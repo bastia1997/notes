@@ -1,0 +1,660 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hashmap and set — FAANG Prep</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">F</div>
+      <div>
+        <div class="brand-title">FAANG Prep</div>
+        <div class="brand-subtitle">DS&amp;A · System Design</div>
+      </div>
+    </div>
+    <div class="lang-bar">
+      <a class="lang-switcher" href="../../pages/03-hashmap-set.html" title="Italiano"><span class="flag-icon">🇮🇹</span><span class="flag-label">Italiano</span></a>
+    </div>
+  </div>
+  <div class="search-wrap">
+    <input class="search-input" id="search-input" placeholder="Search content... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/00-introduction.html" class=""><span class="num">00</span>Introduction and how to use this path</a></li><li class="nav-item"><a href="../pages/01-complexity.html" class=""><span class="num">01</span>Computational complexity (Big-O)</a></li><li class="nav-item"><a href="../pages/02-arrays-strings.html" class=""><span class="num">02</span>Arrays and strings</a></li><li class="nav-item"><a href="../pages/03-hashmap-set.html" class="active"><span class="num">03</span>Hashmap and set</a></li><li class="nav-item"><a href="../pages/04-linked-list.html" class=""><span class="num">04</span>Linked list</a></li><li class="nav-item"><a href="../pages/05-stack-queue.html" class=""><span class="num">05</span>Stack and queue</a></li><li class="nav-item"><a href="../pages/06-trees.html" class=""><span class="num">06</span>Trees (binary tree and BST)</a></li><li class="nav-item"><a href="../pages/07-heap.html" class=""><span class="num">07</span>Heap and priority queue</a></li><li class="nav-item"><a href="../pages/08-graphs.html" class=""><span class="num">08</span>Graphs</a></li><li class="nav-item"><a href="../pages/09-trie.html" class=""><span class="num">09</span>Trie (prefix tree)</a></li><li class="nav-item"><a href="../pages/10-recursion-backtracking.html" class=""><span class="num">10</span>Recursion and backtracking</a></li><li class="nav-item"><a href="../pages/11-sorting-searching.html" class=""><span class="num">11</span>Sorting and searching</a></li><li class="nav-item"><a href="../pages/12-two-pointers-sliding-window.html" class=""><span class="num">12</span>Two pointers and sliding window</a></li><li class="nav-item"><a href="../pages/13-greedy.html" class=""><span class="num">13</span>Greedy</a></li><li class="nav-item"><a href="../pages/14-dp.html" class=""><span class="num">14</span>Dynamic programming</a></li><li class="nav-item"><a href="../pages/15-bit-manipulation.html" class=""><span class="num">15</span>Bit manipulation</a></li><li class="nav-item"><a href="../pages/16-oop-design-patterns.html" class=""><span class="num">16</span>OOP and design patterns</a></li><li class="nav-item"><a href="../pages/17-system-design.html" class=""><span class="num">17</span>System design — fundamentals</a></li><li class="nav-item"><a href="../pages/18-system-design-examples.html" class=""><span class="num">18</span>System design — end-to-end examples</a></li><li class="nav-item"><a href="../pages/19-concurrency.html" class=""><span class="num">19</span>Concurrency and parallelism</a></li><li class="nav-item"><a href="../pages/20-database-sql.html" class=""><span class="num">20</span>Database and SQL</a></li><li class="nav-item"><a href="../pages/21-os-networking.html" class=""><span class="num">21</span>OS and networking</a></li><li class="nav-item"><a href="../pages/22-coding-patterns.html" class=""><span class="num">22</span>The 16 interview coding patterns</a></li><li class="nav-item"><a href="../pages/23-behavioral-star.html" class=""><span class="num">23</span>Behavioral interview — STAR and Amazon LP</a></li><li class="nav-item"><a href="../pages/24-mock-interviews.html" class=""><span class="num">24</span>Mock interview and interview strategy</a></li><li class="nav-item"><a href="../pages/25-roadmap-90-days.html" class=""><span class="num">25</span>90-day Roadmap — operational plan</a></li><li class="nav-item"><a href="../pages/26-problem-bank.html" class=""><span class="num">26</span>Problem bank — 200+ FAANG problems</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Data structures</span>
+        <span>Section 3 of 26</span>
+      </div>
+      <h1>Hashmap and set</h1>
+      <p class="summary">From foundations — hash function, collisions, buckets — to the killer pattern &quot;from O(n²) to O(n)&quot;. The secret weapon of interviews.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Data structures</div>
+  
+  
+</div>
+      <p>If you must memorize a single lesson from this entire path, you'd probably pick this: <strong>when you see a problem that looks O(n²), think hashmap and it probably becomes O(n)</strong>.</p>
+<p>Let's start from foundations.</p>
+<h2 id="part-1-the-problem-hashmap-solves">Part 1 — The problem hashmap solves</h2>
+<p>Suppose you have a list of 1 million elements and I ask: "is the value 42456 in there?"</p>
+<p><strong>Array approach</strong>: scan one by one. O(n). For 1 million: ~10 ms. To do 1 million such queries: 10000 seconds (3 hours).</p>
+<p><strong>Sorted array + binary search</strong>: O(log n). For 1 million queries: 20·10⁶ = 20 ms total. Good. But insert/remove is O(n).</p>
+<p><strong>Hashmap</strong>: O(1) per query, O(1) for insert/delete. For 1 million queries: ~10 ms total.</p>
+<p>Hashmap is the most powerful data structure in everyday CS. Whenever you can answer "what's the key?", a hashmap solves in O(1).</p>
+<h2 id="part-2-how-it-works-internally-the-hash-function">Part 2 — How it works internally: the hash function</h2>
+<h3 id="base-idea">Base idea</h3>
+<p>Imagine you have 10 numbered drawers from 0 to 9, and you want to store 100 objects. How do you decide which drawer each object goes into?</p>
+<p>Simple solution: a <strong>deterministic rule</strong> that converts the object into a number between 0 and 9. This is the hash.</p>
+<p>Example: object = string, rule = "sum of ASCII codes of characters, modulo 10".</p>
+<pre><code class="language-python">def my_hash(s):
+    total = sum(ord(c) for c in s)
+    return total % 10
+</code></pre>
+<p><code>my_hash("hello")</code> = (104+101+108+108+111) % 10 = 532 % 10 = <strong>2</strong>. Goes in drawer 2.</p>
+<p>To search "hello", just compute the hash → drawer 2 → look there. Lookup in <strong>one hash operation + one drawer visit</strong>.</p>
+<h3 id="properties-of-a-good-hash-function">Properties of a good hash function</h3>
+<ol>
+<li><strong>Deterministic</strong>: same input → same output.</li>
+<li><strong>Fast to compute</strong>: O(1) ideally.</li>
+<li><strong>Uniformly distributed</strong>: each drawer receives roughly the same number of objects.</li>
+<li><strong>Sensitive to changes</strong>: changing a single character should give a completely different hash ("avalanche" effect).</li>
+</ol>
+<p>Python uses specific hash functions for various types (int, str, tuple) much better than my toy example.</p>
+<h3 id="collisions-the-real-problem">Collisions — the real problem</h3>
+<p>What if two objects end up in the same drawer? It's called <strong>collision</strong>.</p>
+<p>Example: <code>my_hash("hello") = 2</code>, but also <code>my_hash("ouui")</code> could end up in 2 if codes sum to a multiple of 10 plus 2.</p>
+<p><strong>You have two classic strategies</strong> to handle collisions:</p>
+<h4 id="strategy-1-chaining">Strategy 1 — Chaining</h4>
+<p>Each drawer contains a <strong>list</strong> of all objects falling there. To search: go to drawer, scan the list.</p>
+<pre><code class="language-mermaid">flowchart LR
+    subgraph T[Buckets]
+        direction TB
+        B0[Bucket 0]
+        B1[Bucket 1&lt;br/&gt;empty]
+        B2[Bucket 2]
+        B3[Bucket 3]
+    end
+    B0 --&gt; R[rose] --&gt; L[moon]
+    B2 --&gt; C[hello] --&gt; O[ouui] --&gt; Te[test]
+    B3 --&gt; Ca[house]
+</code></pre>
+<h4 id="strategy-2-open-addressing">Strategy 2 — Open addressing</h4>
+<p>If the drawer is occupied, try the <strong>next free</strong> one (linear probing) or another following some scheme (quadratic, double hashing).</p>
+<p>Pros: uses only the array, no extra lists. Cons: delete handling complex, performance degrades when full.</p>
+<p>Python <code>dict</code> uses open addressing with random probing.</p>
+<h3 id="resize-how-o1-performance-is-maintained">Resize: how O(1) performance is maintained</h3>
+<p>The more objects you put in, the more collisions. The ratio <code>n_objects / n_drawers</code> is the <strong>load factor</strong>. When it exceeds ~0.7, the hashmap <strong>doubles capacity</strong> and <strong>re-hashes</strong> all objects.</p>
+<p>Cost: O(n) for resize. But amortized over <code>n</code> inserts: O(1) per insert.</p>
+<h3 id="complexity-summary">Complexity summary</h3>
+<p>All base operations:</p>
+<ul>
+<li><strong>Get/put/delete</strong>: <strong>O(1) average</strong>.</li>
+<li><strong>Worst case</strong>: O(n) (when everything collides in the same bucket).</li>
+</ul>
+<p>In practice O(1) always. If the interviewer asks, cite "average O(1), worst case O(n) for adversarial inputs".</p>
+<h2 id="part-3-hashmap-in-python-complete-api">Part 3 — Hashmap in Python: complete API</h2>
+<h3 id="dict-pythons-hashmap">Dict (Python's hashmap)</h3>
+<pre><code class="language-python">d = {}                  # empty
+d = {&quot;a&quot;: 1, &quot;b&quot;: 2}    # with initial values
+
+d[k] = v                # set / update
+v = d[k]                # get; KeyError if missing
+v = d.get(k)            # None if missing
+v = d.get(k, default)   # default instead of None
+k in d                  # exists, O(1)
+del d[k]                # delete, KeyError if missing
+d.pop(k)                # delete and return value, KeyError if missing
+d.pop(k, default)       # safe pop
+
+list(d.keys())          # list of keys
+list(d.values())        # list of values
+list(d.items())         # list of (key, value)
+
+len(d)                  # number of entries
+d.clear()               # empty
+
+# Iteration
+for k in d: ...         # iterate over keys
+for k, v in d.items(): ...   # iterate over pairs
+</code></pre>
+<h3 id="set-hashmap-without-values">Set (hashmap without values)</h3>
+<p>A set is a hashmap storing only keys. Same O(1) lookup properties.</p>
+<pre><code class="language-python">s = set()
+s = {1, 2, 3}          # NB: {} is empty dict, not empty set!
+
+s.add(x)               # O(1)
+s.remove(x)            # KeyError if missing
+s.discard(x)           # safe, ignores if missing
+x in s                 # O(1)
+
+# Set operations (powerful!)
+a | b                  # union
+a &amp; b                  # intersection
+a - b                  # difference (in a but not in b)
+a ^ b                  # symmetric difference
+a &lt;= b, a &lt; b          # subset
+a &gt;= b                 # superset
+</code></pre>
+<h3 id="the-3-superstars-of-collections">The 3 superstars of <code>collections</code></h3>
+<pre><code class="language-python">from collections import defaultdict, Counter, OrderedDict
+</code></pre>
+<h4 id="defaultdict">defaultdict</h4>
+<p>A dict that <strong>creates default value automatically</strong> when accessing a missing key. Eliminates KeyError bugs.</p>
+<pre><code class="language-python">g = defaultdict(list)
+g['a'].append(1)   # g['a'] auto-created as [], then append
+g['a'].append(2)   # now g = {'a': [1, 2]}
+</code></pre>
+<p>Default factory: <code>int</code> (default 0), <code>list</code> (default []), <code>set</code> (default set()), <code>dict</code> (default {}).</p>
+<h4 id="counter">Counter</h4>
+<p>Counts automatically. One of the most useful classes in everyday CS.</p>
+<pre><code class="language-python">c = Counter(&quot;abracadabra&quot;)
+# Counter({'a': 5, 'b': 2, 'r': 2, 'c': 1, 'd': 1})
+
+c.most_common(3)         # [('a', 5), ('b', 2), ('r', 2)]
+c['z']                   # 0, NOT KeyError. Counter returns 0 for missing.
+c.update(&quot;aaa&quot;)          # adds frequencies
+c1 + c2                  # element-wise sum
+c1 - c2                  # subtraction (clamp to 0)
+c1 &amp; c2                  # element-wise min (multiset intersection)
+c1 | c2                  # max (multiset union)
+</code></pre>
+<h4 id="ordereddict">OrderedDict</h4>
+<p>A dict that <strong>remembers insertion order</strong> and has <code>move_to_end()</code>. Historic importance, but since Python 3.7+ even normal dicts maintain order. <code>OrderedDict</code> remains useful for <code>move_to_end</code> (crucial for LRU cache).</p>
+<pre><code class="language-python">od = OrderedDict()
+od['a'] = 1; od['b'] = 2; od['c'] = 3
+od.move_to_end('a')           # now order: b, c, a
+od.move_to_end('a', last=False)  # now order: a, b, c
+od.popitem(last=False)        # removes and returns first entry (FIFO)
+od.popitem()                  # removes and returns last (LIFO)
+</code></pre>
+<h2 id="part-4-the-6-fundamental-hashmap-patterns">Part 4 — The 6 fundamental hashmap patterns</h2>
+<h3 id="pattern-1-complement-for-sum">Pattern 1 — Complement for sum</h3>
+<p>Already seen in ch. 02 (Two Sum). <strong>The general idea</strong>: you're looking for two elements that combine (sum, product, XOR, etc.); instead of double loop, memorize what you've seen and look for the complement.</p>
+<pre><code class="language-python">def two_sum(arr, t):
+    seen = {}
+    for i, x in enumerate(arr):
+        comp = t - x
+        if comp in seen:
+            return [seen[comp], i]
+        seen[x] = i
+</code></pre>
+<p>Generalization: <strong>from "find X and Y such that ..."</strong> to <strong>"find X such that (something Y derived from X) is already in memory"</strong>.</p>
+<h3 id="pattern-2-frequency">Pattern 2 — Frequency</h3>
+<p>Count occurrences. Three typical uses:</p>
+<pre><code class="language-python"># Is there an element appearing &gt; n/2 times?
+def majority(arr):
+    c = Counter(arr)
+    return c.most_common(1)[0][0]
+
+# Are two strings anagrams?
+def anagrams(a, b):
+    return Counter(a) == Counter(b)
+
+# Substring with exactly k distinct chars?
+# (Sliding window + Counter, see ch. 12)
+</code></pre>
+<h3 id="pattern-3-group-by-derived-key">Pattern 3 — Group by derived key</h3>
+<p>Group elements sharing a "fingerprint".</p>
+<pre><code class="language-python"># Group anagrams: &quot;fingerprint&quot; is sorted(s)
+g = defaultdict(list)
+for s in strs:
+    g[''.join(sorted(s))].append(s)
+return list(g.values())
+</code></pre>
+<p>Other key examples: <code>tuple(sorted(...))</code> for lists, <code>(x % 10, x // 10)</code> for digits, etc.</p>
+<h3 id="pattern-4-prefix-sum-hashmap-exact-subarray-sums">Pattern 4 — Prefix sum + hashmap (exact subarray sums)</h3>
+<p>Combine prefix sum and hashmap to count/find subarrays with specific sum.</p>
+<p><strong>Key idea</strong>: sum of subarray <code>arr[i..j]</code> is <code>prefix[j+1] - prefix[i]</code>. I want it equal to <code>k</code>. So: <code>prefix[j+1] - prefix[i] = k</code> → <code>prefix[i] = prefix[j+1] - k</code>.</p>
+<p>That is: I scan the array computing current prefix. For each position, I look for how many previous prefixes have value <code>prefix_current - k</code>. Those give me <strong>all subarrays ending here with sum k</strong>.</p>
+<pre><code class="language-python">def subarray_sum_equals_k(arr, k):
+    seen = {0: 1}   # sum 0 seen 1 time (empty prefix)
+    pre = 0
+    count = 0
+    for x in arr:
+        pre += x
+        count += seen.get(pre - k, 0)   # how many previous prefixes have pre - k
+        seen[pre] = seen.get(pre, 0) + 1
+    return count
+</code></pre>
+<p><strong>Why <code>seen = {0: 1}</code> at start?</strong> Because a subarray starting from the beginning (<code>arr[0..j]</code>) has sum <code>prefix[j+1] - prefix[0] = prefix[j+1] - 0</code>. I must be able to "see" the prefix=0 (empty sum).</p>
+<p>Trace on <code>arr = [1, 1, 1]</code>, <code>k = 2</code>:</p>
+<pre><code>i=0 x=1: pre=1, look for pre-k=-1 in seen{0:1} → 0. count=0. seen={0:1, 1:1}
+i=1 x=1: pre=2, look for pre-k=0 in seen → found 1 time. count=1. seen={0:1, 1:1, 2:1}
+i=2 x=1: pre=3, look for pre-k=1 in seen → found 1 time. count=2. seen={0:1, 1:1, 2:1, 3:1}
+</code></pre>
+<p>Result: 2 subarrays with sum 2 (<code>[1,1]</code> at indices [0,1] and [1,2]). ✓</p>
+<p><strong>Lesson</strong>: this pattern appears in MANY problems in disguise. "Subarray with sum X", "subarray with sum divisible by k", "binary array with as many 0s as 1s" (map 0 → -1, k = 0).</p>
+<h3 id="pattern-5-set-for-already-seen">Pattern 5 — Set for "already seen"</h3>
+<p>Cycle detection, duplicates, intersection between lists.</p>
+<pre><code class="language-python">def has_duplicate(arr):
+    seen = set()
+    for x in arr:
+        if x in seen: return True
+        seen.add(x)
+    return False
+</code></pre>
+<h3 id="pattern-6-hashmap-of-objects">Pattern 6 — Hashmap of objects</h3>
+<p>In graph/tree problems, map node → metadata (visited, distance, parent).</p>
+<pre><code class="language-python"># BFS on graph
+visited = {start}
+parent = {start: None}
+queue = deque([start])
+while queue:
+    u = queue.popleft()
+    for v in graph[u]:
+        if v not in visited:
+            visited.add(v)
+            parent[v] = u
+            queue.append(v)
+</code></pre>
+<h2 id="part-5-the-5-common-traps">Part 5 — The 5 common traps</h2>
+<h3 id="trap-1-non-hashable-keys">Trap 1 — Non-hashable keys</h3>
+<p>To be a dict key (or set element), the object must be <strong>hashable</strong>. In Python:</p>
+<ul>
+<li>Hashable: <code>int, float, str, tuple</code> (if all its elements are hashable), <code>frozenset</code>, custom class with <code>__hash__</code>.</li>
+<li><strong>NOT</strong> hashable: <code>list, dict, set</code> (mutable).</li>
+</ul>
+<pre><code class="language-python">d = {}
+d[[1, 2]] = &quot;x&quot;   # TypeError: unhashable type: 'list'
+d[(1, 2)] = &quot;x&quot;   # OK, tuple
+</code></pre>
+<p>For dict of arrays, <strong>convert to tuple</strong>. For dict of sets, <strong>convert to frozenset</strong>.</p>
+<h3 id="trap-2-iteration-modification">Trap 2 — Iteration + modification</h3>
+<p>Already seen in ch. 02 but also valid for dict:</p>
+<pre><code class="language-python">for k in d:
+    if cond(k): del d[k]   # RuntimeError
+
+# Solution: copy keys first
+for k in list(d.keys()):
+    if cond(k): del d[k]
+</code></pre>
+<h3 id="trap-3-dk-1-on-missing-key">Trap 3 — <code>d[k] += 1</code> on missing key</h3>
+<pre><code class="language-python">d = {}
+d['a'] += 1   # KeyError!
+
+# Alternatives:
+d['a'] = d.get('a', 0) + 1     # Verbose but explicit
+# Or:
+from collections import defaultdict
+d = defaultdict(int)
+d['a'] += 1   # OK
+# Or:
+c = Counter()
+c['a'] += 1   # OK
+</code></pre>
+<h3 id="trap-4-comparing-empty-counter">Trap 4 — Comparing empty <code>Counter</code></h3>
+<pre><code class="language-python">Counter(&quot;aab&quot;) == Counter(&quot;aba&quot;)   # True (anagrams)
+Counter() == {}                     # True (both empty)
+</code></pre>
+<p><code>Counter</code> behaves like <code>dict</code> for <code>==</code>. Useful for the anagram pattern.</p>
+<h3 id="trap-5-mutating-keys-after-insertion">Trap 5 — Mutating keys after insertion</h3>
+<p>If you insert <code>(list, ...)</code> and then modify the list — disaster. But lists aren't hashable, so Python blocks this error. With <strong>custom classes</strong>, though, beware: if you modify an attribute entering <code>__hash__</code>, the object "gets lost" in the hashmap.</p>
+<h2 id="part-6-golden-snippet">Part 6 — Golden snippet</h2>
+<h3 id="lru-cache-the-simple-ordereddict-version">LRU Cache (the "simple" OrderedDict version)</h3>
+<pre><code class="language-python">from collections import OrderedDict
+
+class LRUCache:
+    def __init__(self, capacity):
+        self.cache = OrderedDict()
+        self.cap = capacity
+
+    def get(self, k):
+        if k not in self.cache:
+            return -1
+        self.cache.move_to_end(k)   # now it's &quot;most recently used&quot;
+        return self.cache[k]
+
+    def put(self, k, v):
+        if k in self.cache:
+            self.cache.move_to_end(k)
+        self.cache[k] = v
+        if len(self.cache) &gt; self.cap:
+            self.cache.popitem(last=False)   # removes LRU (first inserted)
+</code></pre>
+<p>All O(1). This is one of the most asked problems in interviews (Amazon, Google, Microsoft, Stripe).</p>
+<p>"Real" version without OrderedDict (with dict + doubly linked list manually) is in ch. 04.</p>
+<h2 id="guided-exercises">Guided exercises</h2>
+<h3 id="exercise-31-contains-duplicate-easy">Exercise 3.1 — Contains Duplicate <span class="problem-tag easy">EASY</span></h3>
+<p>Does the array contain at least one duplicate?</p>
+<details><summary>Solution</summary>
+
+
+<pre><code class="language-python">def has_dup(arr):
+    return len(set(arr)) &lt; len(arr)
+</code></pre>
+
+
+O(n) time, O(n) space.
+
+"Early exit" alternative:
+
+
+<pre><code class="language-python">def has_dup(arr):
+    seen = set()
+    for x in arr:
+        if x in seen: return True
+        seen.add(x)
+    return False
+</code></pre>
+
+
+Advantage: on average faster on inputs with early duplicates.
+</details>
+
+<h3 id="exercise-32-valid-anagram-easy">Exercise 3.2 — Valid Anagram <span class="problem-tag easy">EASY</span></h3>
+<details><summary>Solution</summary>
+
+
+<pre><code class="language-python">from collections import Counter
+def is_anagram(s, t):
+    return Counter(s) == Counter(t)
+</code></pre>
+
+
+O(n).
+</details>
+
+<h3 id="exercise-33-top-k-frequent-elements-medium">Exercise 3.3 — Top K Frequent Elements <span class="problem-tag medium">MEDIUM</span></h3>
+<details><summary>Reasoning</summary>
+
+Counter + `most_common(k)`.
+
+
+<pre><code class="language-python">from collections import Counter
+def top_k(arr, k):
+    return [x for x, _ in Counter(arr).most_common(k)]
+</code></pre>
+
+
+`most_common` internally uses a heap → O(n log k). For small k, great.
+
+**Bucket sort O(n) version**: create bucket[freq] = list of values with that frequency. Scan from high to low freq.
+
+
+<pre><code class="language-python">def top_k_bucket(arr, k):
+    c = Counter(arr)
+    buckets = [[] for _ in range(len(arr) + 1)]
+    for val, freq in c.items():
+        buckets[freq].append(val)
+    res = []
+    for freq in range(len(buckets) - 1, 0, -1):
+        for val in buckets[freq]:
+            res.append(val)
+            if len(res) == k: return res
+</code></pre>
+
+
+In interview discuss with: "Heap is O(n log k). If we want strictly O(n), we can use bucket sort by frequency".
+</details>
+
+<h3 id="exercise-34-subarray-sum-equals-k-medium">Exercise 3.4 — Subarray Sum Equals K <span class="problem-tag medium">MEDIUM</span></h3>
+<details><summary>Solution</summary>
+
+See Pattern 4 above. Code and trace included.
+</details>
+
+<h3 id="exercise-35-longest-consecutive-sequence-medium">Exercise 3.5 — Longest Consecutive Sequence <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Given an unsorted array of integers, find the length of the longest consecutive sequence. O(n).</p>
+<details><summary>Reasoning</summary>
+
+**Naive idea**: sort + scan → O(n log n).
+
+**To reach O(n)**:
+
+1. Put all values in a set.
+2. For each value `x` in the set, **start the sequence only if `x-1` is NOT in the set** (otherwise `x` is mid-sequence, not the head).
+3. From `x`, count while `x+1, x+2, ...` are in the set.
+
+**Why is it O(n)**? Each element is visited at most 2 times: once in the outer iteration, once in the "expansion" of its own sequence.
+
+
+<pre><code class="language-python">def longest_consec(arr):
+    s = set(arr)
+    best = 0
+    for x in s:
+        if x - 1 in s:
+            continue   # I'm not the head of the sequence
+        y = x
+        while y + 1 in s:
+            y += 1
+        best = max(best, y - x + 1)
+    return best
+</code></pre>
+
+
+Trace on `[100, 4, 200, 1, 3, 2]`:
+
+
+<pre><code>set = {100, 4, 200, 1, 3, 2}
+x=100: 99 not in set → start. 100→101 no. length=1. best=1.
+x=4: 3 in set → skip (4 not head).
+x=200: 199 not in set → start. 200→201 no. length=1. best=1.
+x=1: 0 not in set → start. 1→2 yes, 2→3 yes, 3→4 yes, 4→5 no. length=4. best=4.
+x=3: 2 in set → skip.
+x=2: 1 in set → skip.
+</code></pre>
+
+
+Result: 4 (sequence 1,2,3,4). ✓
+</details>
+
+<h3 id="exercise-36-first-non-repeating-character-easy">Exercise 3.6 — First Non-Repeating Character <span class="problem-tag easy">EASY</span></h3>
+<details><summary>Solution</summary>
+
+
+<pre><code class="language-python">from collections import Counter
+def first_unique(s):
+    c = Counter(s)
+    for i, ch in enumerate(s):
+        if c[ch] == 1:
+            return i
+    return -1
+</code></pre>
+
+
+Two passes. O(n).
+</details>
+
+<h3 id="exercise-37-happy-number-easy">Exercise 3.7 — Happy Number <span class="problem-tag easy">EASY</span></h3>
+<p>A number is "happy" if, repeating the "sum of squares of digits" operation, you reach 1. Otherwise you end up in a cycle.</p>
+<details><summary>Solution</summary>
+
+
+<pre><code class="language-python">def is_happy(n):
+    seen = set()
+    while n != 1 and n not in seen:
+        seen.add(n)
+        n = sum(int(c)**2 for c in str(n))
+    return n == 1
+</code></pre>
+
+
+Set for cycle detection. O(log n) time (numbers shrink quickly).
+
+O(1) space variant: Floyd's cycle detection (slow/fast). See ch. 04.
+</details>
+
+<h3 id="exercise-38-group-anagrams-medium">Exercise 3.8 — Group Anagrams <span class="problem-tag medium">MEDIUM</span></h3>
+<details><summary>Solution</summary>
+
+See Pattern 3.
+</details>
+
+<h3 id="exercise-39-longest-substring-with-at-most-k-distinct-medium">Exercise 3.9 — Longest Substring with At Most K Distinct <span class="problem-tag medium">MEDIUM</span></h3>
+<details><summary>Reasoning</summary>
+
+Sliding window + Counter. Expand right; when distinct count exceeds k, contract left.
+
+
+<pre><code class="language-python">from collections import defaultdict
+def longest_k_distinct(s, k):
+    cnt = defaultdict(int)
+    l = 0
+    best = 0
+    for r, c in enumerate(s):
+        cnt[c] += 1
+        while len(cnt) &gt; k:
+            cnt[s[l]] -= 1
+            if cnt[s[l]] == 0:
+                del cnt[s[l]]
+            l += 1
+        best = max(best, r - l + 1)
+    return best
+</code></pre>
+
+
+The `del` is important: without it, `len(cnt)` doesn't decrease when a key reaches 0.
+
+O(n).
+</details>
+
+<h3 id="exercise-310-minimum-window-substring-hard">Exercise 3.10 — Minimum Window Substring <span class="problem-tag hard">HARD</span></h3>
+<p>Shortest substring of <code>s</code> containing all characters of <code>t</code> (with multiplicity).</p>
+<details><summary>Reasoning (one of the most asked problems)</summary>
+
+**Sliding window "shortest covering" approach**:
+
+1. `need = Counter(t)`: required characters.
+2. `have`: characters currently in window.
+3. `missing`: how many characters still missing to cover `t` (counting multiplicity).
+
+Expand right: each "useful" char decrements `missing`. When `missing == 0`, valid window → try to contract.
+
+
+<pre><code class="language-python">from collections import Counter
+def min_window(s, t):
+    need = Counter(t)
+    have = {}
+    missing = len(t)
+    l = 0
+    best = (float('inf'), 0, 0)
+    for r, c in enumerate(s):
+        if need.get(c, 0) &gt; 0:
+            if have.get(c, 0) &lt; need[c]:
+                missing -= 1
+        have[c] = have.get(c, 0) + 1
+        while missing == 0:
+            if r - l + 1 &lt; best[0]:
+                best = (r - l + 1, l, r)
+            have[s[l]] -= 1
+            if need.get(s[l], 0) &gt; 0 and have[s[l]] &lt; need[s[l]]:
+                missing += 1
+            l += 1
+    return &quot;&quot; if best[0] == float('inf') else s[best[1]:best[2]+1]
+</code></pre>
+
+
+O(n+m). One of the most asked (Meta, Google).
+</details>
+
+<h3 id="exercise-311-design-hashmap-medium">Exercise 3.11 — Design HashMap <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Implement a hashmap without using predefined structures.</p>
+<details><summary>Solution</summary>
+
+
+<pre><code class="language-python">class MyHashMap:
+    def __init__(self):
+        self.size = 1009   # prime number
+        self.table = [[] for _ in range(self.size)]
+
+    def _bucket(self, k):
+        return self.table[k % self.size]
+
+    def put(self, k, v):
+        b = self._bucket(k)
+        for i, (kk, vv) in enumerate(b):
+            if kk == k:
+                b[i] = (k, v)
+                return
+        b.append((k, v))
+
+    def get(self, k):
+        for kk, vv in self._bucket(k):
+            if kk == k:
+                return vv
+        return -1
+
+    def remove(self, k):
+        b = self._bucket(k)
+        for i, (kk, vv) in enumerate(b):
+            if kk == k:
+                b.pop(i)
+                return
+</code></pre>
+
+
+Chaining with lists. A real hashmap also does dynamic resize.
+</details>
+
+<h2 id="chapter-summary">Chapter summary</h2>
+<ol>
+<li><strong>Hashmap = O(1) lookup</strong> thanks to hash + buckets + collision handling.</li>
+<li><strong>Worst case O(n)</strong> but in practice O(1). Cite only if requested.</li>
+<li><strong>Killer pattern</strong>: transform O(n²) problems into O(n) by memorizing "what I've seen" → look for the complement.</li>
+<li><strong>Python tools to memorize</strong>: <code>dict</code>, <code>set</code>, <code>defaultdict</code>, <code>Counter</code>, <code>OrderedDict</code>.</li>
+<li><strong>Traps</strong>: non-hashable keys, modification during iteration, <code>+= 1</code> on missing key.</li>
+</ol>
+<p>The 6 patterns of this chapter cover <strong>30% of medium problems</strong> you'll see. Memorize them deeply.</p>
+      <nav class="pager">
+<a href="02-arrays-strings.html" class="prev"><span class="label">← Previous</span><span class="title">Arrays and strings</span></a>
+<a href="04-linked-list.html" class="next"><span class="label">Next →</span><span class="title">Linked list</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>FAANG Prep</strong> — complete prep path: DS&amp;A, system design, behavioral. Built to crush Big Tech interviews.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-index.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true,
+      background: '#161922',
+      primaryColor: '#1d2230',
+      primaryTextColor: '#e6e8ee',
+      primaryBorderColor: '#6cf',
+      lineColor: '#7a8194',
+      secondaryColor: '#262b3a',
+      tertiaryColor: '#0f1117',
+      mainBkg: '#1d2230',
+      secondBkg: '#262b3a',
+      tertiaryBkg: '#161922',
+      nodeBorder: '#6cf',
+      clusterBkg: '#161922',
+      clusterBorder: '#262b3a',
+      titleColor: '#6cf',
+      edgeLabelBackground: '#161922',
+      fontFamily: 'Cascadia Code, monospace'
+    }
+  });
+  document.querySelectorAll('pre > code.language-mermaid').forEach((codeEl) => {
+    const pre = codeEl.parentElement;
+    const div = document.createElement('div');
+    div.className = 'mermaid';
+    div.textContent = codeEl.textContent;
+    pre.replaceWith(div);
+  });
+  mermaid.run();
+</script>
+</body>
+</html>

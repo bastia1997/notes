@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Serverless patterns deep dive — AWS Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#232f3e',primaryTextColor:'#ffffff',primaryBorderColor:'#ff9900',lineColor:'#8a99ad',background:'#0c1320'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">λ</div>
+      <div>
+        <div class="brand-title">AWS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/48-serverless-patterns.html" class="lang-link" title="Passa all'italiano">IT</a><span class="lang-active" title="English">EN</span></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="search... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-what-is-cloud-and-aws.html" class=""><span class="num">01</span>What the cloud is, and what AWS is</a></li><li class="nav-item"><a href="../pages/02-global-infrastructure.html" class=""><span class="num">02</span>Global infrastructure: Regions, AZs, Edge</a></li><li class="nav-item"><a href="../pages/03-account-root-billing.html" class=""><span class="num">03</span>AWS account, root user, billing</a></li><li class="nav-item"><a href="../pages/04-iam-fundamentals.html" class=""><span class="num">04</span>IAM — fundamentals (users, groups, roles, policies)</a></li><li class="nav-item"><a href="../pages/05-iam-advanced.html" class=""><span class="num">05</span>IAM advanced: conditional policies, STS, ABAC</a></li><li class="nav-item"><a href="../pages/06-cli-sdk-iac.html" class=""><span class="num">06</span>CLI, SDK, CloudShell, IaC primer</a></li><li class="nav-item"><a href="../pages/07-pricing-billing.html" class=""><span class="num">07</span>Pricing, billing, free tier, cost tools</a></li><li class="nav-item"><a href="../pages/08-organizations-multi-account.html" class=""><span class="num">08</span>AWS Organizations &amp; multi-account strategy</a></li><li class="nav-item"><a href="../pages/09-vpc-fundamentals.html" class=""><span class="num">09</span>VPC — fundamentals</a></li><li class="nav-item"><a href="../pages/10-vpc-advanced.html" class=""><span class="num">10</span>VPC advanced: peering, TGW, PrivateLink, endpoints</a></li><li class="nav-item"><a href="../pages/11-route53-cloudfront.html" class=""><span class="num">11</span>Route 53, CloudFront, Global Accelerator</a></li><li class="nav-item"><a href="../pages/12-hybrid-vpn-directconnect.html" class=""><span class="num">12</span>Hybrid: VPN, Direct Connect, PrivateLink</a></li><li class="nav-item"><a href="../pages/13-ec2-fundamentals.html" class=""><span class="num">13</span>EC2 — fundamentals (instances, AMIs, lifecycle)</a></li><li class="nav-item"><a href="../pages/14-ec2-advanced-spot-nitro.html" class=""><span class="num">14</span>EC2 advanced — Spot, Placement Groups, Nitro, hibernation</a></li><li class="nav-item"><a href="../pages/15-asg-elb.html" class=""><span class="num">15</span>Auto Scaling Groups + Elastic Load Balancing</a></li><li class="nav-item"><a href="../pages/16-lambda-deep-dive.html" class=""><span class="num">16</span>Lambda deep dive</a></li><li class="nav-item"><a href="../pages/17-containers-ecs-eks-fargate.html" class=""><span class="num">17</span>Containers: ECS, EKS, Fargate, ECR</a></li><li class="nav-item"><a href="../pages/18-specialty-compute.html" class=""><span class="num">18</span>Specialty compute: Batch, Lightsail, Outposts, Wavelength, Beanstalk</a></li><li class="nav-item"><a href="../pages/19-ebs-efs-fsx.html" class=""><span class="num">19</span>EBS, EFS, FSx, Instance Store</a></li><li class="nav-item"><a href="../pages/20-s3-deep-dive.html" class=""><span class="num">20</span>S3 — deep dive</a></li><li class="nav-item"><a href="../pages/21-archive-snow-gateway-backup.html" class=""><span class="num">21</span>Glacier, Snow, Storage Gateway, DataSync, AWS Backup</a></li><li class="nav-item"><a href="../pages/22-rds.html" class=""><span class="num">22</span>RDS — managed relational DBs (engines, Multi-AZ, replicas, Proxy)</a></li><li class="nav-item"><a href="../pages/23-aurora-deep-dive.html" class=""><span class="num">23</span>Aurora deep dive — shared storage, Serverless v2, Global Database</a></li><li class="nav-item"><a href="../pages/24-dynamodb-deep-dive.html" class=""><span class="num">24</span>DynamoDB deep dive — partitions, GSI, Streams, single-table</a></li><li class="nav-item"><a href="../pages/25-purpose-built-dbs.html" class=""><span class="num">25</span>Purpose-built DBs — ElastiCache, MemoryDB, Neptune, DocumentDB, Keyspaces, Timestream, QLDB</a></li><li class="nav-item"><a href="../pages/26-redshift-data-warehousing.html" class=""><span class="num">26</span>Redshift — MPP data warehousing and zero-ETL</a></li><li class="nav-item"><a href="../pages/27-sqs-sns-eventbridge.html" class=""><span class="num">27</span>SQS, SNS, EventBridge — messaging and events</a></li><li class="nav-item"><a href="../pages/28-step-functions-mq-appflow.html" class=""><span class="num">28</span>Step Functions, MQ, AppFlow — orchestration and integration</a></li><li class="nav-item"><a href="../pages/29-athena-glue-lakeformation.html" class=""><span class="num">29</span>Athena, Glue, Lake Formation — the AWS data lake</a></li><li class="nav-item"><a href="../pages/30-emr-kinesis-msk.html" class=""><span class="num">30</span>EMR, Kinesis, MSK — big data and streaming</a></li><li class="nav-item"><a href="../pages/31-opensearch-quicksight.html" class=""><span class="num">31</span>OpenSearch and QuickSight — search and BI</a></li><li class="nav-item"><a href="../pages/32-sagemaker-overview.html" class=""><span class="num">32</span>SageMaker — the end-to-end ML platform</a></li><li class="nav-item"><a href="../pages/33-bedrock-ai-services.html" class=""><span class="num">33</span>Bedrock and AI services — managed GenAI and ML</a></li><li class="nav-item"><a href="../pages/34-iac-cloudformation-cdk-terraform.html" class=""><span class="num">34</span>IaC on AWS — CloudFormation, CDK, SAM, Terraform</a></li><li class="nav-item"><a href="../pages/35-ci-cd-pipeline.html" class=""><span class="num">35</span>CI/CD on AWS — CodePipeline, CodeBuild, CodeDeploy, CodeCatalyst</a></li><li class="nav-item"><a href="../pages/36-observability-cloudwatch-xray.html" class=""><span class="num">36</span>Observability — CloudWatch, X-Ray, CloudTrail, Config, SSM</a></li><li class="nav-item"><a href="../pages/37-kms-secrets-acm.html" class=""><span class="num">37</span>Encryption — KMS, CloudHSM, Secrets Manager, Parameter Store, ACM</a></li><li class="nav-item"><a href="../pages/38-waf-shield-guardduty-inspector.html" class=""><span class="num">38</span>Threat detection — WAF, Shield, GuardDuty, Inspector, Macie, Security Hub</a></li><li class="nav-item"><a href="../pages/39-governance-org-controltower-identitycenter.html" class=""><span class="num">39</span>Governance — Organizations, Control Tower, Identity Center</a></li><li class="nav-item"><a href="../pages/40-migration-mgn-dms-snow.html" class=""><span class="num">40</span>Migration — MGN, DMS, Snow family, Discovery, Migration Hub</a></li><li class="nav-item"><a href="../pages/41-cost-optimization-finops.html" class=""><span class="num">41</span>Cost optimization and FinOps</a></li><li class="nav-item"><a href="../pages/42-well-architected.html" class=""><span class="num">42</span>Well-Architected Framework — 6 pillars, lenses, review</a></li><li class="nav-item"><a href="../pages/43-architecture-patterns.html" class=""><span class="num">43</span>Architecture patterns — 3-tier, serverless, event-driven, microservices</a></li><li class="nav-item"><a href="../pages/44-disaster-recovery-multi-region.html" class=""><span class="num">44</span>Disaster Recovery and Multi-Region</a></li><li class="nav-item"><a href="../pages/45-reference-architectures.html" class=""><span class="num">45</span>Real-world reference architectures</a></li><li class="nav-item"><a href="../pages/46-advanced-networking.html" class=""><span class="num">46</span>Advanced networking deep dive</a></li><li class="nav-item"><a href="../pages/47-containers-deep-dive.html" class=""><span class="num">47</span>Containers deep dive — EKS, Karpenter, service mesh</a></li><li class="nav-item"><a href="../pages/48-serverless-patterns.html" class="active"><span class="num">48</span>Serverless patterns deep dive</a></li><li class="nav-item"><a href="../pages/49-genai-rag-agents.html" class=""><span class="num">49</span>Generative AI on AWS — RAG and Agents</a></li><li class="nav-item"><a href="../pages/50-aws-certifications.html" class=""><span class="num">50</span>AWS Certifications — roadmap and study guide</a></li><li class="nav-item"><a href="../pages/51-glossary-az.html" class=""><span class="num">51</span>Glossary A-Z</a></li><li class="nav-item"><a href="../pages/52-cheatsheet.html" class=""><span class="num">52</span>Cheat sheet: services, limits, instance families</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Serverless</span>
+        <span>Section 48 of 52</span>
+        <span class="level-tag level-exp">Level: expert</span>
+      </div>
+      <h1>Serverless patterns deep dive</h1>
+      <p class="summary">Cold start mitigation, idempotency, async patterns, EventBridge Pipes, scatter-gather, choreography vs orchestration, Step Functions distributed map, Powertools, API Gateway vs AppSync.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Serverless</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>sections 15, 27, 28</li></ul>
+  <div class="label">Tools / references</div>
+  <ul class="source-list"><li>Lambda</li><li>EventBridge</li><li>Step Functions</li></ul>
+</div>
+      <p>Serverless is easy to start (1 Lambda + 1 trigger) but production requires specific patterns to handle cold start, idempotency, backpressure, distributed transactions. This section gathers patterns that save systems at scale.</p>
+<h2 id="1-cold-start-strategies">1. Cold start — strategies</h2>
+<p>Lambda performs a cold start (~100ms-3s) when it must instantiate a new worker. Mitigation:</p>
+<table>
+<thead>
+<tr>
+<th>Technique</th>
+<th>Reduction</th>
+<th>Cost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Memory bump</strong> (2-3 GB)</td>
+<td>-30-50% (more CPU = faster init)</td>
+<td>linearly more expensive</td>
+</tr>
+<tr>
+<td><strong>Lambda SnapStart</strong> (Java/Python/.NET)</td>
+<td>-90% (pre-cached init snapshot)</td>
+<td>free but versioning required</td>
+</tr>
+<tr>
+<td><strong>Provisioned concurrency</strong></td>
+<td>~0 cold start</td>
+<td>$$ (you pay for idle too)</td>
+</tr>
+<tr>
+<td><strong>Smaller runtime</strong> (Rust, Go, Node)</td>
+<td>-50% (vs Java/Python big deps)</td>
+<td>code refactor</td>
+</tr>
+<tr>
+<td><strong>Lambda Layer + minimal dependency</strong></td>
+<td>-20%</td>
+<td>refactor</td>
+</tr>
+<tr>
+<td><strong>Avoid VPC unless needed</strong></td>
+<td>-200-500ms historical (Hyperplane fixed much)</td>
+<td>architecture</td>
+</tr>
+</tbody>
+</table>
+<p>2026 best practice: SnapStart for JVM/Python, native runtimes (Rust/Go) for latency-critical, provisioned concurrency only for user-facing APIs with tight SLA.</p>
+<h2 id="2-idempotency">2. Idempotency</h2>
+<p>Lambda has <strong>at-least-once delivery</strong> (SQS, SNS, EventBridge, S3 trigger): the same event can arrive 2+ times. Without idempotency = double charge, double order.</p>
+<p>Pattern: <strong>DynamoDB conditional write</strong> with idempotency-ID key:</p>
+<pre><code class="language-python">import hashlib
+from aws_lambda_powertools.utilities.idempotency import idempotent, DynamoDBPersistenceLayer
+
+persistence = DynamoDBPersistenceLayer(table_name=&quot;idempotency-store&quot;)
+
+@idempotent(persistence_store=persistence)
+def lambda_handler(event, context):
+    # Powertools automatic dedupe via event hash
+    order_id = process_payment(event[&quot;order&quot;])
+    return {&quot;order_id&quot;: order_id}
+</code></pre>
+<p><strong>Lambda Powertools</strong> (Python/Java/TypeScript/.NET) includes an <code>@idempotent</code> decorator that does lock+TTL on DynamoDB automatically.</p>
+<h2 id="3-async-invocation-pattern">3. Async invocation pattern</h2>
+<p>Async Lambda (invoked by SNS/EventBridge/S3 or <code>InvocationType=Event</code>) has a dedicated lifecycle:</p>
+<pre><code class="language-mermaid">flowchart LR
+    INV[Event source] --&gt; Q[Internal&lt;br/&gt;async queue]
+    Q --&gt; L[Lambda]
+    L --&gt;|success| DST_OK[On-success destination&lt;br/&gt;SQS/SNS/EventBridge/Lambda]
+    L --&gt;|fail after retries| DLQ[DLQ SQS/SNS]
+    DLQ --&gt; ALERT[CloudWatch Alarm&lt;br/&gt;+ replay logic]
+    L --&gt;|fail| DST_FAIL[On-failure destination]
+</code></pre>
+<ul>
+<li><strong>Retry</strong>: 2 default async retries (configurable 0-2), exponential backoff.</li>
+<li><strong>Destination</strong>: better than DLQ — sends metadata + result to SQS/SNS/EventBridge/Lambda for both success and failure.</li>
+<li><strong>DLQ</strong>: SQS/SNS for messages failed after retry. Always configure.</li>
+<li><strong>Event source mapping</strong> (SQS/Kinesis/DDB Stream/Kafka): batch, parallel, separate error handling (<code>ReportBatchItemFailures</code>).</li>
+</ul>
+<h2 id="4-eventbridge-pipes">4. EventBridge Pipes</h2>
+<p>EventBridge Pipes (2023) connects 1 source → 1 target with optional filter/transform/enrich, <strong>without Lambda glue</strong>. Example: DynamoDB Stream → filter only <code>INSERT</code> → enrich with Lambda → EventBridge bus.</p>
+<p>Saves: no Lambda to "route" events, less cold start and code.</p>
+<h2 id="5-transactional-outbox">5. Transactional outbox</h2>
+<p>Problem: you write to DynamoDB + publish event to EventBridge. If the second fails after the first, the system is inconsistent.</p>
+<p><strong>Outbox</strong> solution: write only to DynamoDB (atomic), DynamoDB Streams trigger Lambda that publishes to EventBridge. Atomicity guaranteed by the DB.</p>
+<h2 id="6-scatter-gather-fan-out-fan-in">6. Scatter-gather, fan-out, fan-in</h2>
+<p><strong>Scatter-gather</strong>: send N tasks in parallel, aggregate results.</p>
+<pre><code class="language-yaml"># Step Functions Map
+{
+  &quot;StartAt&quot;: &quot;FanOut&quot;,
+  &quot;States&quot;: {
+    &quot;FanOut&quot;: {
+      &quot;Type&quot;: &quot;Map&quot;,
+      &quot;ItemsPath&quot;: &quot;$.tasks&quot;,
+      &quot;MaxConcurrency&quot;: 100,
+      &quot;Iterator&quot;: {
+        &quot;StartAt&quot;: &quot;ProcessTask&quot;,
+        &quot;States&quot;: {
+          &quot;ProcessTask&quot;: { &quot;Type&quot;: &quot;Task&quot;, &quot;Resource&quot;: &quot;arn:...lambda...&quot;, &quot;End&quot;: true }
+        }
+      },
+      &quot;ResultPath&quot;: &quot;$.results&quot;,
+      &quot;Next&quot;: &quot;Aggregate&quot;
+    },
+    &quot;Aggregate&quot;: { &quot;Type&quot;: &quot;Task&quot;, &quot;Resource&quot;: &quot;arn:...aggregator...&quot;, &quot;End&quot;: true }
+  }
+}
+</code></pre>
+<p><strong>Step Functions Distributed Map</strong> (2022) scales to 10k+ parallel executions reading from an S3 manifest — perfect for processing millions of files (e.g. data lake ETL).</p>
+<p>Classic <strong>fan-out</strong>: SNS → multiple SQS, each consumer has its queue. <strong>Fan-in</strong>: multiple SQS → 1 aggregator Lambda (rare, usually done elsewhere).</p>
+<h2 id="7-choreography-vs-orchestration">7. Choreography vs orchestration</h2>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Choreography (EventBridge)</th>
+<th>Orchestration (Step Functions)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Coordinator</td>
+<td>none</td>
+<td>central state machine</td>
+</tr>
+<tr>
+<td>Visibility</td>
+<td>hard tracing</td>
+<td>native graph + history</td>
+</tr>
+<tr>
+<td>Coupling</td>
+<td>loose</td>
+<td>medium (logic in state machine)</td>
+</tr>
+<tr>
+<td>Cost</td>
+<td>$1/M event</td>
+<td>$25/M state transition (Standard), $0.000001/transition (Express)</td>
+</tr>
+<tr>
+<td>Best for</td>
+<td>event broadcasting, loose microservices</td>
+<td>linear workflow with compensation</td>
+</tr>
+</tbody>
+</table>
+<p>Trick: Step Functions <strong>Express</strong> is 1000x cheaper than Standard for short workflows (&lt; 5 min), but no detailed history. Use Express for ETL and mass processing, Standard for business workflows with audit.</p>
+<h2 id="8-throttling-backpressure-bulkhead">8. Throttling, backpressure, bulkhead</h2>
+<ul>
+<li><strong>Reserved concurrency</strong> for Lambda: fixed throttle at N (e.g. 100), prevents draining account concurrency.</li>
+<li><strong>Provisioned concurrency</strong>: also pre-warm.</li>
+<li><strong>SQS visibility timeout</strong> + <strong>maxReceiveCount</strong>: implicit retry, DLQ after threshold.</li>
+<li><strong>API Gateway usage plan</strong>: rate limit per API key, burst.</li>
+<li><strong>AppSync caching + DDB throttling</strong>: GraphQL doesn't explode the DB.</li>
+</ul>
+<p>Bulkhead pattern: Lambda with reserved concurrency per tenant prevents noisy neighbor.</p>
+<h2 id="9-api-gateway-http-vs-rest-vs-websocket-vs-appsync">9. API Gateway HTTP vs REST vs WebSocket vs AppSync</h2>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>When</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>API Gateway REST</strong></td>
+<td>feature complete: usage plan, API key, request validation, custom authorizer, WAF</td>
+</tr>
+<tr>
+<td><strong>API Gateway HTTP</strong></td>
+<td>70% cheaper, lower latency, no request validation/usage plan</td>
+</tr>
+<tr>
+<td><strong>API Gateway WebSocket</strong></td>
+<td>chat, server-side real-time push</td>
+</tr>
+<tr>
+<td><strong>AppSync GraphQL</strong></td>
+<td>mobile/web with GraphQL schema, real-time subscriptions, DDB/Aurora/Lambda resolvers</td>
+</tr>
+</tbody>
+</table>
+<p>2026 default: <strong>HTTP API</strong> if you don't need advanced REST features (3.5x cheaper). AppSync if you prefer GraphQL schema or need real-time subscriptions.</p>
+<h2 id="10-anti-patterns">10. Anti-patterns</h2>
+<ul>
+<li><strong>Monolithic Lambda</strong> (<code>lambda-monorepo</code> with 100 endpoints in 1 handler): indiscriminate scaling, slow deploy, huge blast radius. Better 1 Lambda per domain or per endpoint.</li>
+<li><strong>Sync chain of Lambdas</strong>: API GW → Lambda A → invoke Lambda B → invoke Lambda C. Cumulative latency, double cost (you pay B while A waits). Use Step Functions or async event.</li>
+<li><strong>Lambda in VPC without need</strong>: with Hyperplane the 10s cold start issue is solved, but still + complexity (ENI, IP exhaustion). Only if you need RDS/ElastiCache.</li>
+<li><strong>No Powertools</strong>: re-implementing structured logging, X-Ray tracing, idempotency, metrics... it covers everything for free.</li>
+</ul>
+<h2 id="11-exercise">11. Exercise</h2>
+<details>
+<summary>Serverless API with 10k RPS spikes and p99 SLA < 200ms. Architecture?</summary>
+
+1. **API Gateway HTTP** (not REST: lower latency, 70% cheaper).
+2. **Lambda** in Python with **SnapStart** or Rust for reduced cold start.
+3. **Provisioned concurrency** = baseline RPS / 1000 (e.g. 10 RPS = 10k baseline, size after load test) + auto-scaling.
+4. **Reserved concurrency** = 2x peak as safety margin.
+5. **DynamoDB** on-demand mode + DAX cache for hot items.
+6. **CloudFront** in front for static + cache for cacheable GETs.
+7. **Powertools** for structured logging + tracing.
+
+Expected p99: 50-100ms with DAX, < 200ms with cold DynamoDB. Cost: ~$200/day at 10k RPS (vs ~$1000 for equivalent ECS Fargate).
+</details>
+
+<details>
+<summary>You must process 5 million S3 files with Lambda. How?</summary>
+
+**Step Functions Distributed Map**: 1 state machine with `Type: Map`, `ItemReader` reading from S3 inventory (JSON manifest with 5M objects), `MaxConcurrency: 10000`.
+
+Lambda invoked in batches (e.g. 100 files per execution to reduce overhead). Automatic throttling, per-item retry, aggregated output in S3.
+
+Estimated time: 5M / 10k concurrency × time per batch (e.g. 5s) = 2500 seconds = ~40 min. Cost: $0.000001/transition × 5M = $5 + Lambda cost.
+
+Without Distributed Map you would write pagination/parallelism logic by hand and manage failures: hours of code and bugs.
+</details>
+
+<blockquote>
+<p><strong>Summary</strong>: cold start: SnapStart, native runtimes, provisioned concurrency; idempotency with Powertools + DDB conditional write; async pattern use destination &gt; DLQ; EventBridge Pipes replaces glue Lambdas; outbox for DB+event consistency; scatter-gather with Step Functions Distributed Map (10k parallel); choreography (EventBridge cheap) vs orchestration (Step Functions visible); Express SF 1000x cheaper than Standard; throttling with reserved concurrency + usage plan; HTTP API default vs REST/AppSync; avoid monolithic Lambda and sync chains.</p>
+</blockquote>
+      <nav class="pager">
+<a href="47-containers-deep-dive.html" class="prev"><span class="label">← Previous</span><span class="title">Containers deep dive — EKS, Karpenter, service mesh</span></a>
+<a href="49-genai-rag-agents.html" class="next"><span class="label">Next →</span><span class="title">Generative AI on AWS — RAG and Agents</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>AWS Zero to Hero</strong> — complete path, in English, from primitives to advanced architecture.</p><p>Open educational material. No sponsorships, no affiliate links, no affiliation with AWS. When a concept is unclear, go back: AWS is a pyramid of primitives, not a tree you skip across.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+</body>
+</html>

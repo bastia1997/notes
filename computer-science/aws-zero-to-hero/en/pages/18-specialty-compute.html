@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Specialty compute: Batch, Lightsail, Outposts, Wavelength, Beanstalk — AWS Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#232f3e',primaryTextColor:'#ffffff',primaryBorderColor:'#ff9900',lineColor:'#8a99ad',background:'#0c1320'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">λ</div>
+      <div>
+        <div class="brand-title">AWS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/18-specialty-compute.html" class="lang-link" title="Passa all'italiano">IT</a><span class="lang-active" title="English">EN</span></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="search... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-what-is-cloud-and-aws.html" class=""><span class="num">01</span>What the cloud is, and what AWS is</a></li><li class="nav-item"><a href="../pages/02-global-infrastructure.html" class=""><span class="num">02</span>Global infrastructure: Regions, AZs, Edge</a></li><li class="nav-item"><a href="../pages/03-account-root-billing.html" class=""><span class="num">03</span>AWS account, root user, billing</a></li><li class="nav-item"><a href="../pages/04-iam-fundamentals.html" class=""><span class="num">04</span>IAM — fundamentals (users, groups, roles, policies)</a></li><li class="nav-item"><a href="../pages/05-iam-advanced.html" class=""><span class="num">05</span>IAM advanced: conditional policies, STS, ABAC</a></li><li class="nav-item"><a href="../pages/06-cli-sdk-iac.html" class=""><span class="num">06</span>CLI, SDK, CloudShell, IaC primer</a></li><li class="nav-item"><a href="../pages/07-pricing-billing.html" class=""><span class="num">07</span>Pricing, billing, free tier, cost tools</a></li><li class="nav-item"><a href="../pages/08-organizations-multi-account.html" class=""><span class="num">08</span>AWS Organizations &amp; multi-account strategy</a></li><li class="nav-item"><a href="../pages/09-vpc-fundamentals.html" class=""><span class="num">09</span>VPC — fundamentals</a></li><li class="nav-item"><a href="../pages/10-vpc-advanced.html" class=""><span class="num">10</span>VPC advanced: peering, TGW, PrivateLink, endpoints</a></li><li class="nav-item"><a href="../pages/11-route53-cloudfront.html" class=""><span class="num">11</span>Route 53, CloudFront, Global Accelerator</a></li><li class="nav-item"><a href="../pages/12-hybrid-vpn-directconnect.html" class=""><span class="num">12</span>Hybrid: VPN, Direct Connect, PrivateLink</a></li><li class="nav-item"><a href="../pages/13-ec2-fundamentals.html" class=""><span class="num">13</span>EC2 — fundamentals (instances, AMIs, lifecycle)</a></li><li class="nav-item"><a href="../pages/14-ec2-advanced-spot-nitro.html" class=""><span class="num">14</span>EC2 advanced — Spot, Placement Groups, Nitro, hibernation</a></li><li class="nav-item"><a href="../pages/15-asg-elb.html" class=""><span class="num">15</span>Auto Scaling Groups + Elastic Load Balancing</a></li><li class="nav-item"><a href="../pages/16-lambda-deep-dive.html" class=""><span class="num">16</span>Lambda deep dive</a></li><li class="nav-item"><a href="../pages/17-containers-ecs-eks-fargate.html" class=""><span class="num">17</span>Containers: ECS, EKS, Fargate, ECR</a></li><li class="nav-item"><a href="../pages/18-specialty-compute.html" class="active"><span class="num">18</span>Specialty compute: Batch, Lightsail, Outposts, Wavelength, Beanstalk</a></li><li class="nav-item"><a href="../pages/19-ebs-efs-fsx.html" class=""><span class="num">19</span>EBS, EFS, FSx, Instance Store</a></li><li class="nav-item"><a href="../pages/20-s3-deep-dive.html" class=""><span class="num">20</span>S3 — deep dive</a></li><li class="nav-item"><a href="../pages/21-archive-snow-gateway-backup.html" class=""><span class="num">21</span>Glacier, Snow, Storage Gateway, DataSync, AWS Backup</a></li><li class="nav-item"><a href="../pages/22-rds.html" class=""><span class="num">22</span>RDS — managed relational DBs (engines, Multi-AZ, replicas, Proxy)</a></li><li class="nav-item"><a href="../pages/23-aurora-deep-dive.html" class=""><span class="num">23</span>Aurora deep dive — shared storage, Serverless v2, Global Database</a></li><li class="nav-item"><a href="../pages/24-dynamodb-deep-dive.html" class=""><span class="num">24</span>DynamoDB deep dive — partitions, GSI, Streams, single-table</a></li><li class="nav-item"><a href="../pages/25-purpose-built-dbs.html" class=""><span class="num">25</span>Purpose-built DBs — ElastiCache, MemoryDB, Neptune, DocumentDB, Keyspaces, Timestream, QLDB</a></li><li class="nav-item"><a href="../pages/26-redshift-data-warehousing.html" class=""><span class="num">26</span>Redshift — MPP data warehousing and zero-ETL</a></li><li class="nav-item"><a href="../pages/27-sqs-sns-eventbridge.html" class=""><span class="num">27</span>SQS, SNS, EventBridge — messaging and events</a></li><li class="nav-item"><a href="../pages/28-step-functions-mq-appflow.html" class=""><span class="num">28</span>Step Functions, MQ, AppFlow — orchestration and integration</a></li><li class="nav-item"><a href="../pages/29-athena-glue-lakeformation.html" class=""><span class="num">29</span>Athena, Glue, Lake Formation — the AWS data lake</a></li><li class="nav-item"><a href="../pages/30-emr-kinesis-msk.html" class=""><span class="num">30</span>EMR, Kinesis, MSK — big data and streaming</a></li><li class="nav-item"><a href="../pages/31-opensearch-quicksight.html" class=""><span class="num">31</span>OpenSearch and QuickSight — search and BI</a></li><li class="nav-item"><a href="../pages/32-sagemaker-overview.html" class=""><span class="num">32</span>SageMaker — the end-to-end ML platform</a></li><li class="nav-item"><a href="../pages/33-bedrock-ai-services.html" class=""><span class="num">33</span>Bedrock and AI services — managed GenAI and ML</a></li><li class="nav-item"><a href="../pages/34-iac-cloudformation-cdk-terraform.html" class=""><span class="num">34</span>IaC on AWS — CloudFormation, CDK, SAM, Terraform</a></li><li class="nav-item"><a href="../pages/35-ci-cd-pipeline.html" class=""><span class="num">35</span>CI/CD on AWS — CodePipeline, CodeBuild, CodeDeploy, CodeCatalyst</a></li><li class="nav-item"><a href="../pages/36-observability-cloudwatch-xray.html" class=""><span class="num">36</span>Observability — CloudWatch, X-Ray, CloudTrail, Config, SSM</a></li><li class="nav-item"><a href="../pages/37-kms-secrets-acm.html" class=""><span class="num">37</span>Encryption — KMS, CloudHSM, Secrets Manager, Parameter Store, ACM</a></li><li class="nav-item"><a href="../pages/38-waf-shield-guardduty-inspector.html" class=""><span class="num">38</span>Threat detection — WAF, Shield, GuardDuty, Inspector, Macie, Security Hub</a></li><li class="nav-item"><a href="../pages/39-governance-org-controltower-identitycenter.html" class=""><span class="num">39</span>Governance — Organizations, Control Tower, Identity Center</a></li><li class="nav-item"><a href="../pages/40-migration-mgn-dms-snow.html" class=""><span class="num">40</span>Migration — MGN, DMS, Snow family, Discovery, Migration Hub</a></li><li class="nav-item"><a href="../pages/41-cost-optimization-finops.html" class=""><span class="num">41</span>Cost optimization and FinOps</a></li><li class="nav-item"><a href="../pages/42-well-architected.html" class=""><span class="num">42</span>Well-Architected Framework — 6 pillars, lenses, review</a></li><li class="nav-item"><a href="../pages/43-architecture-patterns.html" class=""><span class="num">43</span>Architecture patterns — 3-tier, serverless, event-driven, microservices</a></li><li class="nav-item"><a href="../pages/44-disaster-recovery-multi-region.html" class=""><span class="num">44</span>Disaster Recovery and Multi-Region</a></li><li class="nav-item"><a href="../pages/45-reference-architectures.html" class=""><span class="num">45</span>Real-world reference architectures</a></li><li class="nav-item"><a href="../pages/46-advanced-networking.html" class=""><span class="num">46</span>Advanced networking deep dive</a></li><li class="nav-item"><a href="../pages/47-containers-deep-dive.html" class=""><span class="num">47</span>Containers deep dive — EKS, Karpenter, service mesh</a></li><li class="nav-item"><a href="../pages/48-serverless-patterns.html" class=""><span class="num">48</span>Serverless patterns deep dive</a></li><li class="nav-item"><a href="../pages/49-genai-rag-agents.html" class=""><span class="num">49</span>Generative AI on AWS — RAG and Agents</a></li><li class="nav-item"><a href="../pages/50-aws-certifications.html" class=""><span class="num">50</span>AWS Certifications — roadmap and study guide</a></li><li class="nav-item"><a href="../pages/51-glossary-az.html" class=""><span class="num">51</span>Glossary A-Z</a></li><li class="nav-item"><a href="../pages/52-cheatsheet.html" class=""><span class="num">52</span>Cheat sheet: services, limits, instance families</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Compute</span>
+        <span>Section 18 of 52</span>
+        <span class="level-tag level-int">Level: intermediate</span>
+      </div>
+      <h1>Specialty compute: Batch, Lightsail, Outposts, Wavelength, Beanstalk</h1>
+      <p class="summary">AWS Batch for HPC/scientific workloads, Lightsail managed VPS, Outposts/Local Zones/Wavelength for edge, Snow family and Elastic Beanstalk PaaS.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Compute</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>sections 13, 14, 17</li></ul>
+  <div class="label">Tools / references</div>
+  <ul class="source-list"><li>AWS CLI</li><li>AWS Batch</li></ul>
+</div>
+      <p>Beyond EC2, Lambda and containers there are services for specific needs: scientific batch workloads, 5G edge computing, on-prem hardware, managed VPS, classic PaaS. Knowing them prevents you from "reinventing the wheel" with raw EC2.</p>
+<h2 id="1-aws-batch">1. AWS Batch</h2>
+<p>Batch job orchestrator (HPC, simulations, genomics, ML training). You define jobs, AWS handles compute provisioning (EC2 or Fargate, Spot included), scheduling and retries.</p>
+<p>Components:</p>
+<table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Compute Environment</strong></td>
+<td>compute pool (EC2 ASG, Fargate, EKS). Managed or Unmanaged</td>
+</tr>
+<tr>
+<td><strong>Job Queue</strong></td>
+<td>priority queue, mapped to one or more CEs</td>
+</tr>
+<tr>
+<td><strong>Job Definition</strong></td>
+<td>job template (image, vCPU, RAM, retry, env)</td>
+</tr>
+<tr>
+<td><strong>Job</strong></td>
+<td>concrete instance submitted to the queue</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-mermaid">flowchart LR
+  User --&gt; Submit[Submit job]
+  Submit --&gt; Queue[Job Queue Priority 10]
+  Queue --&gt; CE[Compute Env&lt;br/&gt;Fargate Spot]
+  CE --&gt; Job[Container runs]
+  Job --&gt; S3[Results to S3]
+</code></pre>
+<pre><code class="language-bash">aws batch submit-job --job-name render-001 \
+  --job-queue prod-queue \
+  --job-definition render:3 \
+  --container-overrides '{&quot;environment&quot;:[{&quot;name&quot;:&quot;CHUNK&quot;,&quot;value&quot;:&quot;42&quot;}]}'
+</code></pre>
+<p>Useful patterns:
+- <strong>Array job</strong>: launch N copies with index (<code>AWS_BATCH_JOB_ARRAY_INDEX</code>).
+- <strong>Multi-Node Parallel (MNP)</strong>: 1 job using N MPI nodes (HPC).
+- <strong>Job dependencies</strong>: DAG of dependencies (<code>--depends-on</code>).
+- Spot compute env + retry strategy with <code>evaluateOnExit</code> to handle interruptions.</p>
+<h2 id="2-lightsail">2. Lightsail</h2>
+<p>Managed VPS with fixed-tier pricing (e.g. $5/month = 1 vCPU + 2 GB + 60 GB SSD + 2 TB transfer). Designed for:
+- Small WordPress / static web sites.
+- Developers who don't want to touch VPC/IAM/SG.
+- Demos, prototypes, side projects.</p>
+<p>Key differences vs EC2:
+- Simplified UI, pre-packaged "blueprints" (LAMP, Node, WordPress).
+- Predictable pricing (no complicated GB-month EBS or egress GB).
+- Limits: no deep integration with the rest of AWS (you can VPC-peer but it's limited).</p>
+<p>When to move to EC2: as soon as you need auto-scaling, ALB, granular IAM or multi-service integrations.</p>
+<h2 id="3-outposts">3. Outposts</h2>
+<p>Physical AWS racks that AWS ships and installs in <strong>your data center</strong>. Same AWS API as in the cloud, managed by AWS via the regional control plane.</p>
+<table>
+<thead>
+<tr>
+<th>Form factor</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Outposts 42U rack</strong></td>
+<td>full rack, 5 to 100+ kVA</td>
+</tr>
+<tr>
+<td><strong>Outposts servers</strong></td>
+<td>1U/2U, for small sites (remote office, edge)</td>
+</tr>
+</tbody>
+</table>
+<p>Use cases: single-digit ms latency to local systems (factory floor, hospital, broadcast), strict data residency (data must not leave the premises), gradual migration.</p>
+<p>Services on Outpost: EC2, EBS, ECS/EKS, RDS, S3 on Outposts. No Lambda, no local DynamoDB (they hop to the region).</p>
+<h2 id="4-wavelength-and-local-zones">4. Wavelength and Local Zones</h2>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Distance from carrier</th>
+<th>Use case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Wavelength</strong></td>
+<td>inside the 5G network (Verizon, KDDI, Vodafone)</td>
+<td>mobile gaming, AR/VR, V2X</td>
+</tr>
+<tr>
+<td><strong>Local Zones</strong></td>
+<td>metropolitan area (Milan, Boston, etc.)</td>
+<td>user latency &lt;10 ms, local regulatory</td>
+</tr>
+<tr>
+<td><strong>Outposts</strong></td>
+<td>your DC</td>
+<td>on-prem hybrid</td>
+</tr>
+</tbody>
+</table>
+<p>Wavelength exposes EC2, EBS, ECS inside the carrier zone; traffic from the 5G device never leaves the carrier network toward the Internet.</p>
+<h2 id="5-snow-family-for-edge-compute">5. Snow family for edge compute</h2>
+<p>Not just data transport: Snow devices can <strong>run EC2/Lambda</strong> offline.</p>
+<table>
+<thead>
+<tr>
+<th>Device</th>
+<th>Storage</th>
+<th>Compute</th>
+<th>Use case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Snowcone</strong></td>
+<td>8/14 TB</td>
+<td>4 vCPU 4 GB</td>
+<td>military edge, drones, mobile lab</td>
+</tr>
+<tr>
+<td><strong>Snowball Edge Storage</strong></td>
+<td>~80 TB</td>
+<td>light</td>
+<td>bulk transfer</td>
+</tr>
+<tr>
+<td><strong>Snowball Edge Compute</strong></td>
+<td>~42 TB</td>
+<td>52 vCPU + optional GPU</td>
+<td>edge ML inference, IoT aggregation</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-mermaid">flowchart LR
+  Edge[Remote site&lt;br/&gt;no Internet] --&gt; Snow[Snowball Edge Compute]
+  Snow --&gt;|EC2 + local S3| App[ML inference app]
+  App --&gt;|periodically| Ship[Shipped to AWS]
+  Ship --&gt; S3[S3 in region]
+</code></pre>
+<h2 id="6-aws-app-runner-revisited">6. AWS App Runner — revisited</h2>
+<p>Already covered in section 17. Putting it in the specialty context: it's AWS's "containerized PaaS". Quick comparison:</p>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Code or container?</th>
+<th>Network management</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Lambda</td>
+<td>code (zip/image)</td>
+<td>managed</td>
+</tr>
+<tr>
+<td>App Runner</td>
+<td>container</td>
+<td>managed</td>
+</tr>
+<tr>
+<td>Elastic Beanstalk</td>
+<td>code</td>
+<td>EC2 + ALB exposed</td>
+</tr>
+<tr>
+<td>Lightsail</td>
+<td>VPS</td>
+<td>simplified</td>
+</tr>
+</tbody>
+</table>
+<h2 id="7-elastic-beanstalk">7. Elastic Beanstalk</h2>
+<p>"Legacy" PaaS (2011) but useful for those who don't want IaC: upload a zip (Java, Python, .NET, Node, PHP, Ruby, Go, Docker) and Beanstalk creates EC2 + ALB + ASG + RDS + CloudWatch behind the scenes.</p>
+<p>Pros:
+- Zero IaC to get started.
+- Rolling updates, blue-green, URL swap.
+- You see and edit the underlying resources (EC2, ASG) in the console.</p>
+<p>Cons:
+- Magical: hard to debug when things go wrong.
+- Conceptual lock-in: redoing it in CDK/Terraform later is work.
+- Slow iteration vs App Runner or ECS.</p>
+<pre><code class="language-bash">eb init -p python-3.12 my-app --region eu-west-1
+eb create my-env --instance-type t3.small
+eb deploy
+</code></pre>
+<p>When: quick PoC, team without ops, classic monolithic app. For greenfield in 2026, consider App Runner or ECS+Fargate first.</p>
+<h2 id="8-exercise">8. Exercise</h2>
+<details>
+<summary>ML training pipeline with 10k parallel jobs of varying duration. Which service?</summary>
+
+**AWS Batch** is ideal for this:
+1. **Fargate Spot** compute environment (or EC2 Spot with GPU instances if needed).
+2. Priority job queue (e.g. preview vs prod).
+3. Job definition with the trainer container image, retry strategy that handles Spot interruption.
+4. **Array job** of 10k instances, each `AWS_BATCH_JOB_ARRAY_INDEX` reads a different chunk from S3.
+5. Dependencies for the final merge (`--depends-on type=N_TO_N`).
+
+Alternatives: SageMaker Training Jobs (more ML-focused), Step Functions Map (for complex orchestration with other integrations).
+</details>
+
+<details>
+<summary>Hospital with the requirement: patient data must not leave the building, but they want to use AWS. What?</summary>
+
+**AWS Outposts** (rack or server):
+- AWS hardware installed on premises.
+- Same API and tooling as an AWS region.
+- Data physically stays in the building (HIPAA/local GDPR compliance).
+- EC2/EBS/ECS/RDS services locally; optional encrypted uplink to the region for backup or unavailable services.
+
+Smaller edge alternative: Snowball Edge Compute (mobile, no permanent rack).
+</details>
+
+<blockquote>
+<p><strong>Summary</strong>: AWS Batch for batch/HPC jobs (CE + queue + job def, array job + Spot); Lightsail = simplified managed VPS for small use cases; Outposts = AWS in your DC (compliance, single-digit ms latency); Wavelength = 5G edge; Local Zones = metropolitan; Snow family for offline edge; Elastic Beanstalk = legacy PaaS but useful to get started without IaC; App Runner = modern PaaS for web containers.</p>
+</blockquote>
+      <nav class="pager">
+<a href="17-containers-ecs-eks-fargate.html" class="prev"><span class="label">← Previous</span><span class="title">Containers: ECS, EKS, Fargate, ECR</span></a>
+<a href="19-ebs-efs-fsx.html" class="next"><span class="label">Next →</span><span class="title">EBS, EFS, FSx, Instance Store</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>AWS Zero to Hero</strong> — complete path, in English, from primitives to advanced architecture.</p><p>Open educational material. No sponsorships, no affiliate links, no affiliation with AWS. When a concept is unclear, go back: AWS is a pyramid of primitives, not a tree you skip across.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+</body>
+</html>

@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Glacier, Snow, Storage Gateway, DataSync, AWS Backup — AWS Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#232f3e',primaryTextColor:'#ffffff',primaryBorderColor:'#ff9900',lineColor:'#8a99ad',background:'#0c1320'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">λ</div>
+      <div>
+        <div class="brand-title">AWS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/21-archive-snow-gateway-backup.html" class="lang-link" title="Passa all'italiano">IT</a><span class="lang-active" title="English">EN</span></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="search... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-what-is-cloud-and-aws.html" class=""><span class="num">01</span>What the cloud is, and what AWS is</a></li><li class="nav-item"><a href="../pages/02-global-infrastructure.html" class=""><span class="num">02</span>Global infrastructure: Regions, AZs, Edge</a></li><li class="nav-item"><a href="../pages/03-account-root-billing.html" class=""><span class="num">03</span>AWS account, root user, billing</a></li><li class="nav-item"><a href="../pages/04-iam-fundamentals.html" class=""><span class="num">04</span>IAM — fundamentals (users, groups, roles, policies)</a></li><li class="nav-item"><a href="../pages/05-iam-advanced.html" class=""><span class="num">05</span>IAM advanced: conditional policies, STS, ABAC</a></li><li class="nav-item"><a href="../pages/06-cli-sdk-iac.html" class=""><span class="num">06</span>CLI, SDK, CloudShell, IaC primer</a></li><li class="nav-item"><a href="../pages/07-pricing-billing.html" class=""><span class="num">07</span>Pricing, billing, free tier, cost tools</a></li><li class="nav-item"><a href="../pages/08-organizations-multi-account.html" class=""><span class="num">08</span>AWS Organizations &amp; multi-account strategy</a></li><li class="nav-item"><a href="../pages/09-vpc-fundamentals.html" class=""><span class="num">09</span>VPC — fundamentals</a></li><li class="nav-item"><a href="../pages/10-vpc-advanced.html" class=""><span class="num">10</span>VPC advanced: peering, TGW, PrivateLink, endpoints</a></li><li class="nav-item"><a href="../pages/11-route53-cloudfront.html" class=""><span class="num">11</span>Route 53, CloudFront, Global Accelerator</a></li><li class="nav-item"><a href="../pages/12-hybrid-vpn-directconnect.html" class=""><span class="num">12</span>Hybrid: VPN, Direct Connect, PrivateLink</a></li><li class="nav-item"><a href="../pages/13-ec2-fundamentals.html" class=""><span class="num">13</span>EC2 — fundamentals (instances, AMIs, lifecycle)</a></li><li class="nav-item"><a href="../pages/14-ec2-advanced-spot-nitro.html" class=""><span class="num">14</span>EC2 advanced — Spot, Placement Groups, Nitro, hibernation</a></li><li class="nav-item"><a href="../pages/15-asg-elb.html" class=""><span class="num">15</span>Auto Scaling Groups + Elastic Load Balancing</a></li><li class="nav-item"><a href="../pages/16-lambda-deep-dive.html" class=""><span class="num">16</span>Lambda deep dive</a></li><li class="nav-item"><a href="../pages/17-containers-ecs-eks-fargate.html" class=""><span class="num">17</span>Containers: ECS, EKS, Fargate, ECR</a></li><li class="nav-item"><a href="../pages/18-specialty-compute.html" class=""><span class="num">18</span>Specialty compute: Batch, Lightsail, Outposts, Wavelength, Beanstalk</a></li><li class="nav-item"><a href="../pages/19-ebs-efs-fsx.html" class=""><span class="num">19</span>EBS, EFS, FSx, Instance Store</a></li><li class="nav-item"><a href="../pages/20-s3-deep-dive.html" class=""><span class="num">20</span>S3 — deep dive</a></li><li class="nav-item"><a href="../pages/21-archive-snow-gateway-backup.html" class="active"><span class="num">21</span>Glacier, Snow, Storage Gateway, DataSync, AWS Backup</a></li><li class="nav-item"><a href="../pages/22-rds.html" class=""><span class="num">22</span>RDS — managed relational DBs (engines, Multi-AZ, replicas, Proxy)</a></li><li class="nav-item"><a href="../pages/23-aurora-deep-dive.html" class=""><span class="num">23</span>Aurora deep dive — shared storage, Serverless v2, Global Database</a></li><li class="nav-item"><a href="../pages/24-dynamodb-deep-dive.html" class=""><span class="num">24</span>DynamoDB deep dive — partitions, GSI, Streams, single-table</a></li><li class="nav-item"><a href="../pages/25-purpose-built-dbs.html" class=""><span class="num">25</span>Purpose-built DBs — ElastiCache, MemoryDB, Neptune, DocumentDB, Keyspaces, Timestream, QLDB</a></li><li class="nav-item"><a href="../pages/26-redshift-data-warehousing.html" class=""><span class="num">26</span>Redshift — MPP data warehousing and zero-ETL</a></li><li class="nav-item"><a href="../pages/27-sqs-sns-eventbridge.html" class=""><span class="num">27</span>SQS, SNS, EventBridge — messaging and events</a></li><li class="nav-item"><a href="../pages/28-step-functions-mq-appflow.html" class=""><span class="num">28</span>Step Functions, MQ, AppFlow — orchestration and integration</a></li><li class="nav-item"><a href="../pages/29-athena-glue-lakeformation.html" class=""><span class="num">29</span>Athena, Glue, Lake Formation — the AWS data lake</a></li><li class="nav-item"><a href="../pages/30-emr-kinesis-msk.html" class=""><span class="num">30</span>EMR, Kinesis, MSK — big data and streaming</a></li><li class="nav-item"><a href="../pages/31-opensearch-quicksight.html" class=""><span class="num">31</span>OpenSearch and QuickSight — search and BI</a></li><li class="nav-item"><a href="../pages/32-sagemaker-overview.html" class=""><span class="num">32</span>SageMaker — the end-to-end ML platform</a></li><li class="nav-item"><a href="../pages/33-bedrock-ai-services.html" class=""><span class="num">33</span>Bedrock and AI services — managed GenAI and ML</a></li><li class="nav-item"><a href="../pages/34-iac-cloudformation-cdk-terraform.html" class=""><span class="num">34</span>IaC on AWS — CloudFormation, CDK, SAM, Terraform</a></li><li class="nav-item"><a href="../pages/35-ci-cd-pipeline.html" class=""><span class="num">35</span>CI/CD on AWS — CodePipeline, CodeBuild, CodeDeploy, CodeCatalyst</a></li><li class="nav-item"><a href="../pages/36-observability-cloudwatch-xray.html" class=""><span class="num">36</span>Observability — CloudWatch, X-Ray, CloudTrail, Config, SSM</a></li><li class="nav-item"><a href="../pages/37-kms-secrets-acm.html" class=""><span class="num">37</span>Encryption — KMS, CloudHSM, Secrets Manager, Parameter Store, ACM</a></li><li class="nav-item"><a href="../pages/38-waf-shield-guardduty-inspector.html" class=""><span class="num">38</span>Threat detection — WAF, Shield, GuardDuty, Inspector, Macie, Security Hub</a></li><li class="nav-item"><a href="../pages/39-governance-org-controltower-identitycenter.html" class=""><span class="num">39</span>Governance — Organizations, Control Tower, Identity Center</a></li><li class="nav-item"><a href="../pages/40-migration-mgn-dms-snow.html" class=""><span class="num">40</span>Migration — MGN, DMS, Snow family, Discovery, Migration Hub</a></li><li class="nav-item"><a href="../pages/41-cost-optimization-finops.html" class=""><span class="num">41</span>Cost optimization and FinOps</a></li><li class="nav-item"><a href="../pages/42-well-architected.html" class=""><span class="num">42</span>Well-Architected Framework — 6 pillars, lenses, review</a></li><li class="nav-item"><a href="../pages/43-architecture-patterns.html" class=""><span class="num">43</span>Architecture patterns — 3-tier, serverless, event-driven, microservices</a></li><li class="nav-item"><a href="../pages/44-disaster-recovery-multi-region.html" class=""><span class="num">44</span>Disaster Recovery and Multi-Region</a></li><li class="nav-item"><a href="../pages/45-reference-architectures.html" class=""><span class="num">45</span>Real-world reference architectures</a></li><li class="nav-item"><a href="../pages/46-advanced-networking.html" class=""><span class="num">46</span>Advanced networking deep dive</a></li><li class="nav-item"><a href="../pages/47-containers-deep-dive.html" class=""><span class="num">47</span>Containers deep dive — EKS, Karpenter, service mesh</a></li><li class="nav-item"><a href="../pages/48-serverless-patterns.html" class=""><span class="num">48</span>Serverless patterns deep dive</a></li><li class="nav-item"><a href="../pages/49-genai-rag-agents.html" class=""><span class="num">49</span>Generative AI on AWS — RAG and Agents</a></li><li class="nav-item"><a href="../pages/50-aws-certifications.html" class=""><span class="num">50</span>AWS Certifications — roadmap and study guide</a></li><li class="nav-item"><a href="../pages/51-glossary-az.html" class=""><span class="num">51</span>Glossary A-Z</a></li><li class="nav-item"><a href="../pages/52-cheatsheet.html" class=""><span class="num">52</span>Cheat sheet: services, limits, instance families</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Storage</span>
+        <span>Section 21 of 52</span>
+        <span class="level-tag level-int">Level: intermediate</span>
+      </div>
+      <h1>Glacier, Snow, Storage Gateway, DataSync, AWS Backup</h1>
+      <p class="summary">Cold archive (Glacier + Vault Lock), bulk physical transfer (Snow family) and online (DataSync), hybrid bridge (Storage Gateway), centralized backup (AWS Backup), and DR (Elastic Disaster Recovery).</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Storage</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>section 20</li></ul>
+  <div class="label">Tools / references</div>
+  <ul class="source-list"><li>AWS CLI</li><li>AWS Backup</li><li>DataSync</li></ul>
+</div>
+      <p>S3 and EBS/EFS cover "online" storage. For edge cases — 25-year compliance archives, migrating 500 TB out of a datacenter with no decent network, NFS shares still living on-prem, unified backups across 30 services, cross-region DR — AWS offers a galaxy of dedicated services. Let's see them together because they're often combined.</p>
+<h2 id="1-decision-map">1. Decision map</h2>
+<pre><code class="language-mermaid">flowchart TD
+  A[Which problem?] --&gt; B[Cheap long-term archive]
+  A --&gt; C[Massive initial transfer]
+  A --&gt; D[On-prem app speaking NFS/SMB/iSCSI]
+  A --&gt; E[Recurring file sync on-prem ↔ AWS]
+  A --&gt; F[Centralized cross-service backup]
+  A --&gt; G[DR with low RPO/RTO]
+  B --&gt; B1[Glacier classes + Vault Lock]
+  C --&gt; C1[Snowcone / Snowball Edge / Snowmobile]
+  D --&gt; D1[Storage Gateway&lt;br/&gt;File / Volume / Tape]
+  E --&gt; E1[DataSync]
+  F --&gt; F1[AWS Backup]
+  G --&gt; G1[Elastic Disaster Recovery DRS]
+</code></pre>
+<h2 id="2-glacier-the-three-classes">2. Glacier — the three classes</h2>
+<table>
+<thead>
+<tr>
+<th>Class</th>
+<th>Retrieval</th>
+<th>Storage cost</th>
+<th>Min duration</th>
+<th>Use case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Glacier Instant Retrieval</strong></td>
+<td>ms</td>
+<td>$0.004/GB</td>
+<td>90 days</td>
+<td>archive but needs to be instant (medical compliance)</td>
+</tr>
+<tr>
+<td><strong>Glacier Flexible Retrieval</strong></td>
+<td>Expedited 1-5 min / Standard 3-5h / Bulk 5-12h</td>
+<td>$0.0036/GB</td>
+<td>90 days</td>
+<td>archive with flexible SLA (logs, raw video)</td>
+</tr>
+<tr>
+<td><strong>Glacier Deep Archive</strong></td>
+<td>Standard 12h / Bulk 48h</td>
+<td>$0.00099/GB</td>
+<td>180 days</td>
+<td>"the warehouse" — 10+ year fiscal backups</td>
+</tr>
+</tbody>
+</table>
+<p>Glacier is a <strong>tier of S3</strong>: you reach it via S3 API (and lifecycle), there's no longer a separate "Glacier Vault" for new projects (still exists for legacy).</p>
+<p><strong>Vault Lock</strong> (S3 Object Lock in Compliance mode is the modern equivalent): immutable WORM policy even for root; once locked, it can't be undone. For regulators SEC 17a-4, MiFID II, GDPR retention.</p>
+<h2 id="3-snow-family-physical-transfer">3. Snow family — physical transfer</h2>
+<p>When you have hundreds of TB and a 100 Mbps internet connection, do the math: 100 TB over a "pure" 100 Mbps is ~92 days. AWS ships you hardware:</p>
+<table>
+<thead>
+<tr>
+<th>Device</th>
+<th>Capacity</th>
+<th>Form factor</th>
+<th>Trait</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Snowcone</strong></td>
+<td>8 TB</td>
+<td>pocket-sized (~2 kg)</td>
+<td>edge, optional battery, IoT</td>
+</tr>
+<tr>
+<td><strong>Snowball Edge Storage Optimized</strong></td>
+<td>80 TB usable</td>
+<td>industrial briefcase</td>
+<td>the migration workhorse</td>
+</tr>
+<tr>
+<td><strong>Snowball Edge Compute Optimized</strong></td>
+<td>28 TB + GPU + 104 vCPU</td>
+<td>briefcase</td>
+<td>edge compute (ships, mines)</td>
+</tr>
+<tr>
+<td><strong>Snowmobile</strong></td>
+<td>100 PB</td>
+<td>14 m container on a truck</td>
+<td>deprecated in 2024 but worth knowing for context</td>
+</tr>
+</tbody>
+</table>
+<p>Typical flow: order from console → AWS ships → load (Snowball CLI / NFS / S3 adapter) → ship back with auto-updating E-Ink label → AWS ingests into S3 → data destruction certificate. Mandatory 256-bit encryption with KMS keys.</p>
+<h2 id="4-storage-gateway-the-hybrid-bridge">4. Storage Gateway — the hybrid bridge</h2>
+<p>VM (or hardware appliance) that runs on-prem and exposes local protocols to servers, persisting behind the scenes to S3/EBS/Glacier.</p>
+<table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>On-prem protocol</th>
+<th>AWS backing store</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>File Gateway</strong> (S3 / FSx)</td>
+<td>NFS, SMB</td>
+<td>S3 (or FSx)</td>
+<td>file shares with native cloud backup</td>
+</tr>
+<tr>
+<td><strong>Volume Gateway — Cached</strong></td>
+<td>iSCSI</td>
+<td>S3 (hot local cache)</td>
+<td>working set cached, infinite capacity</td>
+</tr>
+<tr>
+<td><strong>Volume Gateway — Stored</strong></td>
+<td>iSCSI</td>
+<td>EBS snapshot</td>
+<td>primary data local, snapshots on AWS</td>
+</tr>
+<tr>
+<td><strong>Tape Gateway</strong> (VTL)</td>
+<td>iSCSI VTL</td>
+<td>S3 + Glacier</td>
+<td>replaces physical tape libraries</td>
+</tr>
+</tbody>
+</table>
+<p>Typical: legacy Windows apps that write to <code>\\fileserver\share</code> keep doing so, but files actually land in S3 with lifecycle to Glacier.</p>
+<h2 id="5-datasync-accelerated-online-sync">5. DataSync — accelerated online sync</h2>
+<p>Managed service to migrate/sync datasets between storage <strong>on-prem ↔ AWS</strong> (and between AWS services). Key differences vs <code>rsync</code> or <code>aws s3 sync</code>:</p>
+<ul>
+<li><strong>Throughput</strong>: up to 10x faster over WAN thanks to parallelism, compression, integrated encryption.</li>
+<li>Automatic end-to-end <strong>integrity verification</strong>.</li>
+<li>Built-in <strong>bandwidth throttling</strong> and <strong>scheduling</strong>.</li>
+<li>Source/target: NFS, SMB, HDFS, self-hosted object stores, S3, EFS, FSx (all variants).</li>
+<li>Per-GB pricing (~$0.0125/GB).</li>
+</ul>
+<pre><code class="language-bash">aws datasync create-task \
+  --source-location-arn arn:aws:datasync:eu-west-1:111:location/loc-nfs-on-prem \
+  --destination-location-arn arn:aws:datasync:eu-west-1:111:location/loc-s3-target \
+  --options TransferMode=CHANGED,VerifyMode=ONLY_FILES_TRANSFERRED \
+  --schedule ScheduleExpression=&quot;cron(0 2 * * ? *)&quot;
+</code></pre>
+<p>Classic combo: <strong>DataSync</strong> for ongoing delta, <strong>Snowball</strong> for the initial bulk.</p>
+<h2 id="6-aws-backup-centralized-backup">6. AWS Backup — centralized backup</h2>
+<p>Orchestrator service that brings under one console and policy the backup of: EBS, EFS, FSx, RDS, Aurora, DynamoDB, S3, DocumentDB, Neptune, EC2 (AMI), Storage Gateway, Redshift, Timestream, on-prem VMware.</p>
+<p>Concepts:
+- <strong>Backup plan</strong>: schedule (e.g. daily at 02:00), retention (e.g. 35 days daily + 12 months monthly), copy cross-region/cross-account.
+- <strong>Backup vault</strong>: encrypted container (own CMK) where recovery points live.
+- <strong>Vault Lock</strong>: makes the vault WORM, immutable retention (even root cannot shorten or delete before term) — for financial/healthcare audits.
+- <strong>Backup policy via Organizations</strong>: applies a policy to all accounts in the OU.</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Benefit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tag-based selection</td>
+<td>"anything tagged <code>backup=daily</code>"</td>
+</tr>
+<tr>
+<td>Cross-region copy</td>
+<td>native geographic DR</td>
+</tr>
+<tr>
+<td>Cross-account copy</td>
+<td>isolated bunker account (anti-ransomware)</td>
+</tr>
+<tr>
+<td>Audit Manager integration</td>
+<td>ready-made compliance reports</td>
+</tr>
+</tbody>
+</table>
+<p>Anti-pattern: ad-hoc manual snapshots across three different services, no retention. Guaranteed: in two years you lose track, pay three times, restore never tested.</p>
+<h2 id="7-aws-elastic-disaster-recovery-drs">7. AWS Elastic Disaster Recovery (DRS)</h2>
+<p>CloudEndure's successor. Continuous <strong>block-level</strong> replication of on-prem or cloud servers to a low-cost AWS <em>staging area</em> (powered-off EBS). At disaster:</p>
+<ul>
+<li><strong>RPO</strong>: seconds (continuous replication).</li>
+<li><strong>RTO</strong>: minutes (boot EC2 from staging volumes).</li>
+<li><strong>Drill</strong>: isolated test failover in a dedicated VPC without impacting prod.</li>
+<li><strong>Failback</strong>: reverse replication to return on-prem once resolved.</li>
+</ul>
+<p>Use case: business continuity for legacy apps you can't rewrite cloud-native short term, but for which you need a credible DR plan.</p>
+<h2 id="8-exercise">8. Exercise</h2>
+<details>
+<summary>Italian bank: 800 TB of scanned documents on-prem, to be migrated to AWS, 10-year WORM retention, annual audit access.</summary>
+
+1. **Snowball Edge Storage Optimized** x ~10 devices (80 TB each) for initial ingest → S3 Standard.
+2. Lifecycle policy → **Glacier Instant Retrieval** after 7 days (ms access, very cheap).
+3. **Object Lock Compliance mode** 10-year retention (immutable even for root).
+4. **SSE-KMS** with dedicated CMK, key policy blocking disable/delete.
+5. **CRR** to a secondary region (eu-south-1) with the same Object Lock for DR.
+6. Separate **AWS Backup vault** with **Vault Lock** for the DynamoDB metadata index.
+7. **DataSync** for incremental new documents post-migration.
+</details>
+
+<details>
+<summary>B2B SaaS with stack on AWS: needs a DR plan with RPO < 5 min, RTO < 30 min, but the customer wants quarterly tested region failover.</summary>
+
+- **AWS Backup** with daily plan + cross-region copy (CRR vault) for RDS, EFS, DynamoDB → RPO 24h isn't enough alone.
+- **Aurora Global Database** or **DynamoDB Global Tables** for DBs → RPO seconds cross-region.
+- **S3** Cross-Region Replication with **RTC** (15 min SLA).
+- **Elastic Disaster Recovery** for stateful EC2/ECS → RPO seconds, RTO ~10 min.
+- **Route 53 health check + failover** (sec. 11) for DNS cutover.
+- **Quarterly drill**: use DRS's "recovery instances in isolated subnet" feature → doesn't touch prod, generates a report.
+
+Result: RPO seconds-minutes, RTO 20-30 min, audit evidence for the customer.
+</details>
+
+<blockquote>
+<p><strong>Summary</strong>: Glacier (3 classes) for cold archive + Object Lock for WORM; Snow family for massive physical migration; Storage Gateway as a hybrid NFS/SMB/iSCSI/VTL bridge to S3; DataSync for recurring accelerated online transfers; AWS Backup orchestrates cross-service backup with vault lock and cross-account/region copy; Elastic Disaster Recovery delivers seconds-RPO/minutes-RTO for enterprise DR. They often combine: initial Snowball + delta DataSync + AWS Backup + CRR + DRS = a complete story.</p>
+</blockquote>
+      <nav class="pager">
+<a href="20-s3-deep-dive.html" class="prev"><span class="label">← Previous</span><span class="title">S3 — deep dive</span></a>
+<a href="22-rds.html" class="next"><span class="label">Next →</span><span class="title">RDS — managed relational DBs (engines, Multi-AZ, replicas, Proxy)</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>AWS Zero to Hero</strong> — complete path, in English, from primitives to advanced architecture.</p><p>Open educational material. No sponsorships, no affiliate links, no affiliation with AWS. When a concept is unclear, go back: AWS is a pyramid of primitives, not a tree you skip across.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+</body>
+</html>

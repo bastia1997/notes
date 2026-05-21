@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Containers deep dive — EKS, Karpenter, service mesh — AWS Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#232f3e',primaryTextColor:'#ffffff',primaryBorderColor:'#ff9900',lineColor:'#8a99ad',background:'#0c1320'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">λ</div>
+      <div>
+        <div class="brand-title">AWS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">IT</span><a href="../en/pages/47-containers-deep-dive.html" class="lang-link" title="Switch to English">EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-cos-e-aws-cloud.html" class=""><span class="num">01</span>Cos&#x27;è il cloud e cos&#x27;è AWS</a></li><li class="nav-item"><a href="../pages/02-infrastruttura-globale.html" class=""><span class="num">02</span>Infrastruttura globale: Region, AZ, Edge</a></li><li class="nav-item"><a href="../pages/03-account-root-billing.html" class=""><span class="num">03</span>Account AWS, utente root, billing</a></li><li class="nav-item"><a href="../pages/04-iam-fondamenti.html" class=""><span class="num">04</span>IAM — fondamenti (utenti, gruppi, ruoli, policy)</a></li><li class="nav-item"><a href="../pages/05-iam-avanzato.html" class=""><span class="num">05</span>IAM avanzato: policy condizionali, STS, ABAC</a></li><li class="nav-item"><a href="../pages/06-cli-sdk-iac.html" class=""><span class="num">06</span>CLI, SDK, CloudShell, IaC primer</a></li><li class="nav-item"><a href="../pages/07-pricing-billing.html" class=""><span class="num">07</span>Pricing, billing, free tier, cost tools</a></li><li class="nav-item"><a href="../pages/08-organizations-multi-account.html" class=""><span class="num">08</span>AWS Organizations &amp; strategia multi-account</a></li><li class="nav-item"><a href="../pages/09-vpc-fondamenti.html" class=""><span class="num">09</span>VPC — fondamenti</a></li><li class="nav-item"><a href="../pages/10-vpc-avanzato.html" class=""><span class="num">10</span>VPC avanzato: peering, TGW, PrivateLink, endpoint</a></li><li class="nav-item"><a href="../pages/11-route53-cloudfront.html" class=""><span class="num">11</span>Route 53, CloudFront, Global Accelerator</a></li><li class="nav-item"><a href="../pages/12-hybrid-vpn-directconnect.html" class=""><span class="num">12</span>Hybrid: VPN, Direct Connect, PrivateLink</a></li><li class="nav-item"><a href="../pages/13-ec2-fondamenti.html" class=""><span class="num">13</span>EC2 — fondamenti (istanze, AMI, lifecycle)</a></li><li class="nav-item"><a href="../pages/14-ec2-avanzato-spot-nitro.html" class=""><span class="num">14</span>EC2 avanzato — Spot, Placement Groups, Nitro, hibernation</a></li><li class="nav-item"><a href="../pages/15-asg-elb.html" class=""><span class="num">15</span>Auto Scaling Groups + Elastic Load Balancing</a></li><li class="nav-item"><a href="../pages/16-lambda-deep-dive.html" class=""><span class="num">16</span>Lambda deep dive</a></li><li class="nav-item"><a href="../pages/17-containers-ecs-eks-fargate.html" class=""><span class="num">17</span>Containers: ECS, EKS, Fargate, ECR</a></li><li class="nav-item"><a href="../pages/18-specialty-compute.html" class=""><span class="num">18</span>Specialty compute: Batch, Lightsail, Outposts, Wavelength, Beanstalk</a></li><li class="nav-item"><a href="../pages/19-ebs-efs-fsx.html" class=""><span class="num">19</span>EBS, EFS, FSx, Instance Store</a></li><li class="nav-item"><a href="../pages/20-s3-deep-dive.html" class=""><span class="num">20</span>S3 — deep dive</a></li><li class="nav-item"><a href="../pages/21-archive-snow-gateway-backup.html" class=""><span class="num">21</span>Glacier, Snow, Storage Gateway, DataSync, AWS Backup</a></li><li class="nav-item"><a href="../pages/22-rds.html" class=""><span class="num">22</span>RDS — relational DB managed (engines, Multi-AZ, replicas, Proxy)</a></li><li class="nav-item"><a href="../pages/23-aurora-deep-dive.html" class=""><span class="num">23</span>Aurora deep dive — storage condiviso, Serverless v2, Global Database</a></li><li class="nav-item"><a href="../pages/24-dynamodb-deep-dive.html" class=""><span class="num">24</span>DynamoDB deep dive — partition, GSI, Streams, single-table</a></li><li class="nav-item"><a href="../pages/25-purpose-built-dbs.html" class=""><span class="num">25</span>Purpose-built DB — ElastiCache, MemoryDB, Neptune, DocumentDB, Keyspaces, Timestream, QLDB</a></li><li class="nav-item"><a href="../pages/26-redshift-data-warehousing.html" class=""><span class="num">26</span>Redshift — data warehousing MPP e zero-ETL</a></li><li class="nav-item"><a href="../pages/27-sqs-sns-eventbridge.html" class=""><span class="num">27</span>SQS, SNS, EventBridge — messaging ed eventi</a></li><li class="nav-item"><a href="../pages/28-step-functions-mq-appflow.html" class=""><span class="num">28</span>Step Functions, MQ, AppFlow — orchestrazione e integrazione</a></li><li class="nav-item"><a href="../pages/29-athena-glue-lakeformation.html" class=""><span class="num">29</span>Athena, Glue, Lake Formation — il data lake AWS</a></li><li class="nav-item"><a href="../pages/30-emr-kinesis-msk.html" class=""><span class="num">30</span>EMR, Kinesis, MSK — big data e streaming</a></li><li class="nav-item"><a href="../pages/31-opensearch-quicksight.html" class=""><span class="num">31</span>OpenSearch e QuickSight — search e BI</a></li><li class="nav-item"><a href="../pages/32-sagemaker-overview.html" class=""><span class="num">32</span>SageMaker — la piattaforma ML end-to-end</a></li><li class="nav-item"><a href="../pages/33-bedrock-ai-services.html" class=""><span class="num">33</span>Bedrock e AI services — GenAI e ML managed</a></li><li class="nav-item"><a href="../pages/34-iac-cloudformation-cdk-terraform.html" class=""><span class="num">34</span>IaC su AWS — CloudFormation, CDK, SAM, Terraform</a></li><li class="nav-item"><a href="../pages/35-ci-cd-pipeline.html" class=""><span class="num">35</span>CI/CD su AWS — CodePipeline, CodeBuild, CodeDeploy, CodeCatalyst</a></li><li class="nav-item"><a href="../pages/36-observability-cloudwatch-xray.html" class=""><span class="num">36</span>Observability — CloudWatch, X-Ray, CloudTrail, Config, SSM</a></li><li class="nav-item"><a href="../pages/37-kms-secrets-acm.html" class=""><span class="num">37</span>Crittografia — KMS, CloudHSM, Secrets Manager, Parameter Store, ACM</a></li><li class="nav-item"><a href="../pages/38-waf-shield-guardduty-inspector.html" class=""><span class="num">38</span>Threat detection — WAF, Shield, GuardDuty, Inspector, Macie, Security Hub</a></li><li class="nav-item"><a href="../pages/39-governance-org-controltower-identitycenter.html" class=""><span class="num">39</span>Governance — Organizations, Control Tower, Identity Center</a></li><li class="nav-item"><a href="../pages/40-migration-mgn-dms-snow.html" class=""><span class="num">40</span>Migration — MGN, DMS, Snow family, Discovery, Migration Hub</a></li><li class="nav-item"><a href="../pages/41-cost-optimization-finops.html" class=""><span class="num">41</span>Cost optimization e FinOps</a></li><li class="nav-item"><a href="../pages/42-well-architected.html" class=""><span class="num">42</span>Well-Architected Framework — 6 pillar, lens, review</a></li><li class="nav-item"><a href="../pages/43-architecture-patterns.html" class=""><span class="num">43</span>Architecture patterns — 3-tier, serverless, event-driven, microservices</a></li><li class="nav-item"><a href="../pages/44-disaster-recovery-multi-region.html" class=""><span class="num">44</span>Disaster Recovery e Multi-Region</a></li><li class="nav-item"><a href="../pages/45-reference-architectures.html" class=""><span class="num">45</span>Reference architectures real-world</a></li><li class="nav-item"><a href="../pages/46-advanced-networking.html" class=""><span class="num">46</span>Advanced networking deep dive</a></li><li class="nav-item"><a href="../pages/47-containers-deep-dive.html" class="active"><span class="num">47</span>Containers deep dive — EKS, Karpenter, service mesh</a></li><li class="nav-item"><a href="../pages/48-serverless-patterns.html" class=""><span class="num">48</span>Serverless patterns deep dive</a></li><li class="nav-item"><a href="../pages/49-genai-rag-agents.html" class=""><span class="num">49</span>Generative AI su AWS — RAG e Agents</a></li><li class="nav-item"><a href="../pages/50-certificazioni-aws.html" class=""><span class="num">50</span>Certificazioni AWS — roadmap e study guide</a></li><li class="nav-item"><a href="../pages/51-glossario-az.html" class=""><span class="num">51</span>Glossario A-Z</a></li><li class="nav-item"><a href="../pages/52-cheatsheet.html" class=""><span class="num">52</span>Cheat sheet: servizi, limiti, instance families</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Containers</span>
+        <span>Sezione 47 di 52</span>
+        <span class="level-tag level-exp">Livello: esperto</span>
+      </div>
+      <h1>Containers deep dive — EKS, Karpenter, service mesh</h1>
+      <p class="summary">EKS architettura (control plane + node group/Fargate/Auto Mode), Karpenter, Pod Identity/IRSA, VPC CNI, ALB Controller, service mesh (App Mesh deprecato, Istio/Linkerd/Cilium), GitOps, security.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Containers</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>sezioni 16, 17</li></ul>
+  <div class="label">Strumenti / riferimenti</div>
+  <ul class="source-list"><li>EKS</li><li>Karpenter</li><li>ArgoCD</li></ul>
+</div>
+      <p>Sezione per chi va oltre "deploy un pod in EKS". Vediamo come è fatto davvero il control plane, come gestire il data plane in modo cost-effective con Karpenter, networking CNI, service mesh moderno (post-App Mesh) e pattern GitOps in produzione.</p>
+<h2 id="1-eks-architettura">1. EKS — architettura</h2>
+<p>EKS è un Kubernetes managed: AWS opera il <strong>control plane</strong> (API server, etcd, scheduler, controller manager) in un VPC AWS-owned, replicato in 3 AZ con SLA 99.95%. Tu paghi $0.10/h (~$73/mese) per cluster.</p>
+<p>Il <strong>data plane</strong> (dove girano i pod) è tuo, con 3 opzioni:</p>
+<table>
+<thead>
+<tr>
+<th>Opzione</th>
+<th>Cosa gestisci</th>
+<th>Quando</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Self-managed node group</strong></td>
+<td>tutto (AMI, scaling, patching)</td>
+<td>controllo totale, raro oggi</td>
+</tr>
+<tr>
+<td><strong>Managed node group</strong></td>
+<td>AWS gestisce ASG, drain, patching</td>
+<td>default classico</td>
+</tr>
+<tr>
+<td><strong>Fargate</strong></td>
+<td>nessun nodo, pod su VM dedicata</td>
+<td>small/medium pod, serverless</td>
+</tr>
+<tr>
+<td><strong>EKS Auto Mode</strong> (2024)</td>
+<td>AWS gestisce node + addon + scaling end-to-end</td>
+<td>nuovo gold standard</td>
+</tr>
+</tbody>
+</table>
+<p><strong>EKS Auto Mode</strong> (lanciato re:Invent 2024) è la novità più importante: AWS installa Karpenter, AWS LB Controller, VPC CNI, EBS CSI, GuardDuty agent come "managed addons", scegli istanza automaticamente. Costo ~12% premium sul nodo, ma elimina ops.</p>
+<h2 id="2-karpenter-next-gen-autoscaler">2. Karpenter — next-gen autoscaler</h2>
+<p><strong>Karpenter</strong> (open source, sviluppato AWS) sostituisce il vecchio Cluster Autoscaler. Differenze:</p>
+<ul>
+<li><strong>No node group rigid</strong>: Karpenter sceglie l'istanza tipo migliore per i pod pending (es. se servono 4 CPU/16GB, lancia <code>m6i.xlarge</code> o <code>c6i.xlarge</code> o spot equivalente).</li>
+<li><strong>Fast</strong>: scale-up in ~30s vs 2-5 min Cluster Autoscaler.</li>
+<li><strong>Consolidation</strong>: muove pod e termina nodi sotto-utilizzati per ottimizzare costi.</li>
+<li><strong>Spot first-class</strong>: sceglie spot quando possibile, fallback on-demand su interruzione.</li>
+</ul>
+<pre><code class="language-yaml">apiVersion: karpenter.sh/v1
+kind: NodePool
+metadata:
+  name: default
+spec:
+  template:
+    spec:
+      requirements:
+        - key: karpenter.sh/capacity-type
+          operator: In
+          values: [&quot;spot&quot;, &quot;on-demand&quot;]
+        - key: kubernetes.io/arch
+          operator: In
+          values: [&quot;amd64&quot;, &quot;arm64&quot;]
+        - key: karpenter.k8s.aws/instance-family
+          operator: In
+          values: [&quot;m6i&quot;, &quot;m7i&quot;, &quot;m6g&quot;, &quot;m7g&quot;, &quot;c6i&quot;]
+  disruption:
+    consolidationPolicy: WhenEmptyOrUnderutilized
+    consolidateAfter: 30s
+  limits:
+    cpu: 1000
+</code></pre>
+<h2 id="3-iam-per-pod-irsa-e-pod-identity">3. IAM per pod — IRSA e Pod Identity</h2>
+<p>I pod hanno bisogno di credenziali AWS per chiamare DynamoDB/S3/SQS. Due meccanismi:</p>
+<ul>
+<li><strong>IRSA (IAM Roles for Service Accounts)</strong>: pod assume IAM role via OIDC del cluster. Configurazione: 1 OIDC provider per cluster, annotation <code>eks.amazonaws.com/role-arn</code> sul ServiceAccount, trust policy del role referenzia OIDC.</li>
+<li><strong>EKS Pod Identity</strong> (2023): nuovo meccanismo senza OIDC, gestito tramite addon <code>eks-pod-identity-agent</code>. Più semplice (no OIDC setup), supporta cross-account in modo nativo. <strong>Preferito per nuovi cluster</strong>.</li>
+</ul>
+<p>Entrambi danno al pod credenziali temporanee via SDK senza dover stoccare access key.</p>
+<h2 id="4-networking-vpc-cni-vs-calico-vs-cilium">4. Networking — VPC CNI vs Calico vs Cilium</h2>
+<table>
+<thead>
+<tr>
+<th>CNI</th>
+<th>Caratteristica</th>
+<th>Quando</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>AWS VPC CNI</strong> (default)</td>
+<td>ogni pod riceve IP del VPC, secondary IP della ENI</td>
+<td>default EKS, integration nativa SG</td>
+</tr>
+<tr>
+<td><strong>Calico</strong></td>
+<td>overlay VXLAN, network policy avanzate</td>
+<td>NetworkPolicy fine, esaurimento IP VPC</td>
+</tr>
+<tr>
+<td><strong>Cilium</strong></td>
+<td>eBPF-based, network + observability + service mesh</td>
+<td>next-gen, performance, Hubble UI</td>
+</tr>
+</tbody>
+</table>
+<p>VPC CNI dà performance native (no overlay) ma consuma molti IP del VPC (un pod = 1 IP). Per cluster grandi attiva <strong>prefix delegation</strong> (ogni ENI riceve /28 = 16 IP), aumenta densità ~16x.</p>
+<h2 id="5-ingress-e-load-balancer-controller">5. Ingress e Load Balancer Controller</h2>
+<p><strong>AWS Load Balancer Controller</strong> (ex ALB Ingress Controller) installa ALB/NLB per Service e Ingress K8s:</p>
+<ul>
+<li><code>Ingress</code> con annotation <code>kubernetes.io/ingress.class: alb</code> → crea ALB con target group IP.</li>
+<li><code>Service type: LoadBalancer</code> con <code>service.beta.kubernetes.io/aws-load-balancer-type: external</code> → crea NLB.</li>
+<li>Supporta target group binding (cross-namespace), pod readiness gate, WAF integration.</li>
+</ul>
+<h2 id="6-service-mesh-post-app-mesh">6. Service mesh — post App Mesh</h2>
+<p><strong>AWS App Mesh</strong> è stato annunciato in deprecation a settembre 2024 (end-of-support 2026). Alternative moderne:</p>
+<pre><code class="language-mermaid">flowchart LR
+    subgraph EKS cluster
+        subgraph Service A namespace
+            PA[Pod A]
+            PA -.- ESA[Envoy sidecar]
+        end
+        subgraph Service B namespace
+            PB[Pod B]
+            PB -.- ESB[Envoy sidecar]
+        end
+        CP[Mesh control plane&lt;br/&gt;Istio/Linkerd/Cilium]
+        CP -.config.-&gt; ESA
+        CP -.config.-&gt; ESB
+        ESA --&gt;|mTLS| ESB
+    end
+    OBS[Observability&lt;br/&gt;Prometheus/Jaeger] -.-&gt; ESA
+    OBS -.-&gt; ESB
+</code></pre>
+<ul>
+<li><strong>Istio</strong>: feature-complete, complex; standard de-facto enterprise.</li>
+<li><strong>Linkerd</strong>: minimal, Rust-based, easy install.</li>
+<li><strong>Cilium Service Mesh</strong>: eBPF, no sidecar Envoy (sidecarless), lower overhead.</li>
+</ul>
+<p>Tutti offrono: mTLS automatico, traffic splitting (canary/blue-green), retry/timeout policy, observability distribuita.</p>
+<h2 id="7-gitops-con-argocdflux">7. GitOps con ArgoCD/Flux</h2>
+<p>GitOps = stato del cluster definito in Git, controller pull e applica. Su EKS:</p>
+<ul>
+<li><strong>ArgoCD</strong>: UI ricca, multi-cluster, ApplicationSet per generazione massiva, popolare in enterprise.</li>
+<li><strong>Flux</strong>: CLI-first, più leggero, GitOps Toolkit modulare.</li>
+</ul>
+<p>Pattern: repo <code>infra/</code> contiene Helm chart/Kustomize/raw YAML, ArgoCD <code>Application</code> sync ogni 3 min. PR = deploy. Rollback = git revert.</p>
+<p>Helm vs Kustomize: <strong>Helm</strong> è templating ricco (chart riusabili, values per env); <strong>Kustomize</strong> è patch overlay senza templating (più semplice, niente DSL Go).</p>
+<h2 id="8-scaling-pattern">8. Scaling pattern</h2>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Cosa scala</th>
+<th>Trigger</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>HPA</strong> (Horizontal Pod Autoscaler)</td>
+<td>numero pod</td>
+<td>CPU/memory/custom metric</td>
+</tr>
+<tr>
+<td><strong>VPA</strong> (Vertical Pod Autoscaler)</td>
+<td>resource request del pod</td>
+<td>uso storico</td>
+</tr>
+<tr>
+<td><strong>KEDA</strong></td>
+<td>numero pod (anche a 0)</td>
+<td>event-driven (SQS depth, Kafka lag, ecc.)</td>
+</tr>
+<tr>
+<td><strong>Karpenter</strong></td>
+<td>numero nodi</td>
+<td>pod pending</td>
+</tr>
+</tbody>
+</table>
+<p>Combinazione tipica: HPA gestisce repliche app su CPU, KEDA gestisce worker su lunghezza SQS, Karpenter aggiunge/toglie nodi. VPA usato meno (richiede restart pod).</p>
+<h2 id="9-security-e-eks-d-eks-anywhere">9. Security e EKS-D / EKS Anywhere</h2>
+<ul>
+<li><strong>Pod Security Standard</strong> (privileged/baseline/restricted): label namespace, K8s rifiuta pod che violano.</li>
+<li><strong>OPA Gatekeeper / Kyverno</strong>: policy-as-code (es. "vieta image non da ECR aziendale").</li>
+<li><strong>GuardDuty EKS Protection</strong>: monitora audit log K8s + runtime monitoring (eBPF) per detection malware/crypto-mining.</li>
+<li><strong>EKS Distro (EKS-D)</strong>: stessa distribuzione K8s di EKS, open source, per usarla on-prem.</li>
+<li><strong>EKS Anywhere</strong>: EKS-D + tooling per gestione on-prem (bare metal, vSphere). Subscription paid.</li>
+</ul>
+<h2 id="10-upgrade-strategy">10. Upgrade strategy</h2>
+<p>Kubernetes rilascia 3 minor/anno. EKS supporta 4 versioni in standard (+ 12 mesi in <strong>Extended Support</strong> a costo extra). Pattern:</p>
+<ol>
+<li>Test in cluster dev/staging prima.</li>
+<li>Upgrade control plane via console/Terraform.</li>
+<li>Upgrade managed node group (drain + rolling).</li>
+<li>Verifica deprecation API (<code>kubectl convert</code>, <code>pluto</code>).</li>
+</ol>
+<h2 id="11-esercizio">11. Esercizio</h2>
+<details>
+<summary>Cluster con 200 microservizi, costi nodo elevati, dev frustrati da scale lento. Che fai?</summary>
+
+1. **Migra a Karpenter** dal Cluster Autoscaler: scale 30s vs 5 min, picks spot automaticamente, consolida nodi sottoutilizzati. Risparmio 30-60% sul compute, latenza scaling drastica.
+2. **Abilita Graviton (ARM)** nei NodePool requirement: aggiungi `m7g` e `c7g` al pool, fai build multi-arch dei container. ~20% sconto su workload compatibili.
+3. **Pod Disruption Budget** per servizi critici (impedisce Karpenter consolidation di rompere availability).
+4. **Spot ratio**: 70% spot per worker stateless, 30% on-demand per API critiche.
+
+Risultato tipico: -40% bill compute, scale latency da 5min a 30s.
+</details>
+
+<details>
+<summary>App in pod deve scrivere su DynamoDB. Come dai i permessi senza access key?</summary>
+
+**EKS Pod Identity** (preferito per nuovi cluster):
+
+1. Installa addon `eks-pod-identity-agent` (Auto Mode lo include).
+2. Crea IAM role `app-dynamodb-role` con policy DynamoDB necessaria, trust policy `pods.eks.amazonaws.com`.
+3. Crea ServiceAccount `app-sa` in namespace.
+4. Crea `PodIdentityAssociation`: `aws eks create-pod-identity-association --cluster-name X --namespace Y --service-account app-sa --role-arn arn:aws:iam::...:role/app-dynamodb-role`.
+5. Nel pod spec: `serviceAccountName: app-sa`.
+
+SDK boto3/AWS SDK ottiene credenziali automaticamente da `AWS_CONTAINER_CREDENTIALS_FULL_URI`. Niente IRSA OIDC, più semplice.
+</details>
+
+<blockquote>
+<p><strong>Riassunto</strong>: EKS control plane managed + data plane (managed node group / Fargate / Auto Mode); Karpenter sostituisce Cluster Autoscaler con scale 30s e spot first-class; Pod Identity preferito su IRSA per nuovi cluster; VPC CNI nativa (con prefix delegation per scale), Calico/Cilium per network policy; AWS LB Controller per ALB/NLB; App Mesh deprecato, scegli Istio/Linkerd/Cilium; GitOps con ArgoCD/Flux + Helm o Kustomize; scaling HPA+KEDA+Karpenter; security pod standard + OPA + GuardDuty; EKS-D per on-prem.</p>
+</blockquote>
+      <nav class="pager">
+<a href="46-advanced-networking.html" class="prev"><span class="label">← Precedente</span><span class="title">Advanced networking deep dive</span></a>
+<a href="48-serverless-patterns.html" class="next"><span class="label">Successivo →</span><span class="title">Serverless patterns deep dive</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>AWS Zero to Hero</strong> — percorso completo, in italiano, dalle primitive all'architettura avanzata.</p><p>Materiale didattico aperto. Nessuna sponsorizzazione, nessun affiliate link, nessuna affiliazione con AWS. Quando un concetto è oscuro, torna indietro: AWS è una piramide di primitive, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

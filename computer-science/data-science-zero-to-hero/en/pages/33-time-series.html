@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Time series and forecasting — Data Science Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#3a4a7a',primaryTextColor:'#e8eef0',primaryBorderColor:'#5a6aa0',lineColor:'#8a9499',background:'#11171a'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">Σ</div>
+      <div>
+        <div class="brand-title">DATA SCIENCE</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/33-time-series.html" class="lang-link" title="Passa all'italiano">🇮🇹 IT</a><span class="lang-active" title="English">🇬🇧 EN</span></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="search... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-what-is-data-science.html" class=""><span class="num">01</span>What is data science (and what isn&#x27;t)</a></li><li class="nav-item"><a href="../pages/02-python-for-data-science.html" class=""><span class="num">02</span>Python for data science: pro setup</a></li><li class="nav-item"><a href="../pages/02b-math-essentials.html" class=""><span class="num">02b</span>High-school math you actually need</a></li><li class="nav-item"><a href="../pages/03-linear-algebra.html" class=""><span class="num">03</span>Linear algebra for data scientists</a></li><li class="nav-item"><a href="../pages/04-calculus-optimization.html" class=""><span class="num">04</span>Calculus, gradients, and optimization</a></li><li class="nav-item"><a href="../pages/05-probability.html" class=""><span class="num">05</span>Probability: the language of uncertainty</a></li><li class="nav-item"><a href="../pages/06-descriptive-statistics.html" class=""><span class="num">06</span>Descriptive statistics</a></li><li class="nav-item"><a href="../pages/07-inferential-statistics.html" class=""><span class="num">07</span>Inferential statistics and hypothesis testing</a></li><li class="nav-item"><a href="../pages/08-distributions.html" class=""><span class="num">08</span>Probability distributions you&#x27;ll meet</a></li><li class="nav-item"><a href="../pages/09-numpy.html" class=""><span class="num">09</span>NumPy: thinking in arrays</a></li><li class="nav-item"><a href="../pages/10-pandas.html" class=""><span class="num">10</span>Pandas: the swiss army knife</a></li><li class="nav-item"><a href="../pages/11-sql.html" class=""><span class="num">11</span>SQL for data scientists</a></li><li class="nav-item"><a href="../pages/12-visualization.html" class=""><span class="num">12</span>Visualization: matplotlib, seaborn, plotly</a></li><li class="nav-item"><a href="../pages/13-data-wrangling.html" class=""><span class="num">13</span>Cleaning and data wrangling</a></li><li class="nav-item"><a href="../pages/14-feature-engineering.html" class=""><span class="num">14</span>Feature engineering</a></li><li class="nav-item"><a href="../pages/15-eda.html" class=""><span class="num">15</span>EDA: Exploratory Data Analysis</a></li><li class="nav-item"><a href="../pages/16-ml-fundamentals.html" class=""><span class="num">16</span>ML: fundamentals — bias, variance, validation</a></li><li class="nav-item"><a href="../pages/17-linear-regression.html" class=""><span class="num">17</span>Linear regression and regularization</a></li><li class="nav-item"><a href="../pages/18-logistic-regression.html" class=""><span class="num">18</span>Logistic regression and classification</a></li><li class="nav-item"><a href="../pages/19-knn-naive-bayes-svm.html" class=""><span class="num">19</span>KNN, Naive Bayes, SVM</a></li><li class="nav-item"><a href="../pages/20-decision-trees.html" class=""><span class="num">20</span>Decision trees</a></li><li class="nav-item"><a href="../pages/21-random-forest-boosting.html" class=""><span class="num">21</span>Random Forest, Gradient Boosting, XGBoost</a></li><li class="nav-item"><a href="../pages/22-clustering.html" class=""><span class="num">22</span>Clustering: K-Means, DBSCAN, GMM, hierarchical</a></li><li class="nav-item"><a href="../pages/23-pca-tsne-umap.html" class=""><span class="num">23</span>Dimensionality reduction: PCA, t-SNE, UMAP</a></li><li class="nav-item"><a href="../pages/24-metrics-validation.html" class=""><span class="num">24</span>Metrics, cross-validation, leakage</a></li><li class="nav-item"><a href="../pages/25-class-imbalance.html" class=""><span class="num">25</span>Class imbalance</a></li><li class="nav-item"><a href="../pages/26-hyperparameter-tuning.html" class=""><span class="num">26</span>Hyperparameter tuning</a></li><li class="nav-item"><a href="../pages/27-neural-networks.html" class=""><span class="num">27</span>Neural networks: from fundamentals to backprop</a></li><li class="nav-item"><a href="../pages/28-pytorch.html" class=""><span class="num">28</span>PyTorch: from toy model to training loop</a></li><li class="nav-item"><a href="../pages/29-cnn.html" class=""><span class="num">29</span>CNN for computer vision</a></li><li class="nav-item"><a href="../pages/30-rnn-lstm.html" class=""><span class="num">30</span>RNN, LSTM, GRU for sequences</a></li><li class="nav-item"><a href="../pages/31-transformer.html" class=""><span class="num">31</span>Transformer and attention</a></li><li class="nav-item"><a href="../pages/32-nlp-llm.html" class=""><span class="num">32</span>NLP: from text mining to LLMs</a></li><li class="nav-item"><a href="../pages/33-time-series.html" class="active"><span class="num">33</span>Time series and forecasting</a></li><li class="nav-item"><a href="../pages/34-mlops.html" class=""><span class="num">34</span>MLOps: deployment, monitoring, drift</a></li><li class="nav-item"><a href="../pages/35-bayesian-causal.html" class=""><span class="num">35</span>Bayesian and Causal Inference</a></li><li class="nav-item"><a href="../pages/36-capstone-career.html" class=""><span class="num">36</span>Capstone, portfolio, career</a></li><li class="nav-item"><a href="../pages/37-glossary.html" class=""><span class="num">37</span>Glossary A-Z</a></li><li class="nav-item"><a href="../pages/38-formula-sheet.html" class=""><span class="num">38</span>Formula Sheet: all the formulas from the course</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Domains</span>
+        <span>Section 34 of 39</span>
+        <span class="level-tag level-adv">Level: advanced</span>
+      </div>
+      <h1>Time series and forecasting</h1>
+      <p class="summary">Stationarity, ARIMA, SARIMAX, Prophet, gradient boosting on temporal features, deep models (DeepAR, N-BEATS, TFT). Cross-validation for time.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Domains</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>[[inferential-statistics]]</li><li>[[pandas]]</li></ul>
+  <div class="label">Tools</div>
+  <ul class="source-list"><li>statsmodels, prophet, sktime, neuralforecast</li></ul>
+</div>
+      <h2 id="what-is-a-time-series">What is a time series</h2>
+<p>A sequence of observations over time: $y_1, y_2, \dots, y_T$. The temporal structure breaks the iid assumption → requires dedicated tools.</p>
+<pre><code class="language-mermaid">flowchart LR
+    A[Time series] --&gt; B[Trend&lt;br/&gt;long-term direction]
+    A --&gt; C[Seasonality&lt;br/&gt;periodic patterns]
+    A --&gt; D[Cycles&lt;br/&gt;non-fixed oscillations]
+    A --&gt; E[Noise&lt;br/&gt;residual]
+</code></pre>
+<h2 id="decomposition">Decomposition</h2>
+<p>$$y_t = T_t + S_t + C_t + \epsilon_t$$</p>
+<p>Additive (above) or multiplicative ($y_t = T_t \cdot S_t \cdot C_t \cdot \epsilon_t$, for increasing variance).</p>
+<pre><code class="language-python">from statsmodels.tsa.seasonal import seasonal_decompose, STL
+dec = STL(y, period=12).fit()
+dec.plot()
+</code></pre>
+<p>STL is the preferred modern decomposition (robust, handles non-linear trends).</p>
+<h2 id="stationarity">Stationarity</h2>
+<p>A series is <strong>stationary</strong> if mean, variance, and autocovariance do not depend on time. Almost all classical models (ARIMA) assume stationarity.</p>
+<p><strong>Stationarity tests</strong>:</p>
+<ul>
+<li><strong>Augmented Dickey-Fuller (ADF)</strong>: H0 = "non-stationary". p&lt;0.05 → stationary.</li>
+<li><strong>KPSS</strong>: H0 = "stationary". Inverse.</li>
+</ul>
+<p>Use both:</p>
+<pre><code class="language-python">from statsmodels.tsa.stattools import adfuller, kpss
+print(adfuller(y)[1])      # ADF p-value
+print(kpss(y)[1])           # KPSS p-value
+</code></pre>
+<p><strong>How to make a series stationary</strong>:</p>
+<ol>
+<li><strong>Differencing</strong>: $y_t - y_{t-1}$.</li>
+<li><strong>Seasonal differencing</strong>: $y_t - y_{t-12}$ (for annual monthly data).</li>
+<li><strong>Logarithm</strong>: stabilizes multiplicative variance.</li>
+</ol>
+<h2 id="autocorrelation-acf-and-pacf">Autocorrelation: ACF and PACF</h2>
+<p><strong>Autocorrelation</strong> measures how much the series is correlated with itself $k$ lags back:</p>
+<p>$$r_k = \text{Corr}(y_t, y_{t-k})$$</p>
+<p>ACF = total correlation. PACF = "pure" correlation eliminating the effect of intermediate lags.</p>
+<pre><code class="language-python">from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
+plot_acf(y, lags=40); plot_pacf(y, lags=40)
+</code></pre>
+<p>Interpretation (for choosing ARIMA):</p>
+<ul>
+<li>ACF tail-off, PACF cuts off at lag $p$ → AR($p$).</li>
+<li>ACF cuts off at lag $q$, PACF tail-off → MA($q$).</li>
+<li>Both tail-off → ARMA.</li>
+</ul>
+<h2 id="arima">ARIMA</h2>
+<p><strong>ARIMA(p, d, q)</strong> = AR(p) + differencing of order d + MA(q).</p>
+<p>$$\phi(B)(1-B)^d y_t = \theta(B) \epsilon_t$$</p>
+<p>where $B$ is the shift operator, $\phi, \theta$ polynomials.</p>
+<pre><code class="language-python">from statsmodels.tsa.arima.model import ARIMA
+m = ARIMA(y, order=(2, 1, 2)).fit()
+print(m.summary())
+fc = m.forecast(steps=12)
+</code></pre>
+<h2 id="sarimax">SARIMAX</h2>
+<p>ARIMA + seasonality + exogenous variables:</p>
+<p>$$\text{SARIMAX}(p,d,q)(P,D,Q)_s$$</p>
+<pre><code class="language-python">from statsmodels.tsa.statespace.sarimax import SARIMAX
+m = SARIMAX(y, order=(1,1,1), seasonal_order=(1,1,1,12), exog=X).fit()
+</code></pre>
+<blockquote>
+<p>Use <code>pmdarima.auto_arima(y)</code> to automatically identify orders.</p>
+</blockquote>
+<h2 id="prophet-facebook-2017">Prophet (Facebook, 2017)</h2>
+<p>"Additive-type" model with trend + multiple seasonalities + holidays. Designed for business analysts:</p>
+<p>$$y(t) = g(t) + s(t) + h(t) + \epsilon$$</p>
+<pre><code class="language-python">from prophet import Prophet
+df = pd.DataFrame({'ds': dates, 'y': values})
+m = Prophet(yearly_seasonality=True, weekly_seasonality=True)
+m.fit(df)
+future = m.make_future_dataframe(periods=365)
+forecast = m.predict(future)
+m.plot(forecast); m.plot_components(forecast)
+</code></pre>
+<p>Pros: robust, predictive intervals, handles missing data and holidays.
+Cons: less accurate than modern models for complex patterns.</p>
+<h2 id="modern-approach-gradient-boosting">Modern approach: gradient boosting</h2>
+<p>Often the <strong>most effective</strong> for business forecasting: transforms the problem into tabular by adding temporal features.</p>
+<pre><code class="language-python">import pandas as pd
+df['lag1'] = df['y'].shift(1)
+df['lag7'] = df['y'].shift(7)
+df['ma7'] = df['y'].rolling(7).mean().shift(1)
+df['dow'] = df['ds'].dt.dayofweek
+df['month'] = df['ds'].dt.month
+df['is_holiday'] = ...
+
+# train LightGBM
+import lightgbm as lgb
+X = df.drop(['y','ds'], axis=1); y = df['y']
+m = lgb.LGBMRegressor(n_estimators=1000, learning_rate=0.05).fit(X, y)
+</code></pre>
+<p><strong>M5 Competition</strong> (Kaggle 2020): winning solutions used LightGBM with temporal feature engineering, not "fancy neural" models.</p>
+<h2 id="deep-models-for-time-series">Deep models for time series</h2>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>DeepAR</strong> (Amazon)</td>
+<td>Autoregressive RNN, probabilistic</td>
+</tr>
+<tr>
+<td><strong>N-BEATS</strong> (Element AI)</td>
+<td>Backward-forward residual blocks</td>
+</tr>
+<tr>
+<td><strong>N-HiTS</strong></td>
+<td>N-BEATS with multi-scale</td>
+</tr>
+<tr>
+<td><strong>Temporal Fusion Transformer (TFT)</strong></td>
+<td>Transformer + interpretability</td>
+</tr>
+<tr>
+<td><strong>PatchTST</strong></td>
+<td>Patch-based Transformer (like ViT)</td>
+</tr>
+<tr>
+<td><strong>TimesFM, Chronos, Moirai</strong></td>
+<td>Foundation models pre-trained on billions of series</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-python">from neuralforecast import NeuralForecast
+from neuralforecast.models import NBEATS, NHITS, TFT
+nf = NeuralForecast(models=[NBEATS(input_size=24, h=12)], freq='M')
+nf.fit(df)
+preds = nf.predict()
+</code></pre>
+<h2 id="temporal-cross-validation">Temporal cross-validation</h2>
+<p>Never random K-fold. Use:</p>
+<ul>
+<li><strong>Forward chaining</strong> (expanding window).</li>
+<li><strong>Sliding window</strong> (rolling).</li>
+</ul>
+<pre><code class="language-python">from sklearn.model_selection import TimeSeriesSplit
+tscv = TimeSeriesSplit(n_splits=5, gap=7)
+</code></pre>
+<pre><code class="language-mermaid">flowchart LR
+    A[T1&lt;br/&gt;train] --&gt; B[V1] --&gt; C[T2&lt;br/&gt;train+V1] --&gt; D[V2] --&gt; E[T3] --&gt; F[V3]
+</code></pre>
+<h2 id="forecasting-metrics">Forecasting metrics</h2>
+<ul>
+<li><strong>MAE</strong> / <strong>RMSE</strong>: scale-dependent, fine for a single series.</li>
+<li><strong>MAPE</strong>: percentage, but explodes when $y$ is close to 0.</li>
+<li><strong>sMAPE</strong>: symmetric variant.</li>
+<li><strong>MASE</strong> (Mean Absolute Scaled Error): scale-independent, comparable across series.</li>
+</ul>
+<pre><code class="language-python">def mase(y_true, y_pred, y_train, period=1):
+    naive = np.mean(np.abs(np.diff(y_train, period)))
+    return np.mean(np.abs(y_true - y_pred)) / naive
+</code></pre>
+<h2 id="baselines-not-to-underestimate">Baselines not to underestimate</h2>
+<ul>
+<li><strong>Naive</strong>: $\hat{y}_{t+1} = y_t$.</li>
+<li><strong>Seasonal naive</strong>: $\hat{y}<em t_1-s="t+1-s">{t+1} = y</em>$.</li>
+<li><strong>Moving average</strong>: mean of the last $k$ values.</li>
+<li><strong>Exponential smoothing (Holt-Winters)</strong>: trend + seasonality with decay.</li>
+</ul>
+<p>Baselines often beat complex models.</p>
+<pre><code class="language-python">from statsmodels.tsa.holtwinters import ExponentialSmoothing
+m = ExponentialSmoothing(y, trend='add', seasonal='add', seasonal_periods=12).fit()
+</code></pre>
+<h2 id="predictive-intervals">Predictive intervals</h2>
+<p>A point forecast is almost always <strong>insufficient</strong>. You want an interval:</p>
+<ul>
+<li>ARIMA / Prophet: provide them naturally.</li>
+<li>Gradient boosting: use <strong>quantile regression</strong> (LightGBM <code>objective='quantile'</code>).</li>
+<li>Deep models: Monte Carlo dropout, ensemble, probabilistic output.</li>
+</ul>
+<h2 id="exercises">Exercises</h2>
+<details>
+<summary>Exercise 1 — Decomposition</summary>
+
+
+<pre><code class="language-python">import pandas as pd
+import seaborn as sns
+from statsmodels.tsa.seasonal import STL
+df = sns.load_dataset('flights')
+y = df.set_index('year')['passengers']     # unfortunately annual, try with real monthly freq
+# better: download AirPassengers
+</code></pre>
+
+</details>
+
+<details>
+<summary>Exercise 2 — ARIMA vs Prophet vs LightGBM</summary>
+
+On a daily web traffic series for one year:
+
+1. Split into train/test (last month = test).
+2. Fit ARIMA(auto), Prophet, LightGBM with lag features.
+3. Compare MAE, MAPE.
+
+Typically: LightGBM > Prophet > ARIMA for complex patterns. ARIMA can win on very regular series.
+</details>
+
+<details>
+<summary>Exercise 3 — Quantile forecasting</summary>
+
+
+<pre><code class="language-python">import lightgbm as lgb
+# train 3 models for quantiles 0.1, 0.5, 0.9
+preds = {}
+for q in [0.1, 0.5, 0.9]:
+    m = lgb.LGBMRegressor(objective='quantile', alpha=q, n_estimators=500)
+    m.fit(X_tr, y_tr)
+    preds[q] = m.predict(X_te)
+
+# plot intervals
+import matplotlib.pyplot as plt
+plt.plot(y_te.index, y_te, label='actual')
+plt.plot(y_te.index, preds[0.5], label='median')
+plt.fill_between(y_te.index, preds[0.1], preds[0.9], alpha=0.3, label='80% band')
+plt.legend()
+</code></pre>
+
+</details>
+
+<h2 id="key-takeaways">Key takeaways</h2>
+<ul>
+<li>Stationarity is the first check (ADF + KPSS).</li>
+<li>ACF/PACF guide the choice of ARIMA.</li>
+<li>Gradient boosting + temporal features often beats ARIMA in business problems.</li>
+<li>Prophet is a good simplicity/quality tradeoff for analysts.</li>
+<li>TimeSeriesSplit for CV, never random K-fold.</li>
+<li>Predictive intervals &gt; point forecast.</li>
+<li>Foundation models 2024+ (Chronos, TimesFM) — worth watching but not yet a silver bullet.</li>
+</ul>
+<p>Next up: MLOps — deployment, monitoring, drift.</p>
+      <nav class="pager">
+<a href="32-nlp-llm.html" class="prev"><span class="label">← Previous</span><span class="title">NLP: from text mining to LLMs</span></a>
+<a href="34-mlops.html" class="next"><span class="label">Next →</span><span class="title">MLOps: deployment, monitoring, drift</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Data Science Zero to Hero</strong> — complete path, in English, from math to deployment.</p><p>Open didactic material. Formulas are here to be understood, not feared. When a concept is unclear, go back: data science is a pyramid, not a tree you skip across.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+</body>
+</html>

@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>JDBC: connessione, PreparedStatement, transazioni, isolation levels — Java + Spring Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">☕</div>
+      <div>
+        <div class="brand-title">JAVA · SPRING</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="10" height="20" fill="#009246"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ce2b37"/></svg> IT</span><a href="../en/pages/19-jdbc.html" class="lang-link" title="Switch to English"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="30" height="20" fill="#012169"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#fff" stroke-width="3"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#c8102e" stroke-width="1.5"/><path d="M15,0 v20 M0,10 h30" stroke="#fff" stroke-width="5"/><path d="M15,0 v20 M0,10 h30" stroke="#c8102e" stroke-width="3"/></svg> EN</a></div>
+  </div>
+  <div class="search-wrap">
+    <div class="search-row">
+      <div class="search-inputwrap">
+        <span class="search-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"/>
+            <line x1="20" y1="20" x2="16.65" y2="16.65"/>
+          </svg>
+        </span>
+        <input class="search-input" id="search-input" type="text" placeholder="cerca... (premi /)" autocomplete="off" aria-label="Search">
+        <button class="search-clear" id="search-clear" type="button" aria-label="Clear" title="Clear">&times;</button>
+      </div>
+      <button class="search-btn" id="search-btn" type="button" aria-label="CERCA" title="CERCA">CERCA</button>
+    </div>
+    <div class="search-hits" id="search-hits" role="listbox"></div>
+  </div>
+  <div class="sidebar-nav">
+    <nav class="nav-section">
+      <div class="nav-section-title">Percorso</div>
+      <ul class="nav-list">
+        <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+        <li class="nav-item"><a href="../pages/00-percorso-e-mindset.html" class=""><span class="num">00</span>Il percorso e la giusta mentalità</a></li><li class="nav-item"><a href="../pages/01-introduzione-java.html" class=""><span class="num">01</span>Java: cos&#x27;è davvero, JVM/JRE/JDK, primo programma</a></li><li class="nav-item"><a href="../pages/02-sintassi-base.html" class=""><span class="num">02</span>Sintassi di base: tipi, variabili, operatori, controllo di flusso</a></li><li class="nav-item"><a href="../pages/03-stringhe-array-io.html" class=""><span class="num">03</span>Stringhe, array, I/O da console</a></li><li class="nav-item"><a href="../pages/04-oop-classi-oggetti.html" class=""><span class="num">04</span>OOP I — Classi, oggetti, costruttori, this, package, visibilità</a></li><li class="nav-item"><a href="../pages/05-oop-ereditarieta-polimorfismo.html" class=""><span class="num">05</span>OOP II — Ereditarietà, polimorfismo, interfacce, classi astratte</a></li><li class="nav-item"><a href="../pages/06-equals-hashcode-immutabilita.html" class=""><span class="num">06</span>OOP III — equals, hashCode, toString, immutabilità, record</a></li><li class="nav-item"><a href="../pages/07-eccezioni.html" class=""><span class="num">07</span>Eccezioni: checked vs unchecked, try-with-resources, custom</a></li><li class="nav-item"><a href="../pages/08-generics.html" class=""><span class="num">08</span>Generics: tipi parametrici, PECS, type erasure, wildcards</a></li><li class="nav-item"><a href="../pages/09-collections.html" class=""><span class="num">09</span>Collections: List, Set, Map, Queue, complessità, scelta della struttura</a></li><li class="nav-item"><a href="../pages/10-stream-lambda-optional.html" class=""><span class="num">10</span>Stream API, lambda, functional interfaces, Optional</a></li><li class="nav-item"><a href="../pages/11-io-nio.html" class=""><span class="num">11</span>I/O e NIO.2: File, Path, channels, buffer</a></li><li class="nav-item"><a href="../pages/12-concurrency-thread.html" class=""><span class="num">12</span>Concurrency I — Thread, sincronizzazione, volatile, Java Memory Model</a></li><li class="nav-item"><a href="../pages/13-executor-future-completablefuture.html" class=""><span class="num">13</span>Concurrency II — ExecutorService, Future, CompletableFuture</a></li><li class="nav-item"><a href="../pages/14-concurrency-jucconcurrent.html" class=""><span class="num">14</span>Concurrency III — java.util.concurrent: locks, atomics, concurrent collections</a></li><li class="nav-item"><a href="../pages/15-jvm-internals.html" class=""><span class="num">15</span>JVM internals: classloader, bytecode, runtime data areas, JIT</a></li><li class="nav-item"><a href="../pages/16-memoria-gc.html" class=""><span class="num">16</span>Memoria e garbage collection: G1, ZGC, Shenandoah</a></li><li class="nav-item"><a href="../pages/17-profiling-jfr.html" class=""><span class="num">17</span>Profiling: JFR, async-profiler, jstack, heap dump, jcmd</a></li><li class="nav-item"><a href="../pages/18-java-moderno.html" class=""><span class="num">18</span>Java moderno: dal 8 al 21 — features chiave</a></li><li class="nav-item"><a href="../pages/19-jdbc.html" class="active"><span class="num">19</span>JDBC: connessione, PreparedStatement, transazioni, isolation levels</a></li><li class="nav-item"><a href="../pages/20-jpa-hibernate.html" class=""><span class="num">20</span>JPA / Hibernate: entità, relazioni, lazy/eager, N+1, cache</a></li><li class="nav-item"><a href="../pages/21-sql-essenziale.html" class=""><span class="num">21</span>SQL essenziale per chi sviluppa in Java</a></li><li class="nav-item"><a href="../pages/22-spring-intro-ioc-di.html" class=""><span class="num">22</span>Spring intro: IoC, DI, ApplicationContext, BeanFactory</a></li><li class="nav-item"><a href="../pages/23-spring-beans-lifecycle.html" class=""><span class="num">23</span>Bean: scopes, lifecycle, BeanPostProcessor, FactoryBean</a></li><li class="nav-item"><a href="../pages/24-spring-configurazione.html" class=""><span class="num">24</span>Configurazione: Java config, @ComponentScan, profili, conditionals, properties</a></li><li class="nav-item"><a href="../pages/25-spring-aop-transactional.html" class=""><span class="num">25</span>AOP, proxy, @Transactional: cosa accade davvero</a></li><li class="nav-item"><a href="../pages/26-spring-boot.html" class=""><span class="num">26</span>Spring Boot: auto-configuration, starters, Actuator</a></li><li class="nav-item"><a href="../pages/27-spring-data-jpa.html" class=""><span class="num">27</span>Spring Data JPA: Repository, derived queries, paginazione, Specification</a></li><li class="nav-item"><a href="../pages/28-spring-mvc-rest.html" class=""><span class="num">28</span>Spring MVC: DispatcherServlet, controller, REST endpoint</a></li><li class="nav-item"><a href="../pages/29-rest-openapi-hateoas.html" class=""><span class="num">29</span>REST: best practice, OpenAPI/Swagger, HATEOAS, versionamento</a></li><li class="nav-item"><a href="../pages/30-spring-webflux.html" class=""><span class="num">30</span>Spring WebFlux + Reactor: Mono, Flux, programmazione reattiva</a></li><li class="nav-item"><a href="../pages/31-spring-security.html" class=""><span class="num">31</span>Spring Security: filter chain, autenticazione, autorizzazione, JWT, OAuth2</a></li><li class="nav-item"><a href="../pages/32-spring-cloud.html" class=""><span class="num">32</span>Spring Cloud: Config Server, Discovery, Gateway, Resilience4j</a></li><li class="nav-item"><a href="../pages/33-testing.html" class=""><span class="num">33</span>Testing: JUnit 5, Mockito, MockMvc, Testcontainers</a></li><li class="nav-item"><a href="../pages/34-spring-batch-intro.html" class=""><span class="num">34</span>Spring Batch intro: domain model, Job, Step, primo batch</a></li><li class="nav-item"><a href="../pages/35-spring-batch-jobrepository.html" class=""><span class="num">35</span>JobRepository, JobLauncher, schema dei metadati</a></li><li class="nav-item"><a href="../pages/36-spring-batch-chunk-skip-retry.html" class=""><span class="num">36</span>Chunk processing: commit interval, skip, retry, fault tolerance</a></li><li class="nav-item"><a href="../pages/37-spring-batch-tasklet-flow.html" class=""><span class="num">37</span>Tasklet vs Chunk; flow control: decisioni, split, conditional</a></li><li class="nav-item"><a href="../pages/38-spring-batch-itemreader.html" class=""><span class="num">38</span>ItemReader: flat file, XML/JSON, JDBC cursor/paging, JPA, multi-resource</a></li><li class="nav-item"><a href="../pages/39-spring-batch-itemwriter.html" class=""><span class="num">39</span>ItemWriter: file, JDBC, JPA, composite, classifier, batch insert</a></li><li class="nav-item"><a href="../pages/40-spring-batch-scaling-partitioning.html" class=""><span class="num">40</span>Scaling: multi-threaded step, partitioning, remote chunking/partitioning</a></li><li class="nav-item"><a href="../pages/41-spring-batch-listeners-restart-k8s.html" class=""><span class="num">41</span>Listeners, restart, monitoring, integrazione con Spring Boot e Kubernetes</a></li><li class="nav-item"><a href="../pages/42-design-patterns.html" class=""><span class="num">42</span>Design pattern in Java/Spring: GoF + DDD-lite</a></li><li class="nav-item"><a href="../pages/43-performance-observability.html" class=""><span class="num">43</span>Performance tuning e observability production-grade</a></li><li class="nav-item"><a href="../pages/44-esercizi-sintesi.html" class=""><span class="num">44</span>50 esercizi cumulativi: dalla sintassi a Spring Batch</a></li><li class="nav-item"><a href="../pages/45-progetto-finale-etl.html" class=""><span class="num">45</span>Progetto finale guidato: ETL bancario notturno</a></li>
+      </ul>
+    </nav>
+  </div>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Persistenza</span>
+        <span>Sezione 19 di 45</span>
+        <span class="level-tag level-int">Livello: intermedio</span>
+      </div>
+      <h1>JDBC: connessione, PreparedStatement, transazioni, isolation levels</h1>
+      <p class="summary">JDBC URL, DriverManager vs DataSource. Statement, PreparedStatement (SQL injection-safe), ResultSet. Transazioni: commit, rollback, savepoint. Isolation levels e fenomeni anomali.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Persistenza</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>Sezione 18</li></ul>
+  <div class="label">Strumenti</div>
+  <ul class="source-list"><li>JDK 21</li><li>PostgreSQL/H2</li><li>Maven</li></ul>
+</div>
+      <h2 id="cose-jdbc">Cos'è JDBC</h2>
+<p>JDBC (<code>java.sql.*</code>, <code>javax.sql.*</code>) è l'API standard di Java per parlare con un DB relazionale. Sotto Spring Data, Hibernate, JOOQ, MyBatis — c'è sempre JDBC.</p>
+<p>Componenti:
+- <strong>Driver</strong>: implementazione fornita dal vendor (postgres-jdbc, mysql-connector, ojdbc, h2, ...).
+- <strong>Connection</strong>: una connessione TCP al DB.
+- <strong>Statement / PreparedStatement</strong>: una query SQL.
+- <strong>ResultSet</strong>: il risultato di una <code>SELECT</code>.
+- <strong>DataSource</strong>: factory di connessioni, di solito un pool.</p>
+<h2 id="setup">Setup</h2>
+<p>Aggiungi il driver in <code>pom.xml</code>:</p>
+<pre><code class="language-xml">&lt;dependency&gt;
+  &lt;groupId&gt;org.postgresql&lt;/groupId&gt;
+  &lt;artifactId&gt;postgresql&lt;/artifactId&gt;
+  &lt;version&gt;42.7.4&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+<h2 id="connessione-drivermanager-didattico">Connessione: DriverManager (didattico)</h2>
+<pre><code class="language-java">String url = &quot;jdbc:postgresql://localhost:5432/mydb&quot;;
+String user = &quot;postgres&quot;, pwd = &quot;secret&quot;;
+
+try (Connection c = DriverManager.getConnection(url, user, pwd)) {
+    System.out.println(c.getMetaData().getDatabaseProductVersion());
+}
+</code></pre>
+<p>URL JDBC: <code>jdbc:&lt;driver&gt;://&lt;host&gt;:&lt;port&gt;/&lt;db&gt;?&lt;params&gt;</code>.</p>
+<blockquote>
+<p><strong>In produzione</strong> usi <strong>HikariCP</strong> o il pool di Spring (<code>spring.datasource.hikari.*</code>). Mai <code>DriverManager</code> direttamente per i tuoi servizi.</p>
+</blockquote>
+<h2 id="datasource-con-hikaricp">DataSource con HikariCP</h2>
+<pre><code class="language-java">HikariDataSource ds = new HikariDataSource();
+ds.setJdbcUrl(url);
+ds.setUsername(user);
+ds.setPassword(pwd);
+ds.setMaximumPoolSize(20);
+
+try (Connection c = ds.getConnection()) {
+    ...
+}
+</code></pre>
+<p>HikariCP è il pool più veloce di Java. Spring Boot lo usa per default.</p>
+<h2 id="preparedstatement-sempre-ovunque"><code>PreparedStatement</code> (sempre, ovunque)</h2>
+<pre><code class="language-java">String sql = &quot;SELECT id, name, email FROM customer WHERE city = ? AND age &gt;= ?&quot;;
+
+try (Connection c = ds.getConnection();
+     PreparedStatement ps = c.prepareStatement(sql)) {
+    ps.setString(1, &quot;Milano&quot;);
+    ps.setInt(2, 18);
+
+    try (ResultSet rs = ps.executeQuery()) {
+        while (rs.next()) {
+            long id = rs.getLong(&quot;id&quot;);
+            String name = rs.getString(&quot;name&quot;);
+            String email = rs.getString(&quot;email&quot;);
+            System.out.println(id + &quot; &quot; + name + &quot; &quot; + email);
+        }
+    }
+}
+</code></pre>
+<h3 id="perche-preparedstatement-e-non-statement">Perché PreparedStatement e non Statement</h3>
+<ul>
+<li><strong>SQL injection-safe</strong>: i <code>?</code> sono placeholder, mai concatenare stringhe utente.</li>
+<li><strong>Performance</strong>: il DB può pianificare la query una volta.</li>
+<li><strong>Tipi</strong>: <code>setString</code>, <code>setInt</code>, <code>setBigDecimal</code>, <code>setTimestamp</code> — niente parser fragili.</li>
+</ul>
+<h3 id="mai-fare-cosi">MAI fare così</h3>
+<pre><code class="language-java">String sql = &quot;SELECT * FROM customer WHERE city = '&quot; + city + &quot;'&quot;;
+// BOOM, SQL injection
+</code></pre>
+<h2 id="update-e-returning">Update e returning</h2>
+<pre><code class="language-java">String sql = &quot;UPDATE account SET balance = balance - ? WHERE id = ?&quot;;
+try (PreparedStatement ps = c.prepareStatement(sql)) {
+    ps.setBigDecimal(1, amount);
+    ps.setLong(2, accountId);
+    int rows = ps.executeUpdate();
+    System.out.println(&quot;aggiornate &quot; + rows + &quot; righe&quot;);
+}
+</code></pre>
+<p>INSERT con id generato:</p>
+<pre><code class="language-java">String sql = &quot;INSERT INTO customer(name, email) VALUES (?, ?)&quot;;
+try (PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+    ps.setString(1, &quot;Anna&quot;);
+    ps.setString(2, &quot;anna@x.it&quot;);
+    ps.executeUpdate();
+    try (ResultSet rs = ps.getGeneratedKeys()) {
+        if (rs.next()) System.out.println(&quot;nuovo id: &quot; + rs.getLong(1));
+    }
+}
+</code></pre>
+<h2 id="batch-update">Batch update</h2>
+<p>Per inserire/aggiornare N righe, evita N round-trip:</p>
+<pre><code class="language-java">String sql = &quot;INSERT INTO log(msg) VALUES (?)&quot;;
+try (PreparedStatement ps = c.prepareStatement(sql)) {
+    for (String m : messages) {
+        ps.setString(1, m);
+        ps.addBatch();
+    }
+    int[] counts = ps.executeBatch();
+}
+</code></pre>
+<p>Speedup tipico: 10-100x. Fondamentale in Spring Batch.</p>
+<h2 id="transazioni">Transazioni</h2>
+<pre><code class="language-java">try (Connection c = ds.getConnection()) {
+    c.setAutoCommit(false);            // disattiva auto-commit
+    try {
+        // due update che devono andare insieme
+        try (PreparedStatement ps1 = c.prepareStatement(&quot;UPDATE account SET balance = balance - ? WHERE id = ?&quot;)) {
+            ps1.setBigDecimal(1, amt); ps1.setLong(2, from); ps1.executeUpdate();
+        }
+        try (PreparedStatement ps2 = c.prepareStatement(&quot;UPDATE account SET balance = balance + ? WHERE id = ?&quot;)) {
+            ps2.setBigDecimal(1, amt); ps2.setLong(2, to); ps2.executeUpdate();
+        }
+        c.commit();
+    } catch (Exception e) {
+        c.rollback();
+        throw e;
+    }
+}
+</code></pre>
+<h3 id="isolation-levels">Isolation levels</h3>
+<p>Fenomeni anomali:
+- <strong>Dirty read</strong>: leggi dati non committati.
+- <strong>Non-repeatable read</strong>: leggi lo stesso record due volte, valori diversi.
+- <strong>Phantom read</strong>: leggi un set di record due volte, comparsa/scomparsa di righe.</p>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>Dirty</th>
+<th>Non-rep</th>
+<th>Phantom</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>READ UNCOMMITTED</td>
+<td>⚠️</td>
+<td>⚠️</td>
+<td>⚠️</td>
+</tr>
+<tr>
+<td>READ COMMITTED</td>
+<td>OK</td>
+<td>⚠️</td>
+<td>⚠️</td>
+</tr>
+<tr>
+<td>REPEATABLE READ</td>
+<td>OK</td>
+<td>OK</td>
+<td>⚠️</td>
+</tr>
+<tr>
+<td>SERIALIZABLE</td>
+<td>OK</td>
+<td>OK</td>
+<td>OK</td>
+</tr>
+</tbody>
+</table>
+<p>Postgres default: <strong>READ COMMITTED</strong>. Oracle: <strong>READ COMMITTED</strong>. MySQL InnoDB: <strong>REPEATABLE READ</strong>.</p>
+<pre><code class="language-java">c.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+</code></pre>
+<blockquote>
+<p>Più alto isolation = più lock = meno concorrenza. La scelta giusta è quasi sempre <strong>READ COMMITTED</strong> + locking esplicito quando serve.</p>
+</blockquote>
+<h3 id="savepoint">Savepoint</h3>
+<pre><code class="language-java">Savepoint sp = c.setSavepoint(&quot;dopo_step1&quot;);
+// ...
+c.rollback(sp);  // rollback parziale
+</code></pre>
+<h2 id="resultset-scorrimento-e-tipi">ResultSet: scorrimento e tipi</h2>
+<pre><code class="language-java">while (rs.next()) {
+    long id = rs.getLong(&quot;id&quot;);
+    String name = rs.getString(&quot;name&quot;);
+    Timestamp ts = rs.getTimestamp(&quot;created_at&quot;);
+    BigDecimal amt = rs.getBigDecimal(&quot;amount&quot;);
+    boolean active = rs.getBoolean(&quot;active&quot;);
+    // tipo java per ogni tipo SQL
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>SQL</th>
+<th>Java</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>INTEGER</td>
+<td><code>int</code> / <code>Integer</code></td>
+</tr>
+<tr>
+<td>BIGINT</td>
+<td><code>long</code> / <code>Long</code></td>
+</tr>
+<tr>
+<td>VARCHAR</td>
+<td><code>String</code></td>
+</tr>
+<tr>
+<td>NUMERIC, DECIMAL</td>
+<td><code>BigDecimal</code></td>
+</tr>
+<tr>
+<td>DATE</td>
+<td><code>LocalDate</code> (usa <code>rs.getObject("col", LocalDate.class)</code>)</td>
+</tr>
+<tr>
+<td>TIMESTAMP</td>
+<td><code>LocalDateTime</code> o <code>Instant</code></td>
+</tr>
+<tr>
+<td>BOOLEAN</td>
+<td><code>boolean</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="esercizi">Esercizi</h2>
+<details>
+<summary>Es 19.1 — Setup H2 in-memory + CRUD</summary>
+
+
+<pre><code class="language-xml">&lt;dependency&gt;
+  &lt;groupId&gt;com.h2database&lt;/groupId&gt;
+  &lt;artifactId&gt;h2&lt;/artifactId&gt;
+  &lt;version&gt;2.2.224&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+
+
+
+<pre><code class="language-java">String url = &quot;jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1&quot;;
+try (Connection c = DriverManager.getConnection(url, &quot;sa&quot;, &quot;&quot;)) {
+    try (Statement s = c.createStatement()) {
+        s.execute(&quot;CREATE TABLE persona(id BIGINT AUTO_INCREMENT, nome VARCHAR, eta INT)&quot;);
+    }
+    try (PreparedStatement ps = c.prepareStatement(
+            &quot;INSERT INTO persona(nome, eta) VALUES (?, ?)&quot;)) {
+        ps.setString(1, &quot;Anna&quot;); ps.setInt(2, 30); ps.executeUpdate();
+        ps.setString(1, &quot;Beppe&quot;); ps.setInt(2, 45); ps.executeUpdate();
+    }
+    try (PreparedStatement ps = c.prepareStatement(&quot;SELECT * FROM persona&quot;);
+         ResultSet rs = ps.executeQuery()) {
+        while (rs.next()) {
+            System.out.println(rs.getLong(&quot;id&quot;) + &quot; &quot; + rs.getString(&quot;nome&quot;) + &quot; &quot; + rs.getInt(&quot;eta&quot;));
+        }
+    }
+}
+</code></pre>
+
+
+</details>
+
+<details>
+<summary>Es 19.2 — Trasferimento atomico</summary>
+
+Implementa `trasferisci(from, to, amount)` con transazione + rollback in caso di errore.
+
+</details>
+
+<details>
+<summary>Es 19.3 — Batch insert</summary>
+
+Inserisci 10.000 record con e senza batch. Misura il tempo.
+
+</details>
+
+<h2 id="cosa-devi-portarti-via">Cosa devi portarti via</h2>
+<ul>
+<li>Sempre <strong><code>PreparedStatement</code></strong> (mai concatenare SQL).</li>
+<li><strong><code>try-with-resources</code></strong> per Connection, Statement, ResultSet.</li>
+<li>Pool di connessioni: <strong>HikariCP</strong>.</li>
+<li>Transazioni: <code>setAutoCommit(false)</code> + <code>commit/rollback</code>.</li>
+<li>Isolation level di default = READ COMMITTED. Cambialo solo se sai perché.</li>
+<li>Batch update per inserimenti massivi (cruciale per Spring Batch).</li>
+</ul>
+<p>Prossimo: JPA / Hibernate.</p>
+      <nav class="pager">
+<a href="18-java-moderno.html" class="prev"><span class="label">← Precedente</span><span class="title">Java moderno: dal 8 al 21 — features chiave</span></a>
+<a href="20-jpa-hibernate.html" class="next"><span class="label">Successivo →</span><span class="title">JPA / Hibernate: entità, relazioni, lazy/eager, N+1, cache</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Java + Spring Zero to Hero</strong> — percorso completo da Java base a Spring Batch in produzione.</p><p>Materiale a scopo educativo. Codice sotto licenza MIT; usalo liberamente nei tuoi progetti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body, {delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true, background: '#15191e', primaryColor: '#1d2530',
+      primaryTextColor: '#eef1f5', primaryBorderColor: '#f89820',
+      lineColor: '#6db33f', secondaryColor: '#1a1f25', tertiaryColor: '#222a33',
+      mainBkg: '#1d2530', nodeBorder: '#f89820', clusterBkg: '#0f1318',
+      clusterBorder: '#2a3340', titleColor: '#f89820',
+      edgeLabelBackground: '#0f1318', textColor: '#eef1f5',
+      labelTextColor: '#eef1f5', actorBkg: '#1d2530', actorBorder: '#f89820',
+      actorTextColor: '#f89820', actorLineColor: '#6db33f',
+      signalColor: '#eef1f5', signalTextColor: '#eef1f5',
+      labelBoxBkgColor: '#1d2530', labelBoxBorderColor: '#f89820',
+      noteBkgColor: '#fff6a8', noteTextColor: '#0f1318', noteBorderColor: '#fff6a8',
+      activationBkgColor: '#1d2530', activationBorderColor: '#f89820',
+      sequenceNumberColor: '#0f1318'
+    },
+    flowchart: { curve: 'basis', padding: 16 },
+    sequence: { mirrorActors: false, bottomMarginAdj: 10 },
+    fontFamily: 'JetBrains Mono, Cascadia Code, Consolas, monospace'
+  });
+</script>
+</body>
+</html>

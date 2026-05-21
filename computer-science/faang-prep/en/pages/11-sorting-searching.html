@@ -1,0 +1,684 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sorting and searching — FAANG Prep</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">F</div>
+      <div>
+        <div class="brand-title">FAANG Prep</div>
+        <div class="brand-subtitle">DS&amp;A · System Design</div>
+      </div>
+    </div>
+    <div class="lang-bar">
+      <a class="lang-switcher" href="../../pages/11-sorting-searching.html" title="Italiano"><span class="flag-icon">🇮🇹</span><span class="flag-label">Italiano</span></a>
+    </div>
+  </div>
+  <div class="search-wrap">
+    <input class="search-input" id="search-input" placeholder="Search content... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/00-introduction.html" class=""><span class="num">00</span>Introduction and how to use this path</a></li><li class="nav-item"><a href="../pages/01-complexity.html" class=""><span class="num">01</span>Computational complexity (Big-O)</a></li><li class="nav-item"><a href="../pages/02-arrays-strings.html" class=""><span class="num">02</span>Arrays and strings</a></li><li class="nav-item"><a href="../pages/03-hashmap-set.html" class=""><span class="num">03</span>Hashmap and set</a></li><li class="nav-item"><a href="../pages/04-linked-list.html" class=""><span class="num">04</span>Linked list</a></li><li class="nav-item"><a href="../pages/05-stack-queue.html" class=""><span class="num">05</span>Stack and queue</a></li><li class="nav-item"><a href="../pages/06-trees.html" class=""><span class="num">06</span>Trees (binary tree and BST)</a></li><li class="nav-item"><a href="../pages/07-heap.html" class=""><span class="num">07</span>Heap and priority queue</a></li><li class="nav-item"><a href="../pages/08-graphs.html" class=""><span class="num">08</span>Graphs</a></li><li class="nav-item"><a href="../pages/09-trie.html" class=""><span class="num">09</span>Trie (prefix tree)</a></li><li class="nav-item"><a href="../pages/10-recursion-backtracking.html" class=""><span class="num">10</span>Recursion and backtracking</a></li><li class="nav-item"><a href="../pages/11-sorting-searching.html" class="active"><span class="num">11</span>Sorting and searching</a></li><li class="nav-item"><a href="../pages/12-two-pointers-sliding-window.html" class=""><span class="num">12</span>Two pointers and sliding window</a></li><li class="nav-item"><a href="../pages/13-greedy.html" class=""><span class="num">13</span>Greedy</a></li><li class="nav-item"><a href="../pages/14-dp.html" class=""><span class="num">14</span>Dynamic programming</a></li><li class="nav-item"><a href="../pages/15-bit-manipulation.html" class=""><span class="num">15</span>Bit manipulation</a></li><li class="nav-item"><a href="../pages/16-oop-design-patterns.html" class=""><span class="num">16</span>OOP and design patterns</a></li><li class="nav-item"><a href="../pages/17-system-design.html" class=""><span class="num">17</span>System design — fundamentals</a></li><li class="nav-item"><a href="../pages/18-system-design-examples.html" class=""><span class="num">18</span>System design — end-to-end examples</a></li><li class="nav-item"><a href="../pages/19-concurrency.html" class=""><span class="num">19</span>Concurrency and parallelism</a></li><li class="nav-item"><a href="../pages/20-database-sql.html" class=""><span class="num">20</span>Database and SQL</a></li><li class="nav-item"><a href="../pages/21-os-networking.html" class=""><span class="num">21</span>OS and networking</a></li><li class="nav-item"><a href="../pages/22-coding-patterns.html" class=""><span class="num">22</span>The 16 interview coding patterns</a></li><li class="nav-item"><a href="../pages/23-behavioral-star.html" class=""><span class="num">23</span>Behavioral interview — STAR and Amazon LP</a></li><li class="nav-item"><a href="../pages/24-mock-interviews.html" class=""><span class="num">24</span>Mock interview and interview strategy</a></li><li class="nav-item"><a href="../pages/25-roadmap-90-days.html" class=""><span class="num">25</span>90-day Roadmap — operational plan</a></li><li class="nav-item"><a href="../pages/26-problem-bank.html" class=""><span class="num">26</span>Problem bank — 200+ FAANG problems</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Algorithms</span>
+        <span>Section 11 of 26</span>
+      </div>
+      <h1>Sorting and searching</h1>
+      <p class="summary">All sorting algorithms you need, binary search demystified with all its off-by-ones debugged step by step.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Algorithms</div>
+  
+  
+</div>
+      <p>Sorting and searching are the two oldest algorithms in CS. They look "simple", but under the surface there are detail-rich bugs.</p>
+<p>Let's start with sorting, then enter the binary search forest.</p>
+<h2 id="part-1-sorting-the-general-map">Part 1 — Sorting: the general map</h2>
+<h3 id="in-python-you-use-sort-but">In Python you use <code>sort()</code>. But...</h3>
+<p>For 99% of practical cases, Python has <code>sorted()</code> and <code>list.sort()</code>. Both use <strong>TimSort</strong>, a hybrid algorithm O(n log n), stable, optimized for "nearly-sorted" data.</p>
+<p>So in real life you never implement a sort. In interviews instead:</p>
+<ol>
+<li>You must know classic sorting algorithms and their trade-offs.</li>
+<li>You must know how to implement merge sort and quick sort ("implement sorting" questions are common for Apple/Bloomberg).</li>
+<li>You must understand <strong>when</strong> sorting is the right move.</li>
+</ol>
+<h3 id="reference-table">Reference table</h3>
+<table>
+<thead>
+<tr>
+<th>Algorithm</th>
+<th>Avg time</th>
+<th>Worst time</th>
+<th>Space</th>
+<th>Stable?</th>
+<th>In-place?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Bubble sort</strong></td>
+<td>O(n²)</td>
+<td>O(n²)</td>
+<td>O(1)</td>
+<td>yes</td>
+<td>yes</td>
+</tr>
+<tr>
+<td><strong>Insertion sort</strong></td>
+<td>O(n²)</td>
+<td>O(n²)</td>
+<td>O(1)</td>
+<td>yes</td>
+<td>yes</td>
+</tr>
+<tr>
+<td><strong>Selection sort</strong></td>
+<td>O(n²)</td>
+<td>O(n²)</td>
+<td>O(1)</td>
+<td>no</td>
+<td>yes</td>
+</tr>
+<tr>
+<td><strong>Merge sort</strong></td>
+<td>O(n log n)</td>
+<td>O(n log n)</td>
+<td>O(n)</td>
+<td>yes</td>
+<td>no</td>
+</tr>
+<tr>
+<td><strong>Quick sort</strong></td>
+<td>O(n log n)</td>
+<td>O(n²)</td>
+<td>O(log n) stack</td>
+<td>no</td>
+<td>yes</td>
+</tr>
+<tr>
+<td><strong>Heap sort</strong></td>
+<td>O(n log n)</td>
+<td>O(n log n)</td>
+<td>O(1)</td>
+<td>no</td>
+<td>yes</td>
+</tr>
+<tr>
+<td><strong>Counting sort</strong></td>
+<td>O(n + k)</td>
+<td>O(n + k)</td>
+<td>O(k)</td>
+<td>yes</td>
+<td>no</td>
+</tr>
+<tr>
+<td><strong>Radix sort</strong></td>
+<td>O(d (n + k))</td>
+<td>O(d (n + k))</td>
+<td>O(n + k)</td>
+<td>yes</td>
+<td>no</td>
+</tr>
+</tbody>
+</table>
+<h3 id="what-stable-means">What "stable" means</h3>
+<p>A sort is <strong>stable</strong> if equal elements keep their relative order.</p>
+<p>Example: sort pairs <code>[(1, 'a'), (1, 'b'), (2, 'c')]</code> by first element. Stable → <code>[(1, 'a'), (1, 'b'), (2, 'c')]</code>. Not stable → could become <code>[(1, 'b'), (1, 'a'), (2, 'c')]</code>.</p>
+<p>Important in interview: <strong>TimSort is stable</strong>, so Python's <code>sorted()</code> is stable.</p>
+<h2 id="part-2-detailed-implementations">Part 2 — Detailed implementations</h2>
+<h3 id="insertion-sort-why-start-here">Insertion sort (why start here)</h3>
+<p>The intuition for sorting cards in your hand. One at a time, insert in the right spot among the "already sorted" part.</p>
+<pre><code class="language-python">def insertion_sort(arr):
+    for i in range(1, len(arr)):
+        cur = arr[i]
+        j = i - 1
+        while j &gt;= 0 and arr[j] &gt; cur:
+            arr[j+1] = arr[j]
+            j -= 1
+        arr[j+1] = cur
+</code></pre>
+<p>O(n²). Slow for large n, but:</p>
+<ul>
+<li>O(n) if array is <strong>nearly sorted</strong>.</li>
+<li>Good for <code>n ≤ 30</code>.</li>
+<li>Stable.</li>
+<li>TimSort uses it internally as final step.</li>
+</ul>
+<h3 id="merge-sort-the-classic-on-log-n">Merge sort (the classic O(n log n))</h3>
+<p><strong>Idea (divide and conquer)</strong>:</p>
+<ol>
+<li>Split the array in half.</li>
+<li>Recursively sort each half.</li>
+<li>Merge the two sorted halves.</li>
+</ol>
+<pre><code class="language-python">def merge_sort(arr):
+    if len(arr) &lt;= 1:
+        return arr
+    mid = len(arr) // 2
+    left = merge_sort(arr[:mid])
+    right = merge_sort(arr[mid:])
+    return merge(left, right)
+
+def merge(a, b):
+    out = []
+    i = j = 0
+    while i &lt; len(a) and j &lt; len(b):
+        if a[i] &lt;= b[j]:
+            out.append(a[i])
+            i += 1
+        else:
+            out.append(b[j])
+            j += 1
+    out.extend(a[i:])
+    out.extend(b[j:])
+    return out
+</code></pre>
+<p>Visualization (split top-down, merge bottom-up):</p>
+<pre><code class="language-mermaid">flowchart TD
+    A[&quot;[5,2,8,3,1,7,4,6]&quot;] --&gt; B[&quot;[5,2,8,3]&quot;]
+    A --&gt; C[&quot;[1,7,4,6]&quot;]
+    B --&gt; D[&quot;[5,2]&quot;]
+    B --&gt; E[&quot;[8,3]&quot;]
+    C --&gt; F[&quot;[1,7]&quot;]
+    C --&gt; G[&quot;[4,6]&quot;]
+    D --&gt; H[&quot;[5]&quot;]
+    D --&gt; I[&quot;[2]&quot;]
+    E --&gt; J[&quot;[8]&quot;]
+    E --&gt; K[&quot;[3]&quot;]
+    F --&gt; L[&quot;[1]&quot;]
+    F --&gt; M[&quot;[7]&quot;]
+    G --&gt; N[&quot;[4]&quot;]
+    G --&gt; O[&quot;[6]&quot;]
+</code></pre>
+<p>Then merge bottom-up:</p>
+<pre><code class="language-mermaid">flowchart BT
+    H[&quot;[5]&quot;] --&gt; D2[&quot;[2,5]&quot;]
+    I[&quot;[2]&quot;] --&gt; D2
+    J[&quot;[8]&quot;] --&gt; E2[&quot;[3,8]&quot;]
+    K[&quot;[3]&quot;] --&gt; E2
+    L[&quot;[1]&quot;] --&gt; F2[&quot;[1,7]&quot;]
+    M[&quot;[7]&quot;] --&gt; F2
+    N[&quot;[4]&quot;] --&gt; G2[&quot;[4,6]&quot;]
+    O[&quot;[6]&quot;] --&gt; G2
+    D2 --&gt; B2[&quot;[2,3,5,8]&quot;]
+    E2 --&gt; B2
+    F2 --&gt; C2[&quot;[1,4,6,7]&quot;]
+    G2 --&gt; C2
+    B2 --&gt; R[&quot;[1,2,3,4,5,6,7,8]&quot;]
+    C2 --&gt; R
+</code></pre>
+<p><strong>Complexity</strong>:</p>
+<ul>
+<li>Time: T(n) = 2T(n/2) + O(n) → O(n log n) (master theorem).</li>
+<li>Space: O(n) (auxiliary arrays).</li>
+</ul>
+<p><strong>Stable</strong>. <strong>Always O(n log n)</strong> even worst case.</p>
+<h3 id="quick-sort-faster-in-practice">Quick sort (faster in practice)</h3>
+<p><strong>Idea</strong>: pick a <strong>pivot</strong> from the array. Partition: left of pivot, all smaller; right, all larger. Then recurse.</p>
+<pre><code class="language-python">def quicksort(arr, lo=0, hi=None):
+    if hi is None: hi = len(arr) - 1
+    if lo &gt;= hi: return
+    p = partition(arr, lo, hi)
+    quicksort(arr, lo, p - 1)
+    quicksort(arr, p + 1, hi)
+
+def partition(arr, lo, hi):
+    pivot = arr[hi]
+    i = lo
+    for j in range(lo, hi):
+        if arr[j] &lt; pivot:
+            arr[i], arr[j] = arr[j], arr[i]
+            i += 1
+    arr[i], arr[hi] = arr[hi], arr[i]
+    return i
+</code></pre>
+<p><strong>Avg time</strong>: O(n log n).
+<strong>Worst time</strong>: O(n²) (sorted array + pivot at end).</p>
+<p><strong>Worst case mitigation</strong>: random pivot.</p>
+<pre><code class="language-python">import random
+pivot_idx = random.randint(lo, hi)
+arr[pivot_idx], arr[hi] = arr[hi], arr[pivot_idx]
+# then normal partition
+</code></pre>
+<p><strong>Not stable</strong>, <strong>in-place</strong>, ~3× faster than merge sort in practice (cache-friendly).</p>
+<h3 id="counting-sort-when-alphabet-is-small">Counting sort (when alphabet is small)</h3>
+<p>If values are integers in a small range, count frequencies and rebuild.</p>
+<pre><code class="language-python">def counting_sort(arr):
+    if not arr: return []
+    lo, hi = min(arr), max(arr)
+    cnt = [0] * (hi - lo + 1)
+    for x in arr:
+        cnt[x - lo] += 1
+    out = []
+    for i, c in enumerate(cnt):
+        out.extend([i + lo] * c)
+    return out
+</code></pre>
+<p>O(n + k) where k = range of values.</p>
+<p><strong>When</strong>: integer values in small range (e.g. age, grades, letters). For huge range it's useless.</p>
+<h2 id="part-3-quickselect-k-th-element-in-on-average">Part 3 — Quickselect: k-th element in O(n) average</h2>
+<p>Quicksort variant that searches <strong>only</strong> the k-th element. Doesn't sort everything.</p>
+<p><strong>Idea</strong>: after partition, you know where the pivot is. If it's in position k, found. Otherwise recurse only on the right half.</p>
+<pre><code class="language-python">import random
+def quickselect(arr, k):
+    &quot;&quot;&quot;Returns k-th smallest (1-indexed).&quot;&quot;&quot;
+    def partition(lo, hi, pivot_idx):
+        pivot = arr[pivot_idx]
+        arr[pivot_idx], arr[hi] = arr[hi], arr[pivot_idx]
+        store = lo
+        for i in range(lo, hi):
+            if arr[i] &lt; pivot:
+                arr[store], arr[i] = arr[i], arr[store]
+                store += 1
+        arr[store], arr[hi] = arr[hi], arr[store]
+        return store
+
+    def select(lo, hi, k):
+        if lo == hi: return arr[lo]
+        pivot_idx = random.randint(lo, hi)
+        p = partition(lo, hi, pivot_idx)
+        if k == p: return arr[k]
+        elif k &lt; p: return select(lo, p - 1, k)
+        else: return select(p + 1, hi, k)
+
+    return select(0, len(arr) - 1, k - 1)
+</code></pre>
+<p><strong>Avg time</strong>: O(n). Master theorem on T(n) = T(n/2) + O(n) (avg you throw half away) → O(n).
+<strong>Worst</strong>: O(n²) but extremely rare with random pivot.</p>
+<p>Used in: kth largest, median, top-k without sorting everything.</p>
+<h2 id="part-4-binary-search-theory">Part 4 — Binary search: theory</h2>
+<h3 id="the-basic-idea">The basic idea</h3>
+<p>You have a <strong>sorted</strong> array. Looking for a target.</p>
+<pre><code class="language-python">def search(arr, target):
+    lo, hi = 0, len(arr) - 1
+    while lo &lt;= hi:
+        mid = (lo + hi) // 2
+        if arr[mid] == target:
+            return mid
+        elif arr[mid] &lt; target:
+            lo = mid + 1
+        else:
+            hi = mid - 1
+    return -1
+</code></pre>
+<p>Each iteration <strong>halves</strong> the search space → O(log n).</p>
+<p>For <code>n = 1 million</code>: ~20 iterations. For <code>n = 1 billion</code>: ~30. Magic.</p>
+<h3 id="off-by-one-the-weak-point">Off-by-one: the weak point</h3>
+<p>99% of binary search bugs are off-by-one. Three questions to set consistently:</p>
+<ol>
+<li><strong>Extremes</strong>: <code>[lo, hi]</code> (inclusive) or <code>[lo, hi)</code> (hi exclusive)?</li>
+<li><strong>While condition</strong>: <code>&lt;=</code> or <code>&lt;</code>?</li>
+<li><strong>Update</strong>: <code>mid + 1</code>, <code>mid - 1</code>, <code>mid</code>?</li>
+</ol>
+<p><strong>You must pick a convention and follow it</strong>. Don't improvise.</p>
+<h3 id="convention-1-lo-hi-inclusive">Convention 1 — <code>[lo, hi]</code> inclusive</h3>
+<pre><code class="language-python">lo, hi = 0, len(arr) - 1
+while lo &lt;= hi:
+    mid = (lo + hi) // 2
+    if arr[mid] == target: return mid
+    elif arr[mid] &lt; target: lo = mid + 1
+    else: hi = mid - 1
+</code></pre>
+<ul>
+<li>Exit loop with <code>lo &gt; hi</code> (empty range).</li>
+<li>Update skips mid: <code>lo = mid + 1</code> or <code>hi = mid - 1</code>.</li>
+</ul>
+<h3 id="convention-2-lo-hi-hi-exclusive-bisect-style">Convention 2 — <code>[lo, hi)</code> hi exclusive (bisect-style)</h3>
+<pre><code class="language-python">lo, hi = 0, len(arr)
+while lo &lt; hi:
+    mid = (lo + hi) // 2
+    if arr[mid] &lt; target: lo = mid + 1
+    else: hi = mid          # NOT mid - 1!
+return lo  # first index with arr[lo] &gt;= target
+</code></pre>
+<ul>
+<li>Exit loop with <code>lo == hi</code>.</li>
+<li>Final <code>lo</code> is the "insertion point" to keep order.</li>
+</ul>
+<p>This is the basis of Python's <code>bisect.bisect_left</code>.</p>
+<h3 id="which-to-use">Which to use?</h3>
+<p>In interview:</p>
+<ul>
+<li>For "find exact target": Convention 1.</li>
+<li>For "find first X with condition" or "binary search on answer": Convention 2.</li>
+</ul>
+<p>Once chosen, apply it identically in every problem. Don't mix.</p>
+<h2 id="part-5-the-7-binary-search-variants">Part 5 — The 7 binary search variants</h2>
+<h3 id="1-search-find-exact">1. Search "find exact"</h3>
+<p>Seen above (convention 1).</p>
+<h3 id="2-lower-bound-bisect_left">2. Lower bound (<code>bisect_left</code>)</h3>
+<p>First index <code>i</code> with <code>arr[i] &gt;= target</code>.</p>
+<pre><code class="language-python">def lower_bound(arr, target):
+    lo, hi = 0, len(arr)
+    while lo &lt; hi:
+        mid = (lo + hi) // 2
+        if arr[mid] &lt; target: lo = mid + 1
+        else: hi = mid
+    return lo
+</code></pre>
+<p>If <code>lo == len(arr)</code>, target is &gt; everything.</p>
+<h3 id="3-upper-bound-bisect_right">3. Upper bound (<code>bisect_right</code>)</h3>
+<p>First index <code>i</code> with <code>arr[i] &gt; target</code>.</p>
+<pre><code class="language-python">def upper_bound(arr, target):
+    lo, hi = 0, len(arr)
+    while lo &lt; hi:
+        mid = (lo + hi) // 2
+        if arr[mid] &lt;= target: lo = mid + 1
+        else: hi = mid
+    return lo
+</code></pre>
+<h3 id="4-python-bisect-module">4. Python <code>bisect</code> module</h3>
+<pre><code class="language-python">from bisect import bisect_left, bisect_right, insort
+bisect_left(arr, x)   # first idx with arr[idx] &gt;= x
+bisect_right(arr, x)  # first idx with arr[idx] &gt; x
+insort(arr, x)        # insert keeping order
+</code></pre>
+<p><strong>Always use <code>bisect</code> in interview</strong> when you can. Fewer bugs.</p>
+<h3 id="5-binary-search-on-the-answer">5. Binary search "on the answer"</h3>
+<p>Often the problem isn't "search a value in array", but:</p>
+<blockquote>
+<p><em>"What's the minimum X such that ok(X) is true?"</em></p>
+</blockquote>
+<p>If <code>ok(X)</code> is <strong>monotonic</strong> (if it holds for X then for all Y ≥ X), you can binary-search on X.</p>
+<p>Template:</p>
+<pre><code class="language-python">def search_answer(lo, hi, ok):
+    while lo &lt; hi:
+        mid = (lo + hi) // 2
+        if ok(mid): hi = mid
+        else: lo = mid + 1
+    return lo
+</code></pre>
+<p>Examples: "minimum ship capacity for d days", "minimum Koko speed".</p>
+<p>This is the most <strong>asked</strong> pattern in interviews. Really learn it.</p>
+<h3 id="6-binary-search-on-rotated-array">6. Binary search on rotated array</h3>
+<p><code>[4, 5, 6, 7, 0, 1, 2]</code> is a rotated sorted array. There's still structure: <strong>one of the two halves is always sorted</strong>.</p>
+<pre><code class="language-python">def search_rotated(arr, target):
+    lo, hi = 0, len(arr) - 1
+    while lo &lt;= hi:
+        mid = (lo + hi) // 2
+        if arr[mid] == target: return mid
+        if arr[lo] &lt;= arr[mid]:   # left half sorted
+            if arr[lo] &lt;= target &lt; arr[mid]:
+                hi = mid - 1
+            else:
+                lo = mid + 1
+        else:                      # right half sorted
+            if arr[mid] &lt; target &lt;= arr[hi]:
+                lo = mid + 1
+            else:
+                hi = mid - 1
+    return -1
+</code></pre>
+<p>Identify which half is sorted, then decide if target is in it.</p>
+<h3 id="7-binary-search-find-peak-find-minimum">7. Binary search "find peak / find minimum"</h3>
+<p>For array with a single min (or max), compare <code>arr[mid]</code> with <code>arr[mid+1]</code> to decide where the peak is.</p>
+<pre><code class="language-python">def find_peak(arr):
+    lo, hi = 0, len(arr) - 1
+    while lo &lt; hi:
+        mid = (lo + hi) // 2
+        if arr[mid] &gt; arr[mid + 1]:
+            hi = mid
+        else:
+            lo = mid + 1
+    return lo
+</code></pre>
+<h2 id="part-6-the-4-main-binary-search-traps">Part 6 — The 4 main binary search traps</h2>
+<h3 id="trap-1-convention-inconsistency">Trap 1 — Convention inconsistency</h3>
+<p>Mixing <code>&lt;=</code> with <code>&lt; len(arr)</code> or <code>mid - 1</code> with <code>mid</code> → infinite loops or off-by-one.</p>
+<p><strong>Solution</strong>: pick a convention and stick to it.</p>
+<h3 id="trap-2-mid-lo-hi-2-in-languages-with-overflow">Trap 2 — <code>mid = (lo + hi) // 2</code> in languages with overflow</h3>
+<p>In Python integers are unlimited. In C/Java for huge arrays <code>lo + hi</code> can overflow. Use <code>mid = lo + (hi - lo) // 2</code>.</p>
+<h3 id="trap-3-infinite-loop-with-lo-mid-instead-of-lo-mid-1">Trap 3 — Infinite loop with <code>lo = mid</code> instead of <code>lo = mid + 1</code></h3>
+<pre><code class="language-python">lo, hi = 0, 1
+while lo &lt; hi:
+    mid = (0 + 1) // 2 = 0
+    if cond: lo = mid     # INFINITE LOOP! mid is still 0
+    else: hi = mid
+</code></pre>
+<p>If you use <code>lo = mid</code>, you must change <code>mid</code> calc to <code>mid = (lo + hi + 1) // 2</code> (round up).</p>
+<h3 id="trap-4-rotated-array-with-duplicates">Trap 4 — Rotated array with duplicates</h3>
+<p><code>[1, 1, 1, 2, 1, 1]</code>. When <code>arr[lo] == arr[mid]</code>, you don't know which half is sorted → degenerates to O(n).</p>
+<h2 id="guided-exercises">Guided exercises</h2>
+<h3 id="exercise-111-binary-search-easy">Exercise 11.1 — Binary Search <span class="problem-tag easy">EASY</span></h3>
+<p>Find target in sorted array.</p>
+<p>See Part 4.</p>
+<h3 id="exercise-112-first-bad-version-easy">Exercise 11.2 — First Bad Version <span class="problem-tag easy">EASY</span></h3>
+<p>Versions 1..n. One version <code>f</code> is "bad" and all subsequent ones too. Find <code>f</code> in O(log n) API calls.</p>
+<details><summary>Solution</summary>
+
+
+<pre><code class="language-python">def first_bad(n, isBadVersion):
+    lo, hi = 1, n
+    while lo &lt; hi:
+        mid = (lo + hi) // 2
+        if isBadVersion(mid):
+            hi = mid
+        else:
+            lo = mid + 1
+    return lo
+</code></pre>
+
+
+Convention 2 (lower_bound style).
+</details>
+
+<h3 id="exercise-113-search-in-rotated-sorted-medium">Exercise 11.3 — Search in Rotated Sorted <span class="problem-tag medium">MEDIUM</span></h3>
+<p>See Part 5 variant 6.</p>
+<h3 id="exercise-114-find-minimum-in-rotated-sorted-medium">Exercise 11.4 — Find Minimum in Rotated Sorted <span class="problem-tag medium">MEDIUM</span></h3>
+<details><summary>Solution</summary>
+
+
+<pre><code class="language-python">def find_min(arr):
+    lo, hi = 0, len(arr) - 1
+    while lo &lt; hi:
+        mid = (lo + hi) // 2
+        if arr[mid] &gt; arr[hi]:
+            lo = mid + 1
+        else:
+            hi = mid
+    return arr[lo]
+</code></pre>
+
+
+Idea: compare with `hi`. If mid > hi, min is in right half (rotation passes through middle). Otherwise in left half.
+</details>
+
+<h3 id="exercise-115-find-peak-element-medium">Exercise 11.5 — Find Peak Element <span class="problem-tag medium">MEDIUM</span></h3>
+<p>See Part 5 variant 7.</p>
+<h3 id="exercise-116-koko-eating-bananas-medium">Exercise 11.6 — Koko Eating Bananas <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Banana piles. Koko eats <code>k</code> bananas/hour (max). Find min <code>k</code> to finish within <code>h</code> hours.</p>
+<details><summary>Reasoning (important!)</summary>
+
+**Binary search on answer pattern.**
+
+Answer space is `k ∈ [1, max(piles)]`. For each `k`, I can compute total hours in O(n).
+
+Function `ok(k)`: hours needed ≤ h.
+
+**Monotonicity**: if k works, every k' > k works. I can binary-search.
+
+
+<pre><code class="language-python">def min_eating_speed(piles, h):
+    def hours(k):
+        return sum((p + k - 1) // k for p in piles)   # ceil
+    lo, hi = 1, max(piles)
+    while lo &lt; hi:
+        mid = (lo + hi) // 2
+        if hours(mid) &lt;= h:
+            hi = mid
+        else:
+            lo = mid + 1
+    return lo
+</code></pre>
+
+
+O(n log(max_pile)).
+
+**Lesson**: when you see "what's the minimum X such that ...", ask if the condition is monotonic in X. If yes, binary search on the answer.
+</details>
+
+<h3 id="exercise-117-capacity-to-ship-within-d-days-medium">Exercise 11.7 — Capacity to Ship Within D Days <span class="problem-tag medium">MEDIUM</span></h3>
+<details><summary>Solution</summary>
+
+
+<pre><code class="language-python">def ship_capacity(weights, days):
+    def needed(cap):
+        d, cur = 1, 0
+        for w in weights:
+            if cur + w &gt; cap:
+                d += 1
+                cur = 0
+            cur += w
+        return d
+    lo, hi = max(weights), sum(weights)
+    while lo &lt; hi:
+        mid = (lo + hi) // 2
+        if needed(mid) &lt;= days:
+            hi = mid
+        else:
+            lo = mid + 1
+    return lo
+</code></pre>
+
+
+Same pattern.
+</details>
+
+<h3 id="exercise-118-kth-largest-element-medium">Exercise 11.8 — Kth Largest Element <span class="problem-tag medium">MEDIUM</span></h3>
+<details><summary>Solution</summary>
+
+Quickselect (see Part 3).
+
+Heap-based version (simpler, O(n log k)):
+
+
+<pre><code class="language-python">import heapq
+def kth_largest(arr, k):
+    return heapq.nlargest(k, arr)[-1]
+</code></pre>
+
+</details>
+
+<h3 id="exercise-119-sort-colors-dutch-flag-medium">Exercise 11.9 — Sort Colors (Dutch Flag) <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Array of 0, 1, 2. Sort in-place, <strong>single pass</strong>.</p>
+<details><summary>Reasoning (three pointers)</summary>
+
+Three pointers `l, m, r`:
+
+- `[0..l-1]` are 0.
+- `[l..m-1]` are 1.
+- `[m..r]` unknown.
+- `[r+1..n-1]` are 2.
+
+Start with `l=0, m=0, r=n-1`. While `m <= r`:
+
+- If `arr[m] == 0`: swap with `arr[l]`. `l++; m++`.
+- If `arr[m] == 1`: `m++`.
+- If `arr[m] == 2`: swap with `arr[r]`. `r--` (DON'T increment m because the just-swapped element is unknown).
+
+
+<pre><code class="language-python">def sort_colors(arr):
+    l, m, r = 0, 0, len(arr) - 1
+    while m &lt;= r:
+        if arr[m] == 0:
+            arr[l], arr[m] = arr[m], arr[l]
+            l += 1; m += 1
+        elif arr[m] == 1:
+            m += 1
+        else:
+            arr[m], arr[r] = arr[r], arr[m]
+            r -= 1
+</code></pre>
+
+
+O(n), O(1). Dijkstra's "Dutch national flag" pattern. Beautiful.
+</details>
+
+<h3 id="exercise-1110-wiggle-sort-ii-medium">Exercise 11.10 — Wiggle Sort II <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Reorder array so <code>arr[0] &lt; arr[1] &gt; arr[2] &lt; arr[3] &gt; ...</code>.</p>
+<details><summary>Idea</summary>
+
+1. Quickselect to find the **median**.
+2. Three-way partition (Dutch flag) around median.
+3. Position alternating in O(n) extra space (or with index magic).
+
+Hard, rare.
+</details>
+
+<h3 id="exercise-1111-median-of-two-sorted-arrays-hard">Exercise 11.11 — Median of Two Sorted Arrays <span class="problem-tag hard">HARD</span></h3>
+<p>See ch. 02.</p>
+<h2 id="chapter-summary">Chapter summary</h2>
+<ol>
+<li><strong>Python's TimSort</strong> is O(n log n) stable. Use <code>sorted()</code>/<code>list.sort()</code> by default.</li>
+<li><strong>Merge sort vs quick sort</strong>: merge is stable and predictable (always O(n log n)). Quick is in-place and faster in practice.</li>
+<li><strong>Quickselect</strong>: O(n) avg for k-th. Know it.</li>
+<li><strong>Binary search</strong>: pick a convention (<code>[lo, hi]</code> or <code>[lo, hi)</code>) and stick to it.</li>
+<li><strong>Binary search on answer pattern</strong>: often the problem is "min X such that ok(X)". Recognize it.</li>
+<li><strong><code>bisect</code> module</strong> saves you from off-by-one. Use it.</li>
+</ol>
+<p>When this chapter is internalized, problems like "Koko" or "rotated search" seem easy. Go to <a href="12-two-pointers-sliding-window.html">ch. 12 — Two pointers and sliding window</a>.</p>
+      <nav class="pager">
+<a href="10-recursion-backtracking.html" class="prev"><span class="label">← Previous</span><span class="title">Recursion and backtracking</span></a>
+<a href="12-two-pointers-sliding-window.html" class="next"><span class="label">Next →</span><span class="title">Two pointers and sliding window</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>FAANG Prep</strong> — complete prep path: DS&amp;A, system design, behavioral. Built to crush Big Tech interviews.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-index.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true,
+      background: '#161922',
+      primaryColor: '#1d2230',
+      primaryTextColor: '#e6e8ee',
+      primaryBorderColor: '#6cf',
+      lineColor: '#7a8194',
+      secondaryColor: '#262b3a',
+      tertiaryColor: '#0f1117',
+      mainBkg: '#1d2230',
+      secondBkg: '#262b3a',
+      tertiaryBkg: '#161922',
+      nodeBorder: '#6cf',
+      clusterBkg: '#161922',
+      clusterBorder: '#262b3a',
+      titleColor: '#6cf',
+      edgeLabelBackground: '#161922',
+      fontFamily: 'Cascadia Code, monospace'
+    }
+  });
+  document.querySelectorAll('pre > code.language-mermaid').forEach((codeEl) => {
+    const pre = codeEl.parentElement;
+    const div = document.createElement('div');
+    div.className = 'mermaid';
+    div.textContent = codeEl.textContent;
+    pre.replaceWith(div);
+  });
+  mermaid.run();
+</script>
+</body>
+</html>

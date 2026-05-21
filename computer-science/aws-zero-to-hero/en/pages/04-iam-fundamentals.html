@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IAM — fundamentals (users, groups, roles, policies) — AWS Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#232f3e',primaryTextColor:'#ffffff',primaryBorderColor:'#ff9900',lineColor:'#8a99ad',background:'#0c1320'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">λ</div>
+      <div>
+        <div class="brand-title">AWS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/04-iam-fondamenti.html" class="lang-link" title="Passa all'italiano">IT</a><span class="lang-active" title="English">EN</span></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="search... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-what-is-cloud-and-aws.html" class=""><span class="num">01</span>What the cloud is, and what AWS is</a></li><li class="nav-item"><a href="../pages/02-global-infrastructure.html" class=""><span class="num">02</span>Global infrastructure: Regions, AZs, Edge</a></li><li class="nav-item"><a href="../pages/03-account-root-billing.html" class=""><span class="num">03</span>AWS account, root user, billing</a></li><li class="nav-item"><a href="../pages/04-iam-fundamentals.html" class="active"><span class="num">04</span>IAM — fundamentals (users, groups, roles, policies)</a></li><li class="nav-item"><a href="../pages/05-iam-advanced.html" class=""><span class="num">05</span>IAM advanced: conditional policies, STS, ABAC</a></li><li class="nav-item"><a href="../pages/06-cli-sdk-iac.html" class=""><span class="num">06</span>CLI, SDK, CloudShell, IaC primer</a></li><li class="nav-item"><a href="../pages/07-pricing-billing.html" class=""><span class="num">07</span>Pricing, billing, free tier, cost tools</a></li><li class="nav-item"><a href="../pages/08-organizations-multi-account.html" class=""><span class="num">08</span>AWS Organizations &amp; multi-account strategy</a></li><li class="nav-item"><a href="../pages/09-vpc-fundamentals.html" class=""><span class="num">09</span>VPC — fundamentals</a></li><li class="nav-item"><a href="../pages/10-vpc-advanced.html" class=""><span class="num">10</span>VPC advanced: peering, TGW, PrivateLink, endpoints</a></li><li class="nav-item"><a href="../pages/11-route53-cloudfront.html" class=""><span class="num">11</span>Route 53, CloudFront, Global Accelerator</a></li><li class="nav-item"><a href="../pages/12-hybrid-vpn-directconnect.html" class=""><span class="num">12</span>Hybrid: VPN, Direct Connect, PrivateLink</a></li><li class="nav-item"><a href="../pages/13-ec2-fundamentals.html" class=""><span class="num">13</span>EC2 — fundamentals (instances, AMIs, lifecycle)</a></li><li class="nav-item"><a href="../pages/14-ec2-advanced-spot-nitro.html" class=""><span class="num">14</span>EC2 advanced — Spot, Placement Groups, Nitro, hibernation</a></li><li class="nav-item"><a href="../pages/15-asg-elb.html" class=""><span class="num">15</span>Auto Scaling Groups + Elastic Load Balancing</a></li><li class="nav-item"><a href="../pages/16-lambda-deep-dive.html" class=""><span class="num">16</span>Lambda deep dive</a></li><li class="nav-item"><a href="../pages/17-containers-ecs-eks-fargate.html" class=""><span class="num">17</span>Containers: ECS, EKS, Fargate, ECR</a></li><li class="nav-item"><a href="../pages/18-specialty-compute.html" class=""><span class="num">18</span>Specialty compute: Batch, Lightsail, Outposts, Wavelength, Beanstalk</a></li><li class="nav-item"><a href="../pages/19-ebs-efs-fsx.html" class=""><span class="num">19</span>EBS, EFS, FSx, Instance Store</a></li><li class="nav-item"><a href="../pages/20-s3-deep-dive.html" class=""><span class="num">20</span>S3 — deep dive</a></li><li class="nav-item"><a href="../pages/21-archive-snow-gateway-backup.html" class=""><span class="num">21</span>Glacier, Snow, Storage Gateway, DataSync, AWS Backup</a></li><li class="nav-item"><a href="../pages/22-rds.html" class=""><span class="num">22</span>RDS — managed relational DBs (engines, Multi-AZ, replicas, Proxy)</a></li><li class="nav-item"><a href="../pages/23-aurora-deep-dive.html" class=""><span class="num">23</span>Aurora deep dive — shared storage, Serverless v2, Global Database</a></li><li class="nav-item"><a href="../pages/24-dynamodb-deep-dive.html" class=""><span class="num">24</span>DynamoDB deep dive — partitions, GSI, Streams, single-table</a></li><li class="nav-item"><a href="../pages/25-purpose-built-dbs.html" class=""><span class="num">25</span>Purpose-built DBs — ElastiCache, MemoryDB, Neptune, DocumentDB, Keyspaces, Timestream, QLDB</a></li><li class="nav-item"><a href="../pages/26-redshift-data-warehousing.html" class=""><span class="num">26</span>Redshift — MPP data warehousing and zero-ETL</a></li><li class="nav-item"><a href="../pages/27-sqs-sns-eventbridge.html" class=""><span class="num">27</span>SQS, SNS, EventBridge — messaging and events</a></li><li class="nav-item"><a href="../pages/28-step-functions-mq-appflow.html" class=""><span class="num">28</span>Step Functions, MQ, AppFlow — orchestration and integration</a></li><li class="nav-item"><a href="../pages/29-athena-glue-lakeformation.html" class=""><span class="num">29</span>Athena, Glue, Lake Formation — the AWS data lake</a></li><li class="nav-item"><a href="../pages/30-emr-kinesis-msk.html" class=""><span class="num">30</span>EMR, Kinesis, MSK — big data and streaming</a></li><li class="nav-item"><a href="../pages/31-opensearch-quicksight.html" class=""><span class="num">31</span>OpenSearch and QuickSight — search and BI</a></li><li class="nav-item"><a href="../pages/32-sagemaker-overview.html" class=""><span class="num">32</span>SageMaker — the end-to-end ML platform</a></li><li class="nav-item"><a href="../pages/33-bedrock-ai-services.html" class=""><span class="num">33</span>Bedrock and AI services — managed GenAI and ML</a></li><li class="nav-item"><a href="../pages/34-iac-cloudformation-cdk-terraform.html" class=""><span class="num">34</span>IaC on AWS — CloudFormation, CDK, SAM, Terraform</a></li><li class="nav-item"><a href="../pages/35-ci-cd-pipeline.html" class=""><span class="num">35</span>CI/CD on AWS — CodePipeline, CodeBuild, CodeDeploy, CodeCatalyst</a></li><li class="nav-item"><a href="../pages/36-observability-cloudwatch-xray.html" class=""><span class="num">36</span>Observability — CloudWatch, X-Ray, CloudTrail, Config, SSM</a></li><li class="nav-item"><a href="../pages/37-kms-secrets-acm.html" class=""><span class="num">37</span>Encryption — KMS, CloudHSM, Secrets Manager, Parameter Store, ACM</a></li><li class="nav-item"><a href="../pages/38-waf-shield-guardduty-inspector.html" class=""><span class="num">38</span>Threat detection — WAF, Shield, GuardDuty, Inspector, Macie, Security Hub</a></li><li class="nav-item"><a href="../pages/39-governance-org-controltower-identitycenter.html" class=""><span class="num">39</span>Governance — Organizations, Control Tower, Identity Center</a></li><li class="nav-item"><a href="../pages/40-migration-mgn-dms-snow.html" class=""><span class="num">40</span>Migration — MGN, DMS, Snow family, Discovery, Migration Hub</a></li><li class="nav-item"><a href="../pages/41-cost-optimization-finops.html" class=""><span class="num">41</span>Cost optimization and FinOps</a></li><li class="nav-item"><a href="../pages/42-well-architected.html" class=""><span class="num">42</span>Well-Architected Framework — 6 pillars, lenses, review</a></li><li class="nav-item"><a href="../pages/43-architecture-patterns.html" class=""><span class="num">43</span>Architecture patterns — 3-tier, serverless, event-driven, microservices</a></li><li class="nav-item"><a href="../pages/44-disaster-recovery-multi-region.html" class=""><span class="num">44</span>Disaster Recovery and Multi-Region</a></li><li class="nav-item"><a href="../pages/45-reference-architectures.html" class=""><span class="num">45</span>Real-world reference architectures</a></li><li class="nav-item"><a href="../pages/46-advanced-networking.html" class=""><span class="num">46</span>Advanced networking deep dive</a></li><li class="nav-item"><a href="../pages/47-containers-deep-dive.html" class=""><span class="num">47</span>Containers deep dive — EKS, Karpenter, service mesh</a></li><li class="nav-item"><a href="../pages/48-serverless-patterns.html" class=""><span class="num">48</span>Serverless patterns deep dive</a></li><li class="nav-item"><a href="../pages/49-genai-rag-agents.html" class=""><span class="num">49</span>Generative AI on AWS — RAG and Agents</a></li><li class="nav-item"><a href="../pages/50-aws-certifications.html" class=""><span class="num">50</span>AWS Certifications — roadmap and study guide</a></li><li class="nav-item"><a href="../pages/51-glossary-az.html" class=""><span class="num">51</span>Glossary A-Z</a></li><li class="nav-item"><a href="../pages/52-cheatsheet.html" class=""><span class="num">52</span>Cheat sheet: services, limits, instance families</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Identity &amp; Security</span>
+        <span>Section 4 of 52</span>
+        <span class="level-tag level-beg">Level: beginner</span>
+      </div>
+      <h1>IAM — fundamentals (users, groups, roles, policies)</h1>
+      <p class="summary">IAM is the nervous system of AWS: every API call goes through it. Users, groups, roles, resource- vs identity-based policies, principals, explicit allow/deny evaluation.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Identity &amp; Security</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>section 3 (account)</li></ul>
+  <div class="label">Tools / references</div>
+  <ul class="source-list"><li>AWS CLI configured</li><li>policy simulator: policysim.aws.amazon.com</li></ul>
+</div>
+      <p>IAM (Identity and Access Management) is the <strong>wall around everything</strong>. With no explicit IAM permissions, no API call succeeds. Understanding it deeply is not optional: 90% of public AWS breaches are "IAM misconfigured" (keys in public repos, <code>*</code> policies, cross-account roles without conditions).</p>
+<h2 id="1-the-four-principal-types">1. The four principal types</h2>
+<p>A <strong>principal</strong> is whoever (or whatever) makes an API call. AWS recognizes four:</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Example</th>
+<th>When</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Root user</strong></td>
+<td>the sign-up email/password</td>
+<td>never, after setup</td>
+</tr>
+<tr>
+<td><strong>IAM user</strong></td>
+<td>username + (password or access key)</td>
+<td>individual human (legacy)</td>
+</tr>
+<tr>
+<td><strong>IAM role</strong></td>
+<td>role assumed temporarily via STS</td>
+<td>EC2/Lambda/cross-account</td>
+</tr>
+<tr>
+<td><strong>Federated user</strong></td>
+<td>identity from external IdP (Google, Okta, ADFS, IAM Identity Center)</td>
+<td>corporate SSO</td>
+</tr>
+</tbody>
+</table>
+<p>2026 best practice: <strong>IAM users are legacy</strong>. For humans use <strong>IAM Identity Center</strong> (formerly AWS SSO). For machines use <strong>roles</strong>: no static keys, time-bound credentials via STS.</p>
+<h2 id="2-the-three-policy-types-plus-two">2. The three policy types (plus two)</h2>
+<p>Policies are JSON documents that describe permissions.</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Attached to</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Identity-based</strong></td>
+<td>IAM user/group/role</td>
+<td><code>AmazonS3ReadOnlyAccess</code> attached to a role</td>
+</tr>
+<tr>
+<td><strong>Resource-based</strong></td>
+<td>the resource (S3 bucket, SQS queue, KMS key)</td>
+<td>bucket policy allowing cross-account</td>
+</tr>
+<tr>
+<td><strong>Permissions boundary</strong></td>
+<td>identity (caps the maximum)</td>
+<td>"this role can never exceed S3+DynamoDB"</td>
+</tr>
+<tr>
+<td><strong>SCP (Service Control Policy)</strong></td>
+<td>account/OU in Organizations</td>
+<td>"in this OU you cannot launch EC2 outside EU"</td>
+</tr>
+<tr>
+<td><strong>Session policy</strong></td>
+<td>STS session</td>
+<td>further narrows an assumed session</td>
+</tr>
+</tbody>
+</table>
+<h2 id="3-anatomy-of-a-policy">3. Anatomy of a policy</h2>
+<pre><code class="language-json">{
+  &quot;Version&quot;: &quot;2012-10-17&quot;,
+  &quot;Statement&quot;: [
+    {
+      &quot;Sid&quot;: &quot;ReadProdLogsBucket&quot;,
+      &quot;Effect&quot;: &quot;Allow&quot;,
+      &quot;Action&quot;: [&quot;s3:GetObject&quot;,&quot;s3:ListBucket&quot;],
+      &quot;Resource&quot;: [
+        &quot;arn:aws:s3:::prod-logs&quot;,
+        &quot;arn:aws:s3:::prod-logs/*&quot;
+      ],
+      &quot;Condition&quot;: {
+        &quot;StringEquals&quot;: {&quot;aws:PrincipalTag/Team&quot;: &quot;platform&quot;},
+        &quot;Bool&quot;: {&quot;aws:MultiFactorAuthPresent&quot;: &quot;true&quot;}
+      }
+    }
+  ]
+}
+</code></pre>
+<p>Five elements:</p>
+<ol>
+<li><strong>Effect</strong>: <code>Allow</code> or <code>Deny</code>.</li>
+<li><strong>Action</strong>: what is allowed (e.g. <code>s3:GetObject</code>, <code>ec2:RunInstances</code>). Per-API granularity.</li>
+<li><strong>Resource</strong>: on which resources (ARN). <code>*</code> means "any" — dangerous.</li>
+<li><strong>Condition</strong> (optional): extra constraints (tag, MFA, IP, time of day, encryption type).</li>
+<li><strong>Principal</strong> (resource-based only): who.</li>
+</ol>
+<h2 id="4-evaluation-rule">4. Evaluation rule</h2>
+<pre><code class="language-mermaid">flowchart TD
+    A[API request] --&gt; B{Any explicit&lt;br&gt;Deny?}
+    B -- Yes --&gt; X[Final Deny]
+    B -- No --&gt; C{Any explicit&lt;br&gt;Allow?}
+    C -- No --&gt; X
+    C -- Yes --&gt; D{SCP, permissions&lt;br&gt;boundary, session policy&lt;br&gt;all allow?}
+    D -- No --&gt; X
+    D -- Yes --&gt; Y[Final Allow]
+</code></pre>
+<p>Key points:</p>
+<ul>
+<li><strong>Default deny</strong>: if no policy says "Allow", the call fails.</li>
+<li><strong>Explicit Deny always wins</strong>. <code>Allow *</code> + <code>Deny s3:DeleteBucket</code> = you cannot delete buckets.</li>
+<li><strong>The intersection of SCP + boundary + session policy + identity policy + resource policy</strong> must permit the call.</li>
+</ul>
+<h2 id="5-users-groups-and-roles">5. Users, groups, and roles</h2>
+<ul>
+<li><strong>IAM User</strong>: long-lived identity with credentials (console password, access key). Avoid in new setups.</li>
+<li><strong>Group</strong>: a set of users sharing policies. Not a principal: just avoids duplicating policies.</li>
+<li><strong>Role</strong>: identity with no fixed credentials, assumed on demand via <code>sts:AssumeRole</code>. Returns temporary credentials (15 min – 12 hours).</li>
+</ul>
+<p>Typical role uses:</p>
+<table>
+<thead>
+<tr>
+<th>Use case</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>EC2 instance role</td>
+<td>EC2 gets credentials via metadata service (<code>http://169.254.169.254/latest/meta-data/iam/security-credentials/</code>)</td>
+</tr>
+<tr>
+<td>Lambda execution role</td>
+<td>function receives <code>AWS_ACCESS_KEY_ID</code>/<code>AWS_SECRET_ACCESS_KEY</code>/<code>AWS_SESSION_TOKEN</code> from env vars</td>
+</tr>
+<tr>
+<td>Cross-account access</td>
+<td>account A assumes a role in account B to access B's resources</td>
+</tr>
+<tr>
+<td>Federated SSO</td>
+<td>an Okta user assumes a temporary role via SAML</td>
+</tr>
+</tbody>
+</table>
+<h2 id="6-best-practices-to-memorize">6. Best practices to memorize</h2>
+<ol>
+<li><strong>Least privilege</strong>: start denying everything, add only what's needed. AWS Access Analyzer generates policies from real CloudTrail usage.</li>
+<li><strong>Never static access keys on EC2/Lambda/ECS</strong>: use roles.</li>
+<li><strong>MFA on all humans</strong>, with <code>aws:MultiFactorAuthPresent</code> condition on sensitive actions.</li>
+<li><strong>Permissions boundary</strong> on devs: even if they grant themselves more, they can't exceed the cap.</li>
+<li><strong>Naming</strong>: consistent prefixes (<code>role/svc-</code>, <code>role/human-</code>, <code>role/cross-acct-</code>) for fast audit.</li>
+<li><strong>Access key rotation</strong> if you must use them (max 90 days, ideally automatic via Lambda).</li>
+<li><strong>Never commit keys to git</strong> (GitGuardian/TruffleHog scan public repos; AWS auto-quarantines them if you publish on GitHub).</li>
+</ol>
+<h2 id="7-hands-on-examples">7. Hands-on examples</h2>
+<pre><code class="language-bash"># Create an IAM user and attach an AWS managed policy
+aws iam create-user --user-name alice
+aws iam attach-user-policy \
+  --user-name alice \
+  --policy-arn arn:aws:iam::aws:policy/ReadOnlyAccess
+
+# Create a role assumable by Lambda
+aws iam create-role --role-name lambda-s3-reader \
+  --assume-role-policy-document '{
+    &quot;Version&quot;:&quot;2012-10-17&quot;,
+    &quot;Statement&quot;:[{
+      &quot;Effect&quot;:&quot;Allow&quot;,
+      &quot;Principal&quot;:{&quot;Service&quot;:&quot;lambda.amazonaws.com&quot;},
+      &quot;Action&quot;:&quot;sts:AssumeRole&quot;
+    }]
+  }'
+
+# Assume role from CLI (cross-account)
+aws sts assume-role \
+  --role-arn arn:aws:iam::222222222222:role/cross-acct-read \
+  --role-session-name alice-prod-read \
+  --external-id &quot;shared-secret-XYZ&quot;
+</code></pre>
+<h2 id="8-exercise">8. Exercise</h2>
+<details>
+<summary>A dev has `AdministratorAccess`. You want them not to delete S3 buckets whose name starts with `prod-`. How?</summary>
+
+Attach an extra policy with an explicit `Deny` to the same user/role:
+
+
+<pre><code class="language-json">{
+  &quot;Version&quot;:&quot;2012-10-17&quot;,
+  &quot;Statement&quot;:[{
+    &quot;Effect&quot;:&quot;Deny&quot;,
+    &quot;Action&quot;:[&quot;s3:DeleteBucket&quot;,&quot;s3:DeleteObject&quot;],
+    &quot;Resource&quot;:[&quot;arn:aws:s3:::prod-*&quot;,&quot;arn:aws:s3:::prod-*/*&quot;]
+  }]
+}
+</code></pre>
+
+
+The explicit Deny beats the `AdministratorAccess` Allow. More scalable alternatives: an SCP at the Organization level, or a permissions boundary on the dev role.
+</details>
+
+<details>
+<summary>EC2 in account A must read an S3 bucket in account B. Minimal setup?</summary>
+
+Two options:
+
+**A) Bucket policy in B that allows the role in A**:
+
+<pre><code class="language-json">{
+  &quot;Version&quot;:&quot;2012-10-17&quot;,
+  &quot;Statement&quot;:[{
+    &quot;Effect&quot;:&quot;Allow&quot;,
+    &quot;Principal&quot;:{&quot;AWS&quot;:&quot;arn:aws:iam::111111111111:role/ec2-app-role&quot;},
+    &quot;Action&quot;:&quot;s3:GetObject&quot;,
+    &quot;Resource&quot;:&quot;arn:aws:s3:::bucket-in-b/*&quot;
+  }]
+}
+</code></pre>
+
++ the EC2 in A must have `s3:GetObject` on the bucket in its identity policy.
+
+**B) Cross-account role**: in B create a `s3-reader` role that trusts A's role; the EC2 calls `sts:AssumeRole` to get temp credentials in B, then reads S3.
+
+For "read one bucket", A is simpler. For "access many resources in B", B (cross-account role) is cleaner.
+</details>
+
+<blockquote>
+<p><strong>Summary</strong>: every AWS API call goes through IAM. Default deny; explicit Allow; explicit Deny wins. Principal = caller; policy = JSON with effect+action+resource+condition. Best practice: no static keys, roles for machines, IAM Identity Center for humans, MFA, least privilege, boundary on devs.</p>
+</blockquote>
+      <nav class="pager">
+<a href="03-account-root-billing.html" class="prev"><span class="label">← Previous</span><span class="title">AWS account, root user, billing</span></a>
+<a href="05-iam-advanced.html" class="next"><span class="label">Next →</span><span class="title">IAM advanced: conditional policies, STS, ABAC</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>AWS Zero to Hero</strong> — complete path, in English, from primitives to advanced architecture.</p><p>Open educational material. No sponsorships, no affiliate links, no affiliation with AWS. When a concept is unclear, go back: AWS is a pyramid of primitives, not a tree you skip across.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+</body>
+</html>

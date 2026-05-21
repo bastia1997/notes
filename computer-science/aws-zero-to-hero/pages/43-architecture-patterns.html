@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Architecture patterns — 3-tier, serverless, event-driven, microservices — AWS Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#232f3e',primaryTextColor:'#ffffff',primaryBorderColor:'#ff9900',lineColor:'#8a99ad',background:'#0c1320'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">λ</div>
+      <div>
+        <div class="brand-title">AWS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">IT</span><a href="../en/pages/43-architecture-patterns.html" class="lang-link" title="Switch to English">EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-cos-e-aws-cloud.html" class=""><span class="num">01</span>Cos&#x27;è il cloud e cos&#x27;è AWS</a></li><li class="nav-item"><a href="../pages/02-infrastruttura-globale.html" class=""><span class="num">02</span>Infrastruttura globale: Region, AZ, Edge</a></li><li class="nav-item"><a href="../pages/03-account-root-billing.html" class=""><span class="num">03</span>Account AWS, utente root, billing</a></li><li class="nav-item"><a href="../pages/04-iam-fondamenti.html" class=""><span class="num">04</span>IAM — fondamenti (utenti, gruppi, ruoli, policy)</a></li><li class="nav-item"><a href="../pages/05-iam-avanzato.html" class=""><span class="num">05</span>IAM avanzato: policy condizionali, STS, ABAC</a></li><li class="nav-item"><a href="../pages/06-cli-sdk-iac.html" class=""><span class="num">06</span>CLI, SDK, CloudShell, IaC primer</a></li><li class="nav-item"><a href="../pages/07-pricing-billing.html" class=""><span class="num">07</span>Pricing, billing, free tier, cost tools</a></li><li class="nav-item"><a href="../pages/08-organizations-multi-account.html" class=""><span class="num">08</span>AWS Organizations &amp; strategia multi-account</a></li><li class="nav-item"><a href="../pages/09-vpc-fondamenti.html" class=""><span class="num">09</span>VPC — fondamenti</a></li><li class="nav-item"><a href="../pages/10-vpc-avanzato.html" class=""><span class="num">10</span>VPC avanzato: peering, TGW, PrivateLink, endpoint</a></li><li class="nav-item"><a href="../pages/11-route53-cloudfront.html" class=""><span class="num">11</span>Route 53, CloudFront, Global Accelerator</a></li><li class="nav-item"><a href="../pages/12-hybrid-vpn-directconnect.html" class=""><span class="num">12</span>Hybrid: VPN, Direct Connect, PrivateLink</a></li><li class="nav-item"><a href="../pages/13-ec2-fondamenti.html" class=""><span class="num">13</span>EC2 — fondamenti (istanze, AMI, lifecycle)</a></li><li class="nav-item"><a href="../pages/14-ec2-avanzato-spot-nitro.html" class=""><span class="num">14</span>EC2 avanzato — Spot, Placement Groups, Nitro, hibernation</a></li><li class="nav-item"><a href="../pages/15-asg-elb.html" class=""><span class="num">15</span>Auto Scaling Groups + Elastic Load Balancing</a></li><li class="nav-item"><a href="../pages/16-lambda-deep-dive.html" class=""><span class="num">16</span>Lambda deep dive</a></li><li class="nav-item"><a href="../pages/17-containers-ecs-eks-fargate.html" class=""><span class="num">17</span>Containers: ECS, EKS, Fargate, ECR</a></li><li class="nav-item"><a href="../pages/18-specialty-compute.html" class=""><span class="num">18</span>Specialty compute: Batch, Lightsail, Outposts, Wavelength, Beanstalk</a></li><li class="nav-item"><a href="../pages/19-ebs-efs-fsx.html" class=""><span class="num">19</span>EBS, EFS, FSx, Instance Store</a></li><li class="nav-item"><a href="../pages/20-s3-deep-dive.html" class=""><span class="num">20</span>S3 — deep dive</a></li><li class="nav-item"><a href="../pages/21-archive-snow-gateway-backup.html" class=""><span class="num">21</span>Glacier, Snow, Storage Gateway, DataSync, AWS Backup</a></li><li class="nav-item"><a href="../pages/22-rds.html" class=""><span class="num">22</span>RDS — relational DB managed (engines, Multi-AZ, replicas, Proxy)</a></li><li class="nav-item"><a href="../pages/23-aurora-deep-dive.html" class=""><span class="num">23</span>Aurora deep dive — storage condiviso, Serverless v2, Global Database</a></li><li class="nav-item"><a href="../pages/24-dynamodb-deep-dive.html" class=""><span class="num">24</span>DynamoDB deep dive — partition, GSI, Streams, single-table</a></li><li class="nav-item"><a href="../pages/25-purpose-built-dbs.html" class=""><span class="num">25</span>Purpose-built DB — ElastiCache, MemoryDB, Neptune, DocumentDB, Keyspaces, Timestream, QLDB</a></li><li class="nav-item"><a href="../pages/26-redshift-data-warehousing.html" class=""><span class="num">26</span>Redshift — data warehousing MPP e zero-ETL</a></li><li class="nav-item"><a href="../pages/27-sqs-sns-eventbridge.html" class=""><span class="num">27</span>SQS, SNS, EventBridge — messaging ed eventi</a></li><li class="nav-item"><a href="../pages/28-step-functions-mq-appflow.html" class=""><span class="num">28</span>Step Functions, MQ, AppFlow — orchestrazione e integrazione</a></li><li class="nav-item"><a href="../pages/29-athena-glue-lakeformation.html" class=""><span class="num">29</span>Athena, Glue, Lake Formation — il data lake AWS</a></li><li class="nav-item"><a href="../pages/30-emr-kinesis-msk.html" class=""><span class="num">30</span>EMR, Kinesis, MSK — big data e streaming</a></li><li class="nav-item"><a href="../pages/31-opensearch-quicksight.html" class=""><span class="num">31</span>OpenSearch e QuickSight — search e BI</a></li><li class="nav-item"><a href="../pages/32-sagemaker-overview.html" class=""><span class="num">32</span>SageMaker — la piattaforma ML end-to-end</a></li><li class="nav-item"><a href="../pages/33-bedrock-ai-services.html" class=""><span class="num">33</span>Bedrock e AI services — GenAI e ML managed</a></li><li class="nav-item"><a href="../pages/34-iac-cloudformation-cdk-terraform.html" class=""><span class="num">34</span>IaC su AWS — CloudFormation, CDK, SAM, Terraform</a></li><li class="nav-item"><a href="../pages/35-ci-cd-pipeline.html" class=""><span class="num">35</span>CI/CD su AWS — CodePipeline, CodeBuild, CodeDeploy, CodeCatalyst</a></li><li class="nav-item"><a href="../pages/36-observability-cloudwatch-xray.html" class=""><span class="num">36</span>Observability — CloudWatch, X-Ray, CloudTrail, Config, SSM</a></li><li class="nav-item"><a href="../pages/37-kms-secrets-acm.html" class=""><span class="num">37</span>Crittografia — KMS, CloudHSM, Secrets Manager, Parameter Store, ACM</a></li><li class="nav-item"><a href="../pages/38-waf-shield-guardduty-inspector.html" class=""><span class="num">38</span>Threat detection — WAF, Shield, GuardDuty, Inspector, Macie, Security Hub</a></li><li class="nav-item"><a href="../pages/39-governance-org-controltower-identitycenter.html" class=""><span class="num">39</span>Governance — Organizations, Control Tower, Identity Center</a></li><li class="nav-item"><a href="../pages/40-migration-mgn-dms-snow.html" class=""><span class="num">40</span>Migration — MGN, DMS, Snow family, Discovery, Migration Hub</a></li><li class="nav-item"><a href="../pages/41-cost-optimization-finops.html" class=""><span class="num">41</span>Cost optimization e FinOps</a></li><li class="nav-item"><a href="../pages/42-well-architected.html" class=""><span class="num">42</span>Well-Architected Framework — 6 pillar, lens, review</a></li><li class="nav-item"><a href="../pages/43-architecture-patterns.html" class="active"><span class="num">43</span>Architecture patterns — 3-tier, serverless, event-driven, microservices</a></li><li class="nav-item"><a href="../pages/44-disaster-recovery-multi-region.html" class=""><span class="num">44</span>Disaster Recovery e Multi-Region</a></li><li class="nav-item"><a href="../pages/45-reference-architectures.html" class=""><span class="num">45</span>Reference architectures real-world</a></li><li class="nav-item"><a href="../pages/46-advanced-networking.html" class=""><span class="num">46</span>Advanced networking deep dive</a></li><li class="nav-item"><a href="../pages/47-containers-deep-dive.html" class=""><span class="num">47</span>Containers deep dive — EKS, Karpenter, service mesh</a></li><li class="nav-item"><a href="../pages/48-serverless-patterns.html" class=""><span class="num">48</span>Serverless patterns deep dive</a></li><li class="nav-item"><a href="../pages/49-genai-rag-agents.html" class=""><span class="num">49</span>Generative AI su AWS — RAG e Agents</a></li><li class="nav-item"><a href="../pages/50-certificazioni-aws.html" class=""><span class="num">50</span>Certificazioni AWS — roadmap e study guide</a></li><li class="nav-item"><a href="../pages/51-glossario-az.html" class=""><span class="num">51</span>Glossario A-Z</a></li><li class="nav-item"><a href="../pages/52-cheatsheet.html" class=""><span class="num">52</span>Cheat sheet: servizi, limiti, instance families</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Architecture</span>
+        <span>Sezione 43 di 52</span>
+        <span class="level-tag level-int">Livello: intermedio</span>
+      </div>
+      <h1>Architecture patterns — 3-tier, serverless, event-driven, microservices</h1>
+      <p class="summary">Pattern architetturali fondamentali su AWS: 3-tier classico, serverless web, event-driven, microservices, CQRS+event sourcing, saga, data mesh, modular monolith vs microservices.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Architecture</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>sezione 42</li></ul>
+  <div class="label">Strumenti / riferimenti</div>
+  <ul class="source-list"><li>ALB / API Gateway / EventBridge</li><li>Step Functions</li></ul>
+</div>
+      <p>Non esiste l'architettura "giusta" in assoluto: esistono pattern adatti a contesti diversi. Conoscerli ti permette di scegliere consapevolmente invece di re-inventare. Questa sezione passa in rassegna i pattern più usati su AWS, con quando applicarli e i loro trade-off.</p>
+<h2 id="1-3-tier-classico">1. 3-tier classico</h2>
+<p>Il pattern "monolitico distribuito": <strong>presentation / application / data</strong>. Storia 25+ anni, ancora vivissimo per app enterprise.</p>
+<pre><code class="language-mermaid">flowchart LR
+    U[Browser] --&gt; CF[CloudFront]
+    CF --&gt; ALB[Application LB]
+    ALB --&gt; ASG[Auto Scaling Group&lt;br/&gt;EC2 app server]
+    ASG --&gt; RDS[(RDS Multi-AZ&lt;br/&gt;primary+standby)]
+    ASG --&gt; EC[(ElastiCache Redis&lt;br/&gt;session/cache)]
+    RDS -.replica.-&gt; RR[(Read Replica)]
+    ASG --&gt; RR
+</code></pre>
+<p>Stack AWS tipico: CloudFront → ALB → ASG di EC2 (Node/Java/.NET) → RDS Multi-AZ + Read Replica + ElastiCache. <strong>Pro</strong>: semplice, debug facile. <strong>Contro</strong>: scaling per-tier non granulare, deploy monolitico.</p>
+<h2 id="2-serverless-web-app">2. Serverless web app</h2>
+<p>Pattern moderno: zero server da gestire, costo pay-per-request, scaling automatico.</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Servizio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Static frontend</td>
+<td>S3 + CloudFront (SPA React/Vue)</td>
+</tr>
+<tr>
+<td>Auth</td>
+<td>Cognito User Pool</td>
+</tr>
+<tr>
+<td>API</td>
+<td>API Gateway REST/HTTP</td>
+</tr>
+<tr>
+<td>Business logic</td>
+<td>Lambda (per endpoint o aggregata)</td>
+</tr>
+<tr>
+<td>Database</td>
+<td>DynamoDB (NoSQL key-value)</td>
+</tr>
+<tr>
+<td>Search</td>
+<td>OpenSearch Serverless</td>
+</tr>
+<tr>
+<td>Image processing</td>
+<td>Lambda + S3 trigger</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Pro</strong>: zero ops, scaling istantaneo, cost-efficient sotto certi volumi. <strong>Contro</strong>: cold start, limiti Lambda (15 min, 10 GB RAM), DynamoDB richiede modellazione single-table.</p>
+<h2 id="3-event-driven">3. Event-driven</h2>
+<p>Servizi comunicano via <strong>eventi</strong> asincroni invece che chiamate sincrone. <strong>EventBridge</strong> è l'event bus centrale; SNS/SQS coprono pub-sub e queue.</p>
+<p>Due stili:</p>
+<ul>
+<li><strong>Choreography</strong>: ogni servizio reagisce agli eventi che gli interessano, nessun coordinatore. Semplice ma debug difficile (chi ha fatto cosa?).</li>
+<li><strong>Orchestration</strong>: uno state machine (<strong>Step Functions</strong>) coordina i passi. Più visibile, costo per transizione di stato.</li>
+</ul>
+<pre><code class="language-mermaid">flowchart LR
+    subgraph Producers
+        OS[Order Service]
+        US[User Service]
+    end
+    OS --&gt;|OrderCreated| EB((EventBridge&lt;br/&gt;bus))
+    US --&gt;|UserSignup| EB
+    EB --&gt; Q1[SQS payment-queue]
+    EB --&gt; Q2[SQS shipping-queue]
+    EB --&gt; Q3[SQS email-queue]
+    EB --&gt; L[Lambda analytics]
+    Q1 --&gt; PS[Payment Service]
+    Q2 --&gt; SS[Shipping Service]
+    Q3 --&gt; ES[Email Service]
+    Q1 -.fail.-&gt; DLQ[(DLQ)]
+</code></pre>
+<p>Pattern utili:
+- <strong>Fan-out</strong>: SNS → multiple SQS (ogni consumer ha la sua coda).
+- <strong>Outbox</strong>: scrivi evento in DynamoDB + stream → garantisci consistency tra DB e eventi pubblicati.
+- <strong>Inbox</strong>: deduplica eventi in arrivo via ID idempotente.</p>
+<h2 id="4-cqrs-event-sourcing">4. CQRS + Event Sourcing</h2>
+<p><strong>CQRS</strong> (Command Query Responsibility Segregation): separa write (command) da read (query). <strong>Event Sourcing</strong>: il sistema-of-record è la sequenza di eventi, non lo stato corrente.</p>
+<p>Implementazione AWS:</p>
+<ul>
+<li>Write: API Gateway → Lambda → DynamoDB (eventi append-only).</li>
+<li>DynamoDB Streams → Kinesis Firehose → S3 (audit log permanente).</li>
+<li>Read: proiezioni aggiornate da Lambda (eventi → vista materializzata in Aurora o OpenSearch per query complesse).</li>
+</ul>
+<p>Pro: audit completo gratis, time-travel, scale read separato da write. Contro: complessità, eventual consistency, schema migration eventi è dura.</p>
+<h2 id="5-microservices">5. Microservices</h2>
+<p>Decomposi il sistema in servizi piccoli, ognuno con DB e team proprio. Su AWS: <strong>ECS Fargate</strong> o <strong>EKS</strong> + <strong>API Gateway</strong> o <strong>AWS App Mesh / Service Connect</strong> + DB per servizio.</p>
+<p>Trade-off rispetto al monolito:</p>
+<table>
+<thead>
+<tr>
+<th>Aspetto</th>
+<th>Monolite</th>
+<th>Microservices</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Deploy</td>
+<td>unico</td>
+<td>per servizio</td>
+</tr>
+<tr>
+<td>Team scaling</td>
+<td>bottleneck</td>
+<td>indipendente</td>
+</tr>
+<tr>
+<td>Latency</td>
+<td>locale, ns</td>
+<td>rete, ms</td>
+</tr>
+<tr>
+<td>Debug</td>
+<td>breakpoint</td>
+<td>tracing distribuito (X-Ray)</td>
+</tr>
+<tr>
+<td>Consistency</td>
+<td>transazione DB</td>
+<td>saga + eventual</td>
+</tr>
+<tr>
+<td>Costo infra</td>
+<td>basso</td>
+<td>alto (overhead per servizio)</td>
+</tr>
+<tr>
+<td>Quando</td>
+<td>team &lt; 20, dominio piccolo</td>
+<td>team &gt; 50, domini multipli</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Modular monolith</strong> è spesso la scelta corretta per startup: codice modulare, deploy unico; quando il team cresce, estrai i moduli in servizi.</p>
+<h2 id="6-saga-pattern-transazioni-distribuite">6. Saga pattern (transazioni distribuite)</h2>
+<p>In microservices manca la transazione ACID cross-servizio. Il <strong>saga</strong> è una sequenza di transazioni locali, ognuna con la sua <strong>compensating action</strong> se fallisce.</p>
+<p>Implementazione con <strong>Step Functions</strong>:</p>
+<pre><code class="language-yaml">StateMachine:
+  StartAt: ReserveInventory
+  States:
+    ReserveInventory:
+      Type: Task
+      Resource: arn:aws:lambda:...:reserveInventory
+      Catch:
+        - ErrorEquals: [&quot;States.ALL&quot;]
+          Next: FailOrder
+      Next: ChargeCard
+    ChargeCard:
+      Type: Task
+      Resource: arn:aws:lambda:...:chargeCard
+      Catch:
+        - ErrorEquals: [&quot;States.ALL&quot;]
+          Next: ReleaseInventory  # compensating
+      Next: ShipOrder
+    ReleaseInventory:
+      Type: Task
+      Resource: arn:aws:lambda:...:releaseInventory
+      Next: FailOrder
+    ShipOrder: { Type: Task, End: true, ... }
+    FailOrder: { Type: Fail }
+</code></pre>
+<h2 id="7-data-mesh-e-altri-pattern">7. Data mesh e altri pattern</h2>
+<ul>
+<li><strong>Data mesh</strong>: ogni dominio possiede e pubblica i propri dataset come "data product" (con SLA, schema, governance). Lake Formation + Glue + cross-account sharing.</li>
+<li><strong>Throttling/backpressure</strong>: API Gateway usage plan, SQS visibility timeout, token bucket Lambda reserved concurrency.</li>
+<li><strong>Bulkhead</strong>: isola risorse per consumer (es. Lambda concurrency per tenant) per evitare noisy neighbor.</li>
+<li><strong>Circuit breaker</strong>: chiamante interrompe richieste verso servizio in failure (App Mesh / library lato client).</li>
+</ul>
+<h2 id="8-esercizio">8. Esercizio</h2>
+<details>
+<summary>Startup B2B SaaS, team 5 dev, MVP da fare in 3 mesi. Quale pattern scegli?</summary>
+
+**Modular monolith serverless**: API Gateway + 1 Lambda monorepo (Python/Node) ben strutturata in moduli (auth, billing, core) + DynamoDB + Cognito. Deploy unico, debug facile, scaling automatico, costo ~$0 a basso volume.
+
+**Non** scegliere microservices: con 5 dev sarebbe overhead enorme (rete, deploy, tracing, observability) per zero beneficio. Estrai a microservices quando il team supera 20-30 e i moduli iniziano a competere sul codice.
+</details>
+
+<details>
+<summary>E-commerce: ordine richiede inventory + payment + shipping. Sync o async?</summary>
+
+**Saga asincrono con Step Functions** (orchestration): API riceve `POST /order`, scrive ordine in DynamoDB stato `PENDING`, scatena Step Function che esegue ReserveInventory → ChargeCard → ShipOrder, ognuna con compensating action. Cliente fa polling o riceve WebSocket update.
+
+Pro: ogni step può ritentare, audit completo, gestisci timeouts. Sync end-to-end (chiamate REST a catena) è fragile: se shipping fallisce dopo charge, hai pagamento senza ordine.
+</details>
+
+<blockquote>
+<p><strong>Riassunto</strong>: 3-tier (ALB+EC2+RDS) per enterprise classico; serverless (S3+API GW+Lambda+DDB) per startup/event-driven; event-driven con EventBridge per loose coupling; CQRS+event sourcing per audit e read-scale; microservices solo con team grande e dominio maturo (preferisci modular monolith prima); saga con Step Functions per transazioni distribuite; pattern di resilienza (bulkhead, circuit breaker, throttling) sono trasversali.</p>
+</blockquote>
+      <nav class="pager">
+<a href="42-well-architected.html" class="prev"><span class="label">← Precedente</span><span class="title">Well-Architected Framework — 6 pillar, lens, review</span></a>
+<a href="44-disaster-recovery-multi-region.html" class="next"><span class="label">Successivo →</span><span class="title">Disaster Recovery e Multi-Region</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>AWS Zero to Hero</strong> — percorso completo, in italiano, dalle primitive all'architettura avanzata.</p><p>Materiale didattico aperto. Nessuna sponsorizzazione, nessun affiliate link, nessuna affiliazione con AWS. Quando un concetto è oscuro, torna indietro: AWS è una piramide di primitive, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

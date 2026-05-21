@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Probability: the language of uncertainty — Data Science Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#3a4a7a',primaryTextColor:'#e8eef0',primaryBorderColor:'#5a6aa0',lineColor:'#8a9499',background:'#11171a'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">Σ</div>
+      <div>
+        <div class="brand-title">DATA SCIENCE</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/05-probabilita.html" class="lang-link" title="Passa all'italiano">🇮🇹 IT</a><span class="lang-active" title="English">🇬🇧 EN</span></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="search... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-what-is-data-science.html" class=""><span class="num">01</span>What is data science (and what isn&#x27;t)</a></li><li class="nav-item"><a href="../pages/02-python-for-data-science.html" class=""><span class="num">02</span>Python for data science: pro setup</a></li><li class="nav-item"><a href="../pages/02b-math-essentials.html" class=""><span class="num">02b</span>High-school math you actually need</a></li><li class="nav-item"><a href="../pages/03-linear-algebra.html" class=""><span class="num">03</span>Linear algebra for data scientists</a></li><li class="nav-item"><a href="../pages/04-calculus-optimization.html" class=""><span class="num">04</span>Calculus, gradients, and optimization</a></li><li class="nav-item"><a href="../pages/05-probability.html" class="active"><span class="num">05</span>Probability: the language of uncertainty</a></li><li class="nav-item"><a href="../pages/06-descriptive-statistics.html" class=""><span class="num">06</span>Descriptive statistics</a></li><li class="nav-item"><a href="../pages/07-inferential-statistics.html" class=""><span class="num">07</span>Inferential statistics and hypothesis testing</a></li><li class="nav-item"><a href="../pages/08-distributions.html" class=""><span class="num">08</span>Probability distributions you&#x27;ll meet</a></li><li class="nav-item"><a href="../pages/09-numpy.html" class=""><span class="num">09</span>NumPy: thinking in arrays</a></li><li class="nav-item"><a href="../pages/10-pandas.html" class=""><span class="num">10</span>Pandas: the swiss army knife</a></li><li class="nav-item"><a href="../pages/11-sql.html" class=""><span class="num">11</span>SQL for data scientists</a></li><li class="nav-item"><a href="../pages/12-visualization.html" class=""><span class="num">12</span>Visualization: matplotlib, seaborn, plotly</a></li><li class="nav-item"><a href="../pages/13-data-wrangling.html" class=""><span class="num">13</span>Cleaning and data wrangling</a></li><li class="nav-item"><a href="../pages/14-feature-engineering.html" class=""><span class="num">14</span>Feature engineering</a></li><li class="nav-item"><a href="../pages/15-eda.html" class=""><span class="num">15</span>EDA: Exploratory Data Analysis</a></li><li class="nav-item"><a href="../pages/16-ml-fundamentals.html" class=""><span class="num">16</span>ML: fundamentals — bias, variance, validation</a></li><li class="nav-item"><a href="../pages/17-linear-regression.html" class=""><span class="num">17</span>Linear regression and regularization</a></li><li class="nav-item"><a href="../pages/18-logistic-regression.html" class=""><span class="num">18</span>Logistic regression and classification</a></li><li class="nav-item"><a href="../pages/19-knn-naive-bayes-svm.html" class=""><span class="num">19</span>KNN, Naive Bayes, SVM</a></li><li class="nav-item"><a href="../pages/20-decision-trees.html" class=""><span class="num">20</span>Decision trees</a></li><li class="nav-item"><a href="../pages/21-random-forest-boosting.html" class=""><span class="num">21</span>Random Forest, Gradient Boosting, XGBoost</a></li><li class="nav-item"><a href="../pages/22-clustering.html" class=""><span class="num">22</span>Clustering: K-Means, DBSCAN, GMM, hierarchical</a></li><li class="nav-item"><a href="../pages/23-pca-tsne-umap.html" class=""><span class="num">23</span>Dimensionality reduction: PCA, t-SNE, UMAP</a></li><li class="nav-item"><a href="../pages/24-metrics-validation.html" class=""><span class="num">24</span>Metrics, cross-validation, leakage</a></li><li class="nav-item"><a href="../pages/25-class-imbalance.html" class=""><span class="num">25</span>Class imbalance</a></li><li class="nav-item"><a href="../pages/26-hyperparameter-tuning.html" class=""><span class="num">26</span>Hyperparameter tuning</a></li><li class="nav-item"><a href="../pages/27-neural-networks.html" class=""><span class="num">27</span>Neural networks: from fundamentals to backprop</a></li><li class="nav-item"><a href="../pages/28-pytorch.html" class=""><span class="num">28</span>PyTorch: from toy model to training loop</a></li><li class="nav-item"><a href="../pages/29-cnn.html" class=""><span class="num">29</span>CNN for computer vision</a></li><li class="nav-item"><a href="../pages/30-rnn-lstm.html" class=""><span class="num">30</span>RNN, LSTM, GRU for sequences</a></li><li class="nav-item"><a href="../pages/31-transformer.html" class=""><span class="num">31</span>Transformer and attention</a></li><li class="nav-item"><a href="../pages/32-nlp-llm.html" class=""><span class="num">32</span>NLP: from text mining to LLMs</a></li><li class="nav-item"><a href="../pages/33-time-series.html" class=""><span class="num">33</span>Time series and forecasting</a></li><li class="nav-item"><a href="../pages/34-mlops.html" class=""><span class="num">34</span>MLOps: deployment, monitoring, drift</a></li><li class="nav-item"><a href="../pages/35-bayesian-causal.html" class=""><span class="num">35</span>Bayesian and Causal Inference</a></li><li class="nav-item"><a href="../pages/36-capstone-career.html" class=""><span class="num">36</span>Capstone, portfolio, career</a></li><li class="nav-item"><a href="../pages/37-glossary.html" class=""><span class="num">37</span>Glossary A-Z</a></li><li class="nav-item"><a href="../pages/38-formula-sheet.html" class=""><span class="num">38</span>Formula Sheet: all the formulas from the course</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Mathematics</span>
+        <span>Section 6 of 39</span>
+        <span class="level-tag level-int">Level: intermediate</span>
+      </div>
+      <h1>Probability: the language of uncertainty</h1>
+      <p class="summary">Sample space, events, independence, Bayes, expected value, variance. The foundations of statistics, ML, and every decision under uncertainty.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Mathematics</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>[[linear-algebra]]</li></ul>
+  <div class="label">Tools</div>
+  <ul class="source-list"><li>paper, NumPy</li></ul>
+</div>
+      <h2 id="why-probability">Why probability</h2>
+<p>Data science lives in uncertainty. Every estimate has error. Every prediction is a distribution. Every decision balances risks. Probability is the formal language to reason about all this.</p>
+<p><strong>Where it shows up</strong>:</p>
+<ul>
+<li><strong>Naive Bayes</strong>, <strong>logistic regression</strong>, <strong>GMM</strong> — directly formulated in probability.</li>
+<li><strong>Maximum likelihood estimation (MLE)</strong> — the principle behind OLS, logistic, NN.</li>
+<li><strong>Bayesian inference</strong> — probabilistic models, MCMC.</li>
+<li><strong>Statistical tests</strong> — p-values, confidence intervals.</li>
+<li><strong>Sampling</strong> — every Monte Carlo, every stochastic gradient.</li>
+</ul>
+<h2 id="sample-space-and-events">Sample space and events</h2>
+<p>A random experiment has:</p>
+<ul>
+<li><strong>Sample space</strong> $\Omega$: set of all possible outcomes.</li>
+<li><strong>Event</strong> $A \subseteq \Omega$: subset of outcomes.</li>
+<li><strong>Probability</strong> $P: 2^\Omega \to [0, 1]$ satisfying <strong>Kolmogorov's axioms</strong> (1933):</li>
+</ul>
+<ol>
+<li>$P(A) \geq 0$ for every $A$.</li>
+<li>$P(\Omega) = 1$.</li>
+<li>If $A_1, A_2, \dots$ are <strong>mutually exclusive</strong>, $P(A_1 \cup A_2 \cup \dots) = \sum_i P(A_i)$.</li>
+</ol>
+<p><strong>Example</strong>: rolling a die. $\Omega = {1,2,3,4,5,6}$. Event "even" is $A = {2,4,6}$, $P(A) = 3/6 = 0.5$.</p>
+<h3 id="derived-rules">Derived rules</h3>
+<ul>
+<li>$P(\emptyset) = 0$</li>
+<li>$P(A^c) = 1 - P(A)$</li>
+<li>$P(A \cup B) = P(A) + P(B) - P(A \cap B)$ (<strong>inclusion-exclusion</strong>)</li>
+</ul>
+<h2 id="conditional-probability">Conditional probability</h2>
+<p>$$P(A | B) = \frac{P(A \cap B)}{P(B)}, \quad \text{if } P(B) &gt; 0$$</p>
+<p>"Probability of $A$ <strong>given that</strong> $B$ happened". Restricts the sample space to $B$.</p>
+<p><strong>Example</strong>: dice roll, $A$ = "rolls 6", $B$ = "rolls even". Then $P(A|B) = 1/3$ (among the three evens, only one is 6).</p>
+<h3 id="independent-events">Independent events</h3>
+<p>$A$ and $B$ are <strong>independent</strong> if $P(A | B) = P(A)$, equivalently $P(A \cap B) = P(A) P(B)$.</p>
+<p><strong>Watch out</strong>: independence isn't "don't touch each other". Two events can seem unrelated yet be dependent (and vice versa).</p>
+<h2 id="bayes-theorem">Bayes' theorem</h2>
+<p>The most famous probability theorem, and the most misunderstood:</p>
+<p>$$P(A | B) = \frac{P(B | A) \cdot P(A)}{P(B)}$$</p>
+<p>In <strong>scientific</strong> form:</p>
+<p>$$P(\text{hypothesis} | \text{data}) = \frac{P(\text{data} | \text{hypothesis}) \cdot P(\text{hypothesis})}{P(\text{data})}$$</p>
+<p>The four terms:</p>
+<ul>
+<li>$P(H | D)$ = <strong>posterior</strong>: what we believe after seeing data.</li>
+<li>$P(D | H)$ = <strong>likelihood</strong>: how compatible the data is with the hypothesis.</li>
+<li>$P(H)$ = <strong>prior</strong>: what we believed before.</li>
+<li>$P(D)$ = <strong>evidence</strong>: normalization.</li>
+</ul>
+<h3 id="bayes-tree-the-visual-way-to-grok-it">Bayes tree: the visual way to grok it</h3>
+<p>Before the formula, try the <strong>natural frequencies method</strong> (Gigerenzer). A rare disease affects 1 in 1000 people. A test has:
+- Sensitivity (true positive) = 99%: $P(+|\text{sick}) = 0.99$
+- Specificity = 99%: $P(-|\text{healthy}) = 0.99$</p>
+<p>You test positive. What's the probability you're sick? Intuition says 99%. The real answer is <strong>9%</strong>.</p>
+<p>Let's build a <strong>tree</strong> with 10,000 people:</p>
+<div class="chart"><svg viewBox="0 0 600 320" xmlns="http://www.w3.org/2000/svg">
+<rect x="240" y="10" width="120" height="40" fill="rgba(122,162,255,0.18)" stroke="#7aa2ff" rx="4"/>
+<text x="300" y="35" fill="#7aa2ff" font-size="12" text-anchor="middle">10,000 people</text>
+
+<line x1="290" y1="50" x2="120" y2="90" stroke="#7aa2ff" stroke-width="1.5"/>
+<line x1="310" y1="50" x2="480" y2="90" stroke="#7aa2ff" stroke-width="1.5"/>
+<text x="180" y="75" fill="#8b949e" font-size="10">0.1% sick</text>
+<text x="420" y="75" fill="#8b949e" font-size="10">99.9% healthy</text>
+
+<rect x="50" y="90" width="140" height="40" fill="rgba(255,122,122,0.15)" stroke="#ff7a7a" rx="4"/>
+<text x="120" y="115" fill="#ff7a7a" font-size="12" text-anchor="middle">10 sick</text>
+
+<rect x="410" y="90" width="140" height="40" fill="rgba(94,226,196,0.15)" stroke="#5ee2c4" rx="4"/>
+<text x="480" y="115" fill="#5ee2c4" font-size="12" text-anchor="middle">9990 healthy</text>
+
+<line x1="100" y1="130" x2="55" y2="170" stroke="#ff7a7a" stroke-width="1.5"/>
+<line x1="140" y1="130" x2="185" y2="170" stroke="#ff7a7a" stroke-width="1.5"/>
+<text x="50" y="155" fill="#8b949e" font-size="9">99% +</text>
+<text x="170" y="155" fill="#8b949e" font-size="9">1% -</text>
+
+<line x1="460" y1="130" x2="415" y2="170" stroke="#5ee2c4" stroke-width="1.5"/>
+<line x1="500" y1="130" x2="545" y2="170" stroke="#5ee2c4" stroke-width="1.5"/>
+<text x="410" y="155" fill="#8b949e" font-size="9">1% +</text>
+<text x="530" y="155" fill="#8b949e" font-size="9">99% -</text>
+
+<rect x="15" y="170" width="80" height="40" fill="rgba(255,179,71,0.25)" stroke="#ffb347" rx="4"/>
+<text x="55" y="195" fill="#ffb347" font-size="12" text-anchor="middle">~10 true +</text>
+
+<rect x="150" y="170" width="80" height="40" fill="rgba(60,80,100,0.3)" stroke="#5b6669" rx="4"/>
+<text x="190" y="195" fill="#8b949e" font-size="11" text-anchor="middle">0 false -</text>
+
+<rect x="375" y="170" width="80" height="40" fill="rgba(255,179,71,0.25)" stroke="#ffb347" rx="4"/>
+<text x="415" y="195" fill="#ffb347" font-size="12" text-anchor="middle">~100 false +</text>
+
+<rect x="510" y="170" width="80" height="40" fill="rgba(60,80,100,0.3)" stroke="#5b6669" rx="4"/>
+<text x="550" y="195" fill="#8b949e" font-size="11" text-anchor="middle">~9890 true -</text>
+
+<rect x="100" y="250" width="400" height="50" fill="rgba(122,162,255,0.08)" stroke="#7aa2ff" stroke-dasharray="4,3" rx="4"/>
+<text x="300" y="270" fill="#7aa2ff" font-size="12" text-anchor="middle">Total positives ≈ 10 + 100 = 110</text>
+<text x="300" y="288" fill="#ffb347" font-size="12" text-anchor="middle">P(sick | +) = 10 / 110 ≈ 9.1%</text>
+</svg><div class="chart-caption">Natural frequency tree: counting 10 true positives and 100 false positives makes the result obvious.</div></div>
+
+<p><strong>And now the formula</strong>:</p>
+<p>$$P(M|+) = \frac{P(+|M) P(M)}{P(+|M) P(M) + P(+|H) P(H)} = \frac{0.99 \cdot 0.001}{0.99 \cdot 0.001 + 0.01 \cdot 0.999} \approx 0.090$$</p>
+<p>Same result. But the tree is <strong>infinitely more intuitive</strong>: Gigerenzer's studies show even expert doctors miscompute $P(M|+)$ with the formula but almost all answer correctly when posed as "out of 1000 patients…". Lesson: when a Bayesian problem confuses you, <strong>convert to frequencies</strong>.</p>
+<p>Lesson: <strong>rare events stay rare even after a test</strong>, if the prior is low enough. This is the epistemic basis for medical screening, fraud detection, anomaly detection.</p>
+<h2 id="random-variables">Random variables</h2>
+<p>A <strong>random variable</strong> $X$ is a function $X: \Omega \to \mathbb{R}$. Examples:
+- $X$ = sum of two dice.
+- $X$ = height of a random person.
+- $X$ = number of clicks per day.</p>
+<h3 id="discrete-vs-continuous">Discrete vs continuous</h3>
+<ul>
+<li><strong>Discrete</strong>: takes values in a countable set. E.g., click count. Described by the <strong>probability mass function</strong> (PMF) $p(x) = P(X = x)$.</li>
+<li><strong>Continuous</strong>: takes values in $\mathbb{R}$. E.g., height. Described by the <strong>probability density function</strong> (PDF) $f(x)$, where $P(a \leq X \leq b) = \int_a^b f(x) dx$.</li>
+</ul>
+<p>In both cases, the <strong>cumulative distribution function</strong> (CDF) is $F(x) = P(X \leq x)$.</p>
+<blockquote>
+<p>For continuous variables $P(X = x) = 0$ for any $x$. Probability is "over intervals", not points.</p>
+</blockquote>
+<h2 id="expected-value-variance-covariance">Expected value, variance, covariance</h2>
+<h3 id="expected-value-theoretical-mean">Expected value (theoretical mean)</h3>
+<p>Discrete: $E[X] = \sum_x x \, p(x)$</p>
+<p>Continuous: $E[X] = \int_{-\infty}^{\infty} x f(x) \, dx$</p>
+<p>Essential properties:
+- <strong>Linearity</strong>: $E[aX + bY] = a E[X] + b E[Y]$ <strong>even if X, Y are not independent</strong>.
+- $E[c] = c$ for a constant.
+- $E[XY] = E[X] E[Y]$ <strong>only if</strong> $X, Y$ are independent.</p>
+<h3 id="variance-dispersion">Variance (dispersion)</h3>
+<p>$$\text{Var}(X) = E[(X - E[X])^2] = E[X^2] - E[X]^2$$</p>
+<p>The <strong>standard deviation</strong> is $\sigma = \sqrt{\text{Var}(X)}$, in the same units as $X$.</p>
+<p>Properties:
+- $\text{Var}(aX + b) = a^2 \text{Var}(X)$
+- $\text{Var}(X + Y) = \text{Var}(X) + \text{Var}(Y) + 2\text{Cov}(X, Y)$</p>
+<h3 id="covariance-and-correlation">Covariance and correlation</h3>
+<p>$$\text{Cov}(X, Y) = E[(X - E[X])(Y - E[Y])]$$</p>
+<p>If positive, $X$ and $Y$ tend to grow together. The <strong>Pearson correlation</strong> normalizes to $[-1, 1]$:</p>
+<p>$$\rho(X, Y) = \frac{\text{Cov}(X, Y)}{\sigma_X \sigma_Y}$$</p>
+<blockquote>
+<p><strong>Correlation ≠ causation</strong>. Mantra. You'll repeat it a thousand times to colleagues. See causal inference section.</p>
+<p><strong>Linear</strong> correlation. Two variables can have $\rho = 0$ and be strongly dependent (e.g., $Y = X^2$, $X \sim N(0,1)$, $\rho = 0$ but $Y$ is a function of $X$).</p>
+</blockquote>
+<h2 id="independence-and-iid">Independence and iid</h2>
+<p>In ML, the <strong>iid assumption</strong> is fundamental: samples $X_1, \dots, X_n$ are assumed <strong>independent</strong> and <strong>identically distributed</strong>. This assumption underpins:</p>
+<ul>
+<li>Cross-validation</li>
+<li>Bootstrap</li>
+<li>Standard error estimates</li>
+</ul>
+<p>When the assumption <strong>doesn't hold</strong> (e.g., time series, spatial data, social graphs), you need caution.</p>
+<h2 id="law-of-large-numbers-lln">Law of large numbers (LLN)</h2>
+<p>For iid $X_1, X_2, \dots$ with mean $\mu$:</p>
+<p>$$\bar{X}<em i="1">n = \frac{1}{n} \sum</em> \mu$$}^n X_i \xrightarrow{n \to \infty</p>
+<p>In words: the sample mean converges to the true mean. This is <strong>why</strong> more data improves estimates.</p>
+<h2 id="central-limit-theorem-clt">Central limit theorem (CLT)</h2>
+<p>Perhaps the most powerful theorem in statistics:</p>
+<blockquote>
+<p>For iid $X_i$ with mean $\mu$ and finite variance $\sigma^2$, the sample mean, <strong>properly scaled</strong>, converges to a normal:</p>
+</blockquote>
+<p>$$\sqrt{n} (\bar{X}_n - \mu) \xrightarrow{d} \mathcal{N}(0, \sigma^2)$$</p>
+<p>Practical consequence: <strong>even if the original distribution is not normal</strong>, the mean of many samples becomes normal. This justifies confidence intervals using the normal even for weird data.</p>
+<div class="chart"><svg viewBox="0 0 480 180" xmlns="http://www.w3.org/2000/svg">
+<g transform="translate(20,20)">
+  <line x1="0" y1="120" x2="120" y2="120" stroke="#555"/>
+  <rect x="0" y="20" width="120" height="100" fill="rgba(255,179,71,0.3)" stroke="#ffb347"/>
+  <text x="60" y="145" fill="#ffb347" font-size="11" text-anchor="middle">n=1 (uniform)</text>
+</g>
+<g transform="translate(170,20)">
+  <line x1="0" y1="120" x2="120" y2="120" stroke="#555"/>
+  <polygon points="0,120 60,20 120,120" fill="rgba(192,132,252,0.3)" stroke="#c084fc"/>
+  <text x="60" y="145" fill="#c084fc" font-size="11" text-anchor="middle">n=2 (triangular)</text>
+</g>
+<g transform="translate(320,20)">
+  <line x1="0" y1="120" x2="120" y2="120" stroke="#555"/>
+  <path d="M 0 118 Q 30 110 50 60 Q 60 30 70 60 Q 90 110 120 118" fill="rgba(122,162,255,0.3)" stroke="#7aa2ff"/>
+  <text x="60" y="145" fill="#7aa2ff" font-size="11" text-anchor="middle">n=30 (≈ normal)</text>
+</g>
+</svg><div class="chart-caption">Sum of uniforms: starts rectangular, becomes triangular, then normal. Magic.</div></div>
+
+<h2 id="exercises">Exercises</h2>
+<details>
+<summary>Exercise 1 — Loaded dice</summary>
+
+A die is loaded: face 6 comes up 30%, the others uniformly.
+1. What is $P(6)$?
+2. What is $P(\text{even})$?
+3. What is the expected value?
+
+**Solutions**:
+1. 0.30.
+2. P(2) + P(4) + P(6) = 0.14 + 0.14 + 0.30 = 0.58.
+3. $1 \cdot 0.14 \cdot 5 + 6 \cdot 0.30 = 0.14 \cdot 15 + 1.8 = 2.1 + 1.8 = 3.9$.
+
+Verify:
+
+<pre><code class="language-python">import numpy as np
+probs = [0.14]*5 + [0.30]
+vals = list(range(1,7))
+sum(v*p for v,p in zip(vals, probs))  # 3.9
+</code></pre>
+
+</details>
+
+<details>
+<summary>Exercise 2 — Bayes on a medical test</summary>
+
+A disease has prevalence 0.5%. Test has sensitivity 95%, specificity 98%. What's $P(\text{sick} | +)$?
+
+**Solution**:
+$$P(M|+) = \frac{0.95 \cdot 0.005}{0.95 \cdot 0.005 + 0.02 \cdot 0.995} = \frac{0.00475}{0.02465} \approx 0.193$$
+
+Only 19%. Even with a "precise" test, if the disease is rare most positives are false.
+</details>
+
+<details>
+<summary>Exercise 3 — Monty Hall</summary>
+
+You have 3 doors. Behind one is a car, behind the other two are goats. You pick door 1. The host (who knows where the car is) opens door 3, revealing a goat. He offers to swap to door 2. Should you?
+
+**Solution**: YES, switch. Switching wins with probability 2/3, staying with 1/3. The door the host opens depends on your initial pick: if you picked wrong (prob 2/3), he's "forced" to open the other goat, leaving the car on the remaining one.
+
+Simulation:
+
+<pre><code class="language-python">import numpy as np
+rng = np.random.default_rng(0)
+n = 100_000
+stay_wins = switch_wins = 0
+for _ in range(n):
+    car = rng.integers(3)
+    pick = rng.integers(3)
+    # host opens a door that is not your pick nor the car
+    door_to_open = next(d for d in range(3) if d != pick and d != car)
+    switch_pick = next(d for d in range(3) if d != pick and d != door_to_open)
+    if pick == car: stay_wins += 1
+    if switch_pick == car: switch_wins += 1
+print(f&quot;stay: {stay_wins/n:.3f}  switch: {switch_wins/n:.3f}&quot;)
+# stay: ~0.333  switch: ~0.667
+</code></pre>
+
+</details>
+
+<details>
+<summary>Exercise 4 — Expected value and variance</summary>
+
+$X$ uniformly distributed on $\{1, 2, \dots, 10\}$. Compute $E[X]$, $E[X^2]$, $\text{Var}(X)$.
+
+**Solution**:
+- $E[X] = \frac{1+2+\dots+10}{10} = 5.5$
+- $E[X^2] = \frac{1+4+9+\dots+100}{10} = \frac{385}{10} = 38.5$
+- $\text{Var}(X) = 38.5 - 5.5^2 = 38.5 - 30.25 = 8.25$
+</details>
+
+<details>
+<summary>Exercise 5 — Independence vs uncorrelated</summary>
+
+$X \sim \mathcal{N}(0, 1)$, $Y = X^2$. Show that $\text{Cov}(X, Y) = 0$ but $X, Y$ are NOT independent.
+
+**Solution**:
+$\text{Cov}(X, Y) = E[X \cdot X^2] - E[X] E[X^2] = E[X^3] - 0 \cdot E[X^2] = 0$ (X symmetric → odd moments are zero).
+
+Not independent because $Y$ is a deterministic function of $X$.
+
+Lesson: **correlation only measures linear dependence**. For nonlinear dependence use mutual information, distance correlation, etc.
+</details>
+
+<details>
+<summary>Exercise 6 — CLT simulation</summary>
+
+Simulate 10000 means of 30 die rolls. Plot the histogram. You should see a normal.
+
+
+<pre><code class="language-python">import numpy as np, matplotlib.pyplot as plt
+rng = np.random.default_rng(0)
+means = rng.integers(1, 7, size=(10_000, 30)).mean(axis=1)
+plt.hist(means, bins=40, density=True)
+plt.title(f&quot;Mean of 30 dice · μ={means.mean():.3f}, σ={means.std():.3f}&quot;)
+plt.show()
+</code></pre>
+
+
+CLT predicts $\mu = 3.5$, $\sigma = \sqrt{35/12 / 30} \approx 0.31$. Verify.
+</details>
+
+<details>
+<summary>Exercise 7 — Birthday paradox</summary>
+
+How many people do you need in a room so that the probability of at least two sharing a birthday exceeds 50%?
+
+**Solution**: 23 (always surprises). Formula:
+$$P(\text{all different}) = \frac{365 \cdot 364 \cdots (365-n+1)}{365^n}$$
+
+$P(\text{at least one match}) > 0.5$ for $n = 23$.
+
+
+<pre><code class="language-python">import math
+n = 1
+while True:
+    p = math.prod((365-i)/365 for i in range(n))
+    if 1-p &gt; 0.5:
+        print(n); break
+    n += 1
+# 23
+</code></pre>
+
+</details>
+
+<h2 id="takeaways">Takeaways</h2>
+<ul>
+<li>Bayes: the formal way to update beliefs with data.</li>
+<li>$E[\cdot]$ is linear always; for $\text{Var}(X+Y)$ you need covariance.</li>
+<li>Correlation only measures linear dependence.</li>
+<li>CLT is why the normal appears everywhere.</li>
+<li>Rare events + imperfect tests = many false positives. Teach it to doctors (and PMs).</li>
+</ul>
+<h2 id="reading">Reading</h2>
+<ul>
+<li><strong>Sheldon Ross</strong> — "A First Course in Probability": the classic text.</li>
+<li><strong>3Blue1Brown</strong> — Bayes video (YouTube).</li>
+<li><strong>Tijms</strong> — "Understanding Probability": full of fun paradoxes.</li>
+</ul>
+<p>Next: descriptive statistics — when the data speaks first.</p>
+      <nav class="pager">
+<a href="04-calculus-optimization.html" class="prev"><span class="label">← Previous</span><span class="title">Calculus, gradients, and optimization</span></a>
+<a href="06-descriptive-statistics.html" class="next"><span class="label">Next →</span><span class="title">Descriptive statistics</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Data Science Zero to Hero</strong> — complete path, in English, from math to deployment.</p><p>Open didactic material. Formulas are here to be understood, not feared. When a concept is unclear, go back: data science is a pyramid, not a tree you skip across.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+</body>
+</html>

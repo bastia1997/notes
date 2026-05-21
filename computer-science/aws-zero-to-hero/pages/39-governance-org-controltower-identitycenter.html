@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Governance — Organizations, Control Tower, Identity Center — AWS Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#232f3e',primaryTextColor:'#ffffff',primaryBorderColor:'#ff9900',lineColor:'#8a99ad',background:'#0c1320'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">λ</div>
+      <div>
+        <div class="brand-title">AWS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">IT</span><a href="../en/pages/39-governance-org-controltower-identitycenter.html" class="lang-link" title="Switch to English">EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-cos-e-aws-cloud.html" class=""><span class="num">01</span>Cos&#x27;è il cloud e cos&#x27;è AWS</a></li><li class="nav-item"><a href="../pages/02-infrastruttura-globale.html" class=""><span class="num">02</span>Infrastruttura globale: Region, AZ, Edge</a></li><li class="nav-item"><a href="../pages/03-account-root-billing.html" class=""><span class="num">03</span>Account AWS, utente root, billing</a></li><li class="nav-item"><a href="../pages/04-iam-fondamenti.html" class=""><span class="num">04</span>IAM — fondamenti (utenti, gruppi, ruoli, policy)</a></li><li class="nav-item"><a href="../pages/05-iam-avanzato.html" class=""><span class="num">05</span>IAM avanzato: policy condizionali, STS, ABAC</a></li><li class="nav-item"><a href="../pages/06-cli-sdk-iac.html" class=""><span class="num">06</span>CLI, SDK, CloudShell, IaC primer</a></li><li class="nav-item"><a href="../pages/07-pricing-billing.html" class=""><span class="num">07</span>Pricing, billing, free tier, cost tools</a></li><li class="nav-item"><a href="../pages/08-organizations-multi-account.html" class=""><span class="num">08</span>AWS Organizations &amp; strategia multi-account</a></li><li class="nav-item"><a href="../pages/09-vpc-fondamenti.html" class=""><span class="num">09</span>VPC — fondamenti</a></li><li class="nav-item"><a href="../pages/10-vpc-avanzato.html" class=""><span class="num">10</span>VPC avanzato: peering, TGW, PrivateLink, endpoint</a></li><li class="nav-item"><a href="../pages/11-route53-cloudfront.html" class=""><span class="num">11</span>Route 53, CloudFront, Global Accelerator</a></li><li class="nav-item"><a href="../pages/12-hybrid-vpn-directconnect.html" class=""><span class="num">12</span>Hybrid: VPN, Direct Connect, PrivateLink</a></li><li class="nav-item"><a href="../pages/13-ec2-fondamenti.html" class=""><span class="num">13</span>EC2 — fondamenti (istanze, AMI, lifecycle)</a></li><li class="nav-item"><a href="../pages/14-ec2-avanzato-spot-nitro.html" class=""><span class="num">14</span>EC2 avanzato — Spot, Placement Groups, Nitro, hibernation</a></li><li class="nav-item"><a href="../pages/15-asg-elb.html" class=""><span class="num">15</span>Auto Scaling Groups + Elastic Load Balancing</a></li><li class="nav-item"><a href="../pages/16-lambda-deep-dive.html" class=""><span class="num">16</span>Lambda deep dive</a></li><li class="nav-item"><a href="../pages/17-containers-ecs-eks-fargate.html" class=""><span class="num">17</span>Containers: ECS, EKS, Fargate, ECR</a></li><li class="nav-item"><a href="../pages/18-specialty-compute.html" class=""><span class="num">18</span>Specialty compute: Batch, Lightsail, Outposts, Wavelength, Beanstalk</a></li><li class="nav-item"><a href="../pages/19-ebs-efs-fsx.html" class=""><span class="num">19</span>EBS, EFS, FSx, Instance Store</a></li><li class="nav-item"><a href="../pages/20-s3-deep-dive.html" class=""><span class="num">20</span>S3 — deep dive</a></li><li class="nav-item"><a href="../pages/21-archive-snow-gateway-backup.html" class=""><span class="num">21</span>Glacier, Snow, Storage Gateway, DataSync, AWS Backup</a></li><li class="nav-item"><a href="../pages/22-rds.html" class=""><span class="num">22</span>RDS — relational DB managed (engines, Multi-AZ, replicas, Proxy)</a></li><li class="nav-item"><a href="../pages/23-aurora-deep-dive.html" class=""><span class="num">23</span>Aurora deep dive — storage condiviso, Serverless v2, Global Database</a></li><li class="nav-item"><a href="../pages/24-dynamodb-deep-dive.html" class=""><span class="num">24</span>DynamoDB deep dive — partition, GSI, Streams, single-table</a></li><li class="nav-item"><a href="../pages/25-purpose-built-dbs.html" class=""><span class="num">25</span>Purpose-built DB — ElastiCache, MemoryDB, Neptune, DocumentDB, Keyspaces, Timestream, QLDB</a></li><li class="nav-item"><a href="../pages/26-redshift-data-warehousing.html" class=""><span class="num">26</span>Redshift — data warehousing MPP e zero-ETL</a></li><li class="nav-item"><a href="../pages/27-sqs-sns-eventbridge.html" class=""><span class="num">27</span>SQS, SNS, EventBridge — messaging ed eventi</a></li><li class="nav-item"><a href="../pages/28-step-functions-mq-appflow.html" class=""><span class="num">28</span>Step Functions, MQ, AppFlow — orchestrazione e integrazione</a></li><li class="nav-item"><a href="../pages/29-athena-glue-lakeformation.html" class=""><span class="num">29</span>Athena, Glue, Lake Formation — il data lake AWS</a></li><li class="nav-item"><a href="../pages/30-emr-kinesis-msk.html" class=""><span class="num">30</span>EMR, Kinesis, MSK — big data e streaming</a></li><li class="nav-item"><a href="../pages/31-opensearch-quicksight.html" class=""><span class="num">31</span>OpenSearch e QuickSight — search e BI</a></li><li class="nav-item"><a href="../pages/32-sagemaker-overview.html" class=""><span class="num">32</span>SageMaker — la piattaforma ML end-to-end</a></li><li class="nav-item"><a href="../pages/33-bedrock-ai-services.html" class=""><span class="num">33</span>Bedrock e AI services — GenAI e ML managed</a></li><li class="nav-item"><a href="../pages/34-iac-cloudformation-cdk-terraform.html" class=""><span class="num">34</span>IaC su AWS — CloudFormation, CDK, SAM, Terraform</a></li><li class="nav-item"><a href="../pages/35-ci-cd-pipeline.html" class=""><span class="num">35</span>CI/CD su AWS — CodePipeline, CodeBuild, CodeDeploy, CodeCatalyst</a></li><li class="nav-item"><a href="../pages/36-observability-cloudwatch-xray.html" class=""><span class="num">36</span>Observability — CloudWatch, X-Ray, CloudTrail, Config, SSM</a></li><li class="nav-item"><a href="../pages/37-kms-secrets-acm.html" class=""><span class="num">37</span>Crittografia — KMS, CloudHSM, Secrets Manager, Parameter Store, ACM</a></li><li class="nav-item"><a href="../pages/38-waf-shield-guardduty-inspector.html" class=""><span class="num">38</span>Threat detection — WAF, Shield, GuardDuty, Inspector, Macie, Security Hub</a></li><li class="nav-item"><a href="../pages/39-governance-org-controltower-identitycenter.html" class="active"><span class="num">39</span>Governance — Organizations, Control Tower, Identity Center</a></li><li class="nav-item"><a href="../pages/40-migration-mgn-dms-snow.html" class=""><span class="num">40</span>Migration — MGN, DMS, Snow family, Discovery, Migration Hub</a></li><li class="nav-item"><a href="../pages/41-cost-optimization-finops.html" class=""><span class="num">41</span>Cost optimization e FinOps</a></li><li class="nav-item"><a href="../pages/42-well-architected.html" class=""><span class="num">42</span>Well-Architected Framework — 6 pillar, lens, review</a></li><li class="nav-item"><a href="../pages/43-architecture-patterns.html" class=""><span class="num">43</span>Architecture patterns — 3-tier, serverless, event-driven, microservices</a></li><li class="nav-item"><a href="../pages/44-disaster-recovery-multi-region.html" class=""><span class="num">44</span>Disaster Recovery e Multi-Region</a></li><li class="nav-item"><a href="../pages/45-reference-architectures.html" class=""><span class="num">45</span>Reference architectures real-world</a></li><li class="nav-item"><a href="../pages/46-advanced-networking.html" class=""><span class="num">46</span>Advanced networking deep dive</a></li><li class="nav-item"><a href="../pages/47-containers-deep-dive.html" class=""><span class="num">47</span>Containers deep dive — EKS, Karpenter, service mesh</a></li><li class="nav-item"><a href="../pages/48-serverless-patterns.html" class=""><span class="num">48</span>Serverless patterns deep dive</a></li><li class="nav-item"><a href="../pages/49-genai-rag-agents.html" class=""><span class="num">49</span>Generative AI su AWS — RAG e Agents</a></li><li class="nav-item"><a href="../pages/50-certificazioni-aws.html" class=""><span class="num">50</span>Certificazioni AWS — roadmap e study guide</a></li><li class="nav-item"><a href="../pages/51-glossario-az.html" class=""><span class="num">51</span>Glossario A-Z</a></li><li class="nav-item"><a href="../pages/52-cheatsheet.html" class=""><span class="num">52</span>Cheat sheet: servizi, limiti, instance families</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Security</span>
+        <span>Sezione 39 di 52</span>
+        <span class="level-tag level-adv">Livello: avanzato</span>
+      </div>
+      <h1>Governance — Organizations, Control Tower, Identity Center</h1>
+      <p class="summary">Multi-account a scala: landing zone, guardrail, SSO federato, ABAC con session tag, service catalog, StackSets delegated admin.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Security</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>sezione 8</li></ul>
+  <div class="label">Strumenti / riferimenti</div>
+  <ul class="source-list"><li>AWS Organizations</li><li>Control Tower</li><li>IAM Identity Center</li><li>Service Catalog</li></ul>
+</div>
+      <p>A 5 account te la cavi a mano. A 50, senza governance, hai 50 versioni della stessa policy, 50 ruoli admin, 50 budget separati e nessuno che capisce dove va a finire la bolletta. Control Tower + Organizations + Identity Center sono la "fabbrica account" che AWS ti regala — ricapitoliamo brevemente e poi entriamo nella parte governance vera (guardrail, SSO, tag policy).</p>
+<h2 id="1-organizations-recap">1. Organizations — recap</h2>
+<p>Già visto in sez. 8: <strong>management account</strong> (root) + <strong>OU</strong> ad albero + <strong>member account</strong>. Strumenti chiave:</p>
+<ul>
+<li><strong>SCP</strong> (Service Control Policy): guardrail negativi che limitano ciò che IAM può fare in un account. SCP non <em>concede</em> mai permessi, può solo <em>negare</em>.</li>
+<li><strong>Consolidated billing</strong>: una sola fattura, sconti di volume condivisi.</li>
+<li><strong>Trusted access</strong>: abilita servizi (Config, Security Hub, GuardDuty, Backup) a operare cross-account.</li>
+</ul>
+<pre><code class="language-mermaid">flowchart TB
+  Mgmt[Management account] --&gt; OU_Sec[Security OU]
+  Mgmt --&gt; OU_Inf[Infrastructure OU]
+  Mgmt --&gt; OU_Wkl[Workloads OU]
+  OU_Sec --&gt; Log[Log Archive account]
+  OU_Sec --&gt; Aud[Audit account]
+  OU_Inf --&gt; Net[Networking account]
+  OU_Inf --&gt; Shared[Shared Services account]
+  OU_Wkl --&gt; Dev[Dev OU] --&gt; AppDev[app-dev]
+  OU_Wkl --&gt; Prod[Prod OU] --&gt; AppProd[app-prod]
+</code></pre>
+<h2 id="2-control-tower-landing-zone-come-servizio">2. Control Tower — landing zone come servizio</h2>
+<p>Control Tower automatizza la creazione della <strong>landing zone</strong>: setup org "best-practice" con account dedicati (Log Archive, Audit), OU baseline, SSO, CloudTrail org trail, Config aggregator, guardrail iniziali.</p>
+<p><strong>Account Factory</strong> = self-service per vendere nuovi account: l'utente compila un form ("nome account, email, OU, baseline"), Control Tower crea l'account, applica SCP, configura SSO, etc. Versione "by code": <strong>Account Factory for Terraform (AFT)</strong>.</p>
+<p><strong>Guardrail</strong> (oggi chiamati "Controls"):</p>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Esempio</th>
+<th>Implementazione</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Preventive</strong></td>
+<td>"non si possono creare risorse fuori da eu-west-1"</td>
+<td>SCP</td>
+</tr>
+<tr>
+<td><strong>Detective</strong></td>
+<td>"tutti i bucket S3 devono avere versioning"</td>
+<td>Config rule</td>
+</tr>
+<tr>
+<td><strong>Proactive</strong></td>
+<td>"blocca al deploy IaC un EC2 senza tag CostCenter"</td>
+<td>CloudFormation hook</td>
+</tr>
+</tbody>
+</table>
+<p>Per ogni guardrail, tipo: <strong>Mandatory</strong> (sempre on, non disattivabile), <strong>Strongly recommended</strong>, <strong>Elective</strong>.</p>
+<h2 id="3-aws-identity-center-ex-aws-sso">3. AWS Identity Center (ex AWS SSO)</h2>
+<p>Il modo <em>corretto</em> di gestire utenti umani 2026: <strong>un solo login</strong> federato verso tutti gli account. Sostituisce gli IAM user (che dovrebbero esistere solo per scenari legacy/break-glass).</p>
+<p>Componenti:
+- <strong>Identity source</strong>: built-in directory, oppure Microsoft Entra ID (ex Azure AD), Okta, Google Workspace via <strong>SAML 2.0</strong> + <strong>SCIM</strong> per provisioning.
+- <strong>Permission Set</strong>: una IAM policy + relative session duration che diventerà un IAM role nell'account target.
+- <strong>Assignment</strong>: <code>(gruppo identity source) × (permission set) × (account)</code>.</p>
+<p>L'utente fa SSO → vede la lista account/ruoli che può assumere → clicca → ottiene credenziali STS temporanee. CLI: <code>aws sso login --profile dev-admin</code>.</p>
+<h2 id="4-abac-con-session-tag">4. ABAC con session tag</h2>
+<p>ABAC = Attribute-Based Access Control. Idea: invece di "Bob può accedere a bucket-finance", "chi ha tag Department=Finance accede a risorse con tag Department=Finance".</p>
+<p>In Identity Center: mappa attributi della directory esterna (es. <code>department</code> in Entra) a session tag AWS:</p>
+<pre><code class="language-json">{
+  &quot;Version&quot;: &quot;2012-10-17&quot;,
+  &quot;Statement&quot;: [{
+    &quot;Effect&quot;: &quot;Allow&quot;,
+    &quot;Action&quot;: &quot;s3:GetObject&quot;,
+    &quot;Resource&quot;: &quot;arn:aws:s3:::reports/*&quot;,
+    &quot;Condition&quot;: {
+      &quot;StringEquals&quot;: {
+        &quot;s3:ExistingObjectTag/Department&quot;: &quot;${aws:PrincipalTag/Department}&quot;
+      }
+    }
+  }]
+}
+</code></pre>
+<p>Beneficio: zero policy nuove quando assumi un dipendente nuovo, basta metterlo nel gruppo Entra giusto.</p>
+<h2 id="5-resource-access-manager-ram">5. Resource Access Manager (RAM)</h2>
+<p>Condividi risorse tra account dell'org <strong>senza</strong> dover gestire IAM cross-account complicato:</p>
+<ul>
+<li><strong>VPC subnet</strong> (un account "Networking" possiede VPC, altri account ci lanciano EC2/RDS direttamente).</li>
+<li><strong>Transit Gateway</strong>.</li>
+<li><strong>Route 53 Resolver rules</strong>.</li>
+<li><strong>License Manager configuration</strong>.</li>
+<li><strong>CodeArtifact repository</strong>.</li>
+</ul>
+<p>Risparmio: 1 VPC condivisa invece di 50 VPC + 50 peering.</p>
+<h2 id="6-service-catalog-vending-di-stack">6. Service Catalog — vending di stack</h2>
+<p>Pubblichi "prodotti" CloudFormation curati (es. "VPC standard", "RDS Postgres con backup") e gli utenti finali in altri account li lanciano da una console self-service. Ottimo per democratizzare l'infrastruttura senza dare permessi raw a tutti.</p>
+<p><strong>TagOptions</strong> forza tag obbligatori (CostCenter, Owner). <strong>Constraint</strong>: launch role (eleva permessi solo nel lancio), notification, template.</p>
+<h2 id="7-stacksets-health-account-management">7. StackSets, Health, Account Management</h2>
+<ul>
+<li><strong>CloudFormation StackSets</strong> con <strong>delegated administrator</strong>: deleghi a un account membro (non al management) di lanciare stack su tutta l'org. Auto-deploy quando un nuovo account viene aggiunto a un'OU.</li>
+<li><strong>AWS Health Dashboard organization view</strong>: aggregato eventi (manutenzioni, deprecations) di tutti gli account.</li>
+<li><strong>Account Management</strong>: chiusura account programmatic (API <code>CloseAccount</code>), alternate contacts (billing, security, ops separati dal root account email).</li>
+</ul>
+<h2 id="8-tag-backup-ai-opt-out-policies">8. Tag, Backup, AI opt-out policies</h2>
+<p>Tre policy "organization-wide" oltre SCP:</p>
+<table>
+<thead>
+<tr>
+<th>Policy</th>
+<th>Cosa fa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Tag Policy</strong></td>
+<td>Definisce tag obbligatori + valori validi (es. <code>Env in [dev,stage,prod]</code>)</td>
+</tr>
+<tr>
+<td><strong>Backup Policy</strong></td>
+<td>Definisce piano backup AWS Backup applicato a tutti gli account</td>
+</tr>
+<tr>
+<td><strong>AI services opt-out</strong></td>
+<td>Esclude i tuoi dati da training modelli AWS (Bedrock, Rekognition, Transcribe)</td>
+</tr>
+</tbody>
+</table>
+<p>Tag policy NON forza (lo fa Config rule o IaC); segnala compliance/violation. Per forza vera, SCP che richiede tag.</p>
+<h2 id="9-esercizio">9. Esercizio</h2>
+<details>
+<summary>Stai partendo: 0 account, vuoi setup multi-account "fatto bene" per 1 anno. Da dove inizi?</summary>
+
+Approccio "by-the-book" AWS:
+1. **Apri account management** con email dedicata (non personale, gruppo `aws-root@`).
+2. Abilita **Control Tower** in region principale (es. eu-west-1) → crea OU baseline (Security, Sandbox, Workloads), account Log Archive + Audit, org trail.
+3. Configura **Identity Center** con la tua directory (Entra/Okta), crea permission set (AdminAccess, PowerUser, ReadOnly, BillingViewer).
+4. Crea **Account Factory** baseline per produrre nuovi account workload.
+5. **Guardrail mandatory** + un set di elective (es. "no public RDS", "MFA mandatory", "Log group retention richiesta").
+6. **GuardDuty + Security Hub + Config** delegated admin sull'Audit account, abilitati su tutta l'org.
+7. **Budget alerting** su ogni account, anche dev.
+
+Tempo totale: 1-2 settimane. Risparmi 6 mesi di refactor un anno dopo.
+</details>
+
+<details>
+<summary>Hai 80 dipendenti su Okta. Vuoi che tutti gli ingegneri abbiano accesso "PowerUser" a 10 account dev, e solo i tech lead a prod. Come modelli?</summary>
+
+In Okta crea due gruppi: `aws-eng` (tutti gli ingegneri) e `aws-tech-leads` (subset). Sincronizza via **SCIM** verso Identity Center (auto-provisioning, niente sync manuale).
+
+In Identity Center:
+- Permission set `PowerUserAccess` (managed) + `ReadOnlyAccess`.
+- Permission set custom `ProdAdmin` con session duration 1h (forzata corta per ridurre blast radius).
+- Assignment: gruppo `aws-eng` × `PowerUserAccess` × {tutti gli account dev}.
+- Assignment: gruppo `aws-tech-leads` × `ProdAdmin` × {account prod} **+ MFA condition** + approval via IAM Identity Center session policy che richiede ticket Jira.
+
+Quando un ingegnere lascia Okta, perde *automaticamente* tutto il giorno stesso. Quando uno entra, accesso immediato senza ticket.
+</details>
+
+<blockquote>
+<p><strong>Riassunto</strong>: Control Tower per landing zone con account baseline (Log, Audit) e guardrail mandatory/elective/proactive; Identity Center per SSO federato (Entra/Okta) con permission set e ABAC via session tag; RAM per share VPC/TGW/Route 53; Service Catalog per self-service IaC; StackSets delegated admin per deploy cross-account; Tag/Backup/AI opt-out policy come policy org-wide.</p>
+</blockquote>
+      <nav class="pager">
+<a href="38-waf-shield-guardduty-inspector.html" class="prev"><span class="label">← Precedente</span><span class="title">Threat detection — WAF, Shield, GuardDuty, Inspector, Macie, Security Hub</span></a>
+<a href="40-migration-mgn-dms-snow.html" class="next"><span class="label">Successivo →</span><span class="title">Migration — MGN, DMS, Snow family, Discovery, Migration Hub</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>AWS Zero to Hero</strong> — percorso completo, in italiano, dalle primitive all'architettura avanzata.</p><p>Materiale didattico aperto. Nessuna sponsorizzazione, nessun affiliate link, nessuna affiliazione con AWS. Quando un concetto è oscuro, torna indietro: AWS è una piramide di primitive, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

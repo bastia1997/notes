@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>OSINT and reconnaissance — Cybersec Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">&gt;_</div>
+      <div>
+        <div class="brand-title">CYBERSEC</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/08-osint-recon.html" class="lang-link" title="Passa all'italiano"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="10" height="20" fill="#009246"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ce2b37"/></svg> IT</a><span class="lang-active" title="English"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="30" height="20" fill="#012169"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#fff" stroke-width="3"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#c8102e" stroke-width="1.5"/><path d="M15,0 v20 M0,10 h30" stroke="#fff" stroke-width="5"/><path d="M15,0 v20 M0,10 h30" stroke="#c8102e" stroke-width="3"/></svg> EN</span></div>
+  </div>
+  <div class="search-wrap">
+    <div class="search-row">
+      <div class="search-inputwrap">
+        <span class="search-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"/>
+            <line x1="20" y1="20" x2="16.65" y2="16.65"/>
+          </svg>
+        </span>
+        <input class="search-input" id="search-input" type="text" placeholder="search... (press /)" autocomplete="off" aria-label="Search">
+        <button class="search-clear" id="search-clear" type="button" aria-label="Clear" title="Clear">&times;</button>
+      </div>
+      <button class="search-btn" id="search-btn" type="button" aria-label="SEARCH" title="SEARCH">SEARCH</button>
+    </div>
+    <div class="search-hits" id="search-hits" role="listbox"></div>
+  </div>
+  <div class="sidebar-nav">
+    <nav class="nav-section">
+      <div class="nav-section-title">Path</div>
+      <ul class="nav-list">
+        <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+        <li class="nav-item"><a href="../pages/00-path-and-mindset.html" class=""><span class="num">00</span>Path, mindset, ethics and law</a></li><li class="nav-item"><a href="../pages/00b-math-and-cs.html" class=""><span class="num">00b</span>Math and computation theory (the bare minimum, integrated)</a></li><li class="nav-item"><a href="../pages/01-cs-fundamentals.html" class=""><span class="num">01</span>Computer science fundamentals for security</a></li><li class="nav-item"><a href="../pages/01b-assembly-from-zero.html" class=""><span class="num">01b</span>x86-64 and ARM64 Assembly from zero</a></li><li class="nav-item"><a href="../pages/02-essential-linux.html" class=""><span class="num">02</span>Essential Linux for security</a></li><li class="nav-item"><a href="../pages/02b-regex-automata.html" class=""><span class="num">02b</span>Regex, automata, and parsers for security</a></li><li class="nav-item"><a href="../pages/03-networking-tcp-ip.html" class=""><span class="num">03</span>Networking: from cables to TCP/IP</a></li><li class="nav-item"><a href="../pages/04-http-tls.html" class=""><span class="num">04</span>HTTP, HTTPS and TLS in depth</a></li><li class="nav-item"><a href="../pages/05-cryptography.html" class=""><span class="num">05</span>Cryptography: theory and practice</a></li><li class="nav-item"><a href="../pages/05b-crypto-worked-examples.html" class=""><span class="num">05b</span>Cryptography — step-by-step worked examples</a></li><li class="nav-item"><a href="../pages/06-os-internals.html" class=""><span class="num">06</span>OS internals: Linux and Windows in depth</a></li><li class="nav-item"><a href="../pages/07-programming-for-security.html" class=""><span class="num">07</span>Programming for security: Python, C, Go</a></li><li class="nav-item"><a href="../pages/08-osint-recon.html" class="active"><span class="num">08</span>OSINT and reconnaissance</a></li><li class="nav-item"><a href="../pages/09-scanning-enumeration.html" class=""><span class="num">09</span>Scanning, enumeration and fingerprinting</a></li><li class="nav-item"><a href="../pages/10-owasp-top10.html" class=""><span class="num">10</span>OWASP Top 10 and beyond — basic web vulnerabilities</a></li><li class="nav-item"><a href="../pages/10b-walkthrough-byte-by-byte.html" class=""><span class="num">10b</span>Byte-by-byte walkthrough: SQLi, XSS, SSRF, IDOR</a></li><li class="nav-item"><a href="../pages/11-advanced-web.html" class=""><span class="num">11</span>Advanced web hacking</a></li><li class="nav-item"><a href="../pages/12-network-attacks.html" class=""><span class="num">12</span>Network attacks: MITM, spoofing, pivoting</a></li><li class="nav-item"><a href="../pages/13-active-directory.html" class=""><span class="num">13</span>Active Directory hacking</a></li><li class="nav-item"><a href="../pages/14-exploit-development.html" class=""><span class="num">14</span>Exploit development: from buffer overflow to ROP</a></li><li class="nav-item"><a href="../pages/14b-bof-to-shell-complete.html" class=""><span class="num">14b</span>BoF → shell: a complete exploit from zero</a></li><li class="nav-item"><a href="../pages/15-reverse-engineering.html" class=""><span class="num">15</span>Reverse engineering</a></li><li class="nav-item"><a href="../pages/16-malware-analysis.html" class=""><span class="num">16</span>Malware: taxonomy and analysis</a></li><li class="nav-item"><a href="../pages/17-mobile-security.html" class=""><span class="num">17</span>Mobile security: Android and iOS</a></li><li class="nav-item"><a href="../pages/18-cloud-security.html" class=""><span class="num">18</span>Cloud security: AWS, Azure, GCP</a></li><li class="nav-item"><a href="../pages/19-container-kubernetes.html" class=""><span class="num">19</span>Containers and Kubernetes</a></li><li class="nav-item"><a href="../pages/20-wireless-radio.html" class=""><span class="num">20</span>Wireless and radio: WiFi, BT, SDR</a></li><li class="nav-item"><a href="../pages/21-hardware-firmware.html" class=""><span class="num">21</span>Hardware and firmware hacking</a></li><li class="nav-item"><a href="../pages/22-forensics-dfir.html" class=""><span class="num">22</span>Forensics and DFIR</a></li><li class="nav-item"><a href="../pages/23-blue-team-soc.html" class=""><span class="num">23</span>Blue team: SOC, SIEM, EDR, hunting</a></li><li class="nav-item"><a href="../pages/24-threat-intelligence.html" class=""><span class="num">24</span>Threat intelligence</a></li><li class="nav-item"><a href="../pages/25-grc-regulations.html" class=""><span class="num">25</span>GRC, regulations, and standards</a></li><li class="nav-item"><a href="../pages/26-red-team.html" class=""><span class="num">26</span>Red team and adversary emulation</a></li><li class="nav-item"><a href="../pages/27-ai-ml-security.html" class=""><span class="num">27</span>AI / ML security</a></li><li class="nav-item"><a href="../pages/28-capstone-roadmap.html" class=""><span class="num">28</span>Capstone: CTF roadmap, home lab, certifications</a></li><li class="nav-item"><a href="../pages/29-master-cheatsheet.html" class=""><span class="num">29</span>Master cheatsheet</a></li><li class="nav-item"><a href="../pages/30-extended-glossary.html" class=""><span class="num">30</span>Extended glossary (250+ terms)</a></li><li class="nav-item"><a href="../pages/31-it-eu-regulations.html" class=""><span class="num">31</span>IT/EU regulatory references in detail</a></li>
+      </ul>
+    </nav>
+  </div>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Offensive</span>
+        <span>Section 11 of 36</span>
+        <span class="level-tag level-int">Level: intermediate</span>
+      </div>
+      <h1>OSINT and reconnaissance</h1>
+      <p class="summary">Passive and active recon: footprinting, Google dorking, Shodan/Censys, CT certificates, subdomain enum, OSINT on people, public threat intelligence. The first phase of every attack and every pentest.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Offensive</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>Sections 03, 04</li></ul>
+  <div class="label">Tools</div>
+  <ul class="source-list"><li>amass, subfinder, assetfinder, dnsrecon</li><li>Shodan / Censys / FOFA / ZoomEye</li><li>theHarvester, Maltego CE</li><li>Recon-ng, OSINT framework</li><li>Sherlock, Holehe, Spiderfoot</li></ul>
+</div>
+      <blockquote>
+<p><em>"Recon is 80% of pentest."</em> Knowing the target — domains, IPs, technologies, people, dependencies — is what distinguishes a "tool-driven" pentest from a targeted and effective one.</p>
+</blockquote>
+<h2 id="passive-vs-active-recon">Passive vs active recon</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Passive</th>
+<th>Active</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Definition</td>
+<td>Collection from public sources, without touching the target</td>
+<td>Direct interaction with the target (probe)</td>
+</tr>
+<tr>
+<td>Risk for target</td>
+<td>None</td>
+<td>Visible in logs/IDS</td>
+</tr>
+<tr>
+<td>Examples</td>
+<td>Google, public DNS, CT logs, leaks, social</td>
+<td>nmap, web fuzzing, banner grabbing</td>
+</tr>
+</tbody>
+</table>
+<p>In red team / engagements with high OPSEC: you maximize passive before moving to active. In day-to-day bug bounty: you often go straight to active because the scope allows it.</p>
+<h2 id="domain-and-subdomain-discovery">Domain and subdomain discovery</h2>
+<h3 id="passive">Passive</h3>
+<p><strong>Certificate Transparency logs</strong> — anyone who issues a TLS cert has to log it. The log is public. Therefore you can enumerate subdomains of <code>example.com</code> simply by reading CT:</p>
+<pre><code class="language-bash">curl -s &quot;https://crt.sh/?q=%25.example.com&amp;output=json&quot; | jq -r '.[].name_value' | sort -u
+</code></pre>
+<p><strong>Passive DNS aggregators:</strong>
+- <code>subfinder -d example.com</code> — uses dozens of sources.
+- <code>amass enum -passive -d example.com</code>.
+- <code>assetfinder example.com</code>.
+- <code>chaos</code>/<code>dnsx</code> (Project Discovery).
+- Censys / SecurityTrails / VirusTotal passive DNS.</p>
+<p><strong>Misc:</strong>
+- Google dorking (see below).
+- GitHub: code often mentions endpoints, subdomains, env URLs.
+- Wayback Machine (<code>waybackurls</code>), CommonCrawl (<code>gau</code>).</p>
+<h3 id="active">Active</h3>
+<p><strong>DNS bruteforce</strong> — you query resolvers with a wordlist of candidates:</p>
+<pre><code class="language-bash">amass enum -active -d example.com -brute -w subs.txt
+ffuf -u https://FUZZ.example.com -w subs.txt
+dnsx -d example.com -w subs.txt -resp-only
+</code></pre>
+<p>Notable wordlists: <strong>commonspeak2</strong>, assetnote's <strong>all.txt</strong>, <strong>bug-bounty-wordlists</strong>.</p>
+<p><strong>Permutation</strong> — combining known names (e.g. <code>dev-api.example.com</code>, <code>api.staging.example.com</code>). Tools: <code>gotator</code>, <code>dnsgen</code>, <code>altdns</code>.</p>
+<p><strong>Reverse DNS sweep</strong> on CIDR ranges published for the org.</p>
+<h2 id="ip-asn-infrastructure-discovery">IP, ASN, infrastructure discovery</h2>
+<ul>
+<li><strong>WHOIS</strong> of the domain + IP range. <code>whois example.com</code>, <code>whois 1.2.3.4</code>. RIRs: ARIN (USA), RIPE (EU+ME), APNIC (Asia/Pacific), AFRINIC, LACNIC.</li>
+<li><strong>ASN lookup</strong>: <code>whois -h whois.cymru.com " -v 8.8.8.8"</code>, <code>bgp.he.net</code>, <code>ipinfo.io/AS15169</code>.</li>
+<li><strong>Reverse IP</strong>: which domains point to the same IP? Useful for shared hosting. SecurityTrails, ViewDNS.</li>
+<li><strong>BGP feeds</strong> — <code>bgp.tools</code>, <code>ripestat</code>, <code>team-cymru</code>.</li>
+</ul>
+<p>For a large org: you find the ASN → derive all the prefixes → enumerate public hosts.</p>
+<h2 id="shodan-censys-fofa-zoomeye">Shodan / Censys / FOFA / ZoomEye</h2>
+<p>Search engines <strong>for devices</strong> (not for pages). They constantly scan the internet, indexing banners.</p>
+<pre><code class="language-text"># Shodan (CLI: shodan)
+hostname:&quot;example.com&quot;
+ssl.cert.subject.cn:&quot;*.example.com&quot;
+http.title:&quot;Login&quot;
+port:445 country:&quot;IT&quot; org:&quot;banca&quot;
+product:Jenkins
+http.html:&quot;Welcome to nginx&quot; port:80
+</code></pre>
+<pre><code class="language-text"># Censys (UI / API)
+services.tls.certificates.leaf_data.subject.common_name: example.com
+parsed.names: example.com and parsed.issuer.organization: Let's Encrypt
+</code></pre>
+<p>For red team pentesting:
+- Find exposed services (Jenkins, RDP, FTP, Mongo with no auth).
+- Find branded login pages (login page with the company logo).
+- Find pre-prod web apps (<code>staging-*</code>, <code>dev-*</code>).</p>
+<blockquote>
+<p><strong>Censys</strong> also includes SSH/SMTP/etc. scans, shows historical infrastructure views. <strong>FOFA / ZoomEye</strong> are Chinese equivalents, often with different coverage.</p>
+</blockquote>
+<h2 id="google-dorking-and-other-search-engines">Google dorking (and other search engines)</h2>
+<p>Useful operators:</p>
+<table>
+<thead>
+<tr>
+<th>Operator</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>site:</code></td>
+<td>restrict to a domain</td>
+</tr>
+<tr>
+<td><code>inurl:</code></td>
+<td>in the path/URL</td>
+</tr>
+<tr>
+<td><code>intitle:</code></td>
+<td>in the <code>&lt;title&gt;</code></td>
+</tr>
+<tr>
+<td><code>intext:</code></td>
+<td>in the body</td>
+</tr>
+<tr>
+<td><code>filetype:</code> or <code>ext:</code></td>
+<td>file extension (pdf, sql, log, env)</td>
+</tr>
+<tr>
+<td><code>cache:</code></td>
+<td>Google cache</td>
+</tr>
+<tr>
+<td><code>-term</code></td>
+<td>exclude term</td>
+</tr>
+<tr>
+<td><code>"exact"</code></td>
+<td>exact phrase match</td>
+</tr>
+<tr>
+<td><code>OR</code>, parentheses</td>
+<td>logic</td>
+</tr>
+</tbody>
+</table>
+<p>Classic examples (Google Hacking DB — GHDB at <a href="https://www.exploit-db.com/google-hacking-database">exploit-db.com/google-hacking-database</a>):</p>
+<pre><code class="language-text">site:example.com ext:sql
+site:example.com inurl:admin
+site:example.com filetype:env intext:&quot;DB_PASSWORD&quot;
+site:pastebin.com &quot;example.com&quot; &quot;@example.com&quot; password
+intitle:&quot;index of&quot; &quot;parent directory&quot; site:example.com
+</code></pre>
+<p><strong>Alternative engines</strong>: Bing, DuckDuckGo, Yandex (often indexes different things), Baidu, Mojeek.</p>
+<h2 id="osint-on-people-and-organizations">OSINT on people and organizations</h2>
+<p><strong>Tooling:</strong>
+- <strong>theHarvester</strong> — emails + subdomains from search engines.
+- <strong>Maltego CE</strong> — graph of entities (person, domain, IP, email).
+- <strong>Spiderfoot</strong> — orchestrator of many sources.
+- <strong>Recon-ng</strong> — modular framework.
+- <strong>Sherlock</strong> — username on 300+ social networks.
+- <strong>Holehe</strong> — checks whether an email is registered on services (without logging in).
+- <strong>Maigret</strong> — usernames on social, extended.
+- <strong>EPIEOS</strong> — OSINT tool for email/account discovery.
+- <strong>Have I Been Pwned</strong> — email/domain in known leaks.
+- <strong>Dehashed</strong>, <strong>IntelligenceX</strong> — leak databases.
+- <strong>OSINT Framework</strong> (<a href="https://osintframework.com">osintframework.com</a>) — taxonomy of tools.</p>
+<p>For a <strong>person target</strong>:
+- LinkedIn → role, tech stack, colleagues (useful for phishing).
+- Twitter/Mastodon → opinions, interests.
+- GitHub → projects, emails in commits (<code>git log --format='%ae %an'</code>), API keys in history.
+- Photos → EXIF metadata (gps, model).
+- Addresses/events → Google Maps Street View, OpenStreetMap.</p>
+<p><strong>Ethical/legal limits:</strong> even if everything is public, <strong>systematic collection</strong> of personal data is subject to GDPR. Document the scope of the engagement.</p>
+<h2 id="tech-stack-discovery">Tech stack discovery</h2>
+<p>On a web target:</p>
+<pre><code class="language-bash">whatweb https://example.com
+wafw00f https://example.com    # detects WAFs
+nuclei -u https://example.com -t technologies/
+httpx -title -tech-detect -status-code -l hosts.txt
+</code></pre>
+<p>What to look for:
+- Server: nginx/Apache/IIS + version → known CVEs.
+- Framework: Rails/Django/Express/Spring → patterns.
+- CMS: WordPress/Drupal/Joomla → plugin/theme vuln (wpscan).
+- JS framework: React/Vue/Angular + bundle (sourcemap?).
+- Server / X-Powered-By / X-AspNet-Version headers.
+- Distinctive 404 pages.
+- Cookie names (PHPSESSID, JSESSIONID, ASP.NET_SessionId, …).</p>
+<h2 id="osint-on-code">OSINT on code</h2>
+<p>GitHub is a goldmine:</p>
+<pre><code class="language-text"># Exposed code of the org
+org:acme            # Github advanced search
+filename:.env &quot;DB_PASSWORD&quot;
+&quot;smtp.gmail.com&quot; &quot;password&quot; extension:py
+&quot;BEGIN RSA PRIVATE KEY&quot;
+</code></pre>
+<p>Dedicated tools:
+- <strong>Gitleaks</strong>, <strong>trufflehog</strong>, <strong>gitrob</strong> — scan history for secrets.
+- <strong>gh-dorker</strong>, <strong>github-search</strong>.
+- <strong>Sourcegraph</strong> for cross-repo search.</p>
+<p>For private repos historically exposed, check the <strong>Wayback Machine</strong> of the GitHub profiles (rare but it happens).</p>
+<h2 id="mobile-code">Mobile code</h2>
+<ul>
+<li>Google Play / App Store → <code>apkpure</code>, <code>apkmirror</code> to download APKs.</li>
+<li>Decompile with <strong>jadx</strong>, <strong>apktool</strong>, <strong>MobSF</strong> → URLs, API keys, internal endpoints.</li>
+</ul>
+<h2 id="public-threat-intelligence">Public threat intelligence</h2>
+<p>To enrich OSINT with data on "what's out there":</p>
+<ul>
+<li><strong>AlienVault OTX</strong> (open threat exchange) — IOCs.</li>
+<li><strong>VirusTotal</strong> — file/url/IP/domain reputation.</li>
+<li><strong>AbuseIPDB</strong> — malicious IPs reported.</li>
+<li><strong>GreyNoise</strong> — who is internet-wide "noise" (Shodan crawlers, etc.) vs. targeted.</li>
+<li><strong>URLScan.io</strong> — public URL sandbox.</li>
+<li><strong>CTI feeds</strong>: ThreatFox (abuse.ch), MalwareBazaar (abuse.ch), URLhaus.</li>
+</ul>
+<h2 id="typical-recon-workflow-for-pentestbug-bounty">Typical recon workflow (for pentest/bug bounty)</h2>
+<div class="mermaid">
+flowchart TB
+    SC[1. Scope<br/>what is in / out] --> AS[2. Asset acquisition]
+    AS --> SUB[subdomains<br/>passive + active]
+    AS --> IP[IP / ASN / netblock]
+    AS --> GH[GitHub / docs /<br/>mobile app / partners]
+    SUB --> LC[3. Live check<br/>httpx -title -tech]
+    IP --> LC
+    GH --> LC
+    LC --> MAP[4. Mapping<br/>spreadsheet · BloodHound]
+    MAP --> PR[5. Priority<br/>login · API · staging · CMS]
+    PR --> VS[6. Vulnerability scan<br/>nuclei · nikto]
+    VS --> MT[7. Manual web testing<br/>Burp · business-critical]
+    style MT fill:#3a2a00,stroke:#ffe066
+
+</div>
+
+<ol>
+<li><strong>Scope</strong>: what's in scope (domains, IPs, mobile, API). What is NOT.</li>
+<li><strong>Asset acquisition</strong>:
+   - subdomains (passive + active).
+   - IP/ASN.
+   - GitHub / docs / mobile apps / partner portals.</li>
+<li><strong>Live check</strong>: who responds? <code>httpx -l domains.txt -title -status-code -tech-detect -follow-redirects</code>.</li>
+<li><strong>Mapping</strong>: organize into a spreadsheet/Notion/BloodHound.</li>
+<li><strong>Priority</strong>: promising targets (login portals, APIs, old staging, well-known CMSs).</li>
+<li><strong>Vulnerability scan</strong>: nuclei, nikto.</li>
+<li><strong>Manual web testing</strong>: Burp, focus on business-critical parts.</li>
+</ol>
+<p>In red team add: <strong>people</strong> (phishing targets), <strong>cloud/AD infrastructure</strong>, <strong>MFA absence detection</strong>.</p>
+<h2 id="opsec-while-doing-recon">OPSEC while doing recon</h2>
+<p>Even passive activity leaves traces:
+- From which IP do you query Shodan/Censys? They are logged.
+- Tools like <code>amass active</code> make thousands of DNS queries → the target's authoritative NS sees them.
+- Tests on corporate login pages → IDP logs.</p>
+<p>For serious engagements:
+- Use a <strong>dedicated VPS</strong> for the active footprint.
+- <strong>Tor / proxy chain</strong> when appropriate.
+- Realistic User-Agents.
+- Human rate limits.
+- Coordinate traffic with the client.</p>
+<h2 id="exercises">Exercises</h2>
+<h3 id="exercise-81-map-a-public-company">Exercise 8.1 — Map a public company</h3>
+<p>Pick a public company (e.g. one with a public bug bounty on HackerOne — hypothetical <code>acme.com</code>). Without sending a single active packet to the target:
+1. How many subdomains can you find from CT logs + aggregators?
+2. Which ASNs/IP ranges?
+3. How many GitHub repos for the org?
+4. Any leaks on HIBP?</p>
+<blockquote>
+<p>Work carefully: passive scope only. For active: only if the bug bounty program allows it.</p>
+</blockquote>
+<h3 id="exercise-82-guided-dns-enum">Exercise 8.2 — Guided DNS enum</h3>
+<p>On <code>tryhackme.com</code> or an HTB target domain:</p>
+<pre><code class="language-bash">subfinder -d target.com -all -silent &gt; subs.txt
+amass enum -passive -d target.com &gt;&gt; subs.txt
+sort -u subs.txt -o subs.txt
+
+httpx -l subs.txt -title -status-code -tech-detect -o live.txt
+
+cat live.txt | grep -iE &quot;admin|login|dev|staging|internal&quot;
+</code></pre>
+<h3 id="exercise-83-shodan-dorking">Exercise 8.3 — Shodan dorking</h3>
+<p>With a free Shodan account:
+- <code>org:"target Inc"</code> how many hosts?
+- <code>ssl.cert.subject.cn:"*.target.com"</code> compare with the previous result.
+- <code>port:3389 country:"IT"</code> (RDP exposed in Italy, tens of thousands).
+- <code>product:Jenkins http.html:"Dashboard"</code> — exposed Jenkins.</p>
+<p>Document what you see. <strong>Do not interact</strong> with hosts found.</p>
+<h3 id="exercise-84-email-harvesting">Exercise 8.4 — Email harvesting</h3>
+<p><code>theHarvester -d example.com -b all</code>. How many emails? Match against HIBP? Phishing-ready list?</p>
+<h3 id="exercise-85-github-secrets">Exercise 8.5 — GitHub secrets</h3>
+<p>On a demo repo (e.g. yours, with a fake secret committed and then removed):</p>
+<pre><code class="language-bash">trufflehog filesystem --directory .
+trufflehog git file:///path/to/repo
+gitleaks detect --source=. -v
+</code></pre>
+<p>Do you find the secret? Even though it was removed in a subsequent commit?</p>
+<h3 id="exercise-86-apk-osint">Exercise 8.6 — APK OSINT</h3>
+<p>Download a public APK (e.g. yours or open source) with <code>apkpure</code>:
+- <code>jadx-gui app.apk</code> → decompile.
+- Look for URLs: <code>grep -rEi "https?://[^\"']+" sources/</code>
+- Look for keys: <code>grep -rEi "api[_-]?key|secret|token" sources/</code></p>
+<p>What do you find in <code>strings.xml</code>, AndroidManifest, certificate?</p>
+<h3 id="exercise-87-tryhackme-room">Exercise 8.7 — TryHackMe room</h3>
+<p>TryHackMe has free rooms: "OhSINT", "Searchlight - IMINT", "OSINT". They're guided. Do them.</p>
+<h3 id="exercise-88-maltego">Exercise 8.8 — Maltego</h3>
+<p>Install Maltego CE. Run public transforms on <code>example.com</code>. Build a graph with: domains, IPs, emails, people.</p>
+<h2 id="key-concepts">Key concepts</h2>
+<ol>
+<li><strong>Passive first</strong>: maximize what you obtain without touching the target.</li>
+<li><strong>CT logs</strong> = a goldmine of subdomains.</li>
+<li><strong>Shodan/Censys</strong> = a map of the attack surface exposed on the internet.</li>
+<li><strong>GitHub and dorks</strong> often reveal keys and architectures.</li>
+<li><strong>Iterative recon</strong>: every discovery opens new targets.</li>
+<li><strong>OPSEC even in passive</strong> when it's red team.</li>
+<li><strong>Document</strong>. A good report is born from good recon.</li>
+</ol>
+<p>Now we move on to active weapons: scanning and enumeration.</p>
+      <nav class="pager">
+<a href="07-programming-for-security.html" class="prev"><span class="label">← Previous</span><span class="title">Programming for security: Python, C, Go</span></a>
+<a href="09-scanning-enumeration.html" class="next"><span class="label">Next →</span><span class="title">Scanning, enumeration and fingerprinting</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Cybersec Zero to Hero</strong> — built as a continuous path. Static build from Markdown.</p><p>Educational material. Everything you learn here is to be used only on systems you own, in labs, in authorized bug-bounty programs, or under signed pentest contracts. <strong>Don't break the law.</strong></p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true, background: '#131a1e', primaryColor: '#1d262b',
+      primaryTextColor: '#e8eef0', primaryBorderColor: '#00ff9c',
+      lineColor: '#00e6ff', secondaryColor: '#11171a', tertiaryColor: '#161d21',
+      mainBkg: '#1d262b', nodeBorder: '#00ff9c', clusterBkg: '#0b0f10',
+      clusterBorder: '#243035', titleColor: '#00ff9c',
+      edgeLabelBackground: '#0b0f10', textColor: '#e8eef0',
+      labelTextColor: '#e8eef0', actorBkg: '#1d262b', actorBorder: '#00ff9c',
+      actorTextColor: '#00ff9c', actorLineColor: '#00e6ff',
+      signalColor: '#e8eef0', signalTextColor: '#e8eef0',
+      labelBoxBkgColor: '#1d262b', labelBoxBorderColor: '#00ff9c',
+      noteBkgColor: '#ffe066', noteTextColor: '#0b0f10', noteBorderColor: '#ffe066',
+      activationBkgColor: '#1d262b', activationBorderColor: '#00ff9c',
+      sequenceNumberColor: '#0b0f10'
+    },
+    flowchart: { curve: 'basis', padding: 16 },
+    sequence: { mirrorActors: false, bottomMarginAdj: 10 },
+    fontFamily: 'JetBrains Mono, Cascadia Code, Consolas, monospace'
+  });
+</script>
+</body>
+</html>

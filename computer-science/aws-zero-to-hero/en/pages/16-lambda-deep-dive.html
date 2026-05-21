@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lambda deep dive — AWS Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#232f3e',primaryTextColor:'#ffffff',primaryBorderColor:'#ff9900',lineColor:'#8a99ad',background:'#0c1320'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">λ</div>
+      <div>
+        <div class="brand-title">AWS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/16-lambda-deep-dive.html" class="lang-link" title="Passa all'italiano">IT</a><span class="lang-active" title="English">EN</span></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="search... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-what-is-cloud-and-aws.html" class=""><span class="num">01</span>What the cloud is, and what AWS is</a></li><li class="nav-item"><a href="../pages/02-global-infrastructure.html" class=""><span class="num">02</span>Global infrastructure: Regions, AZs, Edge</a></li><li class="nav-item"><a href="../pages/03-account-root-billing.html" class=""><span class="num">03</span>AWS account, root user, billing</a></li><li class="nav-item"><a href="../pages/04-iam-fundamentals.html" class=""><span class="num">04</span>IAM — fundamentals (users, groups, roles, policies)</a></li><li class="nav-item"><a href="../pages/05-iam-advanced.html" class=""><span class="num">05</span>IAM advanced: conditional policies, STS, ABAC</a></li><li class="nav-item"><a href="../pages/06-cli-sdk-iac.html" class=""><span class="num">06</span>CLI, SDK, CloudShell, IaC primer</a></li><li class="nav-item"><a href="../pages/07-pricing-billing.html" class=""><span class="num">07</span>Pricing, billing, free tier, cost tools</a></li><li class="nav-item"><a href="../pages/08-organizations-multi-account.html" class=""><span class="num">08</span>AWS Organizations &amp; multi-account strategy</a></li><li class="nav-item"><a href="../pages/09-vpc-fundamentals.html" class=""><span class="num">09</span>VPC — fundamentals</a></li><li class="nav-item"><a href="../pages/10-vpc-advanced.html" class=""><span class="num">10</span>VPC advanced: peering, TGW, PrivateLink, endpoints</a></li><li class="nav-item"><a href="../pages/11-route53-cloudfront.html" class=""><span class="num">11</span>Route 53, CloudFront, Global Accelerator</a></li><li class="nav-item"><a href="../pages/12-hybrid-vpn-directconnect.html" class=""><span class="num">12</span>Hybrid: VPN, Direct Connect, PrivateLink</a></li><li class="nav-item"><a href="../pages/13-ec2-fundamentals.html" class=""><span class="num">13</span>EC2 — fundamentals (instances, AMIs, lifecycle)</a></li><li class="nav-item"><a href="../pages/14-ec2-advanced-spot-nitro.html" class=""><span class="num">14</span>EC2 advanced — Spot, Placement Groups, Nitro, hibernation</a></li><li class="nav-item"><a href="../pages/15-asg-elb.html" class=""><span class="num">15</span>Auto Scaling Groups + Elastic Load Balancing</a></li><li class="nav-item"><a href="../pages/16-lambda-deep-dive.html" class="active"><span class="num">16</span>Lambda deep dive</a></li><li class="nav-item"><a href="../pages/17-containers-ecs-eks-fargate.html" class=""><span class="num">17</span>Containers: ECS, EKS, Fargate, ECR</a></li><li class="nav-item"><a href="../pages/18-specialty-compute.html" class=""><span class="num">18</span>Specialty compute: Batch, Lightsail, Outposts, Wavelength, Beanstalk</a></li><li class="nav-item"><a href="../pages/19-ebs-efs-fsx.html" class=""><span class="num">19</span>EBS, EFS, FSx, Instance Store</a></li><li class="nav-item"><a href="../pages/20-s3-deep-dive.html" class=""><span class="num">20</span>S3 — deep dive</a></li><li class="nav-item"><a href="../pages/21-archive-snow-gateway-backup.html" class=""><span class="num">21</span>Glacier, Snow, Storage Gateway, DataSync, AWS Backup</a></li><li class="nav-item"><a href="../pages/22-rds.html" class=""><span class="num">22</span>RDS — managed relational DBs (engines, Multi-AZ, replicas, Proxy)</a></li><li class="nav-item"><a href="../pages/23-aurora-deep-dive.html" class=""><span class="num">23</span>Aurora deep dive — shared storage, Serverless v2, Global Database</a></li><li class="nav-item"><a href="../pages/24-dynamodb-deep-dive.html" class=""><span class="num">24</span>DynamoDB deep dive — partitions, GSI, Streams, single-table</a></li><li class="nav-item"><a href="../pages/25-purpose-built-dbs.html" class=""><span class="num">25</span>Purpose-built DBs — ElastiCache, MemoryDB, Neptune, DocumentDB, Keyspaces, Timestream, QLDB</a></li><li class="nav-item"><a href="../pages/26-redshift-data-warehousing.html" class=""><span class="num">26</span>Redshift — MPP data warehousing and zero-ETL</a></li><li class="nav-item"><a href="../pages/27-sqs-sns-eventbridge.html" class=""><span class="num">27</span>SQS, SNS, EventBridge — messaging and events</a></li><li class="nav-item"><a href="../pages/28-step-functions-mq-appflow.html" class=""><span class="num">28</span>Step Functions, MQ, AppFlow — orchestration and integration</a></li><li class="nav-item"><a href="../pages/29-athena-glue-lakeformation.html" class=""><span class="num">29</span>Athena, Glue, Lake Formation — the AWS data lake</a></li><li class="nav-item"><a href="../pages/30-emr-kinesis-msk.html" class=""><span class="num">30</span>EMR, Kinesis, MSK — big data and streaming</a></li><li class="nav-item"><a href="../pages/31-opensearch-quicksight.html" class=""><span class="num">31</span>OpenSearch and QuickSight — search and BI</a></li><li class="nav-item"><a href="../pages/32-sagemaker-overview.html" class=""><span class="num">32</span>SageMaker — the end-to-end ML platform</a></li><li class="nav-item"><a href="../pages/33-bedrock-ai-services.html" class=""><span class="num">33</span>Bedrock and AI services — managed GenAI and ML</a></li><li class="nav-item"><a href="../pages/34-iac-cloudformation-cdk-terraform.html" class=""><span class="num">34</span>IaC on AWS — CloudFormation, CDK, SAM, Terraform</a></li><li class="nav-item"><a href="../pages/35-ci-cd-pipeline.html" class=""><span class="num">35</span>CI/CD on AWS — CodePipeline, CodeBuild, CodeDeploy, CodeCatalyst</a></li><li class="nav-item"><a href="../pages/36-observability-cloudwatch-xray.html" class=""><span class="num">36</span>Observability — CloudWatch, X-Ray, CloudTrail, Config, SSM</a></li><li class="nav-item"><a href="../pages/37-kms-secrets-acm.html" class=""><span class="num">37</span>Encryption — KMS, CloudHSM, Secrets Manager, Parameter Store, ACM</a></li><li class="nav-item"><a href="../pages/38-waf-shield-guardduty-inspector.html" class=""><span class="num">38</span>Threat detection — WAF, Shield, GuardDuty, Inspector, Macie, Security Hub</a></li><li class="nav-item"><a href="../pages/39-governance-org-controltower-identitycenter.html" class=""><span class="num">39</span>Governance — Organizations, Control Tower, Identity Center</a></li><li class="nav-item"><a href="../pages/40-migration-mgn-dms-snow.html" class=""><span class="num">40</span>Migration — MGN, DMS, Snow family, Discovery, Migration Hub</a></li><li class="nav-item"><a href="../pages/41-cost-optimization-finops.html" class=""><span class="num">41</span>Cost optimization and FinOps</a></li><li class="nav-item"><a href="../pages/42-well-architected.html" class=""><span class="num">42</span>Well-Architected Framework — 6 pillars, lenses, review</a></li><li class="nav-item"><a href="../pages/43-architecture-patterns.html" class=""><span class="num">43</span>Architecture patterns — 3-tier, serverless, event-driven, microservices</a></li><li class="nav-item"><a href="../pages/44-disaster-recovery-multi-region.html" class=""><span class="num">44</span>Disaster Recovery and Multi-Region</a></li><li class="nav-item"><a href="../pages/45-reference-architectures.html" class=""><span class="num">45</span>Real-world reference architectures</a></li><li class="nav-item"><a href="../pages/46-advanced-networking.html" class=""><span class="num">46</span>Advanced networking deep dive</a></li><li class="nav-item"><a href="../pages/47-containers-deep-dive.html" class=""><span class="num">47</span>Containers deep dive — EKS, Karpenter, service mesh</a></li><li class="nav-item"><a href="../pages/48-serverless-patterns.html" class=""><span class="num">48</span>Serverless patterns deep dive</a></li><li class="nav-item"><a href="../pages/49-genai-rag-agents.html" class=""><span class="num">49</span>Generative AI on AWS — RAG and Agents</a></li><li class="nav-item"><a href="../pages/50-aws-certifications.html" class=""><span class="num">50</span>AWS Certifications — roadmap and study guide</a></li><li class="nav-item"><a href="../pages/51-glossary-az.html" class=""><span class="num">51</span>Glossary A-Z</a></li><li class="nav-item"><a href="../pages/52-cheatsheet.html" class=""><span class="num">52</span>Cheat sheet: services, limits, instance families</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Compute</span>
+        <span>Section 16 of 52</span>
+        <span class="level-tag level-int">Level: intermediate</span>
+      </div>
+      <h1>Lambda deep dive</h1>
+      <p class="summary">Execution model, cold starts, provisioned concurrency, SnapStart, layers, VPC, sync/async/poll triggers, DLQ/destination, Function URL, container images.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Compute</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>sections 4, 9</li></ul>
+  <div class="label">Tools / references</div>
+  <ul class="source-list"><li>AWS CLI</li><li>AWS SAM</li></ul>
+</div>
+      <p>Lambda is AWS's "serverless compute": you write a function, AWS handles scaling, runs it in ephemeral containers and bills per millisecond. Here we go <em>under the hood</em> — what separates a slow Lambda from a fast one.</p>
+<h2 id="1-execution-model">1. Execution model</h2>
+<p>Each invocation runs a <strong>handler</strong> (entry point) inside a <strong>runtime</strong> (Node.js, Python, Java, .NET, Go, Ruby or custom OCI). The <strong>execution context</strong> (container) is <strong>reused</strong> between invocations of the same concurrent function: globals, DB connections, SDK clients survive.</p>
+<pre><code class="language-python"># Best practice: initialize outside the handler
+import boto3
+s3 = boto3.client(&quot;s3&quot;)  # reused across invocations (warm)
+
+def handler(event, context):
+    return s3.list_buckets()
+</code></pre>
+<pre><code class="language-mermaid">flowchart LR
+  Req[Request] --&gt; CW{Container warm?}
+  CW -- Yes --&gt; Run[Run handler]
+  CW -- No --&gt; CS[Cold start: init runtime + load code]
+  CS --&gt; Run
+  Run --&gt; Resp[Response]
+  Run -.idle.-&gt; Frozen[Frozen, max ~10-60 min]
+</code></pre>
+<h2 id="2-cold-start">2. Cold start</h2>
+<p>When no warm container is available AWS must create one. Typical times:</p>
+<table>
+<thead>
+<tr>
+<th>Runtime</th>
+<th>Typical cold start</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Lightweight Python/Node</td>
+<td>100-300 ms</td>
+</tr>
+<tr>
+<td>Java/.NET</td>
+<td>500-3000 ms</td>
+</tr>
+<tr>
+<td>Java + Spring Boot</td>
+<td>3-10 s</td>
+</tr>
+<tr>
+<td>Container image</td>
+<td>200-1500 ms</td>
+</tr>
+<tr>
+<td>Function in VPC (post hyperplane)</td>
+<td>+50-150 ms</td>
+</tr>
+</tbody>
+</table>
+<p>Mitigations:
+- <strong>Provisioned Concurrency (PC)</strong>: keeps N containers warm 24/7, fixed $/h. Great for web apps with tight SLA.
+- <strong>SnapStart</strong> (Java/Python/.NET): AWS snapshots the already-initialized JVM/runtime, restore &lt; 200 ms. Free.
+- <strong>Lambda SnapStart + priming</strong>: initialize DB connections in the <code>beforeCheckpoint</code> hook.
+- Keep package small, avoid heavy deps.
+- Container image: cached base layer + fast bootstrap.</p>
+<h2 id="3-configuration">3. Configuration</h2>
+<table>
+<thead>
+<tr>
+<th>Limit</th>
+<th>Value (2026)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Memory</td>
+<td>128 - 10 240 MB (in 1 MB steps)</td>
+</tr>
+<tr>
+<td>Max duration</td>
+<td>15 minutes</td>
+</tr>
+<tr>
+<td>Package size (zip)</td>
+<td>50 MB direct / 250 MB unzipped</td>
+</tr>
+<tr>
+<td>Container image</td>
+<td>10 GB</td>
+</tr>
+<tr>
+<td>Layers</td>
+<td>5 per function, 250 MB total</td>
+</tr>
+<tr>
+<td><code>/tmp</code></td>
+<td>512 MB - 10 240 MB (configurable)</td>
+</tr>
+<tr>
+<td>Env vars</td>
+<td>4 KB total, KMS-encrypted</td>
+</tr>
+<tr>
+<td>Sync payload</td>
+<td>6 MB</td>
+</tr>
+<tr>
+<td>Async payload</td>
+<td>256 KB</td>
+</tr>
+</tbody>
+</table>
+<p>CPU scales linearly with memory: at 1769 MB you get 1 full vCPU; at 10 240 MB ~6 vCPUs.</p>
+<pre><code class="language-bash">aws lambda update-function-configuration \
+  --function-name my-fn \
+  --memory-size 1024 \
+  --timeout 30 \
+  --environment 'Variables={DB_URL=...}' \
+  --kms-key-arn arn:aws:kms:...:key/abcd
+</code></pre>
+<p>Cost trick: often <strong>increasing memory reduces cost</strong> because the function finishes much sooner (more CPU). Use <strong>Lambda Power Tuning</strong> to find the sweet spot.</p>
+<h2 id="4-pricing">4. Pricing</h2>
+<p>$$\text{cost} = N_{request} \cdot 0.20/10^6 + \text{GB-sec} \cdot 0.0000166667$$</p>
+<p>With $N$ requests/month, duration $t$ ms at $m$ MB: $\text{GB-sec} = N \cdot t/1000 \cdot m/1024$.</p>
+<p>Example: 10M req, 200 ms, 512 MB → ~$2 in requests + ~$17 in compute = $19/month.</p>
+<h2 id="5-triggers-and-patterns">5. Triggers and patterns</h2>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Trigger</th>
+<th>Error behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Sync</strong></td>
+<td>API Gateway, ALB, Function URL, SDK invoke</td>
+<td>error returned to client</td>
+</tr>
+<tr>
+<td><strong>Async</strong></td>
+<td>S3 event, SNS, EventBridge</td>
+<td>retry x2 + DLQ/destination</td>
+</tr>
+<tr>
+<td><strong>Poll-based</strong></td>
+<td>SQS, Kinesis, DynamoDB Streams, MSK, MQ</td>
+<td>Lambda polls; error = batch redone</td>
+</tr>
+</tbody>
+</table>
+<p>For async/poll: configure a <strong>Dead Letter Queue</strong> (SQS/SNS) or, better, <strong>Destinations</strong> (success+failure to SQS/SNS/EventBridge/Lambda).</p>
+<pre><code class="language-bash">aws lambda put-function-event-invoke-config \
+  --function-name my-fn \
+  --destination-config '{
+    &quot;OnFailure&quot;: {&quot;Destination&quot;: &quot;arn:aws:sqs:eu-west-1:123:dlq&quot;},
+    &quot;OnSuccess&quot;: {&quot;Destination&quot;: &quot;arn:aws:events:eu-west-1:123:event-bus/main&quot;}
+  }'
+</code></pre>
+<h2 id="6-vpc-layers-containers">6. VPC, layers, containers</h2>
+<p><strong>VPC</strong>: only needed to reach private resources (RDS, ElastiCache). Since 2019 AWS uses <strong>Hyperplane ENI</strong> sharing, eliminating the historical 10s cold start. Still costs ~50-150 ms more.</p>
+<p><strong>Layers</strong>: reusable packages (custom SDKs, Python deps). Versioned, max 5 per function.</p>
+<p><strong>Container image</strong>: deploy an OCI image up to 10 GB. Useful for heavy ML models or when the zip isn't enough. Use the <strong>AWS Lambda base image</strong> (includes Runtime Interface Client).</p>
+<pre><code class="language-dockerfile">FROM public.ecr.aws/lambda/python:3.12
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+COPY app.py ${LAMBDA_TASK_ROOT}
+CMD [&quot;app.handler&quot;]
+</code></pre>
+<h2 id="7-function-url-vs-api-gateway-vs-lambdaedge">7. Function URL vs API Gateway vs Lambda@Edge</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Function URL</th>
+<th>API Gateway REST</th>
+<th>API Gateway HTTP</th>
+<th>Lambda@Edge</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cost</td>
+<td>free</td>
+<td>$$</td>
+<td>$</td>
+<td>$$</td>
+</tr>
+<tr>
+<td>Auth</td>
+<td>IAM or public</td>
+<td>IAM, Cognito, custom auth</td>
+<td>JWT, IAM</td>
+<td>none built-in</td>
+</tr>
+<tr>
+<td>WAF</td>
+<td>no (put CF in front)</td>
+<td>yes</td>
+<td>yes</td>
+<td>via CF</td>
+</tr>
+<tr>
+<td>Throttle/quota</td>
+<td>no</td>
+<td>granular</td>
+<td>yes</td>
+<td>no</td>
+</tr>
+<tr>
+<td>Global latency</td>
+<td>regional</td>
+<td>regional</td>
+<td>regional</td>
+<td>global edge</td>
+</tr>
+</tbody>
+</table>
+<p>Lambda@Edge runs on CloudFront edges (600+ locations), Node/Python runtime, no custom env vars, 1 MB payload. Use cases: A/B testing, URL rewrite, edge auth.</p>
+<h2 id="8-exercise">8. Exercise</h2>
+<details>
+<summary>Python Lambda with 4-second cold start: causes and fixes?</summary>
+
+Common causes:
+1. **Huge package** (e.g. `pandas + scikit-learn` = 200 MB). Move to a layer or, better, container image.
+2. **Heavy module-level imports**. Lazy-load: import inside the handler if only some paths need it.
+3. **VPC config** using subnets without proper NAT/endpoints (DNS timeout).
+4. **DB connections** rebuilt on every cold start. Initialize outside the handler (warm reuse).
+
+Fixes:
+- Raise memory to 1024+ MB → more CPU → faster init.
+- Provisioned Concurrency for 2-5 units during peak hours.
+- For Java: SnapStart (free, 10x improvement).
+</details>
+
+<details>
+<summary>Lambda triggered by S3 ObjectCreated, you want exactly-once processing. How?</summary>
+
+Async Lambda has auto-retry → you can get duplicates. Solutions:
+- **Idempotency key**: use `bucket+key+etag` as ID; save to DynamoDB with `attribute_not_exists` condition.
+- Powertools for AWS Lambda (Python/Node/Java) has an `@idempotent` decorator that does exactly this.
+- DLQ/Destinations on failure so you don't lose events after the 2 retries.
+</details>
+
+<blockquote>
+<p><strong>Summary</strong>: Lambda = event-driven compute, billed per ms · GB; warm container reused (init outside the handler); cold start mitigated with Provisioned Concurrency or SnapStart; max 15 min / 10 GB RAM / 10 GB image; sync/async/poll triggers with DLQ+Destinations; raising memory often costs less (linear CPU); Function URL for simple cases, API GW HTTP for modern APIs, Lambda@Edge for edge logic.</p>
+</blockquote>
+      <nav class="pager">
+<a href="15-asg-elb.html" class="prev"><span class="label">← Previous</span><span class="title">Auto Scaling Groups + Elastic Load Balancing</span></a>
+<a href="17-containers-ecs-eks-fargate.html" class="next"><span class="label">Next →</span><span class="title">Containers: ECS, EKS, Fargate, ECR</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>AWS Zero to Hero</strong> — complete path, in English, from primitives to advanced architecture.</p><p>Open educational material. No sponsorships, no affiliate links, no affiliation with AWS. When a concept is unclear, go back: AWS is a pyramid of primitives, not a tree you skip across.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+</body>
+</html>

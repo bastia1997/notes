@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>Strings, arrays, console I/O — Java + Spring Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">☕</div>
+      <div>
+        <div class="brand-title">JAVA · SPRING</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/03-stringhe-array-io.html" class="lang-link" title="Passa all'italiano"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="10" height="20" fill="#009246"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ce2b37"/></svg> IT</a><span class="lang-active" title="English"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="30" height="20" fill="#012169"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#fff" stroke-width="3"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#c8102e" stroke-width="1.5"/><path d="M15,0 v20 M0,10 h30" stroke="#fff" stroke-width="5"/><path d="M15,0 v20 M0,10 h30" stroke="#c8102e" stroke-width="3"/></svg> EN</span></div>
+  </div>
+  <div class="search-wrap">
+    <div class="search-row">
+      <div class="search-inputwrap">
+        <span class="search-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"/>
+            <line x1="20" y1="20" x2="16.65" y2="16.65"/>
+          </svg>
+        </span>
+        <input class="search-input" id="search-input" type="text" placeholder="search... (press /)" autocomplete="off" aria-label="Search">
+        <button class="search-clear" id="search-clear" type="button" aria-label="Clear" title="Clear">&times;</button>
+      </div>
+      <button class="search-btn" id="search-btn" type="button" aria-label="SEARCH" title="SEARCH">SEARCH</button>
+    </div>
+    <div class="search-hits" id="search-hits" role="listbox"></div>
+  </div>
+  <div class="sidebar-nav">
+    <nav class="nav-section">
+      <div class="nav-section-title">Path</div>
+      <ul class="nav-list">
+        <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+        <li class="nav-item"><a href="../pages/00-path-and-mindset.html" class=""><span class="num">00</span>The path and the right mindset</a></li><li class="nav-item"><a href="../pages/01-java-introduction.html" class=""><span class="num">01</span>Java: what it really is, JVM/JRE/JDK, first program</a></li><li class="nav-item"><a href="../pages/02-basic-syntax.html" class=""><span class="num">02</span>Basic syntax: types, variables, operators, control flow</a></li><li class="nav-item"><a href="../pages/03-strings-arrays-io.html" class="active"><span class="num">03</span>Strings, arrays, console I/O</a></li><li class="nav-item"><a href="../pages/04-oop-classes-objects.html" class=""><span class="num">04</span>OOP I — Classes, objects, constructors, this, packages, visibility</a></li><li class="nav-item"><a href="../pages/05-oop-inheritance-polymorphism.html" class=""><span class="num">05</span>OOP II — Inheritance, polymorphism, interfaces, abstract classes</a></li><li class="nav-item"><a href="../pages/06-equals-hashcode-immutability.html" class=""><span class="num">06</span>OOP III — equals, hashCode, toString, immutability, record</a></li><li class="nav-item"><a href="../pages/07-exceptions.html" class=""><span class="num">07</span>Exceptions: checked vs unchecked, try-with-resources, custom</a></li><li class="nav-item"><a href="../pages/08-generics.html" class=""><span class="num">08</span>Generics: parametric types, PECS, type erasure, wildcards</a></li><li class="nav-item"><a href="../pages/09-collections.html" class=""><span class="num">09</span>Collections: List, Set, Map, Queue, complexity, choosing the right structure</a></li><li class="nav-item"><a href="../pages/10-stream-lambda-optional.html" class=""><span class="num">10</span>Stream API, lambdas, functional interfaces, Optional</a></li><li class="nav-item"><a href="../pages/11-io-nio.html" class=""><span class="num">11</span>I/O and NIO.2: File, Path, channels, buffers</a></li><li class="nav-item"><a href="../pages/12-concurrency-thread.html" class=""><span class="num">12</span>Concurrency I — Threads, synchronization, volatile, JMM</a></li><li class="nav-item"><a href="../pages/13-executor-future-completablefuture.html" class=""><span class="num">13</span>Concurrency II — ExecutorService, Future, CompletableFuture</a></li><li class="nav-item"><a href="../pages/14-concurrency-juc.html" class=""><span class="num">14</span>Concurrency III — java.util.concurrent: locks, atomics, concurrent collections</a></li><li class="nav-item"><a href="../pages/15-jvm-internals.html" class=""><span class="num">15</span>JVM internals: classloader, bytecode, runtime data areas, JIT</a></li><li class="nav-item"><a href="../pages/16-memory-gc.html" class=""><span class="num">16</span>Memory and garbage collection: G1, ZGC, Shenandoah</a></li><li class="nav-item"><a href="../pages/17-profiling-jfr.html" class=""><span class="num">17</span>Profiling: JFR, async-profiler, jstack, heap dump, jcmd</a></li><li class="nav-item"><a href="../pages/18-modern-java.html" class=""><span class="num">18</span>Modern Java: from 8 to 21 — key features</a></li><li class="nav-item"><a href="../pages/19-jdbc.html" class=""><span class="num">19</span>JDBC: connection, PreparedStatement, transactions, isolation levels</a></li><li class="nav-item"><a href="../pages/20-jpa-hibernate.html" class=""><span class="num">20</span>JPA / Hibernate: entities, relationships, lazy/eager, N+1, cache</a></li><li class="nav-item"><a href="../pages/21-essential-sql.html" class=""><span class="num">21</span>Essential SQL for the Java developer</a></li><li class="nav-item"><a href="../pages/22-spring-intro-ioc-di.html" class=""><span class="num">22</span>Spring intro: IoC, DI, ApplicationContext, BeanFactory</a></li><li class="nav-item"><a href="../pages/23-spring-beans-lifecycle.html" class=""><span class="num">23</span>Beans: scopes, lifecycle, BeanPostProcessor, FactoryBean</a></li><li class="nav-item"><a href="../pages/24-spring-configuration.html" class=""><span class="num">24</span>Configuration: Java config, @ComponentScan, profiles, conditionals, properties</a></li><li class="nav-item"><a href="../pages/25-spring-aop-transactional.html" class=""><span class="num">25</span>AOP, proxies, @Transactional: what really happens</a></li><li class="nav-item"><a href="../pages/26-spring-boot.html" class=""><span class="num">26</span>Spring Boot: auto-configuration, starters, Actuator</a></li><li class="nav-item"><a href="../pages/27-spring-data-jpa.html" class=""><span class="num">27</span>Spring Data JPA: Repository, derived queries, pagination, Specification</a></li><li class="nav-item"><a href="../pages/28-spring-mvc-rest.html" class=""><span class="num">28</span>Spring MVC: DispatcherServlet, controllers, REST endpoints</a></li><li class="nav-item"><a href="../pages/29-rest-openapi-hateoas.html" class=""><span class="num">29</span>REST: best practices, OpenAPI/Swagger, HATEOAS, versioning</a></li><li class="nav-item"><a href="../pages/30-spring-webflux.html" class=""><span class="num">30</span>Spring WebFlux + Reactor: Mono, Flux, reactive programming</a></li><li class="nav-item"><a href="../pages/31-spring-security.html" class=""><span class="num">31</span>Spring Security: filter chain, authentication, authorization, JWT, OAuth2</a></li><li class="nav-item"><a href="../pages/32-spring-cloud.html" class=""><span class="num">32</span>Spring Cloud: Config Server, Discovery, Gateway, Resilience4j</a></li><li class="nav-item"><a href="../pages/33-testing.html" class=""><span class="num">33</span>Testing: JUnit 5, Mockito, MockMvc, Testcontainers</a></li><li class="nav-item"><a href="../pages/34-spring-batch-intro.html" class=""><span class="num">34</span>Spring Batch intro: domain model, Job, Step, first batch</a></li><li class="nav-item"><a href="../pages/35-spring-batch-jobrepository.html" class=""><span class="num">35</span>JobRepository, JobLauncher, metadata schema</a></li><li class="nav-item"><a href="../pages/36-spring-batch-chunk-skip-retry.html" class=""><span class="num">36</span>Chunk processing: commit interval, skip, retry, fault tolerance</a></li><li class="nav-item"><a href="../pages/37-spring-batch-tasklet-flow.html" class=""><span class="num">37</span>Tasklet vs Chunk; flow control: decisions, splits, conditionals</a></li><li class="nav-item"><a href="../pages/38-spring-batch-itemreader.html" class=""><span class="num">38</span>ItemReader: flat file, XML/JSON, JDBC cursor/paging, JPA, multi-resource</a></li><li class="nav-item"><a href="../pages/39-spring-batch-itemwriter.html" class=""><span class="num">39</span>ItemWriter: file, JDBC, JPA, composite, classifier, batch insert</a></li><li class="nav-item"><a href="../pages/40-spring-batch-scaling-partitioning.html" class=""><span class="num">40</span>Scaling: multi-threaded step, partitioning, remote chunking/partitioning</a></li><li class="nav-item"><a href="../pages/41-spring-batch-listeners-restart-k8s.html" class=""><span class="num">41</span>Listeners, restart, monitoring, Spring Boot and Kubernetes integration</a></li><li class="nav-item"><a href="../pages/42-design-patterns.html" class=""><span class="num">42</span>Design patterns in Java/Spring: GoF + DDD-lite</a></li><li class="nav-item"><a href="../pages/43-performance-observability.html" class=""><span class="num">43</span>Production-grade performance tuning and observability</a></li><li class="nav-item"><a href="../pages/44-synthesis-exercises.html" class=""><span class="num">44</span>50 cumulative exercises: from syntax to Spring Batch</a></li><li class="nav-item"><a href="../pages/45-final-project-etl.html" class=""><span class="num">45</span>Final guided project: nightly bank ETL</a></li>
+      </ul>
+    </nav>
+  </div>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Java Foundations</span>
+        <span>Section 3 of 45</span>
+        <span class="level-tag level-beg">Level: beginner</span>
+      </div>
+      <h1>Strings, arrays, console I/O</h1>
+      <p class="summary">String is immutable: why it matters. StringBuilder and StringBuffer, formatting, text blocks. One- and multi-dimensional arrays. Reading input from console with Scanner and BufferedReader.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Java Foundations</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>Section 2</li></ul>
+  <div class="label">Tools</div>
+  <ul class="source-list"><li>JDK 21</li></ul>
+</div>
+      <h2 id="the-string-class-immutable-and-why-it-matters">The <code>String</code> class: immutable, and why it matters</h2>
+<p>In Java <code>String</code> is <strong>immutable</strong>: once created, the object never changes. Operations that "modify" a string actually create a new one.</p>
+<pre><code class="language-java">String s = &quot;hello&quot;;
+s.toUpperCase();         // creates &quot;HELLO&quot; and THROWS IT AWAY
+System.out.println(s);   // &quot;hello&quot; — unchanged
+s = s.toUpperCase();     // now s points to &quot;HELLO&quot;
+System.out.println(s);   // &quot;HELLO&quot;
+</code></pre>
+<p><strong>Why immutable?</strong> Security (a password string can't be modified under you), caching (<code>hashCode</code> computed once), automatic thread-safety, <strong>string pool</strong> (see below).</p>
+<h3 id="string-pool">String pool</h3>
+<p><strong>String literals</strong> are stored in an internal cache (<code>String pool</code>):</p>
+<pre><code class="language-java">String a = &quot;hi&quot;;
+String b = &quot;hi&quot;;
+System.out.println(a == b);   // true, same pooled object
+
+String c = new String(&quot;hi&quot;);
+System.out.println(a == c);   // false, fresh object on heap
+System.out.println(a == c.intern());  // true, intern() returns pool instance
+</code></pre>
+<p>Almost never use <code>new String("...")</code>: it wastes memory.</p>
+<h3 id="essential-string-methods">Essential <code>String</code> methods</h3>
+<pre><code class="language-java">String s = &quot;  Hello, World!  &quot;;
+s.length();                 // 17
+s.trim();                   // &quot;Hello, World!&quot; (strips leading/trailing whitespace)
+s.strip();                  // like trim but Unicode-aware (Java 11+)
+s.toLowerCase();
+s.toUpperCase();
+s.charAt(2);                // 'H'
+s.indexOf(&quot;World&quot;);         // 9
+s.indexOf(&quot;xyz&quot;);           // -1 (not found)
+s.substring(7, 12);         // &quot;World&quot;  [start, end)
+s.replace(&quot;World&quot;, &quot;Java&quot;); // &quot;  Hello, Java!  &quot;
+s.contains(&quot;World&quot;);        // true
+s.startsWith(&quot;  Hello&quot;);    // true
+s.endsWith(&quot;!  &quot;);          // true
+s.split(&quot;,\\s*&quot;);           // [&quot;  Hello&quot;, &quot;World!  &quot;]
+s.isEmpty();                // false
+s.isBlank();                // false (Java 11+) — true if only whitespace
+String.join(&quot;, &quot;, &quot;a&quot;, &quot;b&quot;, &quot;c&quot;);  // &quot;a, b, c&quot;
+&quot;abc&quot;.repeat(3);            // &quot;abcabcabc&quot; (Java 11+)
+</code></pre>
+<h3 id="comparison">Comparison</h3>
+<pre><code class="language-java">&quot;foo&quot;.equals(&quot;FOO&quot;);                 // false
+&quot;foo&quot;.equalsIgnoreCase(&quot;FOO&quot;);       // true
+&quot;abc&quot;.compareTo(&quot;abd&quot;);              // -1 (lexicographic)
+</code></pre>
+<h3 id="concatenation-vs-stringbuilder">Concatenation vs <code>StringBuilder</code></h3>
+<p><code>+</code> concatenation inside a loop is <strong>slow</strong>: each <code>+</code> creates a new <code>String</code>.</p>
+<pre><code class="language-java">String s = &quot;&quot;;
+for (int i = 0; i &lt; 10_000; i++) {
+    s += i;       // 10,000 temporary String objects!
+}
+</code></pre>
+<p>Use <code>StringBuilder</code> to build strings efficiently:</p>
+<pre><code class="language-java">StringBuilder sb = new StringBuilder();
+for (int i = 0; i &lt; 10_000; i++) {
+    sb.append(i);
+}
+String s = sb.toString();
+</code></pre>
+<p><code>StringBuilder</code> is mutable and not thread-safe (fast). <code>StringBuffer</code> is its synchronized version (slower, rarely needed).</p>
+<blockquote>
+<p><strong>Modern Java note</strong>: the compiler may optimize <code>a + b + c</code> into <code>StringBuilder</code> automatically (Java 9+ with <code>invokedynamic</code>). But inside loops you have to do it yourself.</p>
+</blockquote>
+<h3 id="formatting">Formatting</h3>
+<pre><code class="language-java">String s = String.format(&quot;Hi %s, you are #%d&quot;, &quot;Mario&quot;, 42);
+// &quot;Hi Mario, you are #42&quot;
+
+System.out.printf(&quot;%-10s %6.2f%n&quot;, &quot;Price&quot;, 19.99);
+// &quot;Price       19.99&quot;
+
+// Java 15+: text blocks for multi-line strings
+String html = &quot;&quot;&quot;
+        &lt;html&gt;
+          &lt;body&gt;
+            &lt;h1&gt;%s&lt;/h1&gt;
+          &lt;/body&gt;
+        &lt;/html&gt;
+        &quot;&quot;&quot;.formatted(&quot;Title&quot;);
+</code></pre>
+<h3 id="character-encoding">Character encoding</h3>
+<p><code>String</code> is internally stored as UTF-16 (2 bytes per char, 4 for emoji/rare glyphs). When you go to bytes:</p>
+<pre><code class="language-java">byte[] utf8 = &quot;hello&quot;.getBytes(StandardCharsets.UTF_8);
+String back = new String(utf8, StandardCharsets.UTF_8);
+</code></pre>
+<p><strong>Always</strong> specify the charset: the default is the "platform default" (on Windows ITA = <code>windows-1252</code>, guaranteed bugs).</p>
+<h2 id="arrays">Arrays</h2>
+<h3 id="declaration-and-initialization">Declaration and initialization</h3>
+<pre><code class="language-java">int[] a = new int[5];        // [0,0,0,0,0]
+int[] b = {1, 2, 3, 4, 5};   // literal
+int[] c = new int[]{10, 20}; // alternative
+String[] names = {&quot;Anna&quot;, &quot;Beppe&quot;, &quot;Carlo&quot;};
+</code></pre>
+<p>Length: <code>a.length</code> (field, not method).</p>
+<h3 id="access">Access</h3>
+<pre><code class="language-java">b[0];           // 1
+b[b.length - 1]; // 5
+b[10];          // ArrayIndexOutOfBoundsException at runtime
+</code></pre>
+<p>Arrays are <strong>objects</strong>: they have <code>.length</code> but no meaningful <code>.equals()</code> (compares references). To compare contents use <code>Arrays.equals()</code>.</p>
+<h3 id="multi-dimensional">Multi-dimensional</h3>
+<pre><code class="language-java">int[][] matrix = {
+    {1, 2, 3},
+    {4, 5, 6}
+};
+matrix[1][2];   // 6
+matrix.length;     // 2 (number of rows)
+matrix[0].length;  // 3 (columns of row 0)
+</code></pre>
+<p>Actually <strong>arrays of arrays</strong>: rows can have different lengths.</p>
+<pre><code class="language-java">int[][] jagged = new int[3][];
+jagged[0] = new int[]{1};
+jagged[1] = new int[]{1, 2, 3};
+jagged[2] = new int[]{1, 2};
+</code></pre>
+<h3 id="arrays-the-utility-class"><code>Arrays</code>: the utility class</h3>
+<pre><code class="language-java">import java.util.Arrays;
+
+int[] nums = {3, 1, 4, 1, 5, 9, 2, 6};
+Arrays.sort(nums);
+System.out.println(Arrays.toString(nums));   // [1, 1, 2, 3, 4, 5, 6, 9]
+
+int[] copy = Arrays.copyOf(nums, 4);  // [1, 1, 2, 3]
+int idx = Arrays.binarySearch(nums, 5); // 5 (requires sorted array)
+
+Arrays.fill(nums, 0);     // all zeros
+
+int[] a = {1,2,3};
+int[] b = {1,2,3};
+System.out.println(a == b);              // false (references)
+System.out.println(Arrays.equals(a, b)); // true
+</code></pre>
+<h2 id="console-io">Console I/O</h2>
+<h3 id="printing">Printing</h3>
+<pre><code class="language-java">System.out.println(&quot;hi&quot;);      // newline at end
+System.out.print(&quot;new &quot;);
+System.out.print(&quot;line&quot;);
+System.out.println();           // newline
+System.out.printf(&quot;%s is %d%n&quot;, &quot;Luca&quot;, 30);
+System.err.println(&quot;error!&quot;);  // to stderr
+</code></pre>
+<p><code>%n</code> is the portable newline (<code>\n</code> on Linux, <code>\r\n</code> on Windows).</p>
+<h3 id="reading-scanner">Reading: <code>Scanner</code></h3>
+<pre><code class="language-java">import java.util.Scanner;
+
+public class Echo {
+    public static void main(String[] args) {
+        try (Scanner sc = new Scanner(System.in)) {
+            System.out.print(&quot;Your name? &quot;);
+            String name = sc.nextLine();
+            System.out.print(&quot;Age: &quot;);
+            int age = sc.nextInt();
+            System.out.printf(&quot;Hi %s, you're %d%n&quot;, name, age);
+        }
+    }
+}
+</code></pre>
+<blockquote>
+<p><strong>Classic trap</strong>: after <code>nextInt()</code> the newline stays in the buffer. A subsequent <code>nextLine()</code> reads an empty line. To avoid it: call a "cleaning" <code>sc.nextLine()</code> after the int.</p>
+</blockquote>
+<h3 id="reading-bufferedreader-more-efficient">Reading: <code>BufferedReader</code> (more efficient)</h3>
+<pre><code class="language-java">import java.io.*;
+
+try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
+    String line = br.readLine();
+    int n = Integer.parseInt(line);
+    System.out.println(&quot;Got: &quot; + n);
+}
+</code></pre>
+<p><code>BufferedReader.readLine()</code> is much faster than <code>Scanner</code> for reading large inputs.</p>
+<h3 id="try-with-resources"><code>try-with-resources</code></h3>
+<p>Resources (files, scanners, connections) must be closed. Java 7+ has the <code>try-with-resources</code> pattern:</p>
+<pre><code class="language-java">try (Scanner sc = new Scanner(System.in)) {
+    // ...
+} // sc.close() automatically, even on exception
+</code></pre>
+<p>Anything implementing <code>AutoCloseable</code> works here. We'll use it everywhere.</p>
+<h3 id="command-line-arguments">Command-line arguments</h3>
+<pre><code class="language-java">public static void main(String[] args) {
+    if (args.length &lt; 1) {
+        System.err.println(&quot;Usage: java MyApp &lt;name&gt;&quot;);
+        System.exit(1);
+    }
+    System.out.println(&quot;Hello &quot; + args[0]);
+}
+</code></pre>
+<p><code>args</code> holds arguments after the class name.</p>
+<h2 id="exercises">Exercises</h2>
+<details>
+<summary>Ex 3.1 — Palindrome</summary>
+
+Write a function that returns `true` if the string is a palindrome, case- and space-insensitive.
+
+
+<pre><code class="language-java">public static boolean isPalindrome(String s) {
+    String clean = s.toLowerCase().replaceAll(&quot;\\s+&quot;, &quot;&quot;);
+    int i = 0, j = clean.length() - 1;
+    while (i &lt; j) {
+        if (clean.charAt(i++) != clean.charAt(j--)) return false;
+    }
+    return true;
+}
+
+// test
+isPalindrome(&quot;anna&quot;);          // true
+isPalindrome(&quot;Ama il mami&quot;);   // true
+isPalindrome(&quot;hello&quot;);         // false
+</code></pre>
+
+
+</details>
+
+<details>
+<summary>Ex 3.2 — In-place array reverse</summary>
+
+Reverse an `int[]` in place (mutating the original).
+
+
+<pre><code class="language-java">public static void reverse(int[] a) {
+    int i = 0, j = a.length - 1;
+    while (i &lt; j) {
+        int tmp = a[i];
+        a[i++] = a[j];
+        a[j--] = tmp;
+    }
+}
+</code></pre>
+
+
+</details>
+
+<details>
+<summary>Ex 3.3 — Word count</summary>
+
+Read one line from stdin, count the words (separated by one or more spaces).
+
+
+<pre><code class="language-java">import java.util.Scanner;
+public class WordCount {
+    public static void main(String[] args) {
+        try (Scanner sc = new Scanner(System.in)) {
+            System.out.print(&quot;Sentence: &quot;);
+            String line = sc.nextLine().trim();
+            int count = line.isEmpty() ? 0 : line.split(&quot;\\s+&quot;).length;
+            System.out.println(&quot;Words: &quot; + count);
+        }
+    }
+}
+</code></pre>
+
+
+</details>
+
+<details>
+<summary>Ex 3.4 — StringBuilder vs `+=`</summary>
+
+Build a string of 1..100,000 concatenated, first with `+=`, then with `StringBuilder`. Time it with `System.nanoTime`.
+
+
+<pre><code class="language-java">public class BuildPerf {
+    public static void main(String[] args) {
+        int N = 100_000;
+
+        long t1 = System.nanoTime();
+        String s = &quot;&quot;;
+        for (int i = 0; i &lt; N; i++) s += i;
+        long t2 = System.nanoTime();
+        System.out.printf(&quot;+= : %.2f ms%n&quot;, (t2 - t1) / 1e6);
+
+        long t3 = System.nanoTime();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i &lt; N; i++) sb.append(i);
+        String s2 = sb.toString();
+        long t4 = System.nanoTime();
+        System.out.printf(&quot;sb : %.2f ms%n&quot;, (t4 - t3) / 1e6);
+    }
+}
+</code></pre>
+
+
+Expect 100x differences or more. For small N (< 100) the gap is negligible.
+
+</details>
+
+<details>
+<summary>Ex 3.5 — Anagrams</summary>
+
+Two words are anagrams if they have the same letters in different order.
+
+
+<pre><code class="language-java">public static boolean isAnagram(String a, String b) {
+    char[] x = a.toLowerCase().toCharArray();
+    char[] y = b.toLowerCase().toCharArray();
+    if (x.length != y.length) return false;
+    Arrays.sort(x);
+    Arrays.sort(y);
+    return Arrays.equals(x, y);
+}
+</code></pre>
+
+
+</details>
+
+<h2 id="take-aways">Take-aways</h2>
+<ul>
+<li><code>String</code> is immutable. "Modifications" create new objects.</li>
+<li>To build strings in loops: <code>StringBuilder</code>.</li>
+<li>For comparisons: <code>.equals()</code>, never <code>==</code> with strings (except null checks).</li>
+<li>Arrays have <code>.length</code> (field). Out-of-range access throws <code>ArrayIndexOutOfBoundsException</code>.</li>
+<li>Use <code>Arrays.toString</code>, <code>Arrays.equals</code>, <code>Arrays.sort</code>, <code>Arrays.copyOf</code>.</li>
+<li>For input: <code>Scanner</code> (simple), <code>BufferedReader</code> (fast). Always <code>try-with-resources</code>.</li>
+<li><strong>Always</strong> specify the <strong>charset</strong> when converting <code>String</code> ⟷ <code>byte[]</code>.</li>
+</ul>
+<p>Next: OOP — classes, objects, constructors.</p>
+      <nav class="pager">
+<a href="02-basic-syntax.html" class="prev"><span class="label">← Previous</span><span class="title">Basic syntax: types, variables, operators, control flow</span></a>
+<a href="04-oop-classes-objects.html" class="next"><span class="label">Next →</span><span class="title">OOP I — Classes, objects, constructors, this, packages, visibility</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Java + Spring Zero to Hero</strong> — built as a continuous path. Static build from Markdown.</p><p>Open-content educational material. Code under the MIT license; use freely in your own projects.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body, {delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true, background: '#15191e', primaryColor: '#1d2530',
+      primaryTextColor: '#eef1f5', primaryBorderColor: '#f89820',
+      lineColor: '#6db33f', secondaryColor: '#1a1f25', tertiaryColor: '#222a33',
+      mainBkg: '#1d2530', nodeBorder: '#f89820', clusterBkg: '#0f1318',
+      clusterBorder: '#2a3340', titleColor: '#f89820',
+      edgeLabelBackground: '#0f1318', textColor: '#eef1f5',
+      labelTextColor: '#eef1f5', actorBkg: '#1d2530', actorBorder: '#f89820',
+      actorTextColor: '#f89820', actorLineColor: '#6db33f',
+      signalColor: '#eef1f5', signalTextColor: '#eef1f5',
+      labelBoxBkgColor: '#1d2530', labelBoxBorderColor: '#f89820',
+      noteBkgColor: '#fff6a8', noteTextColor: '#0f1318', noteBorderColor: '#fff6a8',
+      activationBkgColor: '#1d2530', activationBorderColor: '#f89820',
+      sequenceNumberColor: '#0f1318'
+    },
+    flowchart: { curve: 'basis', padding: 16 },
+    sequence: { mirrorActors: false, bottomMarginAdj: 10 },
+    fontFamily: 'JetBrains Mono, Cascadia Code, Consolas, monospace'
+  });
+</script>
+</body>
+</html>

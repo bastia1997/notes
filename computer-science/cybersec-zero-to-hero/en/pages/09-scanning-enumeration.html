@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>Scanning, enumeration and fingerprinting — Cybersec Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">&gt;_</div>
+      <div>
+        <div class="brand-title">CYBERSEC</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/09-scanning-enumeration.html" class="lang-link" title="Passa all'italiano"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="10" height="20" fill="#009246"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ce2b37"/></svg> IT</a><span class="lang-active" title="English"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="30" height="20" fill="#012169"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#fff" stroke-width="3"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#c8102e" stroke-width="1.5"/><path d="M15,0 v20 M0,10 h30" stroke="#fff" stroke-width="5"/><path d="M15,0 v20 M0,10 h30" stroke="#c8102e" stroke-width="3"/></svg> EN</span></div>
+  </div>
+  <div class="search-wrap">
+    <div class="search-row">
+      <div class="search-inputwrap">
+        <span class="search-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"/>
+            <line x1="20" y1="20" x2="16.65" y2="16.65"/>
+          </svg>
+        </span>
+        <input class="search-input" id="search-input" type="text" placeholder="search... (press /)" autocomplete="off" aria-label="Search">
+        <button class="search-clear" id="search-clear" type="button" aria-label="Clear" title="Clear">&times;</button>
+      </div>
+      <button class="search-btn" id="search-btn" type="button" aria-label="SEARCH" title="SEARCH">SEARCH</button>
+    </div>
+    <div class="search-hits" id="search-hits" role="listbox"></div>
+  </div>
+  <div class="sidebar-nav">
+    <nav class="nav-section">
+      <div class="nav-section-title">Path</div>
+      <ul class="nav-list">
+        <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+        <li class="nav-item"><a href="../pages/00-path-and-mindset.html" class=""><span class="num">00</span>Path, mindset, ethics and law</a></li><li class="nav-item"><a href="../pages/00b-math-and-cs.html" class=""><span class="num">00b</span>Math and computation theory (the bare minimum, integrated)</a></li><li class="nav-item"><a href="../pages/01-cs-fundamentals.html" class=""><span class="num">01</span>Computer science fundamentals for security</a></li><li class="nav-item"><a href="../pages/01b-assembly-from-zero.html" class=""><span class="num">01b</span>x86-64 and ARM64 Assembly from zero</a></li><li class="nav-item"><a href="../pages/02-essential-linux.html" class=""><span class="num">02</span>Essential Linux for security</a></li><li class="nav-item"><a href="../pages/02b-regex-automata.html" class=""><span class="num">02b</span>Regex, automata, and parsers for security</a></li><li class="nav-item"><a href="../pages/03-networking-tcp-ip.html" class=""><span class="num">03</span>Networking: from cables to TCP/IP</a></li><li class="nav-item"><a href="../pages/04-http-tls.html" class=""><span class="num">04</span>HTTP, HTTPS and TLS in depth</a></li><li class="nav-item"><a href="../pages/05-cryptography.html" class=""><span class="num">05</span>Cryptography: theory and practice</a></li><li class="nav-item"><a href="../pages/05b-crypto-worked-examples.html" class=""><span class="num">05b</span>Cryptography — step-by-step worked examples</a></li><li class="nav-item"><a href="../pages/06-os-internals.html" class=""><span class="num">06</span>OS internals: Linux and Windows in depth</a></li><li class="nav-item"><a href="../pages/07-programming-for-security.html" class=""><span class="num">07</span>Programming for security: Python, C, Go</a></li><li class="nav-item"><a href="../pages/08-osint-recon.html" class=""><span class="num">08</span>OSINT and reconnaissance</a></li><li class="nav-item"><a href="../pages/09-scanning-enumeration.html" class="active"><span class="num">09</span>Scanning, enumeration and fingerprinting</a></li><li class="nav-item"><a href="../pages/10-owasp-top10.html" class=""><span class="num">10</span>OWASP Top 10 and beyond — basic web vulnerabilities</a></li><li class="nav-item"><a href="../pages/10b-walkthrough-byte-by-byte.html" class=""><span class="num">10b</span>Byte-by-byte walkthrough: SQLi, XSS, SSRF, IDOR</a></li><li class="nav-item"><a href="../pages/11-advanced-web.html" class=""><span class="num">11</span>Advanced web hacking</a></li><li class="nav-item"><a href="../pages/12-network-attacks.html" class=""><span class="num">12</span>Network attacks: MITM, spoofing, pivoting</a></li><li class="nav-item"><a href="../pages/13-active-directory.html" class=""><span class="num">13</span>Active Directory hacking</a></li><li class="nav-item"><a href="../pages/14-exploit-development.html" class=""><span class="num">14</span>Exploit development: from buffer overflow to ROP</a></li><li class="nav-item"><a href="../pages/14b-bof-to-shell-complete.html" class=""><span class="num">14b</span>BoF → shell: a complete exploit from zero</a></li><li class="nav-item"><a href="../pages/15-reverse-engineering.html" class=""><span class="num">15</span>Reverse engineering</a></li><li class="nav-item"><a href="../pages/16-malware-analysis.html" class=""><span class="num">16</span>Malware: taxonomy and analysis</a></li><li class="nav-item"><a href="../pages/17-mobile-security.html" class=""><span class="num">17</span>Mobile security: Android and iOS</a></li><li class="nav-item"><a href="../pages/18-cloud-security.html" class=""><span class="num">18</span>Cloud security: AWS, Azure, GCP</a></li><li class="nav-item"><a href="../pages/19-container-kubernetes.html" class=""><span class="num">19</span>Containers and Kubernetes</a></li><li class="nav-item"><a href="../pages/20-wireless-radio.html" class=""><span class="num">20</span>Wireless and radio: WiFi, BT, SDR</a></li><li class="nav-item"><a href="../pages/21-hardware-firmware.html" class=""><span class="num">21</span>Hardware and firmware hacking</a></li><li class="nav-item"><a href="../pages/22-forensics-dfir.html" class=""><span class="num">22</span>Forensics and DFIR</a></li><li class="nav-item"><a href="../pages/23-blue-team-soc.html" class=""><span class="num">23</span>Blue team: SOC, SIEM, EDR, hunting</a></li><li class="nav-item"><a href="../pages/24-threat-intelligence.html" class=""><span class="num">24</span>Threat intelligence</a></li><li class="nav-item"><a href="../pages/25-grc-regulations.html" class=""><span class="num">25</span>GRC, regulations, and standards</a></li><li class="nav-item"><a href="../pages/26-red-team.html" class=""><span class="num">26</span>Red team and adversary emulation</a></li><li class="nav-item"><a href="../pages/27-ai-ml-security.html" class=""><span class="num">27</span>AI / ML security</a></li><li class="nav-item"><a href="../pages/28-capstone-roadmap.html" class=""><span class="num">28</span>Capstone: CTF roadmap, home lab, certifications</a></li><li class="nav-item"><a href="../pages/29-master-cheatsheet.html" class=""><span class="num">29</span>Master cheatsheet</a></li><li class="nav-item"><a href="../pages/30-extended-glossary.html" class=""><span class="num">30</span>Extended glossary (250+ terms)</a></li><li class="nav-item"><a href="../pages/31-it-eu-regulations.html" class=""><span class="num">31</span>IT/EU regulatory references in detail</a></li>
+      </ul>
+    </nav>
+  </div>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Offensive</span>
+        <span>Section 12 of 36</span>
+        <span class="level-tag level-int">Level: intermediate</span>
+      </div>
+      <h1>Scanning, enumeration and fingerprinting</h1>
+      <p class="summary">From a list of hosts to a detailed map of services, versions, configurations. nmap, masscan, naabu, gobuster, ffuf, nuclei, banner grabbing, NSE scripts, evasion.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Offensive</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>Sections 03 (TCP/IP), 08 (recon)</li></ul>
+  <div class="label">Tools</div>
+  <ul class="source-list"><li>nmap, masscan, naabu, rustscan</li><li>gobuster, ffuf, feroxbuster, dirb</li><li>nuclei, nikto</li><li>smbclient, enum4linux-ng, snmpwalk</li><li>wpscan, droopescan, joomscan</li></ul>
+</div>
+      <blockquote>
+<p>Once you have the <strong>hosts</strong>, you need to turn them into a <strong>list of surfaces</strong>. Service, version, config, authentication, web content, shares, default credentials. This is the section that separates those who know how to use nmap from those who only know <code>nmap -A</code>.</p>
+</blockquote>
+<h2 id="host-discovery">Host discovery</h2>
+<p>Before scanning ports, you need to know which hosts are "alive". Techniques:</p>
+<pre><code class="language-bash">nmap -sn 10.10.10.0/24                 # ping scan, no port (requires root for ICMP/ARP)
+nmap -PE -PP -PM 10.10.10.0/24         # ICMP echo, timestamp, mask
+nmap -PR 192.168.1.0/24                # ARP (LAN, more reliable)
+nmap -PS22,80,443 -PA80 10.10.10.0/24  # TCP SYN/ACK probe to known ports
+nmap -PU53,161 10.10.10.0/24           # UDP probe
+nmap -n -sn -PE 10.0.0.0/16            # no DNS resolve, fast
+</code></pre>
+<p>On a LAN: ARP is the truth (no host can "hide" from ARP if it's on the same segment and has an IP). On WAN: ICMP is often filtered. Best to combine TCP SYN on typical ports (80, 443, 22, 3389).</p>
+<h3 id="alternatives-faster">Alternatives (faster)</h3>
+<ul>
+<li><strong>masscan</strong>: ultra-fast SYN scan. <code>masscan -p1-65535 10.0.0.0/16 --rate 10000 -oL out.txt</code>. Half a ms more but transmits raw packets at insane speeds.</li>
+<li><strong>naabu</strong> (Project Discovery): modern scriptable scanner, supports sd-only.</li>
+<li><strong>rustscan</strong>: fast wrapper that then passes results to nmap.</li>
+</ul>
+<p>Classic pipeline:</p>
+<pre><code class="language-bash">naabu -l hosts.txt -p - -silent -o ports.txt
+nmap -sV -sC -iL ports.txt -oA nmap_full
+</code></pre>
+<h2 id="port-scanning-with-nmap-the-flags-you-need-to-know">Port scanning with nmap — the flags you need to know</h2>
+<pre><code class="language-bash"># Scan modes
+nmap -sS target            # SYN scan (default for root, &quot;half open&quot;)
+nmap -sT target            # TCP connect scan (no root, completes handshake)
+nmap -sU target            # UDP scan (slow, combine with --top-ports)
+nmap -sA target            # ACK scan (identify stateful vs stateless firewall)
+nmap -sF -sN -sX target    # FIN/NULL/XMAS — bypass simple firewalls
+nmap -sY target            # SCTP INIT
+
+# Ports
+nmap -p-                   # all 1-65535
+nmap -p1-1024
+nmap -p 80,443,8080-8090
+nmap --top-ports 1000      # the 1000 most common
+nmap -p T:80,U:53          # mix TCP+UDP
+
+# Service + scripts
+nmap -sV                   # version detection (banner + probe)
+nmap -sC                   # default safe scripts (NSE)
+nmap -A                    # aggressive: -sV -sC -O --traceroute
+nmap --script vuln         # vuln detection scripts (watch out: noisy)
+nmap --script &quot;smb-* and safe&quot; -p445
+
+# OS detection
+nmap -O                    # TCP/IP fingerprint
+nmap --osscan-guess
+
+# Timing
+nmap -T0 ... -T5           # paranoid -&gt; insane. Default T3
+nmap --min-rate 1000 --max-retries 1
+
+# Output
+nmap -oA basename          # produces .nmap .gnmap .xml
+nmap -oN -                 # stdout
+
+# Evasion
+nmap -f                    # fragment packets
+nmap --mtu 24
+nmap -D RND:10 target      # decoy (10 fake IPs + yours)
+nmap -S spoofed            # spoof source IP (requires -e and routing)
+nmap --source-port 53      # fake DNS source
+nmap --data-length 50      # random payload padding
+nmap --badsum              # wrong checksum to test IDS
+
+# Performance vs accuracy
+nmap -Pn                   # no host discovery (assume alive)
+nmap -n                    # no DNS resolution
+</code></pre>
+<h3 id="interpreting-port-states">Interpreting port states</h3>
+<ul>
+<li><strong>open</strong> — responds with SYN-ACK / data.</li>
+<li><strong>closed</strong> — responds with RST.</li>
+<li><strong>filtered</strong> — no response or ICMP unreachable -&gt; firewall in between.</li>
+<li><strong>unfiltered</strong> (only with <code>-sA</code>) — accessible but state unknown.</li>
+<li><strong>open|filtered</strong>, <strong>closed|filtered</strong> — ambiguous (typical for UDP).</li>
+</ul>
+<h3 id="nse-nmap-scripting-engine">NSE — Nmap Scripting Engine</h3>
+<p><code>/usr/share/nmap/scripts/</code> contains ~600 Lua scripts. Categories: <code>auth</code>, <code>broadcast</code>, <code>brute</code>, <code>default</code>, <code>discovery</code>, <code>dos</code>, <code>exploit</code>, <code>external</code>, <code>fuzzer</code>, <code>intrusive</code>, <code>malware</code>, <code>safe</code>, <code>version</code>, <code>vuln</code>.</p>
+<p>Useful examples:</p>
+<pre><code class="language-bash">nmap --script ssl-enum-ciphers -p 443 target
+nmap --script ssh2-enum-algos -p 22 target
+nmap --script http-enum,http-headers,http-title -p 80,443 target
+nmap --script smb-os-discovery,smb-enum-shares,smb-vuln-* -p 139,445 target
+nmap --script ftp-anon,ftp-bounce -p 21 target
+nmap --script ldap-rootdse,ldap-search -p 389,636 target
+nmap --script dns-zone-transfer --script-args dns-zone-transfer.domain=target.com -p 53 ns1.target.com
+nmap --script smtp-enum-users,smtp-vuln-cve* -p 25 target
+nmap --script rdp-enum-encryption,rdp-vuln-ms12-020 -p 3389 target
+nmap --script ssh-auth-methods --script-args ssh.user=admin -p 22 target
+</code></pre>
+<p>NSE isn't "the magic hacking tool", but it's excellent for <em>enumeration</em>. Most <code>*-vuln-*</code> scripts check specific CVEs; don't expect them to find everything.</p>
+<h2 id="manual-banner-grabbing">Manual banner grabbing</h2>
+<pre><code class="language-bash">nc -nv target 22       # SSH banner
+nc -nv target 21       # FTP banner
+echo -e &quot;GET / HTTP/1.0\r\n\r\n&quot; | nc -nv target 80   # HTTP raw
+
+# HTTPS
+openssl s_client -connect target:443 -servername target -quiet
+GET / HTTP/1.1
+Host: target
+
+# SMB
+nbtscan target
+smbclient -L //target -N            # list shares anonymously
+smbmap -H target -u guest -p &quot;&quot;
+
+# SNMP
+snmpwalk -v2c -c public target
+onesixtyone -c communities.txt target
+
+# LDAP
+ldapsearch -x -H ldap://target -s base -b &quot;&quot; &quot;(objectClass=*)&quot;
+
+# DNS
+dig @target version.bind chaos txt   # DNS server version
+</code></pre>
+<h2 id="enumeration-of-specific-services">Enumeration of specific services</h2>
+<h3 id="smb-netbios">SMB / NetBIOS</h3>
+<pre><code class="language-bash">nmap -p139,445 --script smb-os-discovery,smb-enum-shares,smb-enum-users,smb-protocols target
+enum4linux-ng -A target
+smbclient -L //target -N
+smbclient //target/share -N
+smbmap -u user -p pass -H target
+crackmapexec smb target -u users.txt -p passwords.txt
+# (in AD pentest: ntpassword spray, Kerbrute — section 13)
+</code></pre>
+<h3 id="nfs">NFS</h3>
+<pre><code class="language-bash">showmount -e target
+mount -t nfs target:/share /mnt -o nolock
+</code></pre>
+<h3 id="ftp">FTP</h3>
+<pre><code class="language-bash">ftp target          # try anonymous
+nmap --script ftp-anon target
+</code></pre>
+<h3 id="httphttps-web-enumeration">HTTP/HTTPS — web enumeration</h3>
+<pre><code class="language-bash"># Content / endpoint discovery
+gobuster dir -u https://target -w /usr/share/wordlists/dirb/big.txt -k -t 50
+gobuster vhost -u https://target -w subs.txt
+feroxbuster -u https://target -w big.txt -k -t 100 -d 4
+ffuf -u https://target/FUZZ -w big.txt -e .php,.html,.bak -mc 200,301,302,403
+
+# Parameter fuzzing
+ffuf -u 'https://target/api/user?FUZZ=value' -w params.txt -fs 0
+
+# Subdomain fuzz via Host header (vhost)
+ffuf -u https://target -H &quot;Host: FUZZ.target.com&quot; -w subs.txt -fs 1234
+
+# WAF detection
+wafw00f https://target
+
+# Tech stack
+whatweb https://target
+webanalyze -host https://target
+
+# Headers, scope
+curl -I https://target
+nikto -h https://target
+</code></pre>
+<p><strong>Recommended wordlists:</strong>
+- <strong>SecLists</strong> (Daniel Miessler): <code>git clone https://github.com/danielmiessler/SecLists</code>. Tons of themed lists.
+- <strong>dirsearch wordlists</strong>.
+- <strong>Assetnote wordlists</strong> (industry standard).
+- <strong>rockyou.txt</strong> (in Kali under <code>/usr/share/wordlists</code>).</p>
+<h3 id="cms-specific">CMS-specific</h3>
+<pre><code class="language-bash">wpscan --url https://target --enumerate p,t,u
+joomscan -u https://target
+droopescan scan drupal -u https://target
+</code></pre>
+<h3 id="nuclei-the-template-engine">Nuclei — the template engine</h3>
+<p><a href="https://github.com/projectdiscovery/nuclei">Nuclei</a> by Project Discovery: scanner based on community-driven YAML templates. Thousands of public checks.</p>
+<pre><code class="language-bash">nuclei -update-templates
+nuclei -u https://target
+nuclei -l targets.txt -severity critical,high
+nuclei -t exposures/ -l targets.txt
+nuclei -t cves/2023/ -l targets.txt
+nuclei -t technologies/ -l targets.txt
+</code></pre>
+<p>Very fast, very up to date. JSON/JSONL output -&gt; integrate with other tools. Writing templates is an extra skill.</p>
+<h3 id="ssh">SSH</h3>
+<ul>
+<li>Version (<code>SSH-2.0-OpenSSH_x.y</code>) -&gt; CVE (see USN advisory).</li>
+<li>Algorithms: <code>nmap --script ssh2-enum-algos</code>.</li>
+<li>User enumeration via timing (historic CVE-2018-15473 OpenSSH).</li>
+<li>Brute force: <code>hydra -L users.txt -P pass.txt -t 4 ssh://target</code> (in the lab!).</li>
+</ul>
+<h3 id="mail">Mail</h3>
+<pre><code class="language-bash">nmap --script smtp-commands,smtp-enum-users target -p 25
+swaks --to test@target --server target
+</code></pre>
+<h3 id="databases">Databases</h3>
+<ul>
+<li><strong>MySQL</strong> 3306: <code>mysql -h target -u root</code> (no password?), <code>nmap --script mysql-empty-password</code>.</li>
+<li><strong>PostgreSQL</strong> 5432: <code>psql -h target -U postgres</code>.</li>
+<li><strong>MongoDB</strong> 27017: <code>mongo --host target</code> (no auth common?).</li>
+<li><strong>Redis</strong> 6379: <code>redis-cli -h target ping</code> -&gt; often without auth -&gt; RCE via SSH key write or module load.</li>
+<li><strong>Elastic</strong> 9200: <code>curl http://target:9200/_cluster/health</code>.</li>
+</ul>
+<h2 id="os-fingerprinting">OS fingerprinting</h2>
+<p><code>nmap -O target</code> sends probes and analyzes:
+- TCP options order, MSS, window scale.
+- Initial TTL (Win=128, Linux=64, old Sun=255).
+- IP ID generation.
+- ISN (Initial Sequence Number).</p>
+<p>Imprecise if the host filters heavily. Often combined with banners (SSH, HTTP <code>Server</code>, SMB).</p>
+<h2 id="evasion-concepts">Evasion (concepts)</h2>
+<p>Detection systems look at:
+- Packet rate and patterns (fast scan -&gt; alert).
+- Source IP (geo/reputation).
+- TCP flag anomalies (SYN-FIN combo).
+- Signatures of known tools (<code>nmap</code> default UA).</p>
+<p>Techniques <strong>legal in pentests</strong> when scope allows:
+- Slow scan (<code>-T1</code>, <code>--max-rate 50</code>).
+- Decoys (<code>-D</code>).
+- Source port 53/80 (<code>--source-port</code>).
+- Fragmentation (<code>-f</code>).
+- IP rotation (multiple VPS).
+- Realistic User-Agent for HTTP.</p>
+<p><strong>Not for fraudulent purposes</strong>: these are for the realism of a test, not to hide against someone else.</p>
+<h2 id="spray-and-default-credentials">Spray and default credentials</h2>
+<p>Often "scanning" ends up in:
+- Trying default credentials. <em>Default password lists</em>: github.com/CISOfy/default-passwords, <a href="https://datarecovery.com/rd/default-passwords/">datarecovery.com password DB</a>.
+- Password spray (1 password against N users) to avoid lockout — see section 13 for AD.
+- Check exposure of <strong>secrets-as-services</strong> (Jenkins anon job creation, Kibana without auth, Mongo no auth, ...).</p>
+<h2 id="scanning-workflow-for-pentests">Scanning workflow for pentests</h2>
+<div class="mermaid">
+flowchart TB
+    A[Host discovery<br/>nmap -sn / ARP] --> B[Fast port scan<br/>naabu top 1000 · masscan]
+    B --> C[Full port scan<br/>nmap -p- on the hot ones]
+    C --> D[Service version + scripts<br/>nmap -sV -sC]
+    D --> E[Targeted NSE<br/>smb-* · http-* · ssl-*]
+    D --> F[Web fuzz<br/>ffuf · gobuster · feroxbuster]
+    D --> G[CMS-specific<br/>wpscan · joomscan]
+    D --> H[Generic Nuclei<br/>cves/ misconfig/ exposures/]
+    E --> I[Manual triage<br/>find CVE · write PoC]
+    F --> I
+    G --> I
+    H --> I
+    style I fill:#3a2a00,stroke:#ffe066
+
+</div>
+
+<ol>
+<li><strong>Targeted host discovery</strong>.</li>
+<li><strong>Fast port scan</strong> top 1000 (<code>naabu</code> or <code>nmap -F</code>).</li>
+<li><strong>Full port scan</strong> on the hottest hosts (<code>nmap -p-</code>).</li>
+<li><strong>Service version + default scripts</strong> (<code>-sV -sC</code>).</li>
+<li><strong>Targeted NSE</strong> for relevant services (<code>smb-*</code>, <code>http-*</code>, ...).</li>
+<li><strong>Web app fuzz</strong> on all 80/443/8080/8443.</li>
+<li><strong>CMS-specific</strong> where applicable.</li>
+<li><strong>Generic Nuclei</strong>.</li>
+<li><strong>Manual triage</strong> on hits.</li>
+</ol>
+<p>Document everything. <strong>Standard pentest tool report</strong>: a table of host x service x version x potential CVEs x notes.</p>
+<h2 id="detection-on-the-blue-team-side">Detection on the blue team side</h2>
+<p>If you're blue team or defensive:
+- Log firewall drops: scans generate many drops on unopen ports.
+- IDS (Suricata, Snort) have "ET SCAN ..." rules.
+- Correlation: same IP attempting many ports in a short time.
+- Honeypots (<code>opencanary</code>, <code>t-pot</code>) attract scanners.
+- Rate limit ACL on firewall.
+- Network segmentation: scans shouldn't reach critical IPs from user segments.</p>
+<h2 id="exercises">Exercises</h2>
+<h3 id="exercise-91-full-scan-on-a-lab">Exercise 9.1 — Full scan on a lab</h3>
+<p>On Metasploitable 2 (in an isolated lab):</p>
+<pre><code class="language-bash">nmap -sV -sC -p- -T4 --min-rate 500 -oA meta2 192.168.56.20
+</code></pre>
+<p>Count the services. Identify:
+- Apache, MySQL, vsftpd versions.
+- shell shocker (vsftpd 2.3.4 backdoor — it exists).
+- distccd (port 3632).
+- ingreslock (1524).
+- open NFS shares.</p>
+<p>How many vulnerabilities does <code>--script vuln</code> find?</p>
+<h3 id="exercise-92-web-enum-on-dvwa">Exercise 9.2 — Web enum on DVWA</h3>
+<p>DVWA lab (in Docker). From Kali:</p>
+<pre><code class="language-bash">gobuster dir -u http://dvwa.local -w /usr/share/wordlists/dirb/common.txt -t 50
+nikto -h http://dvwa.local
+wpscan --url http://dvwa.local --enumerate p,t,u --random-user-agent
+</code></pre>
+<p>What do you find?</p>
+<h3 id="exercise-93-udp-scan">Exercise 9.3 — UDP scan</h3>
+<p>UDP is the "annoying" one because without a response it's ambiguous. In the lab:</p>
+<pre><code class="language-bash">sudo nmap -sU --top-ports 50 -sV target
+</code></pre>
+<p>Identify DNS, DHCP, NTP, SNMP, IPMI (623).</p>
+<h3 id="exercise-94-manual-banner-grabbing">Exercise 9.4 — Manual banner grabbing</h3>
+<p>Without nmap, identify the server and version of:
+- SSH on port 22: <code>nc -v target 22</code>
+- HTTP on 80: <code>printf 'GET / HTTP/1.1\r\nHost: x\r\n\r\n' | nc target 80</code>
+- FTP on 21: <code>nc target 21</code>
+- SMTP on 25: <code>nc target 25</code> -&gt; <code>EHLO test</code></p>
+<h3 id="exercise-95-nuclei-discovery">Exercise 9.5 — Nuclei discovery</h3>
+<p>On a lab target with many services:</p>
+<pre><code class="language-bash">nuclei -u http://target -t exposures/ -t misconfiguration/ -t default-logins/ -severity medium,high,critical -o findings.txt
+</code></pre>
+<p>Discuss the "default-logins" findings: how many? Which services?</p>
+<h3 id="exercise-96-custom-nse-script">Exercise 9.6 — Custom NSE script</h3>
+<p>Open an existing NSE script (e.g. <code>/usr/share/nmap/scripts/http-title.nse</code>). Read and understand the structure: portrule, action. Write a variant that searches for the string "Login" in the body.</p>
+<h3 id="exercise-97-htb-starting-point">Exercise 9.7 — HTB Starting Point</h3>
+<p>On HackTheBox -&gt; Starting Point (free): complete the first 5 machines. They are guided. They'll have you use nmap + gobuster + Metasploit.</p>
+<h3 id="exercise-98-explore-seclists">Exercise 9.8 — Explore SecLists</h3>
+<pre><code class="language-bash">git clone https://github.com/danielmiessler/SecLists
+find SecLists -name &quot;*.txt&quot; | head -20
+wc -l SecLists/Discovery/Web-Content/*.txt | sort -rn | head
+</code></pre>
+<p>How many use cases are they intended for? Which wordlist would you use for:
+- subdomain bruteforce of an IT-only site?
+- API endpoint discovery?
+- password spray?
+- file extension fuzzing?</p>
+<h2 id="key-concepts">Key concepts</h2>
+<ol>
+<li><strong>Discovery -&gt; Scan -&gt; Enum -&gt; Triage</strong>: rigorous workflow.</li>
+<li><strong>nmap is the father</strong>, but masscan/naabu/rustscan are complementary for speed.</li>
+<li><strong>NSE scripts</strong> replace many dedicated tools.</li>
+<li><strong>Web enum (gobuster/ffuf) is critical</strong>: most of the modern surface is web.</li>
+<li><strong>Nuclei</strong> is a fast check machine — it doesn't replace manual testing.</li>
+<li><strong>Manual banner grabbing</strong> will come in handy when tools don't work.</li>
+<li><strong>Evasion is theater</strong>: yes for realistic tests, but not for malicious intent — only run against authorized systems.</li>
+</ol>
+<p>Next step: after mapping everything, <strong>we break into the web application</strong> (OWASP).</p>
+      <nav class="pager">
+<a href="08-osint-recon.html" class="prev"><span class="label">← Previous</span><span class="title">OSINT and reconnaissance</span></a>
+<a href="10-owasp-top10.html" class="next"><span class="label">Next →</span><span class="title">OWASP Top 10 and beyond — basic web vulnerabilities</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Cybersec Zero to Hero</strong> — built as a continuous path. Static build from Markdown.</p><p>Educational material. Everything you learn here is to be used only on systems you own, in labs, in authorized bug-bounty programs, or under signed pentest contracts. <strong>Don't break the law.</strong></p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true, background: '#131a1e', primaryColor: '#1d262b',
+      primaryTextColor: '#e8eef0', primaryBorderColor: '#00ff9c',
+      lineColor: '#00e6ff', secondaryColor: '#11171a', tertiaryColor: '#161d21',
+      mainBkg: '#1d262b', nodeBorder: '#00ff9c', clusterBkg: '#0b0f10',
+      clusterBorder: '#243035', titleColor: '#00ff9c',
+      edgeLabelBackground: '#0b0f10', textColor: '#e8eef0',
+      labelTextColor: '#e8eef0', actorBkg: '#1d262b', actorBorder: '#00ff9c',
+      actorTextColor: '#00ff9c', actorLineColor: '#00e6ff',
+      signalColor: '#e8eef0', signalTextColor: '#e8eef0',
+      labelBoxBkgColor: '#1d262b', labelBoxBorderColor: '#00ff9c',
+      noteBkgColor: '#ffe066', noteTextColor: '#0b0f10', noteBorderColor: '#ffe066',
+      activationBkgColor: '#1d262b', activationBorderColor: '#00ff9c',
+      sequenceNumberColor: '#0b0f10'
+    },
+    flowchart: { curve: 'basis', padding: 16 },
+    sequence: { mirrorActors: false, bottomMarginAdj: 10 },
+    fontFamily: 'JetBrains Mono, Cascadia Code, Consolas, monospace'
+  });
+</script>
+</body>
+</html>

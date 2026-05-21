@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Observability — CloudWatch, X-Ray, CloudTrail, Config, SSM — AWS Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#232f3e',primaryTextColor:'#ffffff',primaryBorderColor:'#ff9900',lineColor:'#8a99ad',background:'#0c1320'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">λ</div>
+      <div>
+        <div class="brand-title">AWS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/36-observability-cloudwatch-xray.html" class="lang-link" title="Passa all'italiano">IT</a><span class="lang-active" title="English">EN</span></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="search... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-what-is-cloud-and-aws.html" class=""><span class="num">01</span>What the cloud is, and what AWS is</a></li><li class="nav-item"><a href="../pages/02-global-infrastructure.html" class=""><span class="num">02</span>Global infrastructure: Regions, AZs, Edge</a></li><li class="nav-item"><a href="../pages/03-account-root-billing.html" class=""><span class="num">03</span>AWS account, root user, billing</a></li><li class="nav-item"><a href="../pages/04-iam-fundamentals.html" class=""><span class="num">04</span>IAM — fundamentals (users, groups, roles, policies)</a></li><li class="nav-item"><a href="../pages/05-iam-advanced.html" class=""><span class="num">05</span>IAM advanced: conditional policies, STS, ABAC</a></li><li class="nav-item"><a href="../pages/06-cli-sdk-iac.html" class=""><span class="num">06</span>CLI, SDK, CloudShell, IaC primer</a></li><li class="nav-item"><a href="../pages/07-pricing-billing.html" class=""><span class="num">07</span>Pricing, billing, free tier, cost tools</a></li><li class="nav-item"><a href="../pages/08-organizations-multi-account.html" class=""><span class="num">08</span>AWS Organizations &amp; multi-account strategy</a></li><li class="nav-item"><a href="../pages/09-vpc-fundamentals.html" class=""><span class="num">09</span>VPC — fundamentals</a></li><li class="nav-item"><a href="../pages/10-vpc-advanced.html" class=""><span class="num">10</span>VPC advanced: peering, TGW, PrivateLink, endpoints</a></li><li class="nav-item"><a href="../pages/11-route53-cloudfront.html" class=""><span class="num">11</span>Route 53, CloudFront, Global Accelerator</a></li><li class="nav-item"><a href="../pages/12-hybrid-vpn-directconnect.html" class=""><span class="num">12</span>Hybrid: VPN, Direct Connect, PrivateLink</a></li><li class="nav-item"><a href="../pages/13-ec2-fundamentals.html" class=""><span class="num">13</span>EC2 — fundamentals (instances, AMIs, lifecycle)</a></li><li class="nav-item"><a href="../pages/14-ec2-advanced-spot-nitro.html" class=""><span class="num">14</span>EC2 advanced — Spot, Placement Groups, Nitro, hibernation</a></li><li class="nav-item"><a href="../pages/15-asg-elb.html" class=""><span class="num">15</span>Auto Scaling Groups + Elastic Load Balancing</a></li><li class="nav-item"><a href="../pages/16-lambda-deep-dive.html" class=""><span class="num">16</span>Lambda deep dive</a></li><li class="nav-item"><a href="../pages/17-containers-ecs-eks-fargate.html" class=""><span class="num">17</span>Containers: ECS, EKS, Fargate, ECR</a></li><li class="nav-item"><a href="../pages/18-specialty-compute.html" class=""><span class="num">18</span>Specialty compute: Batch, Lightsail, Outposts, Wavelength, Beanstalk</a></li><li class="nav-item"><a href="../pages/19-ebs-efs-fsx.html" class=""><span class="num">19</span>EBS, EFS, FSx, Instance Store</a></li><li class="nav-item"><a href="../pages/20-s3-deep-dive.html" class=""><span class="num">20</span>S3 — deep dive</a></li><li class="nav-item"><a href="../pages/21-archive-snow-gateway-backup.html" class=""><span class="num">21</span>Glacier, Snow, Storage Gateway, DataSync, AWS Backup</a></li><li class="nav-item"><a href="../pages/22-rds.html" class=""><span class="num">22</span>RDS — managed relational DBs (engines, Multi-AZ, replicas, Proxy)</a></li><li class="nav-item"><a href="../pages/23-aurora-deep-dive.html" class=""><span class="num">23</span>Aurora deep dive — shared storage, Serverless v2, Global Database</a></li><li class="nav-item"><a href="../pages/24-dynamodb-deep-dive.html" class=""><span class="num">24</span>DynamoDB deep dive — partitions, GSI, Streams, single-table</a></li><li class="nav-item"><a href="../pages/25-purpose-built-dbs.html" class=""><span class="num">25</span>Purpose-built DBs — ElastiCache, MemoryDB, Neptune, DocumentDB, Keyspaces, Timestream, QLDB</a></li><li class="nav-item"><a href="../pages/26-redshift-data-warehousing.html" class=""><span class="num">26</span>Redshift — MPP data warehousing and zero-ETL</a></li><li class="nav-item"><a href="../pages/27-sqs-sns-eventbridge.html" class=""><span class="num">27</span>SQS, SNS, EventBridge — messaging and events</a></li><li class="nav-item"><a href="../pages/28-step-functions-mq-appflow.html" class=""><span class="num">28</span>Step Functions, MQ, AppFlow — orchestration and integration</a></li><li class="nav-item"><a href="../pages/29-athena-glue-lakeformation.html" class=""><span class="num">29</span>Athena, Glue, Lake Formation — the AWS data lake</a></li><li class="nav-item"><a href="../pages/30-emr-kinesis-msk.html" class=""><span class="num">30</span>EMR, Kinesis, MSK — big data and streaming</a></li><li class="nav-item"><a href="../pages/31-opensearch-quicksight.html" class=""><span class="num">31</span>OpenSearch and QuickSight — search and BI</a></li><li class="nav-item"><a href="../pages/32-sagemaker-overview.html" class=""><span class="num">32</span>SageMaker — the end-to-end ML platform</a></li><li class="nav-item"><a href="../pages/33-bedrock-ai-services.html" class=""><span class="num">33</span>Bedrock and AI services — managed GenAI and ML</a></li><li class="nav-item"><a href="../pages/34-iac-cloudformation-cdk-terraform.html" class=""><span class="num">34</span>IaC on AWS — CloudFormation, CDK, SAM, Terraform</a></li><li class="nav-item"><a href="../pages/35-ci-cd-pipeline.html" class=""><span class="num">35</span>CI/CD on AWS — CodePipeline, CodeBuild, CodeDeploy, CodeCatalyst</a></li><li class="nav-item"><a href="../pages/36-observability-cloudwatch-xray.html" class="active"><span class="num">36</span>Observability — CloudWatch, X-Ray, CloudTrail, Config, SSM</a></li><li class="nav-item"><a href="../pages/37-kms-secrets-acm.html" class=""><span class="num">37</span>Encryption — KMS, CloudHSM, Secrets Manager, Parameter Store, ACM</a></li><li class="nav-item"><a href="../pages/38-waf-shield-guardduty-inspector.html" class=""><span class="num">38</span>Threat detection — WAF, Shield, GuardDuty, Inspector, Macie, Security Hub</a></li><li class="nav-item"><a href="../pages/39-governance-org-controltower-identitycenter.html" class=""><span class="num">39</span>Governance — Organizations, Control Tower, Identity Center</a></li><li class="nav-item"><a href="../pages/40-migration-mgn-dms-snow.html" class=""><span class="num">40</span>Migration — MGN, DMS, Snow family, Discovery, Migration Hub</a></li><li class="nav-item"><a href="../pages/41-cost-optimization-finops.html" class=""><span class="num">41</span>Cost optimization and FinOps</a></li><li class="nav-item"><a href="../pages/42-well-architected.html" class=""><span class="num">42</span>Well-Architected Framework — 6 pillars, lenses, review</a></li><li class="nav-item"><a href="../pages/43-architecture-patterns.html" class=""><span class="num">43</span>Architecture patterns — 3-tier, serverless, event-driven, microservices</a></li><li class="nav-item"><a href="../pages/44-disaster-recovery-multi-region.html" class=""><span class="num">44</span>Disaster Recovery and Multi-Region</a></li><li class="nav-item"><a href="../pages/45-reference-architectures.html" class=""><span class="num">45</span>Real-world reference architectures</a></li><li class="nav-item"><a href="../pages/46-advanced-networking.html" class=""><span class="num">46</span>Advanced networking deep dive</a></li><li class="nav-item"><a href="../pages/47-containers-deep-dive.html" class=""><span class="num">47</span>Containers deep dive — EKS, Karpenter, service mesh</a></li><li class="nav-item"><a href="../pages/48-serverless-patterns.html" class=""><span class="num">48</span>Serverless patterns deep dive</a></li><li class="nav-item"><a href="../pages/49-genai-rag-agents.html" class=""><span class="num">49</span>Generative AI on AWS — RAG and Agents</a></li><li class="nav-item"><a href="../pages/50-aws-certifications.html" class=""><span class="num">50</span>AWS Certifications — roadmap and study guide</a></li><li class="nav-item"><a href="../pages/51-glossary-az.html" class=""><span class="num">51</span>Glossary A-Z</a></li><li class="nav-item"><a href="../pages/52-cheatsheet.html" class=""><span class="num">52</span>Cheat sheet: services, limits, instance families</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">DevOps</span>
+        <span>Section 36 of 52</span>
+        <span class="level-tag level-int">Level: intermediate</span>
+      </div>
+      <h1>Observability — CloudWatch, X-Ray, CloudTrail, Config, SSM</h1>
+      <p class="summary">Metrics, logs, traces, audit and operational management: dashboards, alarms, Insights queries, service map, retention as a cost variable.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>DevOps</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>sections 16, 17</li></ul>
+  <div class="label">Tools / references</div>
+  <ul class="source-list"><li>CloudWatch</li><li>X-Ray / ADOT</li><li>CloudTrail</li><li>AWS Config</li><li>Systems Manager</li></ul>
+</div>
+      <p>"Observability" is not "I have a pretty graph"; it's the ability to answer new questions about the system without redeploying code. The three classic legs are <strong>metrics, logs, traces</strong>, plus audit (CloudTrail) and configuration governance (Config). AWS gives you all of it in-house — the real challenges are cost (Logs retention) and signal/noise (over-sensitive alarms).</p>
+<h2 id="1-cloudwatch-metrics">1. CloudWatch Metrics</h2>
+<p>Model: <strong>namespace</strong> (e.g. <code>AWS/EC2</code>, <code>MyApp/Orders</code>) → <strong>metric</strong> (e.g. <code>CPUUtilization</code>) → <strong>dimension</strong> (e.g. <code>InstanceId=i-1</code>). Standard 1-min resolution, <strong>high-resolution</strong> 1 sec ($$$). Publish custom metrics:</p>
+<pre><code class="language-bash">aws cloudwatch put-metric-data \
+  --namespace MyApp/Orders \
+  --metric-name OrdersCreated \
+  --dimensions Env=prod,Region=eu-west-1 \
+  --value 1 --unit Count
+</code></pre>
+<p><strong>Embedded Metric Format (EMF)</strong>: emit a special JSON payload in Lambda logs, CloudWatch extracts it as a metric without an API call. Cheaper, no extra latency. Great for Lambda.</p>
+<h2 id="2-cloudwatch-logs">2. CloudWatch Logs</h2>
+<p>Model: <strong>log group</strong> (logical, e.g. <code>/aws/lambda/myFn</code>) → <strong>log stream</strong> (one per process/container/Lambda invocation). Default retention = <strong>NEVER</strong> (infinite, pay storage forever). Always set it.</p>
+<table>
+<thead>
+<tr>
+<th>Retention</th>
+<th>When</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1-7 days</td>
+<td>dev, debug</td>
+</tr>
+<tr>
+<td>30 days</td>
+<td>normal prod app</td>
+</tr>
+<tr>
+<td>90 days</td>
+<td>basic security/audit</td>
+</tr>
+<tr>
+<td>1 year+</td>
+<td>compliance (PCI 1 year minimum)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Subscription filter</strong> → ship logs to Lambda, Firehose, Kinesis (e.g. push to OpenSearch or S3). <strong>Logs Insights</strong> query:</p>
+<pre><code>fields @timestamp, @message
+| filter @message like /ERROR/
+| stats count() by bin(5m)
+| sort @timestamp desc
+| limit 100
+</code></pre>
+<h2 id="3-cloudwatch-alarms">3. CloudWatch Alarms</h2>
+<p>States: <code>OK | ALARM | INSUFFICIENT_DATA</code>. Triggered by a statistic (Avg/Sum/p99) on a metric over a period.</p>
+<ul>
+<li><strong>Composite Alarm</strong>: AND/OR over multiple alarms → reduces noisy paging ("high ALB 5xx <strong>AND</strong> high RDS CPU", not OR).</li>
+<li><strong>Anomaly Detection</strong>: ML model on seasonal patterns ("is this anomalous for Monday 9am?").</li>
+<li><strong>Metric Math</strong>: <code>error_rate = m1/m2 * 100</code> directly.</li>
+</ul>
+<p>Actions: SNS (human alerting), Auto Scaling, EC2 reboot/recover, Systems Manager Incident Manager.</p>
+<h2 id="4-dashboards-synthetics-rum-insights">4. Dashboards, Synthetics, RUM, Insights</h2>
+<pre><code class="language-mermaid">flowchart TB
+  User[Real user] --&gt; CF[CloudFront]
+  CF --&gt; ALB
+  ALB --&gt; ECS
+  ECS --&gt; RDS
+  RUM[CW RUM SDK] -.-&gt; User
+  Synth[CW Synthetics canary] -.-&gt; CF
+  ContIns[Container Insights] -.-&gt; ECS
+  LambdaIns[Lambda Insights] -.-&gt; Lam[Lambda]
+  AllMetrics --&gt; Dash[Dashboard]
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Measures</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Dashboard</strong></td>
+<td>Custom visual aggregator</td>
+</tr>
+<tr>
+<td><strong>Synthetics</strong></td>
+<td>Puppeteer/Selenium canary from AWS edge against URL/API</td>
+</tr>
+<tr>
+<td><strong>RUM</strong> (Real User Monitoring)</td>
+<td>Browser JS SDK → real user metrics (Web Vitals)</td>
+</tr>
+<tr>
+<td><strong>Container Insights</strong></td>
+<td>ECS/EKS perf (CPU/MEM per task, pod)</td>
+</tr>
+<tr>
+<td><strong>Lambda Insights</strong></td>
+<td>Memory init, init duration, network</td>
+</tr>
+</tbody>
+</table>
+<h2 id="5-aws-x-ray-and-adot">5. AWS X-Ray and ADOT</h2>
+<p>Distributed tracing: each request receives a <strong>trace ID</strong> propagated in headers (<code>X-Amzn-Trace-Id</code>); each component emits <strong>segments</strong> (and subsegments for downstream calls). Result: visual <strong>service map</strong> with per-node latency + per-trace drill-down.</p>
+<pre><code class="language-python">from aws_xray_sdk.core import xray_recorder, patch_all
+patch_all()  # auto-instrument boto3, requests, ...
+
+@xray_recorder.capture('process_order')
+def process_order(order):
+    ...
+</code></pre>
+<p><strong>Sampling rule</strong>: by default 1 req/sec + 5% (to avoid overpaying). Customizable per URL/service.</p>
+<p><strong>ADOT (AWS Distro for OpenTelemetry)</strong> is the strategic direction: standard OTel collector exporting to X-Ray <em>and</em> CloudWatch Metrics <em>and</em> other backends (Jaeger, Tempo). Multi-vendor or want open standards → ADOT.</p>
+<h2 id="6-cloudtrail-audit-of-who-did-what">6. CloudTrail — audit of who-did-what</h2>
+<p>Records every AWS API call. Event types:</p>
+<ul>
+<li><strong>Management events</strong> (default ON, free 90 days): <code>RunInstances</code>, <code>CreateBucket</code>, <code>AssumeRole</code>.</li>
+<li><strong>Data events</strong> (default OFF, extra cost): S3 <code>GetObject</code>, Lambda <code>Invoke</code>, DynamoDB <code>Query</code>.</li>
+<li><strong>Insights events</strong>: volume anomalies (e.g. <code>DeleteObject</code> spike).</li>
+</ul>
+<p>Best practice: <strong>Organization Trail</strong> (one trail in org root covers all child accounts, immutable logs in a dedicated S3 bucket with Object Lock). <strong>CloudTrail Lake</strong> = SQL-queryable data lake for investigations.</p>
+<h2 id="7-aws-config">7. AWS Config</h2>
+<p>Snapshots configuration of every resource over time + evaluates <strong>rules</strong> (e.g. "all S3 buckets must have block public access"). Rule types: <strong>AWS-managed</strong> (200+ ready), <strong>custom Lambda</strong>, <strong>custom Guard</strong> (declarative DSL).</p>
+<p><strong>Conformance Pack</strong> = rule bundle for a standard (CIS, PCI, HIPAA). <strong>Aggregator</strong> = cross-account/region view. <strong>Advanced Query</strong> SQL-like: <code>SELECT resourceId WHERE configuration.encrypted = false</code>.</p>
+<p>Cost: $0.003 per item per region — can balloon on large accounts.</p>
+<h2 id="8-systems-manager-ssm-operations-swiss-army-knife">8. Systems Manager (SSM) — operations swiss-army knife</h2>
+<table>
+<thead>
+<tr>
+<th>Module</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Parameter Store</strong></td>
+<td>Key-value config (String, StringList, SecureString with KMS)</td>
+</tr>
+<tr>
+<td><strong>Session Manager</strong></td>
+<td>EC2 shell without SSH (see sec. 13)</td>
+</tr>
+<tr>
+<td><strong>Run Command</strong></td>
+<td>Execute on EC2 fleets ("yum update -y" on 500 hosts)</td>
+</tr>
+<tr>
+<td><strong>Patch Manager</strong></td>
+<td>OS patching on schedule + baseline</td>
+</tr>
+<tr>
+<td><strong>State Manager</strong></td>
+<td>"Keep these 500 hosts in this state" (idempotent)</td>
+</tr>
+<tr>
+<td><strong>Automation</strong></td>
+<td>YAML runbook (e.g. "snapshot + reboot RDS")</td>
+</tr>
+<tr>
+<td><strong>Inventory</strong></td>
+<td>Installed SW/HW inventory</td>
+</tr>
+<tr>
+<td><strong>Incident Manager</strong></td>
+<td>On-call rotation + runbook + chat collab</td>
+</tr>
+</tbody>
+</table>
+<h2 id="9-exercise">9. Exercise</h2>
+<details>
+<summary>CloudWatch bill exploded to $5k/month. Where to start?</summary>
+
+Three typical suspects:
+1. **Logs ingestion + storage**: log groups without retention. Go to **CW Logs → Log Groups → Storage**, sort by bytes. Set 7/30-day retention on the top offenders.
+2. **High-cardinality custom metric**: emitting metrics with `userId` as dimension → millions of unique metrics. Redesign (dimension = tier/region, not userId).
+3. **Synthetics canaries** too frequent (every 1 min) across all regions. Scale to 5 min, reduce geos.
+
+Quick win: enforce **Log Group retention** policy via a Config rule that blocks log group creation without retention.
+</details>
+
+<details>
+<summary>You must understand why an API is slow for only 2% of requests. Which tool?</summary>
+
+**X-Ray (or ADOT)**: the service map shows per-node latency, but for long-tail debug you enable **temporary 100% sampling** on the route, then search traces with `responsetime > 2s`. Often you'll find a downstream call (e.g. slow RDS query on an edge case, or Lambda cold start inside VPC) drives p99. Aggregate CloudWatch metrics tell you *that* it exists; X-Ray tells you *where* and *why*.
+</details>
+
+<blockquote>
+<p><strong>Summary</strong>: CloudWatch (Metrics/Logs/Alarms/Dashboards/Synthetics/RUM) for metrics and logs with EMF and Insights queries; X-Ray/ADOT for distributed tracing and service map; CloudTrail for API audit (Org Trail + Lake); Config for configuration posture and compliance packs; SSM as ops swiss-army (Param Store, Session, Run Command, Patch, Incident Manager); watch Logs retention and custom metric cardinality.</p>
+</blockquote>
+      <nav class="pager">
+<a href="35-ci-cd-pipeline.html" class="prev"><span class="label">← Previous</span><span class="title">CI/CD on AWS — CodePipeline, CodeBuild, CodeDeploy, CodeCatalyst</span></a>
+<a href="37-kms-secrets-acm.html" class="next"><span class="label">Next →</span><span class="title">Encryption — KMS, CloudHSM, Secrets Manager, Parameter Store, ACM</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>AWS Zero to Hero</strong> — complete path, in English, from primitives to advanced architecture.</p><p>Open educational material. No sponsorships, no affiliate links, no affiliation with AWS. When a concept is unclear, go back: AWS is a pyramid of primitives, not a tree you skip across.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+</body>
+</html>

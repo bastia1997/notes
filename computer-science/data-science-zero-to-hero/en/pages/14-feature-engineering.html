@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Feature engineering — Data Science Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#3a4a7a',primaryTextColor:'#e8eef0',primaryBorderColor:'#5a6aa0',lineColor:'#8a9499',background:'#11171a'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">Σ</div>
+      <div>
+        <div class="brand-title">DATA SCIENCE</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/14-feature-engineering.html" class="lang-link" title="Passa all'italiano">🇮🇹 IT</a><span class="lang-active" title="English">🇬🇧 EN</span></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="search... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-what-is-data-science.html" class=""><span class="num">01</span>What is data science (and what isn&#x27;t)</a></li><li class="nav-item"><a href="../pages/02-python-for-data-science.html" class=""><span class="num">02</span>Python for data science: pro setup</a></li><li class="nav-item"><a href="../pages/02b-math-essentials.html" class=""><span class="num">02b</span>High-school math you actually need</a></li><li class="nav-item"><a href="../pages/03-linear-algebra.html" class=""><span class="num">03</span>Linear algebra for data scientists</a></li><li class="nav-item"><a href="../pages/04-calculus-optimization.html" class=""><span class="num">04</span>Calculus, gradients, and optimization</a></li><li class="nav-item"><a href="../pages/05-probability.html" class=""><span class="num">05</span>Probability: the language of uncertainty</a></li><li class="nav-item"><a href="../pages/06-descriptive-statistics.html" class=""><span class="num">06</span>Descriptive statistics</a></li><li class="nav-item"><a href="../pages/07-inferential-statistics.html" class=""><span class="num">07</span>Inferential statistics and hypothesis testing</a></li><li class="nav-item"><a href="../pages/08-distributions.html" class=""><span class="num">08</span>Probability distributions you&#x27;ll meet</a></li><li class="nav-item"><a href="../pages/09-numpy.html" class=""><span class="num">09</span>NumPy: thinking in arrays</a></li><li class="nav-item"><a href="../pages/10-pandas.html" class=""><span class="num">10</span>Pandas: the swiss army knife</a></li><li class="nav-item"><a href="../pages/11-sql.html" class=""><span class="num">11</span>SQL for data scientists</a></li><li class="nav-item"><a href="../pages/12-visualization.html" class=""><span class="num">12</span>Visualization: matplotlib, seaborn, plotly</a></li><li class="nav-item"><a href="../pages/13-data-wrangling.html" class=""><span class="num">13</span>Cleaning and data wrangling</a></li><li class="nav-item"><a href="../pages/14-feature-engineering.html" class="active"><span class="num">14</span>Feature engineering</a></li><li class="nav-item"><a href="../pages/15-eda.html" class=""><span class="num">15</span>EDA: Exploratory Data Analysis</a></li><li class="nav-item"><a href="../pages/16-ml-fundamentals.html" class=""><span class="num">16</span>ML: fundamentals — bias, variance, validation</a></li><li class="nav-item"><a href="../pages/17-linear-regression.html" class=""><span class="num">17</span>Linear regression and regularization</a></li><li class="nav-item"><a href="../pages/18-logistic-regression.html" class=""><span class="num">18</span>Logistic regression and classification</a></li><li class="nav-item"><a href="../pages/19-knn-naive-bayes-svm.html" class=""><span class="num">19</span>KNN, Naive Bayes, SVM</a></li><li class="nav-item"><a href="../pages/20-decision-trees.html" class=""><span class="num">20</span>Decision trees</a></li><li class="nav-item"><a href="../pages/21-random-forest-boosting.html" class=""><span class="num">21</span>Random Forest, Gradient Boosting, XGBoost</a></li><li class="nav-item"><a href="../pages/22-clustering.html" class=""><span class="num">22</span>Clustering: K-Means, DBSCAN, GMM, hierarchical</a></li><li class="nav-item"><a href="../pages/23-pca-tsne-umap.html" class=""><span class="num">23</span>Dimensionality reduction: PCA, t-SNE, UMAP</a></li><li class="nav-item"><a href="../pages/24-metrics-validation.html" class=""><span class="num">24</span>Metrics, cross-validation, leakage</a></li><li class="nav-item"><a href="../pages/25-class-imbalance.html" class=""><span class="num">25</span>Class imbalance</a></li><li class="nav-item"><a href="../pages/26-hyperparameter-tuning.html" class=""><span class="num">26</span>Hyperparameter tuning</a></li><li class="nav-item"><a href="../pages/27-neural-networks.html" class=""><span class="num">27</span>Neural networks: from fundamentals to backprop</a></li><li class="nav-item"><a href="../pages/28-pytorch.html" class=""><span class="num">28</span>PyTorch: from toy model to training loop</a></li><li class="nav-item"><a href="../pages/29-cnn.html" class=""><span class="num">29</span>CNN for computer vision</a></li><li class="nav-item"><a href="../pages/30-rnn-lstm.html" class=""><span class="num">30</span>RNN, LSTM, GRU for sequences</a></li><li class="nav-item"><a href="../pages/31-transformer.html" class=""><span class="num">31</span>Transformer and attention</a></li><li class="nav-item"><a href="../pages/32-nlp-llm.html" class=""><span class="num">32</span>NLP: from text mining to LLMs</a></li><li class="nav-item"><a href="../pages/33-time-series.html" class=""><span class="num">33</span>Time series and forecasting</a></li><li class="nav-item"><a href="../pages/34-mlops.html" class=""><span class="num">34</span>MLOps: deployment, monitoring, drift</a></li><li class="nav-item"><a href="../pages/35-bayesian-causal.html" class=""><span class="num">35</span>Bayesian and Causal Inference</a></li><li class="nav-item"><a href="../pages/36-capstone-career.html" class=""><span class="num">36</span>Capstone, portfolio, career</a></li><li class="nav-item"><a href="../pages/37-glossary.html" class=""><span class="num">37</span>Glossary A-Z</a></li><li class="nav-item"><a href="../pages/38-formula-sheet.html" class=""><span class="num">38</span>Formula Sheet: all the formulas from the course</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Data</span>
+        <span>Section 15 of 39</span>
+        <span class="level-tag level-int">Level: intermediate</span>
+      </div>
+      <h1>Feature engineering</h1>
+      <p class="summary">Building features that capture signal. Binning, interactions, target encoding, features from dates, text, geo. 80% of accuracy comes from here.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Data</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>[[data-wrangling]]</li></ul>
+  <div class="label">Tools</div>
+  <ul class="source-list"><li>pandas, scikit-learn, featuretools (optional)</li></ul>
+</div>
+      <h2 id="why-it-matters-more-than-the-model">Why it matters more than the model</h2>
+<blockquote>
+<p>"Coming up with features is difficult, time-consuming, requires expert knowledge. Applied machine learning is basically feature engineering." — Andrew Ng</p>
+</blockquote>
+<p>In a winning Kaggle entry, typically:
+- Base models: everyone uses XGBoost/LightGBM with similar tuning.
+- <strong>The difference</strong>: who found the right features.</p>
+<p>At work: a good feature found in 2 hours raises AUC by 0.05; the same improvement via hyperparameter tuning takes weeks.</p>
+<h2 id="numeric-features">Numeric features</h2>
+<h3 id="basic-transformations">Basic transformations</h3>
+<pre><code class="language-python">df['log_amount'] = np.log1p(df['amount'])  # log(1+x), handles x=0
+
+df['sqrt_count'] = np.sqrt(df['count'])
+
+df['x_sq'] = df['x'] ** 2
+df['x_cubed'] = df['x'] ** 3
+
+df['1_over_age'] = 1 / (df['age'] + 1)
+</code></pre>
+<h3 id="binning-discretization">Binning / discretization</h3>
+<p>Turns a continuous variable into categorical. Useful when relationship is nonlinear.</p>
+<pre><code class="language-python">df['age_bin'] = pd.cut(df['age'], bins=[0, 18, 35, 65, 120],
+                       labels=['minor','young','adult','senior'])
+
+df['amount_dec'] = pd.qcut(df['amount'], q=10, labels=False)
+
+from sklearn.preprocessing import KBinsDiscretizer
+kbd = KBinsDiscretizer(n_bins=10, strategy='quantile', encode='ordinal')
+</code></pre>
+<h3 id="interactions">Interactions</h3>
+<p>Combine features: <code>salary / age</code>, <code>clicks * cost</code>, geo distances.</p>
+<pre><code class="language-python">df['salary_per_year_exp'] = df['salary'] / (df['years_experience'] + 1)
+df['debt_to_income'] = df['debt'] / df['income']
+
+from sklearn.preprocessing import PolynomialFeatures
+poly = PolynomialFeatures(degree=2, interaction_only=True)
+X_poly = poly.fit_transform(X)
+</code></pre>
+<blockquote>
+<p><strong>Caveat</strong>: with $p$ features, interactions $p(p-1)/2$ explode fast. Use carefully.</p>
+</blockquote>
+<h2 id="categorical-features">Categorical features</h2>
+<h3 id="one-hot-ordinal-target-encoding">One-hot, ordinal, target encoding</h3>
+<pre><code class="language-python">df_dummies = pd.get_dummies(df, columns=['city'], drop_first=True)
+
+from sklearn.preprocessing import OrdinalEncoder
+oe = OrdinalEncoder(categories=[['low','mid','high']])
+df['level'] = oe.fit_transform(df[['level']])
+
+from category_encoders import TargetEncoder
+te = TargetEncoder(cols=['city'])
+X_train_enc = te.fit_transform(X_train, y_train)
+X_test_enc = te.transform(X_test)
+</code></pre>
+<h3 id="frequency-count-encoding">Frequency / count encoding</h3>
+<pre><code class="language-python">freq = df['city'].value_counts(normalize=True)
+df['city_freq'] = df['city'].map(freq)
+</code></pre>
+<p>Works because <strong>rarity</strong> is often informative.</p>
+<h3 id="hashing-trick">Hashing trick</h3>
+<p>For categoricals with thousands of values (e.g., URL, user_id):</p>
+<pre><code class="language-python">from sklearn.feature_extraction import FeatureHasher
+fh = FeatureHasher(n_features=64, input_type='string')
+X_hash = fh.transform(df['url'].astype(str).values.reshape(-1, 1))
+</code></pre>
+<p>Maps categories into a fixed-size $n$ space. Collisions acceptable.</p>
+<h3 id="embedding-for-high-cardinality-categoricals">Embedding (for high-cardinality categoricals)</h3>
+<p>In deep learning, each category becomes a learned vector. See embedding/NN section.</p>
+<h2 id="date-features">Date features</h2>
+<p>A <code>datetime</code> column alone is useless for classic models. Extract:</p>
+<pre><code class="language-python">df['hour'] = df['ts'].dt.hour
+df['dow'] = df['ts'].dt.dayofweek          # 0=Mon
+df['week'] = df['ts'].dt.isocalendar().week
+df['month'] = df['ts'].dt.month
+df['quarter'] = df['ts'].dt.quarter
+df['is_weekend'] = df['dow'].isin([5, 6]).astype(int)
+df['is_business_hours'] = df['hour'].between(9, 17).astype(int)
+df['days_since_epoch'] = (df['ts'] - pd.Timestamp('1970-01-01')).dt.days
+</code></pre>
+<h3 id="cyclicity">Cyclicity</h3>
+<p>Hour=23 and hour=0 are "close" but the model doesn't know if hour is numeric. Encode with sine/cosine:</p>
+<p>$$\text{hour_sin} = \sin\left(\frac{2\pi \cdot \text{hour}}{24}\right), \quad \text{hour_cos} = \cos\left(\frac{2\pi \cdot \text{hour}}{24}\right)$$</p>
+<pre><code class="language-python">df['hour_sin'] = np.sin(2 * np.pi * df['hour'] / 24)
+df['hour_cos'] = np.cos(2 * np.pi * df['hour'] / 24)
+df['dow_sin'] = np.sin(2 * np.pi * df['dow'] / 7)
+df['dow_cos'] = np.cos(2 * np.pi * df['dow'] / 7)
+</code></pre>
+<p>Heavily used in time series.</p>
+<h3 id="lag-rolling-expanding-features">Lag, rolling, expanding features</h3>
+<p>For temporal data:</p>
+<pre><code class="language-python">df = df.sort_values(['user_id', 'ts'])
+df['amount_lag1'] = df.groupby('user_id')['amount'].shift(1)
+df['amount_ma7'] = df.groupby('user_id')['amount'].transform(lambda s: s.rolling(7).mean())
+df['amount_diff'] = df.groupby('user_id')['amount'].diff()
+df['days_since_last_event'] = df.groupby('user_id')['ts'].diff().dt.days
+df['cumsum_amount'] = df.groupby('user_id')['amount'].cumsum()
+</code></pre>
+<blockquote>
+<p><strong>Watch for data leakage</strong> in time series: only use data <code>≤ t</code> to build features at time $t$. <code>shift(1)</code> is your friend; <code>rolling().mean()</code> includes the current value — use it only after shifting.</p>
+</blockquote>
+<h2 id="aggregate-group-level-features">Aggregate (group-level) features</h2>
+<p>For each user, summarize their history:</p>
+<pre><code class="language-python">agg = df.groupby('user_id').agg(
+    total_spent=('amount', 'sum'),
+    avg_order=('amount', 'mean'),
+    n_orders=('amount', 'count'),
+    first_order=('ts', 'min'),
+    last_order=('ts', 'max'),
+    unique_products=('product_id', 'nunique'),
+).reset_index()
+agg['days_active'] = (agg.last_order - agg.first_order).dt.days
+agg['recency_days'] = (df.ts.max() - agg.last_order).dt.days
+</code></pre>
+<p>RFM pattern (Recency, Frequency, Monetary) — base for churn models.</p>
+<h2 id="text-features">Text features</h2>
+<p>From basic to modern:</p>
+<h3 id="bag-of-words-tf-idf">Bag-of-words / TF-IDF</h3>
+<pre><code class="language-python">from sklearn.feature_extraction.text import TfidfVectorizer
+tfidf = TfidfVectorizer(ngram_range=(1,2), min_df=5, max_df=0.95, max_features=20_000)
+X_text = tfidf.fit_transform(df['review'])
+</code></pre>
+<p>Output: sparse $n \times d$ matrix with $d$ ~ thousands.</p>
+<h3 id="text-statistics">Text statistics</h3>
+<pre><code class="language-python">df['n_chars'] = df['text'].str.len()
+df['n_words'] = df['text'].str.split().str.len()
+df['avg_word_len'] = df['n_chars'] / df['n_words']
+df['n_punct'] = df['text'].str.count(r'[.!?;,]')
+df['n_uppercase'] = df['text'].str.count(r'[A-Z]')
+df['has_url'] = df['text'].str.contains(r'http', regex=True).astype(int)
+</code></pre>
+<h3 id="semantic-embeddings-modern">Semantic embeddings (modern)</h3>
+<pre><code class="language-python">from sentence_transformers import SentenceTransformer
+m = SentenceTransformer('paraphrase-multilingual-MiniLM-L12-v2')
+embeddings = m.encode(df['review'].tolist())  # (n, 384)
+</code></pre>
+<p>384 dense features capturing semantics. Replace TF-IDF in many modern tasks.</p>
+<h2 id="geo-features">Geo features</h2>
+<pre><code class="language-python">def haversine(lat1, lon1, lat2, lon2):
+    R = 6371                          # km
+    lat1, lon1, lat2, lon2 = map(np.radians, [lat1, lon1, lat2, lon2])
+    dlat = lat2 - lat1
+    dlon = lon2 - lon1
+    a = np.sin(dlat/2)**2 + np.cos(lat1)*np.cos(lat2)*np.sin(dlon/2)**2
+    return 2 * R * np.arcsin(np.sqrt(a))
+
+df['dist_from_center'] = haversine(df.lat, df.lon, 45.464, 9.190)  # Milan
+</code></pre>
+<p>Other geo features: zip code → aggregated mean income, spatial clusters (k-means on lat/lon), POI density (OpenStreetMap).</p>
+<h2 id="feature-selection">Feature selection</h2>
+<p>When you have 1000+ features, discard useless ones:</p>
+<h3 id="statistical-filters">Statistical filters</h3>
+<pre><code class="language-python">from sklearn.feature_selection import SelectKBest, mutual_info_classif, f_classif
+sel = SelectKBest(mutual_info_classif, k=50).fit(X, y)
+</code></pre>
+<ul>
+<li><code>f_classif</code> / <code>chi2</code>: linear/categorical relation.</li>
+<li><code>mutual_info_classif</code>: captures nonlinearity too.</li>
+</ul>
+<h3 id="wrappers">Wrappers</h3>
+<ul>
+<li><strong>Forward selection</strong>: add features one at a time.</li>
+<li><strong>Backward elimination</strong>: start with all, remove.</li>
+<li><strong>Recursive Feature Elimination (RFE)</strong>: use model importance to remove worst.</li>
+</ul>
+<pre><code class="language-python">from sklearn.feature_selection import RFECV
+rfe = RFECV(estimator=RandomForestClassifier(n_estimators=100), cv=5)
+rfe.fit(X, y)
+</code></pre>
+<h3 id="embedded-regularization">Embedded (regularization)</h3>
+<p>Lasso (L1) zeros out irrelevant coefficients. Random Forest / Boosting provide feature importance.</p>
+<pre><code class="language-python">from sklearn.linear_model import LassoCV
+ls = LassoCV().fit(X, y)
+selected = ls.coef_ != 0
+</code></pre>
+<h2 id="workflow-scikit-learn-pipeline">Workflow: scikit-learn pipeline</h2>
+<p>To avoid duplicating code train/test and prevent leakage:</p>
+<pre><code class="language-python">from sklearn.pipeline import Pipeline
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.impute import SimpleImputer
+
+numeric = ['age', 'income']
+cat = ['country', 'plan']
+
+pre = ColumnTransformer([
+    ('num', Pipeline([
+        ('imp', SimpleImputer(strategy='median')),
+        ('sc', StandardScaler()),
+    ]), numeric),
+    ('cat', Pipeline([
+        ('imp', SimpleImputer(strategy='constant', fill_value='UNKNOWN')),
+        ('oh', OneHotEncoder(handle_unknown='ignore')),
+    ]), cat),
+])
+
+full = Pipeline([
+    ('pre', pre),
+    ('clf', RandomForestClassifier()),
+])
+full.fit(X_train, y_train)
+</code></pre>
+<p><strong>Everything</strong> (imputation, scaling, encoding, model) bundled. Save <code>full</code> with joblib, rebuild on new data without thinking.</p>
+<h2 id="exercises">Exercises</h2>
+<details>
+<summary>Exercise 1 — RFM features</summary>
+
+For `orders(user_id, order_date, amount)`, build R(ecency), F(requency), M(onetary) features.
+
+
+<pre><code class="language-python">ref = orders.order_date.max()
+rfm = orders.groupby('user_id').agg(
+    recency=('order_date', lambda s: (ref - s.max()).days),
+    frequency=('order_date', 'count'),
+    monetary=('amount', 'sum'),
+)
+for c in rfm.columns:
+    rfm[c + '_dec'] = pd.qcut(rfm[c], 10, labels=False, duplicates='drop')
+</code></pre>
+
+</details>
+
+<details>
+<summary>Exercise 2 — Cyclical time features</summary>
+
+Generate 8760 hourly timestamps (a year). Plot x=hour vs sin/cos to see cyclicity.
+
+
+<pre><code class="language-python">import pandas as pd, numpy as np, matplotlib.pyplot as plt
+ts = pd.date_range('2025-01-01', periods=8760, freq='H')
+df = pd.DataFrame({'ts': ts})
+df['hour'] = df.ts.dt.hour
+df['hsin'] = np.sin(2*np.pi*df.hour/24)
+df['hcos'] = np.cos(2*np.pi*df.hour/24)
+plt.scatter(df.hsin[:48], df.hcos[:48])
+plt.gca().set_aspect('equal'); plt.show()
+</code></pre>
+
+
+Forms a circle. Cycle preservation done.
+</details>
+
+<details>
+<summary>Exercise 3 — Target encoding without leakage</summary>
+
+Implement K-fold target encoding:
+
+
+<pre><code class="language-python">import numpy as np, pandas as pd
+from sklearn.model_selection import KFold
+
+def kfold_target_encode(X, y, col, n_splits=5, smoothing=10):
+    kf = KFold(n_splits, shuffle=True, random_state=0)
+    enc = pd.Series(index=X.index, dtype='float64')
+    global_mean = y.mean()
+    for tr, va in kf.split(X):
+        agg = pd.DataFrame({col: X[col].iloc[tr], 'y': y.iloc[tr]})
+        means = agg.groupby(col)['y'].agg(['mean','count'])
+        smoothed = (means['mean']*means['count'] + global_mean*smoothing) / (means['count']+smoothing)
+        enc.iloc[va] = X[col].iloc[va].map(smoothed).fillna(global_mean)
+    return enc
+</code></pre>
+
+
+Smoothing balances per-category mean and global mean: useful for rare categories.
+</details>
+
+<details>
+<summary>Exercise 4 — Random Forest feature importance</summary>
+
+
+<pre><code class="language-python">from sklearn.ensemble import RandomForestClassifier
+m = RandomForestClassifier(n_estimators=200, random_state=0).fit(X, y)
+imp = pd.Series(m.feature_importances_, index=X.columns).sort_values(ascending=False)
+print(imp.head(20))
+imp.head(20).plot.barh()
+</code></pre>
+
+
+Bonus: use **permutation importance** (more reliable):
+
+
+<pre><code class="language-python">from sklearn.inspection import permutation_importance
+r = permutation_importance(m, X_val, y_val, n_repeats=10, random_state=0)
+pd.Series(r.importances_mean, index=X.columns).sort_values(ascending=False).head(20).plot.barh()
+</code></pre>
+
+</details>
+
+<h2 id="takeaways">Takeaways</h2>
+<ul>
+<li>Feature engineering &gt; model tuning, usually.</li>
+<li>Dates → many derived features, possibly cyclical.</li>
+<li>High-cardinality categoricals: target encoding with CV, hashing, or embedding.</li>
+<li>Scikit-learn pipelines save your life.</li>
+<li>Permutation importance &gt; naive <code>feature_importance_</code>.</li>
+</ul>
+<p>Next: EDA — the workflow for exploring a real dataset.</p>
+      <nav class="pager">
+<a href="13-data-wrangling.html" class="prev"><span class="label">← Previous</span><span class="title">Cleaning and data wrangling</span></a>
+<a href="15-eda.html" class="next"><span class="label">Next →</span><span class="title">EDA: Exploratory Data Analysis</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Data Science Zero to Hero</strong> — complete path, in English, from math to deployment.</p><p>Open didactic material. Formulas are here to be understood, not feared. When a concept is unclear, go back: data science is a pyramid, not a tree you skip across.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+</body>
+</html>

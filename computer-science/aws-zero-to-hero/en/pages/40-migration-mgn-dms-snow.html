@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Migration — MGN, DMS, Snow family, Discovery, Migration Hub — AWS Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#232f3e',primaryTextColor:'#ffffff',primaryBorderColor:'#ff9900',lineColor:'#8a99ad',background:'#0c1320'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">λ</div>
+      <div>
+        <div class="brand-title">AWS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/40-migration-mgn-dms-snow.html" class="lang-link" title="Passa all'italiano">IT</a><span class="lang-active" title="English">EN</span></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="search... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-what-is-cloud-and-aws.html" class=""><span class="num">01</span>What the cloud is, and what AWS is</a></li><li class="nav-item"><a href="../pages/02-global-infrastructure.html" class=""><span class="num">02</span>Global infrastructure: Regions, AZs, Edge</a></li><li class="nav-item"><a href="../pages/03-account-root-billing.html" class=""><span class="num">03</span>AWS account, root user, billing</a></li><li class="nav-item"><a href="../pages/04-iam-fundamentals.html" class=""><span class="num">04</span>IAM — fundamentals (users, groups, roles, policies)</a></li><li class="nav-item"><a href="../pages/05-iam-advanced.html" class=""><span class="num">05</span>IAM advanced: conditional policies, STS, ABAC</a></li><li class="nav-item"><a href="../pages/06-cli-sdk-iac.html" class=""><span class="num">06</span>CLI, SDK, CloudShell, IaC primer</a></li><li class="nav-item"><a href="../pages/07-pricing-billing.html" class=""><span class="num">07</span>Pricing, billing, free tier, cost tools</a></li><li class="nav-item"><a href="../pages/08-organizations-multi-account.html" class=""><span class="num">08</span>AWS Organizations &amp; multi-account strategy</a></li><li class="nav-item"><a href="../pages/09-vpc-fundamentals.html" class=""><span class="num">09</span>VPC — fundamentals</a></li><li class="nav-item"><a href="../pages/10-vpc-advanced.html" class=""><span class="num">10</span>VPC advanced: peering, TGW, PrivateLink, endpoints</a></li><li class="nav-item"><a href="../pages/11-route53-cloudfront.html" class=""><span class="num">11</span>Route 53, CloudFront, Global Accelerator</a></li><li class="nav-item"><a href="../pages/12-hybrid-vpn-directconnect.html" class=""><span class="num">12</span>Hybrid: VPN, Direct Connect, PrivateLink</a></li><li class="nav-item"><a href="../pages/13-ec2-fundamentals.html" class=""><span class="num">13</span>EC2 — fundamentals (instances, AMIs, lifecycle)</a></li><li class="nav-item"><a href="../pages/14-ec2-advanced-spot-nitro.html" class=""><span class="num">14</span>EC2 advanced — Spot, Placement Groups, Nitro, hibernation</a></li><li class="nav-item"><a href="../pages/15-asg-elb.html" class=""><span class="num">15</span>Auto Scaling Groups + Elastic Load Balancing</a></li><li class="nav-item"><a href="../pages/16-lambda-deep-dive.html" class=""><span class="num">16</span>Lambda deep dive</a></li><li class="nav-item"><a href="../pages/17-containers-ecs-eks-fargate.html" class=""><span class="num">17</span>Containers: ECS, EKS, Fargate, ECR</a></li><li class="nav-item"><a href="../pages/18-specialty-compute.html" class=""><span class="num">18</span>Specialty compute: Batch, Lightsail, Outposts, Wavelength, Beanstalk</a></li><li class="nav-item"><a href="../pages/19-ebs-efs-fsx.html" class=""><span class="num">19</span>EBS, EFS, FSx, Instance Store</a></li><li class="nav-item"><a href="../pages/20-s3-deep-dive.html" class=""><span class="num">20</span>S3 — deep dive</a></li><li class="nav-item"><a href="../pages/21-archive-snow-gateway-backup.html" class=""><span class="num">21</span>Glacier, Snow, Storage Gateway, DataSync, AWS Backup</a></li><li class="nav-item"><a href="../pages/22-rds.html" class=""><span class="num">22</span>RDS — managed relational DBs (engines, Multi-AZ, replicas, Proxy)</a></li><li class="nav-item"><a href="../pages/23-aurora-deep-dive.html" class=""><span class="num">23</span>Aurora deep dive — shared storage, Serverless v2, Global Database</a></li><li class="nav-item"><a href="../pages/24-dynamodb-deep-dive.html" class=""><span class="num">24</span>DynamoDB deep dive — partitions, GSI, Streams, single-table</a></li><li class="nav-item"><a href="../pages/25-purpose-built-dbs.html" class=""><span class="num">25</span>Purpose-built DBs — ElastiCache, MemoryDB, Neptune, DocumentDB, Keyspaces, Timestream, QLDB</a></li><li class="nav-item"><a href="../pages/26-redshift-data-warehousing.html" class=""><span class="num">26</span>Redshift — MPP data warehousing and zero-ETL</a></li><li class="nav-item"><a href="../pages/27-sqs-sns-eventbridge.html" class=""><span class="num">27</span>SQS, SNS, EventBridge — messaging and events</a></li><li class="nav-item"><a href="../pages/28-step-functions-mq-appflow.html" class=""><span class="num">28</span>Step Functions, MQ, AppFlow — orchestration and integration</a></li><li class="nav-item"><a href="../pages/29-athena-glue-lakeformation.html" class=""><span class="num">29</span>Athena, Glue, Lake Formation — the AWS data lake</a></li><li class="nav-item"><a href="../pages/30-emr-kinesis-msk.html" class=""><span class="num">30</span>EMR, Kinesis, MSK — big data and streaming</a></li><li class="nav-item"><a href="../pages/31-opensearch-quicksight.html" class=""><span class="num">31</span>OpenSearch and QuickSight — search and BI</a></li><li class="nav-item"><a href="../pages/32-sagemaker-overview.html" class=""><span class="num">32</span>SageMaker — the end-to-end ML platform</a></li><li class="nav-item"><a href="../pages/33-bedrock-ai-services.html" class=""><span class="num">33</span>Bedrock and AI services — managed GenAI and ML</a></li><li class="nav-item"><a href="../pages/34-iac-cloudformation-cdk-terraform.html" class=""><span class="num">34</span>IaC on AWS — CloudFormation, CDK, SAM, Terraform</a></li><li class="nav-item"><a href="../pages/35-ci-cd-pipeline.html" class=""><span class="num">35</span>CI/CD on AWS — CodePipeline, CodeBuild, CodeDeploy, CodeCatalyst</a></li><li class="nav-item"><a href="../pages/36-observability-cloudwatch-xray.html" class=""><span class="num">36</span>Observability — CloudWatch, X-Ray, CloudTrail, Config, SSM</a></li><li class="nav-item"><a href="../pages/37-kms-secrets-acm.html" class=""><span class="num">37</span>Encryption — KMS, CloudHSM, Secrets Manager, Parameter Store, ACM</a></li><li class="nav-item"><a href="../pages/38-waf-shield-guardduty-inspector.html" class=""><span class="num">38</span>Threat detection — WAF, Shield, GuardDuty, Inspector, Macie, Security Hub</a></li><li class="nav-item"><a href="../pages/39-governance-org-controltower-identitycenter.html" class=""><span class="num">39</span>Governance — Organizations, Control Tower, Identity Center</a></li><li class="nav-item"><a href="../pages/40-migration-mgn-dms-snow.html" class="active"><span class="num">40</span>Migration — MGN, DMS, Snow family, Discovery, Migration Hub</a></li><li class="nav-item"><a href="../pages/41-cost-optimization-finops.html" class=""><span class="num">41</span>Cost optimization and FinOps</a></li><li class="nav-item"><a href="../pages/42-well-architected.html" class=""><span class="num">42</span>Well-Architected Framework — 6 pillars, lenses, review</a></li><li class="nav-item"><a href="../pages/43-architecture-patterns.html" class=""><span class="num">43</span>Architecture patterns — 3-tier, serverless, event-driven, microservices</a></li><li class="nav-item"><a href="../pages/44-disaster-recovery-multi-region.html" class=""><span class="num">44</span>Disaster Recovery and Multi-Region</a></li><li class="nav-item"><a href="../pages/45-reference-architectures.html" class=""><span class="num">45</span>Real-world reference architectures</a></li><li class="nav-item"><a href="../pages/46-advanced-networking.html" class=""><span class="num">46</span>Advanced networking deep dive</a></li><li class="nav-item"><a href="../pages/47-containers-deep-dive.html" class=""><span class="num">47</span>Containers deep dive — EKS, Karpenter, service mesh</a></li><li class="nav-item"><a href="../pages/48-serverless-patterns.html" class=""><span class="num">48</span>Serverless patterns deep dive</a></li><li class="nav-item"><a href="../pages/49-genai-rag-agents.html" class=""><span class="num">49</span>Generative AI on AWS — RAG and Agents</a></li><li class="nav-item"><a href="../pages/50-aws-certifications.html" class=""><span class="num">50</span>AWS Certifications — roadmap and study guide</a></li><li class="nav-item"><a href="../pages/51-glossary-az.html" class=""><span class="num">51</span>Glossary A-Z</a></li><li class="nav-item"><a href="../pages/52-cheatsheet.html" class=""><span class="num">52</span>Cheat sheet: services, limits, instance families</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Migration</span>
+        <span>Section 40 of 52</span>
+        <span class="level-tag level-int">Level: intermediate</span>
+      </div>
+      <h1>Migration — MGN, DMS, Snow family, Discovery, Migration Hub</h1>
+      <p class="summary">AWS tools to move workloads from on-prem or other clouds: 6 R&#x27;s, discovery, lift-and-shift, DB sync, offline transfer.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Migration</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>sections 8, 22</li></ul>
+  <div class="label">Tools / references</div>
+  <ul class="source-list"><li>Application Migration Service (MGN)</li><li>Database Migration Service (DMS)</li><li>Snow family</li><li>DataSync</li><li>Migration Hub</li></ul>
+</div>
+      <p>A botched migration burns 18 months and the board's trust in the cloud. A good one frees infrastructure, cuts costs and enables managed services. The question isn't "how do I move VMs" — it's "<strong>what</strong> do I move, <strong>how</strong> do I modernize it, <strong>in what order</strong>". The AWS framework is "6 R's", and the tools cover every R.</p>
+<h2 id="1-the-6-rs">1. The 6 R's</h2>
+<table>
+<thead>
+<tr>
+<th>R</th>
+<th>What</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Rehost</strong></td>
+<td>"Lift and shift" — move VM as-is</td>
+<td>VMware → MGN onto EC2</td>
+</tr>
+<tr>
+<td><strong>Replatform</strong></td>
+<td>"Lift, tinker and shift" — small improvements</td>
+<td>on-prem MySQL → RDS MySQL</td>
+</tr>
+<tr>
+<td><strong>Repurchase</strong></td>
+<td>Swap for SaaS</td>
+<td>Exchange → Microsoft 365</td>
+</tr>
+<tr>
+<td><strong>Refactor / Re-architect</strong></td>
+<td>Cloud-native rewrite</td>
+<td>monolith → serverless microservices</td>
+</tr>
+<tr>
+<td><strong>Retire</strong></td>
+<td>Turn off, wasn't needed</td>
+<td>the 10-20% of VMs discovered during discovery</td>
+</tr>
+<tr>
+<td><strong>Retain</strong></td>
+<td>Leave on-prem (for now)</td>
+<td>legacy mainframe, non-cloud dependencies</td>
+</tr>
+</tbody>
+</table>
+<p>Typical wave: first Discovery, then Retire the forgotten ones, then massive Rehost to leave the datacenter, then Replatform/Refactor in phase 2.</p>
+<h2 id="2-application-discovery-migration-hub">2. Application Discovery + Migration Hub</h2>
+<p><strong>AWS Application Discovery Service</strong>: discovers what you have on-prem.
+- <strong>Agent-based</strong> (Linux/Windows): perf metrics, processes, network dependencies (who talks to whom).
+- <strong>Agentless</strong> (OVA VMware): inventory + baseline perf with zero install.</p>
+<p><strong>Migration Hub</strong>: central console tracking all in-flight migrations (MGN/DMS/etc.) by app/wave/account. Aggregates progress, estimated cost, blockers. <strong>Migration Hub Refactor Spaces</strong> assists the strangler pattern (incrementally attaching cloud-native to legacy).</p>
+<h2 id="3-aws-application-migration-service-mgn">3. AWS Application Migration Service (MGN)</h2>
+<p>Successor to CloudEndure Migration. <strong>Continuous block-level replication</strong> from source VM to a "staging" EBS in AWS, then cutover at the right moment.</p>
+<pre><code class="language-mermaid">sequenceDiagram
+  participant Src as On-prem VM
+  participant Agent as MGN agent
+  participant Stage as Staging EBS in AWS
+  participant Tgt as Target EC2
+  Src-&gt;&gt;Agent: install
+  Agent-&gt;&gt;Stage: initial replica (full)
+  loop continuous
+    Agent-&gt;&gt;Stage: block-level delta
+  end
+  Note over Tgt: test instance: non-disruptive
+  Tgt-&gt;&gt;Tgt: launch test
+  Note over Src,Tgt: final cutover: shutdown source, launch prod
+</code></pre>
+<p>Cutover window: minutes to tens of minutes vs days of dump-restore. Works from: VMware, Hyper-V, physical, Azure, GCP. Also <strong>Server Migration</strong> for retired workloads (one-shot snapshot).</p>
+<h2 id="4-database-migration-service-dms-and-sct">4. Database Migration Service (DMS) and SCT</h2>
+<p><strong>DMS</strong> moves DB data with minimal downtime:
+- <strong>Homogeneous</strong> (Oracle → Oracle, MySQL → MySQL): native, easy.
+- <strong>Heterogeneous</strong> (Oracle → Aurora PostgreSQL, SQL Server → Aurora MySQL): combined with <strong>Schema Conversion Tool (SCT)</strong> to convert DDL, procedures, triggers.</p>
+<p>Modes:
+- <strong>Full load</strong> (one-shot snapshot).
+- <strong>CDC</strong> (Change Data Capture: reads source transaction log and applies continuously to target).
+- <strong>Full + CDC</strong>: initial full + ongoing CDC → cutover when lag = 0.</p>
+<pre><code class="language-bash">aws dms create-replication-task \
+  --replication-task-identifier orcl-to-aurora \
+  --source-endpoint-arn arn:... --target-endpoint-arn arn:... \
+  --migration-type full-load-and-cdc \
+  --table-mappings file://tables.json
+</code></pre>
+<p>DMS Serverless since 2023: auto-scaling of replication compute, no more manual instance sizing.</p>
+<h2 id="5-datasync-and-transfer-family">5. DataSync and Transfer Family</h2>
+<p><strong>DataSync</strong>: high-speed file sync between on-prem NFS/SMB/HDFS/Object and S3/EFS/FSx (or between AWS storage). In-transit encryption, integrity check, incremental. Typical for migrating petabytes of NAS.</p>
+<p><strong>AWS Transfer Family</strong>: managed <strong>SFTP/FTPS/FTP/AS2</strong> server writing directly to S3 or EFS. For when your B2B partners "just want SFTP" and you don't want to babysit an EC2 with OpenSSH.</p>
+<h2 id="6-snow-family-offline-transfer">6. Snow family — offline transfer</h2>
+<p>When WAN bandwidth isn't enough. AWS ships you a physical appliance:</p>
+<table>
+<thead>
+<tr>
+<th>Device</th>
+<th>Capacity</th>
+<th>When</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Snowcone</strong></td>
+<td>8-14 TB usable, portable (~2 kg)</td>
+<td>edge IoT, small transfers, austere environments</td>
+</tr>
+<tr>
+<td><strong>Snowball Edge Storage Optimized</strong></td>
+<td>80 TB usable</td>
+<td>medium transfers</td>
+</tr>
+<tr>
+<td><strong>Snowball Edge Compute Optimized</strong></td>
+<td>42 TB + GPU + EC2-compatible</td>
+<td>edge compute + transfer</td>
+</tr>
+<tr>
+<td><strong>Snowmobile</strong></td>
+<td>100 PB on a truck (40-ft container)</td>
+<td>entire datacenter — discontinued 2024, replaced by multi-Snowball</td>
+</tr>
+</tbody>
+</table>
+<p>Bandwidth math: 100 TB over 1 Gbps = 10+ continuous days. Snowball arrives in 1 week, copy in 1-2 days, ship back. AES-256 hardware encryption with KMS.</p>
+<h2 id="7-storage-gateway-hybrid-recap">7. Storage Gateway (hybrid recap)</h2>
+<p>Already covered: 3 modes — <strong>File Gateway</strong> (NFS/SMB → S3), <strong>Volume Gateway</strong> (iSCSI cached/stored), <strong>Tape Gateway</strong> (VTL → S3/Glacier). Useful during long "hybrid" migrations when you can't cut over immediately.</p>
+<h2 id="8-wave-planning">8. Wave planning</h2>
+<p>Strategies for ordering what to move when:</p>
+<ul>
+<li><strong>Big bang</strong>: everything in a weekend (risky, rare post-2010).</li>
+<li><strong>Phased per app</strong>: one app per wave (2-4 weeks), test, next.</li>
+<li><strong>Phased per dependency graph</strong>: from Discovery — leaf apps first, climb to shared services.</li>
+<li><strong>Strangler</strong>: new cloud-native sits alongside legacy, traffic migrated piece by piece via API GW / DNS.</li>
+</ul>
+<p>Anti-pattern: migrating the DB <strong>first</strong> leaving the app on-prem → devastating WAN latency. Migrate app + DB together in the same wave, or use DMS CDC to minimize cutover.</p>
+<h2 id="9-exercise">9. Exercise</h2>
+<details>
+<summary>200 VMware VMs on-prem, 30 SQL Server DBs, you want to be off-datacenter in 12 months. Order and tools?</summary>
+
+Months 1-2: **Discovery Service agentless** for inventory + dependency map. Identify 30-40 forgotten VMs → **Retire**.
+
+Months 3-4: **MGN** to rehost 100 "vanilla" VMs (web, app servers). Continuous replication, weekly wave-by-wave cutover. Test instance to validate before cutover.
+
+Months 5-8: DB migration. For SQL Server with existing license: rehost with MGN on EC2 (Microsoft BYOL). For 5-10 Replatform candidates: **DMS + SCT** to Aurora PostgreSQL (query refactor required) or RDS SQL Server (no app change). CDC for final cutover with minimal lag.
+
+Months 9-11: remaining complex apps + 1-2 Refactor candidates (e.g. file storage → S3).
+
+Month 12: final cutover, decommission datacenter, celebrate.
+
+All tracked in **Migration Hub** with an executive dashboard.
+</details>
+
+<details>
+<summary>You must transfer 500 TB of medical archives from on-prem NAS to S3 Glacier Deep Archive. WAN bandwidth 200 Mbps. How long via DataSync vs Snowball?</summary>
+
+**DataSync over WAN**: 500 TB × 8 bit/byte ÷ 200 Mbps = ~230 days theoretical at sustained throughput (assuming full link, unrealistic). In practice ~6-9 months, saturating the corporate WAN → productivity hit.
+
+**Snowball Edge Storage** (80 TB each): order 7 units, arrive in 1 week, parallel copy from NAS ~3-5 days, ship back, AWS imports to S3 in ~1 week per unit. **Total ~4-6 weeks**, WAN free, cost ~$300/device + shipping.
+
+Trade-off: physical latency vs network latency. For 500 TB, physical shipping wins cleanly.
+</details>
+
+<blockquote>
+<p><strong>Summary</strong>: 6 R's framework (Rehost/Replatform/Repurchase/Refactor/Retire/Retain); Application Discovery + Migration Hub for inventory and tracking; MGN for continuous block-level lift-and-shift; DMS + SCT for homogeneous/heterogeneous DB with CDC; DataSync for files, Transfer Family for managed SFTP; Snow family for offline &gt;50 TB; phased wave planning by dependency, avoid big-bang and DB-before-app migration.</p>
+</blockquote>
+      <nav class="pager">
+<a href="39-governance-org-controltower-identitycenter.html" class="prev"><span class="label">← Previous</span><span class="title">Governance — Organizations, Control Tower, Identity Center</span></a>
+<a href="41-cost-optimization-finops.html" class="next"><span class="label">Next →</span><span class="title">Cost optimization and FinOps</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>AWS Zero to Hero</strong> — complete path, in English, from primitives to advanced architecture.</p><p>Open educational material. No sponsorships, no affiliate links, no affiliation with AWS. When a concept is unclear, go back: AWS is a pyramid of primitives, not a tree you skip across.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+</body>
+</html>

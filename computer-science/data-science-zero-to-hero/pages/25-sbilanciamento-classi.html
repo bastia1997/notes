@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sbilanciamento di classi — Data Science Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#3a4a7a',primaryTextColor:'#e8eef0',primaryBorderColor:'#5a6aa0',lineColor:'#8a9499',background:'#11171a'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">Σ</div>
+      <div>
+        <div class="brand-title">DATA SCIENCE</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">🇮🇹 IT</span><a href="../en/pages/25-class-imbalance.html" class="lang-link" title="Switch to English">🇬🇧 EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-cos-e-data-science.html" class=""><span class="num">01</span>Cos&#x27;è la data science (e cosa non è)</a></li><li class="nav-item"><a href="../pages/02-python-per-data-science.html" class=""><span class="num">02</span>Python per data science: setup professionale</a></li><li class="nav-item"><a href="../pages/02b-matematica-essenziale.html" class=""><span class="num">02b</span>Matematica del liceo che ti serve davvero</a></li><li class="nav-item"><a href="../pages/03-algebra-lineare.html" class=""><span class="num">03</span>Algebra lineare per data scientist</a></li><li class="nav-item"><a href="../pages/04-calcolo-ottimizzazione.html" class=""><span class="num">04</span>Calcolo, gradiente e ottimizzazione</a></li><li class="nav-item"><a href="../pages/05-probabilita.html" class=""><span class="num">05</span>Probabilità: la lingua dell&#x27;incertezza</a></li><li class="nav-item"><a href="../pages/06-statistica-descrittiva.html" class=""><span class="num">06</span>Statistica descrittiva</a></li><li class="nav-item"><a href="../pages/07-statistica-inferenziale.html" class=""><span class="num">07</span>Statistica inferenziale e test di ipotesi</a></li><li class="nav-item"><a href="../pages/08-distribuzioni.html" class=""><span class="num">08</span>Distribuzioni di probabilità che incontrerai</a></li><li class="nav-item"><a href="../pages/09-numpy.html" class=""><span class="num">09</span>NumPy: pensare in array</a></li><li class="nav-item"><a href="../pages/10-pandas.html" class=""><span class="num">10</span>Pandas: il coltellino svizzero</a></li><li class="nav-item"><a href="../pages/11-sql.html" class=""><span class="num">11</span>SQL per data scientist</a></li><li class="nav-item"><a href="../pages/12-visualizzazione.html" class=""><span class="num">12</span>Visualizzazione: matplotlib, seaborn, plotly</a></li><li class="nav-item"><a href="../pages/13-data-wrangling.html" class=""><span class="num">13</span>Pulizia e data wrangling</a></li><li class="nav-item"><a href="../pages/14-feature-engineering.html" class=""><span class="num">14</span>Feature engineering</a></li><li class="nav-item"><a href="../pages/15-eda.html" class=""><span class="num">15</span>EDA: Exploratory Data Analysis</a></li><li class="nav-item"><a href="../pages/16-ml-fondamenti.html" class=""><span class="num">16</span>ML: fondamenti — bias, varianza, validazione</a></li><li class="nav-item"><a href="../pages/17-regressione-lineare.html" class=""><span class="num">17</span>Regressione lineare e regolarizzazione</a></li><li class="nav-item"><a href="../pages/18-regressione-logistica.html" class=""><span class="num">18</span>Regressione logistica e classificazione</a></li><li class="nav-item"><a href="../pages/19-knn-naive-bayes-svm.html" class=""><span class="num">19</span>KNN, Naive Bayes, SVM</a></li><li class="nav-item"><a href="../pages/20-alberi-decisionali.html" class=""><span class="num">20</span>Alberi decisionali</a></li><li class="nav-item"><a href="../pages/21-random-forest-boosting.html" class=""><span class="num">21</span>Random Forest, Gradient Boosting, XGBoost</a></li><li class="nav-item"><a href="../pages/22-clustering.html" class=""><span class="num">22</span>Clustering: K-Means, DBSCAN, GMM, gerarchico</a></li><li class="nav-item"><a href="../pages/23-pca-tsne-umap.html" class=""><span class="num">23</span>Riduzione dimensionale: PCA, t-SNE, UMAP</a></li><li class="nav-item"><a href="../pages/24-metriche-validazione.html" class=""><span class="num">24</span>Metriche, cross-validation, leakage</a></li><li class="nav-item"><a href="../pages/25-sbilanciamento-classi.html" class="active"><span class="num">25</span>Sbilanciamento di classi</a></li><li class="nav-item"><a href="../pages/26-hyperparameter-tuning.html" class=""><span class="num">26</span>Hyperparameter tuning</a></li><li class="nav-item"><a href="../pages/27-reti-neurali.html" class=""><span class="num">27</span>Reti neurali: dalle basi al backprop</a></li><li class="nav-item"><a href="../pages/28-pytorch.html" class=""><span class="num">28</span>PyTorch: dal toy model al training loop</a></li><li class="nav-item"><a href="../pages/29-cnn.html" class=""><span class="num">29</span>CNN per computer vision</a></li><li class="nav-item"><a href="../pages/30-rnn-lstm.html" class=""><span class="num">30</span>RNN, LSTM, GRU per sequenze</a></li><li class="nav-item"><a href="../pages/31-transformer.html" class=""><span class="num">31</span>Transformer e attention</a></li><li class="nav-item"><a href="../pages/32-nlp-llm.html" class=""><span class="num">32</span>NLP: dal text mining ai LLM</a></li><li class="nav-item"><a href="../pages/33-time-series.html" class=""><span class="num">33</span>Time series e forecasting</a></li><li class="nav-item"><a href="../pages/34-mlops.html" class=""><span class="num">34</span>MLOps: deployment, monitoring, drift</a></li><li class="nav-item"><a href="../pages/35-bayesian-causal.html" class=""><span class="num">35</span>Inferenza bayesiana e causale</a></li><li class="nav-item"><a href="../pages/36-capstone-carriera.html" class=""><span class="num">36</span>Capstone, portfolio, carriera</a></li><li class="nav-item"><a href="../pages/37-glossario.html" class=""><span class="num">37</span>Glossario A-Z</a></li><li class="nav-item"><a href="../pages/38-formulario.html" class=""><span class="num">38</span>Formulario: tutte le formule del percorso</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Machine Learning</span>
+        <span>Sezione 26 di 39</span>
+        <span class="level-tag level-int">Livello: intermedio</span>
+      </div>
+      <h1>Sbilanciamento di classi</h1>
+      <p class="summary">SMOTE, undersampling, class weight, threshold moving, cost-sensitive learning. Quando la classe positiva è 1% del dataset.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Machine Learning</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>[[metriche-validazione]]</li></ul>
+  <div class="label">Strumenti</div>
+  <ul class="source-list"><li>scikit-learn, imbalanced-learn</li></ul>
+</div>
+      <h2 id="il-problema">Il problema</h2>
+<p>Frodi: 0.1% delle transazioni. Cancro: 1% degli screening. Click su un ad: 2%. Default sui prestiti: 5%.</p>
+<p>In questi casi:</p>
+<ul>
+<li><strong>Accuracy alta = inutile</strong>: "predici sempre no" raggiunge 99.9%.</li>
+<li>Il modello tende a ignorare la classe minoritaria.</li>
+<li>Le metriche di default (anche AUC ROC) possono ingannare.</li>
+</ul>
+<p>Tre famiglie di rimedi:</p>
+<pre><code class="language-mermaid">flowchart LR
+    A[Sbilanciamento] --&gt; B[Rebalancing&lt;br/&gt;dei dati]
+    A --&gt; C[Cost-sensitive&lt;br/&gt;nel modello]
+    A --&gt; D[Threshold&lt;br/&gt;moving]
+</code></pre>
+<h2 id="1-rebalancing-dei-dati">1. Rebalancing dei dati</h2>
+<h3 id="random-oversampling">Random oversampling</h3>
+<p>Duplica esempi della classe minoritaria. Semplice ma overfitting (le copie sono identiche).</p>
+<h3 id="random-undersampling">Random undersampling</h3>
+<p>Scarta esempi della classe maggioritaria. Rapido ma perde informazione.</p>
+<h3 id="smote-synthetic-minority-oversampling-technique">SMOTE (Synthetic Minority Oversampling Technique)</h3>
+<p>Genera esempi sintetici nella classe minoritaria interpolando tra punti vicini:</p>
+<pre><code class="language-python">from imblearn.over_sampling import SMOTE
+sm = SMOTE(sampling_strategy=0.3, random_state=0)
+X_res, y_res = sm.fit_resample(X_tr, y_tr)
+</code></pre>
+<p>Variants: <strong>SMOTE-NC</strong> (gestisce categoriche), <strong>ADASYN</strong> (più dense dove la classe è già minoritaria), <strong>BorderlineSMOTE</strong> (focus su frontiere).</p>
+<h3 id="combinazione">Combinazione</h3>
+<pre><code class="language-python">from imblearn.pipeline import Pipeline
+from imblearn.over_sampling import SMOTE
+from imblearn.under_sampling import RandomUnderSampler
+
+pipe = Pipeline([
+    ('smote', SMOTE(sampling_strategy=0.3)),
+    ('under', RandomUnderSampler(sampling_strategy=0.5)),
+    ('clf', LogisticRegression(max_iter=2000)),
+])
+</code></pre>
+<blockquote>
+<p><strong>Importante</strong>: SMOTE / undersampling devono essere applicati <strong>dentro la CV</strong>, solo sul training fold. Usare <code>imblearn.Pipeline</code> (non <code>sklearn.Pipeline</code>) lo gestisce correttamente.</p>
+</blockquote>
+<h3 id="cluster-based-undersampling-tomek-links-nearmiss">Cluster-based undersampling (Tomek links, NearMiss)</h3>
+<p>Rimuove esempi "borderline" della classe maggioritaria, mantenendo solo i più rappresentativi.</p>
+<pre><code class="language-python">from imblearn.under_sampling import TomekLinks, NearMiss
+</code></pre>
+<h2 id="2-cost-sensitive-learning">2. Cost-sensitive learning</h2>
+<p>Modifica la loss per pesare di più gli errori sulla classe minoritaria.</p>
+<h3 id="class-weight">Class weight</h3>
+<p>Quasi tutti i modelli sklearn supportano <code>class_weight</code>:</p>
+<pre><code class="language-python">LogisticRegression(class_weight='balanced')
+RandomForestClassifier(class_weight='balanced')
+SVC(class_weight={0: 1, 1: 10})    # manuale: classe 1 conta 10x
+</code></pre>
+<p><code>'balanced'</code> pesa inversamente alle frequenze: $w_k = n / (K \cdot n_k)$.</p>
+<h3 id="per-xgboost-lightgbm">Per XGBoost / LightGBM</h3>
+<p>Usa <code>scale_pos_weight</code>:</p>
+<pre><code class="language-python">xgb.XGBClassifier(scale_pos_weight=99)   # 99 negativi per ogni positivo
+</code></pre>
+<h3 id="per-gradient-boosting-custom">Per gradient boosting custom</h3>
+<p>Si modifica direttamente la loss function.</p>
+<h2 id="3-threshold-moving">3. Threshold moving</h2>
+<p>Spesso la soluzione <strong>più semplice e più efficace</strong>: invece di bilanciare il dataset, modifica la <strong>soglia decisionale</strong>.</p>
+<pre><code class="language-python">proba = model.predict_proba(X_val)[:, 1]
+# scegli soglia che massimizza F1
+from sklearn.metrics import precision_recall_curve, f1_score
+import numpy as np
+prec, rec, thr = precision_recall_curve(y_val, proba)
+f1s = 2 * prec * rec / (prec + rec + 1e-9)
+best_thr = thr[f1s[:-1].argmax()]
+print(f&quot;Soglia ottimale: {best_thr:.3f}&quot;)
+y_pred = (proba &gt;= best_thr).astype(int)
+</code></pre>
+<p>Vantaggi:
+- Non cambia il modello.
+- Calibrato sulla metrica che ti interessa.
+- Veloce.</p>
+<h2 id="quale-strategia-funziona-meglio">Quale strategia funziona meglio?</h2>
+<p>Verità scomoda: <strong>dipende</strong>. Spesso threshold moving + class weight bastano. SMOTE e simili a volte peggiorano (introducono pattern artificiali).</p>
+<p>Linee guida:</p>
+<table>
+<thead>
+<tr>
+<th>Situazione</th>
+<th>Prima cosa da provare</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pochi dati, sbilanciamento moderato</td>
+<td>class_weight='balanced'</td>
+</tr>
+<tr>
+<td>Molti dati, sbilanciamento forte</td>
+<td>scale_pos_weight (boosting) + threshold</td>
+</tr>
+<tr>
+<td>Boundary complesso</td>
+<td>SMOTE + boosting</td>
+</tr>
+<tr>
+<td>Costo errori molto asimmetrico</td>
+<td>cost-sensitive + threshold</td>
+</tr>
+<tr>
+<td>Estremo (&lt;0.1%)</td>
+<td>anomaly detection invece di classification</td>
+</tr>
+</tbody>
+</table>
+<h2 id="quando-non-e-sbilanciamento">Quando NON è "sbilanciamento"</h2>
+<p>A volte ciò che chiami sbilanciamento è in realtà:</p>
+<ul>
+<li><strong>Classe minoritaria con poca segnale</strong> — nemmeno il bilanciamento ti salva.</li>
+<li><strong>Etichette errate</strong> sulla minoritaria — pulisci prima.</li>
+<li><strong>Concept drift</strong> — il pattern positivo cambia nel tempo.</li>
+</ul>
+<blockquote>
+<p>Lezione: prima capisci <strong>perché</strong> il modello fallisce sulla classe minoritaria. Magari le feature non differenziano. In quel caso, oversampling non serve a niente.</p>
+</blockquote>
+<h2 id="cost-sensitive-completo">Cost-sensitive completo</h2>
+<p>Se conosci i costi reali ($C_{FP}, C_{FN}$), trova la soglia che minimizza il <strong>costo totale atteso</strong>:</p>
+<p>$$\text{Costo} = C_{FP} \cdot \text{FP} + C_{FN} \cdot \text{FN}$$</p>
+<pre><code class="language-python">import numpy as np
+from sklearn.metrics import confusion_matrix
+
+C_fp, C_fn = 1, 100   # un FN costa 100x un FP
+proba = model.predict_proba(X_val)[:, 1]
+costs = []
+ths = np.linspace(0, 1, 101)
+for t in ths:
+    tn, fp, fn, tp = confusion_matrix(y_val, (proba &gt; t).astype(int)).ravel()
+    costs.append(C_fp*fp + C_fn*fn)
+best_t = ths[np.argmin(costs)]
+</code></pre>
+<p>Best practice in ambiti dove i costi sono noti (medicina, frodi, manutenzione predittiva).</p>
+<h2 id="esempio-completo-fraud-detection">Esempio completo: fraud detection</h2>
+<pre><code class="language-python">from sklearn.model_selection import train_test_split
+from sklearn.metrics import (classification_report, roc_auc_score,
+                             average_precision_score, precision_recall_curve)
+import lightgbm as lgb
+import numpy as np
+
+X_tr, X_te, y_tr, y_te = train_test_split(X, y, test_size=0.2,
+                                          stratify=y, random_state=0)
+# class proportion: 0.5% fraud
+scale_pos_weight = (y_tr == 0).sum() / (y_tr == 1).sum()
+
+m = lgb.LGBMClassifier(
+    n_estimators=2000, learning_rate=0.05,
+    scale_pos_weight=scale_pos_weight,
+    random_state=0
+)
+m.fit(X_tr, y_tr, eval_set=[(X_te, y_te)],
+      callbacks=[lgb.early_stopping(100)])
+
+proba = m.predict_proba(X_te)[:, 1]
+print(&quot;PR AUC:&quot;, average_precision_score(y_te, proba))
+
+# threshold per precision &gt;= 0.5
+prec, rec, thr = precision_recall_curve(y_te, proba)
+mask = prec &gt;= 0.5
+idx = rec[mask].argmax()
+best_t = thr[mask[:-1]][idx-1]
+y_pred = (proba &gt;= best_t).astype(int)
+print(classification_report(y_te, y_pred))
+</code></pre>
+<h2 id="esercizi">Esercizi</h2>
+<details>
+<summary>Esercizio 1 — Effetto class_weight</summary>
+
+Su un dataset sbilanciato, confronta:
+- `LogisticRegression()`
+- `LogisticRegression(class_weight='balanced')`
+
+Plotta P, R, F1 al variare della soglia.
+
+
+<pre><code class="language-python">from sklearn.datasets import make_classification
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import precision_recall_curve
+import matplotlib.pyplot as plt
+
+X, y = make_classification(20000, weights=[0.95, 0.05], random_state=0)
+X_tr, X_te, y_tr, y_te = train_test_split(X, y, stratify=y, random_state=0)
+
+for cw in [None, 'balanced']:
+    m = LogisticRegression(max_iter=2000, class_weight=cw).fit(X_tr, y_tr)
+    proba = m.predict_proba(X_te)[:, 1]
+    p, r, _ = precision_recall_curve(y_te, proba)
+    plt.plot(r, p, label=f&quot;cw={cw}&quot;)
+plt.legend(); plt.xlabel('recall'); plt.ylabel('precision')
+</code></pre>
+
+</details>
+
+<details>
+<summary>Esercizio 2 — SMOTE dentro cross-validation</summary>
+
+
+<pre><code class="language-python">from imblearn.pipeline import Pipeline
+from imblearn.over_sampling import SMOTE
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import cross_val_score
+
+# SBAGLIATO: SMOTE fuori dalla CV
+X_res, y_res = SMOTE(random_state=0).fit_resample(X, y)
+wrong = cross_val_score(LogisticRegression(), X_res, y_res, cv=5,
+                        scoring='average_precision').mean()
+
+# GIUSTO
+pipe = Pipeline([('smote', SMOTE(random_state=0)),
+                 ('lr', LogisticRegression())])
+right = cross_val_score(pipe, X, y, cv=5,
+                       scoring='average_precision').mean()
+
+print(&quot;wrong:&quot;, wrong, &quot;right:&quot;, right)
+</code></pre>
+
+
+`wrong` è ottimisticamente gonfiato.
+</details>
+
+<details>
+<summary>Esercizio 3 — Cost-aware threshold</summary>
+
+Trova la soglia che minimizza un costo dove un falso negativo costa 100× un falso positivo.
+
+
+<pre><code class="language-python">import numpy as np
+def find_threshold(y_true, y_proba, c_fp=1, c_fn=100):
+    ths = np.linspace(0, 1, 101)
+    costs = []
+    for t in ths:
+        y_pred = (y_proba &gt; t).astype(int)
+        fp = ((y_pred==1) &amp; (y_true==0)).sum()
+        fn = ((y_pred==0) &amp; (y_true==1)).sum()
+        costs.append(c_fp*fp + c_fn*fn)
+    return ths[np.argmin(costs)], min(costs)
+</code></pre>
+
+</details>
+
+<details>
+<summary>Esercizio 4 — Quando SMOTE NON aiuta</summary>
+
+Crea un dataset dove le classi sono **inseparabili** (feature random). SMOTE peggiorerà o non cambierà nulla.
+
+
+<pre><code class="language-python">import numpy as np
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import cross_val_score
+from imblearn.over_sampling import SMOTE
+from imblearn.pipeline import Pipeline
+rng = np.random.default_rng(0)
+X = rng.standard_normal((5000, 5))
+y = rng.choice([0, 1], 5000, p=[0.95, 0.05])  # totalmente random
+
+base = LogisticRegression(max_iter=1000)
+smt = Pipeline([('s', SMOTE()), ('lr', LogisticRegression(max_iter=1000))])
+print(cross_val_score(base, X, y, cv=5, scoring='average_precision').mean())
+print(cross_val_score(smt, X, y, cv=5, scoring='average_precision').mean())
+</code></pre>
+
+
+Vicino al PR AUC = baseline = prevalenza (0.05). Niente da fare con dati senza segnale.
+</details>
+
+<h2 id="cosa-portarti-via">Cosa portarti via</h2>
+<ul>
+<li>Accuracy è inutile con sbilanciamento. PR AUC e F1 sono le tue metriche.</li>
+<li>class_weight / scale_pos_weight: prima cosa da provare, semplice e potente.</li>
+<li>SMOTE è uno strumento utile ma non magico; usalo dentro CV.</li>
+<li>Threshold moving spesso è la soluzione più efficace.</li>
+<li>Con costi noti, ottimizza per costo, non per F1.</li>
+</ul>
+<p>Prossimo: hyperparameter tuning.</p>
+      <nav class="pager">
+<a href="24-metriche-validazione.html" class="prev"><span class="label">← Precedente</span><span class="title">Metriche, cross-validation, leakage</span></a>
+<a href="26-hyperparameter-tuning.html" class="next"><span class="label">Successivo →</span><span class="title">Hyperparameter tuning</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Data Science Zero to Hero</strong> — percorso completo, in italiano, dalla matematica al deployment.</p><p>Materiale didattico aperto. Le formule sono lì per essere capite, non temute. Quando un concetto è oscuro, torna indietro: la data science è una piramide, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

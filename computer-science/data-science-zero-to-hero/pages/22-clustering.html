@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clustering: K-Means, DBSCAN, GMM, gerarchico — Data Science Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#3a4a7a',primaryTextColor:'#e8eef0',primaryBorderColor:'#5a6aa0',lineColor:'#8a9499',background:'#11171a'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">Σ</div>
+      <div>
+        <div class="brand-title">DATA SCIENCE</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">🇮🇹 IT</span><a href="../en/pages/22-clustering.html" class="lang-link" title="Switch to English">🇬🇧 EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-cos-e-data-science.html" class=""><span class="num">01</span>Cos&#x27;è la data science (e cosa non è)</a></li><li class="nav-item"><a href="../pages/02-python-per-data-science.html" class=""><span class="num">02</span>Python per data science: setup professionale</a></li><li class="nav-item"><a href="../pages/02b-matematica-essenziale.html" class=""><span class="num">02b</span>Matematica del liceo che ti serve davvero</a></li><li class="nav-item"><a href="../pages/03-algebra-lineare.html" class=""><span class="num">03</span>Algebra lineare per data scientist</a></li><li class="nav-item"><a href="../pages/04-calcolo-ottimizzazione.html" class=""><span class="num">04</span>Calcolo, gradiente e ottimizzazione</a></li><li class="nav-item"><a href="../pages/05-probabilita.html" class=""><span class="num">05</span>Probabilità: la lingua dell&#x27;incertezza</a></li><li class="nav-item"><a href="../pages/06-statistica-descrittiva.html" class=""><span class="num">06</span>Statistica descrittiva</a></li><li class="nav-item"><a href="../pages/07-statistica-inferenziale.html" class=""><span class="num">07</span>Statistica inferenziale e test di ipotesi</a></li><li class="nav-item"><a href="../pages/08-distribuzioni.html" class=""><span class="num">08</span>Distribuzioni di probabilità che incontrerai</a></li><li class="nav-item"><a href="../pages/09-numpy.html" class=""><span class="num">09</span>NumPy: pensare in array</a></li><li class="nav-item"><a href="../pages/10-pandas.html" class=""><span class="num">10</span>Pandas: il coltellino svizzero</a></li><li class="nav-item"><a href="../pages/11-sql.html" class=""><span class="num">11</span>SQL per data scientist</a></li><li class="nav-item"><a href="../pages/12-visualizzazione.html" class=""><span class="num">12</span>Visualizzazione: matplotlib, seaborn, plotly</a></li><li class="nav-item"><a href="../pages/13-data-wrangling.html" class=""><span class="num">13</span>Pulizia e data wrangling</a></li><li class="nav-item"><a href="../pages/14-feature-engineering.html" class=""><span class="num">14</span>Feature engineering</a></li><li class="nav-item"><a href="../pages/15-eda.html" class=""><span class="num">15</span>EDA: Exploratory Data Analysis</a></li><li class="nav-item"><a href="../pages/16-ml-fondamenti.html" class=""><span class="num">16</span>ML: fondamenti — bias, varianza, validazione</a></li><li class="nav-item"><a href="../pages/17-regressione-lineare.html" class=""><span class="num">17</span>Regressione lineare e regolarizzazione</a></li><li class="nav-item"><a href="../pages/18-regressione-logistica.html" class=""><span class="num">18</span>Regressione logistica e classificazione</a></li><li class="nav-item"><a href="../pages/19-knn-naive-bayes-svm.html" class=""><span class="num">19</span>KNN, Naive Bayes, SVM</a></li><li class="nav-item"><a href="../pages/20-alberi-decisionali.html" class=""><span class="num">20</span>Alberi decisionali</a></li><li class="nav-item"><a href="../pages/21-random-forest-boosting.html" class=""><span class="num">21</span>Random Forest, Gradient Boosting, XGBoost</a></li><li class="nav-item"><a href="../pages/22-clustering.html" class="active"><span class="num">22</span>Clustering: K-Means, DBSCAN, GMM, gerarchico</a></li><li class="nav-item"><a href="../pages/23-pca-tsne-umap.html" class=""><span class="num">23</span>Riduzione dimensionale: PCA, t-SNE, UMAP</a></li><li class="nav-item"><a href="../pages/24-metriche-validazione.html" class=""><span class="num">24</span>Metriche, cross-validation, leakage</a></li><li class="nav-item"><a href="../pages/25-sbilanciamento-classi.html" class=""><span class="num">25</span>Sbilanciamento di classi</a></li><li class="nav-item"><a href="../pages/26-hyperparameter-tuning.html" class=""><span class="num">26</span>Hyperparameter tuning</a></li><li class="nav-item"><a href="../pages/27-reti-neurali.html" class=""><span class="num">27</span>Reti neurali: dalle basi al backprop</a></li><li class="nav-item"><a href="../pages/28-pytorch.html" class=""><span class="num">28</span>PyTorch: dal toy model al training loop</a></li><li class="nav-item"><a href="../pages/29-cnn.html" class=""><span class="num">29</span>CNN per computer vision</a></li><li class="nav-item"><a href="../pages/30-rnn-lstm.html" class=""><span class="num">30</span>RNN, LSTM, GRU per sequenze</a></li><li class="nav-item"><a href="../pages/31-transformer.html" class=""><span class="num">31</span>Transformer e attention</a></li><li class="nav-item"><a href="../pages/32-nlp-llm.html" class=""><span class="num">32</span>NLP: dal text mining ai LLM</a></li><li class="nav-item"><a href="../pages/33-time-series.html" class=""><span class="num">33</span>Time series e forecasting</a></li><li class="nav-item"><a href="../pages/34-mlops.html" class=""><span class="num">34</span>MLOps: deployment, monitoring, drift</a></li><li class="nav-item"><a href="../pages/35-bayesian-causal.html" class=""><span class="num">35</span>Inferenza bayesiana e causale</a></li><li class="nav-item"><a href="../pages/36-capstone-carriera.html" class=""><span class="num">36</span>Capstone, portfolio, carriera</a></li><li class="nav-item"><a href="../pages/37-glossario.html" class=""><span class="num">37</span>Glossario A-Z</a></li><li class="nav-item"><a href="../pages/38-formulario.html" class=""><span class="num">38</span>Formulario: tutte le formule del percorso</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Machine Learning</span>
+        <span>Sezione 23 di 39</span>
+        <span class="level-tag level-int">Livello: intermedio</span>
+      </div>
+      <h1>Clustering: K-Means, DBSCAN, GMM, gerarchico</h1>
+      <p class="summary">Algoritmi unsupervised per trovare gruppi. Quando usarli, come valutarli (no ground truth), pitfall.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Machine Learning</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>[[algebra-lineare]]</li><li>[[ml-fondamenti]]</li></ul>
+  <div class="label">Strumenti</div>
+  <ul class="source-list"><li>scikit-learn, hdbscan</li></ul>
+</div>
+      <h2 id="cose-il-clustering">Cos'è il clustering</h2>
+<p>Raggruppare punti <strong>senza</strong> etichette, in modo che punti simili stiano insieme e punti diversi in cluster diversi. Quattro famiglie principali:</p>
+<pre><code class="language-mermaid">flowchart TD
+    C[Clustering] --&gt; P[Partition-based&lt;br/&gt;K-Means]
+    C --&gt; D[Density-based&lt;br/&gt;DBSCAN, HDBSCAN]
+    C --&gt; H[Hierarchical&lt;br/&gt;linkage agglomerativo]
+    C --&gt; M[Model-based&lt;br/&gt;GMM]
+</code></pre>
+<h2 id="k-means">K-Means</h2>
+<p>L'algoritmo più diffuso. Cerca di dividere $n$ punti in $K$ cluster minimizzando la <strong>somma delle distanze quadrate</strong> dai centri:</p>
+<p>$$J = \sum_{k=1}^K \sum_{x \in C_k} |x - \mu_k|^2$$</p>
+<h3 id="algoritmo-lloyd-1957">Algoritmo (Lloyd, 1957)</h3>
+<pre><code>1. Inizializza K centri (random o K-Means++)
+2. Ripeti:
+   a. Assegna ogni punto al centro più vicino
+   b. Ricalcola ogni centro come media dei suoi punti
+   finché i centri non cambiano
+</code></pre>
+<h3 id="visivamente-3-iterazioni-di-k-means-in-azione">Visivamente: 3 iterazioni di K-Means in azione</h3>
+<div class="chart"><svg viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg">
+<g transform="translate(10,10)">
+  <text x="80" y="-2" fill="#7aa2ff" font-size="11" text-anchor="middle">iter 1: centri random</text>
+  <rect x="0" y="5" width="160" height="140" fill="none" stroke="#444"/>
+  <circle cx="30" cy="30" r="3" fill="#888"/>
+  <circle cx="50" cy="40" r="3" fill="#888"/>
+  <circle cx="40" cy="60" r="3" fill="#888"/>
+  <circle cx="110" cy="100" r="3" fill="#888"/>
+  <circle cx="130" cy="110" r="3" fill="#888"/>
+  <circle cx="120" cy="130" r="3" fill="#888"/>
+  <path d="M 60 80 L 65 70 L 70 80 L 65 90 Z" fill="#ffb347" stroke="#ffb347" stroke-width="2"/>
+  <path d="M 100 50 L 105 40 L 110 50 L 105 60 Z" fill="#c084fc" stroke="#c084fc" stroke-width="2"/>
+</g>
+<g transform="translate(180,10)">
+  <text x="80" y="-2" fill="#7aa2ff" font-size="11" text-anchor="middle">iter 2: assegna + sposta</text>
+  <rect x="0" y="5" width="160" height="140" fill="none" stroke="#444"/>
+  <circle cx="30" cy="30" r="3" fill="#ffb347"/>
+  <circle cx="50" cy="40" r="3" fill="#ffb347"/>
+  <circle cx="40" cy="60" r="3" fill="#ffb347"/>
+  <circle cx="110" cy="100" r="3" fill="#c084fc"/>
+  <circle cx="130" cy="110" r="3" fill="#c084fc"/>
+  <circle cx="120" cy="130" r="3" fill="#c084fc"/>
+  <path d="M 40 43 L 45 33 L 50 43 L 45 53 Z" fill="#ffb347" stroke="#ffb347" stroke-width="2"/>
+  <path d="M 120 113 L 125 103 L 130 113 L 125 123 Z" fill="#c084fc" stroke="#c084fc" stroke-width="2"/>
+</g>
+<g transform="translate(350,10)">
+  <text x="80" y="-2" fill="#7aa2ff" font-size="11" text-anchor="middle">iter 3: convergenza</text>
+  <rect x="0" y="5" width="160" height="140" fill="none" stroke="#444"/>
+  <circle cx="30" cy="30" r="3" fill="#ffb347"/>
+  <circle cx="50" cy="40" r="3" fill="#ffb347"/>
+  <circle cx="40" cy="60" r="3" fill="#ffb347"/>
+  <circle cx="110" cy="100" r="3" fill="#c084fc"/>
+  <circle cx="130" cy="110" r="3" fill="#c084fc"/>
+  <circle cx="120" cy="130" r="3" fill="#c084fc"/>
+  <path d="M 35 43 L 40 33 L 45 43 L 40 53 Z" fill="#ffb347" stroke="#ffb347" stroke-width="2"/>
+  <path d="M 115 113 L 120 103 L 125 113 L 120 123 Z" fill="#c084fc" stroke="#c084fc" stroke-width="2"/>
+</g>
+</svg><div class="chart-caption">Ogni iterazione: i punti scelgono il diamante più vicino, i diamanti si spostano al baricentro del loro gruppo. Converge in pochi step.</div></div>
+
+<p>Convergenza garantita in pochi step (a un minimo locale, non globale).</p>
+<h3 id="k-means_1">K-Means++</h3>
+<p>Inizializzazione "intelligente" (Arthur &amp; Vassilvitskii, 2007):
+- Primo centro: random.
+- Successivi: probabilità proporzionale a $D(x)^2$, dove $D$ è la distanza dal centro più vicino esistente.</p>
+<p>Riduce notevolmente la dipendenza dal seed. Default in sklearn.</p>
+<h3 id="limitazioni">Limitazioni</h3>
+<ul>
+<li>Assume cluster <strong>sferici</strong> e di <strong>dimensioni simili</strong>.</li>
+<li>Sensibile a outlier.</li>
+<li>$K$ deve essere scelto a priori.</li>
+<li>Non scopre cluster di forma non convessa.</li>
+</ul>
+<h3 id="scegliere-k-elbow-method-e-silhouette">Scegliere K: elbow method e silhouette</h3>
+<p><strong>Elbow method</strong>: plotta $J(K)$ per $K = 1, 2, \dots$. Cerca il "gomito" — il punto dove l'aggiunta di un cluster non riduce più di tanto J.</p>
+<p><strong>Silhouette score</strong>: per ogni punto, $(b - a) / \max(a, b)$ dove $a$ = distanza media intra-cluster, $b$ = distanza al cluster più vicino. Range $[-1, 1]$, alto = buon clustering.</p>
+<pre><code class="language-python">from sklearn.cluster import KMeans
+from sklearn.metrics import silhouette_score
+import matplotlib.pyplot as plt
+
+inertias = []; silhouettes = []
+Ks = range(2, 11)
+for K in Ks:
+    km = KMeans(n_clusters=K, random_state=0, n_init=10).fit(X)
+    inertias.append(km.inertia_)
+    silhouettes.append(silhouette_score(X, km.labels_))
+
+fig, ax = plt.subplots(1, 2, figsize=(12, 4))
+ax[0].plot(Ks, inertias, 'o-'); ax[0].set_title('Elbow')
+ax[1].plot(Ks, silhouettes, 'o-'); ax[1].set_title('Silhouette')
+</code></pre>
+<h2 id="dbscan">DBSCAN</h2>
+<p><strong>Density-Based Spatial Clustering of Applications with Noise</strong> (Ester et al, 1996).</p>
+<p>Idea: un punto è <strong>core</strong> se ha almeno <code>min_samples</code> vicini entro raggio <code>eps</code>. Cluster = componenti connesse di core points. Resto = noise.</p>
+<h3 id="algoritmo">Algoritmo</h3>
+<pre><code>per ogni punto p non visitato:
+    se p ha &gt;= min_samples vicini entro eps:
+        crea cluster, espandi includendo vicini ricorsivamente
+    altrimenti:
+        marca p come noise
+</code></pre>
+<h3 id="vantaggi">Vantaggi</h3>
+<ul>
+<li><strong>Non serve K</strong> in input.</li>
+<li>Cluster di <strong>forma arbitraria</strong> (anche concentrici).</li>
+<li>Robusto al noise (lo identifica esplicitamente).</li>
+</ul>
+<h3 id="iperparametri">Iperparametri</h3>
+<ul>
+<li><strong>eps</strong>: raggio del neighborhood. Critico.</li>
+<li><strong>min_samples</strong>: tipicamente $2 \cdot \text{dim}$.</li>
+</ul>
+<h3 id="limitazioni_1">Limitazioni</h3>
+<ul>
+<li>Difficile con cluster di <strong>densità diverse</strong>.</li>
+<li>Sensibile a <code>eps</code> (rule of thumb: k-distance plot per sceglierlo).</li>
+<li>Scala male su dati ad alta dimensione (curse of dimensionality).</li>
+</ul>
+<h3 id="hdbscan">HDBSCAN</h3>
+<p>Estensione gerarchica di DBSCAN che gestisce densità variabili. <strong>Spesso il default moderno</strong> per clustering esplorativo. Installa con <code>pip install hdbscan</code>.</p>
+<pre><code class="language-python">import hdbscan
+clusterer = hdbscan.HDBSCAN(min_cluster_size=15)
+labels = clusterer.fit_predict(X)
+</code></pre>
+<h2 id="gaussian-mixture-models-gmm">Gaussian Mixture Models (GMM)</h2>
+<p>Modello probabilistico: assume i dati generati da una <strong>miscela</strong> di $K$ gaussiane multivariate:</p>
+<p>$$p(x) = \sum_{k=1}^K \pi_k \mathcal{N}(x | \mu_k, \Sigma_k)$$</p>
+<p>Allenato con <strong>EM (Expectation-Maximization)</strong>:</p>
+<ol>
+<li><strong>E-step</strong>: per ogni punto, calcola la probabilità di appartenenza a ogni cluster.</li>
+<li><strong>M-step</strong>: aggiorna $\mu_k, \Sigma_k, \pi_k$ dato l'assegnamento soft.</li>
+</ol>
+<h3 id="differenze-con-k-means">Differenze con K-Means</h3>
+<ul>
+<li>Soft assignment: ogni punto ha una <strong>probabilità</strong> in ciascun cluster, non una assegnazione hard.</li>
+<li>Cluster di <strong>forma ellittica</strong> (covarianze full), non solo sferiche.</li>
+<li>Output: <strong>densità</strong> modellata, utile per anomaly detection.</li>
+</ul>
+<h3 id="tipi-di-covariance">Tipi di covariance</h3>
+<ul>
+<li><code>'full'</code>: ogni cluster ha la sua matrice di covarianza piena (più espressivo).</li>
+<li><code>'tied'</code>: tutti i cluster condividono.</li>
+<li><code>'diag'</code>: solo diagonale (più veloce).</li>
+<li><code>'spherical'</code>: come K-Means.</li>
+</ul>
+<pre><code class="language-python">from sklearn.mixture import GaussianMixture
+gmm = GaussianMixture(n_components=3, covariance_type='full', random_state=0).fit(X)
+labels = gmm.predict(X)
+proba = gmm.predict_proba(X)        # soft assignment
+log_likelihood = gmm.score_samples(X)  # densità (utile per anomalie)
+</code></pre>
+<h3 id="selezione-di-k-via-bic-aic">Selezione di K via BIC / AIC</h3>
+<p>$$\text{BIC} = -2 \log L + k \log n$$</p>
+<p>Più basso = meglio. Penalizza modelli con troppi parametri.</p>
+<pre><code class="language-python">ks = range(1, 11)
+bics = [GaussianMixture(K, random_state=0).fit(X).bic(X) for K in ks]
+plt.plot(ks, bics, 'o-')
+</code></pre>
+<h2 id="hierarchical-clustering">Hierarchical clustering</h2>
+<p>Costruisce un <strong>dendrogramma</strong> — un albero di fusioni o divisioni.</p>
+<ul>
+<li><strong>Agglomerativo (bottom-up)</strong>: parte da $n$ cluster di 1 punto, fonde i più vicini.</li>
+<li><strong>Divisivo (top-down)</strong>: parte da 1 cluster di $n$ punti, divide. Meno comune.</li>
+</ul>
+<h3 id="linkage-criteria">Linkage criteria</h3>
+<p>Come si misura la distanza tra cluster?</p>
+<ul>
+<li><strong>Single</strong>: distanza minima tra due punti dei cluster. Chain-effect, snake-like.</li>
+<li><strong>Complete</strong>: distanza massima. Cluster compatti, sferici.</li>
+<li><strong>Average</strong>: media. Compromesso.</li>
+<li><strong>Ward</strong>: minimizza la varianza dopo fusione. Tende a produrre cluster di taglia simile, spesso il default migliore.</li>
+</ul>
+<pre><code class="language-python">from sklearn.cluster import AgglomerativeClustering
+agg = AgglomerativeClustering(n_clusters=5, linkage='ward').fit(X)
+
+from scipy.cluster.hierarchy import linkage, dendrogram
+import matplotlib.pyplot as plt
+Z = linkage(X, method='ward')
+plt.figure(figsize=(12, 5))
+dendrogram(Z, truncate_mode='lastp', p=20)
+</code></pre>
+<h2 id="quale-algoritmo-scegliere">Quale algoritmo scegliere?</h2>
+<pre><code class="language-mermaid">flowchart TD
+    Q[Cosa hai?] --&gt; Q1{Conosci K?}
+    Q1 --&gt;|sì| Q2{Cluster&lt;br/&gt;sferici?}
+    Q2 --&gt;|sì| KM[K-Means]
+    Q2 --&gt;|no| GM[GMM]
+    Q1 --&gt;|no, vuoi esplorare| Q3{Densità&lt;br/&gt;variabile?}
+    Q3 --&gt;|no| DB[DBSCAN]
+    Q3 --&gt;|sì| HD[HDBSCAN]
+    Q1 --&gt;|no, vuoi gerarchia| H[Hierarchical]
+</code></pre>
+<h2 id="valutazione-senza-ground-truth">Valutazione SENZA ground truth</h2>
+<ul>
+<li><strong>Silhouette score</strong> (interno): $-1$ a $1$, alto buono.</li>
+<li><strong>Calinski-Harabasz</strong>: rapporto disp. tra cluster / dispersione interna.</li>
+<li><strong>Davies-Bouldin</strong>: media rapporto disp.intra/dist.tra. Basso = buono.</li>
+</ul>
+<p>Con ground truth (raro):</p>
+<ul>
+<li><strong>Adjusted Rand Index (ARI)</strong>: -1..1.</li>
+<li><strong>Normalized Mutual Information (NMI)</strong>: 0..1.</li>
+</ul>
+<h2 id="pre-processing-obbligatorio">Pre-processing: obbligatorio</h2>
+<ol>
+<li><strong>Scaling</strong>: K-Means usa distanza euclidea. Feature in scala diversa = dominata.</li>
+<li><strong>Riduzione dim</strong>: in alta dim, distanze diventano "tutte uguali". Considera PCA prima.</li>
+<li><strong>Outlier handling</strong>: K-Means è devastato. DBSCAN li gestisce.</li>
+</ol>
+<h2 id="esempio-customer-segmentation">Esempio: customer segmentation</h2>
+<pre><code class="language-python">from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import KMeans
+from sklearn.decomposition import PCA
+import matplotlib.pyplot as plt
+
+# RFM features per ogni cliente
+X = customers[['recency', 'frequency', 'monetary']].values
+X_s = StandardScaler().fit_transform(X)
+
+km = KMeans(n_clusters=4, random_state=0, n_init=10).fit(X_s)
+customers['cluster'] = km.labels_
+
+# visualizza in 2D
+X_2d = PCA(n_components=2).fit_transform(X_s)
+plt.scatter(X_2d[:, 0], X_2d[:, 1], c=km.labels_, cmap='tab10', alpha=0.6)
+
+# descrivi i cluster
+customers.groupby('cluster')[['recency','frequency','monetary']].mean()
+</code></pre>
+<p>Tipicamente otterrai 4 segmenti tipo "campioni", "fedeli a basso valore", "in fuga", "una tantum". Useful per marketing campaigns differenziati.</p>
+<h2 id="esercizi">Esercizi</h2>
+<details>
+<summary>Esercizio 1 — Elbow + Silhouette su iris</summary>
+
+
+<pre><code class="language-python">from sklearn.cluster import KMeans
+from sklearn.metrics import silhouette_score
+from sklearn.datasets import load_iris
+import matplotlib.pyplot as plt
+
+X = load_iris().data
+inert = []; sil = []
+for K in range(2, 10):
+    km = KMeans(K, random_state=0, n_init=10).fit(X)
+    inert.append(km.inertia_); sil.append(silhouette_score(X, km.labels_))
+
+fig, ax = plt.subplots(1, 2, figsize=(10,4))
+ax[0].plot(range(2,10), inert, 'o-'); ax[0].set_title('Elbow')
+ax[1].plot(range(2,10), sil, 'o-'); ax[1].set_title('Silhouette')
+</code></pre>
+
+
+L'elbow è ambiguo (3 o 4), silhouette suggerisce 2. Realmente le specie sono 3, ma 2 di esse sono difficilmente separabili senza il target.
+</details>
+
+<details>
+<summary>Esercizio 2 — DBSCAN su cerchi concentrici</summary>
+
+
+<pre><code class="language-python">from sklearn.datasets import make_circles
+from sklearn.cluster import DBSCAN, KMeans
+import matplotlib.pyplot as plt
+
+X, _ = make_circles(n_samples=500, noise=0.05, factor=0.5, random_state=0)
+fig, ax = plt.subplots(1, 2, figsize=(10, 4))
+
+km = KMeans(2, random_state=0, n_init=10).fit(X)
+ax[0].scatter(X[:,0], X[:,1], c=km.labels_); ax[0].set_title('K-Means')
+
+db = DBSCAN(eps=0.2, min_samples=5).fit(X)
+ax[1].scatter(X[:,0], X[:,1], c=db.labels_); ax[1].set_title('DBSCAN')
+</code></pre>
+
+
+K-Means fallisce miseramente (taglia in due metà), DBSCAN trova i due cerchi.
+</details>
+
+<details>
+<summary>Esercizio 3 — GMM per anomaly detection</summary>
+
+Allena un GMM su dati "normali", flagga come anomalie i punti con bassa densità.
+
+
+<pre><code class="language-python">from sklearn.mixture import GaussianMixture
+import numpy as np
+rng = np.random.default_rng(0)
+X_normal = rng.standard_normal((1000, 2))
+X_test = rng.standard_normal((200, 2))
+X_test[:10] = rng.uniform(-5, 5, (10, 2))   # outlier inseriti
+
+gmm = GaussianMixture(n_components=3, random_state=0).fit(X_normal)
+scores = gmm.score_samples(X_test)
+threshold = np.percentile(scores, 5)
+anomalies = scores &lt; threshold
+print(f&quot;trovate {anomalies.sum()} anomalie su 200&quot;)
+</code></pre>
+
+</details>
+
+<details>
+<summary>Esercizio 4 — Customer segmentation completo</summary>
+
+Su un dataset di transazioni, calcola RFM, cluster K-Means a 4, descrivi cluster.
+
+
+<pre><code class="language-python"># pseudo: orders DataFrame con user_id, order_date, amount
+ref = orders.order_date.max()
+rfm = orders.groupby('user_id').agg(
+    R=('order_date', lambda s: (ref-s.max()).days),
+    F=('amount', 'count'),
+    M=('amount', 'sum'),
+)
+from sklearn.preprocessing import StandardScaler
+X = StandardScaler().fit_transform(np.log1p(rfm))
+km = KMeans(4, random_state=0, n_init=10).fit(X)
+rfm['cluster'] = km.labels_
+print(rfm.groupby('cluster').agg(['mean','count']))
+</code></pre>
+
+</details>
+
+<h2 id="cosa-portarti-via">Cosa portarti via</h2>
+<ul>
+<li>K-Means = default veloce, ma forma sferica e K noto.</li>
+<li>DBSCAN/HDBSCAN per shape arbitrary e rilevazione noise.</li>
+<li>GMM per soft assignment e modello probabilistico.</li>
+<li>Hierarchical per esplorazione e dendrogramma.</li>
+<li>Senza ground truth: silhouette + senso comune + domain check.</li>
+<li>Scaling sempre obbligatorio. PCA prima del clustering se $d &gt; 20$.</li>
+</ul>
+<p>Prossimo: riduzione dimensionale.</p>
+      <nav class="pager">
+<a href="21-random-forest-boosting.html" class="prev"><span class="label">← Precedente</span><span class="title">Random Forest, Gradient Boosting, XGBoost</span></a>
+<a href="23-pca-tsne-umap.html" class="next"><span class="label">Successivo →</span><span class="title">Riduzione dimensionale: PCA, t-SNE, UMAP</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Data Science Zero to Hero</strong> — percorso completo, in italiano, dalla matematica al deployment.</p><p>Materiale didattico aperto. Le formule sono lì per essere capite, non temute. Quando un concetto è oscuro, torna indietro: la data science è una piramide, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

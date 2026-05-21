@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>JPA / Hibernate: entità, relazioni, lazy/eager, N+1, cache — Java + Spring Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">☕</div>
+      <div>
+        <div class="brand-title">JAVA · SPRING</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="10" height="20" fill="#009246"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ce2b37"/></svg> IT</span><a href="../en/pages/20-jpa-hibernate.html" class="lang-link" title="Switch to English"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="30" height="20" fill="#012169"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#fff" stroke-width="3"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#c8102e" stroke-width="1.5"/><path d="M15,0 v20 M0,10 h30" stroke="#fff" stroke-width="5"/><path d="M15,0 v20 M0,10 h30" stroke="#c8102e" stroke-width="3"/></svg> EN</a></div>
+  </div>
+  <div class="search-wrap">
+    <div class="search-row">
+      <div class="search-inputwrap">
+        <span class="search-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"/>
+            <line x1="20" y1="20" x2="16.65" y2="16.65"/>
+          </svg>
+        </span>
+        <input class="search-input" id="search-input" type="text" placeholder="cerca... (premi /)" autocomplete="off" aria-label="Search">
+        <button class="search-clear" id="search-clear" type="button" aria-label="Clear" title="Clear">&times;</button>
+      </div>
+      <button class="search-btn" id="search-btn" type="button" aria-label="CERCA" title="CERCA">CERCA</button>
+    </div>
+    <div class="search-hits" id="search-hits" role="listbox"></div>
+  </div>
+  <div class="sidebar-nav">
+    <nav class="nav-section">
+      <div class="nav-section-title">Percorso</div>
+      <ul class="nav-list">
+        <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+        <li class="nav-item"><a href="../pages/00-percorso-e-mindset.html" class=""><span class="num">00</span>Il percorso e la giusta mentalità</a></li><li class="nav-item"><a href="../pages/01-introduzione-java.html" class=""><span class="num">01</span>Java: cos&#x27;è davvero, JVM/JRE/JDK, primo programma</a></li><li class="nav-item"><a href="../pages/02-sintassi-base.html" class=""><span class="num">02</span>Sintassi di base: tipi, variabili, operatori, controllo di flusso</a></li><li class="nav-item"><a href="../pages/03-stringhe-array-io.html" class=""><span class="num">03</span>Stringhe, array, I/O da console</a></li><li class="nav-item"><a href="../pages/04-oop-classi-oggetti.html" class=""><span class="num">04</span>OOP I — Classi, oggetti, costruttori, this, package, visibilità</a></li><li class="nav-item"><a href="../pages/05-oop-ereditarieta-polimorfismo.html" class=""><span class="num">05</span>OOP II — Ereditarietà, polimorfismo, interfacce, classi astratte</a></li><li class="nav-item"><a href="../pages/06-equals-hashcode-immutabilita.html" class=""><span class="num">06</span>OOP III — equals, hashCode, toString, immutabilità, record</a></li><li class="nav-item"><a href="../pages/07-eccezioni.html" class=""><span class="num">07</span>Eccezioni: checked vs unchecked, try-with-resources, custom</a></li><li class="nav-item"><a href="../pages/08-generics.html" class=""><span class="num">08</span>Generics: tipi parametrici, PECS, type erasure, wildcards</a></li><li class="nav-item"><a href="../pages/09-collections.html" class=""><span class="num">09</span>Collections: List, Set, Map, Queue, complessità, scelta della struttura</a></li><li class="nav-item"><a href="../pages/10-stream-lambda-optional.html" class=""><span class="num">10</span>Stream API, lambda, functional interfaces, Optional</a></li><li class="nav-item"><a href="../pages/11-io-nio.html" class=""><span class="num">11</span>I/O e NIO.2: File, Path, channels, buffer</a></li><li class="nav-item"><a href="../pages/12-concurrency-thread.html" class=""><span class="num">12</span>Concurrency I — Thread, sincronizzazione, volatile, Java Memory Model</a></li><li class="nav-item"><a href="../pages/13-executor-future-completablefuture.html" class=""><span class="num">13</span>Concurrency II — ExecutorService, Future, CompletableFuture</a></li><li class="nav-item"><a href="../pages/14-concurrency-jucconcurrent.html" class=""><span class="num">14</span>Concurrency III — java.util.concurrent: locks, atomics, concurrent collections</a></li><li class="nav-item"><a href="../pages/15-jvm-internals.html" class=""><span class="num">15</span>JVM internals: classloader, bytecode, runtime data areas, JIT</a></li><li class="nav-item"><a href="../pages/16-memoria-gc.html" class=""><span class="num">16</span>Memoria e garbage collection: G1, ZGC, Shenandoah</a></li><li class="nav-item"><a href="../pages/17-profiling-jfr.html" class=""><span class="num">17</span>Profiling: JFR, async-profiler, jstack, heap dump, jcmd</a></li><li class="nav-item"><a href="../pages/18-java-moderno.html" class=""><span class="num">18</span>Java moderno: dal 8 al 21 — features chiave</a></li><li class="nav-item"><a href="../pages/19-jdbc.html" class=""><span class="num">19</span>JDBC: connessione, PreparedStatement, transazioni, isolation levels</a></li><li class="nav-item"><a href="../pages/20-jpa-hibernate.html" class="active"><span class="num">20</span>JPA / Hibernate: entità, relazioni, lazy/eager, N+1, cache</a></li><li class="nav-item"><a href="../pages/21-sql-essenziale.html" class=""><span class="num">21</span>SQL essenziale per chi sviluppa in Java</a></li><li class="nav-item"><a href="../pages/22-spring-intro-ioc-di.html" class=""><span class="num">22</span>Spring intro: IoC, DI, ApplicationContext, BeanFactory</a></li><li class="nav-item"><a href="../pages/23-spring-beans-lifecycle.html" class=""><span class="num">23</span>Bean: scopes, lifecycle, BeanPostProcessor, FactoryBean</a></li><li class="nav-item"><a href="../pages/24-spring-configurazione.html" class=""><span class="num">24</span>Configurazione: Java config, @ComponentScan, profili, conditionals, properties</a></li><li class="nav-item"><a href="../pages/25-spring-aop-transactional.html" class=""><span class="num">25</span>AOP, proxy, @Transactional: cosa accade davvero</a></li><li class="nav-item"><a href="../pages/26-spring-boot.html" class=""><span class="num">26</span>Spring Boot: auto-configuration, starters, Actuator</a></li><li class="nav-item"><a href="../pages/27-spring-data-jpa.html" class=""><span class="num">27</span>Spring Data JPA: Repository, derived queries, paginazione, Specification</a></li><li class="nav-item"><a href="../pages/28-spring-mvc-rest.html" class=""><span class="num">28</span>Spring MVC: DispatcherServlet, controller, REST endpoint</a></li><li class="nav-item"><a href="../pages/29-rest-openapi-hateoas.html" class=""><span class="num">29</span>REST: best practice, OpenAPI/Swagger, HATEOAS, versionamento</a></li><li class="nav-item"><a href="../pages/30-spring-webflux.html" class=""><span class="num">30</span>Spring WebFlux + Reactor: Mono, Flux, programmazione reattiva</a></li><li class="nav-item"><a href="../pages/31-spring-security.html" class=""><span class="num">31</span>Spring Security: filter chain, autenticazione, autorizzazione, JWT, OAuth2</a></li><li class="nav-item"><a href="../pages/32-spring-cloud.html" class=""><span class="num">32</span>Spring Cloud: Config Server, Discovery, Gateway, Resilience4j</a></li><li class="nav-item"><a href="../pages/33-testing.html" class=""><span class="num">33</span>Testing: JUnit 5, Mockito, MockMvc, Testcontainers</a></li><li class="nav-item"><a href="../pages/34-spring-batch-intro.html" class=""><span class="num">34</span>Spring Batch intro: domain model, Job, Step, primo batch</a></li><li class="nav-item"><a href="../pages/35-spring-batch-jobrepository.html" class=""><span class="num">35</span>JobRepository, JobLauncher, schema dei metadati</a></li><li class="nav-item"><a href="../pages/36-spring-batch-chunk-skip-retry.html" class=""><span class="num">36</span>Chunk processing: commit interval, skip, retry, fault tolerance</a></li><li class="nav-item"><a href="../pages/37-spring-batch-tasklet-flow.html" class=""><span class="num">37</span>Tasklet vs Chunk; flow control: decisioni, split, conditional</a></li><li class="nav-item"><a href="../pages/38-spring-batch-itemreader.html" class=""><span class="num">38</span>ItemReader: flat file, XML/JSON, JDBC cursor/paging, JPA, multi-resource</a></li><li class="nav-item"><a href="../pages/39-spring-batch-itemwriter.html" class=""><span class="num">39</span>ItemWriter: file, JDBC, JPA, composite, classifier, batch insert</a></li><li class="nav-item"><a href="../pages/40-spring-batch-scaling-partitioning.html" class=""><span class="num">40</span>Scaling: multi-threaded step, partitioning, remote chunking/partitioning</a></li><li class="nav-item"><a href="../pages/41-spring-batch-listeners-restart-k8s.html" class=""><span class="num">41</span>Listeners, restart, monitoring, integrazione con Spring Boot e Kubernetes</a></li><li class="nav-item"><a href="../pages/42-design-patterns.html" class=""><span class="num">42</span>Design pattern in Java/Spring: GoF + DDD-lite</a></li><li class="nav-item"><a href="../pages/43-performance-observability.html" class=""><span class="num">43</span>Performance tuning e observability production-grade</a></li><li class="nav-item"><a href="../pages/44-esercizi-sintesi.html" class=""><span class="num">44</span>50 esercizi cumulativi: dalla sintassi a Spring Batch</a></li><li class="nav-item"><a href="../pages/45-progetto-finale-etl.html" class=""><span class="num">45</span>Progetto finale guidato: ETL bancario notturno</a></li>
+      </ul>
+    </nav>
+  </div>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Persistenza</span>
+        <span>Sezione 20 di 45</span>
+        <span class="level-tag level-adv">Livello: avanzato</span>
+      </div>
+      <h1>JPA / Hibernate: entità, relazioni, lazy/eager, N+1, cache</h1>
+      <p class="summary">JPA come specifica, Hibernate come implementazione. Entità, @Id, @GeneratedValue, @Column. Relazioni @OneToMany, @ManyToOne, fetch type. PersistenceContext, JPQL. Problema N+1 e come evitarlo. Cache L1, L2, query cache.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Persistenza</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>Sezione 19</li></ul>
+  <div class="label">Strumenti</div>
+  <ul class="source-list"><li>JDK 21</li><li>Hibernate 6.x</li><li>Spring Boot</li></ul>
+</div>
+      <h2 id="jpa-vs-hibernate">JPA vs Hibernate</h2>
+<ul>
+<li><strong>JPA (Jakarta Persistence API)</strong>: specifica standard, <code>jakarta.persistence.*</code>. Solo interfacce.</li>
+<li><strong>Hibernate</strong>: l'implementazione più diffusa. Spring Boot la usa di default.</li>
+</ul>
+<p>Esistono altre implementazioni (EclipseLink, OpenJPA), ma Hibernate vince.</p>
+<h2 id="entita">Entità</h2>
+<pre><code class="language-java">import jakarta.persistence.*;
+
+@Entity
+@Table(name = &quot;customer&quot;)
+public class Customer {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, length = 100)
+    private String name;
+
+    @Column(unique = true)
+    private String email;
+
+    @Column(name = &quot;created_at&quot;)
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    // costruttore vuoto OBBLIGATORIO da JPA
+    public Customer() {}
+    public Customer(String name, String email) { this.name = name; this.email = email; }
+    // getter, setter, equals, hashCode...
+}
+</code></pre>
+<blockquote>
+<p>JPA richiede un costruttore senza argomenti (lo usa per creare istanze da DB).</p>
+</blockquote>
+<h3 id="id-e-generazione"><code>@Id</code> e generazione</h3>
+<table>
+<thead>
+<tr>
+<th>Strategy</th>
+<th>Quando</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>IDENTITY</code></td>
+<td>Auto-increment (Postgres <code>SERIAL</code>, MySQL <code>AUTO_INCREMENT</code>)</td>
+</tr>
+<tr>
+<td><code>SEQUENCE</code></td>
+<td>Sequenza DB (Postgres, Oracle) — più batch-friendly</td>
+</tr>
+<tr>
+<td><code>UUID</code> (Hibernate)</td>
+<td>Per chiavi UUID</td>
+</tr>
+<tr>
+<td><code>AUTO</code></td>
+<td>Hibernate sceglie</td>
+</tr>
+</tbody>
+</table>
+<h3 id="relazioni">Relazioni</h3>
+<pre><code class="language-java">@Entity
+public class Order {
+    @Id @GeneratedValue private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = &quot;customer_id&quot;)
+    private Customer customer;
+
+    @OneToMany(mappedBy = &quot;order&quot;, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List&lt;OrderLine&gt; lines = new ArrayList&lt;&gt;();
+}
+
+@Entity
+public class OrderLine {
+    @Id @GeneratedValue private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = &quot;order_id&quot;)
+    private Order order;
+
+    private String product;
+    private BigDecimal price;
+}
+</code></pre>
+<h3 id="fetch-type">Fetch type</h3>
+<ul>
+<li><code>LAZY</code>: l'associazione viene caricata solo quando la usi (proxy).</li>
+<li><code>EAGER</code>: caricata sempre, anche se non ti serve.</li>
+</ul>
+<p><strong>Regola</strong>: usa <strong>sempre <code>LAZY</code></strong> per associazioni <code>@ManyToOne</code>, <code>@OneToMany</code>. <code>EAGER</code> è una piaga: carica troppi dati. Default JPA: <code>@OneToMany</code>/<code>@ManyToMany</code> = LAZY, <code>@ManyToOne</code>/<code>@OneToOne</code> = EAGER. <strong>Cambia sempre i <code>@ManyToOne</code> in LAZY.</strong></p>
+<h2 id="entitymanager-e-persistencecontext">EntityManager e PersistenceContext</h2>
+<pre><code class="language-java">@PersistenceContext
+private EntityManager em;
+
+public Customer save(Customer c) {
+    em.persist(c);   // INSERT
+    return c;
+}
+
+public Customer find(Long id) {
+    return em.find(Customer.class, id);   // SELECT by id
+}
+
+public void delete(Long id) {
+    Customer c = em.find(Customer.class, id);
+    em.remove(c);
+}
+</code></pre>
+<p>Il <strong>persistence context</strong> è una cache di prima livello: tiene le entità "managed". Modifiche a entità managed sono auto-rilevate (dirty checking) e flushate al commit:</p>
+<pre><code class="language-java">@Transactional
+public void rinomina(Long id, String nuovoNome) {
+    Customer c = em.find(Customer.class, id);   // managed
+    c.setName(nuovoNome);                        // niente em.merge necessario
+    // a fine metodo, JPA fa l'UPDATE
+}
+</code></pre>
+<h2 id="jpql-e-criteria-api">JPQL e Criteria API</h2>
+<h3 id="jpql-sql-su-entita">JPQL: SQL su entità</h3>
+<pre><code class="language-java">TypedQuery&lt;Customer&gt; q = em.createQuery(
+    &quot;SELECT c FROM Customer c WHERE c.name LIKE :name&quot;, Customer.class);
+q.setParameter(&quot;name&quot;, &quot;A%&quot;);
+List&lt;Customer&gt; result = q.getResultList();
+</code></pre>
+<p>JPQL usa <strong>nomi di entità e campi Java</strong>, non tabelle/colonne SQL.</p>
+<h3 id="criteria-per-query-dinamiche">Criteria (per query dinamiche)</h3>
+<pre><code class="language-java">CriteriaBuilder cb = em.getCriteriaBuilder();
+CriteriaQuery&lt;Customer&gt; q = cb.createQuery(Customer.class);
+Root&lt;Customer&gt; root = q.from(Customer.class);
+q.where(cb.like(root.get(&quot;name&quot;), &quot;A%&quot;));
+List&lt;Customer&gt; result = em.createQuery(q).getResultList();
+</code></pre>
+<p>In Spring Data preferisci <code>JpaSpecificationExecutor</code>.</p>
+<h2 id="il-problema-n1">Il problema N+1</h2>
+<pre><code class="language-java">List&lt;Order&gt; orders = em.createQuery(&quot;SELECT o FROM Order o&quot;, Order.class).getResultList();
+for (Order o : orders) {
+    System.out.println(o.getCustomer().getName());   // BOOM: query per ogni order
+}
+</code></pre>
+<p>Una SELECT per le order (1) + N SELECT per il customer di ognuna = <strong>N+1 query</strong>. È il bug più frequente di tutto JPA.</p>
+<h3 id="soluzioni">Soluzioni</h3>
+<ol>
+<li><strong>JOIN FETCH</strong> (uguale, una sola query):
+   <code>java
+   "SELECT o FROM Order o JOIN FETCH o.customer"</code></li>
+<li><strong><code>@EntityGraph</code></strong> (Spring Data):
+   <code>java
+   @EntityGraph(attributePaths = "customer")
+   List&lt;Order&gt; findAll();</code></li>
+<li><strong>Batch size</strong>:
+   <code>java
+   @ManyToOne(fetch = LAZY)
+   @BatchSize(size = 50)   // Hibernate
+   private Customer customer;</code></li>
+</ol>
+<blockquote>
+<p><strong>Per ogni query JPA</strong>, chiediti: "quante SELECT esegue davvero?" Attiva <code>spring.jpa.show-sql=true</code> durante lo sviluppo.</p>
+</blockquote>
+<h2 id="cache">Cache</h2>
+<h3 id="l1-persistence-context-gratis">L1 — persistence context (gratis)</h3>
+<p>Tutte le entità lette in una transazione sono cachate. <code>em.find(X.class, 1)</code> due volte = una sola SELECT.</p>
+<h3 id="l2-second-level-cache-opzionale">L2 — second-level cache (opzionale)</h3>
+<pre><code class="language-yaml">spring:
+  jpa:
+    properties:
+      hibernate.cache.use_second_level_cache: true
+      hibernate.cache.region.factory_class: org.hibernate.cache.jcache.JCacheRegionFactory
+</code></pre>
+<pre><code class="language-java">@Entity
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+public class Customer { ... }
+</code></pre>
+<p>Cachano per <strong>classe</strong>, condivisa fra transazioni. Attenta con dati che cambiano.</p>
+<h3 id="query-cache">Query cache</h3>
+<p>Cachano i risultati di JPQL. Raramente la attivi: di solito è meglio una cache applicativa (Caffeine/Redis).</p>
+<h2 id="transazioni-in-jpa-spring">Transazioni in JPA / Spring</h2>
+<pre><code class="language-java">@Transactional
+public Order placeOrder(NewOrderRequest r) {
+    Customer c = repo.findById(r.customerId()).orElseThrow();
+    Order o = new Order(c);
+    r.lines().forEach(l -&gt; o.addLine(new OrderLine(l.product(), l.price())));
+    return repo.save(o);
+}
+</code></pre>
+<p><code>@Transactional</code>: il proxy Spring apre una transazione all'entrata, commit/rollback all'uscita. Vedi sezione 25 (AOP) e 27 (Spring Data JPA).</p>
+<h2 id="esercizi">Esercizi</h2>
+<details>
+<summary>Es 20.1 — Entità + repository</summary>
+
+Modella `Customer`, `Order`, `OrderLine`. Implementa CRUD basic con Spring Data:
+
+
+<pre><code class="language-java">public interface CustomerRepository extends JpaRepository&lt;Customer, Long&gt; {
+    List&lt;Customer&gt; findByNameContainingIgnoreCase(String s);
+}
+</code></pre>
+
+
+</details>
+
+<details>
+<summary>Es 20.2 — Riproduci N+1</summary>
+
+Carica `findAll()` di Order e itera su `o.getCustomer().getName()`. Attiva `show-sql` e conta le query. Risolvi con `@EntityGraph`.
+
+</details>
+
+<details>
+<summary>Es 20.3 — Dirty checking</summary>
+
+
+<pre><code class="language-java">@Transactional
+public void rinomina(Long id, String nuovoNome) {
+    Customer c = em.find(Customer.class, id);
+    c.setName(nuovoNome);   // niente save
+}
+</code></pre>
+
+
+Verifica nei log che parte una sola UPDATE.
+
+</details>
+
+<h2 id="cosa-devi-portarti-via">Cosa devi portarti via</h2>
+<ul>
+<li>JPA = specifica, Hibernate = implementazione (la userai).</li>
+<li><code>@Entity</code> + <code>@Id</code> + <code>@GeneratedValue</code>. Costruttore senza args obbligatorio.</li>
+<li><strong>Sempre LAZY</strong> sui <code>@ManyToOne</code>.</li>
+<li><strong>N+1</strong> è il bug più frequente. Risolvi con <code>JOIN FETCH</code> o <code>@EntityGraph</code>.</li>
+<li>Persistence context = cache L1. Modifiche a entità managed sono auto-flushate.</li>
+<li><code>@Transactional</code> su metodi di servizio.</li>
+</ul>
+<p>Prossimo: SQL essenziale per il programmatore Java.</p>
+      <nav class="pager">
+<a href="19-jdbc.html" class="prev"><span class="label">← Precedente</span><span class="title">JDBC: connessione, PreparedStatement, transazioni, isolation levels</span></a>
+<a href="21-sql-essenziale.html" class="next"><span class="label">Successivo →</span><span class="title">SQL essenziale per chi sviluppa in Java</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Java + Spring Zero to Hero</strong> — percorso completo da Java base a Spring Batch in produzione.</p><p>Materiale a scopo educativo. Codice sotto licenza MIT; usalo liberamente nei tuoi progetti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body, {delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true, background: '#15191e', primaryColor: '#1d2530',
+      primaryTextColor: '#eef1f5', primaryBorderColor: '#f89820',
+      lineColor: '#6db33f', secondaryColor: '#1a1f25', tertiaryColor: '#222a33',
+      mainBkg: '#1d2530', nodeBorder: '#f89820', clusterBkg: '#0f1318',
+      clusterBorder: '#2a3340', titleColor: '#f89820',
+      edgeLabelBackground: '#0f1318', textColor: '#eef1f5',
+      labelTextColor: '#eef1f5', actorBkg: '#1d2530', actorBorder: '#f89820',
+      actorTextColor: '#f89820', actorLineColor: '#6db33f',
+      signalColor: '#eef1f5', signalTextColor: '#eef1f5',
+      labelBoxBkgColor: '#1d2530', labelBoxBorderColor: '#f89820',
+      noteBkgColor: '#fff6a8', noteTextColor: '#0f1318', noteBorderColor: '#fff6a8',
+      activationBkgColor: '#1d2530', activationBorderColor: '#f89820',
+      sequenceNumberColor: '#0f1318'
+    },
+    flowchart: { curve: 'basis', padding: 16 },
+    sequence: { mirrorActors: false, bottomMarginAdj: 10 },
+    fontFamily: 'JetBrains Mono, Cascadia Code, Consolas, monospace'
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Containers: ECS, EKS, Fargate, ECR — AWS Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#232f3e',primaryTextColor:'#ffffff',primaryBorderColor:'#ff9900',lineColor:'#8a99ad',background:'#0c1320'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">λ</div>
+      <div>
+        <div class="brand-title">AWS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/17-containers-ecs-eks-fargate.html" class="lang-link" title="Passa all'italiano">IT</a><span class="lang-active" title="English">EN</span></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="search... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-what-is-cloud-and-aws.html" class=""><span class="num">01</span>What the cloud is, and what AWS is</a></li><li class="nav-item"><a href="../pages/02-global-infrastructure.html" class=""><span class="num">02</span>Global infrastructure: Regions, AZs, Edge</a></li><li class="nav-item"><a href="../pages/03-account-root-billing.html" class=""><span class="num">03</span>AWS account, root user, billing</a></li><li class="nav-item"><a href="../pages/04-iam-fundamentals.html" class=""><span class="num">04</span>IAM — fundamentals (users, groups, roles, policies)</a></li><li class="nav-item"><a href="../pages/05-iam-advanced.html" class=""><span class="num">05</span>IAM advanced: conditional policies, STS, ABAC</a></li><li class="nav-item"><a href="../pages/06-cli-sdk-iac.html" class=""><span class="num">06</span>CLI, SDK, CloudShell, IaC primer</a></li><li class="nav-item"><a href="../pages/07-pricing-billing.html" class=""><span class="num">07</span>Pricing, billing, free tier, cost tools</a></li><li class="nav-item"><a href="../pages/08-organizations-multi-account.html" class=""><span class="num">08</span>AWS Organizations &amp; multi-account strategy</a></li><li class="nav-item"><a href="../pages/09-vpc-fundamentals.html" class=""><span class="num">09</span>VPC — fundamentals</a></li><li class="nav-item"><a href="../pages/10-vpc-advanced.html" class=""><span class="num">10</span>VPC advanced: peering, TGW, PrivateLink, endpoints</a></li><li class="nav-item"><a href="../pages/11-route53-cloudfront.html" class=""><span class="num">11</span>Route 53, CloudFront, Global Accelerator</a></li><li class="nav-item"><a href="../pages/12-hybrid-vpn-directconnect.html" class=""><span class="num">12</span>Hybrid: VPN, Direct Connect, PrivateLink</a></li><li class="nav-item"><a href="../pages/13-ec2-fundamentals.html" class=""><span class="num">13</span>EC2 — fundamentals (instances, AMIs, lifecycle)</a></li><li class="nav-item"><a href="../pages/14-ec2-advanced-spot-nitro.html" class=""><span class="num">14</span>EC2 advanced — Spot, Placement Groups, Nitro, hibernation</a></li><li class="nav-item"><a href="../pages/15-asg-elb.html" class=""><span class="num">15</span>Auto Scaling Groups + Elastic Load Balancing</a></li><li class="nav-item"><a href="../pages/16-lambda-deep-dive.html" class=""><span class="num">16</span>Lambda deep dive</a></li><li class="nav-item"><a href="../pages/17-containers-ecs-eks-fargate.html" class="active"><span class="num">17</span>Containers: ECS, EKS, Fargate, ECR</a></li><li class="nav-item"><a href="../pages/18-specialty-compute.html" class=""><span class="num">18</span>Specialty compute: Batch, Lightsail, Outposts, Wavelength, Beanstalk</a></li><li class="nav-item"><a href="../pages/19-ebs-efs-fsx.html" class=""><span class="num">19</span>EBS, EFS, FSx, Instance Store</a></li><li class="nav-item"><a href="../pages/20-s3-deep-dive.html" class=""><span class="num">20</span>S3 — deep dive</a></li><li class="nav-item"><a href="../pages/21-archive-snow-gateway-backup.html" class=""><span class="num">21</span>Glacier, Snow, Storage Gateway, DataSync, AWS Backup</a></li><li class="nav-item"><a href="../pages/22-rds.html" class=""><span class="num">22</span>RDS — managed relational DBs (engines, Multi-AZ, replicas, Proxy)</a></li><li class="nav-item"><a href="../pages/23-aurora-deep-dive.html" class=""><span class="num">23</span>Aurora deep dive — shared storage, Serverless v2, Global Database</a></li><li class="nav-item"><a href="../pages/24-dynamodb-deep-dive.html" class=""><span class="num">24</span>DynamoDB deep dive — partitions, GSI, Streams, single-table</a></li><li class="nav-item"><a href="../pages/25-purpose-built-dbs.html" class=""><span class="num">25</span>Purpose-built DBs — ElastiCache, MemoryDB, Neptune, DocumentDB, Keyspaces, Timestream, QLDB</a></li><li class="nav-item"><a href="../pages/26-redshift-data-warehousing.html" class=""><span class="num">26</span>Redshift — MPP data warehousing and zero-ETL</a></li><li class="nav-item"><a href="../pages/27-sqs-sns-eventbridge.html" class=""><span class="num">27</span>SQS, SNS, EventBridge — messaging and events</a></li><li class="nav-item"><a href="../pages/28-step-functions-mq-appflow.html" class=""><span class="num">28</span>Step Functions, MQ, AppFlow — orchestration and integration</a></li><li class="nav-item"><a href="../pages/29-athena-glue-lakeformation.html" class=""><span class="num">29</span>Athena, Glue, Lake Formation — the AWS data lake</a></li><li class="nav-item"><a href="../pages/30-emr-kinesis-msk.html" class=""><span class="num">30</span>EMR, Kinesis, MSK — big data and streaming</a></li><li class="nav-item"><a href="../pages/31-opensearch-quicksight.html" class=""><span class="num">31</span>OpenSearch and QuickSight — search and BI</a></li><li class="nav-item"><a href="../pages/32-sagemaker-overview.html" class=""><span class="num">32</span>SageMaker — the end-to-end ML platform</a></li><li class="nav-item"><a href="../pages/33-bedrock-ai-services.html" class=""><span class="num">33</span>Bedrock and AI services — managed GenAI and ML</a></li><li class="nav-item"><a href="../pages/34-iac-cloudformation-cdk-terraform.html" class=""><span class="num">34</span>IaC on AWS — CloudFormation, CDK, SAM, Terraform</a></li><li class="nav-item"><a href="../pages/35-ci-cd-pipeline.html" class=""><span class="num">35</span>CI/CD on AWS — CodePipeline, CodeBuild, CodeDeploy, CodeCatalyst</a></li><li class="nav-item"><a href="../pages/36-observability-cloudwatch-xray.html" class=""><span class="num">36</span>Observability — CloudWatch, X-Ray, CloudTrail, Config, SSM</a></li><li class="nav-item"><a href="../pages/37-kms-secrets-acm.html" class=""><span class="num">37</span>Encryption — KMS, CloudHSM, Secrets Manager, Parameter Store, ACM</a></li><li class="nav-item"><a href="../pages/38-waf-shield-guardduty-inspector.html" class=""><span class="num">38</span>Threat detection — WAF, Shield, GuardDuty, Inspector, Macie, Security Hub</a></li><li class="nav-item"><a href="../pages/39-governance-org-controltower-identitycenter.html" class=""><span class="num">39</span>Governance — Organizations, Control Tower, Identity Center</a></li><li class="nav-item"><a href="../pages/40-migration-mgn-dms-snow.html" class=""><span class="num">40</span>Migration — MGN, DMS, Snow family, Discovery, Migration Hub</a></li><li class="nav-item"><a href="../pages/41-cost-optimization-finops.html" class=""><span class="num">41</span>Cost optimization and FinOps</a></li><li class="nav-item"><a href="../pages/42-well-architected.html" class=""><span class="num">42</span>Well-Architected Framework — 6 pillars, lenses, review</a></li><li class="nav-item"><a href="../pages/43-architecture-patterns.html" class=""><span class="num">43</span>Architecture patterns — 3-tier, serverless, event-driven, microservices</a></li><li class="nav-item"><a href="../pages/44-disaster-recovery-multi-region.html" class=""><span class="num">44</span>Disaster Recovery and Multi-Region</a></li><li class="nav-item"><a href="../pages/45-reference-architectures.html" class=""><span class="num">45</span>Real-world reference architectures</a></li><li class="nav-item"><a href="../pages/46-advanced-networking.html" class=""><span class="num">46</span>Advanced networking deep dive</a></li><li class="nav-item"><a href="../pages/47-containers-deep-dive.html" class=""><span class="num">47</span>Containers deep dive — EKS, Karpenter, service mesh</a></li><li class="nav-item"><a href="../pages/48-serverless-patterns.html" class=""><span class="num">48</span>Serverless patterns deep dive</a></li><li class="nav-item"><a href="../pages/49-genai-rag-agents.html" class=""><span class="num">49</span>Generative AI on AWS — RAG and Agents</a></li><li class="nav-item"><a href="../pages/50-aws-certifications.html" class=""><span class="num">50</span>AWS Certifications — roadmap and study guide</a></li><li class="nav-item"><a href="../pages/51-glossary-az.html" class=""><span class="num">51</span>Glossary A-Z</a></li><li class="nav-item"><a href="../pages/52-cheatsheet.html" class=""><span class="num">52</span>Cheat sheet: services, limits, instance families</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Compute</span>
+        <span>Section 17 of 52</span>
+        <span class="level-tag level-int">Level: intermediate</span>
+      </div>
+      <h1>Containers: ECS, EKS, Fargate, ECR</h1>
+      <p class="summary">ECR registry, ECS (task definition, service, EC2 vs Fargate), EKS (managed Kubernetes, IRSA, Auto Mode), Fargate, App Runner and trade-offs.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Compute</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>sections 13, 15</li></ul>
+  <div class="label">Tools / references</div>
+  <ul class="source-list"><li>AWS CLI</li><li>kubectl</li><li>Docker</li></ul>
+</div>
+      <p>AWS has 3 main ways to run containers: <strong>ECS</strong> (AWS-native orchestrator), <strong>EKS</strong> (managed Kubernetes) and <strong>Fargate</strong> (serverless compute used by both). Add <strong>ECR</strong> as the registry and <strong>App Runner</strong> as the "even more managed" option.</p>
+<h2 id="1-ecr-elastic-container-registry">1. ECR — Elastic Container Registry</h2>
+<p>Private OCI/Docker registry. IAM-integrated (no long-lived Docker login passwords).</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Lifecycle policy</td>
+<td>delete old tags (e.g. keep last 10)</td>
+</tr>
+<tr>
+<td>Image scanning</td>
+<td>Basic (free, OS) or Enhanced (Inspector, OS + libs)</td>
+</tr>
+<tr>
+<td>Replication</td>
+<td>auto cross-region or cross-account</td>
+</tr>
+<tr>
+<td>Pull-through cache</td>
+<td>proxy to Docker Hub / Quay / GitHub</td>
+</tr>
+<tr>
+<td>Signing</td>
+<td>sigstore/cosign integration</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-bash">aws ecr get-login-password --region eu-west-1 | \
+  docker login --username AWS --password-stdin 123.dkr.ecr.eu-west-1.amazonaws.com
+
+docker build -t my-app .
+docker tag my-app:latest 123.dkr.ecr.eu-west-1.amazonaws.com/my-app:v1
+docker push 123.dkr.ecr.eu-west-1.amazonaws.com/my-app:v1
+</code></pre>
+<h2 id="2-ecs-elastic-container-service">2. ECS — Elastic Container Service</h2>
+<p>AWS proprietary orchestrator, simple and deeply integrated.</p>
+<p>Hierarchy:</p>
+<pre><code class="language-mermaid">flowchart TB
+  Cluster --&gt; Service1[Service: web]
+  Cluster --&gt; Service2[Service: worker]
+  Service1 --&gt; TD1[Task Definition v3]
+  TD1 --&gt; Task1[Task: 2 containers]
+  Task1 --&gt; C1[Container nginx]
+  Task1 --&gt; C2[Container app]
+</code></pre>
+<ul>
+<li><strong>Cluster</strong>: logical group.</li>
+<li><strong>Task Definition</strong>: JSON with image, CPU, RAM, env, IAM role, network mode.</li>
+<li><strong>Service</strong>: keeps N tasks running, integrates with ALB/Service Discovery, handles rolling/blue-green deploy.</li>
+</ul>
+<p>Launch type:</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Management</th>
+<th>When</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>EC2</strong></td>
+<td>you manage nodes</td>
+<td>fine control, GPU, custom Spot</td>
+</tr>
+<tr>
+<td><strong>Fargate</strong></td>
+<td>serverless</td>
+<td>2026 default for most cases</td>
+</tr>
+<tr>
+<td><strong>External (ECS Anywhere)</strong></td>
+<td>on-prem nodes</td>
+<td>hybrid edge</td>
+</tr>
+</tbody>
+</table>
+<p>Network mode:
+- <code>awsvpc</code> (Fargate default): each task has its own ENI and IP.
+- <code>bridge</code> (EC2 only): classic Docker bridge.
+- <code>host</code>: shares the host network.</p>
+<h2 id="3-eks-elastic-kubernetes-service">3. EKS — Elastic Kubernetes Service</h2>
+<p>Upstream-compliant Kubernetes, control plane managed by AWS ($0.10/h per cluster). You (or EKS) manage the workers.</p>
+<p>Compute options:</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Managed Node Group</strong></td>
+<td>EC2 managed by EKS (auto-upgrade, ASG underneath)</td>
+</tr>
+<tr>
+<td><strong>Self-managed nodes</strong></td>
+<td>you manage everything</td>
+</tr>
+<tr>
+<td><strong>Fargate profile</strong></td>
+<td>pods on Fargate, no nodes</td>
+</tr>
+<tr>
+<td><strong>EKS Auto Mode</strong> (2024+)</td>
+<td>AWS manages nodes+addons+upgrades end-to-end</td>
+</tr>
+</tbody>
+</table>
+<p><strong>EKS Auto Mode</strong> is the big new thing: you declare the cluster, AWS makes node provisioning decisions (Karpenter under the hood), addons (CoreDNS, kube-proxy, CNI, EBS CSI), patching. Brings EKS closer to the GKE Autopilot model.</p>
+<p><strong>IRSA (IAM Roles for Service Accounts)</strong>: binds a K8s ServiceAccount to an IAM role via OIDC. No more shared credentials on the node.</p>
+<pre><code class="language-bash">eksctl create cluster --name prod --region eu-west-1 --version 1.30 \
+  --nodegroup-name mng-1 --node-type m7g.large --nodes 3
+
+# IRSA: bind ServiceAccount to IAM
+eksctl create iamserviceaccount --cluster prod --namespace app \
+  --name s3-reader --attach-policy-arn arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess \
+  --approve
+</code></pre>
+<h2 id="4-fargate">4. Fargate</h2>
+<p>Serverless container compute. No EC2 to patch. Pay per vCPU + RAM by the second (with a 1-minute minimum).</p>
+<p>Features:
+- Per-task isolation (Firecracker microVM).
+- No privileged daemonsets possible (on EKS this limits certain ops).
+- Cold start typically 30-60 s (slower than Lambda).
+- Spot compatible (Fargate Spot, ~70% off).
+- Limits: 16 vCPU, 120 GB RAM, configurable ephemeral storage up to 200 GB.</p>
+<h2 id="5-app-runner">5. App Runner</h2>
+<p>PaaS for web containers. Point at an ECR image (or GitHub repo) and App Runner deploys, scales, manages TLS. Similar to Cloud Run.</p>
+<p>When: stateless web service when you don't want to manage ALB+ASG+ECS. Limit: less control (no sidecars, no complex VPC ingress).</p>
+<h2 id="6-ecs-vs-eks-choosing">6. ECS vs EKS — choosing</h2>
+<table>
+<thead>
+<tr>
+<th>Criterion</th>
+<th>ECS</th>
+<th>EKS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Learning curve</td>
+<td>low</td>
+<td>high</td>
+</tr>
+<tr>
+<td>Multi-cloud portability</td>
+<td>low</td>
+<td>high (standard k8s)</td>
+</tr>
+<tr>
+<td>Ecosystem (Helm, operators, etc.)</td>
+<td>limited</td>
+<td>rich</td>
+</tr>
+<tr>
+<td>Control plane cost</td>
+<td>free</td>
+<td>$73/month per cluster</td>
+</tr>
+<tr>
+<td>Initial deploy speed</td>
+<td>minutes</td>
+<td>hours-days</td>
+</tr>
+<tr>
+<td>Team skill</td>
+<td>"I know AWS"</td>
+<td>"I know K8s"</td>
+</tr>
+</tbody>
+</table>
+<p>Rule of thumb: unless you have a strong reason for K8s (multi-cloud, team already knows it, Helm ecosystem) → <strong>ECS+Fargate</strong>. Otherwise EKS, and consider Auto Mode to reduce ops overhead.</p>
+<pre><code class="language-mermaid">flowchart TB
+  Start{Needs?} --&gt; Multi{Multi-cloud or K8s ecosystem?}
+  Multi -- Yes --&gt; EKS
+  Multi -- No --&gt; Complex{Stateless web app?}
+  Complex -- Yes, simple --&gt; AppRunner
+  Complex -- No, microservices --&gt; ECS
+  EKS --&gt; AutoMode{Want serverless K8s?}
+  AutoMode -- Yes --&gt; EKSAuto[EKS Auto Mode]
+  AutoMode -- No --&gt; ManagedNG[Managed Node Group]
+</code></pre>
+<h2 id="7-integration-alb-service-discovery-secrets">7. Integration: ALB, Service Discovery, Secrets</h2>
+<ul>
+<li><strong>ALB</strong>: target group <code>ip</code> (for Fargate) or <code>instance</code> (for ECS-EC2 bridge). On EKS, use AWS Load Balancer Controller for Ingress.</li>
+<li><strong>Service Discovery</strong>: ECS Service Connect (preferred) or Cloud Map (DNS A/SRV). On EKS, kube-dns + headless service.</li>
+<li><strong>Secrets</strong>: mount from Secrets Manager / Parameter Store via the <code>secrets</code> field in the task def (ECS) or External Secrets Operator (EKS).</li>
+<li><strong>Auto-scaling</strong>: Application Auto Scaling for ECS service (target CPU, RequestCountPerTarget); HPA + Karpenter for EKS.</li>
+</ul>
+<h2 id="8-exercise">8. Exercise</h2>
+<details>
+<summary>Stateless Python microservice you need to deploy. ECS-Fargate, EKS or App Runner?</summary>
+
+Decision:
+- **1 service, no sidecars, no K8s requirements** → **App Runner**. Simplest possible, ALB+TLS+autoscale included.
+- **Multiple microservices, want shared ALB and service discovery** → **ECS-Fargate**. Richer setup but still manageable, no K8s to learn.
+- **Team already on K8s, existing Helm charts, multi-cloud** → **EKS** (Auto Mode if you want serverless).
+
+Rough cost for 1 always-on service, 0.5 vCPU + 1 GB:
+- App Runner: ~$36/month
+- Fargate (always on): ~$25/month
+- EKS Fargate: ~$25/month + $73/month cluster
+</details>
+
+<details>
+<summary>EKS, a pod must read from an S3 bucket. How to grant permissions without an access key?</summary>
+
+**IRSA** (IAM Roles for Service Accounts):
+1. Enable the OIDC provider on the cluster.
+2. Create an IAM role with a trust policy that lets the specific ServiceAccount (`system:serviceaccount:app:s3-reader`) assume it.
+3. Annotate the ServiceAccount with `eks.amazonaws.com/role-arn`.
+4. The pod mounting that SA gets an OIDC token, the AWS SDK swaps it for temporary credentials via STS.
+
+Alternatively, since 2023 there's **EKS Pod Identity** (simpler, no manual OIDC, just an EKS agent).
+</details>
+
+<blockquote>
+<p><strong>Summary</strong>: ECR for registry (with scanning + lifecycle); ECS = AWS-native, simple, deep with Fargate; EKS = managed Kubernetes, rich but complex (Auto Mode simplifies it in 2024+); Fargate = serverless container for both; App Runner = PaaS for simple web; IRSA/Pod Identity for permissions without access keys; pick ECS+Fargate by default, EKS if you have K8s reasons.</p>
+</blockquote>
+      <nav class="pager">
+<a href="16-lambda-deep-dive.html" class="prev"><span class="label">← Previous</span><span class="title">Lambda deep dive</span></a>
+<a href="18-specialty-compute.html" class="next"><span class="label">Next →</span><span class="title">Specialty compute: Batch, Lightsail, Outposts, Wavelength, Beanstalk</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>AWS Zero to Hero</strong> — complete path, in English, from primitives to advanced architecture.</p><p>Open educational material. No sponsorships, no affiliate links, no affiliation with AWS. When a concept is unclear, go back: AWS is a pyramid of primitives, not a tree you skip across.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+</body>
+</html>

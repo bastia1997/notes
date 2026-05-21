@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RDS — managed relational DBs (engines, Multi-AZ, replicas, Proxy) — AWS Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#232f3e',primaryTextColor:'#ffffff',primaryBorderColor:'#ff9900',lineColor:'#8a99ad',background:'#0c1320'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">λ</div>
+      <div>
+        <div class="brand-title">AWS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/22-rds.html" class="lang-link" title="Passa all'italiano">IT</a><span class="lang-active" title="English">EN</span></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="search... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-what-is-cloud-and-aws.html" class=""><span class="num">01</span>What the cloud is, and what AWS is</a></li><li class="nav-item"><a href="../pages/02-global-infrastructure.html" class=""><span class="num">02</span>Global infrastructure: Regions, AZs, Edge</a></li><li class="nav-item"><a href="../pages/03-account-root-billing.html" class=""><span class="num">03</span>AWS account, root user, billing</a></li><li class="nav-item"><a href="../pages/04-iam-fundamentals.html" class=""><span class="num">04</span>IAM — fundamentals (users, groups, roles, policies)</a></li><li class="nav-item"><a href="../pages/05-iam-advanced.html" class=""><span class="num">05</span>IAM advanced: conditional policies, STS, ABAC</a></li><li class="nav-item"><a href="../pages/06-cli-sdk-iac.html" class=""><span class="num">06</span>CLI, SDK, CloudShell, IaC primer</a></li><li class="nav-item"><a href="../pages/07-pricing-billing.html" class=""><span class="num">07</span>Pricing, billing, free tier, cost tools</a></li><li class="nav-item"><a href="../pages/08-organizations-multi-account.html" class=""><span class="num">08</span>AWS Organizations &amp; multi-account strategy</a></li><li class="nav-item"><a href="../pages/09-vpc-fundamentals.html" class=""><span class="num">09</span>VPC — fundamentals</a></li><li class="nav-item"><a href="../pages/10-vpc-advanced.html" class=""><span class="num">10</span>VPC advanced: peering, TGW, PrivateLink, endpoints</a></li><li class="nav-item"><a href="../pages/11-route53-cloudfront.html" class=""><span class="num">11</span>Route 53, CloudFront, Global Accelerator</a></li><li class="nav-item"><a href="../pages/12-hybrid-vpn-directconnect.html" class=""><span class="num">12</span>Hybrid: VPN, Direct Connect, PrivateLink</a></li><li class="nav-item"><a href="../pages/13-ec2-fundamentals.html" class=""><span class="num">13</span>EC2 — fundamentals (instances, AMIs, lifecycle)</a></li><li class="nav-item"><a href="../pages/14-ec2-advanced-spot-nitro.html" class=""><span class="num">14</span>EC2 advanced — Spot, Placement Groups, Nitro, hibernation</a></li><li class="nav-item"><a href="../pages/15-asg-elb.html" class=""><span class="num">15</span>Auto Scaling Groups + Elastic Load Balancing</a></li><li class="nav-item"><a href="../pages/16-lambda-deep-dive.html" class=""><span class="num">16</span>Lambda deep dive</a></li><li class="nav-item"><a href="../pages/17-containers-ecs-eks-fargate.html" class=""><span class="num">17</span>Containers: ECS, EKS, Fargate, ECR</a></li><li class="nav-item"><a href="../pages/18-specialty-compute.html" class=""><span class="num">18</span>Specialty compute: Batch, Lightsail, Outposts, Wavelength, Beanstalk</a></li><li class="nav-item"><a href="../pages/19-ebs-efs-fsx.html" class=""><span class="num">19</span>EBS, EFS, FSx, Instance Store</a></li><li class="nav-item"><a href="../pages/20-s3-deep-dive.html" class=""><span class="num">20</span>S3 — deep dive</a></li><li class="nav-item"><a href="../pages/21-archive-snow-gateway-backup.html" class=""><span class="num">21</span>Glacier, Snow, Storage Gateway, DataSync, AWS Backup</a></li><li class="nav-item"><a href="../pages/22-rds.html" class="active"><span class="num">22</span>RDS — managed relational DBs (engines, Multi-AZ, replicas, Proxy)</a></li><li class="nav-item"><a href="../pages/23-aurora-deep-dive.html" class=""><span class="num">23</span>Aurora deep dive — shared storage, Serverless v2, Global Database</a></li><li class="nav-item"><a href="../pages/24-dynamodb-deep-dive.html" class=""><span class="num">24</span>DynamoDB deep dive — partitions, GSI, Streams, single-table</a></li><li class="nav-item"><a href="../pages/25-purpose-built-dbs.html" class=""><span class="num">25</span>Purpose-built DBs — ElastiCache, MemoryDB, Neptune, DocumentDB, Keyspaces, Timestream, QLDB</a></li><li class="nav-item"><a href="../pages/26-redshift-data-warehousing.html" class=""><span class="num">26</span>Redshift — MPP data warehousing and zero-ETL</a></li><li class="nav-item"><a href="../pages/27-sqs-sns-eventbridge.html" class=""><span class="num">27</span>SQS, SNS, EventBridge — messaging and events</a></li><li class="nav-item"><a href="../pages/28-step-functions-mq-appflow.html" class=""><span class="num">28</span>Step Functions, MQ, AppFlow — orchestration and integration</a></li><li class="nav-item"><a href="../pages/29-athena-glue-lakeformation.html" class=""><span class="num">29</span>Athena, Glue, Lake Formation — the AWS data lake</a></li><li class="nav-item"><a href="../pages/30-emr-kinesis-msk.html" class=""><span class="num">30</span>EMR, Kinesis, MSK — big data and streaming</a></li><li class="nav-item"><a href="../pages/31-opensearch-quicksight.html" class=""><span class="num">31</span>OpenSearch and QuickSight — search and BI</a></li><li class="nav-item"><a href="../pages/32-sagemaker-overview.html" class=""><span class="num">32</span>SageMaker — the end-to-end ML platform</a></li><li class="nav-item"><a href="../pages/33-bedrock-ai-services.html" class=""><span class="num">33</span>Bedrock and AI services — managed GenAI and ML</a></li><li class="nav-item"><a href="../pages/34-iac-cloudformation-cdk-terraform.html" class=""><span class="num">34</span>IaC on AWS — CloudFormation, CDK, SAM, Terraform</a></li><li class="nav-item"><a href="../pages/35-ci-cd-pipeline.html" class=""><span class="num">35</span>CI/CD on AWS — CodePipeline, CodeBuild, CodeDeploy, CodeCatalyst</a></li><li class="nav-item"><a href="../pages/36-observability-cloudwatch-xray.html" class=""><span class="num">36</span>Observability — CloudWatch, X-Ray, CloudTrail, Config, SSM</a></li><li class="nav-item"><a href="../pages/37-kms-secrets-acm.html" class=""><span class="num">37</span>Encryption — KMS, CloudHSM, Secrets Manager, Parameter Store, ACM</a></li><li class="nav-item"><a href="../pages/38-waf-shield-guardduty-inspector.html" class=""><span class="num">38</span>Threat detection — WAF, Shield, GuardDuty, Inspector, Macie, Security Hub</a></li><li class="nav-item"><a href="../pages/39-governance-org-controltower-identitycenter.html" class=""><span class="num">39</span>Governance — Organizations, Control Tower, Identity Center</a></li><li class="nav-item"><a href="../pages/40-migration-mgn-dms-snow.html" class=""><span class="num">40</span>Migration — MGN, DMS, Snow family, Discovery, Migration Hub</a></li><li class="nav-item"><a href="../pages/41-cost-optimization-finops.html" class=""><span class="num">41</span>Cost optimization and FinOps</a></li><li class="nav-item"><a href="../pages/42-well-architected.html" class=""><span class="num">42</span>Well-Architected Framework — 6 pillars, lenses, review</a></li><li class="nav-item"><a href="../pages/43-architecture-patterns.html" class=""><span class="num">43</span>Architecture patterns — 3-tier, serverless, event-driven, microservices</a></li><li class="nav-item"><a href="../pages/44-disaster-recovery-multi-region.html" class=""><span class="num">44</span>Disaster Recovery and Multi-Region</a></li><li class="nav-item"><a href="../pages/45-reference-architectures.html" class=""><span class="num">45</span>Real-world reference architectures</a></li><li class="nav-item"><a href="../pages/46-advanced-networking.html" class=""><span class="num">46</span>Advanced networking deep dive</a></li><li class="nav-item"><a href="../pages/47-containers-deep-dive.html" class=""><span class="num">47</span>Containers deep dive — EKS, Karpenter, service mesh</a></li><li class="nav-item"><a href="../pages/48-serverless-patterns.html" class=""><span class="num">48</span>Serverless patterns deep dive</a></li><li class="nav-item"><a href="../pages/49-genai-rag-agents.html" class=""><span class="num">49</span>Generative AI on AWS — RAG and Agents</a></li><li class="nav-item"><a href="../pages/50-aws-certifications.html" class=""><span class="num">50</span>AWS Certifications — roadmap and study guide</a></li><li class="nav-item"><a href="../pages/51-glossary-az.html" class=""><span class="num">51</span>Glossary A-Z</a></li><li class="nav-item"><a href="../pages/52-cheatsheet.html" class=""><span class="num">52</span>Cheat sheet: services, limits, instance families</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Database</span>
+        <span>Section 22 of 52</span>
+        <span class="level-tag level-int">Level: intermediate</span>
+      </div>
+      <h1>RDS — managed relational DBs (engines, Multi-AZ, replicas, Proxy)</h1>
+      <p class="summary">Managed relational databases: 6 engines, Multi-AZ HA, async read replicas, PITR backups, RDS Proxy for Lambda, and blue/green deployments.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Database</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>sections 9, 13</li></ul>
+  <div class="label">Tools / references</div>
+  <ul class="source-list"><li>AWS CLI</li><li>psql / mysql client</li></ul>
+</div>
+      <p>RDS (Relational Database Service) takes patching, backups, failover, and replication off your plate for classic SQL DBs. You think about schema, queries, and indexes; AWS handles host, OS, replication topology, and maintenance. It's the "boring DB" you want in production when you don't need Aurora.</p>
+<h2 id="1-supported-engines">1. Supported engines</h2>
+<p>Six engines, each with license and feature quirks:</p>
+<table>
+<thead>
+<tr>
+<th>Engine</th>
+<th>License</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>PostgreSQL</strong></td>
+<td>open source</td>
+<td>the "modern" preferred engine; extensions like <code>pg_stat_statements</code>, <code>pgvector</code>, PostGIS</td>
+</tr>
+<tr>
+<td><strong>MySQL</strong></td>
+<td>open source (community)</td>
+<td>5.7 / 8.0; broad compat</td>
+</tr>
+<tr>
+<td><strong>MariaDB</strong></td>
+<td>open source</td>
+<td>MySQL fork, fewer recent features</td>
+</tr>
+<tr>
+<td><strong>Oracle</strong></td>
+<td>BYOL or License Included</td>
+<td>Enterprise/Standard; TDE, OEM options</td>
+</tr>
+<tr>
+<td><strong>SQL Server</strong></td>
+<td>License Included (Express → Enterprise)</td>
+<td>Multi-AZ via Mirroring/Always On</td>
+</tr>
+<tr>
+<td><strong>Db2</strong></td>
+<td>License Included</td>
+<td>added 2023, targets IBM migrations</td>
+</tr>
+</tbody>
+</table>
+<p>For Postgres/MySQL Aurora (section 23) is often the better pick. Vanilla RDS still helps when you want full minor-version control, external logical replication, or extensions Aurora doesn't support.</p>
+<h2 id="2-single-az-vs-multi-az">2. Single-AZ vs Multi-AZ</h2>
+<pre><code class="language-mermaid">flowchart LR
+    App[App] --&gt;|writer endpoint| Primary[(RDS Primary AZ-a)]
+    Primary -.sync replication.-&gt; Standby[(Standby AZ-b)]
+    Primary -.async.-&gt; RR1[(Read Replica AZ-c)]
+    Primary -.async.-&gt; RR2[(Read Replica eu-west-1)]
+    App --&gt;|reader endpoint| RR1
+</code></pre>
+<ul>
+<li><strong>Single-AZ</strong>: 1 instance, 1 AZ. Downtime on failure or patching. Dev/test only.</li>
+<li><strong>Multi-AZ instance</strong> (classic): primary + sync standby in another AZ, <strong>standby NOT readable</strong>. Automatic failover 60-120 s via DNS swap. 2x cost.</li>
+<li><strong>Multi-AZ DB Cluster</strong> (Postgres/MySQL): 1 writer + 2 <strong>readable standbys</strong> synced, failover ~35 s, you can serve reads from standbys. ~2.5x cost.</li>
+</ul>
+<p>Rule: production = always Multi-AZ. Don't disable it "to save $50".</p>
+<h2 id="3-read-replicas">3. Read Replicas</h2>
+<p>Async (typical lag &lt; 1 s, but can climb to minutes under load). Up to <strong>15</strong> per primary. Cross-AZ, cross-region, even cross-account (Aurora). Use cases:</p>
+<ul>
+<li>Offload heavy analytical reads from the primary.</li>
+<li>Cross-region DR (promote the replica to standalone).</li>
+<li>Reporting on a different engine (Postgres → Postgres read replica → logical engine).</li>
+</ul>
+<p>Promotion: a read replica can be <strong>promoted</strong> to standalone, breaking replication. Irreversible.</p>
+<h2 id="4-backup-and-restore">4. Backup and restore</h2>
+<ul>
+<li><strong>Automated backup</strong>: daily snapshot + continuous transaction log. Retention 1-35 days. Enables <strong>Point-In-Time Recovery (PITR)</strong> down to the second.</li>
+<li><strong>Manual snapshot</strong>: you create it, unlimited lifetime, survives DB deletion.</li>
+<li><strong>Restore</strong>: creates <strong>a new instance</strong> from the backup. No in-place restore.</li>
+</ul>
+<pre><code class="language-bash">aws rds restore-db-instance-to-point-in-time \
+  --source-db-instance-identifier prod-db \
+  --target-db-instance-identifier prod-db-restored \
+  --restore-time 2026-05-21T10:15:00Z
+</code></pre>
+<p>Trap: deleting an instance with <code>--skip-final-snapshot</code> loses everything. Never. Always use <code>final-snapshot-identifier</code>.</p>
+<h2 id="5-security-and-encryption">5. Security and encryption</h2>
+<ul>
+<li><strong>At rest</strong>: KMS, enabled at creation (you can't turn it on later — must snapshot + encrypted copy + restore).</li>
+<li><strong>In transit</strong>: SSL/TLS with <code>rds-ca-rsa2048-g1</code> cert. Force with <code>rds.force_ssl=1</code> (Postgres).</li>
+<li><strong>IAM database authentication</strong>: log in with an IAM token instead of a password (Postgres/MySQL). Token valid 15 min.</li>
+<li><strong>Secrets Manager rotation</strong>: automated password rotation via Lambda.</li>
+<li>Network: always in a private subnet, SG opening the DB port only to app SGs.</li>
+</ul>
+<h2 id="6-parameter-group-option-group-maintenance">6. Parameter group, option group, maintenance</h2>
+<ul>
+<li><strong>Parameter group</strong>: all engine flags (<code>max_connections</code>, <code>shared_buffers</code>, etc.). The default is read-only — you must clone it.</li>
+<li><strong>Option group</strong>: Oracle/SQL Server extras (TDE, S3 integration).</li>
+<li><strong>Maintenance window</strong>: 30 min/week, AWS patches minor version and OS. You can force/delay.</li>
+</ul>
+<h2 id="7-rds-proxy-and-bluegreen">7. RDS Proxy and blue/green</h2>
+<p><strong>RDS Proxy</strong>: managed connection pooling in front of the DB. Mandatory for Lambda (which opens/closes a connection per invocation → saturates <code>max_connections</code> fast). Also reduces failover-induced errors by holding client connections during a swap.</p>
+<p><strong>Blue/green deployment</strong>: AWS spins up a "green" environment cloned from "blue" with the new version/parameter group, keeps it in sync via logical replication, and a switchover &lt; 1 minute promotes green to primary. Game-changer for Postgres major version upgrades.</p>
+<p>Other features to know:
+- <strong>Performance Insights</strong>: wait events / top SQL dashboard, free 7-day retention.
+- <strong>RDS Custom</strong> (Oracle/SQL Server): grants SSH/RDP OS access. Compromise between raw EC2 and managed RDS.
+- <strong>Storage Auto Scaling</strong>: grows gp3/io1 automatically up to a cap.</p>
+<h2 id="8-exercise">8. Exercise</h2>
+<details>
+<summary>Lambda opens 5k connections/sec to an RDS Postgres with max_connections=200. What do you do?</summary>
+
+The Lambda-RDS pattern without a proxy exhausts `max_connections` almost instantly (every cold start = new connection). Solutions:
+
+1. **RDS Proxy**: managed pool, Lambdas talk to the proxy, it multiplexes onto few real DB connections. ~5 ms extra latency but eliminates the issue.
+2. **Raising max_connections** isn't enough: needs proportional RAM, and the DB slows down with thousands of idle connections.
+3. **Connection reuse intra-warm-container**: global var outside the handler. Helps but doesn't fix spikes.
+
+Production: RDS Proxy + connection reuse + monitor `DatabaseConnections` in CloudWatch.
+</details>
+
+<details>
+<summary>You must upgrade Postgres major 14→16 with downtime < 5 minutes. Strategy?</summary>
+
+**Blue/green deployment**:
+1. Create blue/green: AWS deploys a green cluster on PG 16 and syncs it via logical replication.
+2. Test the app against the green endpoint (read-only initially).
+3. Trigger the **switchover**: AWS briefly blocks writes on blue, waits for replication to catch up, and flips the endpoints. Typically < 1 min.
+4. Blue stays available for a few hours in case rollback is needed.
+
+Worse alternatives: in-place upgrade (10-30 min downtime, no fast rollback) or pg_dump/restore (hours of downtime).
+</details>
+
+<blockquote>
+<p><strong>Summary</strong>: RDS = managed SQL DB (6 engines); production = Multi-AZ (instance or cluster); async read replicas up to 15; automated backup enables 1-35 day PITR; KMS encryption only at creation; RDS Proxy mandatory in front of Lambda; blue/green for major upgrades with &lt; 1 min downtime.</p>
+</blockquote>
+      <nav class="pager">
+<a href="21-archive-snow-gateway-backup.html" class="prev"><span class="label">← Previous</span><span class="title">Glacier, Snow, Storage Gateway, DataSync, AWS Backup</span></a>
+<a href="23-aurora-deep-dive.html" class="next"><span class="label">Next →</span><span class="title">Aurora deep dive — shared storage, Serverless v2, Global Database</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>AWS Zero to Hero</strong> — complete path, in English, from primitives to advanced architecture.</p><p>Open educational material. No sponsorships, no affiliate links, no affiliation with AWS. When a concept is unclear, go back: AWS is a pyramid of primitives, not a tree you skip across.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+</body>
+</html>

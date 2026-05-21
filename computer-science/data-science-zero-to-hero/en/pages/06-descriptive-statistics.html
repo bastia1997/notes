@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Descriptive statistics — Data Science Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#3a4a7a',primaryTextColor:'#e8eef0',primaryBorderColor:'#5a6aa0',lineColor:'#8a9499',background:'#11171a'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">Σ</div>
+      <div>
+        <div class="brand-title">DATA SCIENCE</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/06-statistica-descrittiva.html" class="lang-link" title="Passa all'italiano">🇮🇹 IT</a><span class="lang-active" title="English">🇬🇧 EN</span></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="search... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-what-is-data-science.html" class=""><span class="num">01</span>What is data science (and what isn&#x27;t)</a></li><li class="nav-item"><a href="../pages/02-python-for-data-science.html" class=""><span class="num">02</span>Python for data science: pro setup</a></li><li class="nav-item"><a href="../pages/02b-math-essentials.html" class=""><span class="num">02b</span>High-school math you actually need</a></li><li class="nav-item"><a href="../pages/03-linear-algebra.html" class=""><span class="num">03</span>Linear algebra for data scientists</a></li><li class="nav-item"><a href="../pages/04-calculus-optimization.html" class=""><span class="num">04</span>Calculus, gradients, and optimization</a></li><li class="nav-item"><a href="../pages/05-probability.html" class=""><span class="num">05</span>Probability: the language of uncertainty</a></li><li class="nav-item"><a href="../pages/06-descriptive-statistics.html" class="active"><span class="num">06</span>Descriptive statistics</a></li><li class="nav-item"><a href="../pages/07-inferential-statistics.html" class=""><span class="num">07</span>Inferential statistics and hypothesis testing</a></li><li class="nav-item"><a href="../pages/08-distributions.html" class=""><span class="num">08</span>Probability distributions you&#x27;ll meet</a></li><li class="nav-item"><a href="../pages/09-numpy.html" class=""><span class="num">09</span>NumPy: thinking in arrays</a></li><li class="nav-item"><a href="../pages/10-pandas.html" class=""><span class="num">10</span>Pandas: the swiss army knife</a></li><li class="nav-item"><a href="../pages/11-sql.html" class=""><span class="num">11</span>SQL for data scientists</a></li><li class="nav-item"><a href="../pages/12-visualization.html" class=""><span class="num">12</span>Visualization: matplotlib, seaborn, plotly</a></li><li class="nav-item"><a href="../pages/13-data-wrangling.html" class=""><span class="num">13</span>Cleaning and data wrangling</a></li><li class="nav-item"><a href="../pages/14-feature-engineering.html" class=""><span class="num">14</span>Feature engineering</a></li><li class="nav-item"><a href="../pages/15-eda.html" class=""><span class="num">15</span>EDA: Exploratory Data Analysis</a></li><li class="nav-item"><a href="../pages/16-ml-fundamentals.html" class=""><span class="num">16</span>ML: fundamentals — bias, variance, validation</a></li><li class="nav-item"><a href="../pages/17-linear-regression.html" class=""><span class="num">17</span>Linear regression and regularization</a></li><li class="nav-item"><a href="../pages/18-logistic-regression.html" class=""><span class="num">18</span>Logistic regression and classification</a></li><li class="nav-item"><a href="../pages/19-knn-naive-bayes-svm.html" class=""><span class="num">19</span>KNN, Naive Bayes, SVM</a></li><li class="nav-item"><a href="../pages/20-decision-trees.html" class=""><span class="num">20</span>Decision trees</a></li><li class="nav-item"><a href="../pages/21-random-forest-boosting.html" class=""><span class="num">21</span>Random Forest, Gradient Boosting, XGBoost</a></li><li class="nav-item"><a href="../pages/22-clustering.html" class=""><span class="num">22</span>Clustering: K-Means, DBSCAN, GMM, hierarchical</a></li><li class="nav-item"><a href="../pages/23-pca-tsne-umap.html" class=""><span class="num">23</span>Dimensionality reduction: PCA, t-SNE, UMAP</a></li><li class="nav-item"><a href="../pages/24-metrics-validation.html" class=""><span class="num">24</span>Metrics, cross-validation, leakage</a></li><li class="nav-item"><a href="../pages/25-class-imbalance.html" class=""><span class="num">25</span>Class imbalance</a></li><li class="nav-item"><a href="../pages/26-hyperparameter-tuning.html" class=""><span class="num">26</span>Hyperparameter tuning</a></li><li class="nav-item"><a href="../pages/27-neural-networks.html" class=""><span class="num">27</span>Neural networks: from fundamentals to backprop</a></li><li class="nav-item"><a href="../pages/28-pytorch.html" class=""><span class="num">28</span>PyTorch: from toy model to training loop</a></li><li class="nav-item"><a href="../pages/29-cnn.html" class=""><span class="num">29</span>CNN for computer vision</a></li><li class="nav-item"><a href="../pages/30-rnn-lstm.html" class=""><span class="num">30</span>RNN, LSTM, GRU for sequences</a></li><li class="nav-item"><a href="../pages/31-transformer.html" class=""><span class="num">31</span>Transformer and attention</a></li><li class="nav-item"><a href="../pages/32-nlp-llm.html" class=""><span class="num">32</span>NLP: from text mining to LLMs</a></li><li class="nav-item"><a href="../pages/33-time-series.html" class=""><span class="num">33</span>Time series and forecasting</a></li><li class="nav-item"><a href="../pages/34-mlops.html" class=""><span class="num">34</span>MLOps: deployment, monitoring, drift</a></li><li class="nav-item"><a href="../pages/35-bayesian-causal.html" class=""><span class="num">35</span>Bayesian and Causal Inference</a></li><li class="nav-item"><a href="../pages/36-capstone-career.html" class=""><span class="num">36</span>Capstone, portfolio, career</a></li><li class="nav-item"><a href="../pages/37-glossary.html" class=""><span class="num">37</span>Glossary A-Z</a></li><li class="nav-item"><a href="../pages/38-formula-sheet.html" class=""><span class="num">38</span>Formula Sheet: all the formulas from the course</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Statistics</span>
+        <span>Section 7 of 39</span>
+        <span class="level-tag level-beg">Level: beginner</span>
+      </div>
+      <h1>Descriptive statistics</h1>
+      <p class="summary">Central tendency, dispersion, skewness, kurtosis. Boxplots, histograms, density plots. Understanding a dataset before touching a model.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Statistics</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>[[probability]]</li></ul>
+  <div class="label">Tools</div>
+  <ul class="source-list"><li>NumPy, pandas, matplotlib</li></ul>
+</div>
+      <h2 id="the-goal-summarize-without-lying">The goal: summarize without lying</h2>
+<p>Before modeling, <strong>describe</strong>. Descriptive statistics produces numerical and graphical summaries. It's the first defense against confirmation bias: it forces you to see the data before believing what you want to believe.</p>
+<blockquote>
+<p>"Statistics is the science of changing your mind under uncertainty" — Persi Diaconis. To change your mind, first see what's there.</p>
+</blockquote>
+<h2 id="visual-preview-same-5-numbers-radically-different-distributions">Visual preview: same "5 numbers", radically different distributions</h2>
+<p>Before studying formulas, look at this: 5 datasets, <strong>all with the same mean and standard deviation</strong>, but with radically different distributions. This is the visual proof that "mean and std" never suffice alone.</p>
+<div class="chart"><svg viewBox="0 0 600 160" xmlns="http://www.w3.org/2000/svg">
+<g transform="translate(20,10)">
+  <text x="50" y="-2" fill="#7aa2ff" font-size="10" text-anchor="middle">symmetric</text>
+  <line x1="0" y1="130" x2="100" y2="130" stroke="#444"/>
+  <path d="M 0 128 Q 25 110 50 50 Q 75 110 100 128" fill="rgba(122,162,255,0.18)" stroke="#7aa2ff" stroke-width="1.5"/>
+</g>
+<g transform="translate(140,10)">
+  <text x="50" y="-2" fill="#ffb347" font-size="10" text-anchor="middle">right skewed</text>
+  <line x1="0" y1="130" x2="100" y2="130" stroke="#444"/>
+  <path d="M 0 128 Q 15 90 25 50 Q 40 95 70 120 Q 90 128 100 128" fill="rgba(255,179,71,0.18)" stroke="#ffb347" stroke-width="1.5"/>
+</g>
+<g transform="translate(260,10)">
+  <text x="50" y="-2" fill="#c084fc" font-size="10" text-anchor="middle">bimodal</text>
+  <line x1="0" y1="130" x2="100" y2="130" stroke="#444"/>
+  <path d="M 0 128 Q 15 100 25 70 Q 35 100 50 120 Q 65 100 75 70 Q 85 100 100 128" fill="rgba(192,132,252,0.18)" stroke="#c084fc" stroke-width="1.5"/>
+</g>
+<g transform="translate(380,10)">
+  <text x="50" y="-2" fill="#5ee2c4" font-size="10" text-anchor="middle">uniform</text>
+  <line x1="0" y1="130" x2="100" y2="130" stroke="#444"/>
+  <rect x="10" y="80" width="80" height="50" fill="rgba(94,226,196,0.18)" stroke="#5ee2c4" stroke-width="1.5"/>
+</g>
+<g transform="translate(500,10)">
+  <text x="50" y="-2" fill="#ff7a7a" font-size="10" text-anchor="middle">heavy tails</text>
+  <line x1="0" y1="130" x2="100" y2="130" stroke="#444"/>
+  <path d="M 0 125 Q 30 122 45 30 Q 55 30 70 122 Q 90 128 100 128" fill="rgba(255,122,122,0.18)" stroke="#ff7a7a" stroke-width="1.5"/>
+</g>
+</svg><div class="chart-caption">All share mean and variance. A distribution isn't "a number": it's a shape.</div></div>
+
+<h2 id="central-tendency">Central tendency</h2>
+<h3 id="arithmetic-mean">Arithmetic mean</h3>
+<p>$$\bar{x} = \frac{1}{n} \sum_{i=1}^n x_i$$</p>
+<p>Sensitive to outliers. One person with income 1M in a sample of 99 with mean 30k pushes the mean to 39.7k. Represents nobody.</p>
+<h3 id="median">Median</h3>
+<p>The middle ordered value. <strong>Robust</strong> to outliers: those 99 have median ~30k, the one rich person doesn't move it.</p>
+<h3 id="mode">Mode</h3>
+<p>The most frequent value. Useful for categorical, rarely for continuous.</p>
+<h3 id="trimmed-mean">Trimmed mean</h3>
+<p>Ignores $\alpha\%$ of extreme values top and bottom. Compromise between mean and median.</p>
+<pre><code class="language-python">import numpy as np
+from scipy import stats
+x = np.array([1,2,3,4,5,6,7,8,9,100])
+np.mean(x), np.median(x), stats.trim_mean(x, 0.1)
+# (14.5, 5.5, 5.0)
+</code></pre>
+<h2 id="dispersion">Dispersion</h2>
+<h3 id="variance-and-standard-deviation">Variance and standard deviation</h3>
+<p>$$s^2 = \frac{1}{n-1} \sum_{i=1}^n (x_i - \bar{x})^2$$</p>
+<p>Note the <strong>denominator $n-1$</strong> (Bessel's correction) — produces an <strong>unbiased</strong> estimator of the population variance. NumPy default is <code>ddof=0</code>, pandas <code>ddof=1</code>. Always check.</p>
+<h3 id="range-iqr">Range, IQR</h3>
+<ul>
+<li><strong>Range</strong> = $\max - \min$. Extreme, not robust.</li>
+<li><strong>Interquartile Range (IQR)</strong> = $Q_3 - Q_1$. Robust, contains 50% of central data.</li>
+</ul>
+<h3 id="mad-median-absolute-deviation">MAD — Median Absolute Deviation</h3>
+<p>$$\text{MAD} = \text{median}(|x_i - \text{median}(x)|)$$</p>
+<p>Robust version of std. Used for outlier detection:</p>
+<p>$$|x_i - \text{median}| &gt; 3 \cdot \text{MAD} \implies \text{suspect outlier}$$</p>
+<h2 id="quantiles-and-boxplots">Quantiles and boxplots</h2>
+<p><strong>Quantiles</strong> divide ordered data into equal parts. Quantile $q$ is the value $x_q$ such that fraction $q$ of data is below:</p>
+<ul>
+<li>$Q_1$ = 0.25 (first quartile)</li>
+<li>$Q_2$ = median = 0.50</li>
+<li>$Q_3$ = 0.75</li>
+</ul>
+<p>The <strong>boxplot</strong> (Tukey, 1977) visualizes them:</p>
+<div class="chart"><svg viewBox="0 0 360 160" xmlns="http://www.w3.org/2000/svg">
+<line x1="40" y1="80" x2="320" y2="80" stroke="#444"/>
+<line x1="60" y1="70" x2="60" y2="90" stroke="#7aa2ff" stroke-width="2"/>
+<line x1="60" y1="80" x2="120" y2="80" stroke="#7aa2ff" stroke-width="2"/>
+<rect x="120" y="55" width="100" height="50" fill="rgba(122,162,255,0.18)" stroke="#7aa2ff" stroke-width="2"/>
+<line x1="160" y1="55" x2="160" y2="105" stroke="#ffb347" stroke-width="3"/>
+<line x1="220" y1="80" x2="280" y2="80" stroke="#7aa2ff" stroke-width="2"/>
+<line x1="280" y1="70" x2="280" y2="90" stroke="#7aa2ff" stroke-width="2"/>
+<circle cx="310" cy="80" r="3" fill="#ff7a7a"/>
+<text x="55" y="120" fill="#7aa2ff" font-size="10" text-anchor="middle">min</text>
+<text x="120" y="120" fill="#7aa2ff" font-size="10" text-anchor="middle">Q1</text>
+<text x="160" y="125" fill="#ffb347" font-size="10" text-anchor="middle">median</text>
+<text x="220" y="120" fill="#7aa2ff" font-size="10" text-anchor="middle">Q3</text>
+<text x="280" y="120" fill="#7aa2ff" font-size="10" text-anchor="middle">max</text>
+<text x="310" y="120" fill="#ff7a7a" font-size="10" text-anchor="middle">outlier</text>
+</svg><div class="chart-caption">Box = IQR, whiskers = 1.5×IQR, points = outliers beyond whiskers.</div></div>
+
+<h2 id="skewness-and-kurtosis">Skewness and kurtosis</h2>
+<p><strong>Skewness</strong> $= E[(X-\mu)^3]/\sigma^3$. Measures asymmetry.</p>
+<ul>
+<li>$&gt; 0$: right tail (right-skewed). E.g., income, session duration.</li>
+<li>$&lt; 0$: left tail. Rare in natural data.</li>
+</ul>
+<p><strong>Kurtosis</strong> $= E[(X-\mu)^4]/\sigma^4$. Measures "heavy tails".</p>
+<ul>
+<li>Normal has kurtosis 3 (excess 0).</li>
+<li>$&gt; 3$: leptokurtic (heavy tails, high peaks). E.g., financial returns, file sizes.</li>
+<li>$&lt; 3$: platykurtic (flatter). E.g., uniform.</li>
+</ul>
+<div class="chart"><svg viewBox="0 0 480 150" xmlns="http://www.w3.org/2000/svg">
+<g transform="translate(20,10)">
+  <line x1="0" y1="120" x2="120" y2="120" stroke="#555"/>
+  <path d="M 0 118 Q 20 50 60 50 Q 80 50 100 90 Q 110 110 120 118" fill="none" stroke="#ffb347" stroke-width="2"/>
+  <text x="60" y="140" fill="#ffb347" font-size="11" text-anchor="middle">skew &gt; 0</text>
+</g>
+<g transform="translate(180,10)">
+  <line x1="0" y1="120" x2="120" y2="120" stroke="#555"/>
+  <path d="M 0 118 Q 30 90 50 50 Q 60 30 70 50 Q 90 90 120 118" fill="none" stroke="#7aa2ff" stroke-width="2"/>
+  <text x="60" y="140" fill="#7aa2ff" font-size="11" text-anchor="middle">symmetric</text>
+</g>
+<g transform="translate(340,10)">
+  <line x1="0" y1="120" x2="120" y2="120" stroke="#555"/>
+  <path d="M 0 118 Q 50 105 60 20 Q 70 105 120 118" fill="none" stroke="#c084fc" stroke-width="2"/>
+  <text x="60" y="140" fill="#c084fc" font-size="11" text-anchor="middle">high kurtosis</text>
+</g>
+</svg></div>
+
+<h2 id="histograms-and-density">Histograms and density</h2>
+<p><strong>Histogram</strong>: divide the range into bins and count. Bin choice: too many → jagged, too few → loss of structure.</p>
+<p>Common rules:
+- <strong>Sturges</strong>: $k = 1 + \log_2 n$
+- <strong>Freedman-Diaconis</strong>: $h = 2 \cdot \text{IQR} / n^{1/3}$ (more robust to heavy tails)</p>
+<pre><code class="language-python">import numpy as np, matplotlib.pyplot as plt
+x = np.random.lognormal(0, 0.5, 1000)
+plt.hist(x, bins='fd', density=True, alpha=0.6, color='#7aa2ff')
+plt.show()
+</code></pre>
+<p><strong>KDE (kernel density estimation)</strong>: smooth alternative to histograms. For each point applies a kernel (Gaussian) and sums. The <code>bandwidth</code> parameter controls smoothness.</p>
+<pre><code class="language-python">import seaborn as sns
+sns.kdeplot(x, fill=True)
+</code></pre>
+<h2 id="bivariate-statistics">Bivariate statistics</h2>
+<h3 id="scatter-plot">Scatter plot</h3>
+<p>The only honest way to see a relationship between two continuous variables. A 0.8 correlation could be perfectly linear, parabolic, or totally skewed by outliers. <strong>Always plot</strong>.</p>
+<h3 id="correlation-heatmap">Correlation heatmap</h3>
+<p>For many variables. <code>seaborn.heatmap(df.corr())</code> is everywhere. Warning: shows only linear Pearson correlation. For nonlinear data, use <strong>Spearman</strong> (rank correlation).</p>
+<pre><code class="language-python">import seaborn as sns
+sns.heatmap(df.corr(method='spearman'), annot=True, cmap='RdBu_r', center=0)
+</code></pre>
+<h2 id="statistics-for-categorical-data">Statistics for categorical data</h2>
+<ul>
+<li><strong>Frequencies</strong>: <code>df['col'].value_counts(normalize=True)</code>.</li>
+<li><strong>Contingency table</strong>: <code>pd.crosstab(df.a, df.b)</code>.</li>
+<li><strong>Cramér's V</strong>: association between two categoricals, in $[0, 1]$.</li>
+<li><strong>Chi-squared</strong> for independence test (see tests section).</li>
+</ul>
+<h2 id="useful-transformations">Useful transformations</h2>
+<p>When data is strongly skewed, some transformations bring them toward normality or stabilize variance:</p>
+<table>
+<thead>
+<tr>
+<th>Data</th>
+<th>Transformation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Right skew (positive)</td>
+<td>$\log(x+c)$ — small c handles zeros</td>
+</tr>
+<tr>
+<td>Severe right skew</td>
+<td>$\sqrt{x}$</td>
+</tr>
+<tr>
+<td>Counts (Poisson)</td>
+<td>$\sqrt{x}$ or Anscombe</td>
+</tr>
+<tr>
+<td>Percentages $[0,1]$</td>
+<td>$\log(p/(1-p))$ (logit)</td>
+</tr>
+<tr>
+<td>Generic</td>
+<td><strong>Box-Cox</strong> or <strong>Yeo-Johnson</strong></td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-python">from sklearn.preprocessing import PowerTransformer
+pt = PowerTransformer(method='yeo-johnson')
+x_trans = pt.fit_transform(x.reshape(-1, 1))
+</code></pre>
+<h2 id="exercises">Exercises</h2>
+<details>
+<summary>Exercise 1 — Outliers affect the mean</summary>
+
+Compute mean and median of `[10, 12, 11, 13, 14, 15, 1000]`. Compare.
+
+**Solution**: mean ≈ 153.6, median = 13. One outlier shifts the mean by 10×.
+</details>
+
+<details>
+<summary>Exercise 2 — Tukey's five-number summary</summary>
+
+For dataset `[2, 4, 4, 4, 5, 5, 7, 9]`, compute min, Q1, median, Q3, max.
+
+**Solution**: 2, 4, 4.5, 6, 9. Verify:
+
+<pre><code class="language-python">np.percentile([2,4,4,4,5,5,7,9], [0, 25, 50, 75, 100])
+</code></pre>
+
+</details>
+
+<details>
+<summary>Exercise 3 — Interpreted skew</summary>
+
+Generate 10000 lognormal samples, compute skew and kurtosis:
+
+
+<pre><code class="language-python">import numpy as np
+from scipy.stats import skew, kurtosis
+x = np.random.lognormal(0, 1, 10_000)
+print(skew(x), kurtosis(x))  # both positive, high
+</code></pre>
+
+
+Apply `np.log(x)` and recompute. What happens? Why?
+
+**Answer**: after the log, skew ≈ 0 and kurtosis ≈ 0 (it's Gaussian). The lognormal is precisely "exp of a normal".
+</details>
+
+<details>
+<summary>Exercise 4 — Anscombe quartet</summary>
+
+Anscombe's 4 datasets have **same mean, variance, correlation, regression line**, but plotted look completely different. Load and plot:
+
+
+<pre><code class="language-python">import seaborn as sns
+a = sns.load_dataset('anscombe')
+sns.lmplot(data=a, x='x', y='y', col='dataset', col_wrap=2, ci=None)
+</code></pre>
+
+
+Lesson: **never trust summary numbers alone. Always plot.**
+</details>
+
+<details>
+<summary>Exercise 5 — Detect outliers with IQR and MAD</summary>
+
+
+<pre><code class="language-python">import numpy as np
+rng = np.random.default_rng(0)
+x = np.concatenate([rng.normal(0, 1, 100), [10, 12, 15]])
+
+# IQR method
+q1, q3 = np.percentile(x, [25, 75])
+iqr = q3 - q1
+mask = (x &lt; q1 - 1.5*iqr) | (x &gt; q3 + 1.5*iqr)
+print(&quot;IQR outliers:&quot;, x[mask])
+
+# MAD method
+med = np.median(x)
+mad = np.median(np.abs(x - med))
+mask = np.abs(x - med) &gt; 3 * 1.4826 * mad   # 1.4826 → normal-σ consistency
+print(&quot;MAD outliers:&quot;, x[mask])
+</code></pre>
+
+</details>
+
+<h2 id="takeaways">Takeaways</h2>
+<ul>
+<li>Mean + std describe well <strong>only if</strong> the distribution is ~symmetric.</li>
+<li>Median + IQR are robust, preferred for skewed or dirty data.</li>
+<li>Always plot. Anscombe teaches.</li>
+<li>Transformations (log, Box-Cox, Yeo-Johnson) are your friends for skewed distributions.</li>
+</ul>
+<p>Next: inferential statistics, hypothesis tests, p-values, and things 9 out of 10 statisticians explain badly.</p>
+      <nav class="pager">
+<a href="05-probability.html" class="prev"><span class="label">← Previous</span><span class="title">Probability: the language of uncertainty</span></a>
+<a href="07-inferential-statistics.html" class="next"><span class="label">Next →</span><span class="title">Inferential statistics and hypothesis testing</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Data Science Zero to Hero</strong> — complete path, in English, from math to deployment.</p><p>Open didactic material. Formulas are here to be understood, not feared. When a concept is unclear, go back: data science is a pyramid, not a tree you skip across.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+</body>
+</html>

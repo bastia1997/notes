@@ -1,0 +1,761 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Linked list — FAANG Prep</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">F</div>
+      <div>
+        <div class="brand-title">FAANG Prep</div>
+        <div class="brand-subtitle">DS&amp;A · System Design</div>
+      </div>
+    </div>
+    <div class="lang-bar">
+      <a class="lang-switcher" href="../../pages/04-linked-list.html" title="Italiano"><span class="flag-icon">🇮🇹</span><span class="flag-label">Italiano</span></a>
+    </div>
+  </div>
+  <div class="search-wrap">
+    <input class="search-input" id="search-input" placeholder="Search content... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/00-introduction.html" class=""><span class="num">00</span>Introduction and how to use this path</a></li><li class="nav-item"><a href="../pages/01-complexity.html" class=""><span class="num">01</span>Computational complexity (Big-O)</a></li><li class="nav-item"><a href="../pages/02-arrays-strings.html" class=""><span class="num">02</span>Arrays and strings</a></li><li class="nav-item"><a href="../pages/03-hashmap-set.html" class=""><span class="num">03</span>Hashmap and set</a></li><li class="nav-item"><a href="../pages/04-linked-list.html" class="active"><span class="num">04</span>Linked list</a></li><li class="nav-item"><a href="../pages/05-stack-queue.html" class=""><span class="num">05</span>Stack and queue</a></li><li class="nav-item"><a href="../pages/06-trees.html" class=""><span class="num">06</span>Trees (binary tree and BST)</a></li><li class="nav-item"><a href="../pages/07-heap.html" class=""><span class="num">07</span>Heap and priority queue</a></li><li class="nav-item"><a href="../pages/08-graphs.html" class=""><span class="num">08</span>Graphs</a></li><li class="nav-item"><a href="../pages/09-trie.html" class=""><span class="num">09</span>Trie (prefix tree)</a></li><li class="nav-item"><a href="../pages/10-recursion-backtracking.html" class=""><span class="num">10</span>Recursion and backtracking</a></li><li class="nav-item"><a href="../pages/11-sorting-searching.html" class=""><span class="num">11</span>Sorting and searching</a></li><li class="nav-item"><a href="../pages/12-two-pointers-sliding-window.html" class=""><span class="num">12</span>Two pointers and sliding window</a></li><li class="nav-item"><a href="../pages/13-greedy.html" class=""><span class="num">13</span>Greedy</a></li><li class="nav-item"><a href="../pages/14-dp.html" class=""><span class="num">14</span>Dynamic programming</a></li><li class="nav-item"><a href="../pages/15-bit-manipulation.html" class=""><span class="num">15</span>Bit manipulation</a></li><li class="nav-item"><a href="../pages/16-oop-design-patterns.html" class=""><span class="num">16</span>OOP and design patterns</a></li><li class="nav-item"><a href="../pages/17-system-design.html" class=""><span class="num">17</span>System design — fundamentals</a></li><li class="nav-item"><a href="../pages/18-system-design-examples.html" class=""><span class="num">18</span>System design — end-to-end examples</a></li><li class="nav-item"><a href="../pages/19-concurrency.html" class=""><span class="num">19</span>Concurrency and parallelism</a></li><li class="nav-item"><a href="../pages/20-database-sql.html" class=""><span class="num">20</span>Database and SQL</a></li><li class="nav-item"><a href="../pages/21-os-networking.html" class=""><span class="num">21</span>OS and networking</a></li><li class="nav-item"><a href="../pages/22-coding-patterns.html" class=""><span class="num">22</span>The 16 interview coding patterns</a></li><li class="nav-item"><a href="../pages/23-behavioral-star.html" class=""><span class="num">23</span>Behavioral interview — STAR and Amazon LP</a></li><li class="nav-item"><a href="../pages/24-mock-interviews.html" class=""><span class="num">24</span>Mock interview and interview strategy</a></li><li class="nav-item"><a href="../pages/25-roadmap-90-days.html" class=""><span class="num">25</span>90-day Roadmap — operational plan</a></li><li class="nav-item"><a href="../pages/26-problem-bank.html" class=""><span class="num">26</span>Problem bank — 200+ FAANG problems</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Data structures</span>
+        <span>Section 4 of 26</span>
+      </div>
+      <h1>Linked list</h1>
+      <p class="summary">What a pointer is, why LL exists, reverse explained 3 different ways, fast/slow pointers visualized.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Data structures</div>
+  
+  
+</div>
+      <p>Linked lists are interview bread and butter. Even though Python rarely uses them in real life (lists are dynamic arrays), they appear in 30% of interview problems.</p>
+<p>And they have a teaching superpower: they <strong>force you to think in pointers</strong>, a fundamental skill that pays in many other contexts.</p>
+<h2 id="part-1-what-a-pointer-really-is">Part 1 — What a pointer really is</h2>
+<h3 id="memory-addresses-recap">Memory + addresses: recap</h3>
+<p>As seen in ch. 02, memory is a tape of cells, each with a numeric address (0, 1, 2, ...).</p>
+<p>A <strong>pointer</strong> is simply a number representing a memory address. <em>"Pointer p equals 1000"</em> means <em>"p points to the cell at address 1000"</em>.</p>
+<p>In Python you don't see pointers as numbers, but they exist: every variable <strong>doesn't contain</strong> the object, it contains a reference (implicit pointer).</p>
+<pre><code class="language-python">a = [1, 2, 3]
+b = a   # b points to the same object as a
+b.append(4)
+print(a)   # [1, 2, 3, 4] !! Modify via b, but a sees the change
+</code></pre>
+<p><code>a</code> and <code>b</code> are two pointers to the same list. Modifying the list from one makes the other "see" it.</p>
+<h3 id="a-linked-list-is-a-chain-of-connected-nodes">A linked list is a chain of connected nodes</h3>
+<p>Imagine wanting to store a sequence of numbers, but <strong>not in contiguous memory cells</strong>. Instead, scattered everywhere, and each "node" knows <strong>where the next is</strong>.</p>
+<pre><code class="language-mermaid">flowchart LR
+    A[42] --&gt; B[17] --&gt; C[99] --&gt; D[03] --&gt; E((None))
+</code></pre>
+<p>Each node has:</p>
+<ul>
+<li><code>val</code>: the value.</li>
+<li><code>next</code>: a pointer to the next node (or <code>None</code> if last).</li>
+</ul>
+<p>In Python:</p>
+<pre><code class="language-python">class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+</code></pre>
+<h3 id="doubly-linked-list">Doubly linked list</h3>
+<p>Variant: each node also has <code>prev</code> (pointer to previous).</p>
+<pre><code class="language-python">class DListNode:
+    def __init__(self, val=0):
+        self.val = val
+        self.prev = None
+        self.next = None
+</code></pre>
+<p>Visualization:</p>
+<pre><code class="language-mermaid">flowchart LR
+    A[42] &lt;--&gt; B[17] &lt;--&gt; C[99] &lt;--&gt; D[03]
+</code></pre>
+<h2 id="part-2-why-does-it-exist-array-vs-linked-list">Part 2 — Why does it exist? Array vs Linked List</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Array</th>
+<th>Singly LL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Memory</td>
+<td>contiguous</td>
+<td>sparse, each node anywhere</td>
+</tr>
+<tr>
+<td>Access to <code>i</code>-th</td>
+<td><strong>O(1)</strong></td>
+<td>O(n) (must traverse)</td>
+</tr>
+<tr>
+<td>Insert/Delete at head</td>
+<td>O(n) (shifts all)</td>
+<td><strong>O(1)</strong></td>
+</tr>
+<tr>
+<td>Insert/Delete at tail</td>
+<td>O(1) amortized</td>
+<td>O(n) or O(1) (with tail ptr)</td>
+</tr>
+<tr>
+<td>Insert/Delete in middle (with ptr to prev)</td>
+<td>O(n) (shifts all)</td>
+<td><strong>O(1)</strong></td>
+</tr>
+<tr>
+<td>Cache-friendly</td>
+<td>yes (close in index = close in mem)</td>
+<td>no (scattered)</td>
+</tr>
+<tr>
+<td>Memory overhead</td>
+<td>low</td>
+<td>high (next ptr per node)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="when-does-it-make-sense-in-real-life">When does it make sense in real life?</h3>
+<p>In Python: pretty much never (<code>list</code> is enough for everything). In systems languages like C++, yes:</p>
+<ul>
+<li>When you have <strong>many inserts/deletes in the middle</strong> and random access doesn't matter.</li>
+<li>To implement structures like queue, deque, hashmap (chaining), graphs (adjacency list).</li>
+</ul>
+<p><strong>In interviews, linked lists serve mainly as mental gymnastics for reasoning with pointers</strong>.</p>
+<h2 id="part-3-the-fundamental-operations">Part 3 — The fundamental operations</h2>
+<h3 id="31-traverse">3.1 Traverse</h3>
+<p>Print or process all nodes:</p>
+<pre><code class="language-python">cur = head
+while cur:
+    print(cur.val)
+    cur = cur.next
+</code></pre>
+<p>Important the idiom <code>while cur:</code> — exits when <code>cur is None</code> (end of list).</p>
+<h3 id="32-length">3.2 Length</h3>
+<pre><code class="language-python">def length(head):
+    n = 0
+    cur = head
+    while cur:
+        n += 1
+        cur = cur.next
+    return n
+</code></pre>
+<p>O(n).</p>
+<h3 id="33-insert-at-head">3.3 Insert at head</h3>
+<pre><code class="language-python">def insert_head(head, val):
+    new_node = ListNode(val)
+    new_node.next = head
+    return new_node   # new head
+</code></pre>
+<p>O(1).</p>
+<p><strong>Before</strong>:</p>
+<pre><code class="language-mermaid">flowchart LR
+    A1[A] --&gt; B1[B] --&gt; C1[C]
+</code></pre>
+<p><strong>After</strong>:</p>
+<pre><code class="language-mermaid">flowchart LR
+    X[X] --&gt; A2[A] --&gt; B2[B] --&gt; C2[C]
+</code></pre>
+<h3 id="34-insert-after-a-node">3.4 Insert after a node</h3>
+<pre><code class="language-python">def insert_after(node, val):
+    new_node = ListNode(val)
+    new_node.next = node.next
+    node.next = new_node
+</code></pre>
+<p>O(1). The order matters! If you invert the two lines, you lose the reference to the next:</p>
+<pre><code class="language-python"># WRONG:
+node.next = new_node       # Now node points to new_node
+new_node.next = node.next  # But node.next is now new_node itself → cycle!
+</code></pre>
+<h3 id="35-delete-after-a-node">3.5 Delete after a node</h3>
+<pre><code class="language-python">def delete_after(node):
+    if node.next:
+        node.next = node.next.next
+</code></pre>
+<p>O(1). The "skipped" node will be collected by garbage collector (in Python).</p>
+<h2 id="part-4-trick-number-1-the-dummy-node">Part 4 — Trick number 1: the dummy node</h2>
+<p>Many linked list problems have a special case: <strong>modification might involve the head</strong>.</p>
+<p>Example: "remove all nodes with value 7". If the head itself is 7, you must change the head. If the second is also 7, again. Bug-prone.</p>
+<p><strong>Solution: add a "virtual" dummy node before the head</strong>.</p>
+<pre><code class="language-python">def delete_value(head, target):
+    dummy = ListNode(0, head)
+    cur = dummy
+    while cur.next:
+        if cur.next.val == target:
+            cur.next = cur.next.next   # skip
+        else:
+            cur = cur.next
+    return dummy.next   # new head
+</code></pre>
+<p>Visualization:</p>
+<p><strong>Before</strong> (removing nodes with value 7):</p>
+<pre><code class="language-mermaid">flowchart LR
+    D1[dummy] --&gt; A1[7] --&gt; B1[1] --&gt; C1[7] --&gt; E1[2] --&gt; F1[7]
+    style A1 stroke:#ff6b6b,stroke-width:2px
+    style C1 stroke:#ff6b6b,stroke-width:2px
+    style F1 stroke:#ff6b6b,stroke-width:2px
+</code></pre>
+<p><strong>After</strong>:</p>
+<pre><code class="language-mermaid">flowchart LR
+    D2[dummy] --&gt; B2[1] --&gt; E2[2]
+</code></pre>
+<p>No special case for the head: the dummy absorbs the complexity.</p>
+<p><strong>Use the dummy whenever the head could change</strong>.</p>
+<h2 id="part-5-reverse-a-linked-list-explained-3-times">Part 5 — Reverse a linked list (explained 3 times)</h2>
+<p>The most asked LL problem ever. You must know how to write it in 30 seconds.</p>
+<h3 id="version-1-explained-in-words">Version 1: explained in words</h3>
+<p>We want to invert <code>A → B → C → D</code> into <code>D → C → B → A</code>.</p>
+<p>Idea: scan node by node. For each, <strong>flip the arrow</strong>.</p>
+<p>But there's a problem: as soon as you flip <code>A.next</code>, you lose the reference to <code>B</code>. So you must <strong>save the next before flipping</strong>.</p>
+<pre><code class="language-python">def reverse(head):
+    prev = None       # at start, &quot;before head&quot; is None
+    cur = head
+    while cur:
+        nxt = cur.next    # 1. SAVE next
+        cur.next = prev   # 2. FLIP cur's arrow
+        prev = cur        # 3. ADVANCE prev
+        cur = nxt         # 4. ADVANCE cur
+    return prev   # new head (last valid cur)
+</code></pre>
+<h3 id="version-2-visually-explained">Version 2: visually explained</h3>
+<p>Trace on <code>A → B → C → D</code>:</p>
+<pre><code>Step 0 (init):
+  prev=None
+  cur=A → B → C → D
+
+Step 1 (iteration 1):
+  nxt = B   (save)
+  A.next = None  (flip: A no longer points to B, points to None)
+  prev = A
+  cur = B
+  List state: None ← A   ;   B → C → D
+
+Step 2:
+  nxt = C
+  B.next = A   (flip)
+  prev = B
+  cur = C
+  State: None ← A ← B   ;   C → D
+
+Step 3:
+  nxt = D
+  C.next = B
+  prev = C
+  cur = D
+  State: None ← A ← B ← C   ;   D
+
+Step 4:
+  nxt = None
+  D.next = C
+  prev = D
+  cur = None
+  State: None ← A ← B ← C ← D
+
+Loop exits (cur is None).
+Return prev = D.
+</code></pre>
+<p>Result: <code>D → C → B → A → None</code>. ✓</p>
+<h3 id="version-3-recursively-explained">Version 3: recursively explained</h3>
+<pre><code class="language-python">def reverse_rec(head):
+    if not head or not head.next:
+        return head   # base: empty list or single node
+
+    new_head = reverse_rec(head.next)   # reverse the rest
+    head.next.next = head               # connect &quot;me&quot; to end of reversed rest
+    head.next = None                    # I become the last
+    return new_head
+</code></pre>
+<p>O(n) time, <strong>O(n) space</strong> for recursion stack. For long lists (n &gt; 1000), prefer the iterative version.</p>
+<h3 id="which-to-remember">Which to remember?</h3>
+<p>All three. In interview write the iterative (simpler, no stack). If they ask recursive, you know.</p>
+<h2 id="part-6-fast-slow-pointers-floyds-algorithm">Part 6 — Fast &amp; slow pointers (Floyd's algorithm)</h2>
+<p>An extraordinarily elegant pattern. Also called <strong>Tortoise and Hare</strong>.</p>
+<h3 id="the-idea">The idea</h3>
+<p>Two pointers start together from the head. One (slow) advances 1 node at a time. The other (fast) advances 2.</p>
+<pre><code>Step 0: slow=A, fast=A
+Step 1: slow=B, fast=C
+Step 2: slow=C, fast=E
+...
+</code></pre>
+<h3 id="use-1-find-the-middle">Use 1: find the middle</h3>
+<p>When <code>fast</code> reaches the end (or can't advance 2 more), <code>slow</code> is exactly in the middle. Single pass, O(n).</p>
+<pre><code class="language-python">def find_middle(head):
+    slow = fast = head
+    while fast and fast.next:
+        slow = slow.next
+        fast = fast.next.next
+    return slow
+</code></pre>
+<p>For even list (e.g. 4 nodes), <code>slow</code> ends on the <strong>second</strong> of the two medians. If you need the first, use <code>while fast.next and fast.next.next</code>.</p>
+<h3 id="use-2-cycle-detection">Use 2: cycle detection</h3>
+<p>If the list has a cycle (some <code>next</code> points back), fast and slow <strong>will meet</strong>.</p>
+<pre><code class="language-python">def has_cycle(head):
+    slow = fast = head
+    while fast and fast.next:
+        slow = slow.next
+        fast = fast.next.next
+        if slow is fast:
+            return True
+    return False
+</code></pre>
+<p><strong>Why does it work?</strong> If there's a cycle, once both pointers enter the cycle they stay there. Fast is "1 ahead more" each iteration (because it does 2 steps vs 1). So sooner or later it reaches slow (one cycle step behind). It's like fast chasing slow on a circular track.</p>
+<h3 id="use-3-find-the-start-of-the-cycle">Use 3: find the start of the cycle</h3>
+<p>After they've met:</p>
+<ol>
+<li>Reset one of the pointers to the head.</li>
+<li>Advance both by 1.</li>
+<li>They'll meet <strong>at the start of the cycle</strong>.</li>
+</ol>
+<pre><code class="language-python">def detect_cycle(head):
+    slow = fast = head
+    while fast and fast.next:
+        slow = slow.next
+        fast = fast.next.next
+        if slow is fast:
+            p = head
+            while p is not slow:
+                p = p.next
+                slow = slow.next
+            return p
+    return None
+</code></pre>
+<p><strong>Why?</strong> Proof (algebra):</p>
+<p>Let <code>a</code> = distance head → cycle start. <code>b</code> = distance cycle start → meeting point (in cycle direction). <code>c</code> = cycle length.</p>
+<p>When they meet:</p>
+<ul>
+<li>slow has traveled <code>a + b</code>.</li>
+<li>fast has traveled <code>a + b + k·c</code> for some <code>k</code> ≥ 1 (k extra cycle laps).</li>
+<li>fast has 2× speed of slow: <code>a + b + k·c = 2(a + b)</code> → <code>k·c = a + b</code> → <code>a = k·c - b</code>.</li>
+</ul>
+<p>So if we start from head and from meeting point at speed 1, we travel <code>a</code> steps each. Slow reaches <code>a + b + a = a + (kc - b) + b = a + kc</code> = "cycle start + k laps" = cycle start. Head reaches exactly cycle start. <strong>They meet there</strong>. □</p>
+<h2 id="part-7-pattern-merge-of-two-sorted-lists">Part 7 — Pattern: Merge of two sorted lists</h2>
+<pre><code class="language-python">def merge(a, b):
+    dummy = ListNode()
+    tail = dummy
+    while a and b:
+        if a.val &lt;= b.val:
+            tail.next = a
+            a = a.next
+        else:
+            tail.next = b
+            b = b.next
+        tail = tail.next
+    tail.next = a or b   # attach remainders
+    return dummy.next
+</code></pre>
+<p>Idea: two pointers, always take the smaller. Dummy node to elegantly handle the head.</p>
+<h2 id="part-8-pattern-intersection-of-two-lists">Part 8 — Pattern: intersection of two lists</h2>
+<p>Given two lists that merge at some point, find the merge node.</p>
+<p><strong>Elegant trick</strong>: scan both lists. When a pointer reaches <code>None</code>, make it restart from the other head. They'll meet at the intersection point (or both at <code>None</code>).</p>
+<pre><code class="language-python">def intersection(a, b):
+    pa, pb = a, b
+    while pa is not pb:
+        pa = pa.next if pa else b
+        pb = pb.next if pb else a
+    return pa
+</code></pre>
+<p>Why it works: after traversing both lists, they've covered the same total length (<code>|a| + |b|</code>). So they arrive "in phase" at the intersection point.</p>
+<h2 id="part-9-common-traps">Part 9 — Common traps</h2>
+<h3 id="trap-1-dereferencing-none">Trap 1 — Dereferencing None</h3>
+<pre><code class="language-python">while cur:
+    if cur.next.val == target:   # CRASH if cur.next is None
+        ...
+
+# Correct:
+while cur and cur.next:
+    if cur.next.val == target: ...
+</code></pre>
+<h3 id="trap-2-save-next-before-overwriting">Trap 2 — Save next before overwriting</h3>
+<pre><code class="language-python"># WRONG:
+cur.next = prev   # now you've lost reference to next!
+
+# Correct:
+nxt = cur.next    # SAVE first
+cur.next = prev
+cur = nxt
+</code></pre>
+<h3 id="trap-3-accidental-cycle">Trap 3 — Accidental cycle</h3>
+<p>If you assign <code>a.next = b</code> when <code>b</code> indirectly points to <code>a</code>, you create a cycle. For debug: print the list limiting to N nodes.</p>
+<pre><code class="language-python">def safe_print(head, max_nodes=50):
+    out = []
+    cur = head
+    while cur and len(out) &lt; max_nodes:
+        out.append(str(cur.val))
+        cur = cur.next
+    return &quot; → &quot;.join(out)
+</code></pre>
+<h3 id="trap-4-doubly-linked-forgetting-prev">Trap 4 — Doubly linked: forgetting <code>prev</code></h3>
+<p>In doubly linked, every operation requires updating both <code>next</code> and <code>prev</code>. Common oversight:</p>
+<pre><code class="language-python"># Insert new after node (doubly linked)
+new.prev = node
+new.next = node.next
+if node.next:
+    node.next.prev = new   # OFTEN FORGOTTEN
+node.next = new
+</code></pre>
+<h3 id="trap-5-changing-head">Trap 5 — Changing head</h3>
+<p>Already said: use the <strong>dummy node</strong> to avoid special cases.</p>
+<h2 id="guided-exercises">Guided exercises</h2>
+<h3 id="exercise-41-reverse-linked-list-easy">Exercise 4.1 — Reverse Linked List <span class="problem-tag easy">EASY</span></h3>
+<details><summary>Solution</summary>
+
+See Part 5. Memorize the iterative version.
+</details>
+
+<h3 id="exercise-42-merge-two-sorted-lists-easy">Exercise 4.2 — Merge Two Sorted Lists <span class="problem-tag easy">EASY</span></h3>
+<details><summary>Solution</summary>
+
+See Part 7.
+</details>
+
+<h3 id="exercise-43-linked-list-cycle-easy">Exercise 4.3 — Linked List Cycle <span class="problem-tag easy">EASY</span></h3>
+<details><summary>Solution</summary>
+
+See Part 6 use 2.
+</details>
+
+<h3 id="exercise-44-cycle-ii-find-cycle-start-medium">Exercise 4.4 — Cycle II (find cycle start) <span class="problem-tag medium">MEDIUM</span></h3>
+<details><summary>Solution</summary>
+
+See Part 6 use 3 with proof.
+</details>
+
+<h3 id="exercise-45-remove-nth-node-from-end-medium">Exercise 4.5 — Remove Nth Node From End <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Remove the n-th node from the end, in <strong>single pass</strong>.</p>
+<details><summary>Reasoning</summary>
+
+**Classic trick**: two pointers with gap of `n`.
+
+1. `fast` starts from head and advances `n` nodes.
+2. Then `slow` starts from head, and both advance together until `fast` reaches the last.
+3. At that point, `slow` is **right before** the n-th from end.
+
+
+<pre><code class="language-python">def remove_nth(head, n):
+    dummy = ListNode(0, head)
+    fast = slow = dummy
+    for _ in range(n):
+        fast = fast.next
+    while fast.next:
+        fast = fast.next
+        slow = slow.next
+    slow.next = slow.next.next
+    return dummy.next
+</code></pre>
+
+
+Dummy use to handle "n = list length" (i.e. removing the head).
+
+O(n) time, O(1) space, single pass.
+</details>
+
+<h3 id="exercise-46-palindrome-linked-list-easy">Exercise 4.6 — Palindrome Linked List <span class="problem-tag easy">EASY</span></h3>
+<p>Check if the list is palindrome. O(n) time, <strong>O(1) space</strong>.</p>
+<details><summary>Reasoning</summary>
+
+**Brute force O(n) space**: copy to Python list, check palindrome. But we want O(1).
+
+**Technique**:
+
+1. Find middle (fast/slow).
+2. Reverse second half.
+3. Compare first half and second half (reversed).
+4. (Optionally: re-reverse to restore).
+
+
+<pre><code class="language-python">def is_pal(head):
+    # 1. Find middle
+    slow = fast = head
+    while fast and fast.next:
+        slow = slow.next
+        fast = fast.next.next
+    # 2. Reverse second half starting from slow
+    prev = None
+    while slow:
+        nxt = slow.next
+        slow.next = prev
+        prev = slow
+        slow = nxt
+    # 3. Compare
+    left = head
+    right = prev   # new head of reversed second half
+    while right:
+        if left.val != right.val:
+            return False
+        left = left.next
+        right = right.next
+    return True
+</code></pre>
+
+
+O(n) time, O(1) space.
+
+**Lesson**: combining two base techniques (fast/slow + reverse) solves problems that seem to require extra structures.
+</details>
+
+<h3 id="exercise-47-add-two-numbers-medium">Exercise 4.7 — Add Two Numbers <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Two numbers represented as linked list (least significant digit at head). Return sum as linked list.</p>
+<details><summary>Solution</summary>
+
+
+<pre><code class="language-python">def add_two(a, b):
+    dummy = ListNode()
+    tail = dummy
+    carry = 0
+    while a or b or carry:
+        v = carry + (a.val if a else 0) + (b.val if b else 0)
+        carry, v = divmod(v, 10)
+        tail.next = ListNode(v)
+        tail = tail.next
+        if a: a = a.next
+        if b: b = b.next
+    return dummy.next
+</code></pre>
+
+
+Trace on `342 + 465 = 807` represented as `2→4→3` + `5→6→4`:
+
+
+<pre><code>iter 1: v=2+5+0=7, carry=0. Output: 7
+iter 2: v=4+6+0=10, carry=1, v=0. Output: 7→0
+iter 3: v=3+4+1=8, carry=0. Output: 7→0→8
+end: 7→0→8 which is 807. ✓
+</code></pre>
+
+
+O(max(n, m)).
+</details>
+
+<h3 id="exercise-48-copy-list-with-random-pointer-medium">Exercise 4.8 — Copy List with Random Pointer <span class="problem-tag medium">MEDIUM</span></h3>
+<p>List where each node has <code>next</code> and <code>random</code>. Do deep copy.</p>
+<details><summary>Reasoning</summary>
+
+**Idea**: for each original node, we create its copy. But `random` points to another original node, and we must make it point to the copy of that node.
+
+**Hashmap solution**: mapping `original → copy`. Two passes.
+
+
+<pre><code class="language-python">def copy_random(head):
+    if not head: return None
+    m = {}
+    # Pass 1: create copies (no links)
+    cur = head
+    while cur:
+        m[cur] = Node(cur.val)
+        cur = cur.next
+    # Pass 2: connect next and random
+    cur = head
+    while cur:
+        m[cur].next = m.get(cur.next)
+        m[cur].random = m.get(cur.random)
+        cur = cur.next
+    return m[head]
+</code></pre>
+
+
+O(n) time, O(n) space.
+
+**O(1) space version**: interleaving (insert copy AFTER each original, then split). More complex but elegant.
+</details>
+
+<h3 id="exercise-49-reverse-nodes-in-k-group-hard">Exercise 4.9 — Reverse Nodes in K-Group <span class="problem-tag hard">HARD</span></h3>
+<p>Reverse every k-node group. Last incomplete group: leave as is.</p>
+<details><summary>Solution</summary>
+
+
+<pre><code class="language-python">def reverse_k_group(head, k):
+    dummy = ListNode(0, head)
+    group_prev = dummy
+    while True:
+        # Find k-th node after group_prev
+        kth = group_prev
+        for _ in range(k):
+            kth = kth.next
+            if not kth:
+                return dummy.next   # incomplete group, end
+        group_next = kth.next
+        # Reverse [group_prev.next .. kth]
+        prev, cur = group_next, group_prev.next
+        while cur is not group_next:
+            nxt = cur.next
+            cur.next = prev
+            prev = cur
+            cur = nxt
+        # &quot;Reconnect&quot; group_prev → kth, and advance group_prev
+        tmp = group_prev.next   # will become new &quot;last&quot; of group
+        group_prev.next = kth   # group is reversed, kth is first
+        group_prev = tmp        # advance for next group
+</code></pre>
+
+
+Hard. You must draw it to understand. "Boss" exercise of linked lists.
+</details>
+
+<h3 id="exercise-410-lru-cache-doubly-linked-list-version-medium">Exercise 4.10 — LRU Cache (doubly linked list version) <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Without OrderedDict. Hashmap + doubly linked list.</p>
+<details><summary>Solution</summary>
+
+
+<pre><code class="language-python">class Node:
+    def __init__(self, k=0, v=0):
+        self.k = k
+        self.v = v
+        self.prev = self.next = None
+
+class LRUCache:
+    def __init__(self, cap):
+        self.cap = cap
+        self.map = {}
+        self.head = Node()   # dummy
+        self.tail = Node()   # dummy
+        self.head.next = self.tail
+        self.tail.prev = self.head
+
+    def _remove(self, n):
+        n.prev.next = n.next
+        n.next.prev = n.prev
+
+    def _add_front(self, n):
+        n.next = self.head.next
+        n.prev = self.head
+        self.head.next.prev = n
+        self.head.next = n
+
+    def get(self, k):
+        if k not in self.map:
+            return -1
+        n = self.map[k]
+        self._remove(n)
+        self._add_front(n)
+        return n.v
+
+    def put(self, k, v):
+        if k in self.map:
+            self._remove(self.map[k])
+        n = Node(k, v)
+        self.map[k] = n
+        self._add_front(n)
+        if len(self.map) &gt; self.cap:
+            lru = self.tail.prev
+            self._remove(lru)
+            del self.map[lru.k]
+</code></pre>
+
+
+Structure:
+
+
+<pre><code>head ↔ MRU ↔ ... ↔ LRU ↔ tail
+</code></pre>
+
+
+Dummy head/tail eliminate "empty list" or "remove first/last" special cases.
+
+All O(1). This is THE most asked interview question.
+</details>
+
+<h3 id="exercise-411-sort-list-medium">Exercise 4.11 — Sort List <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Sort a linked list in O(n log n).</p>
+<details><summary>Solution</summary>
+
+Merge sort.
+
+
+<pre><code class="language-python">def sort_list(head):
+    if not head or not head.next:
+        return head
+    # Split in middle
+    slow, fast = head, head.next
+    while fast and fast.next:
+        slow = slow.next
+        fast = fast.next.next
+    mid = slow.next
+    slow.next = None
+    return merge(sort_list(head), sort_list(mid))
+</code></pre>
+
+
+Merge as seen in Part 7.
+
+O(n log n) time. Stack O(log n).
+</details>
+
+<h2 id="chapter-summary">Chapter summary</h2>
+<ol>
+<li><strong>Pointer = number representing an address</strong>. In Python, variables "are" pointers to objects.</li>
+<li><strong>Linked list = chain of nodes</strong>. Middle insert/delete O(1), i-th access O(n).</li>
+<li><strong>Dummy node</strong>: add it before head to avoid special cases. Always.</li>
+<li><strong>Iterative reverse</strong>: <code>prev/cur/nxt</code>. Memorize it.</li>
+<li><strong>Fast &amp; slow pointers</strong>: middle, cycle detection, cycle start. Killer pattern.</li>
+<li><strong>Hashmap+LL pattern</strong>: LRU cache.</li>
+</ol>
+<p>Can you write reverse in 30 seconds? Can you draw fast/slow? Have you mastered the dummy? Then this chapter is done. Go to <a href="05-stack-queue.html">ch. 05 — Stack and queue</a>.</p>
+      <nav class="pager">
+<a href="03-hashmap-set.html" class="prev"><span class="label">← Previous</span><span class="title">Hashmap and set</span></a>
+<a href="05-stack-queue.html" class="next"><span class="label">Next →</span><span class="title">Stack and queue</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>FAANG Prep</strong> — complete prep path: DS&amp;A, system design, behavioral. Built to crush Big Tech interviews.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-index.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true,
+      background: '#161922',
+      primaryColor: '#1d2230',
+      primaryTextColor: '#e6e8ee',
+      primaryBorderColor: '#6cf',
+      lineColor: '#7a8194',
+      secondaryColor: '#262b3a',
+      tertiaryColor: '#0f1117',
+      mainBkg: '#1d2230',
+      secondBkg: '#262b3a',
+      tertiaryBkg: '#161922',
+      nodeBorder: '#6cf',
+      clusterBkg: '#161922',
+      clusterBorder: '#262b3a',
+      titleColor: '#6cf',
+      edgeLabelBackground: '#161922',
+      fontFamily: 'Cascadia Code, monospace'
+    }
+  });
+  document.querySelectorAll('pre > code.language-mermaid').forEach((codeEl) => {
+    const pre = codeEl.parentElement;
+    const div = document.createElement('div');
+    div.className = 'mermaid';
+    div.textContent = codeEl.textContent;
+    pre.replaceWith(div);
+  });
+  mermaid.run();
+</script>
+</body>
+</html>

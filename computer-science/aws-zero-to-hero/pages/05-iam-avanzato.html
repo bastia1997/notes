@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IAM avanzato: policy condizionali, STS, ABAC — AWS Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#232f3e',primaryTextColor:'#ffffff',primaryBorderColor:'#ff9900',lineColor:'#8a99ad',background:'#0c1320'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">λ</div>
+      <div>
+        <div class="brand-title">AWS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">IT</span><a href="../en/pages/05-iam-advanced.html" class="lang-link" title="Switch to English">EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-cos-e-aws-cloud.html" class=""><span class="num">01</span>Cos&#x27;è il cloud e cos&#x27;è AWS</a></li><li class="nav-item"><a href="../pages/02-infrastruttura-globale.html" class=""><span class="num">02</span>Infrastruttura globale: Region, AZ, Edge</a></li><li class="nav-item"><a href="../pages/03-account-root-billing.html" class=""><span class="num">03</span>Account AWS, utente root, billing</a></li><li class="nav-item"><a href="../pages/04-iam-fondamenti.html" class=""><span class="num">04</span>IAM — fondamenti (utenti, gruppi, ruoli, policy)</a></li><li class="nav-item"><a href="../pages/05-iam-avanzato.html" class="active"><span class="num">05</span>IAM avanzato: policy condizionali, STS, ABAC</a></li><li class="nav-item"><a href="../pages/06-cli-sdk-iac.html" class=""><span class="num">06</span>CLI, SDK, CloudShell, IaC primer</a></li><li class="nav-item"><a href="../pages/07-pricing-billing.html" class=""><span class="num">07</span>Pricing, billing, free tier, cost tools</a></li><li class="nav-item"><a href="../pages/08-organizations-multi-account.html" class=""><span class="num">08</span>AWS Organizations &amp; strategia multi-account</a></li><li class="nav-item"><a href="../pages/09-vpc-fondamenti.html" class=""><span class="num">09</span>VPC — fondamenti</a></li><li class="nav-item"><a href="../pages/10-vpc-avanzato.html" class=""><span class="num">10</span>VPC avanzato: peering, TGW, PrivateLink, endpoint</a></li><li class="nav-item"><a href="../pages/11-route53-cloudfront.html" class=""><span class="num">11</span>Route 53, CloudFront, Global Accelerator</a></li><li class="nav-item"><a href="../pages/12-hybrid-vpn-directconnect.html" class=""><span class="num">12</span>Hybrid: VPN, Direct Connect, PrivateLink</a></li><li class="nav-item"><a href="../pages/13-ec2-fondamenti.html" class=""><span class="num">13</span>EC2 — fondamenti (istanze, AMI, lifecycle)</a></li><li class="nav-item"><a href="../pages/14-ec2-avanzato-spot-nitro.html" class=""><span class="num">14</span>EC2 avanzato — Spot, Placement Groups, Nitro, hibernation</a></li><li class="nav-item"><a href="../pages/15-asg-elb.html" class=""><span class="num">15</span>Auto Scaling Groups + Elastic Load Balancing</a></li><li class="nav-item"><a href="../pages/16-lambda-deep-dive.html" class=""><span class="num">16</span>Lambda deep dive</a></li><li class="nav-item"><a href="../pages/17-containers-ecs-eks-fargate.html" class=""><span class="num">17</span>Containers: ECS, EKS, Fargate, ECR</a></li><li class="nav-item"><a href="../pages/18-specialty-compute.html" class=""><span class="num">18</span>Specialty compute: Batch, Lightsail, Outposts, Wavelength, Beanstalk</a></li><li class="nav-item"><a href="../pages/19-ebs-efs-fsx.html" class=""><span class="num">19</span>EBS, EFS, FSx, Instance Store</a></li><li class="nav-item"><a href="../pages/20-s3-deep-dive.html" class=""><span class="num">20</span>S3 — deep dive</a></li><li class="nav-item"><a href="../pages/21-archive-snow-gateway-backup.html" class=""><span class="num">21</span>Glacier, Snow, Storage Gateway, DataSync, AWS Backup</a></li><li class="nav-item"><a href="../pages/22-rds.html" class=""><span class="num">22</span>RDS — relational DB managed (engines, Multi-AZ, replicas, Proxy)</a></li><li class="nav-item"><a href="../pages/23-aurora-deep-dive.html" class=""><span class="num">23</span>Aurora deep dive — storage condiviso, Serverless v2, Global Database</a></li><li class="nav-item"><a href="../pages/24-dynamodb-deep-dive.html" class=""><span class="num">24</span>DynamoDB deep dive — partition, GSI, Streams, single-table</a></li><li class="nav-item"><a href="../pages/25-purpose-built-dbs.html" class=""><span class="num">25</span>Purpose-built DB — ElastiCache, MemoryDB, Neptune, DocumentDB, Keyspaces, Timestream, QLDB</a></li><li class="nav-item"><a href="../pages/26-redshift-data-warehousing.html" class=""><span class="num">26</span>Redshift — data warehousing MPP e zero-ETL</a></li><li class="nav-item"><a href="../pages/27-sqs-sns-eventbridge.html" class=""><span class="num">27</span>SQS, SNS, EventBridge — messaging ed eventi</a></li><li class="nav-item"><a href="../pages/28-step-functions-mq-appflow.html" class=""><span class="num">28</span>Step Functions, MQ, AppFlow — orchestrazione e integrazione</a></li><li class="nav-item"><a href="../pages/29-athena-glue-lakeformation.html" class=""><span class="num">29</span>Athena, Glue, Lake Formation — il data lake AWS</a></li><li class="nav-item"><a href="../pages/30-emr-kinesis-msk.html" class=""><span class="num">30</span>EMR, Kinesis, MSK — big data e streaming</a></li><li class="nav-item"><a href="../pages/31-opensearch-quicksight.html" class=""><span class="num">31</span>OpenSearch e QuickSight — search e BI</a></li><li class="nav-item"><a href="../pages/32-sagemaker-overview.html" class=""><span class="num">32</span>SageMaker — la piattaforma ML end-to-end</a></li><li class="nav-item"><a href="../pages/33-bedrock-ai-services.html" class=""><span class="num">33</span>Bedrock e AI services — GenAI e ML managed</a></li><li class="nav-item"><a href="../pages/34-iac-cloudformation-cdk-terraform.html" class=""><span class="num">34</span>IaC su AWS — CloudFormation, CDK, SAM, Terraform</a></li><li class="nav-item"><a href="../pages/35-ci-cd-pipeline.html" class=""><span class="num">35</span>CI/CD su AWS — CodePipeline, CodeBuild, CodeDeploy, CodeCatalyst</a></li><li class="nav-item"><a href="../pages/36-observability-cloudwatch-xray.html" class=""><span class="num">36</span>Observability — CloudWatch, X-Ray, CloudTrail, Config, SSM</a></li><li class="nav-item"><a href="../pages/37-kms-secrets-acm.html" class=""><span class="num">37</span>Crittografia — KMS, CloudHSM, Secrets Manager, Parameter Store, ACM</a></li><li class="nav-item"><a href="../pages/38-waf-shield-guardduty-inspector.html" class=""><span class="num">38</span>Threat detection — WAF, Shield, GuardDuty, Inspector, Macie, Security Hub</a></li><li class="nav-item"><a href="../pages/39-governance-org-controltower-identitycenter.html" class=""><span class="num">39</span>Governance — Organizations, Control Tower, Identity Center</a></li><li class="nav-item"><a href="../pages/40-migration-mgn-dms-snow.html" class=""><span class="num">40</span>Migration — MGN, DMS, Snow family, Discovery, Migration Hub</a></li><li class="nav-item"><a href="../pages/41-cost-optimization-finops.html" class=""><span class="num">41</span>Cost optimization e FinOps</a></li><li class="nav-item"><a href="../pages/42-well-architected.html" class=""><span class="num">42</span>Well-Architected Framework — 6 pillar, lens, review</a></li><li class="nav-item"><a href="../pages/43-architecture-patterns.html" class=""><span class="num">43</span>Architecture patterns — 3-tier, serverless, event-driven, microservices</a></li><li class="nav-item"><a href="../pages/44-disaster-recovery-multi-region.html" class=""><span class="num">44</span>Disaster Recovery e Multi-Region</a></li><li class="nav-item"><a href="../pages/45-reference-architectures.html" class=""><span class="num">45</span>Reference architectures real-world</a></li><li class="nav-item"><a href="../pages/46-advanced-networking.html" class=""><span class="num">46</span>Advanced networking deep dive</a></li><li class="nav-item"><a href="../pages/47-containers-deep-dive.html" class=""><span class="num">47</span>Containers deep dive — EKS, Karpenter, service mesh</a></li><li class="nav-item"><a href="../pages/48-serverless-patterns.html" class=""><span class="num">48</span>Serverless patterns deep dive</a></li><li class="nav-item"><a href="../pages/49-genai-rag-agents.html" class=""><span class="num">49</span>Generative AI su AWS — RAG e Agents</a></li><li class="nav-item"><a href="../pages/50-certificazioni-aws.html" class=""><span class="num">50</span>Certificazioni AWS — roadmap e study guide</a></li><li class="nav-item"><a href="../pages/51-glossario-az.html" class=""><span class="num">51</span>Glossario A-Z</a></li><li class="nav-item"><a href="../pages/52-cheatsheet.html" class=""><span class="num">52</span>Cheat sheet: servizi, limiti, instance families</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Identità &amp; Sicurezza</span>
+        <span>Sezione 5 di 52</span>
+        <span class="level-tag level-int">Livello: intermedio</span>
+      </div>
+      <h1>IAM avanzato: policy condizionali, STS, ABAC</h1>
+      <p class="summary">Condition keys, ABAC con tag, STS e credential vending, federazione SAML/OIDC, sts:ExternalId per cross-account sicuro, AssumeRoleWithWebIdentity per workload Kubernetes/CI.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Identità &amp; Sicurezza</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>sezione 4 (IAM fondamenti)</li></ul>
+  <div class="label">Strumenti / riferimenti</div>
+  <ul class="source-list"><li>AWS CLI</li><li>jq per parsare output STS</li></ul>
+</div>
+      <p>Una volta capiti utenti, ruoli e policy, IAM si apre in tre direzioni avanzate: <strong>condizioni</strong> (granularità chirurgica), <strong>ABAC</strong> (attribute-based access control: governare per tag invece che policy esplose), e <strong>STS</strong> (il backbone della federazione e del cross-account).</p>
+<h2 id="1-condition-keys">1. Condition keys</h2>
+<p>Le condition keys arricchiscono <code>Allow</code>/<code>Deny</code> con vincoli runtime. Tre categorie:</p>
+<ul>
+<li><strong>Global</strong>: prefissate <code>aws:</code> (esistono per tutti i servizi). Esempi: <code>aws:SourceIp</code>, <code>aws:MultiFactorAuthPresent</code>, <code>aws:RequestedRegion</code>, <code>aws:CurrentTime</code>, <code>aws:PrincipalOrgID</code>.</li>
+<li><strong>Servizio-specifiche</strong>: prefissate dal servizio. <code>s3:x-amz-server-side-encryption</code>, <code>ec2:InstanceType</code>, <code>dynamodb:LeadingKeys</code>.</li>
+<li><strong>Per tag</strong>: <code>aws:RequestTag/&lt;key&gt;</code>, <code>aws:ResourceTag/&lt;key&gt;</code>, <code>aws:PrincipalTag/&lt;key&gt;</code>.</li>
+</ul>
+<pre><code class="language-json">{
+  &quot;Effect&quot;:&quot;Allow&quot;,
+  &quot;Action&quot;:&quot;ec2:RunInstances&quot;,
+  &quot;Resource&quot;:&quot;*&quot;,
+  &quot;Condition&quot;:{
+    &quot;StringEquals&quot;:{&quot;ec2:InstanceType&quot;:[&quot;t3.micro&quot;,&quot;t3.small&quot;]},
+    &quot;StringEqualsIfExists&quot;:{&quot;aws:RequestTag/Project&quot;:&quot;alpha&quot;},
+    &quot;Bool&quot;:{&quot;aws:MultiFactorAuthPresent&quot;:&quot;true&quot;},
+    &quot;IpAddress&quot;:{&quot;aws:SourceIp&quot;:&quot;203.0.113.0/24&quot;}
+  }
+}
+</code></pre>
+<p>Tipi di operatore: <code>StringEquals</code>, <code>StringLike</code>, <code>NumericLessThan</code>, <code>DateGreaterThan</code>, <code>Bool</code>, <code>IpAddress</code>, <code>ArnLike</code>, <code>Null</code>, e i loro <code>*IfExists</code>. Si combinano con AND logico nel blocco <code>Condition</code> e OR logico negli array.</p>
+<h2 id="2-abac-governare-per-tag">2. ABAC: governare per tag</h2>
+<p>ABAC = <strong>Attribute-Based Access Control</strong>. Invece di scrivere una policy per ciascun team/progetto, scrivi UNA policy che dice "puoi agire su risorse il cui tag <code>Project</code> corrisponde al tuo <code>Project</code>".</p>
+<pre><code class="language-json">{
+  &quot;Effect&quot;:&quot;Allow&quot;,
+  &quot;Action&quot;:[&quot;s3:GetObject&quot;,&quot;s3:PutObject&quot;],
+  &quot;Resource&quot;:&quot;arn:aws:s3:::data-*/*&quot;,
+  &quot;Condition&quot;:{
+    &quot;StringEquals&quot;:{&quot;aws:ResourceTag/Project&quot;:&quot;${aws:PrincipalTag/Project}&quot;}
+  }
+}
+</code></pre>
+<p>Vantaggi:</p>
+<ul>
+<li>Scali a 1000 team senza esplodere il numero di policy.</li>
+<li>Nuovo team = nuovo tag, zero codice IAM.</li>
+<li>Audit più semplice: i tag sono la verità.</li>
+</ul>
+<p>Svantaggi:</p>
+<ul>
+<li>Richiede governance dei tag (chi li applica, validazione automatica).</li>
+<li>Risorse legacy senza tag → fallisce silenziosamente.</li>
+<li>Più difficile da debuggare ("perché non vedo questa risorsa?").</li>
+</ul>
+<h2 id="3-sts-il-vending-machine-delle-credenziali">3. STS: il vending machine delle credenziali</h2>
+<p><strong>STS (Security Token Service)</strong> emette credenziali temporanee. Ogni assumeRole, ogni federazione, ogni <code>aws sso login</code> finisce in una chiamata STS che restituisce tre cose: AccessKeyId, SecretAccessKey, SessionToken — valide 15 min–12 ore.</p>
+<p>API principali:</p>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>Quando</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>AssumeRole</code></td>
+<td>il principal A assume un ruolo (in stesso account o altro)</td>
+</tr>
+<tr>
+<td><code>AssumeRoleWithSAML</code></td>
+<td>utente da IdP SAML (Okta, AD FS) assume un ruolo</td>
+</tr>
+<tr>
+<td><code>AssumeRoleWithWebIdentity</code></td>
+<td>identità da OIDC (Cognito, Google, GitHub Actions, Kubernetes IRSA)</td>
+</tr>
+<tr>
+<td><code>GetSessionToken</code></td>
+<td>un IAM user ottiene una sessione MFA</td>
+</tr>
+<tr>
+<td><code>GetFederationToken</code></td>
+<td>rare, per app proxy</td>
+</tr>
+</tbody>
+</table>
+<p>Punto critico: STS è <strong>regionale</strong>. Esiste un endpoint globale (<code>sts.amazonaws.com</code>) ma è considerato anti-pattern: usa l'endpoint regionale (<code>sts.eu-west-1.amazonaws.com</code>) per latenza e isolamento di failure.</p>
+<h2 id="4-cross-account-il-confused-deputy-e-lexternalid">4. Cross-account: il confused deputy e l'ExternalId</h2>
+<p>Scenario: tu (account A) vuoi che un fornitore (account B, es. Datadog) acceda al tuo S3. Crei un ruolo in A con <code>Principal: arn:aws:iam::B:root</code> in trust policy.</p>
+<p>Problema: B potrebbe assumere il tuo ruolo per conto di <strong>un altro suo cliente</strong> (confused deputy). Soluzione: <strong>sts:ExternalId</strong> — un valore segreto che A genera e dà a B. B deve includerlo in <code>AssumeRole</code>. A lo verifica.</p>
+<pre><code class="language-json">&quot;Condition&quot;:{
+  &quot;StringEquals&quot;:{&quot;sts:ExternalId&quot;:&quot;a-random-secret-12345&quot;}
+}
+</code></pre>
+<p>Tutti i fornitori SaaS seri (Datadog, Snowflake, Wiz, ecc.) lo richiedono.</p>
+<h2 id="5-federazione-moderna-iam-identity-center-oidc">5. Federazione moderna: IAM Identity Center + OIDC</h2>
+<p><strong>IAM Identity Center</strong> (ex AWS SSO) è il modo 2026 per gestire umani. Si collega al tuo IdP (Entra ID, Okta, Google Workspace), e l'utente fa SSO una volta e accede a tutti gli account dell'Organization, con set di permessi (permission sets) per account.</p>
+<p><strong>OIDC</strong> (OpenID Connect) è il modo per workload non-AWS. Esempi pratici:</p>
+<ul>
+<li><strong>GitHub Actions</strong> ottiene credenziali AWS senza access key statiche (<code>AssumeRoleWithWebIdentity</code> su un identity provider OIDC che fida GitHub).</li>
+<li><strong>Kubernetes IRSA</strong> (IAM Roles for Service Accounts): pod EKS assume un ruolo basato sul service account.</li>
+</ul>
+<p>Esempio trust policy per GitHub Actions:</p>
+<pre><code class="language-json">{
+  &quot;Version&quot;:&quot;2012-10-17&quot;,
+  &quot;Statement&quot;:[{
+    &quot;Effect&quot;:&quot;Allow&quot;,
+    &quot;Principal&quot;:{&quot;Federated&quot;:&quot;arn:aws:iam::111:oidc-provider/token.actions.githubusercontent.com&quot;},
+    &quot;Action&quot;:&quot;sts:AssumeRoleWithWebIdentity&quot;,
+    &quot;Condition&quot;:{
+      &quot;StringEquals&quot;:{&quot;token.actions.githubusercontent.com:aud&quot;:&quot;sts.amazonaws.com&quot;},
+      &quot;StringLike&quot;:{&quot;token.actions.githubusercontent.com:sub&quot;:&quot;repo:myorg/myrepo:ref:refs/heads/main&quot;}
+    }
+  }]
+}
+</code></pre>
+<p>Risultato: il workflow CI ottiene credenziali AWS scadenti in 1 ora, niente segreti in repo.</p>
+<h2 id="6-permissions-boundary-in-dettaglio">6. Permissions boundary in dettaglio</h2>
+<p>Una boundary è una policy che limita il <strong>massimo</strong> che un'altra policy può concedere. Non concede nulla da sola. Pattern tipico: dai ai dev il diritto di creare ruoli, ma con boundary fissa.</p>
+<pre><code class="language-bash">aws iam create-role \
+  --role-name app-role \
+  --assume-role-policy-document file://trust.json \
+  --permissions-boundary arn:aws:iam::111:policy/DevBoundary
+</code></pre>
+<p>Anche se il dev allega <code>AdministratorAccess</code> al ruolo creato, il ruolo non potrà superare la boundary.</p>
+<h2 id="7-anti-pattern-reali-incidenti-veri">7. Anti-pattern reali (incidenti veri)</h2>
+<ul>
+<li><strong><code>Action: *, Resource: *</code></strong> su ruoli applicativi. Una compromissione di un singolo container = totale takeover.</li>
+<li><strong>Trust policy con <code>Principal: *</code></strong>: chiunque al mondo può assumere il ruolo se conosce l'ARN.</li>
+<li><strong>Access key di un dev su laptop personale</strong>, sincronizzato su iCloud, scoperto da phishing. Vita reale, multipla.</li>
+<li><strong>CloudFormation eseguito con <code>CAPABILITY_AUTO_EXPAND</code></strong> senza review delle policy generate.</li>
+<li><strong>EC2 metadata IMDSv1</strong> (deprecata): SSRF banale espone credenziali. Forza IMDSv2 sempre.</li>
+</ul>
+<h2 id="8-esercizio">8. Esercizio</h2>
+<details>
+<summary>Vuoi che un ruolo possa lanciare EC2 SOLO con `t3.micro/small` E con il tag `Owner=email-dev`. Policy?</summary>
+
+
+<pre><code class="language-json">{
+  &quot;Effect&quot;:&quot;Allow&quot;,
+  &quot;Action&quot;:[&quot;ec2:RunInstances&quot;,&quot;ec2:CreateTags&quot;],
+  &quot;Resource&quot;:&quot;*&quot;,
+  &quot;Condition&quot;:{
+    &quot;StringEquals&quot;:{&quot;ec2:InstanceType&quot;:[&quot;t3.micro&quot;,&quot;t3.small&quot;]},
+    &quot;StringEquals&quot;:{&quot;aws:RequestTag/Owner&quot;:&quot;${aws:username}@example.com&quot;},
+    &quot;ForAllValues:StringEquals&quot;:{&quot;aws:TagKeys&quot;:[&quot;Owner&quot;,&quot;Project&quot;]}
+  }
+}
+</code></pre>
+
+
+`ForAllValues` impedisce di aggiungere tag fuori lista. Senza `StringEquals` su `aws:RequestTag`, il dev può lanciare senza tag.
+</details>
+
+<details>
+<summary>GitHub Actions deploy in AWS. Spiega come evitare di mettere chiavi nei Secrets di GitHub.</summary>
+
+1. In AWS crea un OIDC identity provider che fida `token.actions.githubusercontent.com`.
+2. Crea un ruolo IAM `github-deploy-role` con trust policy come sopra (con `sub` ristretta a repo/branch specifico).
+3. Nel workflow GitHub:
+
+<pre><code class="language-yaml">permissions:
+  id-token: write
+  contents: read
+steps:
+  - uses: aws-actions/configure-aws-credentials@v4
+    with:
+      role-to-assume: arn:aws:iam::111:role/github-deploy-role
+      aws-region: eu-west-1
+</code></pre>
+
+4. GitHub Actions richiede un OIDC token, lo invia ad AWS STS, ottiene credenziali AWS scadenti in 1 ora.
+
+Niente chiavi statiche, niente "key rotation". Se il repo viene compromesso, basta restringere `sub` in trust policy.
+</details>
+
+<blockquote>
+<p><strong>Riassunto</strong>: condition keys per granularità chirurgica; ABAC per scalare per tag invece che policy; STS per credenziali temporanee (mai statiche); ExternalId per cross-account con vendor; IAM Identity Center per umani; OIDC (<code>AssumeRoleWithWebIdentity</code>) per workload esterni come GitHub Actions e Kubernetes IRSA; permissions boundary per dare libertà ai dev senza esplodere.</p>
+</blockquote>
+      <nav class="pager">
+<a href="04-iam-fondamenti.html" class="prev"><span class="label">← Precedente</span><span class="title">IAM — fondamenti (utenti, gruppi, ruoli, policy)</span></a>
+<a href="06-cli-sdk-iac.html" class="next"><span class="label">Successivo →</span><span class="title">CLI, SDK, CloudShell, IaC primer</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>AWS Zero to Hero</strong> — percorso completo, in italiano, dalle primitive all'architettura avanzata.</p><p>Materiale didattico aperto. Nessuna sponsorizzazione, nessun affiliate link, nessuna affiliazione con AWS. Quando un concetto è oscuro, torna indietro: AWS è una piramide di primitive, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

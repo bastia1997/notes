@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OS e networking — FAANG Prep</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">F</div>
+      <div>
+        <div class="brand-title">FAANG Prep</div>
+        <div class="brand-subtitle">DS&amp;A · System Design</div>
+      </div>
+    </div>
+    <div class="lang-bar">
+      <a class="lang-switcher" href="../en/pages/21-os-networking.html" title="English"><span class="flag-icon">🇬🇧</span><span class="flag-label">English</span></a>
+    </div>
+  </div>
+  <div class="search-wrap">
+    <input class="search-input" id="search-input" placeholder="Cerca nei contenuti... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/00-introduzione.html" class=""><span class="num">00</span>Introduzione e come usare questo percorso</a></li><li class="nav-item"><a href="../pages/01-complessita.html" class=""><span class="num">01</span>Complessità computazionale (Big-O)</a></li><li class="nav-item"><a href="../pages/02-array-stringhe.html" class=""><span class="num">02</span>Array e stringhe</a></li><li class="nav-item"><a href="../pages/03-hashmap-set.html" class=""><span class="num">03</span>Hashmap e set</a></li><li class="nav-item"><a href="../pages/04-linked-list.html" class=""><span class="num">04</span>Linked list</a></li><li class="nav-item"><a href="../pages/05-stack-coda.html" class=""><span class="num">05</span>Stack e coda</a></li><li class="nav-item"><a href="../pages/06-alberi.html" class=""><span class="num">06</span>Alberi (binary tree e BST)</a></li><li class="nav-item"><a href="../pages/07-heap.html" class=""><span class="num">07</span>Heap e priority queue</a></li><li class="nav-item"><a href="../pages/08-grafi.html" class=""><span class="num">08</span>Grafi</a></li><li class="nav-item"><a href="../pages/09-trie.html" class=""><span class="num">09</span>Trie (prefix tree)</a></li><li class="nav-item"><a href="../pages/10-ricorsione-backtracking.html" class=""><span class="num">10</span>Ricorsione e backtracking</a></li><li class="nav-item"><a href="../pages/11-sorting-searching.html" class=""><span class="num">11</span>Sorting e searching</a></li><li class="nav-item"><a href="../pages/12-two-pointers-sliding-window.html" class=""><span class="num">12</span>Two pointers e sliding window</a></li><li class="nav-item"><a href="../pages/13-greedy.html" class=""><span class="num">13</span>Greedy</a></li><li class="nav-item"><a href="../pages/14-dp.html" class=""><span class="num">14</span>Dynamic programming</a></li><li class="nav-item"><a href="../pages/15-bit-manipulation.html" class=""><span class="num">15</span>Bit manipulation</a></li><li class="nav-item"><a href="../pages/16-oop-design-patterns.html" class=""><span class="num">16</span>OOP e design patterns</a></li><li class="nav-item"><a href="../pages/17-system-design.html" class=""><span class="num">17</span>System design — fondamenti</a></li><li class="nav-item"><a href="../pages/18-system-design-esempi.html" class=""><span class="num">18</span>System design — esempi end-to-end</a></li><li class="nav-item"><a href="../pages/19-concorrenza.html" class=""><span class="num">19</span>Concorrenza e parallelismo</a></li><li class="nav-item"><a href="../pages/20-database-sql.html" class=""><span class="num">20</span>Database e SQL</a></li><li class="nav-item"><a href="../pages/21-os-networking.html" class="active"><span class="num">21</span>OS e networking</a></li><li class="nav-item"><a href="../pages/22-coding-patterns.html" class=""><span class="num">22</span>I 16 coding patterns dei colloqui</a></li><li class="nav-item"><a href="../pages/23-behavioral-star.html" class=""><span class="num">23</span>Behavioral interview — STAR e Amazon LP</a></li><li class="nav-item"><a href="../pages/24-mock-interviews.html" class=""><span class="num">24</span>Mock interview e strategia in colloquio</a></li><li class="nav-item"><a href="../pages/25-roadmap-90-giorni.html" class=""><span class="num">25</span>Roadmap 90 giorni — piano operativo</a></li><li class="nav-item"><a href="../pages/26-banca-esercizi.html" class=""><span class="num">26</span>Banca esercizi — 200+ problemi FAANG</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Sistemi</span>
+        <span>Sezione 21 di 26</span>
+      </div>
+      <h1>OS e networking</h1>
+      <p class="summary">Cosa fa il sistema operativo, memoria virtuale, TCP/UDP, HTTP, DNS, TLS. Quanto basta per rispondere alle classiche domande &quot;quick&quot; in colloquio.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Sistemi</div>
+  
+  
+</div>
+      <p>Spesso queste domande arrivano intervallate al coding ("Cos'è un page fault?"), specialmente nelle prime fasi del loop. Devi rispondere con sicurezza in 1-2 frasi.</p>
+<p>Questo capitolo ti dà le fondamenta + risposte memorizzate alle 20 domande più frequenti.</p>
+<h2 id="parte-1-sistema-operativo">Parte 1 — Sistema operativo</h2>
+<h3 id="cose">Cos'è</h3>
+<p>Software base che fa girare il computer. Compiti principali:</p>
+<ol>
+<li><strong>Gestione processi</strong>: avvia, sospende, schedule.</li>
+<li><strong>Gestione memoria</strong>: alloca, isola, virtualizza.</li>
+<li><strong>Gestione I/O</strong>: dischi, rete, dispositivi.</li>
+<li><strong>Sicurezza</strong>: separazione utenti, permessi.</li>
+</ol>
+<p>Esempi: Linux, Windows, macOS, Android (Linux-based), iOS.</p>
+<h3 id="kernel-space-vs-user-space">Kernel space vs user space</h3>
+<p>Il <strong>kernel</strong> è il "core" privilegiato dell'OS. Accede direttamente all'hardware. Le applicazioni utente vivono in <strong>user space</strong>, protetto.</p>
+<p>Per fare cose privilegiate (aprire file, allocare memoria), l'app fa una <strong>system call</strong> → trap nel kernel → kernel esegue per conto dell'app.</p>
+<p>System call sono costose (decine di μs). Per questo si batchano (<code>writev</code>, <code>sendmsg</code>, ecc.).</p>
+<h2 id="parte-2-processi">Parte 2 — Processi</h2>
+<h3 id="cose_1">Cos'è</h3>
+<p>Un processo è un'<strong>istanza in esecuzione</strong> di un programma. Ha:</p>
+<ul>
+<li>Spazio di indirizzi proprio (virtual memory).</li>
+<li>File descriptors aperti.</li>
+<li>PCB (Process Control Block) con stato, registri, priorità.</li>
+<li>Almeno 1 thread.</li>
+</ul>
+<p>In Linux puoi vederli con <code>ps</code>, <code>top</code>.</p>
+<h3 id="stati-di-un-processo">Stati di un processo</h3>
+<ul>
+<li><strong>Running</strong>: sta usando la CPU.</li>
+<li><strong>Ready</strong>: pronto, in coda di scheduling.</li>
+<li><strong>Blocked</strong>: aspetta I/O o evento.</li>
+<li><strong>Zombie</strong>: terminato ma il padre non ha ancora letto exit code.</li>
+</ul>
+<h3 id="fork-exec-unix">Fork &amp; exec (Unix)</h3>
+<ul>
+<li><code>fork()</code>: duplica il processo corrente. Bambino e padre proseguono identici.</li>
+<li><code>exec()</code>: rimpiazza il programma corrente con uno nuovo.</li>
+</ul>
+<p>Pattern "fork + exec": crei un nuovo processo che esegue un altro programma.</p>
+<h3 id="process-id">Process ID</h3>
+<p><code>getpid()</code> ritorna il PID. PID 1 è <code>init</code> (avviato dal kernel al boot).</p>
+<h2 id="parte-3-thread-richiamo">Parte 3 — Thread (richiamo)</h2>
+<p>Già visto nel cap. 19. Sintesi:</p>
+<ul>
+<li>Stesso processo → memoria condivisa.</li>
+<li>Diverso processo → memoria isolata, IPC per comunicare.</li>
+</ul>
+<h2 id="parte-4-scheduling">Parte 4 — Scheduling</h2>
+<p>L'OS decide quale processo/thread eseguire in ogni momento.</p>
+<p><strong>Algoritmi</strong>:</p>
+<ul>
+<li><strong>FCFS (FIFO)</strong>: a turno. Semplice ma "convoy effect" (processi lunghi bloccano corti).</li>
+<li><strong>Round Robin</strong>: time slice fisso (es. 10 ms). Equo.</li>
+<li><strong>Priority</strong>: alta priorità prima. Rischio starvation.</li>
+<li><strong>MLFQ (Multi-Level Feedback Queue)</strong>: moderni OS. Processi I/O-bound salgono di priorità, CPU-bound scendono. Premia interattività.</li>
+</ul>
+<p>Linux usa <strong>CFS</strong> (Completely Fair Scheduler) — variante di fair share.</p>
+<h3 id="preemptive-vs-cooperative">Preemptive vs cooperative</h3>
+<ul>
+<li><strong>Preemptive</strong>: OS può interrompere qualsiasi processo. Linux, Windows, macOS.</li>
+<li><strong>Cooperative</strong>: processi cedono volontariamente. Vecchi OS, alcuni runtime (Lua, vecchi Mac OS).</li>
+</ul>
+<h2 id="parte-5-memoria-virtuale">Parte 5 — Memoria virtuale</h2>
+<p>Concetto chiave: <strong>ogni processo vede uno spazio di indirizzi virtuale "completo"</strong>, come se avesse tutta la RAM solo per sé.</p>
+<h3 id="page-table">Page table</h3>
+<p>L'<strong>MMU</strong> (Memory Management Unit) traduce indirizzi virtuali → fisici tramite una <strong>page table</strong>.</p>
+<p>Memoria divisa in <strong>pagine</strong> (tipicamente 4 KB). Ogni pagina virtuale mappata a una pagina fisica (o swap su disco).</p>
+<h3 id="vantaggi">Vantaggi</h3>
+<ul>
+<li><strong>Isolamento</strong>: il processo A non vede memoria di B.</li>
+<li><strong>Memoria &gt; fisica</strong>: pagine inattive vanno in swap. L'OS può "promettere" più RAM di quanta hai.</li>
+<li><strong>Lazy loading</strong>: pagine allocate ma non ancora usate non occupano RAM.</li>
+</ul>
+<h3 id="page-fault">Page fault</h3>
+<p>Quando un processo accede a una pagina <strong>non in RAM</strong>, MMU genera un page fault → kernel la carica dal disco (o swap). Costoso: 1-10 ms (1 milione di volte più lento di accesso RAM).</p>
+<h3 id="tlb">TLB</h3>
+<p>Cache della page table. Hit O(1) per traduzione, miss → walk della page table (costoso).</p>
+<h3 id="thrashing">Thrashing</h3>
+<p>Quando troppi page fault → CPU passa più tempo a paginare che a lavorare. Sintomo: disco al 100%, sistema lentissimo.</p>
+<h2 id="parte-6-heap-vs-stack">Parte 6 — Heap vs stack</h2>
+<p>Due regioni di memoria di un processo:</p>
+<h3 id="stack">Stack</h3>
+<ul>
+<li><strong>Variabili locali</strong>, parametri di funzione, return address.</li>
+<li>LIFO. Cresce verso il basso.</li>
+<li>Limite ~1-8 MB. Stack overflow se superi.</li>
+<li>Veloce: allocazione = decremento di un puntatore.</li>
+</ul>
+<h3 id="heap">Heap</h3>
+<ul>
+<li><strong>Memoria allocata dinamicamente</strong> (<code>malloc</code>, <code>new</code>, Python <code>list = [...]</code>).</li>
+<li>Limitata da RAM totale.</li>
+<li>Più lento: gestione di blocchi, fragmentation.</li>
+<li>Garbage collector (Java, Python, Go) o manuale (C, C++).</li>
+</ul>
+<p>In Python: ogni oggetto è sul heap. Le variabili locali sono riferimenti agli oggetti (sul stack).</p>
+<h2 id="parte-7-filesystem">Parte 7 — Filesystem</h2>
+<h3 id="inode">Inode</h3>
+<p>Metadata di un file: size, owner, permessi, timestamp, lista di blocchi su disco. Inode NON contiene il nome del file.</p>
+<h3 id="directory">Directory</h3>
+<p>Un mapping nome → inode. Le directory sono file speciali.</p>
+<h3 id="hard-link-vs-soft-link">Hard link vs soft link</h3>
+<ul>
+<li><strong>Hard link</strong>: due nomi → stesso inode. Cancellare uno non cancella il file (se ci sono altri link). Stesso filesystem.</li>
+<li><strong>Soft link</strong> (symlink): file che contiene il path di destinazione. Può puntare cross-filesystem o a file inesistenti.</li>
+</ul>
+<h3 id="permissions-unix">Permissions (Unix)</h3>
+<pre><code>-rwxr-xr-x  owner=alice  group=devs
+</code></pre>
+<ul>
+<li><code>r</code> = read, <code>w</code> = write, <code>x</code> = execute.</li>
+<li>3 gruppi: owner, group, other.</li>
+<li>In ottale: <code>rwxr-xr-x</code> = <code>755</code>.</li>
+</ul>
+<h2 id="parte-8-networking-essenziale">Parte 8 — Networking essenziale</h2>
+<h3 id="osi-tcp-ip-stack">OSI / TCP-IP stack</h3>
+<p>7 layer OSI (modello accademico), 5 nello stack TCP/IP pratico:</p>
+<ol>
+<li><strong>Physical</strong>: bit su filo / radio.</li>
+<li><strong>Data link</strong>: frame, MAC. Ethernet, WiFi.</li>
+<li><strong>Network</strong>: pacchetti, IP, routing.</li>
+<li><strong>Transport</strong>: TCP, UDP. Affidabilità, multiplexing.</li>
+<li><strong>Application</strong>: HTTP, DNS, SMTP, SSH.</li>
+</ol>
+<h3 id="ip-internet-protocol">IP (Internet Protocol)</h3>
+<ul>
+<li><strong>IPv4</strong>: 32 bit (4 byte). 4 miliardi indirizzi, <strong>esauriti</strong>. Es: <code>192.168.1.10</code>.</li>
+<li><strong>IPv6</strong>: 128 bit. Sostituendo IPv4. Es: <code>2001:0db8:85a3::8a2e:0370:7334</code>.</li>
+<li><strong>CIDR</strong>: notazione <code>10.0.0.0/24</code> = primi 24 bit fissi (subnet), ultimi 8 variabili (host).</li>
+<li><strong>NAT</strong>: stesso IP pubblico per più device privati (router casa).</li>
+</ul>
+<h3 id="tcp-vs-udp">TCP vs UDP</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>TCP</th>
+<th>UDP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Connection-oriented</td>
+<td>sì (3-way handshake)</td>
+<td>no</td>
+</tr>
+<tr>
+<td>Reliable</td>
+<td>sì (retransmit, ack)</td>
+<td>no</td>
+</tr>
+<tr>
+<td>Ordered</td>
+<td>sì</td>
+<td>no</td>
+</tr>
+<tr>
+<td>Flow control</td>
+<td>sì</td>
+<td>no</td>
+</tr>
+<tr>
+<td>Overhead</td>
+<td>alto</td>
+<td>basso</td>
+</tr>
+<tr>
+<td>Use case</td>
+<td>HTTP, SSH, DB</td>
+<td>DNS, video streaming, gaming, DoH</td>
+</tr>
+</tbody>
+</table>
+<h3 id="tcp-3-way-handshake">TCP 3-way handshake</h3>
+<pre><code class="language-mermaid">sequenceDiagram
+    participant C as Client
+    participant S as Server
+    C-&gt;&gt;S: SYN (seq=x)
+    S-&gt;&gt;C: SYN/ACK (seq=y, ack=x+1)
+    C-&gt;&gt;S: ACK (ack=y+1)
+    Note over C,S: Connessione stabilita
+</code></pre>
+<p>3 round trip per stabilire connessione. Per HTTPS aggiungi TLS handshake (1-2 RTT). Per questo HTTP/3 sopra QUIC riduce a 1 RTT.</p>
+<h3 id="tcp-teardown-4-way">TCP teardown (4-way)</h3>
+<pre><code class="language-mermaid">sequenceDiagram
+    participant A
+    participant B
+    A-&gt;&gt;B: FIN
+    B-&gt;&gt;A: ACK
+    B-&gt;&gt;A: FIN
+    A-&gt;&gt;B: ACK
+    Note over A,B: Connessione chiusa
+</code></pre>
+<h3 id="tcp-congestion-control">TCP congestion control</h3>
+<p>TCP "rallenta" se sospetta congestione (loss detection).</p>
+<ul>
+<li><strong>Slow start</strong>: cwnd raddoppia ogni RTT (esponenziale fino a soglia).</li>
+<li><strong>Congestion avoidance</strong>: cwnd cresce lineare dopo soglia.</li>
+<li><strong>Fast retransmit/recovery</strong>: su duplicate ACK.</li>
+</ul>
+<p>Algoritmi: Reno, Cubic (default Linux), BBR (Google, basato su bandwidth).</p>
+<h2 id="parte-9-dns">Parte 9 — DNS</h2>
+<p>Risoluzione nome → IP. Es. <code>google.com</code> → <code>142.250.184.46</code>.</p>
+<h3 id="gerarchia">Gerarchia</h3>
+<p>Domain Name System è gerarchico:</p>
+<ul>
+<li><strong>Root</strong> (<code>.</code>) → 13 root server in tutto il mondo.</li>
+<li><strong>TLD</strong> (top-level domain): <code>.com</code>, <code>.org</code>, <code>.it</code>...</li>
+<li><strong>Authoritative</strong>: server con la verità per un dominio (es. ns1.google.com).</li>
+<li><strong>Recursive resolver</strong>: il tuo ISP o 8.8.8.8 fa il giro per te.</li>
+</ul>
+<h3 id="cache">Cache</h3>
+<p>DNS aggressivo nel cache. TTL su ogni record. Modifica DNS = aspetti la propagazione.</p>
+<h3 id="tipi-di-record">Tipi di record</h3>
+<ul>
+<li><strong>A</strong>: IPv4.</li>
+<li><strong>AAAA</strong>: IPv6.</li>
+<li><strong>CNAME</strong>: alias di un altro nome.</li>
+<li><strong>MX</strong>: server email.</li>
+<li><strong>TXT</strong>: testo libero (SPF, DKIM, DNSSEC).</li>
+<li><strong>NS</strong>: name server autoritativi.</li>
+</ul>
+<h2 id="parte-10-http">Parte 10 — HTTP</h2>
+<h3 id="metodi">Metodi</h3>
+<ul>
+<li><strong>GET</strong>: idempotente, safe, cacheable.</li>
+<li><strong>POST</strong>: NON idempotente (creazione).</li>
+<li><strong>PUT</strong>: idempotente (upsert).</li>
+<li><strong>PATCH</strong>: parziale, di solito non idempotente.</li>
+<li><strong>DELETE</strong>: idempotente.</li>
+<li>HEAD, OPTIONS, TRACE.</li>
+</ul>
+<h3 id="status-codes">Status codes</h3>
+<ul>
+<li><strong>1xx</strong> informational.</li>
+<li><strong>2xx</strong> success: 200 OK, 201 Created, 204 No Content.</li>
+<li><strong>3xx</strong> redirect: 301 permanent, 302 temp, 304 not modified.</li>
+<li><strong>4xx</strong> client error: 400 bad, 401 unauthorized, 403 forbidden, 404 not found, 429 rate limit.</li>
+<li><strong>5xx</strong> server error: 500 internal, 502 bad gateway, 503 unavailable, 504 gateway timeout.</li>
+</ul>
+<h3 id="versioni">Versioni</h3>
+<ul>
+<li><strong>HTTP/1.1</strong>: text-based, 1 richiesta/connessione (pipelining mal supportato), header ripetuti.</li>
+<li><strong>HTTP/2</strong>: binario, <strong>multiplexing</strong> (tante richieste in parallelo su una connessione), header compression (HPACK), server push.</li>
+<li><strong>HTTP/3</strong> (su QUIC, sopra UDP): 1-RTT setup, niente head-of-line blocking, 0-RTT con resume.</li>
+</ul>
+<h3 id="headers-comuni">Headers comuni</h3>
+<ul>
+<li><code>Content-Type</code>, <code>Content-Length</code></li>
+<li><code>Authorization: Bearer &lt;token&gt;</code></li>
+<li><code>Cache-Control</code>, <code>ETag</code>, <code>Last-Modified</code> (caching)</li>
+<li><code>Cookie</code> / <code>Set-Cookie</code></li>
+<li><code>Access-Control-Allow-Origin</code> (CORS)</li>
+</ul>
+<h3 id="rest-vs-grpc-vs-graphql">REST vs gRPC vs GraphQL</h3>
+<ul>
+<li><strong>REST</strong>: HTTP + JSON, risorse/verbi. Cacheable. Verboso (overfetching).</li>
+<li><strong>gRPC</strong>: HTTP/2 + Protobuf. Streaming bidirezionale. Polyglot. Più veloce. Meno debuggabile.</li>
+<li><strong>GraphQL</strong>: query specificate dal client. Riduce overfetching. Complica caching e backend.</li>
+</ul>
+<h2 id="parte-11-tls">Parte 11 — TLS</h2>
+<p>Encryption + authentication.</p>
+<h3 id="handshake-semplificato">Handshake (semplificato)</h3>
+<ol>
+<li>Client Hello: "Vorrei comunicare. Ecco i cipher che supporto."</li>
+<li>Server Hello + certificato (proviene la sua identità).</li>
+<li>Client verifica certificato vs CA root (preinstallate in OS/browser).</li>
+<li>Key exchange (Diffie-Hellman) per derivare chiavi simmetriche.</li>
+<li>"Finished" → da qui in poi tutto encrypted.</li>
+</ol>
+<p><strong>TLS 1.3</strong> riduce a 1-RTT. Resume con 0-RTT.</p>
+<h3 id="cert-chain">Cert chain</h3>
+<pre><code>Server cert (es. *.google.com)
+  ← firmato da intermediate CA
+    ← firmato da root CA (preinstalled in trust store)
+</code></pre>
+<h2 id="parte-12-idempotency">Parte 12 — Idempotency</h2>
+<p>Stessa richiesta più volte = stesso effetto della prima. Critico per retry safe.</p>
+<p>POST tipicamente non idempotente (crea risorsa). Per fixarlo: <strong>Idempotency-Key</strong> in header.</p>
+<pre><code>POST /payment
+Idempotency-Key: abc123
+</code></pre>
+<p>Server memorizza la chiave; chiamate duplicate con la stessa key ritornano il primo risultato senza ricreare.</p>
+<h2 id="parte-13-le-15-domande-quick-memorizza-le-risposte">Parte 13 — Le 15 domande quick (memorizza le risposte)</h2>
+<h3 id="1-cosa-succede-quando-digiti-googlecom">1. Cosa succede quando digiti <code>google.com</code>?</h3>
+<ol>
+<li>Browser cerca cache locale + hostfile.</li>
+<li>Se miss, DNS query → recursive resolver → root → TLD (.com) → authoritative.</li>
+<li>Ricevi A record (IP).</li>
+<li>TCP handshake con IP, porta 443.</li>
+<li>TLS handshake.</li>
+<li>HTTP GET / con headers.</li>
+<li>Server: LB → app server → cache + DB → genera HTML.</li>
+<li>Server risponde con HTML + asset links.</li>
+<li>Browser parsifica, scarica CSS/JS/img in parallelo (anche CDN).</li>
+<li>Renderizza DOM, esegue JS.</li>
+</ol>
+<h3 id="2-differenza-processo-vs-thread">2. Differenza processo vs thread?</h3>
+<p>Vedi parte 2-3. Sintetica: thread condividono memoria nello stesso processo; processi sono isolati.</p>
+<h3 id="3-page-fault">3. Page fault?</h3>
+<p>Accesso a pagina non in RAM → MMU genera trap → OS carica da disco. ms vs ns: 1M× più lento.</p>
+<h3 id="4-kill-9">4. <code>kill -9</code>?</h3>
+<p>SIGKILL: non gestibile dal processo. OS lo termina immediatamente. Niente cleanup, niente signal handler.</p>
+<h3 id="5-http-vs-websocket">5. HTTP vs WebSocket?</h3>
+<p>HTTP: request-response. WebSocket: full duplex, persistent. Inizia con HTTP upgrade handshake.</p>
+<h3 id="6-tcp-congestion-window">6. TCP congestion window?</h3>
+<p>Quanti byte non-ack-ati possono essere in flight. Aumenta con successo, diminuisce con loss.</p>
+<h3 id="7-tcp-vs-udp">7. TCP vs UDP?</h3>
+<p>Vedi parte 8.</p>
+<h3 id="8-dns">8. DNS?</h3>
+<p>Vedi parte 9.</p>
+<h3 id="9-zombie-process">9. Zombie process?</h3>
+<p>Processo terminato il cui exit code non è ancora stato letto dal padre (<code>waitpid</code>). Occupa una entry in PID table.</p>
+<h3 id="10-fork-vs-exec">10. Fork vs exec?</h3>
+<p>Fork: clona processo. Exec: rimpiazza programma del processo.</p>
+<h3 id="11-gil">11. GIL?</h3>
+<p>Global Interpreter Lock di Python. Impedisce a thread di eseguire bytecode in parallelo. Per parallelismo CPU usa multiprocessing.</p>
+<h3 id="12-quando-udp-invece-di-tcp">12. Quando UDP invece di TCP?</h3>
+<p>Quando perdite OK + latenza importa: video streaming, gaming, DNS, DoH.</p>
+<h3 id="13-http1-vs-2-vs-3">13. HTTP/1 vs 2 vs 3?</h3>
+<p>1: text, 1 req/conn. 2: binario, multiplexing, HPACK. 3: su QUIC/UDP, 1-RTT, no head-of-line block.</p>
+<h3 id="14-rest-verbi-idempotenti">14. REST: verbi idempotenti?</h3>
+<p>GET, PUT, DELETE, HEAD, OPTIONS. POST e PATCH no (per default).</p>
+<h3 id="15-samloauthjwt">15. SAML/OAuth/JWT?</h3>
+<ul>
+<li><strong>SAML</strong>: standard XML per SSO enterprise (un po' obsoleto).</li>
+<li><strong>OAuth2</strong>: framework di authorization. Permette a un'app di accedere a risorse per conto di un utente senza ricevere la password.</li>
+<li><strong>JWT</strong>: formato di token (JSON + firma). Spesso usato come access token in OAuth.</li>
+</ul>
+<h3 id="16-mutex-vs-semaforo">16. Mutex vs semaforo?</h3>
+<p>Mutex: 1 thread. Semaforo: N thread.</p>
+<h3 id="17-memoria-virtuale">17. Memoria virtuale?</h3>
+<p>Ogni processo vede uno spazio virtuale. MMU traduce in fisico. Isolamento, swap, lazy loading.</p>
+<h3 id="18-heap-vs-stack">18. Heap vs stack?</h3>
+<p>Stack: variabili locali, LIFO, limite ~MB. Heap: allocato dinamicamente, limite ~RAM.</p>
+<h3 id="19-select-epoll">19. <code>select</code> / <code>epoll</code>?</h3>
+<p>System call per gestire I/O multiplexing: un thread che gestisce migliaia di socket. <code>epoll</code> (Linux) scala meglio di <code>select</code>.</p>
+<h3 id="20-load-balancer-l4-vs-l7">20. Load balancer L4 vs L7?</h3>
+<p>L4: vede solo TCP/UDP, routes per IP+port. L7: vede HTTP, routes per path/header.</p>
+<h2 id="riassunto">Riassunto</h2>
+<ol>
+<li><strong>Processo</strong> = istanza programma. <strong>Thread</strong> = unità di scheduling dentro processo.</li>
+<li><strong>Memoria virtuale</strong>: ogni processo vede spazio virtuale isolato. Page fault = costoso.</li>
+<li><strong>TCP</strong> affidabile/connection-oriented, <strong>UDP</strong> veloce/no-guarantees.</li>
+<li><strong>HTTP</strong>: metodi, status code, idempotency, headers di cache.</li>
+<li><strong>DNS</strong>: gerarchico, cached aggressivamente.</li>
+<li><strong>TLS</strong>: handshake con cert chain → encryption simmetrica.</li>
+</ol>
+<p>Memorizza le 20 risposte sopra. In colloquio quick technical, una buona risposta in 30 secondi distingue.</p>
+      <nav class="pager">
+<a href="20-database-sql.html" class="prev"><span class="label">← Precedente</span><span class="title">Database e SQL</span></a>
+<a href="22-coding-patterns.html" class="next"><span class="label">Successivo →</span><span class="title">I 16 coding patterns dei colloqui</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>FAANG Prep</strong> — percorso completo di preparazione: DS&amp;A, system design, behavioral. Costruito per spaccare ai colloqui di Big Tech.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-index.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true,
+      background: '#161922',
+      primaryColor: '#1d2230',
+      primaryTextColor: '#e6e8ee',
+      primaryBorderColor: '#6cf',
+      lineColor: '#7a8194',
+      secondaryColor: '#262b3a',
+      tertiaryColor: '#0f1117',
+      mainBkg: '#1d2230',
+      secondBkg: '#262b3a',
+      tertiaryBkg: '#161922',
+      nodeBorder: '#6cf',
+      clusterBkg: '#161922',
+      clusterBorder: '#262b3a',
+      titleColor: '#6cf',
+      edgeLabelBackground: '#161922',
+      fontFamily: 'Cascadia Code, monospace'
+    }
+  });
+  document.querySelectorAll('pre > code.language-mermaid').forEach((codeEl) => {
+    const pre = codeEl.parentElement;
+    const div = document.createElement('div');
+    div.className = 'mermaid';
+    div.textContent = codeEl.textContent;
+    pre.replaceWith(div);
+  });
+  mermaid.run();
+</script>
+</body>
+</html>

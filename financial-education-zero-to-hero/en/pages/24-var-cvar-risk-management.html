@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quantitative risk management: VaR and CVaR — Financial Literacy Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#3a3a2a',primaryTextColor:'#f4f1e8',primaryBorderColor:'#9b7d34',lineColor:'#9a9685',background:'#181c27'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">€</div>
+      <div>
+        <div class="brand-title">FINANZA</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/24-var-cvar-risk-management.html" class="lang-link" title="Passa all'italiano">IT</a><span class="lang-active" title="English">EN</span></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="search... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-what-is-money.html" class=""><span class="num">01</span>What money actually is (and how it changed)</a></li><li class="nav-item"><a href="../pages/02-financial-system.html" class=""><span class="num">02</span>The financial system: how it actually works</a></li><li class="nav-item"><a href="../pages/03-central-banks.html" class=""><span class="num">03</span>Central banks (ECB, Fed, BOE, BOJ)</a></li><li class="nav-item"><a href="../pages/04-inflation.html" class=""><span class="num">04</span>Inflation, deflation, purchasing power</a></li><li class="nav-item"><a href="../pages/05-personal-budget.html" class=""><span class="num">05</span>Personal budget and cash flow</a></li><li class="nav-item"><a href="../pages/06-financial-pyramid.html" class=""><span class="num">06</span>Financial pyramid and emergency fund</a></li><li class="nav-item"><a href="../pages/07-accounts-and-payments.html" class=""><span class="num">07</span>Current accounts, deposit accounts, payment systems</a></li><li class="nav-item"><a href="../pages/08-credit-score.html" class=""><span class="num">08</span>Credit score, credit bureaus and financial identity</a></li><li class="nav-item"><a href="../pages/09-types-of-banks.html" class=""><span class="num">09</span>Types of banks (and why neobanks are different)</a></li><li class="nav-item"><a href="../pages/10-bank-balance-sheet-basel.html" class=""><span class="num">10</span>Bank balance sheets and Basel III/IV</a></li><li class="nav-item"><a href="../pages/11-mortgages.html" class=""><span class="num">11</span>Mortgages (fixed, floating, mixed, switching, public-employee schemes)</a></li><li class="nav-item"><a href="../pages/12-loans-cards-salary-assignment.html" class=""><span class="num">12</span>Personal loans, revolving cards, salary-assignment loans</a></li><li class="nav-item"><a href="../pages/13-financial-markets.html" class=""><span class="num">13</span>Financial markets: how they actually work</a></li><li class="nav-item"><a href="../pages/14-stocks.html" class=""><span class="num">14</span>Stocks: what you really buy when you buy a stock</a></li><li class="nav-item"><a href="../pages/15-bonds.html" class=""><span class="num">15</span>Bonds: coupon, price, yield, duration</a></li><li class="nav-item"><a href="../pages/16-etfs-funds.html" class=""><span class="num">16</span>ETFs, mutual funds, active vs passive management</a></li><li class="nav-item"><a href="../pages/17-asset-allocation-mpt.html" class=""><span class="num">17</span>Asset allocation and Modern Portfolio Theory (MPT)</a></li><li class="nav-item"><a href="../pages/18-diversification-correlation.html" class=""><span class="num">18</span>Diversification, correlation, and unsystematic risk</a></li><li class="nav-item"><a href="../pages/19-fundamental-analysis.html" class=""><span class="num">19</span>Fundamental analysis: DCF, multiples, ratios</a></li><li class="nav-item"><a href="../pages/20-technical-analysis.html" class=""><span class="num">20</span>Technical analysis (and why academia is skeptical)</a></li><li class="nav-item"><a href="../pages/21-capm-fama-french.html" class=""><span class="num">21</span>CAPM and multi-factor models (Fama-French)</a></li><li class="nav-item"><a href="../pages/22-derivatives.html" class=""><span class="num">22</span>Derivatives: futures, options, swaps, forwards</a></li><li class="nav-item"><a href="../pages/23-black-scholes-greeks.html" class=""><span class="num">23</span>Black-Scholes and the Greeks</a></li><li class="nav-item"><a href="../pages/24-var-cvar-risk-management.html" class="active"><span class="num">24</span>Quantitative risk management: VaR and CVaR</a></li><li class="nav-item"><a href="../pages/25-stress-tests-scenarios.html" class=""><span class="num">25</span>Stress tests, extreme scenarios, tail risk</a></li><li class="nav-item"><a href="../pages/26-behavioral-finance.html" class=""><span class="num">26</span>Behavioral finance: the biases that wreck your investments</a></li><li class="nav-item"><a href="../pages/27-macroeconomics-for-investors.html" class=""><span class="num">27</span>Essential macroeconomics for investors</a></li><li class="nav-item"><a href="../pages/28-exchange-rates-forex.html" class=""><span class="num">28</span>Exchange rates and Forex</a></li><li class="nav-item"><a href="../pages/29-commodities.html" class=""><span class="num">29</span>Commodities: gold, oil, metals, agri</a></li><li class="nav-item"><a href="../pages/30-financial-crises-history.html" class=""><span class="num">30</span>Financial crises in history: what keeps repeating</a></li><li class="nav-item"><a href="../pages/31-investment-taxation-italy.html" class=""><span class="num">31</span>Investment taxation in Italy (and elsewhere)</a></li><li class="nav-item"><a href="../pages/32-pension-retirement-tfr.html" class=""><span class="num">32</span>Pension system: state pension, supplementary funds, TFR</a></li><li class="nav-item"><a href="../pages/33-insurance.html" class=""><span class="num">33</span>Insurance: what you actually need vs what is just fees</a></li><li class="nav-item"><a href="../pages/34-real-estate-reit.html" class=""><span class="num">34</span>Real estate: buying, renting, REITs, fractional investing</a></li><li class="nav-item"><a href="../pages/35-crypto-blockchain-defi.html" class=""><span class="num">35</span>Crypto, Bitcoin, Ethereum, stablecoins, DeFi</a></li><li class="nav-item"><a href="../pages/36-fintech.html" class=""><span class="num">36</span>Fintech: robo-advisors, neobanking, BNPL, embedded finance</a></li><li class="nav-item"><a href="../pages/37-esg-sustainable-finance.html" class=""><span class="num">37</span>ESG and sustainable finance</a></li><li class="nav-item"><a href="../pages/38-ai-in-finance.html" class=""><span class="num">38</span>AI in finance: ML for trading, robo-advisors, credit scoring, LLM</a></li><li class="nav-item"><a href="../pages/39-building-portfolio.html" class=""><span class="num">39</span>Building a portfolio: lazy, three-fund, all-weather, core-satellite</a></li><li class="nav-item"><a href="../pages/40-dca-lump-sum-rebalancing.html" class=""><span class="num">40</span>DCA vs lump sum, rebalancing and tax loss harvesting</a></li><li class="nav-item"><a href="../pages/41-fire-financial-independence.html" class=""><span class="num">41</span>FIRE, financial independence and longevity planning</a></li><li class="nav-item"><a href="../pages/42-frauds-common-mistakes.html" class=""><span class="num">42</span>Frauds, scams, common mistakes: how not to lose everything</a></li><li class="nav-item"><a href="../pages/43-glossary-az.html" class=""><span class="num">43</span>A–Z Glossary</a></li><li class="nav-item"><a href="../pages/44-formula-sheet.html" class=""><span class="num">44</span>Formula Sheet</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Risk management</span>
+        <span>Section 24 of 44</span>
+        <span class="level-tag level-adv">Level: advanced</span>
+      </div>
+      <h1>Quantitative risk management: VaR and CVaR</h1>
+      <p class="summary">Measuring portfolio risk with Value-at-Risk, Expected Shortfall, Sharpe and friends. Definitions, methods, limits, backtesting.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Risk management</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>Know mean, variance, normal distribution</li><li>Read the section on portfolio and diversification</li><li>Familiar with the concept of periodic returns</li></ul>
+  <div class="label">Tools / references</div>
+  <ul class="source-list"><li>Python + numpy + scipy</li><li>Excel or LibreOffice</li><li>Backtesting on real historical series</li></ul>
+</div>
+      <p>Measuring risk is finance's least glamorous job and the only one that keeps you standing when things go wrong. In this section I take you from "risk = volatility" to a set of actually usable measures: Value-at-Risk, Expected Shortfall, ratios. These are the numbers banks use for Basel III and the same ones you should compute on your personal portfolio before the next crisis.</p>
+<h2 id="what-is-risk-in-finance">What is "risk" in finance</h2>
+<p>Two big definitions, and they differ.</p>
+<p><strong>Risk as dispersion.</strong> How much returns move around the mean, in both directions. Measured by variance $\sigma^2$ and standard deviation $\sigma$. Markowitz (1952) uses it: minimize variance for a given return. Problem: a heavily skewed distribution with rare big gains and many small losses can show high variance but "good" risk.</p>
+<p><strong>Risk as downside.</strong> How much you can lose and with what probability. Measured by VaR, ES, semi-variance, max drawdown. It's what your brain feels when the account is down 30%.</p>
+<pre><code class="language-mermaid">flowchart LR
+    R[Risk measures] --&gt; D[Dispersion]
+    R --&gt; DS[Downside]
+    D --&gt; V[Variance σ²]
+    D --&gt; SD[Std dev σ]
+    D --&gt; Beta[Beta vs market]
+    DS --&gt; VAR[VaR]
+    DS --&gt; ES[Expected Shortfall]
+    DS --&gt; SV[Semi-variance]
+    DS --&gt; MDD[Max Drawdown]
+</code></pre>
+<p>In practice you use both families. The first for well-diversified portfolios with "well-behaved" distributions; the second for anything with fat tails or skew (equities, hedge funds, crypto, sold options).</p>
+<h2 id="value-at-risk-var">Value-at-Risk (VaR)</h2>
+<p><strong>Definition.</strong> The $VaR$ at confidence $1-\alpha$ is the maximum loss expected over a fixed horizon <strong>not exceeded</strong> with probability $1-\alpha$. Formally, if $X$ is P&amp;L (positive = gain):</p>
+<p>$$VaR_{\alpha}(X) = -\inf{x \in \mathbb{R} : P(X \le x) &gt; \alpha}$$</p>
+<p>In plain English: take the P&amp;L distribution, find the $\alpha$ quantile (e.g. 1% if $\alpha=0.01$), flip the sign. The result is a positive number saying "worst loss I expect 99% of the time".</p>
+<p>Three things to fix:</p>
+<ol>
+<li><strong>Horizon</strong> — 1 day (trading), 10 days (Basel trading book), 1 year (banking book, insurance).</li>
+<li><strong>Confidence</strong> — 95%, 99%, 99.5% (Solvency II), 99.9%.</li>
+<li><strong>Distribution assumed</strong> — parametric Gaussian, historical empirical, simulated.</li>
+</ol>
+<h3 id="three-methods-to-compute-var">Three methods to compute VaR</h3>
+<h4 id="1-parametric-variance-covariance">1. Parametric (variance-covariance)</h4>
+<p>Assume returns are normal with mean $\mu$ and stddev $\sigma$. Then:</p>
+<p>$$VaR_{\alpha} = -(\mu + z_\alpha \cdot \sigma) \cdot V$$</p>
+<p>where $V$ is portfolio value and $z_\alpha$ is the standard normal quantile ($z_{0.01} \approx -2.326$, $z_{0.05} \approx -1.645$).</p>
+<p><strong>Worked example.</strong> Portfolio $V = 100{,}000$ €, $\sigma_{daily} = 1.5\%$, $\mu_{daily} \approx 0$ (drift ignored over 1 day).</p>
+<p>$$VaR_{0.01}^{1d} = 2.326 \times 0.015 \times 100{,}000 = 3{,}489 \text{ €}$$</p>
+<p>Translation: on 99% of trading days you won't lose more than ~3,490 €. The other 1% you will.</p>
+<p>Time scaling (iid returns):</p>
+<p>$$VaR^{T} = VaR^{1d} \cdot \sqrt{T}$$</p>
+<p>So 10-day $VaR \approx 3{,}489 \times \sqrt{10} \approx 11{,}030$ €.</p>
+<h4 id="2-historical-empirical">2. Historical (empirical)</h4>
+<p>No distributional assumption: take the last $N$ portfolio returns (e.g. 500 days), sort, pick the $\alpha$ quantile. With 500 obs and $VaR_{0.01}$, that's the 5th-worst loss.</p>
+<p>Pros: captures real fat tails, skew, asymmetry.
+Cons: assumes past represents future. A 500-day sample post-2009 doesn't contain 2008.</p>
+<h4 id="3-monte-carlo">3. Monte Carlo</h4>
+<p>Simulate $M$ scenarios (e.g. $M=10{,}000$) drawing returns from a chosen model (multivariate Gaussian, Student-t, GARCH, copula). Compute portfolio P&amp;L per scenario, take the quantile.</p>
+<p>Pros: flexible, handles non-linear derivatives (options), correlations.
+Cons: heavy, quality depends on the underlying model.</p>
+<h3 id="comparison-on-the-same-example">Comparison on the same example</h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th style="text-align: right;">$VaR_{0.01}^{1d}$ (€)</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Parametric Gauss</td>
+<td style="text-align: right;">3,489</td>
+<td>$z=2.326$, $\sigma=1.5\%$</td>
+</tr>
+<tr>
+<td>Historical (500d)</td>
+<td style="text-align: right;">~4,200</td>
+<td>depends on period</td>
+</tr>
+<tr>
+<td>Monte Carlo (t, $\nu=5$)</td>
+<td style="text-align: right;">~4,700</td>
+<td>fatter tails</td>
+</tr>
+</tbody>
+</table>
+<p>The three methods can disagree a lot: Gaussian almost always <strong>understates</strong> real risk.</p>
+<h2 id="limits-of-var">Limits of VaR</h2>
+<p>VaR is wildly popular but has an original sin: <strong>it is not a coherent risk measure</strong> in the sense of Artzner, Delbaen, Eber, Heath (1999). The four properties a "good" measure $\rho$ should satisfy:</p>
+<ol>
+<li><strong>Monotonicity</strong>: if $X \le Y$ everywhere, $\rho(X) \ge \rho(Y)$.</li>
+<li><strong>Translation invariance</strong>: $\rho(X + c) = \rho(X) - c$.</li>
+<li><strong>Positive homogeneity</strong>: $\rho(\lambda X) = \lambda \rho(X)$ for $\lambda \ge 0$.</li>
+<li><strong>Subadditivity</strong>: $\rho(X+Y) \le \rho(X) + \rho(Y)$.</li>
+</ol>
+<p>VaR violates <strong>subadditivity</strong>: in pathological cases, diversifying increases VaR. Classic example: two bonds defaulting independently with 4% probability and 100€ loss. Individually $VaR_{0.05} = 0$. In a portfolio, prob of at least one default $\approx 7.84\%$, and the combined portfolio $VaR_{0.05}$ is $100$. Diversification "worsens" the metric — absurd.</p>
+<p>Other issues:</p>
+<ul>
+<li>Says nothing about <strong>how much</strong> you lose when VaR is exceeded. Just "it'll happen 1% of the time".</li>
+<li>Manipulable: positions with hidden tail risk (e.g. selling OTM puts) look safe under VaR.</li>
+<li>Procyclical: after periods of low vol, VaR shrinks → higher leverage → amplified crashes.</li>
+</ul>
+<h2 id="expected-shortfall-cvares">Expected Shortfall (CVaR/ES)</h2>
+<p><strong>Expected Shortfall</strong> (a.k.a. CVaR, Conditional VaR, Tail VaR) fixes VaR's problems:</p>
+<p>$$ES_{\alpha}(X) = -E[X \mid X \le -VaR_{\alpha}(X)]$$</p>
+<p>In words: given the worst $\alpha\%$ of cases, what is the <strong>average</strong> loss? Always $\ge VaR$.</p>
+<p><strong>It is coherent</strong> (satisfies all four Artzner properties). That's why Basel III (Fundamental Review of the Trading Book, 2019+) replaced VaR 99% with ES 97.5%.</p>
+<h3 id="computing-es">Computing ES</h3>
+<p><strong>Gaussian case.</strong> If $X \sim N(\mu, \sigma^2)$:</p>
+<p>$$ES_\alpha = -\mu + \sigma \cdot \frac{\phi(z_\alpha)}{\alpha}$$</p>
+<p>with $\phi$ the standard normal density and $z_\alpha$ the quantile.</p>
+<p>For $\alpha = 0.01$: $\phi(-2.326) \approx 0.0267$, so $\phi/\alpha \approx 2.67$. ES is $\sigma \times 2.67$ vs VaR's $\sigma \times 2.33$.</p>
+<p><strong>Same portfolio.</strong> $V=100{,}000$, $\sigma=1.5\%$:</p>
+<p>$$ES_{0.01}^{1d} = 0.015 \times 2.67 \times 100{,}000 = 4{,}000 \text{ €}$$</p>
+<p>So: on the worst 1% of days, <strong>average</strong> loss is 4,000 €, not 3,489. Much more honest information.</p>
+<p><strong>Historical case.</strong> Take all returns worse than the $\alpha$ quantile, average them. On 500 days, $\alpha=0.01$, that's the 5 worst → mean.</p>
+<h2 id="backtesting-does-the-var-actually-work">Backtesting: does the VaR actually work?</h2>
+<p>After computing VaR you must verify quality. Two classic tests.</p>
+<h3 id="kupiec-test-pof-proportion-of-failures-1995">Kupiec test (POF — Proportion of Failures, 1995)</h3>
+<p>Count how often realized losses exceed VaR. With $T$ observations and $N$ "exceptions":</p>
+<p>$$LR_{POF} = -2 \ln\left[\frac{(1-\alpha)^{T-N}\alpha^N}{(1-\frac{N}{T})^{T-N}(\frac{N}{T})^N}\right] \sim \chi^2_1$$</p>
+<p>If $LR &gt; 3.84$ (5% threshold), reject the model.</p>
+<p><strong>Example.</strong> $T=250$, $\alpha=0.01$, you expect $2.5$ exceptions. You observe $7$: $LR_{POF} \approx 5.8 \rightarrow$ reject. Model underestimates risk.</p>
+<h3 id="christoffersen-test-1998">Christoffersen test (1998)</h3>
+<p>Extends Kupiec by also checking <strong>independence</strong> of exceptions: two consecutive exceptions are suspicious (uncaught volatility clustering). Joint test $\chi^2_2$.</p>
+<p>Basel has an operational rule: "traffic light" over 250 backtest days. Green if 0–4 exceptions at 99%, yellow 5–9 (capital penalty), red ≥10 (model rejected).</p>
+<h2 id="from-vares-to-regulatory-capital-basel">From VaR/ES to regulatory capital (Basel)</h2>
+<p>Banks compute VaR/ES on the <strong>trading book</strong> and use them to determine capital absorbed.</p>
+<table>
+<thead>
+<tr>
+<th>Standard</th>
+<th>Measure</th>
+<th>Horizon</th>
+<th>Confidence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Basel II (2007)</td>
+<td>VaR</td>
+<td>10 days</td>
+<td>99%</td>
+</tr>
+<tr>
+<td>Basel II.5 (2011)</td>
+<td>VaR + Stressed VaR</td>
+<td>10 days</td>
+<td>99%</td>
+</tr>
+<tr>
+<td>Basel III/FRTB (2019+)</td>
+<td>Expected Shortfall</td>
+<td>10 days (with liquidity horizons 10–120)</td>
+<td>97.5%</td>
+</tr>
+</tbody>
+</table>
+<p>Stylized Basel II capital formula:</p>
+<p>$$K = \max(VaR_{t-1}, k \cdot \overline{VaR}<em t-1="t-1">{60d}) + \max(sVaR</em>)$$}, k \cdot \overline{sVaR}_{60d</p>
+<p>where $k$ ranges from 3 (default) to 4 (poor backtest penalty). <strong>Risk-Weighted Assets</strong> are $RWA = 12.5 \times K$ to scale to the 8% minimum capital ratio.</p>
+<pre><code class="language-mermaid">flowchart LR
+    P[Trading book positions] --&gt; M[Internal ES/VaR model]
+    M --&gt; K[Capital K]
+    K --&gt; RWA[RWA = 12.5 × K]
+    RWA --&gt; CET[Compare to available CET1]
+    CET --&gt; Cap[Capital ratio]
+</code></pre>
+<h2 id="risk-adjusted-performance-measures">Risk-adjusted performance measures</h2>
+<p>Measuring return alone is useless: anyone can make 30% with 10x leverage. Risk-adjusted metrics tell you how much return per unit of risk. The four classics:</p>
+<h3 id="sharpe-ratio-1966">Sharpe Ratio (1966)</h3>
+<p>$$SR = \frac{E[R_p] - R_f}{\sigma_p}$$</p>
+<p>Excess return over risk-free per unit of total vol. Sharpe &gt; 1 good, &gt; 2 excellent, &gt; 3 suspicious (overfitting or hidden leverage).</p>
+<p><strong>Example.</strong> Portfolio returns 8%, $R_f=3\%$, $\sigma = 12\%$ → $SR = (8-3)/12 = 0.42$. Mediocre.</p>
+<h3 id="sortino-ratio">Sortino Ratio</h3>
+<p>Same as Sharpe but the denominator is only the <strong>downside deviation</strong> $\sigma_d$ (volatility of negative returns below a threshold, typically $R_f$):</p>
+<p>$$Sortino = \frac{E[R_p] - R_f}{\sigma_d}$$</p>
+<p>Rewards strategies that are volatile "to the upside". Better for positively-skewed strategies.</p>
+<h3 id="treynor-ratio">Treynor Ratio</h3>
+<p>Denominator = market beta:</p>
+<p>$$Treynor = \frac{E[R_p] - R_f}{\beta_p}$$</p>
+<p>Used when the portfolio is already well-diversified and only systematic risk matters.</p>
+<h3 id="information-ratio">Information Ratio</h3>
+<p>Excess over benchmark per tracking error:</p>
+<p>$$IR = \frac{E[R_p - R_b]}{\sigma_{R_p - R_b}}$$</p>
+<p>How "skilled" an active manager is. IR &gt; 0.5 long-term is rare.</p>
+<table>
+<thead>
+<tr>
+<th>Ratio</th>
+<th>Numerator</th>
+<th>Denominator</th>
+<th>When to use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sharpe</td>
+<td>$R_p - R_f$</td>
+<td>total $\sigma_p$</td>
+<td>Generic comparison</td>
+</tr>
+<tr>
+<td>Sortino</td>
+<td>$R_p - R_f$</td>
+<td>$\sigma_{downside}$</td>
+<td>Skewed strategies</td>
+</tr>
+<tr>
+<td>Treynor</td>
+<td>$R_p - R_f$</td>
+<td>$\beta_p$</td>
+<td>Diversified portfolios</td>
+</tr>
+<tr>
+<td>Information</td>
+<td>$R_p - R_b$</td>
+<td>tracking error</td>
+<td>Active managers</td>
+</tr>
+</tbody>
+</table>
+<h2 id="python-code-full-computation">Python code: full computation</h2>
+<pre><code class="language-python">import numpy as np
+from scipy import stats
+
+# simulated daily returns
+np.random.seed(42)
+rets = np.random.normal(0.0005, 0.015, 1000)  # 1000 days
+
+V = 100_000  # portfolio value
+alpha = 0.01  # 99% confidence
+
+# 1) Parametric Gaussian VaR
+mu, sigma = rets.mean(), rets.std()
+z = stats.norm.ppf(alpha)
+var_param = -(mu + z * sigma) * V
+
+# 2) Historical VaR
+var_hist = -np.quantile(rets, alpha) * V
+
+# 3) Expected Shortfall (gauss)
+es_param = (-mu + sigma * stats.norm.pdf(z) / alpha) * V
+
+# 4) Expected Shortfall (historical)
+tail = rets[rets &lt;= np.quantile(rets, alpha)]
+es_hist = -tail.mean() * V
+
+print(f&quot;Parametric VaR:  {var_param:8.0f} EUR&quot;)
+print(f&quot;Historical VaR:  {var_hist:8.0f} EUR&quot;)
+print(f&quot;Parametric ES:   {es_param:8.0f} EUR&quot;)
+print(f&quot;Historical ES:   {es_hist:8.0f} EUR&quot;)
+
+# Annualized Sharpe ratio
+rf_daily = 0.03 / 252
+sharpe = (mu - rf_daily) / sigma * np.sqrt(252)
+print(f&quot;Annual Sharpe:    {sharpe:.2f}&quot;)
+</code></pre>
+<p>Typical output:</p>
+<pre><code>Parametric VaR:     3382 EUR
+Historical VaR:     3514 EUR
+Parametric ES:      3879 EUR
+Historical ES:      4421 EUR
+Annual Sharpe:       0.43
+</code></pre>
+<p>Note how historical ES is more conservative than parametric: the sample has somewhat fatter real tails.</p>
+<h2 id="visualizing-var-and-es">Visualizing VaR and ES</h2>
+<p><svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;background:#fafafa">
+  <defs>
+    <linearGradient id="g1en" x1="0" x2="1">
+      <stop offset="0" stop-color="#cc3333" stop-opacity="0.4"/>
+      <stop offset="1" stop-color="#cc3333" stop-opacity="0.05"/>
+    </linearGradient>
+  </defs>
+  <path d="M 20 200 C 60 200, 100 195, 130 180 S 180 60, 200 50 S 280 180, 320 195 L 380 200 Z" fill="#cccccc" opacity="0.4"/>
+  <path d="M 20 200 L 80 200 L 80 198 C 90 196, 105 192, 115 188 L 115 200 Z" fill="url(#g1en)"/>
+  <line x1="115" y1="200" x2="115" y2="40" stroke="#cc3333" stroke-dasharray="4 3"/>
+  <line x1="85" y1="200" x2="85" y2="40" stroke="#993300" stroke-dasharray="2 2"/>
+  <text x="115" y="35" font-size="11" fill="#cc3333" text-anchor="middle">VaR 99%</text>
+  <text x="85" y="25" font-size="11" fill="#993300" text-anchor="middle">ES 99%</text>
+  <text x="200" y="215" font-size="11" text-anchor="middle">Portfolio returns</text>
+  <text x="50" y="180" font-size="10" fill="#cc3333">1% tail</text>
+</svg></p>
+<p>The VaR line cuts the 1% quantile; ES is the <strong>average</strong> of values to the left (more extreme).</p>
+<h2 id="practical-case-apply-to-a-personal-portfolio">Practical case: apply to a personal portfolio</h2>
+<p>You have 50,000 € split 60% global equity (MSCI World ETF), 30% bonds (Euro aggregate), 10% gold. Historical data (annualized):</p>
+<table>
+<thead>
+<tr>
+<th>Asset</th>
+<th>Weight</th>
+<th>Annual $\sigma$</th>
+<th>Correlations</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Equity</td>
+<td>60%</td>
+<td>16%</td>
+<td>1 / -0.1 / 0.05</td>
+</tr>
+<tr>
+<td>Bond</td>
+<td>30%</td>
+<td>5%</td>
+<td>-0.1 / 1 / 0.15</td>
+</tr>
+<tr>
+<td>Gold</td>
+<td>10%</td>
+<td>14%</td>
+<td>0.05 / 0.15 / 1</td>
+</tr>
+</tbody>
+</table>
+<p>Portfolio volatility (3×3 matrix):</p>
+<p>$$\sigma_p^2 = \mathbf{w}^T \Sigma \mathbf{w}$$</p>
+<p>Approximate result: $\sigma_p \approx 10\%$ annual, i.e. $\sigma_p^{daily} \approx 10\%/\sqrt{252} \approx 0.63\%$.</p>
+<p>$$VaR_{0.01}^{1d} = 2.326 \times 0.0063 \times 50{,}000 = 733 \text{ €}$$</p>
+<p>At 10 days: ~2,318 €. At 1 year: with annual $z_{0.01}$ and $\sigma_p$: worst expected 99% loss = $2.326 \times 0.10 \times 50{,}000 \approx 11{,}630$ €. ES about 25% more.</p>
+<details>
+<summary>Exercise: compute VaR and ES on Bitcoin</summary>
+
+Download daily BTC prices for the last 3 years (e.g. Yahoo Finance, ticker BTC-USD). Compute log-returns. Your portfolio is 10,000 € in BTC.
+
+1. Compute $VaR_{0.01}^{1d}$ parametric assuming normality.
+2. Compute $VaR_{0.01}^{1d}$ historical empirical.
+3. Compute $ES_{0.01}^{1d}$ both ways.
+4. Compare. How much does the Gaussian model underestimate? Hint: BTC log-returns have kurtosis ~10 vs 3 for normal.
+5. How many exceptions to the 99% historical VaR over the last year? Does Kupiec pass?
+
+Reflection: if your Gauss-VaR says "worst 99% loss = 600 €" and in reality the March 2020 -30% day cost you 3,000 €, you have a model problem, not bad luck.
+
+</details>
+
+<h2 id="takeaways">Takeaways</h2>
+<ul>
+<li>VaR is not the truth of risk: it's a quantile <strong>convention</strong>.</li>
+<li><strong>Expected Shortfall</strong> is better (coherent, tells the tail), but noisier to estimate.</li>
+<li>Three methods: parametric (simple, wrong on tails), historical (honest but mute on new regimes), Monte Carlo (powerful but model risk).</li>
+<li><strong>Backtest</strong> always (Kupiec, Christoffersen). A never-backtested VaR is a placebo.</li>
+<li>Ratios (Sharpe, Sortino, Treynor, Information) tell you whether the return is worth the risk.</li>
+<li>On your personal portfolio you can do this in 30 lines of Python. If you don't, you're telling yourself risk "isn't there".</li>
+</ul>
+      <nav class="pager">
+<a href="23-black-scholes-greeks.html" class="prev"><span class="label">← Previous</span><span class="title">Black-Scholes and the Greeks</span></a>
+<a href="25-stress-tests-scenarios.html" class="next"><span class="label">Next →</span><span class="title">Stress tests, extreme scenarios, tail risk</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Financial Literacy Zero to Hero</strong> — complete path, in English, from money basics to derivative pricing.</p><p>Open educational material. No sponsorships, no affiliate links. When a concept is unclear, go back: finance is a pyramid, not a tree you skip across.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+</body>
+</html>

@@ -1,0 +1,666 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>Assembly x86-64 e ARM64 da zero — Cybersec Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">&gt;_</div>
+      <div>
+        <div class="brand-title">CYBERSEC</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="10" height="20" fill="#009246"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ce2b37"/></svg> IT</span><a href="../en/pages/01b-assembly-from-zero.html" class="lang-link" title="Switch to English"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="30" height="20" fill="#012169"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#fff" stroke-width="3"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#c8102e" stroke-width="1.5"/><path d="M15,0 v20 M0,10 h30" stroke="#fff" stroke-width="5"/><path d="M15,0 v20 M0,10 h30" stroke="#c8102e" stroke-width="3"/></svg> EN</a></div>
+  </div>
+  <div class="search-wrap">
+    <div class="search-row">
+      <div class="search-inputwrap">
+        <span class="search-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"/>
+            <line x1="20" y1="20" x2="16.65" y2="16.65"/>
+          </svg>
+        </span>
+        <input class="search-input" id="search-input" type="text" placeholder="cerca... (premi /)" autocomplete="off" aria-label="Search">
+        <button class="search-clear" id="search-clear" type="button" aria-label="Clear" title="Clear">&times;</button>
+      </div>
+      <button class="search-btn" id="search-btn" type="button" aria-label="CERCA" title="CERCA">CERCA</button>
+    </div>
+    <div class="search-hits" id="search-hits" role="listbox"></div>
+  </div>
+  <div class="sidebar-nav">
+    <nav class="nav-section">
+      <div class="nav-section-title">Percorso</div>
+      <ul class="nav-list">
+        <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+        <li class="nav-item"><a href="../pages/00-percorso-e-mindset.html" class=""><span class="num">00</span>Percorso, mindset, etica e legge</a></li><li class="nav-item"><a href="../pages/00b-matematica-cs.html" class=""><span class="num">00b</span>Matematica e teoria computazione (il minimo, integrato)</a></li><li class="nav-item"><a href="../pages/01-fondamenti-informatica.html" class=""><span class="num">01</span>Fondamenti di informatica per la security</a></li><li class="nav-item"><a href="../pages/01b-assembly-zero.html" class="active"><span class="num">01b</span>Assembly x86-64 e ARM64 da zero</a></li><li class="nav-item"><a href="../pages/02-linux-essenziale.html" class=""><span class="num">02</span>Linux essenziale per la security</a></li><li class="nav-item"><a href="../pages/02b-regex-automi.html" class=""><span class="num">02b</span>Regex, automi e parser per la security</a></li><li class="nav-item"><a href="../pages/03-networking-tcp-ip.html" class=""><span class="num">03</span>Networking: dai cavi a TCP/IP</a></li><li class="nav-item"><a href="../pages/04-http-tls.html" class=""><span class="num">04</span>HTTP, HTTPS e TLS in profondità</a></li><li class="nav-item"><a href="../pages/05-crittografia.html" class=""><span class="num">05</span>Crittografia: teoria e pratica</a></li><li class="nav-item"><a href="../pages/05b-crypto-worked-examples.html" class=""><span class="num">05b</span>Crittografia — esempi numerici passo-passo</a></li><li class="nav-item"><a href="../pages/06-os-internals.html" class=""><span class="num">06</span>OS internals: Linux e Windows in profondità</a></li><li class="nav-item"><a href="../pages/07-programmazione-security.html" class=""><span class="num">07</span>Programmazione per la security: Python, C, Go</a></li><li class="nav-item"><a href="../pages/08-osint-recon.html" class=""><span class="num">08</span>OSINT e ricognizione</a></li><li class="nav-item"><a href="../pages/09-scanning-enumeration.html" class=""><span class="num">09</span>Scanning, enumeration e fingerprinting</a></li><li class="nav-item"><a href="../pages/10-owasp-top10.html" class=""><span class="num">10</span>OWASP Top 10 e oltre — vulnerabilità web di base</a></li><li class="nav-item"><a href="../pages/10b-walkthrough-byte-per-byte.html" class=""><span class="num">10b</span>Walkthrough byte-per-byte: SQLi, XSS, SSRF, IDOR</a></li><li class="nav-item"><a href="../pages/11-web-avanzato.html" class=""><span class="num">11</span>Web hacking avanzato</a></li><li class="nav-item"><a href="../pages/12-network-attacks.html" class=""><span class="num">12</span>Network attacks: MITM, spoofing, pivoting</a></li><li class="nav-item"><a href="../pages/13-active-directory.html" class=""><span class="num">13</span>Active Directory hacking</a></li><li class="nav-item"><a href="../pages/14-exploit-development.html" class=""><span class="num">14</span>Exploit development: dal buffer overflow a ROP</a></li><li class="nav-item"><a href="../pages/14b-bof-shell-completo.html" class=""><span class="num">14b</span>BoF → shell: exploit completo da zero</a></li><li class="nav-item"><a href="../pages/15-reverse-engineering.html" class=""><span class="num">15</span>Reverse engineering</a></li><li class="nav-item"><a href="../pages/16-malware-analysis.html" class=""><span class="num">16</span>Malware: tassonomia e analisi</a></li><li class="nav-item"><a href="../pages/17-mobile-security.html" class=""><span class="num">17</span>Mobile security: Android e iOS</a></li><li class="nav-item"><a href="../pages/18-cloud-security.html" class=""><span class="num">18</span>Cloud security: AWS, Azure, GCP</a></li><li class="nav-item"><a href="../pages/19-container-kubernetes.html" class=""><span class="num">19</span>Container e Kubernetes</a></li><li class="nav-item"><a href="../pages/20-wireless-radio.html" class=""><span class="num">20</span>Wireless e radio: WiFi, BT, SDR</a></li><li class="nav-item"><a href="../pages/21-hardware-firmware.html" class=""><span class="num">21</span>Hardware e firmware hacking</a></li><li class="nav-item"><a href="../pages/22-forensics-dfir.html" class=""><span class="num">22</span>Forensics e DFIR</a></li><li class="nav-item"><a href="../pages/23-blue-team-soc.html" class=""><span class="num">23</span>Blue team: SOC, SIEM, EDR, hunting</a></li><li class="nav-item"><a href="../pages/24-threat-intelligence.html" class=""><span class="num">24</span>Threat intelligence</a></li><li class="nav-item"><a href="../pages/25-grc-normative.html" class=""><span class="num">25</span>GRC, normative e standard</a></li><li class="nav-item"><a href="../pages/26-red-team.html" class=""><span class="num">26</span>Red team e adversary emulation</a></li><li class="nav-item"><a href="../pages/27-ai-ml-security.html" class=""><span class="num">27</span>AI / ML security</a></li><li class="nav-item"><a href="../pages/28-capstone-roadmap.html" class=""><span class="num">28</span>Capstone: CTF roadmap, home lab, certificazioni</a></li><li class="nav-item"><a href="../pages/29-master-cheatsheet.html" class=""><span class="num">29</span>Master cheatsheet</a></li><li class="nav-item"><a href="../pages/30-glossario-esteso.html" class=""><span class="num">30</span>Glossario esteso (250+ termini)</a></li><li class="nav-item"><a href="../pages/31-normative-it-ue.html" class=""><span class="num">31</span>Riferimenti normativi IT/UE in dettaglio</a></li>
+      </ul>
+    </nav>
+  </div>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Prerequisiti</span>
+        <span>Sezione 2 di 36</span>
+        <span class="level-tag level-beg">Livello: principiante</span>
+      </div>
+      <h1>Assembly x86-64 e ARM64 da zero</h1>
+      <p class="summary">Assembly da chi non l&#x27;ha mai visto. Cosa fa la CPU istruzione per istruzione. Registri, stack, calling convention, layout di un programma in memoria, con disegni e tracce passo-passo. Tutto ciò che serve per reverse engineering ed exploit dev.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Prerequisiti</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>Sezione 01 (memoria, processi)</li><li>Sezione 00b (binario, hex)</li></ul>
+  <div class="label">Strumenti</div>
+  <ul class="source-list"><li>gcc, objdump, gdb (+ pwndbg/gef)</li><li>Compiler Explorer (godbolt.org) per esperimenti veloci</li></ul>
+</div>
+      <blockquote>
+<p>Tutto ciò che la CPU fa è eseguire istruzioni assembly. Linguaggi alti (C, Python, Rust) vengono <em>compilati o interpretati</em> a istruzioni macchina. Capire assembly = capire cosa accade DAVVERO. Senza non vedi quello che vedono i reverse engineer e gli exploit dev.</p>
+</blockquote>
+<h2 id="il-modello-base">Il modello base</h2>
+<p>Una CPU in 30 secondi:
+- Ha <strong>registri</strong>: piccole memorie ultraveloci dentro la CPU.
+- Esegue istruzioni in sequenza, ognuna <strong>modifica registri o memoria</strong>.
+- C'è un registro speciale, <code>RIP</code> (instruction pointer), che dice "qual è la prossima istruzione".
+- L'istruzione <code>jmp</code> cambia <code>RIP</code> → salto. <code>call</code> salva <code>RIP</code> e salta. <code>ret</code> ripristina <code>RIP</code>.</p>
+<pre><code>  [   CPU   ]                              [    RAM    ]
+  ┌─────────┐                              ┌───────────┐
+  │ RAX  =? │   fetch istruzione           │ 0x4000:   │
+  │ RBX  =? │  ◄───────────────────────────┤ mov rax,5 │
+  │ RCX  =? │                              │ 0x4007:   │
+  │ ...     │   esegue, aggiorna RAX=5     │ add rax,3 │
+  │ RIP  +→ │                              │ 0x400e:   │
+  └─────────┘   poi fetch successiva...    │ ret       │
+                                           └───────────┘
+</code></pre>
+<h2 id="i-registri-x86-64-system-v-linuxmacos">I registri x86-64 (System V — Linux/macOS)</h2>
+<p>L'architettura <strong>x86-64</strong> (anche detta AMD64, EM64T, x64) ha <strong>16 registri general-purpose da 64 bit</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>64-bit</th>
+<th>32-bit</th>
+<th>16-bit</th>
+<th>8-bit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RAX</td>
+<td>EAX</td>
+<td>AX</td>
+<td>AL</td>
+</tr>
+<tr>
+<td>RBX</td>
+<td>EBX</td>
+<td>BX</td>
+<td>BL</td>
+</tr>
+<tr>
+<td>RCX</td>
+<td>ECX</td>
+<td>CX</td>
+<td>CL</td>
+</tr>
+<tr>
+<td>RDX</td>
+<td>EDX</td>
+<td>DX</td>
+<td>DL</td>
+</tr>
+<tr>
+<td>RSI</td>
+<td>ESI</td>
+<td>SI</td>
+<td>SIL</td>
+</tr>
+<tr>
+<td>RDI</td>
+<td>EDI</td>
+<td>DI</td>
+<td>DIL</td>
+</tr>
+<tr>
+<td>RBP</td>
+<td>EBP</td>
+<td>BP</td>
+<td>BPL</td>
+</tr>
+<tr>
+<td>RSP</td>
+<td>ESP</td>
+<td>SP</td>
+<td>SPL</td>
+</tr>
+<tr>
+<td>R8 – R15</td>
+<td>R8D – R15D</td>
+<td>R8W – R15W</td>
+<td>R8B – R15B</td>
+</tr>
+</tbody>
+</table>
+<p>Più registri speciali:
+- <strong>RIP</strong> — instruction pointer.
+- <strong>RFLAGS</strong> — flag (ZF zero, CF carry, SF sign, OF overflow, ...).</p>
+<pre><code>       64-bit RAX
+   ┌──────────────────────────────────────────┐
+   │  R63...R32     R31...R16   R15...R8 R7..R0 │
+   └──────────────────────────────────────────┘
+                    └──────────EAX──────────────┘
+                                └─────AX────────┘
+                                       └──AH─┴─AL─┘
+</code></pre>
+<p>Scrivere su <code>EAX</code> <strong>azzera</strong> la parte alta di <code>RAX</code> (è una stranezza dell'ISA — utile da ricordare).</p>
+<h3 id="convenzioni-ruoli-system-v-x86-64">Convenzioni ruoli (System V x86-64)</h3>
+<p>Anche se "general-purpose", per convenzione ognuno ha un ruolo:</p>
+<table>
+<thead>
+<tr>
+<th>Registro</th>
+<th>Ruolo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RAX</td>
+<td>accumulator, <strong>ritorno di funzione</strong></td>
+</tr>
+<tr>
+<td>RDI</td>
+<td><strong>1° argomento</strong></td>
+</tr>
+<tr>
+<td>RSI</td>
+<td><strong>2° argomento</strong></td>
+</tr>
+<tr>
+<td>RDX</td>
+<td><strong>3° argomento</strong></td>
+</tr>
+<tr>
+<td>RCX</td>
+<td><strong>4° argomento</strong></td>
+</tr>
+<tr>
+<td>R8</td>
+<td><strong>5° argomento</strong></td>
+</tr>
+<tr>
+<td>R9</td>
+<td><strong>6° argomento</strong></td>
+</tr>
+<tr>
+<td>RBP</td>
+<td>base pointer (frame)</td>
+</tr>
+<tr>
+<td>RSP</td>
+<td><strong>stack pointer</strong></td>
+</tr>
+<tr>
+<td>RBX, R12-R15</td>
+<td>callee-saved (la funzione chiamata li deve preservare)</td>
+</tr>
+<tr>
+<td>RAX, RCX, RDX, RSI, RDI, R8-R11</td>
+<td>caller-saved (la funzione li può rovinare)</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Microsoft x64</strong> ABI (Windows) usa <strong>RCX, RDX, R8, R9</strong> per primi 4 argomenti + 32 byte di "shadow space" sullo stack. Diverso! Se reversi binari Windows fai attenzione.</p>
+</blockquote>
+<h2 id="sintassi-intel-vs-att">Sintassi: Intel vs AT&amp;T</h2>
+<p>Esistono due notazioni:</p>
+<pre><code class="language-asm">; Intel (più leggibile, default su Windows e in pwntools)
+mov rax, 5
+add rax, rbx
+
+# AT&amp;T (default su Linux objdump, gdb)
+movq $5, %rax
+addq %rbx, %rax
+</code></pre>
+<p><strong>Differenze:</strong>
+- Intel: <code>mov dst, src</code> (sorgente a destra).
+- AT&amp;T: <code>mov src, dst</code> (al contrario!), <code>$</code> per immediate, <code>%</code> per registri, suffisso <code>q/l/w/b</code> per size.</p>
+<p>In questa guida <strong>uso Intel</strong>. In gdb: <code>set disassembly-flavor intel</code>.</p>
+<h2 id="le-istruzioni-che-incontrerai-sempre">Le istruzioni che incontrerai sempre</h2>
+<h3 id="movimento-e-aritmetica">Movimento e aritmetica</h3>
+<pre><code class="language-asm">mov rax, rbx            ; rax = rbx
+mov rax, 0x1234         ; rax = 0x1234 (immediate)
+mov rax, [rbx]          ; rax = memoria all'indirizzo rbx (dereferenza)
+mov [rbx], rax          ; memoria[rbx] = rax
+mov rax, [rbx + 8]      ; rax = memoria[rbx+8] (offset)
+mov rax, [rbx + rcx*4]  ; indicizzato (rbx base, rcx*4 offset)
+
+lea rax, [rbx + 8]      ; rax = rbx + 8 (Load Effective Address; aritmetica senza memoria!)
+
+add rax, rbx            ; rax += rbx
+sub rax, 10
+imul rax, rbx           ; rax *= rbx (signed)
+inc rax / dec rax       ; ++ / --
+neg rax                 ; rax = -rax
+
+xor rax, rax            ; rax = 0 (idioma)
+and rax, 0xff           ; mask low byte
+or  rax, 1
+shl rax, 4              ; rax &lt;&lt;= 4 (moltiplica per 16)
+shr rax, 4              ; rax &gt;&gt;= 4 (divisione intera per 16)
+not rax                 ; complementa bit
+</code></pre>
+<h3 id="confronto-e-salti">Confronto e salti</h3>
+<pre><code class="language-asm">cmp rax, 10             ; setta flag in base a rax - 10 (senza modificare rax)
+test rax, rax           ; setta flag in base a rax &amp; rax (zero test efficiente)
+
+je   label              ; jump if equal       (ZF = 1)
+jne  label              ; jump if not equal   (ZF = 0)
+jg   label              ; jump if greater (signed)
+jl   label              ; jump if less (signed)
+ja   label              ; jump if above (unsigned)
+jb   label              ; jump if below (unsigned)
+jz   label              ; jump if zero
+jnz  label              ; jump if not zero
+jmp  label              ; salto incondizionato
+</code></pre>
+<h3 id="stack-push-pop-call-ret">Stack: push, pop, call, ret</h3>
+<pre><code class="language-asm">push rax                ; rsp -= 8; [rsp] = rax
+pop rax                 ; rax = [rsp]; rsp += 8
+call funct              ; push RIP_next; jmp funct
+ret                     ; rax_ret = [rsp]; rsp += 8; jmp rax_ret
+</code></pre>
+<p><strong>Lo stack cresce verso indirizzi BASSI</strong> (in x86). <code>push</code> decrementa <code>RSP</code>, <code>pop</code> lo incrementa.</p>
+<pre><code>            indirizzi alti
+       ┌──────────────────┐
+       │   ...vecchi...   │
+       │                  │
+       │   valore A       │ ← prima del push
+       ├──────────────────┤
+       │   valore B       │ ← dopo &quot;push B&quot;, RSP punta qui
+       │                  │
+       │                  │
+       └──────────────────┘
+            indirizzi bassi
+</code></pre>
+<h3 id="syscall">syscall</h3>
+<p><code>syscall</code> chiede al kernel di fare qualcosa. Convenzione Linux x86-64:
+- <code>RAX</code> = numero syscall.
+- <code>RDI, RSI, RDX, R10, R8, R9</code> = argomenti (nota: R10, non RCX, per syscall).
+- Ritorno in <code>RAX</code>.</p>
+<pre><code class="language-asm">; write(1, &quot;hello\n&quot;, 6)
+mov rax, 1            ; sys_write
+mov rdi, 1            ; fd 1 = stdout
+mov rsi, msg          ; buffer
+mov rdx, 6            ; count
+syscall
+
+; exit(0)
+mov rax, 60           ; sys_exit
+xor rdi, rdi
+syscall
+</code></pre>
+<p>Lista syscall: <code>/usr/include/asm/unistd_64.h</code> o <code>man syscalls</code>.</p>
+<h2 id="hello-world-in-assembly-puro">"Hello, world!" in assembly puro</h2>
+<pre><code class="language-asm">; hello.asm
+section .data
+msg:    db &quot;Hello, asm!&quot;, 0x0a
+mlen:   equ $ - msg
+
+section .text
+global _start
+_start:
+    mov rax, 1
+    mov rdi, 1
+    mov rsi, msg
+    mov rdx, mlen
+    syscall
+
+    mov rax, 60
+    xor rdi, rdi
+    syscall
+</code></pre>
+<p>Compila e esegui:</p>
+<pre><code class="language-bash">nasm -felf64 hello.asm -o hello.o
+ld hello.o -o hello
+./hello
+# Hello, asm!
+</code></pre>
+<p><strong>12 istruzioni, 0 librerie, output reale.</strong> Questo è ciò che fanno gli shellcode.</p>
+<h2 id="il-prologo-e-lepilogo-di-una-funzione">Il prologo e l'epilogo di una funzione</h2>
+<p>Quando una funzione C viene chiamata, il compilatore genera tipicamente:</p>
+<pre><code class="language-asm">funct:
+    push rbp            ; salva il base pointer del chiamante
+    mov  rbp, rsp       ; nuovo frame: rbp = rsp
+    sub  rsp, 32        ; alloca 32 byte per variabili locali
+
+    ; ... corpo della funzione ...
+
+    leave               ; mov rsp, rbp ; pop rbp   (smonta il frame)
+    ret                 ; pop e jmp al return address
+</code></pre>
+<p>Visualizziamo lo stack durante l'esecuzione:</p>
+<pre><code>       indirizzi alti
+   ┌──────────────────┐
+   │   arg7 (se &gt;6)   │
+   │   ...            │
+   ├──────────────────┤
+   │ return address   │  ← RIP salvato (lo lascia &quot;call&quot;)
+   ├──────────────────┤
+   │ saved RBP        │  ← saved RBP del chiamante
+   ├──────────────────┤  ← RBP ora punta qui
+   │ var locale 1     │
+   │ var locale 2     │
+   │ ...              │  ← RSP cresce verso il basso
+   └──────────────────┘
+       indirizzi bassi
+</code></pre>
+<p>Quando un <strong>buffer overflow</strong> scrive oltre <code>var locale</code>, sovrascrive prima <code>saved RBP</code>, poi <code>return address</code>. <strong>Sovrascrivere il return address = controllare dove la CPU andrà al <code>ret</code></strong>. Questa è la base di ogni exploit binario.</p>
+<h2 id="esempio-completo-tracing-di-una-funzione-in-c-asm">Esempio completo: tracing di una funzione in C → asm</h2>
+<pre><code class="language-c">// add.c
+int add(int a, int b) {
+    return a + b;
+}
+int main(void) {
+    int r = add(3, 4);
+    return r;
+}
+</code></pre>
+<p>Compila con <code>gcc -O0 -S add.c -masm=intel</code> (<code>-S</code> produce <code>.s</code> file con asm). Output (semplificato):</p>
+<pre><code class="language-asm">add:
+    push rbp
+    mov  rbp, rsp
+    mov  DWORD PTR [rbp-4], edi    ; salva a (1° arg, EDI)
+    mov  DWORD PTR [rbp-8], esi    ; salva b (2° arg, ESI)
+    mov  edx, DWORD PTR [rbp-4]
+    mov  eax, DWORD PTR [rbp-8]
+    add  eax, edx                  ; EAX = b + a
+    pop  rbp
+    ret                            ; return value in EAX
+
+main:
+    push rbp
+    mov  rbp, rsp
+    sub  rsp, 16
+    mov  esi, 4                    ; 2° arg
+    mov  edi, 3                    ; 1° arg
+    call add
+    mov  DWORD PTR [rbp-4], eax    ; r = ret value
+    mov  eax, DWORD PTR [rbp-4]
+    leave
+    ret
+</code></pre>
+<p><strong>Leggi una riga alla volta.</strong> Vedi come <code>int</code> è 4 byte → uso di <code>EAX</code>/<code>EDX</code>/<code>EDI</code>/<code>ESI</code> (la metà bassa dei registri 64-bit). Compatti, eleganti.</p>
+<h2 id="esempio-un-overflow-di-buffer-in-asm">Esempio: un overflow di buffer in asm</h2>
+<pre><code class="language-c">// vuln.c
+#include &lt;string.h&gt;
+#include &lt;stdio.h&gt;
+void greet(char *name) {
+    char buf[8];
+    strcpy(buf, name);
+    printf(&quot;hi %s\n&quot;, buf);
+}
+int main(int argc, char **argv) {
+    if (argc &gt; 1) greet(argv[1]);
+    return 0;
+}
+</code></pre>
+<p>Stack frame di <code>greet</code> dopo prologo:</p>
+<pre><code>       indirizzi alti
+   ┌──────────────────┐
+   │ return address   │  rbp+8
+   ├──────────────────┤
+   │ saved RBP        │  rbp
+   ├──────────────────┤
+   │ buf[7]           │  rbp-1
+   │ buf[6]           │  rbp-2
+   │ ...              │
+   │ buf[0]           │  rbp-8     ← rsp (e inizio di buf)
+   └──────────────────┘
+       indirizzi bassi
+</code></pre>
+<p>Se <code>strcpy</code> copia 30 byte:
+- byte 0-7  → <code>buf</code>.
+- byte 8-15 → sovrascrivono <code>saved RBP</code>.
+- byte 16-23 → sovrascrivono <code>return address</code>. <strong>Controllo RIP.</strong></p>
+<p>A byte 16-23 metti l'indirizzo dove vuoi che la CPU salti. <strong>Game on.</strong> (Dettagli completi in sezione 14b.)</p>
+<h2 id="endianness-vedi-il-caos">Endianness — vedi il caos</h2>
+<p>Sui sistemi x86 (little-endian), la memoria è organizzata "byte basso per primo". Significa che il valore <code>0x1234567890ABCDEF</code> in RAM è scritto come:</p>
+<pre><code>indirizzi → 0x00   0x01   0x02   0x03   0x04   0x05   0x06   0x07
+bytes:       EF     CD     AB     90     78     56     34     12
+</code></pre>
+<p>L'<strong>EF</strong>, byte meno significativo, sta all'indirizzo <strong>basso</strong>. Quando scrivi un exploit, <strong>devi</strong> invertire i byte di un indirizzo per metterlo in un buffer:</p>
+<pre><code class="language-python"># Se vuoi che la CPU veda 0x4006a0 come prossimo RIP:
+payload += b&quot;\xa0\x06\x40\x00\x00\x00\x00\x00&quot;
+# oppure
+from struct import pack
+payload += pack(&quot;&lt;Q&quot;, 0x4006a0)   # &lt; = little-endian, Q = 8 byte unsigned
+</code></pre>
+<h2 id="arm64-aarch64-quel-che-ti-serve-di-base">ARM64 (AArch64) — quel che ti serve di base</h2>
+<p>In mobile (iOS/Android), molti server cloud (ARM Graviton), Raspberry, M1/M2/M3 Mac: <strong>ARM64</strong>. Diversa filosofia (<strong>RISC</strong> invece di CISC).</p>
+<p><strong>Registri:</strong>
+- <code>X0</code>–<code>X30</code> general-purpose 64-bit, <code>W0</code>–<code>W30</code> versione 32-bit (low half).
+- <code>XZR</code> (registro zero, sempre 0).
+- <code>SP</code> stack pointer, <code>PC</code> program counter.
+- <code>X30</code> = "Link Register" (LR), dove <code>ret</code> torna (analogo del return address salvato sullo stack in x86 — ma in ARM è in un registro, salvato sullo stack solo se la funzione chiama altre funzioni).</p>
+<p><strong>Calling convention:</strong>
+- <code>X0</code>–<code>X7</code> per primi 8 argomenti.
+- <code>X0</code> ritorno.
+- <code>X29</code> frame pointer.</p>
+<p><strong>Istruzioni RISC</strong> (4 byte fissi, semantica orthogonal):</p>
+<pre><code class="language-asm">mov   x0, #5
+add   x0, x1, x2          ; x0 = x1 + x2
+sub   x0, x1, #3
+ldr   x0, [x1]            ; load
+ldr   x0, [x1, #8]        ; load con offset
+str   x0, [x1]            ; store
+ldp   x29, x30, [sp]      ; load PAIR (carica 2 registri da sp e sp+8 con un'istruzione!)
+stp   x29, x30, [sp, #-16]!   ; store pair, pre-decrement (push)
+b     label               ; branch
+bl    funct               ; branch-and-link (call, salva PC+4 in X30)
+ret                       ; jump a X30
+cbz   x0, label           ; compare-and-branch-if-zero
+</code></pre>
+<p>Prologo tipico:</p>
+<pre><code class="language-asm">funct:
+    stp x29, x30, [sp, #-16]!   ; push fp + lr
+    mov x29, sp
+    ; ... corpo ...
+    ldp x29, x30, [sp], #16     ; pop fp + lr
+    ret
+</code></pre>
+<p>Le istruzioni sono semantica più sicura per default (offset bounded), e ARM moderno ha <strong>PAC</strong> (Pointer Authentication Code) che firma i puntatori → exploit BoF su iOS recenti è significativamente più duro.</p>
+<h2 id="tools-come-leggere-e-scrivere-asm">Tools: come leggere e scrivere asm</h2>
+<h3 id="compiler-explorer-godboltorg">Compiler Explorer (godbolt.org)</h3>
+<p><strong>Imperdibile.</strong> Scrivi C, vedi assembly. Cambia flag (<code>-O0</code>, <code>-O2</code>, <code>-fstack-protector</code>), confronta GCC/clang/MSVC. Lab di apprendimento velocissimo.</p>
+<h3 id="objdump">objdump</h3>
+<pre><code class="language-bash">gcc -c -O0 prog.c -o prog.o
+objdump -d -M intel prog.o      # disasm Intel
+objdump -d -M intel prog.o | less
+</code></pre>
+<h3 id="gdb-pwndbg">gdb + pwndbg</h3>
+<pre><code class="language-bash">gdb ./prog
+(gdb) set disassembly-flavor intel
+(gdb) layout asm
+(gdb) layout regs
+(gdb) break main
+(gdb) run
+(gdb) stepi          # step di una istruzione asm
+(gdb) info registers
+(gdb) x/16wx $rsp    # esamina 16 word esadecimali a partire da $rsp
+(gdb) x/s 0x402004   # esamina come stringa
+(gdb) disas funct    # disasm di una funzione
+</code></pre>
+<p>Plugin <code>pwndbg</code> (<code>apt install pwndbg</code> o git) rende gdb usabile come tool di pwn.</p>
+<h3 id="nasm-assembler">NASM (assembler)</h3>
+<pre><code class="language-bash">nasm -felf64 file.asm -o file.o
+ld file.o -o file
+</code></pre>
+<h2 id="esempi-tracciati-passo-passo">Esempi tracciati passo-passo</h2>
+<h3 id="esempio-1-somma-in-registro">Esempio 1: somma in registro</h3>
+<pre><code class="language-asm">mov rax, 5            ; ① RAX = 5
+mov rbx, 3            ; ② RBX = 3
+add rax, rbx          ; ③ RAX = RAX + RBX = 8
+</code></pre>
+<p>Stato dopo ogni step:</p>
+<pre><code>            RAX        RBX
+inizio:     ?          ?
+dopo ①:     5          ?
+dopo ②:     5          3
+dopo ③:     8          3
+</code></pre>
+<h3 id="esempio-2-loop-counting">Esempio 2: loop counting</h3>
+<pre><code class="language-asm">        mov rcx, 10         ; counter
+loop:
+        sub rcx, 1
+        jnz loop            ; se RCX != 0, ritorna a loop
+</code></pre>
+<p><code>rcx</code> parte da 10, decrementi, salti finché non è 0. Loop di 10 iterazioni.</p>
+<h3 id="esempio-3-leggere-un-byte-da-un-puntatore">Esempio 3: leggere un byte da un puntatore</h3>
+<p>C:</p>
+<pre><code class="language-c">char c = *p;
+</code></pre>
+<p>Asm (assumendo <code>p</code> in RDI):</p>
+<pre><code class="language-asm">mov al, byte ptr [rdi]    ; AL = byte all'indirizzo RDI
+</code></pre>
+<h3 id="esempio-4-array-indexing">Esempio 4: array indexing</h3>
+<p>C:</p>
+<pre><code class="language-c">int x = arr[i];
+</code></pre>
+<p>Asm (assumendo <code>arr</code> in RDI, <code>i</code> in RSI; int = 4 byte):</p>
+<pre><code class="language-asm">mov eax, dword ptr [rdi + rsi*4]    ; EAX = arr[i]
+</code></pre>
+<p>L'addressing mode <code>[base + index*scale + disp]</code> è potentissimo, evita istruzioni intermedie.</p>
+<h2 id="esercizi">Esercizi</h2>
+<h3 id="es-1b1-leggi-questa-funzione">Es 1b.1 — Leggi questa funzione</h3>
+<p>Cosa fa?</p>
+<pre><code class="language-asm">funct:
+    push rbp
+    mov  rbp, rsp
+    mov  eax, edi
+    imul eax, edi
+    pop  rbp
+    ret
+</code></pre>
+<details><summary>Soluzione</summary>
+
+Eleva al quadrato il primo argomento. `EAX = EDI * EDI`. Equivale a `int square(int x) { return x*x; }`.
+
+</details>
+
+<h3 id="es-1b2-scrivi-a-mano">Es 1b.2 — Scrivi a mano</h3>
+<p>Scrivi assembly che calcola il massimo tra <code>RDI</code> e <code>RSI</code>, ritorna in <code>RAX</code>.</p>
+<details><summary>Soluzione</summary>
+
+
+<pre><code class="language-asm">max:
+    mov rax, rdi
+    cmp rdi, rsi
+    jge done
+    mov rax, rsi
+done:
+    ret
+</code></pre>
+
+
+</details>
+
+<h3 id="es-1b3-godbolt-experiment">Es 1b.3 — Godbolt experiment</h3>
+<p>Su <a href="https://godbolt.org">godbolt.org</a>, compila con GCC <code>-O0</code> e <code>-O3</code> il seguente C:</p>
+<pre><code class="language-c">int sum(int *arr, int n) {
+    int s = 0;
+    for (int i = 0; i &lt; n; i++) s += arr[i];
+    return s;
+}
+</code></pre>
+<p>Confronta gli output. <code>-O3</code> vettorizza (usa registri XMM/YMM)? Quanto è più corto/efficiente?</p>
+<h3 id="es-1b4-trace-dello-stack">Es 1b.4 — Trace dello stack</h3>
+<p>Per il seguente codice C, disegna lo stack frame di <code>greet</code> subito dopo il prologo:</p>
+<pre><code class="language-c">void greet(int a, int b) {
+    char buf[24];
+    int local = a + b;
+}
+</code></pre>
+<details><summary>Suggerimento</summary>
+
+`a` arriva in EDI, `b` in ESI. Compilatore salva spesso a in `[rbp-4]`, b in `[rbp-8]` (o registri se ottimizzato). `buf[24]` occupa 24 byte allineati. `local` 4 byte. RSP scende di abbastanza per allinearsi a 16 byte (richiesto ABI).
+
+</details>
+
+<h3 id="es-1b5-shellcode-minimo-execvebinsh">Es 1b.5 — Shellcode minimo execve("/bin/sh")</h3>
+<p>Cerca su shell-storm.org un shellcode <code>execve("/bin/sh", NULL, NULL)</code> x86-64 Linux. Leggilo. Identifica:
+- Come la stringa "/bin/sh" viene messa in memoria (push, mov).
+- Quale syscall number è <code>execve</code> (= 59).
+- Perché si usa <code>xor reg, reg</code> invece di <code>mov reg, 0</code> (no null byte → utile per overflow via strcpy che si ferma su \0).</p>
+<h3 id="es-1b6-gdb-come-strumento-didattico">Es 1b.6 — gdb come strumento didattico</h3>
+<p>Compila e gdb-step questo:</p>
+<pre><code class="language-c">// stepme.c
+int main(void) {
+    int a = 5, b = 3;
+    int c = a + b;
+    return c;
+}
+</code></pre>
+<p><code>gcc -O0 -g stepme.c -o stepme</code>. In gdb: <code>start</code>, <code>layout asm</code>, <code>stepi</code> finché non torni. Per ogni istruzione, scrivi cosa cambia.</p>
+<h2 id="concetti-chiave">Concetti chiave</h2>
+<ol>
+<li><strong>CPU = registri + memoria + RIP</strong>. Tutto il resto è abstraction.</li>
+<li><strong>Stack frame</strong>: prologo <code>push rbp; mov rbp,rsp; sub rsp,N</code>. Epilogo <code>leave; ret</code>.</li>
+<li><strong>Return address sullo stack</strong> = il punto di rottura di buffer overflow.</li>
+<li><strong>Calling convention SysV</strong>: RDI, RSI, RDX, RCX, R8, R9 + RAX ritorno. Windows è diversa.</li>
+<li><strong>Little-endian</strong> x86: byte basso prima.</li>
+<li><strong>ARM64</strong> = RISC, link register X30, PAC su mobile.</li>
+<li><strong>Godbolt + gdb intel + pwndbg</strong> = setup di apprendimento perfetto.</li>
+</ol>
+<p>Ora puoi affrontare reverse (15) ed exploit dev (14, 14b) senza il muro di "ma cosa significa <code>mov</code>".</p>
+      <nav class="pager">
+<a href="01-fondamenti-informatica.html" class="prev"><span class="label">← Precedente</span><span class="title">Fondamenti di informatica per la security</span></a>
+<a href="02-linux-essenziale.html" class="next"><span class="label">Successivo →</span><span class="title">Linux essenziale per la security</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Cybersec Zero to Hero</strong> — percorso completo di sicurezza informatica, dall'inizio alla maestria.</p><p>Materiale a scopo educativo. Tutto ciò che impari va usato solo su sistemi che possiedi, in laboratori, in programmi di bug bounty autorizzati o sotto contratto di pentest. <strong>Non rompere la legge.</strong></p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true, background: '#131a1e', primaryColor: '#1d262b',
+      primaryTextColor: '#e8eef0', primaryBorderColor: '#00ff9c',
+      lineColor: '#00e6ff', secondaryColor: '#11171a', tertiaryColor: '#161d21',
+      mainBkg: '#1d262b', nodeBorder: '#00ff9c', clusterBkg: '#0b0f10',
+      clusterBorder: '#243035', titleColor: '#00ff9c',
+      edgeLabelBackground: '#0b0f10', textColor: '#e8eef0',
+      labelTextColor: '#e8eef0', actorBkg: '#1d262b', actorBorder: '#00ff9c',
+      actorTextColor: '#00ff9c', actorLineColor: '#00e6ff',
+      signalColor: '#e8eef0', signalTextColor: '#e8eef0',
+      labelBoxBkgColor: '#1d262b', labelBoxBorderColor: '#00ff9c',
+      noteBkgColor: '#ffe066', noteTextColor: '#0b0f10', noteBorderColor: '#ffe066',
+      activationBkgColor: '#1d262b', activationBorderColor: '#00ff9c',
+      sequenceNumberColor: '#0b0f10'
+    },
+    flowchart: { curve: 'basis', padding: 16 },
+    sequence: { mirrorActors: false, bottomMarginAdj: 10 },
+    fontFamily: 'JetBrains Mono, Cascadia Code, Consolas, monospace'
+  });
+</script>
+</body>
+</html>

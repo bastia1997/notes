@@ -1,0 +1,531 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>Crittografia — esempi numerici passo-passo — Cybersec Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">&gt;_</div>
+      <div>
+        <div class="brand-title">CYBERSEC</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="10" height="20" fill="#009246"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ce2b37"/></svg> IT</span><a href="../en/pages/05b-crypto-worked-examples.html" class="lang-link" title="Switch to English"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="30" height="20" fill="#012169"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#fff" stroke-width="3"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#c8102e" stroke-width="1.5"/><path d="M15,0 v20 M0,10 h30" stroke="#fff" stroke-width="5"/><path d="M15,0 v20 M0,10 h30" stroke="#c8102e" stroke-width="3"/></svg> EN</a></div>
+  </div>
+  <div class="search-wrap">
+    <div class="search-row">
+      <div class="search-inputwrap">
+        <span class="search-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"/>
+            <line x1="20" y1="20" x2="16.65" y2="16.65"/>
+          </svg>
+        </span>
+        <input class="search-input" id="search-input" type="text" placeholder="cerca... (premi /)" autocomplete="off" aria-label="Search">
+        <button class="search-clear" id="search-clear" type="button" aria-label="Clear" title="Clear">&times;</button>
+      </div>
+      <button class="search-btn" id="search-btn" type="button" aria-label="CERCA" title="CERCA">CERCA</button>
+    </div>
+    <div class="search-hits" id="search-hits" role="listbox"></div>
+  </div>
+  <div class="sidebar-nav">
+    <nav class="nav-section">
+      <div class="nav-section-title">Percorso</div>
+      <ul class="nav-list">
+        <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+        <li class="nav-item"><a href="../pages/00-percorso-e-mindset.html" class=""><span class="num">00</span>Percorso, mindset, etica e legge</a></li><li class="nav-item"><a href="../pages/00b-matematica-cs.html" class=""><span class="num">00b</span>Matematica e teoria computazione (il minimo, integrato)</a></li><li class="nav-item"><a href="../pages/01-fondamenti-informatica.html" class=""><span class="num">01</span>Fondamenti di informatica per la security</a></li><li class="nav-item"><a href="../pages/01b-assembly-zero.html" class=""><span class="num">01b</span>Assembly x86-64 e ARM64 da zero</a></li><li class="nav-item"><a href="../pages/02-linux-essenziale.html" class=""><span class="num">02</span>Linux essenziale per la security</a></li><li class="nav-item"><a href="../pages/02b-regex-automi.html" class=""><span class="num">02b</span>Regex, automi e parser per la security</a></li><li class="nav-item"><a href="../pages/03-networking-tcp-ip.html" class=""><span class="num">03</span>Networking: dai cavi a TCP/IP</a></li><li class="nav-item"><a href="../pages/04-http-tls.html" class=""><span class="num">04</span>HTTP, HTTPS e TLS in profondità</a></li><li class="nav-item"><a href="../pages/05-crittografia.html" class=""><span class="num">05</span>Crittografia: teoria e pratica</a></li><li class="nav-item"><a href="../pages/05b-crypto-worked-examples.html" class="active"><span class="num">05b</span>Crittografia — esempi numerici passo-passo</a></li><li class="nav-item"><a href="../pages/06-os-internals.html" class=""><span class="num">06</span>OS internals: Linux e Windows in profondità</a></li><li class="nav-item"><a href="../pages/07-programmazione-security.html" class=""><span class="num">07</span>Programmazione per la security: Python, C, Go</a></li><li class="nav-item"><a href="../pages/08-osint-recon.html" class=""><span class="num">08</span>OSINT e ricognizione</a></li><li class="nav-item"><a href="../pages/09-scanning-enumeration.html" class=""><span class="num">09</span>Scanning, enumeration e fingerprinting</a></li><li class="nav-item"><a href="../pages/10-owasp-top10.html" class=""><span class="num">10</span>OWASP Top 10 e oltre — vulnerabilità web di base</a></li><li class="nav-item"><a href="../pages/10b-walkthrough-byte-per-byte.html" class=""><span class="num">10b</span>Walkthrough byte-per-byte: SQLi, XSS, SSRF, IDOR</a></li><li class="nav-item"><a href="../pages/11-web-avanzato.html" class=""><span class="num">11</span>Web hacking avanzato</a></li><li class="nav-item"><a href="../pages/12-network-attacks.html" class=""><span class="num">12</span>Network attacks: MITM, spoofing, pivoting</a></li><li class="nav-item"><a href="../pages/13-active-directory.html" class=""><span class="num">13</span>Active Directory hacking</a></li><li class="nav-item"><a href="../pages/14-exploit-development.html" class=""><span class="num">14</span>Exploit development: dal buffer overflow a ROP</a></li><li class="nav-item"><a href="../pages/14b-bof-shell-completo.html" class=""><span class="num">14b</span>BoF → shell: exploit completo da zero</a></li><li class="nav-item"><a href="../pages/15-reverse-engineering.html" class=""><span class="num">15</span>Reverse engineering</a></li><li class="nav-item"><a href="../pages/16-malware-analysis.html" class=""><span class="num">16</span>Malware: tassonomia e analisi</a></li><li class="nav-item"><a href="../pages/17-mobile-security.html" class=""><span class="num">17</span>Mobile security: Android e iOS</a></li><li class="nav-item"><a href="../pages/18-cloud-security.html" class=""><span class="num">18</span>Cloud security: AWS, Azure, GCP</a></li><li class="nav-item"><a href="../pages/19-container-kubernetes.html" class=""><span class="num">19</span>Container e Kubernetes</a></li><li class="nav-item"><a href="../pages/20-wireless-radio.html" class=""><span class="num">20</span>Wireless e radio: WiFi, BT, SDR</a></li><li class="nav-item"><a href="../pages/21-hardware-firmware.html" class=""><span class="num">21</span>Hardware e firmware hacking</a></li><li class="nav-item"><a href="../pages/22-forensics-dfir.html" class=""><span class="num">22</span>Forensics e DFIR</a></li><li class="nav-item"><a href="../pages/23-blue-team-soc.html" class=""><span class="num">23</span>Blue team: SOC, SIEM, EDR, hunting</a></li><li class="nav-item"><a href="../pages/24-threat-intelligence.html" class=""><span class="num">24</span>Threat intelligence</a></li><li class="nav-item"><a href="../pages/25-grc-normative.html" class=""><span class="num">25</span>GRC, normative e standard</a></li><li class="nav-item"><a href="../pages/26-red-team.html" class=""><span class="num">26</span>Red team e adversary emulation</a></li><li class="nav-item"><a href="../pages/27-ai-ml-security.html" class=""><span class="num">27</span>AI / ML security</a></li><li class="nav-item"><a href="../pages/28-capstone-roadmap.html" class=""><span class="num">28</span>Capstone: CTF roadmap, home lab, certificazioni</a></li><li class="nav-item"><a href="../pages/29-master-cheatsheet.html" class=""><span class="num">29</span>Master cheatsheet</a></li><li class="nav-item"><a href="../pages/30-glossario-esteso.html" class=""><span class="num">30</span>Glossario esteso (250+ termini)</a></li><li class="nav-item"><a href="../pages/31-normative-it-ue.html" class=""><span class="num">31</span>Riferimenti normativi IT/UE in dettaglio</a></li>
+      </ul>
+    </nav>
+  </div>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Crittografia</span>
+        <span>Sezione 8 di 36</span>
+        <span class="level-tag level-int">Livello: intermedio</span>
+      </div>
+      <h1>Crittografia — esempi numerici passo-passo</h1>
+      <p class="summary">RSA con numeri piccoli (cifri/decifri a mano), Diffie-Hellman con numeri piccoli, AES round 1 dettagliato, ECC visualizzato graficamente, padding oracle byte-per-byte. Niente magia, solo aritmetica scritta sul foglio.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Crittografia</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>Sezione 00b (modular arithmetic, primi, totient)</li><li>Sezione 05 (concetti)</li></ul>
+  <div class="label">Strumenti</div>
+  <ul class="source-list"><li>Carta e penna</li><li>Python REPL con pycryptodome / cryptography per verifica</li></ul>
+</div>
+      <blockquote>
+<p>Tutto il "perché funziona" della crittografia diventa ovvio quando ti siedi a fare i conti su un foglio. Qui calcoliamo tutto <strong>a mano</strong> (con <code>pow(a,b,n)</code> per i conti più grandi). Niente passi saltati.</p>
+</blockquote>
+<h2 id="1-rsa-cifratura-e-decifratura-passo-passo">1. RSA — cifratura e decifratura passo-passo</h2>
+<h3 id="generazione-delle-chiavi">Generazione delle chiavi</h3>
+<p>Scegliamo due primi piccoli (in produzione: 1024 bit ciascuno!):
+- $p = 61$, $q = 53$.</p>
+<p>Calcoli:
+- $n = pq = 61 \cdot 53 = 3233$.
+- $\varphi(n) = (p-1)(q-1) = 60 \cdot 52 = 3120$.
+- Scegli $e$ coprimo con $\varphi$: $e = 17$. Verifica: $\gcd(17, 3120) = 1$ ✅.
+- Calcola $d = e^{-1} \mod \varphi(n)$. Con Euclide esteso o <code>pow(17, -1, 3120)</code> → $d = 2753$. Verifica: $17 \cdot 2753 = 46801 = 15 \cdot 3120 + 1$ ✅.</p>
+<p><strong>Chiave pubblica:</strong> $(n, e) = (3233, 17)$. <strong>Chiave privata:</strong> $(n, d) = (3233, 2753)$.</p>
+<h3 id="cifra-il-messaggio-m-65-codice-ascii-di-a">Cifra il messaggio $m = 65$ (codice ASCII di 'A')</h3>
+<p>Cifratura: $c = m^e \mod n = 65^{17} \mod 3233$.</p>
+<p>Calcolo step-by-step con <strong>esponenziazione modulare ripetuta</strong> (necessario per non far esplodere i numeri):</p>
+<p>$$ 65^{17} = 65^{16} \cdot 65^1 = (65^8)^2 \cdot 65 $$</p>
+<p>A mano (mod 3233 ad ogni step):</p>
+<pre><code>65^1   = 65
+65^2   = 4225          → 4225 mod 3233 = 992
+65^4   = 992^2 = 984064 → mod 3233 = ?
+        984064 / 3233 = 304.4...  → 304 · 3233 = 982832  → 984064 - 982832 = 1232
+65^4   ≡ 1232
+65^8   = 1232^2 = 1517824 → mod 3233 = ?
+        1517824 / 3233 = 469.5 → 469 · 3233 = 1516277 → 1517824 - 1516277 = 1547
+65^8   ≡ 1547
+65^16  = 1547^2 = 2393209 → mod 3233 = ?
+        2393209 / 3233 ≈ 740.4 → 740 · 3233 = 2392420 → 2393209 - 2392420 = 789
+65^16  ≡ 789
+
+65^17  = 65^16 · 65^1 = 789 · 65 = 51285
+        51285 mod 3233 = ?
+        51285 / 3233 ≈ 15.86 → 15 · 3233 = 48495 → 51285 - 48495 = 2790
+65^17  ≡ 2790
+</code></pre>
+<p>Quindi $c = 2790$. Verifica in Python: <code>pow(65, 17, 3233)</code> → 2790 ✅.</p>
+<h3 id="decifra">Decifra</h3>
+<p>$m = c^d \mod n = 2790^{2753} \mod 3233$.</p>
+<p>A mano è proibitivo, in Python: <code>pow(2790, 2753, 3233)</code> → <strong>65</strong>. ✅</p>
+<p><strong>Funziona perché</strong>: per Eulero, $m^{\varphi(n)} \equiv 1 \pmod n$ se $\gcd(m,n)=1$, e visto che $ed \equiv 1 \pmod{\varphi(n)}$, esiste $k$ con $ed = 1 + k\varphi(n)$. Quindi:
+$$m^{ed} = m^{1 + k\varphi(n)} = m \cdot (m^{\varphi(n)})^k \equiv m \cdot 1^k = m \pmod n.$$</p>
+<h3 id="forma-testuale-magica">Forma testuale "magica"</h3>
+<pre><code>Alice                                        Bob
+ │ genera (p,q) segreti                        │
+ │ calcola n, e, d                             │
+ │ pubblica (n, e) ─────────────────────────►  │
+ │                                             │ vuole inviare m=65
+ │                                             │ calcola c = m^e mod n = 2790
+ │ ◄───────── c=2790 ──────────────────────────┤
+ │ calcola m = c^d mod n = 65                  │
+ │ legge &quot;A&quot;                                   │
+</code></pre>
+<p>Senza la chiave privata, anche conoscendo $n=3233, e=17, c=2790$, l'unico modo (senza scoperte matematiche) è <strong>fattorizzare 3233 = 61·53</strong>. Su 3233 fa ridere. Su un $n$ di 2048 bit (~617 cifre decimali) servirebbero migliaia di anni di CPU.</p>
+<h3 id="perche-rsa-textbook-e-insicuro-importantissimo">Perché RSA "textbook" è insicuro (importantissimo)</h3>
+<p>Cifra $m_1 = 2$ e $m_2 = 3$ con stessa chiave $(e=17, n=3233)$:
+- $c_1 = 2^{17} \mod 3233 = 131072 \mod 3233 = 131072 - 40\cdot 3233 = 131072 - 129320 = 1752$.
+- $c_2 = 3^{17} \mod 3233$. <code>pow(3,17,3233)</code> = 3055. Verifica.</p>
+<p>Ora $c_1 \cdot c_2 \mod n = 1752 \cdot 3055 \mod 3233 = ?$. Con Python: <code>(1752 * 3055) % 3233 = 1486</code>.</p>
+<p>E $(m_1 m_2)^e \mod n = 6^{17} \mod 3233 = ?$. <code>pow(6, 17, 3233) = 1486</code>. <strong>Identico.</strong></p>
+<p>Cioè: $E(m_1) \cdot E(m_2) = E(m_1 \cdot m_2)$. Questa è la <strong>proprietà moltiplicativa di RSA</strong>. Permette <strong>attacchi chosen-plaintext</strong> (puoi modificare il cipher in modo prevedibile). Per questo si usa <strong>padding OAEP</strong> che spezza la proprietà aggiungendo dati random.</p>
+<h3 id="padding-rsa-pkcs1-v15-vs-oaep">Padding RSA: PKCS#1 v1.5 vs OAEP</h3>
+<p>RSA "raw" cifra solo <code>m &lt; n</code>. Per cifrare un blocco arbitrario di byte, lo si <strong>padding-ifica</strong> a esattamente <code>k = |n|</code> byte (es. 256 per RSA-2048).</p>
+<h4 id="pkcs1-v15-vecchio-vulnerabile">PKCS#1 v1.5 (vecchio, vulnerabile)</h4>
+<pre><code>EM = 00 || 02 || PS || 00 || M
+     │     │     │    │     │
+     │     │     │    │     └── messaggio (k-3-len(PS) byte)
+     │     │     │    └────── separatore
+     │     │     └──────── padding random (&gt;= 8 byte di NON-zero)
+     │     └────────── tipo block (02 = encrypted)
+     └────────── 0x00 iniziale
+</code></pre>
+<p>Problema: si può <strong>discriminare</strong> un cipher "padding valido" da uno "non valido" via comportamento del server (errore vs OK). Bleichenbacher 1998 dimostra che con queste informazioni si può recuperare un <code>m</code> cifrato in $\sim 2^{20}$ query (qualche ora). Tutti i protocolli che usano PKCS#1 v1.5 in modalità interattiva → vulnerabili. Es. <strong>ROBOT attack 2017</strong> trovò questo in TLS 1.2 di Facebook, F5, Cisco.</p>
+<h4 id="oaep-optimal-asymmetric-encryption-padding">OAEP — Optimal Asymmetric Encryption Padding</h4>
+<p>L'algoritmo:</p>
+<pre><code>                ┌─────────────────────┐
+                │     messaggio M     │
+                └─────────────────────┘
+                          │
+                  ┌───────┴───────┐
+                  │               │
+                  ▼               ▼
+        ┌───────────────┐  ┌──────────┐
+        │ M || 00..00   │  │ random r │
+        │ (k0 byte)     │  │ (k1 byte)│
+        └───────┬───────┘  └────┬─────┘
+                │               │
+                ▼               │
+            G(r) MGF1           │
+                │               │
+                ▼               │
+              XOR               │
+                │               │
+                ▼               │
+            X = M||000 ⊕ G(r)   │
+                │               │
+                ├─► H(X) MGF1   │
+                │       │       │
+                │       ▼       │
+                │      XOR ◄────┘
+                │       │
+                │       ▼
+                │    Y = r ⊕ H(X)
+                │       │
+                └───────┴────► EM = 0x00 || X || Y
+                              poi RSA(EM)
+</code></pre>
+<p><code>MGF1</code> è una "mask generation function" basata su SHA-256. Effetto:
+- L'output è <strong>indistinguibile da random</strong>.
+- Senza la chiave privata, non si può fare verifica di padding "valido vs non" → <strong>niente padding oracle</strong>.
+- Anche la <strong>proprietà moltiplicativa</strong> è rotta perché il padding random rende non lineare.</p>
+<p><strong>Pratica:</strong> in Python <code>cryptography</code>:</p>
+<pre><code class="language-python">from cryptography.hazmat.primitives.asymmetric import padding
+from cryptography.hazmat.primitives import hashes
+
+ciphertext = pub_key.encrypt(
+    message,
+    padding.OAEP(
+        mgf=padding.MGF1(algorithm=hashes.SHA256()),
+        algorithm=hashes.SHA256(),
+        label=None
+    )
+)
+</code></pre>
+<p><strong>Mai</strong> <code>padding.PKCS1v15()</code> se hai scelta.</p>
+<h2 id="2-diffie-hellman-scambio-di-chiavi-a-mano">2. Diffie-Hellman — scambio di chiavi a mano</h2>
+<p>Alice e Bob vogliono concordare una chiave segreta <strong>senza</strong> averla mai inviata in chiaro, su un canale che chiunque può ascoltare.</p>
+<p><strong>Parametri pubblici</strong> (concordati o standard): un primo $p$ e un generatore $g$. Esempio educational: $p = 23$, $g = 5$.</p>
+<div class="mermaid">
+sequenceDiagram
+    autonumber
+    participant A as Alice
+    participant E as Eve (sniffer)
+    participant B as Bob
+    Note over A: sceglie a=6 (segreto)<br/>calcola A = 5^6 mod 23 = 8
+    Note over B: sceglie b=15 (segreto)<br/>calcola B = 5^15 mod 23 = 19
+    A->>E: A = 8 (pubblico)
+    E->>B: A = 8 (sniffato ma inutilizzabile)
+    B->>E: B = 19 (pubblico)
+    E->>A: B = 19
+    Note over A: K = B^a mod p<br/>= 19^6 mod 23 = 2
+    Note over B: K = A^b mod p<br/>= 8^15 mod 23 = 2
+    Note over A,B: Stessa chiave segreta K=2 senza mai inviarla!
+
+</div>
+
+<p><strong>Entrambi arrivano a $K = 2$.</strong> Eve, che ha visto $g=5, p=23, A=8, B=19$, dovrebbe calcolare $\log_5 8 \mod 23$ (cioè $a=6$) — il <strong>problema del logaritmo discreto</strong> — che è "facile" su $p=23$ ma su $p$ di 2048 bit diventa intrattabile.</p>
+<h3 id="verifica-algebrica">Verifica algebrica</h3>
+<p>$$ K = A^b = (g^a)^b = g^{ab} $$
+$$ K = B^a = (g^b)^a = g^{ba} = g^{ab} $$</p>
+<p>Stesso valore. ✅</p>
+<h3 id="calcoli-step">Calcoli step</h3>
+<p>$5^6 \mod 23$:</p>
+<pre><code>5^1 = 5
+5^2 = 25 = 23·1 + 2 → 2
+5^4 = 2^2 = 4
+5^6 = 5^4 · 5^2 = 4 · 2 = 8
+</code></pre>
+<p>$5^{15} \mod 23$ (Bob): 
+- $5^{15} = 5^{8+4+2+1}$. 
+- $5^1 = 5$. $5^2 = 2$. $5^4 = 4$. $5^8 = 4^2 = 16$. 
+- $5^{15} = 16 \cdot 4 \cdot 2 \cdot 5 = 640 \mod 23 = 640 - 27\cdot 23 = 640 - 621 = 19$. ✅</p>
+<p>$19^6 \mod 23$ (Alice):
+- $19^2 = 361 \mod 23 = 361 - 15\cdot 23 = 361 - 345 = 16$.
+- $19^4 = 16^2 = 256 \mod 23 = 256 - 11\cdot 23 = 3$.
+- $19^6 = 19^4 \cdot 19^2 = 3 \cdot 16 = 48 \mod 23 = 2$. ✅</p>
+<h3 id="man-in-the-middle-classico-perche-serve-lautenticazione">Man-in-the-middle classico (perché serve l'autenticazione)</h3>
+<div class="mermaid">
+sequenceDiagram
+    autonumber
+    participant A as Alice
+    participant E as Eve (MITM attivo)
+    participant B as Bob
+    A->>E: A = g^a (creduta diretta a Bob)
+    Note over E: blocca, calcola A' = g^e (sua)
+    E->>B: A' (Bob crede sia Alice)
+    B->>E: B = g^b
+    Note over E: blocca, calcola B' = g^e'
+    E->>A: B'
+    Note over A: K_alice = (B')^a = g^(e' · a)
+    Note over B: K_bob = (A')^b = g^(e · b)
+    Note over E: Eve calcola entrambe le K<br/>e decifra ogni messaggio
+
+</div>
+
+<p>DH "puro" è <strong>vulnerabile a MITM</strong>. Per questo TLS combina DH con <strong>firma</strong> del server (per autenticarlo): l'attaccante in mezzo non sa firmare con la chiave privata del server, smascherato.</p>
+<h2 id="3-ecc-visualizzato-curva-ellittica">3. ECC visualizzato (curva ellittica)</h2>
+<p>Una curva ellittica su reali: $y^2 = x^3 + ax + b$. Esempio $a = -1, b = 1$:</p>
+<figure class="diagram">
+<svg viewBox="-200 -180 400 360" width="500" height="450" xmlns="http://www.w3.org/2000/svg">
+  <!-- assi -->
+  <line x1="-190" y1="0" x2="190" y2="0" stroke="#5b6669" stroke-width="1"/>
+  <line x1="0" y1="-170" x2="0" y2="170" stroke="#5b6669" stroke-width="1"/>
+  <text x="185" y="-6" fill="#8a9499" font-family="JetBrains Mono" font-size="11">x</text>
+  <text x="6" y="-165" fill="#8a9499" font-family="JetBrains Mono" font-size="11">y</text>
+  <!-- curva y^2 = x^3 - x + 1, parametrizzata, due rami -->
+  <path d="M -160,-15 Q -140,-30 -120,-50 Q -90,-80 -50,-90 Q -20,-95 0,-90 Q 30,-85 60,-70 Q 100,-50 140,-25 Q 170,-12 195,0"
+        fill="none" stroke="#00e6ff" stroke-width="2"/>
+  <path d="M -160,15 Q -140,30 -120,50 Q -90,80 -50,90 Q -20,95 0,90 Q 30,85 60,70 Q 100,50 140,25 Q 170,12 195,0"
+        fill="none" stroke="#00e6ff" stroke-width="2"/>
+  <!-- punti P, Q, R, P+Q -->
+  <circle cx="-80" cy="-70" r="5" fill="#00ff9c"/>
+  <text x="-105" y="-78" fill="#00ff9c" font-family="JetBrains Mono" font-size="13">P</text>
+  <circle cx="40" cy="55" r="5" fill="#00ff9c"/>
+  <text x="45" y="73" fill="#00ff9c" font-family="JetBrains Mono" font-size="13">Q</text>
+  <!-- retta tra P e Q estesa -->
+  <line x1="-160" y1="-126" x2="150" y2="100" stroke="#ffe066" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <!-- terzo punto sulla retta (R) e il suo riflesso (P+Q) -->
+  <circle cx="120" cy="84" r="5" fill="#ff3da6"/>
+  <text x="125" y="100" fill="#ff3da6" font-family="JetBrains Mono" font-size="13">R</text>
+  <line x1="120" y1="84" x2="120" y2="-84" stroke="#ff3da6" stroke-width="1" stroke-dasharray="3 3"/>
+  <circle cx="120" cy="-84" r="5" fill="#ff3da6"/>
+  <text x="125" y="-75" fill="#ff3da6" font-family="JetBrains Mono" font-size="13">P+Q</text>
+  <text x="-180" y="-150" fill="#e8eef0" font-family="JetBrains Mono" font-size="11">y² = x³ − x + 1</text>
+</svg>
+<figcaption>Addizione su curva ellittica: P + Q = riflesso del terzo punto di intersezione</figcaption>
+</figure>
+
+<p><strong>Addizione di punti</strong> (intuizione grafica):
+1. Tira la retta tra $P$ e $Q$.
+2. La retta interseca la curva in un terzo punto $R'$.
+3. Rifletti $R'$ rispetto all'asse $x$ → $R = P + Q$.</p>
+<p><strong>Raddoppio</strong>: tangente in $P$ → terzo punto → riflesso.</p>
+<p>In modular arithmetic (curve $y^2 \equiv x^3 + ax + b \pmod p$), questa addizione diventa puramente algebrica con formule esplicite.</p>
+<h3 id="esempio-numerico-minimal">Esempio numerico minimal</h3>
+<p>Curva $y^2 = x^3 + 2x + 3 \pmod{97}$. Verifica che $P = (3, 6)$ sia un punto: $6^2 = 36 \equiv 27 + 6 + 3 = 36 \pmod{97}$ ✅.</p>
+<p>Calcoliamo $2P$:
+- Slope (tangente): $\lambda = (3x^2 + a) / (2y) = (27 + 2) / 12 = 29/12 \pmod{97}$.
+- $12^{-1} \mod 97$ = ? <code>pow(12, -1, 97) = 89</code> (verifica: $12 \cdot 89 = 1068 = 11 \cdot 97 + 1$).
+- $\lambda = 29 \cdot 89 \mod 97 = 2581 \mod 97 = 2581 - 26 \cdot 97 = 2581 - 2522 = 59$.
+- $x_3 = \lambda^2 - 2x = 59^2 - 6 = 3481 - 6 = 3475 \mod 97 = ?$ $3475 / 97 \approx 35.8$ → $35 \cdot 97 = 3395$ → $3475 - 3395 = 80$. $x_3 = 80$.
+- $y_3 = \lambda(x - x_3) - y = 59 \cdot (3 - 80) - 6 = 59 \cdot (-77) - 6 = -4549 \mod 97$. $-4549 + 47 \cdot 97 = -4549 + 4559 = 10$. $y_3 = 10$.</p>
+<p>Quindi $2P = (80, 10)$. Verifica: $10^2 = 100 \equiv 3 \pmod{97}$? $100 - 97 = 3$ ✅. E $80^3 + 2\cdot 80 + 3 = 512000 + 160 + 3 = 512163 \pmod{97}$? $512163 / 97 = 5279.0... \cdot 97 = 5279 \cdot 97 = 512063$. $512163 - 512063 = 100$. Wait, 100 mod 97 = 3 ✅.</p>
+<p><strong>ECDH funziona analogamente a DH ma con "$nP$" (n-volte addizionato) al posto di $g^n$</strong>. Il problema duro: dato $P$ e $nP$, trovare $n$ (logaritmo discreto su curva ellittica, ECDLP). Sui parametri standard (P-256, Curve25519) intrattabile.</p>
+<h2 id="4-aes-round-1-dettagliato">4. AES round 1 dettagliato</h2>
+<p>AES-128 cifra blocchi di 128 bit (16 byte) usando una chiave 128 bit. Esegue <strong>10 round</strong>. Ogni round (tranne ultimo) ha 4 step:</p>
+<ol>
+<li><strong>SubBytes</strong> (S-box): sostituzione non-lineare byte-per-byte tramite tabella fissa.</li>
+<li><strong>ShiftRows</strong>: rotazione righe della matrice 4x4.</li>
+<li><strong>MixColumns</strong>: mescolamento lineare delle colonne.</li>
+<li><strong>AddRoundKey</strong>: XOR con la subkey del round.</li>
+</ol>
+<h3 id="esempio-input-128-bit">Esempio: input 128 bit</h3>
+<p>Stato iniziale (16 byte come matrice 4x4 column-major):</p>
+<pre><code>Stato (hex):
+   32  88  31  e0
+   43  5a  31  37
+   f6  30  98  07
+   a8  8d  a2  34
+</code></pre>
+<p><strong>Step 0 (AddRoundKey con chiave originale)</strong> — non lo facciamo, partiamo da round 1.</p>
+<p><strong>SubBytes</strong>: sostituisci ogni byte con S-box[byte]. La S-box è una tabella 256-elementi pubblica.</p>
+<pre><code>S-box[0x32] = 0x23
+S-box[0x88] = 0xc4
+S-box[0x31] = 0xc7
+...
+</code></pre>
+<p>Risultato (tabellato):</p>
+<pre><code>   23  c4  c7  e1
+   1a  be  c7  9a
+   42  04  46  c5
+   c2  5d  3a  18
+</code></pre>
+<p><strong>ShiftRows</strong>:
+- Riga 0: no shift.
+- Riga 1: shift sinistra 1.
+- Riga 2: shift sinistra 2.
+- Riga 3: shift sinistra 3.</p>
+<pre><code>   23  c4  c7  e1        ← invariata
+   be  c7  9a  1a        ← shift left 1
+   46  c5  42  04        ← shift left 2
+   18  c2  5d  3a        ← shift left 3
+</code></pre>
+<p><strong>MixColumns</strong>: ogni colonna $C$ è moltiplicata (in $GF(2^8)$) per la matrice fissa:</p>
+<pre><code>[ 2 3 1 1 ]
+[ 1 2 3 1 ]
+[ 1 1 2 3 ]
+[ 3 1 1 2 ]
+</code></pre>
+<p>Su prima colonna $(23, be, 46, 18)$ (in hex). Operazioni in $GF(2^8)$. Si ottiene una nuova colonna. La matematica è completamente fissa, niente segreto.</p>
+<p><strong>AddRoundKey</strong>: XOR con la subkey del round 1 (derivata dall'originale via "key schedule" che è una piccola routine ricorsiva). Output del round 1.</p>
+<p><strong>Continui 9 round.</strong> L'ultimo salta MixColumns.</p>
+<blockquote>
+<p>Il punto: AES è una <strong>rete di sostituzione-permutazione (SPN)</strong>. Non c'è "magia matematica", c'è ingegneria di confusione (S-box) + diffusione (ShiftRows + MixColumns). Tutto trasparente, tutto pubblico, sicurezza nella chiave.</p>
+</blockquote>
+<p>In Python con <code>pycryptodome</code>:</p>
+<pre><code class="language-python">from Crypto.Cipher import AES
+key = bytes.fromhex(&quot;2b7e151628aed2a6abf7158809cf4f3c&quot;)
+pt  = bytes.fromhex(&quot;3243f6a8885a308d313198a2e0370734&quot;)
+ct  = AES.new(key, AES.MODE_ECB).encrypt(pt)
+print(ct.hex())   # 3925841d02dc09fbdc118597196a0b32
+</code></pre>
+<p>Questo è esattamente l'esempio NIST FIPS-197.</p>
+<h2 id="5-padding-oracle-decifri-byte-per-byte-un-cipher-cbc-senza-la-chiave">5. Padding oracle — decifri byte per byte un cipher CBC senza la chiave</h2>
+<p>Setup:
+- Cipher in CBC senza MAC, PKCS#7 padding.
+- Server riceve cipher, decifra, restituisce response <strong>diversa</strong> se padding è "buono" vs "rotto".
+- Questo è l'<strong>oracolo</strong>.</p>
+<h3 id="come-funziona-pkcs7">Come funziona PKCS#7</h3>
+<p>Padding aggiunge byte ai dati per arrivare a multiplo di 16 (per AES). Se mancano $n$ byte: aggiungi $n$ byte tutti di valore $n$.</p>
+<pre><code>&quot;hello&quot;  (5 byte) → padded a 16 byte:
+   68 65 6c 6c 6f 0b 0b 0b 0b 0b 0b 0b 0b 0b 0b 0b
+                  └─────── 11 byte di 0x0b ──────────┘
+</code></pre>
+<p>Se i dati sono già multiplo di 16, aggiungi un blocco intero di 0x10. Il decoder controlla l'ultimo byte $p$ e verifica che gli ultimi $p$ byte siano tutti uguali a $p$.</p>
+<h3 id="attacco">Attacco</h3>
+<p>In CBC, decifratura di blocco $C_n$: $P_n = D_K(C_n) \oplus C_{n-1}$.</p>
+<p>Se tu <strong>modifichi</strong> $C_{n-1}$ → modifichi $P_n$ corrispondentemente. <strong>Senza</strong> modificare $D_K(C_n)$ (che non sai).</p>
+<p>Diciamo $D_K(C_n) = I_n$ (l'intermediate). Allora $P_n = I_n \oplus C_{n-1}$.</p>
+<p><strong>Obiettivo</strong>: scoprire $I_n$ byte per byte. Una volta che hai $I_n$, $P_n$ vero = $I_n \oplus C_{n-1}$ vero.</p>
+<h4 id="trovare-lultimo-byte-di-i_n">Trovare l'ultimo byte di $I_n$</h4>
+<p>Manda al server: $C'<em n-1="n-1">{n-1} | C_n$ dove $C'</em>$ ha byte casuali ma con l'ultimo byte $b$ variabile (da 0 a 255). Lo decoder calcola $P'<em n-1="n-1">n = I_n \oplus C'</em>$. Se l'ultimo byte di $P'_n$ è $0x01$ (padding valido di lunghezza 1), il server <strong>accetta</strong> il padding.</p>
+<pre><code>I_n[15] ⊕ C'_{n-1}[15] = 0x01
+→ I_n[15] = 0x01 ⊕ C'_{n-1}[15]
+</code></pre>
+<p>In <strong>al più 256 query</strong> trovi il giusto $C'_{n-1}[15]$, quindi $I_n[15]$.</p>
+<h4 id="trovare-il-penultimo-byte">Trovare il penultimo byte</h4>
+<p>Ora vuoi padding <code>02 02</code> agli ultimi due posti. Imposta $C'<em n-1="n-1">{n-1}[15] = I_n[15] \oplus 0x02$ (così sai che il padding finirà con <code>02</code>). Poi varia $C'</em>[14]$ da 0 a 255 finché server accetta → trovato $I_n[14]$.</p>
+<p>E così via, <strong>byte per byte</strong>, fino a recuperare $I_n$ intero — quindi $P_n$. In <strong>~256 query × 16 byte = ~4096 query</strong> decifri un blocco.</p>
+<h3 id="codice-pseudo">Codice (pseudo)</h3>
+<pre><code class="language-python">def find_byte(C_prev_known, C_target, position):
+    &quot;&quot;&quot;Trova I[position] modificando C_prev byte `position`.&quot;&quot;&quot;
+    target_pad = 16 - position
+    # imposta byte da position+1 a 15 per ottenere target_pad nei finali
+    for guess in range(256):
+        C_new = bytearray(C_prev_known)
+        C_new[position] = guess
+        for i in range(position + 1, 16):
+            C_new[i] = I[i] ^ target_pad   # I[i] già noto
+        ct = bytes(C_new) + C_target
+        if oracle(ct):    # ritorna True se padding accept
+            return guess ^ target_pad     # I[position]
+</code></pre>
+<p><strong>Lab guidato:</strong> <a href="https://portswigger.net/web-security/cryptography/lab-padding-oracle-attack">PortSwigger Padding Oracle Lab</a>. Risolvilo con <code>padbuster</code> automatizzato e poi rifallo a mano per capire.</p>
+<blockquote>
+<p><strong>Storico noto:</strong> POODLE (SSLv3, 2014), .NET FormsAuth (2010), Steam server-side, JSF state.</p>
+</blockquote>
+<h2 id="6-length-extension-a-mano">6. Length extension a mano</h2>
+<p>Hash SHA-256 è basato su Merkle-Damgård. Date:
+- $h = \text{SHA-256}(\text{secret} | m)$ (firma "ingenua")
+- $\text{len}(secret)$ noto.</p>
+<p><strong>Senza</strong> sapere <code>secret</code>, calcoli $h' = \text{SHA-256}(\text{secret} | m | \text{pad} | \text{ext})$ per qualsiasi <code>ext</code>.</p>
+<p><strong>Come?</strong> Il "stato interno" finale di SHA-256 su <code>secret||m</code> è proprio $h$ (con piccolo trick di rappresentazione). Riprendi computazione da $h$ aggiungendo <code>ext</code>. Tool: <code>hashpump</code>, <code>hash_extender</code>, libreria Python.</p>
+<pre><code class="language-bash">hashpump -s '6d5f807e23db210bc254a28be2d6759a' \
+         -d 'count=10&amp;lat=37.351&amp;user_id=1&amp;long=-119.827&amp;waffle=eggo' \
+         -k 14 -a '&amp;waffle=liege'
+
+# Output: nuovo hash h' e payload completo (con secret rimpiazzato da pad)
+</code></pre>
+<p><strong>Mitigazione</strong>: usa HMAC ($\text{HMAC}(K, m) = H(K_{outer} | H(K_{inner} | m))$, doppia chiamata) oppure SHA-3 (immune a length extension by design).</p>
+<h2 id="7-visualizzazione-del-4-way-handshake-wpa2">7. Visualizzazione del 4-way handshake WPA2</h2>
+<div class="mermaid">
+sequenceDiagram
+    autonumber
+    participant AP as Access Point
+    participant CL as Client
+    AP->>CL: M1 — ANonce (random)
+    Note over CL: PTK = PRF(PMK, ANonce, SNonce, MAC_AP, MAC_CL)
+    CL->>AP: M2 — SNonce + MIC
+    Note over AP: stesso PTK derivato, verifica MIC
+    AP->>CL: M3 — GTK (group key) + MIC
+    CL->>AP: M4 — ACK + MIC
+    Note over AP,CL: Cifratura unicast con PTK,<br/>multicast con GTK
+
+</div>
+
+<p><strong>Cosa cattura <code>airodump</code></strong>: gli scambi M1-M4 (specialmente M2 con MIC). Da M1+M2 + SSID:
+- PMK = PBKDF2(passphrase, SSID, 4096, 32) → richiede candidate.
+- PTK = PRF(PMK, ANonce, SNonce, MACs) → calcolabile.
+- MIC = HMAC-MD5(PTK, M2 frame) → verifica.</p>
+<p>L'attacco offline (<code>aircrack-ng</code> / <code>hashcat -m 22000</code>): per ogni candidate passphrase, calcoli PMK, PTK, MIC. Se MIC quadra → trovata. Velocità su GPU moderna: ~$10^6$/sec su WPA-PBKDF2.</p>
+<h2 id="esercizi">Esercizi</h2>
+<h3 id="es-5b1-cifradecifra-rsa-a-mano">Es 5b.1 — Cifra/decifra RSA a mano</h3>
+<p>Con $p=11, q=13, e=7$:
+1. Calcola $n$, $\varphi$, $d$.
+2. Cifra $m=9$.
+3. Decifra $c$ ottenuto.</p>
+<p>(Verifica con Python.)</p>
+<details><summary>Soluzione</summary>
+
+$n=143, \varphi=120, d=103$. $c = 9^7 \mod 143 = 48$. $m = 48^{103} \mod 143 = 9$. ✅
+
+</details>
+
+<h3 id="es-5b2-dh-a-mano">Es 5b.2 — DH a mano</h3>
+<p>Con $p=11, g=2$, $a=5$ (Alice), $b=4$ (Bob): calcola $A$, $B$, $K$.</p>
+<details><summary>Soluzione</summary>
+
+$A = 2^5 \mod 11 = 32 \mod 11 = 10$. $B = 2^4 \mod 11 = 16 \mod 11 = 5$. $K_A = B^a = 5^5 \mod 11$. $5^2=25 \mod 11 = 3$; $5^4 = 9$; $5^5 = 45 \mod 11 = 1$. $K_B = A^b = 10^4 \mod 11$. $10 \equiv -1$, $10^4 \equiv 1$. ✅ $K=1$.
+
+</details>
+
+<h3 id="es-5b3-fattorizza-un-piccolo-n">Es 5b.3 — Fattorizza un piccolo $n$</h3>
+<p>$n = 247$. Trova $p, q$ a mano, deriva $d$ (avendo $e=5$).</p>
+<details><summary>Soluzione</summary>
+
+Provi divisori. $247 / 13 = 19$. Quindi $p=13, q=19$. $\varphi = 12 \cdot 18 = 216$. $d = 5^{-1} \mod 216$. Estesa: $5 \cdot 173 = 865 = 4 \cdot 216 + 1$. $d = 173$.
+
+</details>
+
+<h3 id="es-5b4-rsa-proprieta-moltiplicativa">Es 5b.4 — RSA proprietà moltiplicativa</h3>
+<p>Con la chiave del paragrafo 1 ($n=3233, e=17$), cifra $m_1=2$ e $m_2=3$. Mostra che $c_1 c_2 \mod n = E(m_1 m_2)$.</p>
+<h3 id="es-5b5-padding-oracle-in-pratica">Es 5b.5 — Padding oracle in pratica</h3>
+<p>PortSwigger ha lab gratuiti su padding oracle. Risolvilo. (Cerca "padding oracle" nei lab.)</p>
+<h3 id="es-5b6-aes-first-round-con-openssl">Es 5b.6 — AES first round con OpenSSL</h3>
+<p>Usa OpenSSL per cifrare con AES-128 in mode "ECB single block" (<code>-nopad</code>):</p>
+<pre><code class="language-bash">echo -n &quot;3243f6a8885a308d313198a2e0370734&quot; | xxd -r -p | \
+  openssl enc -aes-128-ecb -nopad -K 2b7e151628aed2a6abf7158809cf4f3c | xxd -p
+</code></pre>
+<p>Compara con valore atteso <code>3925841d02dc09fbdc118597196a0b32</code> (FIPS-197). Match?</p>
+<h3 id="es-5b7-implementa-hmac-a-mano-riprendi-sez-5">Es 5b.7 — Implementa HMAC a mano (riprendi sez 5)</h3>
+<p>Già visto, ma rifallo senza guardare. Verifica con <code>hmac.new</code>.</p>
+<h3 id="es-5b8-length-extension-lab">Es 5b.8 — Length extension lab</h3>
+<p>Setup uno script Python che firma cleartext con <code>sha256(secret + msg)</code> e accetta solo input con firma valida. Senza modificare lo script, usa <code>hash_extender</code> per forge un nuovo input valido.</p>
+<h2 id="concetti-chiave">Concetti chiave</h2>
+<ol>
+<li><strong>RSA</strong> è esponenziazione modulare; sicurezza = difficoltà fattorizzazione $n$.</li>
+<li><strong>DH</strong> è esponenziazione modulare in gruppi; sicurezza = log discreto.</li>
+<li><strong>ECC</strong> è la stessa idea su curve ellittiche, con $k$ + $kP$. Chiavi più corte, stessa sicurezza.</li>
+<li><strong>AES</strong> è rete di sostituzione-permutazione, 10 round in AES-128.</li>
+<li><strong>Padding oracle</strong> trasforma "errori distinguibili" in decryption byte-per-byte.</li>
+<li><strong>Length extension</strong> richiede HMAC o SHA-3 per essere battuta.</li>
+<li><strong>WPA2</strong> offline crack = brute force PBKDF2 + match MIC.</li>
+</ol>
+<p>Tutto è aritmetica. La sicurezza viene da numeri <strong>enormi</strong> + algoritmi specifici. Quando vedi formule, ricordati che dietro ci sono i calcoli che hai fatto tu su 60 secondi a mano.</p>
+      <nav class="pager">
+<a href="05-crittografia.html" class="prev"><span class="label">← Precedente</span><span class="title">Crittografia: teoria e pratica</span></a>
+<a href="06-os-internals.html" class="next"><span class="label">Successivo →</span><span class="title">OS internals: Linux e Windows in profondità</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Cybersec Zero to Hero</strong> — percorso completo di sicurezza informatica, dall'inizio alla maestria.</p><p>Materiale a scopo educativo. Tutto ciò che impari va usato solo su sistemi che possiedi, in laboratori, in programmi di bug bounty autorizzati o sotto contratto di pentest. <strong>Non rompere la legge.</strong></p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true, background: '#131a1e', primaryColor: '#1d262b',
+      primaryTextColor: '#e8eef0', primaryBorderColor: '#00ff9c',
+      lineColor: '#00e6ff', secondaryColor: '#11171a', tertiaryColor: '#161d21',
+      mainBkg: '#1d262b', nodeBorder: '#00ff9c', clusterBkg: '#0b0f10',
+      clusterBorder: '#243035', titleColor: '#00ff9c',
+      edgeLabelBackground: '#0b0f10', textColor: '#e8eef0',
+      labelTextColor: '#e8eef0', actorBkg: '#1d262b', actorBorder: '#00ff9c',
+      actorTextColor: '#00ff9c', actorLineColor: '#00e6ff',
+      signalColor: '#e8eef0', signalTextColor: '#e8eef0',
+      labelBoxBkgColor: '#1d262b', labelBoxBorderColor: '#00ff9c',
+      noteBkgColor: '#ffe066', noteTextColor: '#0b0f10', noteBorderColor: '#ffe066',
+      activationBkgColor: '#1d262b', activationBorderColor: '#00ff9c',
+      sequenceNumberColor: '#0b0f10'
+    },
+    flowchart: { curve: 'basis', padding: 16 },
+    sequence: { mirrorActors: false, bottomMarginAdj: 10 },
+    fontFamily: 'JetBrains Mono, Cascadia Code, Consolas, monospace'
+  });
+</script>
+</body>
+</html>

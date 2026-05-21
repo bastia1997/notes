@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NLP: from text mining to LLMs — Data Science Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#3a4a7a',primaryTextColor:'#e8eef0',primaryBorderColor:'#5a6aa0',lineColor:'#8a9499',background:'#11171a'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">Σ</div>
+      <div>
+        <div class="brand-title">DATA SCIENCE</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/32-nlp-llm.html" class="lang-link" title="Passa all'italiano">🇮🇹 IT</a><span class="lang-active" title="English">🇬🇧 EN</span></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="search... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-what-is-data-science.html" class=""><span class="num">01</span>What is data science (and what isn&#x27;t)</a></li><li class="nav-item"><a href="../pages/02-python-for-data-science.html" class=""><span class="num">02</span>Python for data science: pro setup</a></li><li class="nav-item"><a href="../pages/02b-math-essentials.html" class=""><span class="num">02b</span>High-school math you actually need</a></li><li class="nav-item"><a href="../pages/03-linear-algebra.html" class=""><span class="num">03</span>Linear algebra for data scientists</a></li><li class="nav-item"><a href="../pages/04-calculus-optimization.html" class=""><span class="num">04</span>Calculus, gradients, and optimization</a></li><li class="nav-item"><a href="../pages/05-probability.html" class=""><span class="num">05</span>Probability: the language of uncertainty</a></li><li class="nav-item"><a href="../pages/06-descriptive-statistics.html" class=""><span class="num">06</span>Descriptive statistics</a></li><li class="nav-item"><a href="../pages/07-inferential-statistics.html" class=""><span class="num">07</span>Inferential statistics and hypothesis testing</a></li><li class="nav-item"><a href="../pages/08-distributions.html" class=""><span class="num">08</span>Probability distributions you&#x27;ll meet</a></li><li class="nav-item"><a href="../pages/09-numpy.html" class=""><span class="num">09</span>NumPy: thinking in arrays</a></li><li class="nav-item"><a href="../pages/10-pandas.html" class=""><span class="num">10</span>Pandas: the swiss army knife</a></li><li class="nav-item"><a href="../pages/11-sql.html" class=""><span class="num">11</span>SQL for data scientists</a></li><li class="nav-item"><a href="../pages/12-visualization.html" class=""><span class="num">12</span>Visualization: matplotlib, seaborn, plotly</a></li><li class="nav-item"><a href="../pages/13-data-wrangling.html" class=""><span class="num">13</span>Cleaning and data wrangling</a></li><li class="nav-item"><a href="../pages/14-feature-engineering.html" class=""><span class="num">14</span>Feature engineering</a></li><li class="nav-item"><a href="../pages/15-eda.html" class=""><span class="num">15</span>EDA: Exploratory Data Analysis</a></li><li class="nav-item"><a href="../pages/16-ml-fundamentals.html" class=""><span class="num">16</span>ML: fundamentals — bias, variance, validation</a></li><li class="nav-item"><a href="../pages/17-linear-regression.html" class=""><span class="num">17</span>Linear regression and regularization</a></li><li class="nav-item"><a href="../pages/18-logistic-regression.html" class=""><span class="num">18</span>Logistic regression and classification</a></li><li class="nav-item"><a href="../pages/19-knn-naive-bayes-svm.html" class=""><span class="num">19</span>KNN, Naive Bayes, SVM</a></li><li class="nav-item"><a href="../pages/20-decision-trees.html" class=""><span class="num">20</span>Decision trees</a></li><li class="nav-item"><a href="../pages/21-random-forest-boosting.html" class=""><span class="num">21</span>Random Forest, Gradient Boosting, XGBoost</a></li><li class="nav-item"><a href="../pages/22-clustering.html" class=""><span class="num">22</span>Clustering: K-Means, DBSCAN, GMM, hierarchical</a></li><li class="nav-item"><a href="../pages/23-pca-tsne-umap.html" class=""><span class="num">23</span>Dimensionality reduction: PCA, t-SNE, UMAP</a></li><li class="nav-item"><a href="../pages/24-metrics-validation.html" class=""><span class="num">24</span>Metrics, cross-validation, leakage</a></li><li class="nav-item"><a href="../pages/25-class-imbalance.html" class=""><span class="num">25</span>Class imbalance</a></li><li class="nav-item"><a href="../pages/26-hyperparameter-tuning.html" class=""><span class="num">26</span>Hyperparameter tuning</a></li><li class="nav-item"><a href="../pages/27-neural-networks.html" class=""><span class="num">27</span>Neural networks: from fundamentals to backprop</a></li><li class="nav-item"><a href="../pages/28-pytorch.html" class=""><span class="num">28</span>PyTorch: from toy model to training loop</a></li><li class="nav-item"><a href="../pages/29-cnn.html" class=""><span class="num">29</span>CNN for computer vision</a></li><li class="nav-item"><a href="../pages/30-rnn-lstm.html" class=""><span class="num">30</span>RNN, LSTM, GRU for sequences</a></li><li class="nav-item"><a href="../pages/31-transformer.html" class=""><span class="num">31</span>Transformer and attention</a></li><li class="nav-item"><a href="../pages/32-nlp-llm.html" class="active"><span class="num">32</span>NLP: from text mining to LLMs</a></li><li class="nav-item"><a href="../pages/33-time-series.html" class=""><span class="num">33</span>Time series and forecasting</a></li><li class="nav-item"><a href="../pages/34-mlops.html" class=""><span class="num">34</span>MLOps: deployment, monitoring, drift</a></li><li class="nav-item"><a href="../pages/35-bayesian-causal.html" class=""><span class="num">35</span>Bayesian and Causal Inference</a></li><li class="nav-item"><a href="../pages/36-capstone-career.html" class=""><span class="num">36</span>Capstone, portfolio, career</a></li><li class="nav-item"><a href="../pages/37-glossary.html" class=""><span class="num">37</span>Glossary A-Z</a></li><li class="nav-item"><a href="../pages/38-formula-sheet.html" class=""><span class="num">38</span>Formula Sheet: all the formulas from the course</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">NLP</span>
+        <span>Section 33 of 39</span>
+        <span class="level-tag level-adv">Level: advanced</span>
+      </div>
+      <h1>NLP: from text mining to LLMs</h1>
+      <p class="summary">Tokenization, embeddings, classification, NER, RAG, prompt engineering, LLM fine-tuning. The 2026 state of the art.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>NLP</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>[[transformer]]</li></ul>
+  <div class="label">Tools</div>
+  <ul class="source-list"><li>HuggingFace, spaCy, sentence-transformers, LangChain</li></ul>
+</div>
+      <h2 id="classic-nlp-pipeline-modern-pipeline">Classic NLP pipeline → modern pipeline</h2>
+<pre><code class="language-mermaid">flowchart LR
+    A[Raw text] --&gt; B[Tokenization]
+    B --&gt; C[Embedding]
+    C --&gt; D[Task: clf, NER, gen]
+</code></pre>
+<p>In 2010 you'd do: TF-IDF + SVM. In 2018: fine-tuned BERT. In 2026: LLMs with prompts or RAG, or semantic embeddings + small classifier.</p>
+<h2 id="tokenization">Tokenization</h2>
+<p>Transforming text into <strong>tokens</strong> (words, sub-words, characters):</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Example "tokenization"</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Word</td>
+<td>["tokenization"]</td>
+<td>simple, large vocab, OOV</td>
+</tr>
+<tr>
+<td>Char</td>
+<td>["t","o","k",...]</td>
+<td>tiny vocab, long sequences</td>
+</tr>
+<tr>
+<td><strong>BPE</strong> (Byte Pair Encoding)</td>
+<td>["token","ization"]</td>
+<td>used in GPT</td>
+</tr>
+<tr>
+<td><strong>WordPiece</strong></td>
+<td>["token","##ization"]</td>
+<td>BERT</td>
+</tr>
+<tr>
+<td><strong>SentencePiece</strong></td>
+<td>unicode-aware</td>
+<td>T5, LLama</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-python">from transformers import AutoTokenizer
+tok = AutoTokenizer.from_pretrained(&quot;bert-base-multilingual-cased&quot;)
+print(tok.tokenize(&quot;Tokenizzazione&quot;))
+# ['Token', '##izza', '##zione']
+</code></pre>
+<p>Sub-word tokenizers solve the <strong>OOV</strong> (out-of-vocabulary) problem.</p>
+<h2 id="state-of-the-art-2026-what-to-use-for-what">State of the art 2026: what to use for what</h2>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Recommended approach</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sentiment</td>
+<td>LLM zero-shot or fine-tune small BERT</td>
+</tr>
+<tr>
+<td>NER</td>
+<td>spaCy + fine-tune transformer (XLM-RoBERTa)</td>
+</tr>
+<tr>
+<td>Topic modeling</td>
+<td>BERTopic (embedding + UMAP + HDBSCAN)</td>
+</tr>
+<tr>
+<td>Text classification</td>
+<td>embedding + logistic, or LLM with few-shot</td>
+</tr>
+<tr>
+<td>Semantic search</td>
+<td>sentence-transformers + vector DB</td>
+</tr>
+<tr>
+<td>Q&amp;A on documents</td>
+<td>RAG with LLM + vector store</td>
+</tr>
+<tr>
+<td>Generation/Summarization</td>
+<td>LLM (Claude, GPT, Llama, Mistral)</td>
+</tr>
+<tr>
+<td>Translation</td>
+<td>NLLB, M2M-100, or LLM</td>
+</tr>
+</tbody>
+</table>
+<h2 id="semantic-embeddings">Semantic embeddings</h2>
+<p>Models that map sentences → dense vectors where similar sentences are close together. The reference library:</p>
+<pre><code class="language-python">from sentence_transformers import SentenceTransformer
+m = SentenceTransformer('paraphrase-multilingual-MiniLM-L12-v2')
+emb = m.encode([
+    &quot;Il gatto dorme sul divano&quot;,
+    &quot;Un felino riposa sul sofà&quot;,
+    &quot;Il treno arriva alle 7&quot;
+])
+# (3, 384) — similarity(0, 1) high, (0, 2) low
+</code></pre>
+<p>More powerful models (2024-2026): <code>BAAI/bge-large</code>, <code>intfloat/multilingual-e5-large</code>, <code>Alibaba-NLP/gte-large</code>.</p>
+<h2 id="vector-database">Vector database</h2>
+<p>To search embeddings across millions of documents, you need a <strong>vector DB</strong>:</p>
+<ul>
+<li><strong>FAISS</strong> (Meta): in-memory, super fast. Default for small/medium projects.</li>
+<li><strong>Chroma</strong>: easy, local.</li>
+<li><strong>Qdrant</strong>: open source, scalable.</li>
+<li><strong>Pinecone, Weaviate, Milvus</strong>: managed/cloud.</li>
+<li><strong>pgvector</strong>: Postgres extension if you already have Postgres.</li>
+</ul>
+<pre><code class="language-python">import faiss
+import numpy as np
+index = faiss.IndexFlatIP(384)         # inner product (= cosine if normalized)
+index.add(emb.astype('float32'))
+D, I = index.search(query_emb.astype('float32'), k=5)
+</code></pre>
+<h2 id="rag-retrieval-augmented-generation">RAG — Retrieval Augmented Generation</h2>
+<p>The most important pattern of 2024-2026 for LLM applications on your own data:</p>
+<pre><code class="language-mermaid">flowchart LR
+    Q[User question] --&gt; E[Question embedding]
+    E --&gt; R[Top-K search&lt;br/&gt;in vector DB]
+    D[Company documents] --&gt;|embedding chunks| V[Vector DB]
+    R --&gt; CTX[Relevant documents]
+    CTX --&gt; P[Prompt: question + ctx]
+    P --&gt; L[LLM]
+    L --&gt; A[Answer]
+</code></pre>
+<p>Base code (pseudocode):</p>
+<pre><code class="language-python">chunks = chunk_documents(docs, size=500, overlap=50)
+chunk_embeddings = embedder.encode(chunks)
+index.add(chunk_embeddings)
+
+def rag_query(question):
+    q_emb = embedder.encode([question])
+    _, idx = index.search(q_emb, k=5)
+    context = &quot;\n&quot;.join(chunks[i] for i in idx[0])
+    prompt = f&quot;Context:\n{context}\n\nQuestion: {question}\nAnswer:&quot;
+    return llm(prompt)
+</code></pre>
+<blockquote>
+<p>Variations: hybrid search (combines vector + BM25 keyword), reranker (cross-encoder to reorder top-K), query rewriting (reformulates the question before retrieval).</p>
+</blockquote>
+<h2 id="prompt-engineering">Prompt engineering</h2>
+<p>With LLMs, "writing well" the request is half the work:</p>
+<h3 id="essential-techniques">Essential techniques</h3>
+<ol>
+<li><strong>Be specific</strong>: "Summarize this text in 3 bullet points" &gt; "Summarize".</li>
+<li><strong>Examples (few-shot)</strong>: show 2-3 examples first.</li>
+<li><strong>Chain-of-thought (CoT)</strong>: "Think step by step".</li>
+<li><strong>Structured output</strong>: ask for JSON, YAML, markdown.</li>
+<li><strong>Roles</strong>: "You are an expert in X. Answer accordingly."</li>
+</ol>
+<h3 id="few-shot-example">Few-shot example</h3>
+<pre><code>Classify the sentiment:
+
+Text: &quot;I love this product!&quot;
+Sentiment: positive
+
+Text: &quot;It doesn't work at all.&quot;
+Sentiment: negative
+
+Text: &quot;{new text}&quot;
+Sentiment:
+</code></pre>
+<h2 id="llms-in-production-two-families">LLMs in production: two families</h2>
+<h3 id="commercial-apis">Commercial APIs</h3>
+<ul>
+<li><strong>OpenAI</strong> (GPT-4o, o1)</li>
+<li><strong>Anthropic</strong> (Claude 4.X)</li>
+<li><strong>Google</strong> (Gemini)</li>
+<li><strong>Mistral</strong> (La Plateforme)</li>
+</ul>
+<p>Pros: zero infrastructure, top performance.
+Cons: cost, latency, vendor dependency, data leaving your perimeter.</p>
+<pre><code class="language-python">import anthropic
+client = anthropic.Anthropic(api_key=...)
+m = client.messages.create(
+    model=&quot;claude-opus-4-7&quot;,
+    max_tokens=500,
+    messages=[{&quot;role&quot;:&quot;user&quot;,&quot;content&quot;:&quot;Spiega cos'è il transfer learning.&quot;}]
+)
+print(m.content[0].text)
+</code></pre>
+<h3 id="open-local-models">Open / local models</h3>
+<ul>
+<li><strong>Llama 3.x / Llama 4</strong> (Meta)</li>
+<li><strong>Mistral / Mixtral</strong></li>
+<li><strong>Qwen</strong> (Alibaba)</li>
+<li><strong>Phi</strong> (Microsoft, small but powerful)</li>
+<li><strong>Gemma</strong> (Google)</li>
+</ul>
+<p>Serve them with: <strong>vLLM</strong>, <strong>Ollama</strong>, <strong>llama.cpp</strong>, <strong>Text Generation Inference</strong>.</p>
+<pre><code class="language-bash">ollama pull llama3.1:8b
+ollama run llama3.1:8b
+</code></pre>
+<h2 id="fine-tuning-llms">Fine-tuning LLMs</h2>
+<p>When a generic LLM is not enough:</p>
+<ul>
+<li><strong>Full fine-tuning</strong>: updates all weights. Expensive, rare for large models.</li>
+<li><strong>LoRA (Low-Rank Adaptation)</strong>: only updates low-rank matrices added on top. Reduces trainable parameters by 100-1000×.</li>
+<li><strong>QLoRA</strong>: LoRA + 4-bit quantization. Allows fine-tuning 7B models on a consumer GPU.</li>
+</ul>
+<pre><code class="language-python">from peft import LoraConfig, get_peft_model
+config = LoraConfig(
+    r=8, lora_alpha=16, target_modules=[&quot;q_proj&quot;,&quot;v_proj&quot;],
+    lora_dropout=0.1, bias=&quot;none&quot;, task_type=&quot;CAUSAL_LM&quot;
+)
+model = get_peft_model(base_model, config)
+# now train: model.print_trainable_parameters() → only ~0.5% of total
+</code></pre>
+<h2 id="ner-named-entity-recognition">NER (Named Entity Recognition)</h2>
+<p>Extracting people, places, organizations from text:</p>
+<pre><code class="language-python">import spacy
+nlp = spacy.load(&quot;it_core_news_lg&quot;)
+doc = nlp(&quot;Mario Rossi vive a Roma e lavora per Pirelli.&quot;)
+for ent in doc.ents:
+    print(ent.text, ent.label_)
+# Mario Rossi PER
+# Roma LOC
+# Pirelli ORG
+</code></pre>
+<p>For better accuracy: fine-tune <strong>XLM-RoBERTa</strong> on annotated data with <code>transformers</code>.</p>
+<h2 id="modern-topic-modeling">Modern topic modeling</h2>
+<p>Old approach: LDA. New: <strong>BERTopic</strong> (embedding + UMAP + HDBSCAN + c-TF-IDF):</p>
+<pre><code class="language-python">from bertopic import BERTopic
+docs = [...]
+topic_model = BERTopic(language='italian')
+topics, probs = topic_model.fit_transform(docs)
+topic_model.get_topic_info()
+topic_model.visualize_topics()
+</code></pre>
+<h2 id="exercises">Exercises</h2>
+<details>
+<summary>Exercise 1 — Basic semantic search</summary>
+
+
+<pre><code class="language-python">from sentence_transformers import SentenceTransformer
+import numpy as np
+m = SentenceTransformer('paraphrase-multilingual-MiniLM-L12-v2')
+
+docs = [&quot;Python è un linguaggio di programmazione&quot;,
+        &quot;Il caffè italiano è famoso nel mondo&quot;,
+        &quot;JavaScript gira nei browser&quot;,
+        &quot;L'espresso si beve in piedi al bar&quot;]
+emb = m.encode(docs)
+emb = emb / np.linalg.norm(emb, axis=1, keepdims=True)
+
+q = m.encode([&quot;bevande tipiche&quot;])
+q = q / np.linalg.norm(q)
+print(emb @ q.T)   # similarity
+</code></pre>
+
+</details>
+
+<details>
+<summary>Exercise 2 — RAG on a PDF</summary>
+
+Build a RAG on a PDF (e.g., a manual). Steps:
+1. Extract text (PyPDF, pdfplumber).
+2. Chunk into pieces of 500 tokens with overlap.
+3. Embed with sentence-transformers.
+4. Index in FAISS.
+5. For each query: retrieve top-5 + call LLM.
+</details>
+
+<details>
+<summary>Exercise 3 — Zero-shot classification</summary>
+
+
+<pre><code class="language-python">from transformers import pipeline
+clf = pipeline('zero-shot-classification', model='facebook/bart-large-mnli')
+result = clf(&quot;La banca centrale ha alzato i tassi.&quot;,
+             candidate_labels=['finanza', 'sport', 'cucina'])
+print(result['labels'][0], result['scores'][0])
+# finanza, 0.96
+</code></pre>
+
+
+Zero-shot = no fine-tuning, ready to use out of the box.
+</details>
+
+<details>
+<summary>Exercise 4 — LoRA fine-tune on a small dataset</summary>
+
+
+<pre><code class="language-python"># pseudo-codice, complex setup
+from peft import LoraConfig, get_peft_model, TaskType
+from transformers import AutoModelForCausalLM, AutoTokenizer
+
+model_id = &quot;microsoft/phi-3-mini-4k-instruct&quot;
+tok = AutoTokenizer.from_pretrained(model_id)
+model = AutoModelForCausalLM.from_pretrained(model_id, device_map='auto')
+
+lora = LoraConfig(r=8, lora_alpha=16, target_modules=[&quot;q_proj&quot;,&quot;v_proj&quot;], task_type=TaskType.CAUSAL_LM)
+model = get_peft_model(model, lora)
+# then: prepare dataset (instruction → output), transformers Trainer, training loop
+</code></pre>
+
+</details>
+
+<h2 id="key-takeaways">Key takeaways</h2>
+<ul>
+<li>2026: LLMs + retrieval cover 70% of NLP tasks you did manually in 2018.</li>
+<li>Semantic embeddings → search, classification, clustering.</li>
+<li>RAG is the standard pattern for LLMs on your own data.</li>
+<li>LoRA / QLoRA for cost-effective fine-tuning.</li>
+<li>For specific tasks (NER, precise classification), fine-tuning a BERT/XLM-RoBERTa is still competitive.</li>
+</ul>
+<p>Next up: time series and forecasting.</p>
+      <nav class="pager">
+<a href="31-transformer.html" class="prev"><span class="label">← Previous</span><span class="title">Transformer and attention</span></a>
+<a href="33-time-series.html" class="next"><span class="label">Next →</span><span class="title">Time series and forecasting</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Data Science Zero to Hero</strong> — complete path, in English, from math to deployment.</p><p>Open didactic material. Formulas are here to be understood, not feared. When a concept is unclear, go back: data science is a pyramid, not a tree you skip across.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+</body>
+</html>

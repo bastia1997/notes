@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Probabilità: la lingua dell&#x27;incertezza — Data Science Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#3a4a7a',primaryTextColor:'#e8eef0',primaryBorderColor:'#5a6aa0',lineColor:'#8a9499',background:'#11171a'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">Σ</div>
+      <div>
+        <div class="brand-title">DATA SCIENCE</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">🇮🇹 IT</span><a href="../en/pages/05-probability.html" class="lang-link" title="Switch to English">🇬🇧 EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-cos-e-data-science.html" class=""><span class="num">01</span>Cos&#x27;è la data science (e cosa non è)</a></li><li class="nav-item"><a href="../pages/02-python-per-data-science.html" class=""><span class="num">02</span>Python per data science: setup professionale</a></li><li class="nav-item"><a href="../pages/02b-matematica-essenziale.html" class=""><span class="num">02b</span>Matematica del liceo che ti serve davvero</a></li><li class="nav-item"><a href="../pages/03-algebra-lineare.html" class=""><span class="num">03</span>Algebra lineare per data scientist</a></li><li class="nav-item"><a href="../pages/04-calcolo-ottimizzazione.html" class=""><span class="num">04</span>Calcolo, gradiente e ottimizzazione</a></li><li class="nav-item"><a href="../pages/05-probabilita.html" class="active"><span class="num">05</span>Probabilità: la lingua dell&#x27;incertezza</a></li><li class="nav-item"><a href="../pages/06-statistica-descrittiva.html" class=""><span class="num">06</span>Statistica descrittiva</a></li><li class="nav-item"><a href="../pages/07-statistica-inferenziale.html" class=""><span class="num">07</span>Statistica inferenziale e test di ipotesi</a></li><li class="nav-item"><a href="../pages/08-distribuzioni.html" class=""><span class="num">08</span>Distribuzioni di probabilità che incontrerai</a></li><li class="nav-item"><a href="../pages/09-numpy.html" class=""><span class="num">09</span>NumPy: pensare in array</a></li><li class="nav-item"><a href="../pages/10-pandas.html" class=""><span class="num">10</span>Pandas: il coltellino svizzero</a></li><li class="nav-item"><a href="../pages/11-sql.html" class=""><span class="num">11</span>SQL per data scientist</a></li><li class="nav-item"><a href="../pages/12-visualizzazione.html" class=""><span class="num">12</span>Visualizzazione: matplotlib, seaborn, plotly</a></li><li class="nav-item"><a href="../pages/13-data-wrangling.html" class=""><span class="num">13</span>Pulizia e data wrangling</a></li><li class="nav-item"><a href="../pages/14-feature-engineering.html" class=""><span class="num">14</span>Feature engineering</a></li><li class="nav-item"><a href="../pages/15-eda.html" class=""><span class="num">15</span>EDA: Exploratory Data Analysis</a></li><li class="nav-item"><a href="../pages/16-ml-fondamenti.html" class=""><span class="num">16</span>ML: fondamenti — bias, varianza, validazione</a></li><li class="nav-item"><a href="../pages/17-regressione-lineare.html" class=""><span class="num">17</span>Regressione lineare e regolarizzazione</a></li><li class="nav-item"><a href="../pages/18-regressione-logistica.html" class=""><span class="num">18</span>Regressione logistica e classificazione</a></li><li class="nav-item"><a href="../pages/19-knn-naive-bayes-svm.html" class=""><span class="num">19</span>KNN, Naive Bayes, SVM</a></li><li class="nav-item"><a href="../pages/20-alberi-decisionali.html" class=""><span class="num">20</span>Alberi decisionali</a></li><li class="nav-item"><a href="../pages/21-random-forest-boosting.html" class=""><span class="num">21</span>Random Forest, Gradient Boosting, XGBoost</a></li><li class="nav-item"><a href="../pages/22-clustering.html" class=""><span class="num">22</span>Clustering: K-Means, DBSCAN, GMM, gerarchico</a></li><li class="nav-item"><a href="../pages/23-pca-tsne-umap.html" class=""><span class="num">23</span>Riduzione dimensionale: PCA, t-SNE, UMAP</a></li><li class="nav-item"><a href="../pages/24-metriche-validazione.html" class=""><span class="num">24</span>Metriche, cross-validation, leakage</a></li><li class="nav-item"><a href="../pages/25-sbilanciamento-classi.html" class=""><span class="num">25</span>Sbilanciamento di classi</a></li><li class="nav-item"><a href="../pages/26-hyperparameter-tuning.html" class=""><span class="num">26</span>Hyperparameter tuning</a></li><li class="nav-item"><a href="../pages/27-reti-neurali.html" class=""><span class="num">27</span>Reti neurali: dalle basi al backprop</a></li><li class="nav-item"><a href="../pages/28-pytorch.html" class=""><span class="num">28</span>PyTorch: dal toy model al training loop</a></li><li class="nav-item"><a href="../pages/29-cnn.html" class=""><span class="num">29</span>CNN per computer vision</a></li><li class="nav-item"><a href="../pages/30-rnn-lstm.html" class=""><span class="num">30</span>RNN, LSTM, GRU per sequenze</a></li><li class="nav-item"><a href="../pages/31-transformer.html" class=""><span class="num">31</span>Transformer e attention</a></li><li class="nav-item"><a href="../pages/32-nlp-llm.html" class=""><span class="num">32</span>NLP: dal text mining ai LLM</a></li><li class="nav-item"><a href="../pages/33-time-series.html" class=""><span class="num">33</span>Time series e forecasting</a></li><li class="nav-item"><a href="../pages/34-mlops.html" class=""><span class="num">34</span>MLOps: deployment, monitoring, drift</a></li><li class="nav-item"><a href="../pages/35-bayesian-causal.html" class=""><span class="num">35</span>Inferenza bayesiana e causale</a></li><li class="nav-item"><a href="../pages/36-capstone-carriera.html" class=""><span class="num">36</span>Capstone, portfolio, carriera</a></li><li class="nav-item"><a href="../pages/37-glossario.html" class=""><span class="num">37</span>Glossario A-Z</a></li><li class="nav-item"><a href="../pages/38-formulario.html" class=""><span class="num">38</span>Formulario: tutte le formule del percorso</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Matematica</span>
+        <span>Sezione 6 di 39</span>
+        <span class="level-tag level-int">Livello: intermedio</span>
+      </div>
+      <h1>Probabilità: la lingua dell&#x27;incertezza</h1>
+      <p class="summary">Spazio campionario, eventi, indipendenza, Bayes, valore atteso, varianza. Le fondamenta di statistica, ML e ogni decisione sotto incertezza.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Matematica</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>[[algebra-lineare]]</li></ul>
+  <div class="label">Strumenti</div>
+  <ul class="source-list"><li>carta, NumPy</li></ul>
+</div>
+      <h2 id="perche-probabilita">Perché probabilità</h2>
+<p>La data science vive nell'incertezza. Ogni stima ha errore. Ogni previsione è una distribuzione. Ogni decisione bilancia rischi. La probabilità è il linguaggio formale per ragionare su tutto questo.</p>
+<p><strong>Dove apparirà</strong>:</p>
+<ul>
+<li><strong>Naive Bayes</strong>, <strong>logistic regression</strong>, <strong>GMM</strong> — direttamente formulati in probabilità.</li>
+<li><strong>Stima massima verosimiglianza (MLE)</strong> — il principio alla base di OLS, logistica, NN.</li>
+<li><strong>Inferenza bayesiana</strong> — modelli probabilistici, MCMC.</li>
+<li><strong>Test statistici</strong> — p-value, intervalli di confidenza.</li>
+<li><strong>Sampling</strong> — ogni Monte Carlo, ogni stocastic gradient.</li>
+</ul>
+<h2 id="spazio-campionario-ed-eventi">Spazio campionario ed eventi</h2>
+<p>Un esperimento aleatorio ha:</p>
+<ul>
+<li><strong>Spazio campionario</strong> $\Omega$: insieme di tutti i possibili esiti.</li>
+<li><strong>Evento</strong> $A \subseteq \Omega$: sottoinsieme di esiti.</li>
+<li><strong>Probabilità</strong> $P: 2^\Omega \to [0, 1]$ che soddisfa gli <strong>assiomi di Kolmogorov</strong> (1933):</li>
+</ul>
+<ol>
+<li>$P(A) \geq 0$ per ogni $A$.</li>
+<li>$P(\Omega) = 1$.</li>
+<li>Se $A_1, A_2, \dots$ sono <strong>mutuamente esclusivi</strong>, $P(A_1 \cup A_2 \cup \dots) = \sum_i P(A_i)$.</li>
+</ol>
+<p><strong>Esempio</strong>: lancio un dado. $\Omega = {1,2,3,4,5,6}$. L'evento "esce un pari" è $A = {2,4,6}$, e $P(A) = 3/6 = 0.5$.</p>
+<h3 id="regole-derivate">Regole derivate</h3>
+<ul>
+<li>$P(\emptyset) = 0$</li>
+<li>$P(A^c) = 1 - P(A)$</li>
+<li>$P(A \cup B) = P(A) + P(B) - P(A \cap B)$ (<strong>inclusione-esclusione</strong>)</li>
+</ul>
+<h2 id="probabilita-condizionata">Probabilità condizionata</h2>
+<p>$$P(A | B) = \frac{P(A \cap B)}{P(B)}, \quad \text{se } P(B) &gt; 0$$</p>
+<p>"Probabilità di $A$ <strong>dato che</strong> $B$ è successo". Restringe lo spazio campionario a $B$.</p>
+<p><strong>Esempio</strong>: lancio dado, $A$ = "esce 6", $B$ = "esce pari". Allora $P(A|B) = 1/3$ (tra i tre pari, solo uno è 6).</p>
+<h3 id="eventi-indipendenti">Eventi indipendenti</h3>
+<p>$A$ e $B$ sono <strong>indipendenti</strong> se $P(A | B) = P(A)$, equivalentemente $P(A \cap B) = P(A) P(B)$.</p>
+<p><strong>Attenzione</strong>: indipendenza non è "non si toccano". Due eventi possono sembrare scollegati ma essere dipendenti (e viceversa).</p>
+<h2 id="teorema-di-bayes">Teorema di Bayes</h2>
+<p>Il teorema più famoso della probabilità, e il più equivocato:</p>
+<p>$$P(A | B) = \frac{P(B | A) \cdot P(A)}{P(B)}$$</p>
+<p>In forma <strong>scientifica</strong>:</p>
+<p>$$P(\text{ipotesi} | \text{dati}) = \frac{P(\text{dati} | \text{ipotesi}) \cdot P(\text{ipotesi})}{P(\text{dati})}$$</p>
+<p>I quattro termini:</p>
+<ul>
+<li>$P(H | D)$ = <strong>posterior</strong>: cosa crediamo dopo aver visto i dati.</li>
+<li>$P(D | H)$ = <strong>likelihood</strong>: quanto i dati sono compatibili con l'ipotesi.</li>
+<li>$P(H)$ = <strong>prior</strong>: cosa credevamo prima.</li>
+<li>$P(D)$ = <strong>evidence</strong>: normalizzazione.</li>
+</ul>
+<h3 id="albero-di-bayes-il-modo-visivo-per-capirlo">Albero di Bayes: il modo visivo per capirlo</h3>
+<p>Prima della formula, prova il <strong>metodo a frequenze naturali</strong> (Gigerenzer). Una malattia rara colpisce 1 persona su 1000. Un test ha:
+- Sensibilità (vero positivo) = 99%: $P(+|\text{malato}) = 0.99$
+- Specificità = 99%: $P(-|\text{sano}) = 0.99$</p>
+<p>Sei positivo al test. Qual è la probabilità di essere malato? L'intuizione dice 99%. La probabilità reale è <strong>9%</strong>.</p>
+<p>Costruiamo un <strong>albero</strong> con 10.000 persone:</p>
+<div class="chart"><svg viewBox="0 0 600 320" xmlns="http://www.w3.org/2000/svg">
+<rect x="240" y="10" width="120" height="40" fill="rgba(122,162,255,0.18)" stroke="#7aa2ff" rx="4"/>
+<text x="300" y="35" fill="#7aa2ff" font-size="12" text-anchor="middle">10.000 persone</text>
+
+<line x1="290" y1="50" x2="120" y2="90" stroke="#7aa2ff" stroke-width="1.5"/>
+<line x1="310" y1="50" x2="480" y2="90" stroke="#7aa2ff" stroke-width="1.5"/>
+<text x="180" y="75" fill="#8b949e" font-size="10">0.1% malati</text>
+<text x="420" y="75" fill="#8b949e" font-size="10">99.9% sani</text>
+
+<rect x="50" y="90" width="140" height="40" fill="rgba(255,122,122,0.15)" stroke="#ff7a7a" rx="4"/>
+<text x="120" y="115" fill="#ff7a7a" font-size="12" text-anchor="middle">10 malati</text>
+
+<rect x="410" y="90" width="140" height="40" fill="rgba(94,226,196,0.15)" stroke="#5ee2c4" rx="4"/>
+<text x="480" y="115" fill="#5ee2c4" font-size="12" text-anchor="middle">9990 sani</text>
+
+<line x1="100" y1="130" x2="55" y2="170" stroke="#ff7a7a" stroke-width="1.5"/>
+<line x1="140" y1="130" x2="185" y2="170" stroke="#ff7a7a" stroke-width="1.5"/>
+<text x="50" y="155" fill="#8b949e" font-size="9">99% +</text>
+<text x="170" y="155" fill="#8b949e" font-size="9">1% -</text>
+
+<line x1="460" y1="130" x2="415" y2="170" stroke="#5ee2c4" stroke-width="1.5"/>
+<line x1="500" y1="130" x2="545" y2="170" stroke="#5ee2c4" stroke-width="1.5"/>
+<text x="410" y="155" fill="#8b949e" font-size="9">1% +</text>
+<text x="530" y="155" fill="#8b949e" font-size="9">99% -</text>
+
+<rect x="15" y="170" width="80" height="40" fill="rgba(255,179,71,0.25)" stroke="#ffb347" rx="4"/>
+<text x="55" y="195" fill="#ffb347" font-size="12" text-anchor="middle">~10 veri +</text>
+
+<rect x="150" y="170" width="80" height="40" fill="rgba(60,80,100,0.3)" stroke="#5b6669" rx="4"/>
+<text x="190" y="195" fill="#8b949e" font-size="11" text-anchor="middle">0 falsi -</text>
+
+<rect x="375" y="170" width="80" height="40" fill="rgba(255,179,71,0.25)" stroke="#ffb347" rx="4"/>
+<text x="415" y="195" fill="#ffb347" font-size="12" text-anchor="middle">~100 falsi +</text>
+
+<rect x="510" y="170" width="80" height="40" fill="rgba(60,80,100,0.3)" stroke="#5b6669" rx="4"/>
+<text x="550" y="195" fill="#8b949e" font-size="11" text-anchor="middle">~9890 veri -</text>
+
+<rect x="100" y="250" width="400" height="50" fill="rgba(122,162,255,0.08)" stroke="#7aa2ff" stroke-dasharray="4,3" rx="4"/>
+<text x="300" y="270" fill="#7aa2ff" font-size="12" text-anchor="middle">Totale positivi al test ≈ 10 + 100 = 110</text>
+<text x="300" y="288" fill="#ffb347" font-size="12" text-anchor="middle">P(malato | +) = 10 / 110 ≈ 9.1%</text>
+</svg><div class="chart-caption">Albero delle frequenze naturali: contare 10 veri positivi e 100 falsi positivi rende il risultato ovvio.</div></div>
+
+<p><strong>E ora la formula</strong>:</p>
+<p>$$P(M|+) = \frac{P(+|M) P(M)}{P(+|M) P(M) + P(+|S) P(S)} = \frac{0.99 \cdot 0.001}{0.99 \cdot 0.001 + 0.01 \cdot 0.999} \approx 0.090$$</p>
+<p>Stesso risultato. Ma l'albero è <strong>infinitamente più intuitivo</strong>: studi di Gigerenzer mostrano che anche medici esperti sbagliano a calcolare $P(M|+)$ con la formula, ma quasi tutti rispondono bene se gliela poni come "su 1000 pazienti…". Lezione: quando un problema bayesiano ti confonde, <strong>trasformalo in frequenze</strong>.</p>
+<div class="chart"><svg viewBox="0 0 360 200" xmlns="http://www.w3.org/2000/svg">
+<rect x="40" y="40" width="280" height="120" fill="none" stroke="#444"/>
+<rect x="40" y="40" width="2" height="120" fill="#ff7a7a"/>
+<text x="44" y="35" fill="#ff7a7a" font-size="10">1 malato</text>
+<rect x="42" y="40" width="278" height="120" fill="rgba(122,162,255,0.18)"/>
+<text x="180" y="100" fill="#7aa2ff" font-size="11" text-anchor="middle">999 sani</text>
+<rect x="40" y="42" width="2" height="116" fill="#ffb347"/>
+<text x="44" y="170" fill="#ffb347" font-size="10">~1 vero +</text>
+<rect x="42" y="42" width="2.78" height="116" fill="#ffb347" opacity="0.9"/>
+<text x="180" y="180" fill="#ffb347" font-size="10" text-anchor="middle">~10 falsi positivi tra i sani (1% di 999)</text>
+</svg><div class="chart-caption">Su 1000 persone, ~10 falsi positivi e ~1 vero positivo: P(malato|+) ≈ 1/11 ≈ 9%.</div></div>
+
+<p>Lezione: <strong>gli eventi rari restano rari anche dopo un test</strong>, se il prior è abbastanza basso. È la base epistemica per screening medici, fraud detection, anomaly detection.</p>
+<h2 id="variabili-aleatorie">Variabili aleatorie</h2>
+<p>Una <strong>variabile aleatoria</strong> $X$ è una funzione $X: \Omega \to \mathbb{R}$. Esempi:
+- $X$ = somma di due dadi.
+- $X$ = altezza di una persona scelta a caso.
+- $X$ = numero di click in un giorno.</p>
+<h3 id="discrete-vs-continue">Discrete vs continue</h3>
+<ul>
+<li><strong>Discrete</strong>: assumono valori in un insieme contabile. Es: numero di click. Descritte dalla <strong>funzione di massa</strong> (PMF) $p(x) = P(X = x)$.</li>
+<li><strong>Continue</strong>: assumono valori in $\mathbb{R}$. Es: altezza. Descritte dalla <strong>funzione di densità</strong> (PDF) $f(x)$, dove $P(a \leq X \leq b) = \int_a^b f(x) dx$.</li>
+</ul>
+<p>In entrambi i casi, la <strong>funzione di ripartizione</strong> (CDF) è $F(x) = P(X \leq x)$.</p>
+<blockquote>
+<p>Per variabili continue $P(X = x) = 0$ per qualsiasi $x$. La probabilità è "sull'intervallo", non sul punto.</p>
+</blockquote>
+<h2 id="valore-atteso-varianza-covarianza">Valore atteso, varianza, covarianza</h2>
+<h3 id="valore-atteso-media-teorica">Valore atteso (media teorica)</h3>
+<p>Discreta: $E[X] = \sum_x x \, p(x)$</p>
+<p>Continua: $E[X] = \int_{-\infty}^{\infty} x f(x) \, dx$</p>
+<p>Proprietà essenziali:
+- <strong>Linearità</strong>: $E[aX + bY] = a E[X] + b E[Y]$ <strong>anche se X, Y non indipendenti</strong>.
+- $E[c] = c$ per costante.
+- $E[XY] = E[X] E[Y]$ <strong>solo se</strong> $X, Y$ indipendenti.</p>
+<h3 id="varianza-dispersione">Varianza (dispersione)</h3>
+<p>$$\text{Var}(X) = E[(X - E[X])^2] = E[X^2] - E[X]^2$$</p>
+<p>La <strong>deviazione standard</strong> è $\sigma = \sqrt{\text{Var}(X)}$, nelle stesse unità di $X$.</p>
+<p>Proprietà:
+- $\text{Var}(aX + b) = a^2 \text{Var}(X)$
+- $\text{Var}(X + Y) = \text{Var}(X) + \text{Var}(Y) + 2\text{Cov}(X, Y)$</p>
+<h3 id="covarianza-e-correlazione">Covarianza e correlazione</h3>
+<p>$$\text{Cov}(X, Y) = E[(X - E[X])(Y - E[Y])]$$</p>
+<p>Se positiva, $X$ e $Y$ tendono a crescere insieme. La <strong>correlazione di Pearson</strong> normalizza in $[-1, 1]$:</p>
+<p>$$\rho(X, Y) = \frac{\text{Cov}(X, Y)}{\sigma_X \sigma_Y}$$</p>
+<blockquote>
+<p><strong>Correlazione ≠ causalità</strong>. Mantra. Lo ripeterai mille volte ai colleghi. Vedi sezione causal inference.</p>
+<p>Correlazione <strong>lineare</strong>. Due variabili possono avere $\rho = 0$ ed essere fortemente dipendenti (es: $Y = X^2$, $X \sim N(0,1)$, $\rho = 0$ ma $Y$ è funzione di $X$).</p>
+</blockquote>
+<h2 id="indipendenza-e-identicamente-distribuite-iid">Indipendenza e identicamente distribuite (iid)</h2>
+<p>In ML, l'<strong>ipotesi iid</strong> è fondamentale: si assume che i campioni $X_1, \dots, X_n$ siano <strong>indipendenti</strong> e <strong>identicamente distribuiti</strong>. Su questa ipotesi si reggono:</p>
+<ul>
+<li>Cross-validation</li>
+<li>Bootstrap</li>
+<li>Stime di errore standard</li>
+</ul>
+<p>Quando l'ipotesi <strong>non</strong> vale (es: time series, dati spaziali, grafi sociali), serve cautela.</p>
+<h2 id="legge-dei-grandi-numeri-lgn">Legge dei grandi numeri (LGN)</h2>
+<p>Per $X_1, X_2, \dots$ iid con media $\mu$:</p>
+<p>$$\bar{X}<em i="1">n = \frac{1}{n} \sum</em> \mu$$}^n X_i \xrightarrow{n \to \infty</p>
+<p>In parole: la media campionaria converge alla media teorica. È <strong>perché</strong> una stima da molti dati è migliore di una da pochi.</p>
+<h2 id="teorema-del-limite-centrale-tlc-clt">Teorema del limite centrale (TLC / CLT)</h2>
+<p>Forse il teorema più potente della statistica:</p>
+<blockquote>
+<p>Per $X_i$ iid con media $\mu$ e varianza $\sigma^2$ finita, la media campionaria, <strong>opportunamente scalata</strong>, converge a una normale:</p>
+</blockquote>
+<p>$$\sqrt{n} (\bar{X}_n - \mu) \xrightarrow{d} \mathcal{N}(0, \sigma^2)$$</p>
+<p>Conseguenza pratica: <strong>anche se la distribuzione originale non è normale</strong>, la media di tanti campioni lo diventa. Questo giustifica intervalli di confidenza con la normale anche per dati strani.</p>
+<div class="chart"><svg viewBox="0 0 480 180" xmlns="http://www.w3.org/2000/svg">
+<g transform="translate(20,20)">
+  <line x1="0" y1="120" x2="120" y2="120" stroke="#555"/>
+  <rect x="0" y="20" width="120" height="100" fill="rgba(255,179,71,0.3)" stroke="#ffb347"/>
+  <text x="60" y="145" fill="#ffb347" font-size="11" text-anchor="middle">n=1 (uniforme)</text>
+</g>
+<g transform="translate(170,20)">
+  <line x1="0" y1="120" x2="120" y2="120" stroke="#555"/>
+  <polygon points="0,120 60,20 120,120" fill="rgba(192,132,252,0.3)" stroke="#c084fc"/>
+  <text x="60" y="145" fill="#c084fc" font-size="11" text-anchor="middle">n=2 (triangolare)</text>
+</g>
+<g transform="translate(320,20)">
+  <line x1="0" y1="120" x2="120" y2="120" stroke="#555"/>
+  <path d="M 0 118 Q 30 110 50 60 Q 60 30 70 60 Q 90 110 120 118" fill="rgba(122,162,255,0.3)" stroke="#7aa2ff"/>
+  <text x="60" y="145" fill="#7aa2ff" font-size="11" text-anchor="middle">n=30 (≈ normale)</text>
+</g>
+</svg><div class="chart-caption">Somma di uniformi: parte rettangolare, diventa triangolare, poi normale. Magia.</div></div>
+
+<h2 id="esercizi">Esercizi</h2>
+<details>
+<summary>Esercizio 1 — Dadi truccati</summary>
+
+Un dado è truccato: la faccia 6 esce il 30%, le altre faccia uniformemente.
+1. Qual è $P(6)$?
+2. Qual è $P(\text{pari})$?
+3. Qual è il valore atteso?
+
+**Soluzioni**:
+1. 0.30.
+2. P(2) + P(4) + P(6) = 0.14 + 0.14 + 0.30 = 0.58.
+3. $1 \cdot 0.14 \cdot 5 + 6 \cdot 0.30 = 0.14 \cdot 15 + 1.8 = 2.1 + 1.8 = 3.9$.
+
+Verifica:
+
+<pre><code class="language-python">import numpy as np
+probs = [0.14]*5 + [0.30]
+vals = list(range(1,7))
+sum(v*p for v,p in zip(vals, probs))  # 3.9
+</code></pre>
+
+</details>
+
+<details>
+<summary>Esercizio 2 — Bayes su test medico</summary>
+
+Una malattia ha prevalenza 0.5%. Il test ha sensibilità 95% e specificità 98%. Qual è $P(\text{malato} | +)$?
+
+**Soluzione**:
+$$P(M|+) = \frac{0.95 \cdot 0.005}{0.95 \cdot 0.005 + 0.02 \cdot 0.995} = \frac{0.00475}{0.02465} \approx 0.193$$
+
+Solo 19%. Anche con un test "preciso", se la malattia è rara la maggior parte dei positivi sono falsi.
+</details>
+
+<details>
+<summary>Esercizio 3 — Monty Hall</summary>
+
+Hai 3 porte. Dietro una c'è un'auto, dietro le altre due una capra. Scegli la porta 1. Il presentatore (che sa dove sta l'auto) apre la porta 3, mostrando una capra. Ti offre di cambiare con la 2. Conviene?
+
+**Soluzione**: SÌ, conviene. Cambiando vinci con probabilità 2/3, restando con 1/3. La porta che il presentatore apre dipende dalla tua scelta iniziale: se hai scelto male (prob 2/3), lui è "forzato" ad aprire l'altra capra, lasciando l'auto sulla rimanente.
+
+Simulazione:
+
+<pre><code class="language-python">import numpy as np
+rng = np.random.default_rng(0)
+n = 100_000
+stay_wins = switch_wins = 0
+for _ in range(n):
+    car = rng.integers(3)
+    pick = rng.integers(3)
+    # presentatore apre una porta che non è quella scelta né quella dell'auto
+    door_to_open = next(d for d in range(3) if d != pick and d != car)
+    switch_pick = next(d for d in range(3) if d != pick and d != door_to_open)
+    if pick == car: stay_wins += 1
+    if switch_pick == car: switch_wins += 1
+print(f&quot;stay: {stay_wins/n:.3f}  switch: {switch_wins/n:.3f}&quot;)
+# stay: ~0.333  switch: ~0.667
+</code></pre>
+
+</details>
+
+<details>
+<summary>Esercizio 4 — Valore atteso e varianza</summary>
+
+$X$ uniformemente distribuita su $\{1, 2, \dots, 10\}$. Calcola $E[X]$, $E[X^2]$, $\text{Var}(X)$.
+
+**Soluzione**:
+- $E[X] = \frac{1+2+\dots+10}{10} = 5.5$
+- $E[X^2] = \frac{1+4+9+\dots+100}{10} = \frac{385}{10} = 38.5$
+- $\text{Var}(X) = 38.5 - 5.5^2 = 38.5 - 30.25 = 8.25$
+</details>
+
+<details>
+<summary>Esercizio 5 — Indipendenza vs scorrelazione</summary>
+
+$X \sim \mathcal{N}(0, 1)$, $Y = X^2$. Mostra che $\text{Cov}(X, Y) = 0$ ma $X, Y$ NON sono indipendenti.
+
+**Soluzione**:
+$\text{Cov}(X, Y) = E[X \cdot X^2] - E[X] E[X^2] = E[X^3] - 0 \cdot E[X^2] = 0$ (X simmetrica → momenti dispari nulli).
+
+Non indipendenti perché $Y$ è funzione deterministica di $X$.
+
+Lezione: **correlazione misura solo dipendenza lineare**. Per dipendenze non lineari servono mutual information, distance correlation, ecc.
+</details>
+
+<details>
+<summary>Esercizio 6 — Simulazione del TLC</summary>
+
+Simula 10000 medie di 30 lanci di un dado. Plotta l'istogramma. Devi vedere una normale.
+
+
+<pre><code class="language-python">import numpy as np, matplotlib.pyplot as plt
+rng = np.random.default_rng(0)
+means = rng.integers(1, 7, size=(10_000, 30)).mean(axis=1)
+plt.hist(means, bins=40, density=True)
+plt.title(f&quot;Media di 30 dadi · μ={means.mean():.3f}, σ={means.std():.3f}&quot;)
+plt.show()
+</code></pre>
+
+
+Il TLC predice $\mu = 3.5$, $\sigma = \sqrt{35/12 / 30} \approx 0.31$. Verifica.
+</details>
+
+<details>
+<summary>Esercizio 7 — Paradosso del compleanno</summary>
+
+Quanti studenti servono in un'aula perché la probabilità che almeno due abbiano lo stesso compleanno sia > 50%?
+
+**Soluzione**: 23 (sorprende sempre). La formula:
+$$P(\text{tutti diversi}) = \frac{365 \cdot 364 \cdots (365-n+1)}{365^n}$$
+
+$P(\text{almeno una coincidenza}) > 0.5$ per $n = 23$.
+
+
+<pre><code class="language-python">import math
+n = 1
+while True:
+    p = math.prod((365-i)/365 for i in range(n))
+    if 1-p &gt; 0.5:
+        print(n); break
+    n += 1
+# 23
+</code></pre>
+
+</details>
+
+<h2 id="cosa-portarti-via">Cosa portarti via</h2>
+<ul>
+<li>Bayes: il modo formale per aggiornare credenze coi dati.</li>
+<li>Linearità di $E[\cdot]$ vale sempre; per $\text{Var}(X+Y)$ serve la covarianza.</li>
+<li>Correlazione misura solo dipendenza lineare.</li>
+<li>TLC giustifica perché la normale appare ovunque.</li>
+<li>Eventi rari + test imperfetti = falsi positivi tanti. Insegnalo ai medici (e ai PM).</li>
+</ul>
+<h2 id="letture">Letture</h2>
+<ul>
+<li><strong>Sheldon Ross</strong> — "A First Course in Probability": il testo classico.</li>
+<li><strong>3Blue1Brown</strong> — video su Bayes (YouTube).</li>
+<li><strong>Tijms</strong> — "Understanding Probability": ricco di paradossi divertenti.</li>
+</ul>
+<p>Prossimo: statistica descrittiva — quando i dati parlano per primi.</p>
+      <nav class="pager">
+<a href="04-calcolo-ottimizzazione.html" class="prev"><span class="label">← Precedente</span><span class="title">Calcolo, gradiente e ottimizzazione</span></a>
+<a href="06-statistica-descrittiva.html" class="next"><span class="label">Successivo →</span><span class="title">Statistica descrittiva</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Data Science Zero to Hero</strong> — percorso completo, in italiano, dalla matematica al deployment.</p><p>Materiale didattico aperto. Le formule sono lì per essere capite, non temute. Quando un concetto è oscuro, torna indietro: la data science è una piramide, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

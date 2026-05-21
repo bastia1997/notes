@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>Design patterns in Java/Spring: GoF + DDD-lite — Java + Spring Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">☕</div>
+      <div>
+        <div class="brand-title">JAVA · SPRING</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/42-design-patterns.html" class="lang-link" title="Passa all'italiano"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="10" height="20" fill="#009246"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ce2b37"/></svg> IT</a><span class="lang-active" title="English"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="30" height="20" fill="#012169"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#fff" stroke-width="3"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#c8102e" stroke-width="1.5"/><path d="M15,0 v20 M0,10 h30" stroke="#fff" stroke-width="5"/><path d="M15,0 v20 M0,10 h30" stroke="#c8102e" stroke-width="3"/></svg> EN</span></div>
+  </div>
+  <div class="search-wrap">
+    <div class="search-row">
+      <div class="search-inputwrap">
+        <span class="search-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"/>
+            <line x1="20" y1="20" x2="16.65" y2="16.65"/>
+          </svg>
+        </span>
+        <input class="search-input" id="search-input" type="text" placeholder="search... (press /)" autocomplete="off" aria-label="Search">
+        <button class="search-clear" id="search-clear" type="button" aria-label="Clear" title="Clear">&times;</button>
+      </div>
+      <button class="search-btn" id="search-btn" type="button" aria-label="SEARCH" title="SEARCH">SEARCH</button>
+    </div>
+    <div class="search-hits" id="search-hits" role="listbox"></div>
+  </div>
+  <div class="sidebar-nav">
+    <nav class="nav-section">
+      <div class="nav-section-title">Path</div>
+      <ul class="nav-list">
+        <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+        <li class="nav-item"><a href="../pages/00-path-and-mindset.html" class=""><span class="num">00</span>The path and the right mindset</a></li><li class="nav-item"><a href="../pages/01-java-introduction.html" class=""><span class="num">01</span>Java: what it really is, JVM/JRE/JDK, first program</a></li><li class="nav-item"><a href="../pages/02-basic-syntax.html" class=""><span class="num">02</span>Basic syntax: types, variables, operators, control flow</a></li><li class="nav-item"><a href="../pages/03-strings-arrays-io.html" class=""><span class="num">03</span>Strings, arrays, console I/O</a></li><li class="nav-item"><a href="../pages/04-oop-classes-objects.html" class=""><span class="num">04</span>OOP I — Classes, objects, constructors, this, packages, visibility</a></li><li class="nav-item"><a href="../pages/05-oop-inheritance-polymorphism.html" class=""><span class="num">05</span>OOP II — Inheritance, polymorphism, interfaces, abstract classes</a></li><li class="nav-item"><a href="../pages/06-equals-hashcode-immutability.html" class=""><span class="num">06</span>OOP III — equals, hashCode, toString, immutability, record</a></li><li class="nav-item"><a href="../pages/07-exceptions.html" class=""><span class="num">07</span>Exceptions: checked vs unchecked, try-with-resources, custom</a></li><li class="nav-item"><a href="../pages/08-generics.html" class=""><span class="num">08</span>Generics: parametric types, PECS, type erasure, wildcards</a></li><li class="nav-item"><a href="../pages/09-collections.html" class=""><span class="num">09</span>Collections: List, Set, Map, Queue, complexity, choosing the right structure</a></li><li class="nav-item"><a href="../pages/10-stream-lambda-optional.html" class=""><span class="num">10</span>Stream API, lambdas, functional interfaces, Optional</a></li><li class="nav-item"><a href="../pages/11-io-nio.html" class=""><span class="num">11</span>I/O and NIO.2: File, Path, channels, buffers</a></li><li class="nav-item"><a href="../pages/12-concurrency-thread.html" class=""><span class="num">12</span>Concurrency I — Threads, synchronization, volatile, JMM</a></li><li class="nav-item"><a href="../pages/13-executor-future-completablefuture.html" class=""><span class="num">13</span>Concurrency II — ExecutorService, Future, CompletableFuture</a></li><li class="nav-item"><a href="../pages/14-concurrency-juc.html" class=""><span class="num">14</span>Concurrency III — java.util.concurrent: locks, atomics, concurrent collections</a></li><li class="nav-item"><a href="../pages/15-jvm-internals.html" class=""><span class="num">15</span>JVM internals: classloader, bytecode, runtime data areas, JIT</a></li><li class="nav-item"><a href="../pages/16-memory-gc.html" class=""><span class="num">16</span>Memory and garbage collection: G1, ZGC, Shenandoah</a></li><li class="nav-item"><a href="../pages/17-profiling-jfr.html" class=""><span class="num">17</span>Profiling: JFR, async-profiler, jstack, heap dump, jcmd</a></li><li class="nav-item"><a href="../pages/18-modern-java.html" class=""><span class="num">18</span>Modern Java: from 8 to 21 — key features</a></li><li class="nav-item"><a href="../pages/19-jdbc.html" class=""><span class="num">19</span>JDBC: connection, PreparedStatement, transactions, isolation levels</a></li><li class="nav-item"><a href="../pages/20-jpa-hibernate.html" class=""><span class="num">20</span>JPA / Hibernate: entities, relationships, lazy/eager, N+1, cache</a></li><li class="nav-item"><a href="../pages/21-essential-sql.html" class=""><span class="num">21</span>Essential SQL for the Java developer</a></li><li class="nav-item"><a href="../pages/22-spring-intro-ioc-di.html" class=""><span class="num">22</span>Spring intro: IoC, DI, ApplicationContext, BeanFactory</a></li><li class="nav-item"><a href="../pages/23-spring-beans-lifecycle.html" class=""><span class="num">23</span>Beans: scopes, lifecycle, BeanPostProcessor, FactoryBean</a></li><li class="nav-item"><a href="../pages/24-spring-configuration.html" class=""><span class="num">24</span>Configuration: Java config, @ComponentScan, profiles, conditionals, properties</a></li><li class="nav-item"><a href="../pages/25-spring-aop-transactional.html" class=""><span class="num">25</span>AOP, proxies, @Transactional: what really happens</a></li><li class="nav-item"><a href="../pages/26-spring-boot.html" class=""><span class="num">26</span>Spring Boot: auto-configuration, starters, Actuator</a></li><li class="nav-item"><a href="../pages/27-spring-data-jpa.html" class=""><span class="num">27</span>Spring Data JPA: Repository, derived queries, pagination, Specification</a></li><li class="nav-item"><a href="../pages/28-spring-mvc-rest.html" class=""><span class="num">28</span>Spring MVC: DispatcherServlet, controllers, REST endpoints</a></li><li class="nav-item"><a href="../pages/29-rest-openapi-hateoas.html" class=""><span class="num">29</span>REST: best practices, OpenAPI/Swagger, HATEOAS, versioning</a></li><li class="nav-item"><a href="../pages/30-spring-webflux.html" class=""><span class="num">30</span>Spring WebFlux + Reactor: Mono, Flux, reactive programming</a></li><li class="nav-item"><a href="../pages/31-spring-security.html" class=""><span class="num">31</span>Spring Security: filter chain, authentication, authorization, JWT, OAuth2</a></li><li class="nav-item"><a href="../pages/32-spring-cloud.html" class=""><span class="num">32</span>Spring Cloud: Config Server, Discovery, Gateway, Resilience4j</a></li><li class="nav-item"><a href="../pages/33-testing.html" class=""><span class="num">33</span>Testing: JUnit 5, Mockito, MockMvc, Testcontainers</a></li><li class="nav-item"><a href="../pages/34-spring-batch-intro.html" class=""><span class="num">34</span>Spring Batch intro: domain model, Job, Step, first batch</a></li><li class="nav-item"><a href="../pages/35-spring-batch-jobrepository.html" class=""><span class="num">35</span>JobRepository, JobLauncher, metadata schema</a></li><li class="nav-item"><a href="../pages/36-spring-batch-chunk-skip-retry.html" class=""><span class="num">36</span>Chunk processing: commit interval, skip, retry, fault tolerance</a></li><li class="nav-item"><a href="../pages/37-spring-batch-tasklet-flow.html" class=""><span class="num">37</span>Tasklet vs Chunk; flow control: decisions, splits, conditionals</a></li><li class="nav-item"><a href="../pages/38-spring-batch-itemreader.html" class=""><span class="num">38</span>ItemReader: flat file, XML/JSON, JDBC cursor/paging, JPA, multi-resource</a></li><li class="nav-item"><a href="../pages/39-spring-batch-itemwriter.html" class=""><span class="num">39</span>ItemWriter: file, JDBC, JPA, composite, classifier, batch insert</a></li><li class="nav-item"><a href="../pages/40-spring-batch-scaling-partitioning.html" class=""><span class="num">40</span>Scaling: multi-threaded step, partitioning, remote chunking/partitioning</a></li><li class="nav-item"><a href="../pages/41-spring-batch-listeners-restart-k8s.html" class=""><span class="num">41</span>Listeners, restart, monitoring, Spring Boot and Kubernetes integration</a></li><li class="nav-item"><a href="../pages/42-design-patterns.html" class="active"><span class="num">42</span>Design patterns in Java/Spring: GoF + DDD-lite</a></li><li class="nav-item"><a href="../pages/43-performance-observability.html" class=""><span class="num">43</span>Production-grade performance tuning and observability</a></li><li class="nav-item"><a href="../pages/44-synthesis-exercises.html" class=""><span class="num">44</span>50 cumulative exercises: from syntax to Spring Batch</a></li><li class="nav-item"><a href="../pages/45-final-project-etl.html" class=""><span class="num">45</span>Final guided project: nightly bank ETL</a></li>
+      </ul>
+    </nav>
+  </div>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Patterns &amp; Best Practices</span>
+        <span>Section 42 of 45</span>
+        <span class="level-tag level-adv">Level: advanced</span>
+      </div>
+      <h1>Design patterns in Java/Spring: GoF + DDD-lite</h1>
+      <p class="summary">The 10 essential design patterns in Java/Spring: Singleton, Factory, Builder, Strategy, Template Method, Observer, Decorator, Adapter, Proxy, Command. DDD patterns: Repository, Service, Value Object, Aggregate.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Patterns &amp; Best Practices</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>Section 41</li></ul>
+  <div class="label">Tools</div>
+  <ul class="source-list"><li>Java 21</li></ul>
+</div>
+      <h2 id="gof-patterns-in-modern-java">GoF patterns in modern Java</h2>
+<h3 id="singleton">Singleton</h3>
+<p>A single instance.</p>
+<pre><code class="language-java">public class Logger {
+    private static final Logger INSTANCE = new Logger();
+    private Logger() {}
+    public static Logger get() { return INSTANCE; }
+}
+</code></pre>
+<p>In Spring, default scope is singleton: all <code>@Component</code> are singletons <strong>per ApplicationContext</strong>. Don't hand-roll singletons in Spring.</p>
+<h3 id="factory-method-abstract-factory">Factory Method / Abstract Factory</h3>
+<p>Decentralize creation.</p>
+<pre><code class="language-java">public interface Connection { ... }
+
+public class ConnectionFactory {
+    public static Connection of(String type) {
+        return switch (type) {
+            case &quot;tcp&quot; -&gt; new TcpConnection();
+            case &quot;udp&quot; -&gt; new UdpConnection();
+            default -&gt; throw new IllegalArgumentException();
+        };
+    }
+}
+</code></pre>
+<p>In Spring: <code>@Bean</code> methods in <code>@Configuration</code> <em>are</em> factory methods.</p>
+<h3 id="builder">Builder</h3>
+<p>For objects with many optional params:</p>
+<pre><code class="language-java">public class HttpRequest {
+    private final String url;
+    private final String method;
+    private final Map&lt;String, String&gt; headers;
+
+    private HttpRequest(Builder b) { ... }
+    public static Builder builder() { return new Builder(); }
+
+    public static class Builder {
+        private String url, method = &quot;GET&quot;;
+        private final Map&lt;String, String&gt; headers = new HashMap&lt;&gt;();
+        public Builder url(String u) { this.url = u; return this; }
+        public Builder method(String m) { this.method = m; return this; }
+        public Builder header(String k, String v) { this.headers.put(k, v); return this; }
+        public HttpRequest build() { return new HttpRequest(this); }
+    }
+}
+
+HttpRequest r = HttpRequest.builder().url(&quot;...&quot;).header(&quot;X&quot;, &quot;Y&quot;).build();
+</code></pre>
+<p>In practice: use <strong>Lombok <code>@Builder</code></strong> or <strong>records</strong> + explicit constructor.</p>
+<h3 id="strategy">Strategy</h3>
+<p>Swap algorithm at runtime.</p>
+<pre><code class="language-java">public interface PricingStrategy {
+    BigDecimal price(Cart cart);
+}
+
+public class StandardPricing implements PricingStrategy { ... }
+public class BlackFridayPricing implements PricingStrategy { ... }
+
+@Service
+public class Checkout {
+    private PricingStrategy strategy;
+    public void setStrategy(PricingStrategy s) { this.strategy = s; }
+    public BigDecimal price(Cart c) { return strategy.price(c); }
+}
+</code></pre>
+<p>In Spring: inject <code>List&lt;PricingStrategy&gt;</code> and pick dynamically. Or <code>@Qualifier</code>.</p>
+<h3 id="template-method">Template Method</h3>
+<p>Fixed algorithm, variable details.</p>
+<pre><code class="language-java">public abstract class HttpService {
+    public final Response call(Request r) {
+        beforeCall(r);
+        Response res = doCall(r);
+        afterCall(r, res);
+        return res;
+    }
+    protected void beforeCall(Request r) {}
+    protected abstract Response doCall(Request r);
+    protected void afterCall(Request r, Response res) {}
+}
+</code></pre>
+<h3 id="observer-pub-sub">Observer / Pub-Sub</h3>
+<p>Decouple producers/consumers.</p>
+<p>In Spring:</p>
+<pre><code class="language-java">@Component
+public class OrderService {
+    private final ApplicationEventPublisher publisher;
+    public void place(Order o) {
+        publisher.publishEvent(new OrderPlacedEvent(o));
+    }
+}
+
+@Component
+public class EmailListener {
+    @EventListener
+    public void on(OrderPlacedEvent e) { ... }
+}
+</code></pre>
+<p><code>@Async</code> for async execution.</p>
+<h3 id="decorator">Decorator</h3>
+<p>Add behavior to an object without modifying it.</p>
+<pre><code class="language-java">public interface DataSource {
+    Connection getConnection();
+}
+
+public class CachingDataSource implements DataSource {
+    private final DataSource delegate;
+    public CachingDataSource(DataSource d) { this.delegate = d; }
+    @Override public Connection getConnection() {
+        return delegate.getConnection();
+    }
+}
+</code></pre>
+<p>In Spring: <code>@Cacheable</code>, <code>@Transactional</code> are decorators (via proxy).</p>
+<h3 id="adapter">Adapter</h3>
+<p>Adapt one interface to another.</p>
+<pre><code class="language-java">public interface PaymentGateway {
+    String charge(BigDecimal amount);
+}
+
+public class StripeAdapter implements PaymentGateway {
+    private final StripeApi stripe;
+
+    @Override
+    public String charge(BigDecimal amount) {
+        return stripe.createCharge(amount.movePointRight(2).intValueExact()).id();
+    }
+}
+</code></pre>
+<p>Isolate your app from external APIs.</p>
+<h3 id="proxy">Proxy</h3>
+<p>Replace the real object with a stand-in. Spring AOP uses proxies everywhere.</p>
+<h3 id="command">Command</h3>
+<p>Wrap a request as an object.</p>
+<pre><code class="language-java">public interface Command {
+    void execute();
+}
+
+public class SendEmail implements Command {
+    private final Email email;
+    @Override public void execute() { /* send */ }
+}
+
+queue.submit(new SendEmail(...));
+</code></pre>
+<p>Java's <code>Runnable</code> is essentially a Command.</p>
+<h2 id="ddd-lite-patterns">DDD-lite patterns</h2>
+<h3 id="repository">Repository</h3>
+<p>Persistence abstraction:</p>
+<pre><code class="language-java">public interface CustomerRepository {
+    Optional&lt;Customer&gt; findById(long id);
+    Customer save(Customer c);
+}
+</code></pre>
+<p>Spring Data gives you the implementation for free.</p>
+<h3 id="service">Service</h3>
+<p>Orchestrating business logic:</p>
+<pre><code class="language-java">@Service
+public class OrderService {
+    private final CustomerRepository customers;
+    private final InventoryService inventory;
+    private final PaymentGateway payment;
+
+    @Transactional
+    public Order place(NewOrder req) {
+        Customer c = customers.findById(req.customerId()).orElseThrow();
+        inventory.reserve(req.items());
+        String txId = payment.charge(c, req.total());
+        // ...
+    }
+}
+</code></pre>
+<h3 id="value-object">Value Object</h3>
+<p>Immutable, only its value matters (no identity).</p>
+<pre><code class="language-java">public record Money(BigDecimal amount, String currency) {
+    public Money {
+        Objects.requireNonNull(amount);
+        Objects.requireNonNull(currency);
+    }
+    public Money add(Money other) {
+        if (!currency.equals(other.currency)) throw new IllegalArgumentException();
+        return new Money(amount.add(other.amount), currency);
+    }
+}
+</code></pre>
+<p>Modern Java <strong>records</strong> are perfect for this.</p>
+<h3 id="aggregate">Aggregate</h3>
+<p>"Root" entity managing a graph of others.</p>
+<pre><code class="language-java">@Entity
+public class Order {
+    @Id Long id;
+    @OneToMany(cascade = ALL, orphanRemoval = true)
+    List&lt;OrderLine&gt; lines = new ArrayList&lt;&gt;();
+
+    public void addLine(Product p, int qty) {
+        if (qty &lt;= 0) throw new IllegalArgumentException();
+        lines.add(new OrderLine(p, qty));
+    }
+}
+</code></pre>
+<p>The <code>Order</code> aggregate is the only "entry point": you don't manipulate <code>OrderLine</code> externally.</p>
+<h3 id="specification">Specification</h3>
+<p>See section 27.</p>
+<h3 id="saga-microservices">Saga (microservices)</h3>
+<p>Distributed transactions via events.</p>
+<div class="mermaid">
+sequenceDiagram
+    participant O as Order Service
+    participant P as Payment
+    participant I as Inventory
+    O->>P: ChargeCommand
+    P-->>O: PaymentCompleted
+    O->>I: ReserveCommand
+    I-->>O: Reserved
+    O->>O: OrderConfirmed
+
+</div>
+
+<p>On error: emit <strong>compensating events</strong> (Refund, Release).</p>
+<h2 id="anti-patterns-to-avoid">Anti-patterns to avoid</h2>
+<ul>
+<li><strong>God class</strong>: 2000-line classes. Split by responsibility.</li>
+<li><strong>Anemic domain model</strong>: entities with only getters/setters, all logic in services. For complex rules, move logic into entities.</li>
+<li><strong>Service Locator</strong>: instead of DI. Use DI.</li>
+<li><strong>Mutable singleton</strong>: shared state, guaranteed concurrency bugs.</li>
+<li><strong>N+1</strong>: see section 20.</li>
+</ul>
+<h2 id="exercises">Exercises</h2>
+<details>
+<summary>Ex 42.1 — Strategy for VAT</summary>
+
+`VatStrategy` with `Standard` (22%), `Reduced` (10%), `SuperReduced` (4%). Inject `Map<String, VatStrategy>` into a service.
+
+</details>
+
+<details>
+<summary>Ex 42.2 — Builder with record</summary>
+
+`record HttpReq(String url, String method, Map<String,String> headers)` with inner fluent `builder()` factory.
+
+</details>
+
+<details>
+<summary>Ex 42.3 — Event-driven</summary>
+
+`OrderPlacedEvent`, listener sending email. Add `@Async`.
+
+</details>
+
+<h2 id="take-aways">Take-aways</h2>
+<ul>
+<li>The 10 GoF patterns in Java: most are already "embodied" in Spring.</li>
+<li>DDD-lite: Repository + Service + Value Object + Aggregate for complex apps.</li>
+<li>Saga for distributed transactions (microservices).</li>
+<li>Avoid anti-patterns: god class, service locator, mutable singleton.</li>
+</ul>
+<p>Next: production-grade performance tuning and observability.</p>
+      <nav class="pager">
+<a href="41-spring-batch-listeners-restart-k8s.html" class="prev"><span class="label">← Previous</span><span class="title">Listeners, restart, monitoring, Spring Boot and Kubernetes integration</span></a>
+<a href="43-performance-observability.html" class="next"><span class="label">Next →</span><span class="title">Production-grade performance tuning and observability</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Java + Spring Zero to Hero</strong> — built as a continuous path. Static build from Markdown.</p><p>Open-content educational material. Code under the MIT license; use freely in your own projects.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body, {delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true, background: '#15191e', primaryColor: '#1d2530',
+      primaryTextColor: '#eef1f5', primaryBorderColor: '#f89820',
+      lineColor: '#6db33f', secondaryColor: '#1a1f25', tertiaryColor: '#222a33',
+      mainBkg: '#1d2530', nodeBorder: '#f89820', clusterBkg: '#0f1318',
+      clusterBorder: '#2a3340', titleColor: '#f89820',
+      edgeLabelBackground: '#0f1318', textColor: '#eef1f5',
+      labelTextColor: '#eef1f5', actorBkg: '#1d2530', actorBorder: '#f89820',
+      actorTextColor: '#f89820', actorLineColor: '#6db33f',
+      signalColor: '#eef1f5', signalTextColor: '#eef1f5',
+      labelBoxBkgColor: '#1d2530', labelBoxBorderColor: '#f89820',
+      noteBkgColor: '#fff6a8', noteTextColor: '#0f1318', noteBorderColor: '#fff6a8',
+      activationBkgColor: '#1d2530', activationBorderColor: '#f89820',
+      sequenceNumberColor: '#0f1318'
+    },
+    flowchart: { curve: 'basis', padding: 16 },
+    sequence: { mirrorActors: false, bottomMarginAdj: 10 },
+    fontFamily: 'JetBrains Mono, Cascadia Code, Consolas, monospace'
+  });
+</script>
+</body>
+</html>

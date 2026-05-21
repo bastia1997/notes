@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Route 53, CloudFront, Global Accelerator — AWS Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#232f3e',primaryTextColor:'#ffffff',primaryBorderColor:'#ff9900',lineColor:'#8a99ad',background:'#0c1320'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">λ</div>
+      <div>
+        <div class="brand-title">AWS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">IT</span><a href="../en/pages/11-route53-cloudfront.html" class="lang-link" title="Switch to English">EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-cos-e-aws-cloud.html" class=""><span class="num">01</span>Cos&#x27;è il cloud e cos&#x27;è AWS</a></li><li class="nav-item"><a href="../pages/02-infrastruttura-globale.html" class=""><span class="num">02</span>Infrastruttura globale: Region, AZ, Edge</a></li><li class="nav-item"><a href="../pages/03-account-root-billing.html" class=""><span class="num">03</span>Account AWS, utente root, billing</a></li><li class="nav-item"><a href="../pages/04-iam-fondamenti.html" class=""><span class="num">04</span>IAM — fondamenti (utenti, gruppi, ruoli, policy)</a></li><li class="nav-item"><a href="../pages/05-iam-avanzato.html" class=""><span class="num">05</span>IAM avanzato: policy condizionali, STS, ABAC</a></li><li class="nav-item"><a href="../pages/06-cli-sdk-iac.html" class=""><span class="num">06</span>CLI, SDK, CloudShell, IaC primer</a></li><li class="nav-item"><a href="../pages/07-pricing-billing.html" class=""><span class="num">07</span>Pricing, billing, free tier, cost tools</a></li><li class="nav-item"><a href="../pages/08-organizations-multi-account.html" class=""><span class="num">08</span>AWS Organizations &amp; strategia multi-account</a></li><li class="nav-item"><a href="../pages/09-vpc-fondamenti.html" class=""><span class="num">09</span>VPC — fondamenti</a></li><li class="nav-item"><a href="../pages/10-vpc-avanzato.html" class=""><span class="num">10</span>VPC avanzato: peering, TGW, PrivateLink, endpoint</a></li><li class="nav-item"><a href="../pages/11-route53-cloudfront.html" class="active"><span class="num">11</span>Route 53, CloudFront, Global Accelerator</a></li><li class="nav-item"><a href="../pages/12-hybrid-vpn-directconnect.html" class=""><span class="num">12</span>Hybrid: VPN, Direct Connect, PrivateLink</a></li><li class="nav-item"><a href="../pages/13-ec2-fondamenti.html" class=""><span class="num">13</span>EC2 — fondamenti (istanze, AMI, lifecycle)</a></li><li class="nav-item"><a href="../pages/14-ec2-avanzato-spot-nitro.html" class=""><span class="num">14</span>EC2 avanzato — Spot, Placement Groups, Nitro, hibernation</a></li><li class="nav-item"><a href="../pages/15-asg-elb.html" class=""><span class="num">15</span>Auto Scaling Groups + Elastic Load Balancing</a></li><li class="nav-item"><a href="../pages/16-lambda-deep-dive.html" class=""><span class="num">16</span>Lambda deep dive</a></li><li class="nav-item"><a href="../pages/17-containers-ecs-eks-fargate.html" class=""><span class="num">17</span>Containers: ECS, EKS, Fargate, ECR</a></li><li class="nav-item"><a href="../pages/18-specialty-compute.html" class=""><span class="num">18</span>Specialty compute: Batch, Lightsail, Outposts, Wavelength, Beanstalk</a></li><li class="nav-item"><a href="../pages/19-ebs-efs-fsx.html" class=""><span class="num">19</span>EBS, EFS, FSx, Instance Store</a></li><li class="nav-item"><a href="../pages/20-s3-deep-dive.html" class=""><span class="num">20</span>S3 — deep dive</a></li><li class="nav-item"><a href="../pages/21-archive-snow-gateway-backup.html" class=""><span class="num">21</span>Glacier, Snow, Storage Gateway, DataSync, AWS Backup</a></li><li class="nav-item"><a href="../pages/22-rds.html" class=""><span class="num">22</span>RDS — relational DB managed (engines, Multi-AZ, replicas, Proxy)</a></li><li class="nav-item"><a href="../pages/23-aurora-deep-dive.html" class=""><span class="num">23</span>Aurora deep dive — storage condiviso, Serverless v2, Global Database</a></li><li class="nav-item"><a href="../pages/24-dynamodb-deep-dive.html" class=""><span class="num">24</span>DynamoDB deep dive — partition, GSI, Streams, single-table</a></li><li class="nav-item"><a href="../pages/25-purpose-built-dbs.html" class=""><span class="num">25</span>Purpose-built DB — ElastiCache, MemoryDB, Neptune, DocumentDB, Keyspaces, Timestream, QLDB</a></li><li class="nav-item"><a href="../pages/26-redshift-data-warehousing.html" class=""><span class="num">26</span>Redshift — data warehousing MPP e zero-ETL</a></li><li class="nav-item"><a href="../pages/27-sqs-sns-eventbridge.html" class=""><span class="num">27</span>SQS, SNS, EventBridge — messaging ed eventi</a></li><li class="nav-item"><a href="../pages/28-step-functions-mq-appflow.html" class=""><span class="num">28</span>Step Functions, MQ, AppFlow — orchestrazione e integrazione</a></li><li class="nav-item"><a href="../pages/29-athena-glue-lakeformation.html" class=""><span class="num">29</span>Athena, Glue, Lake Formation — il data lake AWS</a></li><li class="nav-item"><a href="../pages/30-emr-kinesis-msk.html" class=""><span class="num">30</span>EMR, Kinesis, MSK — big data e streaming</a></li><li class="nav-item"><a href="../pages/31-opensearch-quicksight.html" class=""><span class="num">31</span>OpenSearch e QuickSight — search e BI</a></li><li class="nav-item"><a href="../pages/32-sagemaker-overview.html" class=""><span class="num">32</span>SageMaker — la piattaforma ML end-to-end</a></li><li class="nav-item"><a href="../pages/33-bedrock-ai-services.html" class=""><span class="num">33</span>Bedrock e AI services — GenAI e ML managed</a></li><li class="nav-item"><a href="../pages/34-iac-cloudformation-cdk-terraform.html" class=""><span class="num">34</span>IaC su AWS — CloudFormation, CDK, SAM, Terraform</a></li><li class="nav-item"><a href="../pages/35-ci-cd-pipeline.html" class=""><span class="num">35</span>CI/CD su AWS — CodePipeline, CodeBuild, CodeDeploy, CodeCatalyst</a></li><li class="nav-item"><a href="../pages/36-observability-cloudwatch-xray.html" class=""><span class="num">36</span>Observability — CloudWatch, X-Ray, CloudTrail, Config, SSM</a></li><li class="nav-item"><a href="../pages/37-kms-secrets-acm.html" class=""><span class="num">37</span>Crittografia — KMS, CloudHSM, Secrets Manager, Parameter Store, ACM</a></li><li class="nav-item"><a href="../pages/38-waf-shield-guardduty-inspector.html" class=""><span class="num">38</span>Threat detection — WAF, Shield, GuardDuty, Inspector, Macie, Security Hub</a></li><li class="nav-item"><a href="../pages/39-governance-org-controltower-identitycenter.html" class=""><span class="num">39</span>Governance — Organizations, Control Tower, Identity Center</a></li><li class="nav-item"><a href="../pages/40-migration-mgn-dms-snow.html" class=""><span class="num">40</span>Migration — MGN, DMS, Snow family, Discovery, Migration Hub</a></li><li class="nav-item"><a href="../pages/41-cost-optimization-finops.html" class=""><span class="num">41</span>Cost optimization e FinOps</a></li><li class="nav-item"><a href="../pages/42-well-architected.html" class=""><span class="num">42</span>Well-Architected Framework — 6 pillar, lens, review</a></li><li class="nav-item"><a href="../pages/43-architecture-patterns.html" class=""><span class="num">43</span>Architecture patterns — 3-tier, serverless, event-driven, microservices</a></li><li class="nav-item"><a href="../pages/44-disaster-recovery-multi-region.html" class=""><span class="num">44</span>Disaster Recovery e Multi-Region</a></li><li class="nav-item"><a href="../pages/45-reference-architectures.html" class=""><span class="num">45</span>Reference architectures real-world</a></li><li class="nav-item"><a href="../pages/46-advanced-networking.html" class=""><span class="num">46</span>Advanced networking deep dive</a></li><li class="nav-item"><a href="../pages/47-containers-deep-dive.html" class=""><span class="num">47</span>Containers deep dive — EKS, Karpenter, service mesh</a></li><li class="nav-item"><a href="../pages/48-serverless-patterns.html" class=""><span class="num">48</span>Serverless patterns deep dive</a></li><li class="nav-item"><a href="../pages/49-genai-rag-agents.html" class=""><span class="num">49</span>Generative AI su AWS — RAG e Agents</a></li><li class="nav-item"><a href="../pages/50-certificazioni-aws.html" class=""><span class="num">50</span>Certificazioni AWS — roadmap e study guide</a></li><li class="nav-item"><a href="../pages/51-glossario-az.html" class=""><span class="num">51</span>Glossario A-Z</a></li><li class="nav-item"><a href="../pages/52-cheatsheet.html" class=""><span class="num">52</span>Cheat sheet: servizi, limiti, instance families</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Networking</span>
+        <span>Sezione 11 di 52</span>
+        <span class="level-tag level-int">Livello: intermedio</span>
+      </div>
+      <h1>Route 53, CloudFront, Global Accelerator</h1>
+      <p class="summary">DNS managed (Route 53), CDN (CloudFront), anycast IP (Global Accelerator). I tre servizi edge che portano latenza utente da &#x27;lenta&#x27; a &#x27;sub-50 ms&#x27;.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Networking</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>sezione 2 (edge), 9 (VPC)</li></ul>
+  <div class="label">Strumenti / riferimenti</div>
+  <ul class="source-list"><li>Route 53</li><li>CloudFront + ACM (certificate manager)</li></ul>
+</div>
+      <p>Tre servizi globali che vivono sull'edge AWS. Risolvono tre problemi diversi: chi è (DNS), dove cache statici (CDN), come far arrivare TCP velocemente (anycast).</p>
+<h2 id="1-route-53-dns-managed">1. Route 53 — DNS managed</h2>
+<p>DNS authoritative gestito. Highly available (SLA 100%), pagato per hosted zone (~$0.50/mese) + per query (~$0.40/M).</p>
+<p><strong>Hosted Zone</strong> = un dominio gestito da Route 53. Public (risolvibile da Internet) o Private (associata a uno o più VPC, risolvibile solo da dentro).</p>
+<p>Tipi di record standard: <code>A</code>, <code>AAAA</code>, <code>CNAME</code>, <code>MX</code>, <code>TXT</code>, <code>SRV</code>, <code>NS</code>, <code>PTR</code>.</p>
+<p><strong>Tipo speciale: Alias record</strong>. Come CNAME ma può puntare ad altri servizi AWS (ALB, CloudFront, S3 website, API Gateway) e funziona anche sulla zone apex (<code>acme.com</code> senza <code>www.</code>), cosa che CNAME non può.</p>
+<pre><code class="language-bash">aws route53 change-resource-record-sets --hosted-zone-id Z123 \
+  --change-batch '{
+    &quot;Changes&quot;:[{
+      &quot;Action&quot;:&quot;UPSERT&quot;,
+      &quot;ResourceRecordSet&quot;:{
+        &quot;Name&quot;:&quot;acme.com&quot;,
+        &quot;Type&quot;:&quot;A&quot;,
+        &quot;AliasTarget&quot;:{
+          &quot;HostedZoneId&quot;:&quot;Z2FDTNDATAQYW2&quot;,
+          &quot;DNSName&quot;:&quot;d111.cloudfront.net&quot;,
+          &quot;EvaluateTargetHealth&quot;:false
+        }
+      }
+    }]
+  }'
+</code></pre>
+<h3 id="routing-policy">Routing policy</h3>
+<p>Route 53 sceglie quale record restituire in base alla policy:</p>
+<table>
+<thead>
+<tr>
+<th>Policy</th>
+<th>Quando</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Simple</strong></td>
+<td>1 record, ritorna sempre quello</td>
+</tr>
+<tr>
+<td><strong>Weighted</strong></td>
+<td>distribuisci traffico per peso (es. 90/10 per canary)</td>
+</tr>
+<tr>
+<td><strong>Latency-based</strong></td>
+<td>ritorna l'endpoint con la minor latenza dall'utente</td>
+</tr>
+<tr>
+<td><strong>Geolocation</strong></td>
+<td>per paese/continente</td>
+</tr>
+<tr>
+<td><strong>Geoproximity</strong></td>
+<td>come geo + bias di distanza</td>
+</tr>
+<tr>
+<td><strong>Failover</strong></td>
+<td>primary/secondary basato su health check</td>
+</tr>
+<tr>
+<td><strong>Multivalue answer</strong></td>
+<td>restituisce fino a 8 record sani (un mini-LB DNS)</td>
+</tr>
+<tr>
+<td><strong>IP-based</strong></td>
+<td>regole basate su CIDR del client</td>
+</tr>
+</tbody>
+</table>
+<h3 id="health-checks">Health checks</h3>
+<p>Route 53 monitora un endpoint (HTTP/HTTPS/TCP) ogni 10–30 sec da multiple location. Failover policy + health check = DR automatico DNS.</p>
+<h2 id="2-cloudfront-cdn-globale">2. CloudFront — CDN globale</h2>
+<p>CDN AWS distribuito su 600+ edge location. <strong>Modello mentale</strong>: tra l'utente e l'origine c'è una cache HTTP in 600 città. Le risposte cacheabili (con <code>Cache-Control: max-age=N</code>) restano nell'edge, riducendo carico sull'origine e latenza utente.</p>
+<p>Concetti chiave:</p>
+<ul>
+<li><strong>Origin</strong>: dove sta il contenuto vero (S3 bucket, ALB, custom HTTP, MediaPackage). Multi-origin OK.</li>
+<li><strong>Distribution</strong>: la "configurazione CloudFront" (cosa, da dove, con quale comportamento).</li>
+<li><strong>Behavior</strong>: rules path-based ("<code>/api/*</code> non cache, <code>/static/*</code> cache 1 ora").</li>
+<li><strong>TTL</strong>: tempo di cache di una risposta nell'edge. <code>Cache-Control</code> dall'origine vince.</li>
+<li><strong>OAC (Origin Access Control)</strong>: il bucket S3 si fida solo di CloudFront (no public S3).</li>
+<li><strong>Signed URL / Signed Cookie</strong>: contenuti privati a tempo (es. download protetti).</li>
+<li><strong>Lambda@Edge / CloudFront Functions</strong>: codice eseguito vicino all'utente (rewrite URL, A/B testing, JWT validation).</li>
+</ul>
+<p><strong>Pricing</strong>: ~$0.085/GB egress dall'edge (cheaper di EC2 direct) + $0.0075 per 10k richieste HTTPS. 1 TB egress + 10M req/mese free perpetually.</p>
+<h3 id="anti-pattern-frequenti">Anti-pattern frequenti</h3>
+<ul>
+<li><strong>CloudFront davanti a un'API write-heavy senza cache</strong>: paghi CloudFront ma non risparmi. Usalo per GET, mantieni write-direct.</li>
+<li><strong>TTL 0</strong>: ogni richiesta va all'origine, CloudFront diventa un proxy lento.</li>
+<li><strong>Mancato uso di OAC</strong>: lasci S3 pubblico — sconfitto.</li>
+</ul>
+<h2 id="3-aws-global-accelerator">3. AWS Global Accelerator</h2>
+<p>Due IP anycast statici (un /32 per istanza) annunciati da tutte le edge. L'utente parla con l'edge AWS più vicina, poi il traffico viaggia sulla <strong>rete privata AWS</strong> fino al regional endpoint (NLB, ALB, EC2, Elastic IP).</p>
+<p>Differenze chiave vs CloudFront:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>CloudFront</th>
+<th>Global Accelerator</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Layer</td>
+<td>HTTP(S) caching CDN</td>
+<td>TCP/UDP transport</td>
+</tr>
+<tr>
+<td>Cache</td>
+<td>sì</td>
+<td>no</td>
+</tr>
+<tr>
+<td>Indirizzi</td>
+<td>hostname <code>xyz.cloudfront.net</code></td>
+<td>2 IP statici anycast</td>
+</tr>
+<tr>
+<td>Failover</td>
+<td>per origine</td>
+<td>per regione (sec)</td>
+</tr>
+<tr>
+<td>Use case</td>
+<td>web, API, video on demand</td>
+<td>gaming, VoIP, IoT, white-list IP fissi</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Quando</strong>: hai un servizio TCP non-HTTP, o un cliente enterprise che ha bisogno di <strong>due IP statici da whitelist</strong> (firewall pesante).</p>
+<h2 id="4-pattern-combinato">4. Pattern combinato</h2>
+<pre><code class="language-mermaid">flowchart LR
+    user[Utente]
+    user --&gt; r53[Route 53]
+    r53 -. risolve www.acme.com .-&gt; cf[CloudFront]
+    cf -. cache HTTP .-&gt; origin[ALB]
+    origin --&gt; ec2[EC2 in private subnet]
+    user2[Utente gaming]
+    user2 --&gt; ga[Global Accelerator&lt;br&gt;2 IP anycast]
+    ga --&gt; nlb[NLB regional]
+</code></pre>
+<h2 id="5-domini-e-acm">5. Domini e ACM</h2>
+<p>Route 53 può registrare domini ($12+/anno per <code>.com</code>). I certificati TLS sono gratis via <strong>AWS Certificate Manager (ACM)</strong>, auto-rinnovati. Validi solo per uso AWS (ALB, CloudFront, API Gateway). Per CloudFront serve cert in <code>us-east-1</code> (eccezione storica).</p>
+<h2 id="6-esercizio">6. Esercizio</h2>
+<details>
+<summary>Sito statico Next.js export con utenti globali. Architettura?</summary>
+
+1. **S3 bucket** privato per gli asset (no static website hosting attivo: usa OAC).
+2. **CloudFront distribution** con S3 come origin via OAC.
+3. **ACM certificate** in `us-east-1` per `*.acme.com`.
+4. **Route 53** alias record `acme.com` → distribution.
+5. Behavior: `/_next/static/*` cache TTL 1 anno (immutable), `/` cache 5 min (lokale dynamic).
+6. Compression + HTTP/2/3 abilitati.
+7. WAF associato per protezione base.
+
+Costi: ~$1–$10/mese a basso traffico (dentro free tier). A scala scaling lineare con egress.
+</details>
+
+<details>
+<summary>Gioco multiplayer con server in 3 Region. Latenza utente critica. Come instradare?</summary>
+
+Opzioni:
+- **Route 53 latency-based**: DNS ritorna l'IP della Region più vicina. Veloce ma DNS caching utente può portare a stale routing.
+- **Global Accelerator**: IP statici anycast, traffico va su rete AWS dall'edge. Failover ~secondi vs minuti del DNS. Costo: $0.025/h per accelerator + traffic.
+
+Per real-time gaming, GA vince per la latenza più stabile e il failover veloce. Per workload HTTP non latency-critical, Route 53 + ALB regionali + CloudFront può bastare.
+</details>
+
+<blockquote>
+<p><strong>Riassunto</strong>: Route 53 = DNS managed con policy avanzate (latency, geo, failover) e health check; CloudFront = CDN HTTP globale, cache statici, riduce egress origine; Global Accelerator = 2 IP anycast per TCP/UDP non-HTTP. ACM dà cert TLS gratis. Route 53 alias risolve il problema del CNAME su zone apex.</p>
+</blockquote>
+      <nav class="pager">
+<a href="10-vpc-avanzato.html" class="prev"><span class="label">← Precedente</span><span class="title">VPC avanzato: peering, TGW, PrivateLink, endpoint</span></a>
+<a href="12-hybrid-vpn-directconnect.html" class="next"><span class="label">Successivo →</span><span class="title">Hybrid: VPN, Direct Connect, PrivateLink</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>AWS Zero to Hero</strong> — percorso completo, in italiano, dalle primitive all'architettura avanzata.</p><p>Materiale didattico aperto. Nessuna sponsorizzazione, nessun affiliate link, nessuna affiliazione con AWS. Quando un concetto è oscuro, torna indietro: AWS è una piramide di primitive, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

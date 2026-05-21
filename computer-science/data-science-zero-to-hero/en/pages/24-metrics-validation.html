@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Metrics, cross-validation, leakage — Data Science Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#3a4a7a',primaryTextColor:'#e8eef0',primaryBorderColor:'#5a6aa0',lineColor:'#8a9499',background:'#11171a'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">Σ</div>
+      <div>
+        <div class="brand-title">DATA SCIENCE</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/24-metriche-validazione.html" class="lang-link" title="Passa all'italiano">🇮🇹 IT</a><span class="lang-active" title="English">🇬🇧 EN</span></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="search... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-what-is-data-science.html" class=""><span class="num">01</span>What is data science (and what isn&#x27;t)</a></li><li class="nav-item"><a href="../pages/02-python-for-data-science.html" class=""><span class="num">02</span>Python for data science: pro setup</a></li><li class="nav-item"><a href="../pages/02b-math-essentials.html" class=""><span class="num">02b</span>High-school math you actually need</a></li><li class="nav-item"><a href="../pages/03-linear-algebra.html" class=""><span class="num">03</span>Linear algebra for data scientists</a></li><li class="nav-item"><a href="../pages/04-calculus-optimization.html" class=""><span class="num">04</span>Calculus, gradients, and optimization</a></li><li class="nav-item"><a href="../pages/05-probability.html" class=""><span class="num">05</span>Probability: the language of uncertainty</a></li><li class="nav-item"><a href="../pages/06-descriptive-statistics.html" class=""><span class="num">06</span>Descriptive statistics</a></li><li class="nav-item"><a href="../pages/07-inferential-statistics.html" class=""><span class="num">07</span>Inferential statistics and hypothesis testing</a></li><li class="nav-item"><a href="../pages/08-distributions.html" class=""><span class="num">08</span>Probability distributions you&#x27;ll meet</a></li><li class="nav-item"><a href="../pages/09-numpy.html" class=""><span class="num">09</span>NumPy: thinking in arrays</a></li><li class="nav-item"><a href="../pages/10-pandas.html" class=""><span class="num">10</span>Pandas: the swiss army knife</a></li><li class="nav-item"><a href="../pages/11-sql.html" class=""><span class="num">11</span>SQL for data scientists</a></li><li class="nav-item"><a href="../pages/12-visualization.html" class=""><span class="num">12</span>Visualization: matplotlib, seaborn, plotly</a></li><li class="nav-item"><a href="../pages/13-data-wrangling.html" class=""><span class="num">13</span>Cleaning and data wrangling</a></li><li class="nav-item"><a href="../pages/14-feature-engineering.html" class=""><span class="num">14</span>Feature engineering</a></li><li class="nav-item"><a href="../pages/15-eda.html" class=""><span class="num">15</span>EDA: Exploratory Data Analysis</a></li><li class="nav-item"><a href="../pages/16-ml-fundamentals.html" class=""><span class="num">16</span>ML: fundamentals — bias, variance, validation</a></li><li class="nav-item"><a href="../pages/17-linear-regression.html" class=""><span class="num">17</span>Linear regression and regularization</a></li><li class="nav-item"><a href="../pages/18-logistic-regression.html" class=""><span class="num">18</span>Logistic regression and classification</a></li><li class="nav-item"><a href="../pages/19-knn-naive-bayes-svm.html" class=""><span class="num">19</span>KNN, Naive Bayes, SVM</a></li><li class="nav-item"><a href="../pages/20-decision-trees.html" class=""><span class="num">20</span>Decision trees</a></li><li class="nav-item"><a href="../pages/21-random-forest-boosting.html" class=""><span class="num">21</span>Random Forest, Gradient Boosting, XGBoost</a></li><li class="nav-item"><a href="../pages/22-clustering.html" class=""><span class="num">22</span>Clustering: K-Means, DBSCAN, GMM, hierarchical</a></li><li class="nav-item"><a href="../pages/23-pca-tsne-umap.html" class=""><span class="num">23</span>Dimensionality reduction: PCA, t-SNE, UMAP</a></li><li class="nav-item"><a href="../pages/24-metrics-validation.html" class="active"><span class="num">24</span>Metrics, cross-validation, leakage</a></li><li class="nav-item"><a href="../pages/25-class-imbalance.html" class=""><span class="num">25</span>Class imbalance</a></li><li class="nav-item"><a href="../pages/26-hyperparameter-tuning.html" class=""><span class="num">26</span>Hyperparameter tuning</a></li><li class="nav-item"><a href="../pages/27-neural-networks.html" class=""><span class="num">27</span>Neural networks: from fundamentals to backprop</a></li><li class="nav-item"><a href="../pages/28-pytorch.html" class=""><span class="num">28</span>PyTorch: from toy model to training loop</a></li><li class="nav-item"><a href="../pages/29-cnn.html" class=""><span class="num">29</span>CNN for computer vision</a></li><li class="nav-item"><a href="../pages/30-rnn-lstm.html" class=""><span class="num">30</span>RNN, LSTM, GRU for sequences</a></li><li class="nav-item"><a href="../pages/31-transformer.html" class=""><span class="num">31</span>Transformer and attention</a></li><li class="nav-item"><a href="../pages/32-nlp-llm.html" class=""><span class="num">32</span>NLP: from text mining to LLMs</a></li><li class="nav-item"><a href="../pages/33-time-series.html" class=""><span class="num">33</span>Time series and forecasting</a></li><li class="nav-item"><a href="../pages/34-mlops.html" class=""><span class="num">34</span>MLOps: deployment, monitoring, drift</a></li><li class="nav-item"><a href="../pages/35-bayesian-causal.html" class=""><span class="num">35</span>Bayesian and Causal Inference</a></li><li class="nav-item"><a href="../pages/36-capstone-career.html" class=""><span class="num">36</span>Capstone, portfolio, career</a></li><li class="nav-item"><a href="../pages/37-glossary.html" class=""><span class="num">37</span>Glossary A-Z</a></li><li class="nav-item"><a href="../pages/38-formula-sheet.html" class=""><span class="num">38</span>Formula Sheet: all the formulas from the course</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Machine Learning</span>
+        <span>Section 25 of 39</span>
+        <span class="level-tag level-int">Level: intermediate</span>
+      </div>
+      <h1>Metrics, cross-validation, leakage</h1>
+      <p class="summary">Metrics for regression and classification. Cross-validation done right. All the ways a model can cheat on itself.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Machine Learning</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>[[ml-fundamentals]]</li></ul>
+  <div class="label">Tools</div>
+  <ul class="source-list"><li>scikit-learn</li></ul>
+</div>
+      <h2 id="regression-metrics">Regression metrics</h2>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Formula</th>
+<th>Pros</th>
+<th>Cons</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>MSE</strong></td>
+<td>$\frac{1}{n}\sum(y-\hat{y})^2$</td>
+<td>differentiable, MLE for normal</td>
+<td>squared units; sensitive to outliers</td>
+</tr>
+<tr>
+<td><strong>RMSE</strong></td>
+<td>$\sqrt{\text{MSE}}$</td>
+<td>same units as $y$</td>
+<td>sensitive to outliers</td>
+</tr>
+<tr>
+<td><strong>MAE</strong></td>
+<td>$\frac{1}{n}\sum|y-\hat{y}|$</td>
+<td>robust, interpretable</td>
+<td>not differentiable at 0</td>
+</tr>
+<tr>
+<td><strong>MAPE</strong></td>
+<td>$\frac{1}{n}\sum|y-\hat{y}|/|y|$</td>
+<td>percentage</td>
+<td>blows up with small $y$</td>
+</tr>
+<tr>
+<td><strong>SMAPE</strong></td>
+<td>symmetric version of MAPE</td>
+<td>handles 0 better</td>
+<td>still tricky</td>
+</tr>
+<tr>
+<td><strong>R²</strong></td>
+<td>$1 - \text{SS}<em>\text{res}/\text{SS}</em>\text{tot}$</td>
+<td>scale-invariant</td>
+<td>can be negative</td>
+</tr>
+<tr>
+<td><strong>Adjusted R²</strong></td>
+<td>penalizes for #features</td>
+<td>model comparison</td>
+<td>requires $n, p$</td>
+</tr>
+<tr>
+<td><strong>Quantile loss</strong></td>
+<td>pinball loss for quantiles</td>
+<td>for prediction intervals</td>
+<td>less standard</td>
+</tr>
+</tbody>
+</table>
+<p><strong>When to prefer MAE over MSE</strong>: when you expect outliers you do NOT want to emphasize. MSE gives 4× more weight to an error of 2 vs 1; MAE only 2×.</p>
+<p><strong>MAPE pitfall</strong>: if $y = 0$ in the test set, MAPE = ∞. Use SMAPE or MAE.</p>
+<h2 id="classification-metrics">Classification metrics</h2>
+<h3 id="confusion-matrix">Confusion matrix</h3>
+<p>Everything starts here:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Predicted 0</th>
+<th>Predicted 1</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Actual 0</strong></td>
+<td>TN</td>
+<td>FP</td>
+</tr>
+<tr>
+<td><strong>Actual 1</strong></td>
+<td>FN</td>
+<td>TP</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-python">from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+cm = confusion_matrix(y_true, y_pred)
+ConfusionMatrixDisplay(cm, display_labels=['negative','positive']).plot()
+</code></pre>
+<h3 id="the-5-basic-metrics">The 5 basic metrics</h3>
+<p>$$\text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN}$$</p>
+<p>$$\text{Precision} = \frac{TP}{TP + FP}\quad \text{(of all predicted positives, how many are truly positive?)}$$</p>
+<p>$$\text{Recall (Sensitivity)} = \frac{TP}{TP + FN}\quad \text{(of all true positives, how many do I capture?)}$$</p>
+<p>$$\text{Specificity} = \frac{TN}{TN + FP}\quad \text{(of all true negatives, how many do I predict as negative?)}$$</p>
+<p>$$F_1 = 2 \cdot \frac{\text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}$$</p>
+<h3 id="f_beta">F_beta</h3>
+<p>Generalizes F1 by weighting recall:</p>
+<p>$$F_\beta = (1 + \beta^2) \frac{P \cdot R}{\beta^2 P + R}$$</p>
+<p>$\beta &gt; 1$: recall matters more. $\beta = 0.5$: precision matters more.</p>
+<h3 id="roc-and-auc">ROC and AUC</h3>
+<p><strong>ROC</strong> (Receiver Operating Characteristic): plot TPR vs FPR as the threshold varies.</p>
+<ul>
+<li>TPR = Recall.</li>
+<li>FPR = $FP / (FP + TN)$ = 1 - Specificity.</li>
+</ul>
+<p><strong>AUC</strong> = area under the ROC. Interpretation: probability that the model assigns a higher score to a positive than to a random negative. $0.5$ = random, $1$ = perfect.</p>
+<blockquote>
+<p><strong>AUC misleading on imbalanced classes</strong>: with 1% positives, even a mediocre model can have AUC 0.9 but precision 0.05. Use <strong>AUC PR</strong> or F1 in these cases.</p>
+</blockquote>
+<h3 id="precision-recall-curve-and-auc-pr">Precision-Recall curve and AUC-PR</h3>
+<p>Plot P vs R as the threshold varies. More informative than ROC on imbalanced classes.</p>
+<pre><code class="language-python">from sklearn.metrics import (roc_auc_score, average_precision_score,
+                             roc_curve, precision_recall_curve, f1_score)
+proba = model.predict_proba(X_te)[:, 1]
+print(&quot;ROC AUC:&quot;, roc_auc_score(y_te, proba))
+print(&quot;PR AUC:&quot;, average_precision_score(y_te, proba))
+</code></pre>
+<h3 id="log-loss">Log loss</h3>
+<p>$$L = -\frac{1}{n} \sum_i [y_i \log p_i + (1 - y_i) \log(1 - p_i)]$$</p>
+<p>Captures not just whether the class is correct, but how well <strong>the probabilities are calibrated</strong>. More informative than threshold-based metrics.</p>
+<h3 id="brier-score">Brier score</h3>
+<p>$$B = \frac{1}{n} \sum_i (p_i - y_i)^2$$</p>
+<p>Also for calibration, but quadratic. Less commonly used in practice.</p>
+<h2 id="multi-class">Multi-class</h2>
+<p><strong>Macro avg</strong>: unweighted average of per-class metrics. All classes count equally.
+<strong>Weighted avg</strong>: weighted by support.
+<strong>Micro avg</strong>: aggregates TP/FP/FN across all classes before computing.</p>
+<pre><code class="language-python">from sklearn.metrics import classification_report
+print(classification_report(y_te, y_pred))
+</code></pre>
+<blockquote>
+<p>On imbalanced classes, <strong>macro F1</strong> is the most informative metric: it reveals whether the model is "ignoring" small classes.</p>
+</blockquote>
+<h2 id="cross-validation-the-types-you-need">Cross-validation: the types you need</h2>
+<h3 id="k-fold">K-Fold</h3>
+<pre><code class="language-python">from sklearn.model_selection import KFold
+kf = KFold(n_splits=5, shuffle=True, random_state=0)
+</code></pre>
+<h3 id="stratified-k-fold">Stratified K-Fold</h3>
+<p>Preserves class proportions. <strong>Always</strong> use for classification.</p>
+<pre><code class="language-python">from sklearn.model_selection import StratifiedKFold
+skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=0)
+</code></pre>
+<h3 id="group-k-fold">Group K-Fold</h3>
+<p>When examples belong to "groups" (e.g.: user_id, patient). The same groups must not appear in both train and val.</p>
+<pre><code class="language-python">from sklearn.model_selection import GroupKFold
+gkf = GroupKFold(n_splits=5)
+for tr, va in gkf.split(X, y, groups=user_id):
+    ...
+</code></pre>
+<h3 id="time-series-split">Time Series Split</h3>
+<p>For temporal data: train = past, val = future. Never mix.</p>
+<pre><code class="language-python">from sklearn.model_selection import TimeSeriesSplit
+tscv = TimeSeriesSplit(n_splits=5, gap=7)   # 7-day gap between train and val
+</code></pre>
+<pre><code class="language-mermaid">flowchart LR
+    A[fold1: T1] --&gt; B[fold1: V1]
+    C[fold2: T1+V1] --&gt; D[fold2: V2]
+    E[fold3: T1+V1+V2] --&gt; F[fold3: V3]
+</code></pre>
+<h3 id="repeated-k-fold">Repeated K-Fold</h3>
+<p>Repeat K-fold with different seeds to reduce variance of the estimate.</p>
+<h2 id="nested-cross-validation">Nested cross-validation</h2>
+<p>When you need both <strong>hyperparameter tuning</strong> and <strong>honest error estimation</strong>:</p>
+<pre><code class="language-python">from sklearn.model_selection import GridSearchCV, cross_val_score
+outer = StratifiedKFold(5, shuffle=True, random_state=0)
+inner = StratifiedKFold(3, shuffle=True, random_state=0)
+gs = GridSearchCV(model, param_grid, cv=inner, scoring='roc_auc')
+scores = cross_val_score(gs, X, y, cv=outer, scoring='roc_auc')
+print(f&quot;AUC: {scores.mean():.3f} ± {scores.std():.3f}&quot;)
+</code></pre>
+<p>Expensive (5×3=15 fits), but this is the "true" cross-validation.</p>
+<h2 id="leakage-the-ways-you-cheat-on-yourself">Leakage: the ways you cheat on yourself</h2>
+<p>In other words: the test set "sees" the training set, accuracy inflates, and in production the model performs poorly.</p>
+<h3 id="1-target-leakage">1. Target leakage</h3>
+<p>A feature is derived from the target (explicitly or implicitly):</p>
+<ul>
+<li>You predict "loan default" and use <code>times_called_by_collection_dept</code> — that happened after the default!</li>
+<li>You predict subscription cancellation and use <code>last_login_date</code> — people who cancel often have last_login = cancellation date.</li>
+</ul>
+<p><strong>Test</strong>: feature with correlation &gt; 0.95 with target → investigate.</p>
+<h3 id="2-train-test-contamination">2. Train-test contamination</h3>
+<p>Scaler/imputer/PCA fitted on the <strong>entire</strong> dataset before the split:</p>
+<pre><code class="language-python"># WRONG
+X_scaled = StandardScaler().fit_transform(X)
+X_tr, X_te = train_test_split(X_scaled, ...)
+
+# CORRECT
+X_tr, X_te = train_test_split(X, ...)
+sc = StandardScaler().fit(X_tr)
+X_tr_s = sc.transform(X_tr); X_te_s = sc.transform(X_te)
+</code></pre>
+<p>scikit-learn Pipeline saves you from this bug automatically.</p>
+<h3 id="3-group-leakage">3. Group leakage</h3>
+<p>Same user in train and test (or same patient, same document). "Normal" cross-val does not prevent it → use GroupKFold.</p>
+<h3 id="4-time-leakage">4. Time leakage</h3>
+<p>For time series: using features aggregated from the future in the past. E.g.: global mean of the target → contains "future" information about past samples.</p>
+<h3 id="5-selection-bias">5. Selection bias</h3>
+<p>You filtered the data in a way that makes the train/test set non-representative. E.g.: removing rows with NaN — but records with NaN are different from those without.</p>
+<h2 id="typical-workflow">Typical workflow</h2>
+<pre><code class="language-mermaid">flowchart TD
+    A[1. STRATIFIED train/test split] --&gt; B[2. Fit scaler/encoder&lt;br/&gt;on train ONLY]
+    B --&gt; C[3. CV on train for&lt;br/&gt;hyperparam tuning]
+    C --&gt; D[4. Final training&lt;br/&gt;on full train]
+    D --&gt; E[5. FINAL estimate on test&lt;br/&gt;only once]
+</code></pre>
+<h2 id="exercises">Exercises</h2>
+<details>
+<summary>Exercise 1 — Manual metric computation</summary>
+
+Confusion matrix:
+
+|   | Pred 0 | Pred 1 |
+|---|---|---|
+| Actual 0 | 80 | 5 |
+| Actual 1 | 10 | 30 |
+
+Compute accuracy, precision, recall, F1.
+
+**Solutions**:
+- Accuracy = (80+30)/125 = 0.88
+- Precision = 30/35 = 0.857
+- Recall = 30/40 = 0.75
+- F1 = 2 · 0.857 · 0.75 / (0.857 + 0.75) = 0.80
+</details>
+
+<details>
+<summary>Exercise 2 — AUC on imbalanced classes</summary>
+
+Generate a dataset with 1% positives. Train a mediocre model, compute accuracy, AUC, AP.
+
+
+<pre><code class="language-python">from sklearn.datasets import make_classification
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, roc_auc_score, average_precision_score
+
+X, y = make_classification(20000, weights=[0.99, 0.01], random_state=0)
+X_tr, X_te, y_tr, y_te = train_test_split(X, y, stratify=y, random_state=0)
+m = LogisticRegression(max_iter=2000).fit(X_tr, y_tr)
+proba = m.predict_proba(X_te)[:, 1]
+pred = (proba &gt; 0.5).astype(int)
+print(f&quot;Accuracy: {accuracy_score(y_te, pred):.3f}&quot;)
+print(f&quot;ROC AUC: {roc_auc_score(y_te, proba):.3f}&quot;)
+print(f&quot;PR AUC: {average_precision_score(y_te, proba):.3f}&quot;)
+</code></pre>
+
+
+Often: accuracy 99%, ROC AUC 0.9, PR AUC 0.3. **PR AUC is the truth**.
+</details>
+
+<details>
+<summary>Exercise 3 — Find the leakage</summary>
+
+
+<pre><code class="language-python">from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import cross_val_score
+from sklearn.linear_model import LogisticRegression
+
+# WRONG: scaling before split
+sc = StandardScaler()
+X_s = sc.fit_transform(X)
+score_wrong = cross_val_score(LogisticRegression(), X_s, y, cv=5).mean()
+
+# CORRECT: pipeline
+from sklearn.pipeline import Pipeline
+pipe = Pipeline([('sc', StandardScaler()), ('lr', LogisticRegression())])
+score_right = cross_val_score(pipe, X, y, cv=5).mean()
+
+print(score_wrong, score_right)
+</code></pre>
+
+
+In practice the difference for StandardScaler is small, but for imputer, PCA, target encoding it can be huge.
+</details>
+
+<details>
+<summary>Exercise 4 — TimeSeriesSplit</summary>
+
+
+<pre><code class="language-python">import numpy as np
+import pandas as pd
+from sklearn.model_selection import TimeSeriesSplit, cross_val_score
+from sklearn.linear_model import Ridge
+
+ts = pd.date_range('2020-01-01', '2024-12-31', freq='D')
+y = np.sin(np.arange(len(ts))/30) + np.random.randn(len(ts))*0.1
+X = pd.DataFrame({'t': np.arange(len(ts))})
+
+tscv = TimeSeriesSplit(n_splits=5, gap=30)
+scores = cross_val_score(Ridge(), X, y, cv=tscv, scoring='r2')
+print(scores)
+</code></pre>
+
+
+Time-respecting cross-validation: in each fold the train comes "before" the val.
+</details>
+
+<h2 id="key-takeaways">Key takeaways</h2>
+<ul>
+<li>Accuracy is misleading on imbalanced classes. Use F1, PR AUC.</li>
+<li>ROC AUC is threshold-independent. F1 is threshold-dependent.</li>
+<li>Stratified for classes, Group for repeated subjects, TimeSeries for temporal data.</li>
+<li>scikit-learn Pipeline = automatic train/test separation preservation.</li>
+<li>Leakage = enemy number 1. AUC &gt; 0.95 is suspicious.</li>
+</ul>
+<p>Next: class balancing and imbalance.</p>
+      <nav class="pager">
+<a href="23-pca-tsne-umap.html" class="prev"><span class="label">← Previous</span><span class="title">Dimensionality reduction: PCA, t-SNE, UMAP</span></a>
+<a href="25-class-imbalance.html" class="next"><span class="label">Next →</span><span class="title">Class imbalance</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Data Science Zero to Hero</strong> — complete path, in English, from math to deployment.</p><p>Open didactic material. Formulas are here to be understood, not feared. When a concept is unclear, go back: data science is a pyramid, not a tree you skip across.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+</body>
+</html>

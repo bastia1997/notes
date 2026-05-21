@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SageMaker — la piattaforma ML end-to-end — AWS Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#232f3e',primaryTextColor:'#ffffff',primaryBorderColor:'#ff9900',lineColor:'#8a99ad',background:'#0c1320'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">λ</div>
+      <div>
+        <div class="brand-title">AWS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">IT</span><a href="../en/pages/32-sagemaker-overview.html" class="lang-link" title="Switch to English">EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-cos-e-aws-cloud.html" class=""><span class="num">01</span>Cos&#x27;è il cloud e cos&#x27;è AWS</a></li><li class="nav-item"><a href="../pages/02-infrastruttura-globale.html" class=""><span class="num">02</span>Infrastruttura globale: Region, AZ, Edge</a></li><li class="nav-item"><a href="../pages/03-account-root-billing.html" class=""><span class="num">03</span>Account AWS, utente root, billing</a></li><li class="nav-item"><a href="../pages/04-iam-fondamenti.html" class=""><span class="num">04</span>IAM — fondamenti (utenti, gruppi, ruoli, policy)</a></li><li class="nav-item"><a href="../pages/05-iam-avanzato.html" class=""><span class="num">05</span>IAM avanzato: policy condizionali, STS, ABAC</a></li><li class="nav-item"><a href="../pages/06-cli-sdk-iac.html" class=""><span class="num">06</span>CLI, SDK, CloudShell, IaC primer</a></li><li class="nav-item"><a href="../pages/07-pricing-billing.html" class=""><span class="num">07</span>Pricing, billing, free tier, cost tools</a></li><li class="nav-item"><a href="../pages/08-organizations-multi-account.html" class=""><span class="num">08</span>AWS Organizations &amp; strategia multi-account</a></li><li class="nav-item"><a href="../pages/09-vpc-fondamenti.html" class=""><span class="num">09</span>VPC — fondamenti</a></li><li class="nav-item"><a href="../pages/10-vpc-avanzato.html" class=""><span class="num">10</span>VPC avanzato: peering, TGW, PrivateLink, endpoint</a></li><li class="nav-item"><a href="../pages/11-route53-cloudfront.html" class=""><span class="num">11</span>Route 53, CloudFront, Global Accelerator</a></li><li class="nav-item"><a href="../pages/12-hybrid-vpn-directconnect.html" class=""><span class="num">12</span>Hybrid: VPN, Direct Connect, PrivateLink</a></li><li class="nav-item"><a href="../pages/13-ec2-fondamenti.html" class=""><span class="num">13</span>EC2 — fondamenti (istanze, AMI, lifecycle)</a></li><li class="nav-item"><a href="../pages/14-ec2-avanzato-spot-nitro.html" class=""><span class="num">14</span>EC2 avanzato — Spot, Placement Groups, Nitro, hibernation</a></li><li class="nav-item"><a href="../pages/15-asg-elb.html" class=""><span class="num">15</span>Auto Scaling Groups + Elastic Load Balancing</a></li><li class="nav-item"><a href="../pages/16-lambda-deep-dive.html" class=""><span class="num">16</span>Lambda deep dive</a></li><li class="nav-item"><a href="../pages/17-containers-ecs-eks-fargate.html" class=""><span class="num">17</span>Containers: ECS, EKS, Fargate, ECR</a></li><li class="nav-item"><a href="../pages/18-specialty-compute.html" class=""><span class="num">18</span>Specialty compute: Batch, Lightsail, Outposts, Wavelength, Beanstalk</a></li><li class="nav-item"><a href="../pages/19-ebs-efs-fsx.html" class=""><span class="num">19</span>EBS, EFS, FSx, Instance Store</a></li><li class="nav-item"><a href="../pages/20-s3-deep-dive.html" class=""><span class="num">20</span>S3 — deep dive</a></li><li class="nav-item"><a href="../pages/21-archive-snow-gateway-backup.html" class=""><span class="num">21</span>Glacier, Snow, Storage Gateway, DataSync, AWS Backup</a></li><li class="nav-item"><a href="../pages/22-rds.html" class=""><span class="num">22</span>RDS — relational DB managed (engines, Multi-AZ, replicas, Proxy)</a></li><li class="nav-item"><a href="../pages/23-aurora-deep-dive.html" class=""><span class="num">23</span>Aurora deep dive — storage condiviso, Serverless v2, Global Database</a></li><li class="nav-item"><a href="../pages/24-dynamodb-deep-dive.html" class=""><span class="num">24</span>DynamoDB deep dive — partition, GSI, Streams, single-table</a></li><li class="nav-item"><a href="../pages/25-purpose-built-dbs.html" class=""><span class="num">25</span>Purpose-built DB — ElastiCache, MemoryDB, Neptune, DocumentDB, Keyspaces, Timestream, QLDB</a></li><li class="nav-item"><a href="../pages/26-redshift-data-warehousing.html" class=""><span class="num">26</span>Redshift — data warehousing MPP e zero-ETL</a></li><li class="nav-item"><a href="../pages/27-sqs-sns-eventbridge.html" class=""><span class="num">27</span>SQS, SNS, EventBridge — messaging ed eventi</a></li><li class="nav-item"><a href="../pages/28-step-functions-mq-appflow.html" class=""><span class="num">28</span>Step Functions, MQ, AppFlow — orchestrazione e integrazione</a></li><li class="nav-item"><a href="../pages/29-athena-glue-lakeformation.html" class=""><span class="num">29</span>Athena, Glue, Lake Formation — il data lake AWS</a></li><li class="nav-item"><a href="../pages/30-emr-kinesis-msk.html" class=""><span class="num">30</span>EMR, Kinesis, MSK — big data e streaming</a></li><li class="nav-item"><a href="../pages/31-opensearch-quicksight.html" class=""><span class="num">31</span>OpenSearch e QuickSight — search e BI</a></li><li class="nav-item"><a href="../pages/32-sagemaker-overview.html" class="active"><span class="num">32</span>SageMaker — la piattaforma ML end-to-end</a></li><li class="nav-item"><a href="../pages/33-bedrock-ai-services.html" class=""><span class="num">33</span>Bedrock e AI services — GenAI e ML managed</a></li><li class="nav-item"><a href="../pages/34-iac-cloudformation-cdk-terraform.html" class=""><span class="num">34</span>IaC su AWS — CloudFormation, CDK, SAM, Terraform</a></li><li class="nav-item"><a href="../pages/35-ci-cd-pipeline.html" class=""><span class="num">35</span>CI/CD su AWS — CodePipeline, CodeBuild, CodeDeploy, CodeCatalyst</a></li><li class="nav-item"><a href="../pages/36-observability-cloudwatch-xray.html" class=""><span class="num">36</span>Observability — CloudWatch, X-Ray, CloudTrail, Config, SSM</a></li><li class="nav-item"><a href="../pages/37-kms-secrets-acm.html" class=""><span class="num">37</span>Crittografia — KMS, CloudHSM, Secrets Manager, Parameter Store, ACM</a></li><li class="nav-item"><a href="../pages/38-waf-shield-guardduty-inspector.html" class=""><span class="num">38</span>Threat detection — WAF, Shield, GuardDuty, Inspector, Macie, Security Hub</a></li><li class="nav-item"><a href="../pages/39-governance-org-controltower-identitycenter.html" class=""><span class="num">39</span>Governance — Organizations, Control Tower, Identity Center</a></li><li class="nav-item"><a href="../pages/40-migration-mgn-dms-snow.html" class=""><span class="num">40</span>Migration — MGN, DMS, Snow family, Discovery, Migration Hub</a></li><li class="nav-item"><a href="../pages/41-cost-optimization-finops.html" class=""><span class="num">41</span>Cost optimization e FinOps</a></li><li class="nav-item"><a href="../pages/42-well-architected.html" class=""><span class="num">42</span>Well-Architected Framework — 6 pillar, lens, review</a></li><li class="nav-item"><a href="../pages/43-architecture-patterns.html" class=""><span class="num">43</span>Architecture patterns — 3-tier, serverless, event-driven, microservices</a></li><li class="nav-item"><a href="../pages/44-disaster-recovery-multi-region.html" class=""><span class="num">44</span>Disaster Recovery e Multi-Region</a></li><li class="nav-item"><a href="../pages/45-reference-architectures.html" class=""><span class="num">45</span>Reference architectures real-world</a></li><li class="nav-item"><a href="../pages/46-advanced-networking.html" class=""><span class="num">46</span>Advanced networking deep dive</a></li><li class="nav-item"><a href="../pages/47-containers-deep-dive.html" class=""><span class="num">47</span>Containers deep dive — EKS, Karpenter, service mesh</a></li><li class="nav-item"><a href="../pages/48-serverless-patterns.html" class=""><span class="num">48</span>Serverless patterns deep dive</a></li><li class="nav-item"><a href="../pages/49-genai-rag-agents.html" class=""><span class="num">49</span>Generative AI su AWS — RAG e Agents</a></li><li class="nav-item"><a href="../pages/50-certificazioni-aws.html" class=""><span class="num">50</span>Certificazioni AWS — roadmap e study guide</a></li><li class="nav-item"><a href="../pages/51-glossario-az.html" class=""><span class="num">51</span>Glossario A-Z</a></li><li class="nav-item"><a href="../pages/52-cheatsheet.html" class=""><span class="num">52</span>Cheat sheet: servizi, limiti, instance families</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">ML</span>
+        <span>Sezione 32 di 52</span>
+        <span class="level-tag level-adv">Livello: avanzato</span>
+      </div>
+      <h1>SageMaker — la piattaforma ML end-to-end</h1>
+      <p class="summary">Studio IDE, training distribuito, inference (real-time/serverless/async/batch), pipelines MLOps, feature store, monitoring, AutoML e JumpStart.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>ML</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>sezione 22</li><li>sezione 29</li></ul>
+  <div class="label">Strumenti / riferimenti</div>
+  <ul class="source-list"><li>SageMaker Studio</li><li>boto3 sagemaker</li></ul>
+</div>
+      <p>SageMaker è la piattaforma ML "tutto in uno" di AWS: dal notebook al modello in produzione, passando per training distribuito, feature store, monitoring, pipeline MLOps. È enorme: in questa sezione vediamo i pezzi essenziali e quando usarli.</p>
+<h2 id="1-sagemaker-studio">1. SageMaker Studio</h2>
+<p>IDE web basato su <strong>JupyterLab</strong> con:
+- spazio collaborativo per data scientist
+- accesso a notebook su istanze elastiche (ml.t3.medium → ml.p5.48xlarge)
+- terminal, debugger, profiler, code editor (Code Editor IDE), RStudio
+- integrazione git
+- <strong>Studio Lab</strong>: versione gratuita personale con CPU/GPU, account separato AWS</p>
+<p>Costo: paghi solo l'istanza notebook quando è running.</p>
+<h2 id="2-training">2. Training</h2>
+<pre><code class="language-mermaid">flowchart LR
+  S3in[(S3 training data)] --&gt;|input| Job[Training Job]
+  Code[Container immagine] --&gt; Job
+  Job --&gt;|model.tar.gz| S3out[(S3 artifacts)]
+  S3out --&gt; Registry[Model Registry]
+  Registry --&gt; EP[Endpoint deploy]
+</code></pre>
+<p>Tre approcci:</p>
+<table>
+<thead>
+<tr>
+<th>Approccio</th>
+<th>Quando</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Built-in algorithms</strong></td>
+<td>XGBoost, Linear Learner, Object Detection, Seq2Seq, k-NN — pronti</td>
+</tr>
+<tr>
+<td><strong>Script mode</strong> (framework container)</td>
+<td>tuo codice PyTorch / TF / HuggingFace dentro container AWS-managed</td>
+</tr>
+<tr>
+<td><strong>BYO container</strong></td>
+<td>container ECR custom con <code>train</code> come entrypoint</td>
+</tr>
+</tbody>
+</table>
+<p>Funzioni chiave:
+- <strong>Managed Spot Training</strong>: risparmio fino al <strong>90%</strong> sui job interrompibili (checkpointing su S3).
+- <strong>Distributed training</strong>: <strong>data parallel</strong> (SMDDP) e <strong>model parallel</strong> (SMP) per modelli che non stanno in una GPU.
+- <strong>SageMaker HyperPod</strong>: cluster persistenti GPU per training di foundation model giganti (settimane), con resilienza automatica.
+- <strong>Warm pool</strong>: tieni l'istanza calda per N minuti dopo il job per iterazioni rapide.</p>
+<pre><code class="language-python">import sagemaker
+from sagemaker.pytorch import PyTorch
+
+est = PyTorch(
+    entry_point=&quot;train.py&quot;,
+    role=role,
+    instance_type=&quot;ml.p4d.24xlarge&quot;,
+    instance_count=4,
+    framework_version=&quot;2.3&quot;,
+    distribution={&quot;torch_distributed&quot;: {&quot;enabled&quot;: True}},
+    use_spot_instances=True, max_wait=7200, max_run=3600,
+    checkpoint_s3_uri=&quot;s3://my-bucket/ckpt/&quot;
+)
+est.fit({&quot;train&quot;: &quot;s3://my-bucket/train/&quot;})
+</code></pre>
+<h2 id="3-inference-quattro-opzioni">3. Inference: quattro opzioni</h2>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Latenza</th>
+<th>Costo</th>
+<th>Use case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Real-time endpoint</strong></td>
+<td>&lt; 100 ms</td>
+<td>istanza 24/7</td>
+<td>API sincrona, traffico costante</td>
+</tr>
+<tr>
+<td><strong>Serverless inference</strong></td>
+<td>cold start 1-5 s, poi &lt; 100 ms</td>
+<td>pay-per-request</td>
+<td>traffico variabile / intermittente</td>
+</tr>
+<tr>
+<td><strong>Asynchronous inference</strong></td>
+<td>secondi-minuti</td>
+<td>istanza scala a 0 quando vuoto</td>
+<td>payload grandi (1 GB), processing lungo</td>
+</tr>
+<tr>
+<td><strong>Batch transform</strong></td>
+<td>offline</td>
+<td>job temporaneo</td>
+<td>predict massivo su dataset (no endpoint)</td>
+</tr>
+</tbody>
+</table>
+<p>Plus:
+- <strong>Multi-model endpoint</strong>: N modelli sulla stessa istanza, caricati on-demand.
+- <strong>Multi-container endpoint</strong>: pipeline di container in sequenza/parallelo.
+- <strong>Inference Recommender</strong>: benchmarka istanze per latenza/cost.
+- <strong>Shadow testing</strong>: invia % traffico a un nuovo modello senza esporlo agli utenti.</p>
+<h2 id="4-mlops-pipelines-registry-monitor">4. MLOps: Pipelines, Registry, Monitor</h2>
+<ul>
+<li><strong>SageMaker Pipelines</strong>: DAG di step (preprocess, train, eval, register, deploy) versionato, integrato con CI/CD. Sostituisce Step Functions per workflow ML.</li>
+<li><strong>Model Registry</strong>: catalogo modelli con versioning, approval workflow, lineage.</li>
+<li><strong>Model Monitor</strong>: rileva <strong>data drift</strong>, <strong>model drift</strong>, <strong>bias drift</strong>, <strong>feature attribution drift</strong> in produzione. Schedula baseline → confronto periodico.</li>
+<li><strong>Clarify</strong>: bias detection pre-training e post-training, explainability (SHAP).</li>
+</ul>
+<h2 id="5-feature-store">5. Feature Store</h2>
+<p>Repository centralizzato di feature ML, <strong>online</strong> (DynamoDB, low-latency) + <strong>offline</strong> (S3 Parquet, storia). Risolve il classico "training/serving skew": il codice di estrazione feature è uno solo, sia per training (batch) che per inference (real-time).</p>
+<h2 id="6-ground-truth-e-automl">6. Ground Truth e AutoML</h2>
+<ul>
+<li><strong>Ground Truth</strong>: labeling managed (Mechanical Turk, vendor o team interno). Active learning per ridurre il labeling necessario.</li>
+<li><strong>Autopilot</strong>: AutoML tabulare (regression/classification/time series). Genera notebook ispezionabili.</li>
+<li><strong>Canvas</strong>: AutoML <strong>no-code</strong> per analisti business, con generative AI per modelli ready-made.</li>
+<li><strong>JumpStart</strong>: catalogo di foundation model (Llama, Mistral, Stable Diffusion, ecc.) e soluzioni one-click. Deploy in 2 click.</li>
+</ul>
+<h2 id="7-costi-gotcha">7. Costi &amp; gotcha</h2>
+<ul>
+<li>Notebook lasciato acceso 24/7 = costo silenzioso. Configurare <strong>idle shutdown</strong> in Studio.</li>
+<li>Endpoint real-time = istanza che paghi anche se zero richieste. Per traffico irregolare passa a <strong>Serverless</strong> o <strong>Async</strong>.</li>
+<li>Training su istanze p4d/p5 senza Spot = bruciare cassa.</li>
+<li>Multi-model endpoint conviene quando hai centinaia di modelli simili con traffico sparso.</li>
+<li>Per RAG e LLM custom valuta <strong>Bedrock</strong> prima (sezione 33): SageMaker custom solo se serve fine-tuning profondo o modelli non sul catalogo.</li>
+</ul>
+<h2 id="8-esercizio">8. Esercizio</h2>
+<details>
+<summary>Devi servire 50 modelli XGBoost (uno per tenant), traffico totale 100 req/min sparso. Architettura SageMaker?</summary>
+
+**Multi-model endpoint** su singola istanza ml.m5.large (o due in multi-AZ). I 50 modelli stanno su S3, vengono caricati on-demand in cache LRU. Costo: 1-2 istanze invece di 50. Alternativa **Serverless inference** se traffico molto sporadico. Real-time endpoint dedicato per ogni tenant = anti-pattern: 50 istanze 24/7 = €€€.
+</details>
+
+<details>
+<summary>Training di un modello custom da 10B parametri. Cluster ottimale?</summary>
+
+**SageMaker HyperPod** con 16-64 ml.p5.48xlarge (8x H100), distributed training via **SMP** (model parallel) + **SMDDP** (data parallel). FSx for Lustre come storage condiviso ad alta banda per i checkpoint. Spot non adatto: i job sono lunghi e l'interruzione fa perdere ore. HyperPod gestisce node failure recovery automatico.
+</details>
+
+<blockquote>
+<p><strong>Riassunto</strong>: SageMaker = piattaforma ML end-to-end. Studio per dev, Training con Spot e distributed (HyperPod per foundation model), Inference in 4 sapori (real-time, serverless, async, batch), Pipelines + Registry + Monitor per MLOps, Feature Store contro training/serving skew, AutoML (Autopilot, Canvas, JumpStart). Per LLM e RAG valuta Bedrock prima di andare custom.</p>
+</blockquote>
+      <nav class="pager">
+<a href="31-opensearch-quicksight.html" class="prev"><span class="label">← Precedente</span><span class="title">OpenSearch e QuickSight — search e BI</span></a>
+<a href="33-bedrock-ai-services.html" class="next"><span class="label">Successivo →</span><span class="title">Bedrock e AI services — GenAI e ML managed</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>AWS Zero to Hero</strong> — percorso completo, in italiano, dalle primitive all'architettura avanzata.</p><p>Materiale didattico aperto. Nessuna sponsorizzazione, nessun affiliate link, nessuna affiliazione con AWS. Quando un concetto è oscuro, torna indietro: AWS è una piramide di primitive, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

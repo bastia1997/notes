@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MLOps: deployment, monitoring, drift — Data Science Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#3a4a7a',primaryTextColor:'#e8eef0',primaryBorderColor:'#5a6aa0',lineColor:'#8a9499',background:'#11171a'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">Σ</div>
+      <div>
+        <div class="brand-title">DATA SCIENCE</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/34-mlops.html" class="lang-link" title="Passa all'italiano">🇮🇹 IT</a><span class="lang-active" title="English">🇬🇧 EN</span></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="search... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-what-is-data-science.html" class=""><span class="num">01</span>What is data science (and what isn&#x27;t)</a></li><li class="nav-item"><a href="../pages/02-python-for-data-science.html" class=""><span class="num">02</span>Python for data science: pro setup</a></li><li class="nav-item"><a href="../pages/02b-math-essentials.html" class=""><span class="num">02b</span>High-school math you actually need</a></li><li class="nav-item"><a href="../pages/03-linear-algebra.html" class=""><span class="num">03</span>Linear algebra for data scientists</a></li><li class="nav-item"><a href="../pages/04-calculus-optimization.html" class=""><span class="num">04</span>Calculus, gradients, and optimization</a></li><li class="nav-item"><a href="../pages/05-probability.html" class=""><span class="num">05</span>Probability: the language of uncertainty</a></li><li class="nav-item"><a href="../pages/06-descriptive-statistics.html" class=""><span class="num">06</span>Descriptive statistics</a></li><li class="nav-item"><a href="../pages/07-inferential-statistics.html" class=""><span class="num">07</span>Inferential statistics and hypothesis testing</a></li><li class="nav-item"><a href="../pages/08-distributions.html" class=""><span class="num">08</span>Probability distributions you&#x27;ll meet</a></li><li class="nav-item"><a href="../pages/09-numpy.html" class=""><span class="num">09</span>NumPy: thinking in arrays</a></li><li class="nav-item"><a href="../pages/10-pandas.html" class=""><span class="num">10</span>Pandas: the swiss army knife</a></li><li class="nav-item"><a href="../pages/11-sql.html" class=""><span class="num">11</span>SQL for data scientists</a></li><li class="nav-item"><a href="../pages/12-visualization.html" class=""><span class="num">12</span>Visualization: matplotlib, seaborn, plotly</a></li><li class="nav-item"><a href="../pages/13-data-wrangling.html" class=""><span class="num">13</span>Cleaning and data wrangling</a></li><li class="nav-item"><a href="../pages/14-feature-engineering.html" class=""><span class="num">14</span>Feature engineering</a></li><li class="nav-item"><a href="../pages/15-eda.html" class=""><span class="num">15</span>EDA: Exploratory Data Analysis</a></li><li class="nav-item"><a href="../pages/16-ml-fundamentals.html" class=""><span class="num">16</span>ML: fundamentals — bias, variance, validation</a></li><li class="nav-item"><a href="../pages/17-linear-regression.html" class=""><span class="num">17</span>Linear regression and regularization</a></li><li class="nav-item"><a href="../pages/18-logistic-regression.html" class=""><span class="num">18</span>Logistic regression and classification</a></li><li class="nav-item"><a href="../pages/19-knn-naive-bayes-svm.html" class=""><span class="num">19</span>KNN, Naive Bayes, SVM</a></li><li class="nav-item"><a href="../pages/20-decision-trees.html" class=""><span class="num">20</span>Decision trees</a></li><li class="nav-item"><a href="../pages/21-random-forest-boosting.html" class=""><span class="num">21</span>Random Forest, Gradient Boosting, XGBoost</a></li><li class="nav-item"><a href="../pages/22-clustering.html" class=""><span class="num">22</span>Clustering: K-Means, DBSCAN, GMM, hierarchical</a></li><li class="nav-item"><a href="../pages/23-pca-tsne-umap.html" class=""><span class="num">23</span>Dimensionality reduction: PCA, t-SNE, UMAP</a></li><li class="nav-item"><a href="../pages/24-metrics-validation.html" class=""><span class="num">24</span>Metrics, cross-validation, leakage</a></li><li class="nav-item"><a href="../pages/25-class-imbalance.html" class=""><span class="num">25</span>Class imbalance</a></li><li class="nav-item"><a href="../pages/26-hyperparameter-tuning.html" class=""><span class="num">26</span>Hyperparameter tuning</a></li><li class="nav-item"><a href="../pages/27-neural-networks.html" class=""><span class="num">27</span>Neural networks: from fundamentals to backprop</a></li><li class="nav-item"><a href="../pages/28-pytorch.html" class=""><span class="num">28</span>PyTorch: from toy model to training loop</a></li><li class="nav-item"><a href="../pages/29-cnn.html" class=""><span class="num">29</span>CNN for computer vision</a></li><li class="nav-item"><a href="../pages/30-rnn-lstm.html" class=""><span class="num">30</span>RNN, LSTM, GRU for sequences</a></li><li class="nav-item"><a href="../pages/31-transformer.html" class=""><span class="num">31</span>Transformer and attention</a></li><li class="nav-item"><a href="../pages/32-nlp-llm.html" class=""><span class="num">32</span>NLP: from text mining to LLMs</a></li><li class="nav-item"><a href="../pages/33-time-series.html" class=""><span class="num">33</span>Time series and forecasting</a></li><li class="nav-item"><a href="../pages/34-mlops.html" class="active"><span class="num">34</span>MLOps: deployment, monitoring, drift</a></li><li class="nav-item"><a href="../pages/35-bayesian-causal.html" class=""><span class="num">35</span>Bayesian and Causal Inference</a></li><li class="nav-item"><a href="../pages/36-capstone-career.html" class=""><span class="num">36</span>Capstone, portfolio, career</a></li><li class="nav-item"><a href="../pages/37-glossary.html" class=""><span class="num">37</span>Glossary A-Z</a></li><li class="nav-item"><a href="../pages/38-formula-sheet.html" class=""><span class="num">38</span>Formula Sheet: all the formulas from the course</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Production</span>
+        <span>Section 35 of 39</span>
+        <span class="level-tag level-adv">Level: advanced</span>
+      </div>
+      <h1>MLOps: deployment, monitoring, drift</h1>
+      <p class="summary">From Jupyter to production. Data and model versioning, CI/CD, feature drift and performance drift monitoring.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Production</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>[[python-per-data-science]]</li></ul>
+  <div class="label">Tools</div>
+  <ul class="source-list"><li>Docker, MLflow, FastAPI, DVC, Evidently</li></ul>
+</div>
+      <h2 id="what-changes-in-production">What changes in production</h2>
+<p>A model in Jupyter is an experiment. In production:</p>
+<ul>
+<li>It must be <strong>called</strong> by other systems (API).</li>
+<li>It must be <strong>reproducible</strong> (who knows which version is running?).</li>
+<li>It must be <strong>monitored</strong> (are predictions still performing well?).</li>
+<li>It must be <strong>updatable</strong> (retraining, rollback).</li>
+<li>It must <strong>scale</strong> (1 request or 10000/sec).</li>
+</ul>
+<p>90% of "data science" models never reach production. Those that do often arrive without a solid framework.</p>
+<h2 id="the-4-mlops-phases">The 4 MLOps phases</h2>
+<pre><code class="language-mermaid">flowchart LR
+    A[1. Versioning&lt;br/&gt;code + data + model] --&gt; B[2. CI/CD&lt;br/&gt;automated training]
+    B --&gt; C[3. Deploy&lt;br/&gt;serving]
+    C --&gt; D[4. Monitor&lt;br/&gt;drift + perf]
+    D --&gt;|trigger retrain| A
+</code></pre>
+<h2 id="1-versioning">1. Versioning</h2>
+<h3 id="code">Code</h3>
+<p>Git. Nothing new. Every model = a commit hash.</p>
+<h3 id="data">Data</h3>
+<p>Data is too large for git. Solutions:</p>
+<ul>
+<li><strong>DVC</strong> (Data Version Control): metadata in git, data in storage (S3/GCS).</li>
+<li><strong>LakeFS</strong>: git-like for object storage.</li>
+<li><strong>MLflow</strong> has dataset versioning.</li>
+</ul>
+<pre><code class="language-bash">dvc init
+dvc add data/raw/transactions.csv
+git add data/raw/transactions.csv.dvc .gitignore
+git commit -m &quot;track raw data v1&quot;
+dvc push    # upload to storage
+</code></pre>
+<h3 id="models">Models</h3>
+<ul>
+<li><strong>MLflow Model Registry</strong>: versions, stages (Staging, Production, Archived).</li>
+<li><strong>Weights &amp; Biases (W&amp;B)</strong>: experiment tracking + registry.</li>
+<li><strong>Neptune.ai, ClearML</strong>: alternatives.</li>
+</ul>
+<pre><code class="language-python">import mlflow
+mlflow.set_experiment(&quot;churn_model&quot;)
+with mlflow.start_run():
+    mlflow.log_params({'C': 0.5, 'penalty': 'l2'})
+    mlflow.log_metric('auc', 0.83)
+    mlflow.sklearn.log_model(model, &quot;model&quot;)
+</code></pre>
+<h2 id="2-cicd-for-ml">2. CI/CD for ML</h2>
+<p>An ML pipeline is:</p>
+<pre><code class="language-mermaid">flowchart LR
+    P[Git push] --&gt; T[Test + lint] --&gt; D[Data validation] --&gt; TR[Train] --&gt; E[Eval] --&gt; R[Register if metrics ok] --&gt; DEP[Deploy]
+    E --&gt;|metric worsens| F[Fail build]
+</code></pre>
+<p>Tools:
+- <strong>GitHub Actions / GitLab CI</strong> for orchestration.
+- <strong>Kubeflow / Argo / Airflow</strong> for complex pipelines.
+- <strong>DAG-orchestrated training</strong> in production (e.g., dbt + Airflow).</p>
+<h2 id="3-deploy-serving-a-model">3. Deploy: serving a model</h2>
+<h3 id="case-1-batch-prediction">Case 1 — Batch prediction</h3>
+<p>Run the model every night/hour on a batch of rows, save results to DB. Used for: customer base scoring, recommender refresh.</p>
+<pre><code class="language-python"># Python script scheduled (Airflow / cron)
+model = joblib.load(&quot;model.pkl&quot;)
+preds = model.predict(load_customers())
+save_to_db(preds)
+</code></pre>
+<p>Simple and robust. <strong>When you can, use batch</strong>.</p>
+<h3 id="case-2-online-api">Case 2 — Online / API</h3>
+<p>Real-time: receive a request, predict on the fly, respond.</p>
+<pre><code class="language-python"># FastAPI server
+from fastapi import FastAPI
+from pydantic import BaseModel
+import joblib
+
+app = FastAPI()
+model = joblib.load(&quot;model.pkl&quot;)
+
+class Request(BaseModel):
+    age: int
+    income: float
+    n_orders: int
+
+@app.post(&quot;/predict&quot;)
+def predict(req: Request):
+    X = [[req.age, req.income, req.n_orders]]
+    proba = model.predict_proba(X)[0, 1]
+    return {&quot;probability&quot;: float(proba)}
+</code></pre>
+<p>Run: <code>uvicorn main:app --host 0.0.0.0 --port 8000</code>.</p>
+<h3 id="containerization">Containerization</h3>
+<p>Docker for reproducibility:</p>
+<pre><code class="language-dockerfile">FROM python:3.11-slim
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY . .
+CMD [&quot;uvicorn&quot;, &quot;main:app&quot;, &quot;--host&quot;, &quot;0.0.0.0&quot;, &quot;--port&quot;, &quot;8000&quot;]
+</code></pre>
+<h3 id="orchestration">Orchestration</h3>
+<p>For serious production: <strong>Kubernetes</strong> + Helm chart, or managed services:</p>
+<ul>
+<li><strong>AWS SageMaker / GCP Vertex AI / Azure ML</strong>: training + serving + monitoring.</li>
+<li><strong>Modal, Replicate, BentoML</strong>: serverless for ML.</li>
+<li><strong>TorchServe, Triton</strong>: optimized serving for NNs.</li>
+</ul>
+<h2 id="4-monitoring">4. Monitoring</h2>
+<p>The most neglected piece. Three things to monitor:</p>
+<h3 id="model-performance">Model performance</h3>
+<p>Is AUC dropping? Are requests failing? Is latency exploding? Logging + Prometheus + Grafana.</p>
+<h3 id="data-drift">Data drift</h3>
+<p>Have the distributions of input features changed compared to training distributions?</p>
+<ul>
+<li><strong>Univariate drift</strong>: PSI (Population Stability Index), KS test.</li>
+<li><strong>Multivariate drift</strong>: classifier-based (train a model that distinguishes train from prod).</li>
+</ul>
+<pre><code class="language-python">from evidently.report import Report
+from evidently.metric_preset import DataDriftPreset
+report = Report(metrics=[DataDriftPreset()])
+report.run(reference_data=train_df, current_data=prod_df)
+report.show()
+</code></pre>
+<h3 id="concept-drift">Concept drift</h3>
+<p>Even if features do not change, the <strong>relationship</strong> features→target can change. E.g.: before COVID, "time spent online" predicted a certain behavior; afterward, it no longer does.</p>
+<p>Detection: monitor <strong>online</strong> metrics (requires labels, even deferred ones).</p>
+<h2 id="feature-store">Feature store</h2>
+<p>For complex models, features are centralized in a <strong>feature store</strong>: unified definition, online (low-latency) + offline (batch), guarantees <strong>train-serve consistency</strong>.</p>
+<p>Tools: <strong>Feast</strong> (open), <strong>Tecton, Hopsworks</strong> (managed).</p>
+<p>Pattern:</p>
+<pre><code class="language-mermaid">flowchart LR
+    O[Operational DB] --&gt; ETL[ETL] --&gt; OFFLINE[Offline Store&lt;br/&gt;for training]
+    ETL --&gt; ONLINE[Online Store&lt;br/&gt;Redis/DynamoDB]
+    OFFLINE --&gt; TRAIN[Training pipeline]
+    ONLINE --&gt; SERVE[Serving API]
+</code></pre>
+<h2 id="ab-testing-and-shadow-deployment">A/B testing and shadow deployment</h2>
+<p>When updating a model, do <strong>not</strong> roll it out to 100% of traffic at once:</p>
+<ul>
+<li><strong>Shadow mode</strong>: the new model receives traffic but predictions are NOT used, only logged. Offline comparison.</li>
+<li><strong>A/B test</strong>: 10% traffic to the new model, 90% to the old. Compare business metrics.</li>
+<li><strong>Canary</strong>: 1% initially, scale up if OK.</li>
+<li><strong>Bandit</strong>: dynamically allocates based on performance.</li>
+</ul>
+<h2 id="reproducibility">Reproducibility</h2>
+<p>To reconstruct an exact model:</p>
+<ul>
+<li><strong>Code</strong>: git commit.</li>
+<li><strong>Dependencies</strong>: frozen requirements / poetry.lock.</li>
+<li><strong>Data</strong>: DVC commit hash.</li>
+<li><strong>Random seed</strong>: fixed (NumPy, torch).</li>
+<li><strong>Hardware</strong>: even GPUs can produce differences between A100 and V100.</li>
+</ul>
+<pre><code class="language-python">import random, numpy as np, torch
+def seed_all(s=42):
+    random.seed(s); np.random.seed(s); torch.manual_seed(s)
+    torch.cuda.manual_seed_all(s)
+    torch.backends.cudnn.deterministic = True
+</code></pre>
+<h2 id="guidelines">Guidelines</h2>
+<ol>
+<li><strong>Start with batch</strong>, move to online only if needed.</li>
+<li><strong>Log predictions and inputs</strong> always (privacy-compatible).</li>
+<li><strong>Version models and data</strong> from day 1.</li>
+<li><strong>Monitor drift</strong> before SLAs degrade.</li>
+<li><strong>Reproducibility &gt; perfection</strong>: a mediocre reproducible model is better than a super-accurate one you've lost.</li>
+</ol>
+<h2 id="exercises">Exercises</h2>
+<details>
+<summary>Exercise 1 — FastAPI + Docker</summary>
+
+1. Train a simple sklearn model (e.g., iris classifier).
+2. Save with joblib.
+3. Create a FastAPI app with a `/predict` endpoint.
+4. Containerize with Docker.
+5. Run: `docker run -p 8000:8000 my-model`.
+6. Call: `curl -X POST http://localhost:8000/predict -d '{"sepal_length":5.1,...}'`.
+</details>
+
+<details>
+<summary>Exercise 2 — MLflow tracking</summary>
+
+
+<pre><code class="language-python">import mlflow
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import roc_auc_score
+
+mlflow.set_experiment(&quot;rf_tuning&quot;)
+for n in [50, 100, 300, 500]:
+    with mlflow.start_run():
+        m = RandomForestClassifier(n_estimators=n).fit(X_tr, y_tr)
+        auc = roc_auc_score(y_val, m.predict_proba(X_val)[:, 1])
+        mlflow.log_param(&quot;n_estimators&quot;, n)
+        mlflow.log_metric(&quot;auc&quot;, auc)
+        mlflow.sklearn.log_model(m, &quot;model&quot;)
+</code></pre>
+
+
+Open `mlflow ui` → see all experiments.
+</details>
+
+<details>
+<summary>Exercise 3 — Drift detection with Evidently</summary>
+
+
+<pre><code class="language-python">import pandas as pd
+from evidently.report import Report
+from evidently.metric_preset import DataDriftPreset, RegressionPreset
+reference = train_df
+current = prod_df
+report = Report(metrics=[DataDriftPreset()])
+report.run(reference_data=reference, current_data=current)
+report.save_html(&quot;drift.html&quot;)
+</code></pre>
+
+
+Open the HTML: for each feature, see the drift test p-value.
+</details>
+
+<h2 id="key-takeaways">Key takeaways</h2>
+<ul>
+<li>Batch &gt; online when possible.</li>
+<li>Version code + data + models.</li>
+<li>Monitor data drift + model drift continuously.</li>
+<li>Shadow + A/B test for updates.</li>
+<li>MLflow / W&amp;B for tracking, FastAPI + Docker for serving, Evidently for drift.</li>
+</ul>
+<p>Next up: Bayesian methods and causal inference.</p>
+      <nav class="pager">
+<a href="33-time-series.html" class="prev"><span class="label">← Previous</span><span class="title">Time series and forecasting</span></a>
+<a href="35-bayesian-causal.html" class="next"><span class="label">Next →</span><span class="title">Bayesian and Causal Inference</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Data Science Zero to Hero</strong> — complete path, in English, from math to deployment.</p><p>Open didactic material. Formulas are here to be understood, not feared. When a concept is unclear, go back: data science is a pyramid, not a tree you skip across.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+</body>
+</html>

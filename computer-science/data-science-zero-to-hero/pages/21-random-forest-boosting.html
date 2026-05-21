@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Random Forest, Gradient Boosting, XGBoost — Data Science Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#3a4a7a',primaryTextColor:'#e8eef0',primaryBorderColor:'#5a6aa0',lineColor:'#8a9499',background:'#11171a'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">Σ</div>
+      <div>
+        <div class="brand-title">DATA SCIENCE</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">🇮🇹 IT</span><a href="../en/pages/21-random-forest-boosting.html" class="lang-link" title="Switch to English">🇬🇧 EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-cos-e-data-science.html" class=""><span class="num">01</span>Cos&#x27;è la data science (e cosa non è)</a></li><li class="nav-item"><a href="../pages/02-python-per-data-science.html" class=""><span class="num">02</span>Python per data science: setup professionale</a></li><li class="nav-item"><a href="../pages/02b-matematica-essenziale.html" class=""><span class="num">02b</span>Matematica del liceo che ti serve davvero</a></li><li class="nav-item"><a href="../pages/03-algebra-lineare.html" class=""><span class="num">03</span>Algebra lineare per data scientist</a></li><li class="nav-item"><a href="../pages/04-calcolo-ottimizzazione.html" class=""><span class="num">04</span>Calcolo, gradiente e ottimizzazione</a></li><li class="nav-item"><a href="../pages/05-probabilita.html" class=""><span class="num">05</span>Probabilità: la lingua dell&#x27;incertezza</a></li><li class="nav-item"><a href="../pages/06-statistica-descrittiva.html" class=""><span class="num">06</span>Statistica descrittiva</a></li><li class="nav-item"><a href="../pages/07-statistica-inferenziale.html" class=""><span class="num">07</span>Statistica inferenziale e test di ipotesi</a></li><li class="nav-item"><a href="../pages/08-distribuzioni.html" class=""><span class="num">08</span>Distribuzioni di probabilità che incontrerai</a></li><li class="nav-item"><a href="../pages/09-numpy.html" class=""><span class="num">09</span>NumPy: pensare in array</a></li><li class="nav-item"><a href="../pages/10-pandas.html" class=""><span class="num">10</span>Pandas: il coltellino svizzero</a></li><li class="nav-item"><a href="../pages/11-sql.html" class=""><span class="num">11</span>SQL per data scientist</a></li><li class="nav-item"><a href="../pages/12-visualizzazione.html" class=""><span class="num">12</span>Visualizzazione: matplotlib, seaborn, plotly</a></li><li class="nav-item"><a href="../pages/13-data-wrangling.html" class=""><span class="num">13</span>Pulizia e data wrangling</a></li><li class="nav-item"><a href="../pages/14-feature-engineering.html" class=""><span class="num">14</span>Feature engineering</a></li><li class="nav-item"><a href="../pages/15-eda.html" class=""><span class="num">15</span>EDA: Exploratory Data Analysis</a></li><li class="nav-item"><a href="../pages/16-ml-fondamenti.html" class=""><span class="num">16</span>ML: fondamenti — bias, varianza, validazione</a></li><li class="nav-item"><a href="../pages/17-regressione-lineare.html" class=""><span class="num">17</span>Regressione lineare e regolarizzazione</a></li><li class="nav-item"><a href="../pages/18-regressione-logistica.html" class=""><span class="num">18</span>Regressione logistica e classificazione</a></li><li class="nav-item"><a href="../pages/19-knn-naive-bayes-svm.html" class=""><span class="num">19</span>KNN, Naive Bayes, SVM</a></li><li class="nav-item"><a href="../pages/20-alberi-decisionali.html" class=""><span class="num">20</span>Alberi decisionali</a></li><li class="nav-item"><a href="../pages/21-random-forest-boosting.html" class="active"><span class="num">21</span>Random Forest, Gradient Boosting, XGBoost</a></li><li class="nav-item"><a href="../pages/22-clustering.html" class=""><span class="num">22</span>Clustering: K-Means, DBSCAN, GMM, gerarchico</a></li><li class="nav-item"><a href="../pages/23-pca-tsne-umap.html" class=""><span class="num">23</span>Riduzione dimensionale: PCA, t-SNE, UMAP</a></li><li class="nav-item"><a href="../pages/24-metriche-validazione.html" class=""><span class="num">24</span>Metriche, cross-validation, leakage</a></li><li class="nav-item"><a href="../pages/25-sbilanciamento-classi.html" class=""><span class="num">25</span>Sbilanciamento di classi</a></li><li class="nav-item"><a href="../pages/26-hyperparameter-tuning.html" class=""><span class="num">26</span>Hyperparameter tuning</a></li><li class="nav-item"><a href="../pages/27-reti-neurali.html" class=""><span class="num">27</span>Reti neurali: dalle basi al backprop</a></li><li class="nav-item"><a href="../pages/28-pytorch.html" class=""><span class="num">28</span>PyTorch: dal toy model al training loop</a></li><li class="nav-item"><a href="../pages/29-cnn.html" class=""><span class="num">29</span>CNN per computer vision</a></li><li class="nav-item"><a href="../pages/30-rnn-lstm.html" class=""><span class="num">30</span>RNN, LSTM, GRU per sequenze</a></li><li class="nav-item"><a href="../pages/31-transformer.html" class=""><span class="num">31</span>Transformer e attention</a></li><li class="nav-item"><a href="../pages/32-nlp-llm.html" class=""><span class="num">32</span>NLP: dal text mining ai LLM</a></li><li class="nav-item"><a href="../pages/33-time-series.html" class=""><span class="num">33</span>Time series e forecasting</a></li><li class="nav-item"><a href="../pages/34-mlops.html" class=""><span class="num">34</span>MLOps: deployment, monitoring, drift</a></li><li class="nav-item"><a href="../pages/35-bayesian-causal.html" class=""><span class="num">35</span>Inferenza bayesiana e causale</a></li><li class="nav-item"><a href="../pages/36-capstone-carriera.html" class=""><span class="num">36</span>Capstone, portfolio, carriera</a></li><li class="nav-item"><a href="../pages/37-glossario.html" class=""><span class="num">37</span>Glossario A-Z</a></li><li class="nav-item"><a href="../pages/38-formulario.html" class=""><span class="num">38</span>Formulario: tutte le formule del percorso</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Machine Learning</span>
+        <span>Sezione 22 di 39</span>
+        <span class="level-tag level-int">Livello: intermedio</span>
+      </div>
+      <h1>Random Forest, Gradient Boosting, XGBoost</h1>
+      <p class="summary">Bagging vs boosting, XGBoost / LightGBM / CatBoost. I modelli che vincono Kaggle e dominano il tabular ML.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Machine Learning</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>[[alberi-decisionali]]</li></ul>
+  <div class="label">Strumenti</div>
+  <ul class="source-list"><li>scikit-learn, xgboost, lightgbm, catboost</li></ul>
+</div>
+      <h2 id="ensemble-due-filosofie">Ensemble: due filosofie</h2>
+<pre><code class="language-mermaid">flowchart LR
+    subgraph BAG[Bagging - in parallelo]
+        B1[Tree 1] --&gt; V[Vote / mean]
+        B2[Tree 2] --&gt; V
+        B3[Tree N] --&gt; V
+    end
+    subgraph BOOST[Boosting - sequenziale]
+        T1[Tree 1] --&gt; T2[Tree 2: corregge T1]
+        T2 --&gt; T3[Tree 3: corregge 1+2]
+        T3 --&gt; TN[...]
+    end
+</code></pre>
+<ul>
+<li><strong>Bagging</strong> (Bootstrap AGGregating): allena modelli indipendenti su bootstrap del training set, media i risultati. Riduce <strong>varianza</strong>.</li>
+<li><strong>Boosting</strong>: allena modelli in sequenza, ognuno corregge errori del precedente. Riduce <strong>bias</strong> (e anche varianza, se ben regolarizzato).</li>
+</ul>
+<h2 id="random-forest">Random Forest</h2>
+<p>Bagging di alberi, con un twist: ad ogni split, considera solo un <strong>sottoinsieme casuale</strong> delle feature. Decorrelare gli alberi rende la media più potente.</p>
+<h3 id="algoritmo">Algoritmo</h3>
+<pre><code>per b = 1..B:
+    campiona n esempi con rimpiazzo (bootstrap)
+    fai crescere un albero profondo:
+        ad ogni split, considera solo k feature random tra p
+predizione = media (regressione) o voto (classificazione) dei B alberi
+</code></pre>
+<h3 id="iperparametri-principali">Iperparametri principali</h3>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Effetto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>n_estimators</code></td>
+<td>numero di alberi. Più = meglio (rendimento decrescente). 200–1000 OK.</td>
+</tr>
+<tr>
+<td><code>max_features</code></td>
+<td>$k$ per split. Per classification ~$\sqrt{p}$, per regression ~$p/3$.</td>
+</tr>
+<tr>
+<td><code>max_depth</code></td>
+<td>profondità max. <code>None</code> = senza limite.</td>
+</tr>
+<tr>
+<td><code>min_samples_leaf</code></td>
+<td>foglia minima. 1–5 default; aumenta per regolarizzare.</td>
+</tr>
+<tr>
+<td><code>n_jobs</code></td>
+<td>parallelismo (multi-core). <code>-1</code> = tutti i core.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="vantaggi">Vantaggi</h3>
+<ul>
+<li>Funziona benissimo "out of the box" senza tuning serio.</li>
+<li>Robusto agli outlier.</li>
+<li>Niente scaling necessario.</li>
+<li>Gestisce categoriche con encoding base.</li>
+<li>Stima out-of-bag dell'errore (gratis).</li>
+</ul>
+<h3 id="quando-non-usarlo">Quando NON usarlo</h3>
+<ul>
+<li>$n$ enorme con tante feature → lento.</li>
+<li>Vuoi probabilità calibrate → mediocre.</li>
+<li>Dati strutturati di immagini, testi, sequenze → NN meglio.</li>
+</ul>
+<h2 id="gradient-boosting-idea">Gradient Boosting (idea)</h2>
+<p>Costruisci modello $F(x)$ incrementale:</p>
+<p>$$F_m(x) = F_{m-1}(x) + \eta \cdot h_m(x)$$</p>
+<p>dove $h_m$ è un <strong>debole</strong> (di solito un albero piccolo) che approssima il gradiente negativo della loss rispetto a $F_{m-1}$. In pratica, $h_m$ predice i <strong>residui</strong>:</p>
+<p>$$h_m(x) \approx -\frac{\partial L}{\partial F(x)}\bigg|<em m-1="m-1">{F=F</em>$$}</p>
+<p>Per MSE, il gradiente è $-(y - F(x))$ = residuo. Quindi: ogni nuovo albero impara a correggere ciò che il modello finora sbaglia.</p>
+<h3 id="xgboost-lightgbm-catboost">XGBoost, LightGBM, CatBoost</h3>
+<p>Tre implementazioni moderne, ottimizzate, di gradient boosting su alberi. Battono in genere RF e tutto il resto su dati tabellari.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>XGBoost</th>
+<th>LightGBM</th>
+<th>CatBoost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Velocità training</td>
+<td>rapido</td>
+<td>molto rapido</td>
+<td>medio</td>
+</tr>
+<tr>
+<td>Gestione categoriche</td>
+<td>manuale</td>
+<td>nativa</td>
+<td>nativa (ottima)</td>
+</tr>
+<tr>
+<td>Default tuning</td>
+<td>medio</td>
+<td>aggressivo</td>
+<td>conservativo</td>
+</tr>
+<tr>
+<td>Out-of-the-box</td>
+<td>ottimo</td>
+<td>ottimo</td>
+<td>eccellente per cat.</td>
+</tr>
+</tbody>
+</table>
+<p>Codice base, intercambiabile:</p>
+<pre><code class="language-python">import xgboost as xgb
+m = xgb.XGBClassifier(
+    n_estimators=500, max_depth=6, learning_rate=0.05,
+    subsample=0.8, colsample_bytree=0.8,
+    reg_alpha=0, reg_lambda=1,
+    eval_metric='auc',
+    early_stopping_rounds=50,
+    random_state=0,
+)
+m.fit(X_tr, y_tr, eval_set=[(X_val, y_val)])
+</code></pre>
+<pre><code class="language-python">import lightgbm as lgb
+m = lgb.LGBMClassifier(
+    n_estimators=500, num_leaves=31, learning_rate=0.05,
+    feature_fraction=0.8, bagging_fraction=0.8, bagging_freq=5,
+    reg_lambda=1, random_state=0,
+)
+m.fit(X_tr, y_tr, eval_set=[(X_val, y_val)], callbacks=[lgb.early_stopping(50)])
+</code></pre>
+<pre><code class="language-python">from catboost import CatBoostClassifier
+m = CatBoostClassifier(
+    iterations=500, depth=6, learning_rate=0.05,
+    cat_features=['city','plan'],   # nomi colonne categoriche
+    eval_metric='AUC', random_seed=0, verbose=0,
+)
+m.fit(X_tr, y_tr, eval_set=(X_val, y_val), early_stopping_rounds=50)
+</code></pre>
+<h3 id="hyperparam-che-contano-davvero">Hyperparam che contano davvero</h3>
+<p>In ordine di impatto:</p>
+<ol>
+<li><strong><code>learning_rate</code></strong> (eta): 0.01–0.1. Più piccolo = più alberi, più stabile.</li>
+<li><strong><code>n_estimators</code></strong>: usato con <code>early_stopping_rounds</code>. Lascia un numero alto e lascia stop automatico.</li>
+<li><strong><code>max_depth</code> / <code>num_leaves</code></strong>: 4–10 tipicamente. Profondo = più espressivo, più overfit.</li>
+<li><strong><code>subsample</code> / <code>colsample_bytree</code></strong>: 0.7–1.0. Random subsampling come bagging interno.</li>
+<li><strong><code>reg_alpha</code> (L1), <code>reg_lambda</code> (L2)</strong>: regolarizzazione su pesi delle foglie.</li>
+<li><strong><code>min_child_weight</code> / <code>min_data_in_leaf</code></strong>: come <code>min_samples_leaf</code> dei tree.</li>
+</ol>
+<blockquote>
+<p><strong>Workflow tipico</strong>: lr=0.05, n_estim=2000 con early stopping a 50. Tuna max_depth e regolarizzazione. Spesso 80% dell'accuratezza viene dai default.</p>
+</blockquote>
+<h2 id="early-stopping">Early stopping</h2>
+<p>Cresci alberi finché l'errore di validation migliora. Quando non migliora per $N$ iterazioni di seguito, fermati.</p>
+<pre><code class="language-python">m.fit(X_tr, y_tr, eval_set=[(X_val, y_val)], early_stopping_rounds=50, verbose=False)
+print(&quot;alberi usati:&quot;, m.best_iteration)
+</code></pre>
+<p>Pratica essenziale: previene overfit e tara automaticamente <code>n_estimators</code>.</p>
+<h2 id="feature-importance-boosting">Feature importance (boosting)</h2>
+<p>Tre metriche:</p>
+<ul>
+<li><strong>gain</strong>: contributo medio alla riduzione della loss (più affidabile).</li>
+<li><strong>weight / cover</strong>: numero di split / sample passati.</li>
+</ul>
+<pre><code class="language-python">xgb.plot_importance(m, importance_type='gain')
+# o
+import shap
+explainer = shap.TreeExplainer(m)
+shap_values = explainer.shap_values(X_val)
+shap.summary_plot(shap_values, X_val)
+</code></pre>
+<p><strong>SHAP values</strong> è lo standard moderno per spiegare modelli a alberi: contributo di ogni feature alla singola predizione. Robusto, teoricamente fondato (Shapley values, teoria dei giochi).</p>
+<h2 id="categorical-handling-catboost-vs-gli-altri">Categorical handling: CatBoost vs gli altri</h2>
+<p>CatBoost usa <strong>Ordered Target Statistics</strong>: per ogni categoria, calcola una versione "leak-free" del target encoding. È superbo se hai categoriche con cardinalità media-alta.</p>
+<p>LightGBM: usa "Gradient-based One-Side Sampling" e gestisce categoriche nativamente con <code>categorical_feature</code> param.</p>
+<p>XGBoost: storicamente richiedeva one-hot, dal 2024 supporta categorical (<code>enable_categorical=True</code>).</p>
+<h2 id="quando-boosting-batte-le-nn">Quando boosting batte le NN</h2>
+<p>Su <strong>dati tabellari</strong> (ovvero la maggior parte del mondo aziendale), i boosting su alberi dominano. Vari benchmark (Borisov 2022, Grinsztajn 2022) mostrano che XGBoost/LightGBM/CatBoost battono trasformer e MLP sui dataset tabellari "normali" (n &lt; 1M, feature eterogenee).</p>
+<blockquote>
+<p>Le NN tabulari (TabNet, FT-Transformer, SAINT) sono attivamente ricercate ma raramente la prima scelta in industria. Ricorda: i Kaggle Grandmaster usano boosting.</p>
+</blockquote>
+<h2 id="esempio-completo">Esempio completo</h2>
+<pre><code class="language-python">import pandas as pd, numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import roc_auc_score
+import lightgbm as lgb
+
+X, y = load_data()
+X_tr, X_val, y_tr, y_val = train_test_split(X, y, test_size=0.2, stratify=y, random_state=0)
+
+m = lgb.LGBMClassifier(
+    n_estimators=2000, learning_rate=0.05,
+    num_leaves=31, max_depth=-1,
+    feature_fraction=0.8, bagging_fraction=0.8, bagging_freq=5,
+    reg_lambda=1.0, min_data_in_leaf=20,
+    random_state=0, n_jobs=-1,
+)
+m.fit(X_tr, y_tr, eval_set=[(X_val, y_val)],
+      callbacks=[lgb.early_stopping(50), lgb.log_evaluation(100)])
+
+print(&quot;AUC:&quot;, roc_auc_score(y_val, m.predict_proba(X_val)[:, 1]))
+
+# salva
+import joblib; joblib.dump(m, &quot;model.pkl&quot;)
+</code></pre>
+<h2 id="esercizi">Esercizi</h2>
+<details>
+<summary>Esercizio 1 — RF vs LR su Titanic</summary>
+
+Confronta Random Forest e Logistic Regression. Quale vince in AUC? Quale è più interpretabile?
+
+
+<pre><code class="language-python">import seaborn as sns
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import cross_val_score
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import Pipeline
+
+df = sns.load_dataset('titanic').dropna(subset=['age','embarked'])
+y = df.survived
+X = pd.get_dummies(df[['pclass','sex','age','sibsp','parch','fare','embarked']], drop_first=True)
+
+rf = RandomForestClassifier(n_estimators=500, random_state=0)
+lr = Pipeline([('sc', StandardScaler()), ('lr', LogisticRegression(max_iter=2000))])
+
+print(&quot;RF AUC:&quot;, cross_val_score(rf, X, y, cv=5, scoring='roc_auc').mean())
+print(&quot;LR AUC:&quot;, cross_val_score(lr, X, y, cv=5, scoring='roc_auc').mean())
+</code></pre>
+
+</details>
+
+<details>
+<summary>Esercizio 2 — Tuning XGBoost con Optuna</summary>
+
+
+<pre><code class="language-python">import optuna, xgboost as xgb
+from sklearn.model_selection import cross_val_score
+
+def obj(trial):
+    p = dict(
+        n_estimators=trial.suggest_int('n_estimators', 200, 2000),
+        max_depth=trial.suggest_int('max_depth', 3, 10),
+        learning_rate=trial.suggest_float('lr', 1e-3, 0.3, log=True),
+        subsample=trial.suggest_float('subsample', 0.5, 1.0),
+        colsample_bytree=trial.suggest_float('cs', 0.5, 1.0),
+        reg_lambda=trial.suggest_float('rl', 1e-3, 10, log=True),
+    )
+    m = xgb.XGBClassifier(**p, eval_metric='auc', random_state=0)
+    return cross_val_score(m, X, y, cv=5, scoring='roc_auc', n_jobs=-1).mean()
+
+study = optuna.create_study(direction='maximize')
+study.optimize(obj, n_trials=50)
+print(study.best_params)
+</code></pre>
+
+</details>
+
+<details>
+<summary>Esercizio 3 — SHAP per spiegare un modello</summary>
+
+
+<pre><code class="language-python">import shap
+explainer = shap.TreeExplainer(m)
+shap_values = explainer.shap_values(X_val.sample(500, random_state=0))
+shap.summary_plot(shap_values, X_val.sample(500, random_state=0))   # beeswarm
+shap.dependence_plot('age', shap_values, X_val.sample(500, random_state=0))
+</code></pre>
+
+
+Il beeswarm mostra per ogni feature: distribuzione dell'impatto SHAP per ogni osservazione. Una delle visualizzazioni più potenti che esistano.
+</details>
+
+<details>
+<summary>Esercizio 4 — Early stopping in pratica</summary>
+
+Con `early_stopping_rounds`, plotta la loss di train e validation per ogni boosting iteration:
+
+
+<pre><code class="language-python">import lightgbm as lgb
+import matplotlib.pyplot as plt
+m = lgb.LGBMClassifier(n_estimators=1000, learning_rate=0.05, random_state=0)
+m.fit(X_tr, y_tr, eval_set=[(X_tr, y_tr), (X_val, y_val)],
+      eval_metric='auc', callbacks=[lgb.early_stopping(50)])
+plt.plot(m.evals_result_['training']['auc'], label='train')
+plt.plot(m.evals_result_['valid_1']['auc'], label='val')
+plt.legend(); plt.xlabel('iteration'); plt.ylabel('AUC')
+</code></pre>
+
+
+Tipicamente: train continua a salire, val sale poi pareggia. Early stopping ferma all'ultimo "miglioramento" su val.
+</details>
+
+<h2 id="cosa-portarti-via">Cosa portarti via</h2>
+<ul>
+<li>Bagging riduce varianza, Boosting riduce bias. Random Forest = bagging di tree, XGBoost = boosting di tree.</li>
+<li>Su dati tabellari, gradient boosting batte tutto il resto.</li>
+<li>Early stopping ti tara <code>n_estimators</code> automaticamente.</li>
+<li>SHAP per spiegare predictions.</li>
+<li>CatBoost se hai molte categoriche. LightGBM se vuoi velocità. XGBoost se cerchi stabilità ecosystem.</li>
+</ul>
+<p>Prossimo: clustering — l'unsupervised più usato.</p>
+      <nav class="pager">
+<a href="20-alberi-decisionali.html" class="prev"><span class="label">← Precedente</span><span class="title">Alberi decisionali</span></a>
+<a href="22-clustering.html" class="next"><span class="label">Successivo →</span><span class="title">Clustering: K-Means, DBSCAN, GMM, gerarchico</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Data Science Zero to Hero</strong> — percorso completo, in italiano, dalla matematica al deployment.</p><p>Materiale didattico aperto. Le formule sono lì per essere capite, non temute. Quando un concetto è oscuro, torna indietro: la data science è una piramide, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

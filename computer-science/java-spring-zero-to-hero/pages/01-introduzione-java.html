@@ -1,0 +1,455 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>Java: cos&#x27;è davvero, JVM/JRE/JDK, primo programma — Java + Spring Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">☕</div>
+      <div>
+        <div class="brand-title">JAVA · SPRING</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="10" height="20" fill="#009246"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ce2b37"/></svg> IT</span><a href="../en/pages/01-java-introduction.html" class="lang-link" title="Switch to English"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="30" height="20" fill="#012169"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#fff" stroke-width="3"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#c8102e" stroke-width="1.5"/><path d="M15,0 v20 M0,10 h30" stroke="#fff" stroke-width="5"/><path d="M15,0 v20 M0,10 h30" stroke="#c8102e" stroke-width="3"/></svg> EN</a></div>
+  </div>
+  <div class="search-wrap">
+    <div class="search-row">
+      <div class="search-inputwrap">
+        <span class="search-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"/>
+            <line x1="20" y1="20" x2="16.65" y2="16.65"/>
+          </svg>
+        </span>
+        <input class="search-input" id="search-input" type="text" placeholder="cerca... (premi /)" autocomplete="off" aria-label="Search">
+        <button class="search-clear" id="search-clear" type="button" aria-label="Clear" title="Clear">&times;</button>
+      </div>
+      <button class="search-btn" id="search-btn" type="button" aria-label="CERCA" title="CERCA">CERCA</button>
+    </div>
+    <div class="search-hits" id="search-hits" role="listbox"></div>
+  </div>
+  <div class="sidebar-nav">
+    <nav class="nav-section">
+      <div class="nav-section-title">Percorso</div>
+      <ul class="nav-list">
+        <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+        <li class="nav-item"><a href="../pages/00-percorso-e-mindset.html" class=""><span class="num">00</span>Il percorso e la giusta mentalità</a></li><li class="nav-item"><a href="../pages/01-introduzione-java.html" class="active"><span class="num">01</span>Java: cos&#x27;è davvero, JVM/JRE/JDK, primo programma</a></li><li class="nav-item"><a href="../pages/02-sintassi-base.html" class=""><span class="num">02</span>Sintassi di base: tipi, variabili, operatori, controllo di flusso</a></li><li class="nav-item"><a href="../pages/03-stringhe-array-io.html" class=""><span class="num">03</span>Stringhe, array, I/O da console</a></li><li class="nav-item"><a href="../pages/04-oop-classi-oggetti.html" class=""><span class="num">04</span>OOP I — Classi, oggetti, costruttori, this, package, visibilità</a></li><li class="nav-item"><a href="../pages/05-oop-ereditarieta-polimorfismo.html" class=""><span class="num">05</span>OOP II — Ereditarietà, polimorfismo, interfacce, classi astratte</a></li><li class="nav-item"><a href="../pages/06-equals-hashcode-immutabilita.html" class=""><span class="num">06</span>OOP III — equals, hashCode, toString, immutabilità, record</a></li><li class="nav-item"><a href="../pages/07-eccezioni.html" class=""><span class="num">07</span>Eccezioni: checked vs unchecked, try-with-resources, custom</a></li><li class="nav-item"><a href="../pages/08-generics.html" class=""><span class="num">08</span>Generics: tipi parametrici, PECS, type erasure, wildcards</a></li><li class="nav-item"><a href="../pages/09-collections.html" class=""><span class="num">09</span>Collections: List, Set, Map, Queue, complessità, scelta della struttura</a></li><li class="nav-item"><a href="../pages/10-stream-lambda-optional.html" class=""><span class="num">10</span>Stream API, lambda, functional interfaces, Optional</a></li><li class="nav-item"><a href="../pages/11-io-nio.html" class=""><span class="num">11</span>I/O e NIO.2: File, Path, channels, buffer</a></li><li class="nav-item"><a href="../pages/12-concurrency-thread.html" class=""><span class="num">12</span>Concurrency I — Thread, sincronizzazione, volatile, Java Memory Model</a></li><li class="nav-item"><a href="../pages/13-executor-future-completablefuture.html" class=""><span class="num">13</span>Concurrency II — ExecutorService, Future, CompletableFuture</a></li><li class="nav-item"><a href="../pages/14-concurrency-jucconcurrent.html" class=""><span class="num">14</span>Concurrency III — java.util.concurrent: locks, atomics, concurrent collections</a></li><li class="nav-item"><a href="../pages/15-jvm-internals.html" class=""><span class="num">15</span>JVM internals: classloader, bytecode, runtime data areas, JIT</a></li><li class="nav-item"><a href="../pages/16-memoria-gc.html" class=""><span class="num">16</span>Memoria e garbage collection: G1, ZGC, Shenandoah</a></li><li class="nav-item"><a href="../pages/17-profiling-jfr.html" class=""><span class="num">17</span>Profiling: JFR, async-profiler, jstack, heap dump, jcmd</a></li><li class="nav-item"><a href="../pages/18-java-moderno.html" class=""><span class="num">18</span>Java moderno: dal 8 al 21 — features chiave</a></li><li class="nav-item"><a href="../pages/19-jdbc.html" class=""><span class="num">19</span>JDBC: connessione, PreparedStatement, transazioni, isolation levels</a></li><li class="nav-item"><a href="../pages/20-jpa-hibernate.html" class=""><span class="num">20</span>JPA / Hibernate: entità, relazioni, lazy/eager, N+1, cache</a></li><li class="nav-item"><a href="../pages/21-sql-essenziale.html" class=""><span class="num">21</span>SQL essenziale per chi sviluppa in Java</a></li><li class="nav-item"><a href="../pages/22-spring-intro-ioc-di.html" class=""><span class="num">22</span>Spring intro: IoC, DI, ApplicationContext, BeanFactory</a></li><li class="nav-item"><a href="../pages/23-spring-beans-lifecycle.html" class=""><span class="num">23</span>Bean: scopes, lifecycle, BeanPostProcessor, FactoryBean</a></li><li class="nav-item"><a href="../pages/24-spring-configurazione.html" class=""><span class="num">24</span>Configurazione: Java config, @ComponentScan, profili, conditionals, properties</a></li><li class="nav-item"><a href="../pages/25-spring-aop-transactional.html" class=""><span class="num">25</span>AOP, proxy, @Transactional: cosa accade davvero</a></li><li class="nav-item"><a href="../pages/26-spring-boot.html" class=""><span class="num">26</span>Spring Boot: auto-configuration, starters, Actuator</a></li><li class="nav-item"><a href="../pages/27-spring-data-jpa.html" class=""><span class="num">27</span>Spring Data JPA: Repository, derived queries, paginazione, Specification</a></li><li class="nav-item"><a href="../pages/28-spring-mvc-rest.html" class=""><span class="num">28</span>Spring MVC: DispatcherServlet, controller, REST endpoint</a></li><li class="nav-item"><a href="../pages/29-rest-openapi-hateoas.html" class=""><span class="num">29</span>REST: best practice, OpenAPI/Swagger, HATEOAS, versionamento</a></li><li class="nav-item"><a href="../pages/30-spring-webflux.html" class=""><span class="num">30</span>Spring WebFlux + Reactor: Mono, Flux, programmazione reattiva</a></li><li class="nav-item"><a href="../pages/31-spring-security.html" class=""><span class="num">31</span>Spring Security: filter chain, autenticazione, autorizzazione, JWT, OAuth2</a></li><li class="nav-item"><a href="../pages/32-spring-cloud.html" class=""><span class="num">32</span>Spring Cloud: Config Server, Discovery, Gateway, Resilience4j</a></li><li class="nav-item"><a href="../pages/33-testing.html" class=""><span class="num">33</span>Testing: JUnit 5, Mockito, MockMvc, Testcontainers</a></li><li class="nav-item"><a href="../pages/34-spring-batch-intro.html" class=""><span class="num">34</span>Spring Batch intro: domain model, Job, Step, primo batch</a></li><li class="nav-item"><a href="../pages/35-spring-batch-jobrepository.html" class=""><span class="num">35</span>JobRepository, JobLauncher, schema dei metadati</a></li><li class="nav-item"><a href="../pages/36-spring-batch-chunk-skip-retry.html" class=""><span class="num">36</span>Chunk processing: commit interval, skip, retry, fault tolerance</a></li><li class="nav-item"><a href="../pages/37-spring-batch-tasklet-flow.html" class=""><span class="num">37</span>Tasklet vs Chunk; flow control: decisioni, split, conditional</a></li><li class="nav-item"><a href="../pages/38-spring-batch-itemreader.html" class=""><span class="num">38</span>ItemReader: flat file, XML/JSON, JDBC cursor/paging, JPA, multi-resource</a></li><li class="nav-item"><a href="../pages/39-spring-batch-itemwriter.html" class=""><span class="num">39</span>ItemWriter: file, JDBC, JPA, composite, classifier, batch insert</a></li><li class="nav-item"><a href="../pages/40-spring-batch-scaling-partitioning.html" class=""><span class="num">40</span>Scaling: multi-threaded step, partitioning, remote chunking/partitioning</a></li><li class="nav-item"><a href="../pages/41-spring-batch-listeners-restart-k8s.html" class=""><span class="num">41</span>Listeners, restart, monitoring, integrazione con Spring Boot e Kubernetes</a></li><li class="nav-item"><a href="../pages/42-design-patterns.html" class=""><span class="num">42</span>Design pattern in Java/Spring: GoF + DDD-lite</a></li><li class="nav-item"><a href="../pages/43-performance-observability.html" class=""><span class="num">43</span>Performance tuning e observability production-grade</a></li><li class="nav-item"><a href="../pages/44-esercizi-sintesi.html" class=""><span class="num">44</span>50 esercizi cumulativi: dalla sintassi a Spring Batch</a></li><li class="nav-item"><a href="../pages/45-progetto-finale-etl.html" class=""><span class="num">45</span>Progetto finale guidato: ETL bancario notturno</a></li>
+      </ul>
+    </nav>
+  </div>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Java Foundations</span>
+        <span>Sezione 1 di 45</span>
+        <span class="level-tag level-beg">Livello: principiante</span>
+      </div>
+      <h1>Java: cos&#x27;è davvero, JVM/JRE/JDK, primo programma</h1>
+      <p class="summary">Cos&#x27;è Java come linguaggio e come piattaforma, differenza JVM/JRE/JDK, cosa succede quando esegui `java MyApp`, bytecode e portabilità, struttura di un sorgente, primo programma &#x27;Hello World&#x27; spiegato riga per riga.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Java Foundations</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>Sezione 0</li></ul>
+  <div class="label">Strumenti</div>
+  <ul class="source-list"><li>JDK 21</li><li>Editor di testo o IDE</li></ul>
+</div>
+      <h2 id="java-come-linguaggio-e-come-piattaforma">Java come linguaggio e come piattaforma</h2>
+<p>"Java" è due cose insieme:</p>
+<ol>
+<li><strong>Il linguaggio Java</strong>: una sintassi (<code>class</code>, <code>if</code>, <code>for</code>, <code>int</code>, <code>String</code>, ...).</li>
+<li><strong>La piattaforma Java</strong>: un ecosistema fatto da JVM, librerie standard, strumenti.</li>
+</ol>
+<p>Quando dici "scrivo in Java" stai scrivendo nel linguaggio. Quando dici "gira su Java" intendi la piattaforma — cioè la <strong>JVM</strong>, che può eseguire anche altri linguaggi (Kotlin, Scala, Groovy, Clojure, ...).</p>
+<h3 id="caratteristiche-fondamentali-del-linguaggio">Caratteristiche fondamentali del linguaggio</h3>
+<ul>
+<li><strong>Tipato staticamente</strong>: ogni variabile ha un tipo dichiarato a compile-time. <code>int x = 3;</code> funziona, <code>x = "ciao";</code> non compila.</li>
+<li><strong>Orientato agli oggetti</strong>: tutto vive dentro classi (più o meno; ci sono primitivi e static, vedremo). Eredità singola, interfacce multiple.</li>
+<li><strong>Compilato a bytecode, interpretato/JITtato a runtime</strong>: il <code>.java</code> diventa <code>.class</code> (bytecode), che la JVM esegue.</li>
+<li><strong>Garbage Collected</strong>: non devi liberare la memoria a mano (niente <code>free()</code> o <code>delete</code>).</li>
+<li><strong>"Write once, run anywhere"</strong>: lo stesso <code>.class</code> gira su Windows/Linux/Mac/AIX/zOS — perché ogni piattaforma ha la sua JVM.</li>
+</ul>
+<h2 id="jvm-jre-jdk-la-differenza-che-tutti-confondono">JVM, JRE, JDK: la differenza che tutti confondono</h2>
+<div class="mermaid">
+flowchart LR
+    subgraph JDK["JDK (Java Development Kit)"]
+        direction TB
+        subgraph JRE["JRE (Java Runtime Environment)"]
+            direction TB
+            JVM["JVM<br/>esegue bytecode"]
+            LIBS["Librerie standard<br/>java.lang, java.util, ..."]
+        end
+        TOOLS["javac, jar, javadoc,<br/>jshell, jstack, jmap, ..."]
+    end
+
+</div>
+
+<ul>
+<li><strong>JVM (Java Virtual Machine)</strong>: il programma C++ che legge e <em>esegue</em> i <code>.class</code>. Da sola non basta a sviluppare.</li>
+<li><strong>JRE (Java Runtime Environment)</strong> = JVM + librerie standard. Serve a <em>eseguire</em> programmi Java, non a compilarli. Dal Java 11 non viene più distribuita come pacchetto separato.</li>
+<li><strong>JDK (Java Development Kit)</strong> = JRE + strumenti per sviluppare (<code>javac</code> = compilatore, <code>jar</code>, <code>javadoc</code>, <code>jshell</code>, <code>jdb</code>, debugger, profiler, ...).</li>
+</ul>
+<blockquote>
+<p><strong>Quale installare?</strong> Tu installi sempre <strong>il JDK</strong>. Punto. Anche se fai solo "girare" applicazioni, oggi conviene il JDK.</p>
+</blockquote>
+<h3 id="distribuzioni-del-jdk">Distribuzioni del JDK</h3>
+<p>Lo stesso codice OpenJDK è distribuito da vari fornitori, tutti compatibili:</p>
+<table>
+<thead>
+<tr>
+<th>Distribuzione</th>
+<th>Chi la fa</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Eclipse Temurin</strong></td>
+<td>Eclipse Foundation (Adoptium)</td>
+<td>Default consigliato. Gratis, certificato TCK.</td>
+</tr>
+<tr>
+<td><strong>Oracle JDK</strong></td>
+<td>Oracle</td>
+<td>Gratis solo per uso non-commerciale dopo i 6 mesi, poi licenza a pagamento per ambienti enterprise.</td>
+</tr>
+<tr>
+<td><strong>Bellsoft Liberica</strong></td>
+<td>BellSoft</td>
+<td>Gratis, supporto LTS lungo, varianti con JavaFX.</td>
+</tr>
+<tr>
+<td><strong>Amazon Corretto</strong></td>
+<td>Amazon</td>
+<td>Gratis, supporto LTS Amazon. Default su AWS.</td>
+</tr>
+<tr>
+<td><strong>Azul Zulu</strong></td>
+<td>Azul Systems</td>
+<td>Gratis (Zulu OpenJDK), supporto a pagamento (Zulu Prime).</td>
+</tr>
+<tr>
+<td><strong>Red Hat OpenJDK</strong></td>
+<td>Red Hat</td>
+<td>Per ambienti RHEL.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Versioni LTS attuali (Long Term Support)</strong>: 8, 11, 17, <strong>21</strong> (uscita settembre 2023). Java 25 sarà LTS nel 2025.</p>
+<blockquote>
+<p><strong>Per questo percorso</strong>: usa <strong>JDK 21</strong>. È moderno e supportato a lungo. Tutti gli esempi sono testati su 21.</p>
+</blockquote>
+<h2 id="bytecode-e-portabilita-cosa-succede-quando-compili">Bytecode e portabilità: cosa succede quando compili</h2>
+<p>Prendiamo un sorgente <code>Hello.java</code>:</p>
+<pre><code class="language-java">public class Hello {
+    public static void main(String[] args) {
+        System.out.println(&quot;Ciao mondo&quot;);
+    }
+}
+</code></pre>
+<p>Lo compili:</p>
+<pre><code class="language-powershell">javac Hello.java
+# crea Hello.class — bytecode neutrale rispetto alla CPU
+</code></pre>
+<p><code>Hello.class</code> non è binario x86, ARM o RISC-V: è <strong>bytecode JVM</strong>, un set di istruzioni virtuali (es. <code>getstatic</code>, <code>ldc</code>, <code>invokevirtual</code>, <code>return</code>). Lo puoi disassemblare con <code>javap</code>:</p>
+<pre><code class="language-powershell">javap -c Hello.class
+</code></pre>
+<p>Output (semplificato):</p>
+<pre><code>public class Hello {
+  public static void main(java.lang.String[]);
+    Code:
+       0: getstatic     #7    // Field java/lang/System.out
+       3: ldc           #13   // String &quot;Ciao mondo&quot;
+       5: invokevirtual #15   // Method java/io/PrintStream.println
+       8: return
+}
+</code></pre>
+<p>Quando lanci <code>java Hello</code>:</p>
+<div class="mermaid">
+sequenceDiagram
+    participant SH as Shell
+    participant J as java (launcher)
+    participant CL as ClassLoader
+    participant V as JVM Verifier
+    participant I as Interpreter/JIT
+    participant N as OS / CPU
+
+    SH->>J: java Hello
+    J->>CL: carica Hello.class
+    CL->>V: bytecode valido?
+    V-->>CL: ok
+    CL->>I: esegui main()
+    I->>I: interpreta bytecode
+    Note over I: dopo N esecuzioni, il JIT<br/>compila a codice nativo
+    I->>N: chiamate di sistema (System.out)
+
+</div>
+
+<ul>
+<li><strong>Class Loader</strong> carica il <code>.class</code> in memoria.</li>
+<li><strong>Verifier</strong> controlla che il bytecode rispetti le regole (niente salti fuori metodo, niente cast malformati, ...). Questo è perché Java è "sicuro": non puoi eseguire <code>.class</code> malformati.</li>
+<li><strong>Interpreter</strong> esegue le istruzioni una per una.</li>
+<li><strong>JIT (Just-In-Time compiler)</strong>: i metodi caldi vengono compilati a codice nativo per la CPU specifica, e da lì in poi vanno a velocità "C". Vedremo i dettagli in <a href="15-jvm-internals.html">JVM internals</a>.</li>
+</ul>
+<h2 id="struttura-di-un-sorgente-java">Struttura di un sorgente Java</h2>
+<p>Regole base che valgono <em>sempre</em>:</p>
+<ol>
+<li>Un file <code>.java</code> contiene <strong>una classe pubblica</strong> (al massimo), con lo stesso nome del file. <code>Hello.java</code> ⟶ <code>public class Hello { ... }</code>.</li>
+<li>Una classe sta in un <strong>package</strong>. Il package corrisponde alla cartella. <code>it.zth.demo.Hello</code> ⟶ <code>it/zth/demo/Hello.java</code>.</li>
+<li>Il punto di ingresso è <code>public static void main(String[] args)</code>. Senza quello, "non è eseguibile da <code>java</code>".</li>
+<li>Le istruzioni terminano con <code>;</code>.</li>
+<li>Java è <strong>case-sensitive</strong>: <code>String</code> ≠ <code>string</code>.</li>
+</ol>
+<h3 id="naming-conventions-rispettale-tutti-lo-fanno">Naming conventions (rispettale: tutti lo fanno)</h3>
+<table>
+<thead>
+<tr>
+<th>Cosa</th>
+<th>Convenzione</th>
+<th>Esempio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Classi</td>
+<td><code>UpperCamelCase</code></td>
+<td><code>CustomerService</code></td>
+</tr>
+<tr>
+<td>Metodi e variabili</td>
+<td><code>lowerCamelCase</code></td>
+<td><code>getName</code>, <code>totalAmount</code></td>
+</tr>
+<tr>
+<td>Costanti <code>static final</code></td>
+<td><code>SCREAMING_SNAKE_CASE</code></td>
+<td><code>MAX_RETRIES</code></td>
+</tr>
+<tr>
+<td>Package</td>
+<td><code>tutto.minuscolo.puntato</code></td>
+<td><code>it.zth.batch</code></td>
+</tr>
+<tr>
+<td>Interfacce</td>
+<td><code>UpperCamelCase</code>, spesso un sostantivo o aggettivo</td>
+<td><code>Repository</code>, <code>Runnable</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="hello-world-spiegato-riga-per-riga">Hello World, spiegato riga per riga</h2>
+<pre><code class="language-java">package it.zth.demo;            // (1) il &quot;casato&quot; del file
+
+import java.time.LocalDateTime; // (2) importi una classe esterna
+
+public class Hello {            // (3) dichiarazione di classe pubblica
+
+    public static void main(String[] args) {  // (4) entry-point
+        String saluto = &quot;Ciao&quot;;               // (5) variabile locale
+        System.out.println(saluto + &quot; mondo, sono le &quot; + LocalDateTime.now());
+        //                ^---------- concatenazione di stringhe (operator +)
+    }
+}
+</code></pre>
+<ol>
+<li><strong><code>package</code></strong>: dichiari il "casato". Deve corrispondere alla struttura cartelle. Se ometti, sei nel "default package" (sconsigliato, non si fa nei progetti veri).</li>
+<li><strong><code>import</code></strong>: porti dentro una classe da un altro package. <code>java.lang</code> è importato automaticamente.</li>
+<li><strong><code>public class Hello</code></strong>: visibilità <code>public</code> (chiunque può vederla), nome <code>Hello</code> (stesso del file).</li>
+<li><strong><code>public static void main(String[] args)</code></strong>:
+   - <code>public</code> — chiamabile da fuori (la JVM la chiama).
+   - <code>static</code> — non serve un'istanza di <code>Hello</code> per chiamarla.
+   - <code>void</code> — non restituisce nulla.
+   - <code>String[] args</code> — parametri da riga di comando.</li>
+<li><strong><code>String saluto = "Ciao"</code></strong>: dichiari una variabile, tipo <code>String</code>, valore <code>"Ciao"</code>. Le stringhe in Java sono oggetti <code>String</code>, non primitivi.</li>
+</ol>
+<h3 id="compila-ed-esegui">Compila ed esegui</h3>
+<pre><code class="language-powershell"># dalla cartella che contiene src/it/zth/demo/Hello.java
+javac -d out src/it/zth/demo/Hello.java
+java -cp out it.zth.demo.Hello
+# output: Ciao mondo, sono le 2026-05-20T10:30:12.345
+</code></pre>
+<p><code>-d out</code> dice "metti i .class in <code>out/</code>". <code>-cp out</code> dice "cerca i .class in <code>out/</code>".</p>
+<p>In pratica nessuno compila a mano: usi <strong>Maven</strong> o <strong>Gradle</strong>. Ma una volta nella vita devi farlo a mano per capire cosa succede.</p>
+<h2 id="maven-in-60-secondi-anteprima">Maven in 60 secondi (anteprima)</h2>
+<p>Crei una cartella, ci metti un <code>pom.xml</code> minimo:</p>
+<pre><code class="language-xml">&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot;&gt;
+  &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+  &lt;groupId&gt;it.zth&lt;/groupId&gt;
+  &lt;artifactId&gt;playground&lt;/artifactId&gt;
+  &lt;version&gt;0.1.0&lt;/version&gt;
+  &lt;packaging&gt;jar&lt;/packaging&gt;
+  &lt;properties&gt;
+    &lt;maven.compiler.source&gt;21&lt;/maven.compiler.source&gt;
+    &lt;maven.compiler.target&gt;21&lt;/maven.compiler.target&gt;
+    &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;
+  &lt;/properties&gt;
+&lt;/project&gt;
+</code></pre>
+<p>Metti il sorgente in <code>src/main/java/it/zth/demo/Hello.java</code>. Poi:</p>
+<pre><code class="language-powershell">mvn compile
+mvn exec:java -Dexec.mainClass=it.zth.demo.Hello
+</code></pre>
+<p>Tutti i dettagli di Maven li vediamo nella sezione sui tool. Per ora: sappi che esiste.</p>
+<h2 id="esercizi">Esercizi</h2>
+<details>
+<summary>Es 1.1 — Hello bilingue</summary>
+
+Scrivi un programma che stampa "Ciao mondo" in italiano se l'argomento da linea di comando è `it`, "Hello world" se è `en`.
+
+
+<pre><code class="language-java">public class HelloBi {
+    public static void main(String[] args) {
+        if (args.length == 0) {
+            System.out.println(&quot;Usage: java HelloBi &lt;it|en&gt;&quot;);
+            return;
+        }
+        switch (args[0]) {
+            case &quot;it&quot; -&gt; System.out.println(&quot;Ciao mondo&quot;);
+            case &quot;en&quot; -&gt; System.out.println(&quot;Hello world&quot;);
+            default -&gt; System.out.println(&quot;Lingua sconosciuta: &quot; + args[0]);
+        }
+    }
+}
+</code></pre>
+
+
+Nota: `switch` "freccia" è una feature Java 14+. La vedremo bene più avanti.
+
+</details>
+
+<details>
+<summary>Es 1.2 — Versione JVM al volo</summary>
+
+Stampa la versione di Java in uso, il nome del sistema operativo, e l'username dell'utente.
+
+
+<pre><code class="language-java">public class SysInfo {
+    public static void main(String[] args) {
+        System.out.println(&quot;Java:    &quot; + System.getProperty(&quot;java.version&quot;));
+        System.out.println(&quot;OS:      &quot; + System.getProperty(&quot;os.name&quot;) + &quot; &quot;
+                                       + System.getProperty(&quot;os.version&quot;));
+        System.out.println(&quot;User:    &quot; + System.getProperty(&quot;user.name&quot;));
+        System.out.println(&quot;Working: &quot; + System.getProperty(&quot;user.dir&quot;));
+    }
+}
+</code></pre>
+
+
+`System.getProperty(...)` è la finestra sul sistema. Esistono decine di proprietà standard.
+
+</details>
+
+<details>
+<summary>Es 1.3 — Disassembla</summary>
+
+1. Compila `Hello.java` con `javac`.
+2. Esegui `javap -c -v Hello.class > Hello.txt`.
+3. Apri `Hello.txt`. Identifica:
+   - L'istruzione `getstatic` che recupera `System.out`.
+   - L'istruzione `ldc` che carica la stringa `"Ciao mondo"`.
+   - L'istruzione `invokevirtual` che chiama `println`.
+
+Questo è quello che la JVM esegue davvero. Le annotazioni `# 7`, `# 13`, ... sono indici nel **constant pool** della classe.
+
+</details>
+
+<details>
+<summary>Es 1.4 — Fai crashare il classloader</summary>
+
+1. Compila `Hello.java` in `out/`.
+2. Esegui `java -cp out Hello`. Funziona.
+3. Sposta `Hello.class` in `out/altro/`.
+4. Riesegui `java -cp out Hello`. Cosa succede?
+
+Risposta: `Error: Could not find or load main class Hello`. Perché? Il classloader cerca `Hello.class` nelle root del classpath, non nelle sotto-cartelle (a meno che la classe sia in un package corrispondente).
+
+</details>
+
+<details>
+<summary>Es 1.5 — Comprendi il `public static void main`</summary>
+
+Cosa succede se in `main` togli `static`?
+
+
+<pre><code class="language-java">public class Boom {
+    public void main(String[] args) {  // niente static
+        System.out.println(&quot;?&quot;);
+    }
+}
+</code></pre>
+
+
+Compila ma non esegue:
+
+
+<pre><code>Error: Main method is not static in class Boom, please define the main method as:
+   public static void main(String[] args)
+</code></pre>
+
+
+Perché? Per chiamare un metodo *non* static la JVM dovrebbe prima creare un'istanza di `Boom` — ma non sa come (non sa quale costruttore chiamare, con quali parametri). Quindi: il `main` deve essere `static`.
+
+</details>
+
+<h2 id="cosa-devi-portarti-via">Cosa devi portarti via</h2>
+<ul>
+<li>Java è linguaggio + piattaforma. La piattaforma è la <strong>JVM</strong>.</li>
+<li><strong>JDK = JRE + tool</strong>, <strong>JRE = JVM + librerie</strong>. Installa il JDK.</li>
+<li>Codice Java ⟶ <code>.class</code> bytecode ⟶ JVM ⟶ JIT a codice nativo.</li>
+<li>Usa <strong>JDK 21</strong> in questo percorso.</li>
+<li>Un sorgente <code>.java</code>: un <code>package</code>, eventuali <code>import</code>, una classe pubblica con il nome del file, un <code>main</code> per essere eseguibile.</li>
+</ul>
+<p>Prossimo passo: la sintassi vera del linguaggio — tipi, variabili, controllo di flusso, operatori.</p>
+      <nav class="pager">
+<a href="00-percorso-e-mindset.html" class="prev"><span class="label">← Precedente</span><span class="title">Il percorso e la giusta mentalità</span></a>
+<a href="02-sintassi-base.html" class="next"><span class="label">Successivo →</span><span class="title">Sintassi di base: tipi, variabili, operatori, controllo di flusso</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Java + Spring Zero to Hero</strong> — percorso completo da Java base a Spring Batch in produzione.</p><p>Materiale a scopo educativo. Codice sotto licenza MIT; usalo liberamente nei tuoi progetti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body, {delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true, background: '#15191e', primaryColor: '#1d2530',
+      primaryTextColor: '#eef1f5', primaryBorderColor: '#f89820',
+      lineColor: '#6db33f', secondaryColor: '#1a1f25', tertiaryColor: '#222a33',
+      mainBkg: '#1d2530', nodeBorder: '#f89820', clusterBkg: '#0f1318',
+      clusterBorder: '#2a3340', titleColor: '#f89820',
+      edgeLabelBackground: '#0f1318', textColor: '#eef1f5',
+      labelTextColor: '#eef1f5', actorBkg: '#1d2530', actorBorder: '#f89820',
+      actorTextColor: '#f89820', actorLineColor: '#6db33f',
+      signalColor: '#eef1f5', signalTextColor: '#eef1f5',
+      labelBoxBkgColor: '#1d2530', labelBoxBorderColor: '#f89820',
+      noteBkgColor: '#fff6a8', noteTextColor: '#0f1318', noteBorderColor: '#fff6a8',
+      activationBkgColor: '#1d2530', activationBorderColor: '#f89820',
+      sequenceNumberColor: '#0f1318'
+    },
+    flowchart: { curve: 'basis', padding: 16 },
+    sequence: { mirrorActors: false, bottomMarginAdj: 10 },
+    fontFamily: 'JetBrains Mono, Cascadia Code, Consolas, monospace'
+  });
+</script>
+</body>
+</html>

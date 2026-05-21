@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Redshift — data warehousing MPP e zero-ETL — AWS Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#232f3e',primaryTextColor:'#ffffff',primaryBorderColor:'#ff9900',lineColor:'#8a99ad',background:'#0c1320'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">λ</div>
+      <div>
+        <div class="brand-title">AWS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">IT</span><a href="../en/pages/26-redshift-data-warehousing.html" class="lang-link" title="Switch to English">EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-cos-e-aws-cloud.html" class=""><span class="num">01</span>Cos&#x27;è il cloud e cos&#x27;è AWS</a></li><li class="nav-item"><a href="../pages/02-infrastruttura-globale.html" class=""><span class="num">02</span>Infrastruttura globale: Region, AZ, Edge</a></li><li class="nav-item"><a href="../pages/03-account-root-billing.html" class=""><span class="num">03</span>Account AWS, utente root, billing</a></li><li class="nav-item"><a href="../pages/04-iam-fondamenti.html" class=""><span class="num">04</span>IAM — fondamenti (utenti, gruppi, ruoli, policy)</a></li><li class="nav-item"><a href="../pages/05-iam-avanzato.html" class=""><span class="num">05</span>IAM avanzato: policy condizionali, STS, ABAC</a></li><li class="nav-item"><a href="../pages/06-cli-sdk-iac.html" class=""><span class="num">06</span>CLI, SDK, CloudShell, IaC primer</a></li><li class="nav-item"><a href="../pages/07-pricing-billing.html" class=""><span class="num">07</span>Pricing, billing, free tier, cost tools</a></li><li class="nav-item"><a href="../pages/08-organizations-multi-account.html" class=""><span class="num">08</span>AWS Organizations &amp; strategia multi-account</a></li><li class="nav-item"><a href="../pages/09-vpc-fondamenti.html" class=""><span class="num">09</span>VPC — fondamenti</a></li><li class="nav-item"><a href="../pages/10-vpc-avanzato.html" class=""><span class="num">10</span>VPC avanzato: peering, TGW, PrivateLink, endpoint</a></li><li class="nav-item"><a href="../pages/11-route53-cloudfront.html" class=""><span class="num">11</span>Route 53, CloudFront, Global Accelerator</a></li><li class="nav-item"><a href="../pages/12-hybrid-vpn-directconnect.html" class=""><span class="num">12</span>Hybrid: VPN, Direct Connect, PrivateLink</a></li><li class="nav-item"><a href="../pages/13-ec2-fondamenti.html" class=""><span class="num">13</span>EC2 — fondamenti (istanze, AMI, lifecycle)</a></li><li class="nav-item"><a href="../pages/14-ec2-avanzato-spot-nitro.html" class=""><span class="num">14</span>EC2 avanzato — Spot, Placement Groups, Nitro, hibernation</a></li><li class="nav-item"><a href="../pages/15-asg-elb.html" class=""><span class="num">15</span>Auto Scaling Groups + Elastic Load Balancing</a></li><li class="nav-item"><a href="../pages/16-lambda-deep-dive.html" class=""><span class="num">16</span>Lambda deep dive</a></li><li class="nav-item"><a href="../pages/17-containers-ecs-eks-fargate.html" class=""><span class="num">17</span>Containers: ECS, EKS, Fargate, ECR</a></li><li class="nav-item"><a href="../pages/18-specialty-compute.html" class=""><span class="num">18</span>Specialty compute: Batch, Lightsail, Outposts, Wavelength, Beanstalk</a></li><li class="nav-item"><a href="../pages/19-ebs-efs-fsx.html" class=""><span class="num">19</span>EBS, EFS, FSx, Instance Store</a></li><li class="nav-item"><a href="../pages/20-s3-deep-dive.html" class=""><span class="num">20</span>S3 — deep dive</a></li><li class="nav-item"><a href="../pages/21-archive-snow-gateway-backup.html" class=""><span class="num">21</span>Glacier, Snow, Storage Gateway, DataSync, AWS Backup</a></li><li class="nav-item"><a href="../pages/22-rds.html" class=""><span class="num">22</span>RDS — relational DB managed (engines, Multi-AZ, replicas, Proxy)</a></li><li class="nav-item"><a href="../pages/23-aurora-deep-dive.html" class=""><span class="num">23</span>Aurora deep dive — storage condiviso, Serverless v2, Global Database</a></li><li class="nav-item"><a href="../pages/24-dynamodb-deep-dive.html" class=""><span class="num">24</span>DynamoDB deep dive — partition, GSI, Streams, single-table</a></li><li class="nav-item"><a href="../pages/25-purpose-built-dbs.html" class=""><span class="num">25</span>Purpose-built DB — ElastiCache, MemoryDB, Neptune, DocumentDB, Keyspaces, Timestream, QLDB</a></li><li class="nav-item"><a href="../pages/26-redshift-data-warehousing.html" class="active"><span class="num">26</span>Redshift — data warehousing MPP e zero-ETL</a></li><li class="nav-item"><a href="../pages/27-sqs-sns-eventbridge.html" class=""><span class="num">27</span>SQS, SNS, EventBridge — messaging ed eventi</a></li><li class="nav-item"><a href="../pages/28-step-functions-mq-appflow.html" class=""><span class="num">28</span>Step Functions, MQ, AppFlow — orchestrazione e integrazione</a></li><li class="nav-item"><a href="../pages/29-athena-glue-lakeformation.html" class=""><span class="num">29</span>Athena, Glue, Lake Formation — il data lake AWS</a></li><li class="nav-item"><a href="../pages/30-emr-kinesis-msk.html" class=""><span class="num">30</span>EMR, Kinesis, MSK — big data e streaming</a></li><li class="nav-item"><a href="../pages/31-opensearch-quicksight.html" class=""><span class="num">31</span>OpenSearch e QuickSight — search e BI</a></li><li class="nav-item"><a href="../pages/32-sagemaker-overview.html" class=""><span class="num">32</span>SageMaker — la piattaforma ML end-to-end</a></li><li class="nav-item"><a href="../pages/33-bedrock-ai-services.html" class=""><span class="num">33</span>Bedrock e AI services — GenAI e ML managed</a></li><li class="nav-item"><a href="../pages/34-iac-cloudformation-cdk-terraform.html" class=""><span class="num">34</span>IaC su AWS — CloudFormation, CDK, SAM, Terraform</a></li><li class="nav-item"><a href="../pages/35-ci-cd-pipeline.html" class=""><span class="num">35</span>CI/CD su AWS — CodePipeline, CodeBuild, CodeDeploy, CodeCatalyst</a></li><li class="nav-item"><a href="../pages/36-observability-cloudwatch-xray.html" class=""><span class="num">36</span>Observability — CloudWatch, X-Ray, CloudTrail, Config, SSM</a></li><li class="nav-item"><a href="../pages/37-kms-secrets-acm.html" class=""><span class="num">37</span>Crittografia — KMS, CloudHSM, Secrets Manager, Parameter Store, ACM</a></li><li class="nav-item"><a href="../pages/38-waf-shield-guardduty-inspector.html" class=""><span class="num">38</span>Threat detection — WAF, Shield, GuardDuty, Inspector, Macie, Security Hub</a></li><li class="nav-item"><a href="../pages/39-governance-org-controltower-identitycenter.html" class=""><span class="num">39</span>Governance — Organizations, Control Tower, Identity Center</a></li><li class="nav-item"><a href="../pages/40-migration-mgn-dms-snow.html" class=""><span class="num">40</span>Migration — MGN, DMS, Snow family, Discovery, Migration Hub</a></li><li class="nav-item"><a href="../pages/41-cost-optimization-finops.html" class=""><span class="num">41</span>Cost optimization e FinOps</a></li><li class="nav-item"><a href="../pages/42-well-architected.html" class=""><span class="num">42</span>Well-Architected Framework — 6 pillar, lens, review</a></li><li class="nav-item"><a href="../pages/43-architecture-patterns.html" class=""><span class="num">43</span>Architecture patterns — 3-tier, serverless, event-driven, microservices</a></li><li class="nav-item"><a href="../pages/44-disaster-recovery-multi-region.html" class=""><span class="num">44</span>Disaster Recovery e Multi-Region</a></li><li class="nav-item"><a href="../pages/45-reference-architectures.html" class=""><span class="num">45</span>Reference architectures real-world</a></li><li class="nav-item"><a href="../pages/46-advanced-networking.html" class=""><span class="num">46</span>Advanced networking deep dive</a></li><li class="nav-item"><a href="../pages/47-containers-deep-dive.html" class=""><span class="num">47</span>Containers deep dive — EKS, Karpenter, service mesh</a></li><li class="nav-item"><a href="../pages/48-serverless-patterns.html" class=""><span class="num">48</span>Serverless patterns deep dive</a></li><li class="nav-item"><a href="../pages/49-genai-rag-agents.html" class=""><span class="num">49</span>Generative AI su AWS — RAG e Agents</a></li><li class="nav-item"><a href="../pages/50-certificazioni-aws.html" class=""><span class="num">50</span>Certificazioni AWS — roadmap e study guide</a></li><li class="nav-item"><a href="../pages/51-glossario-az.html" class=""><span class="num">51</span>Glossario A-Z</a></li><li class="nav-item"><a href="../pages/52-cheatsheet.html" class=""><span class="num">52</span>Cheat sheet: servizi, limiti, instance families</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Database</span>
+        <span>Sezione 26 di 52</span>
+        <span class="level-tag level-adv">Livello: avanzato</span>
+      </div>
+      <h1>Redshift — data warehousing MPP e zero-ETL</h1>
+      <p class="summary">Data warehouse colonnare MPP: RA3 managed storage, Serverless RPU, distribution/sort key, Spectrum su S3, zero-ETL da Aurora/DynamoDB, Materialized Views, Redshift ML.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Database</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>sezioni 19, 22, 24</li></ul>
+  <div class="label">Strumenti / riferimenti</div>
+  <ul class="source-list"><li>AWS CLI</li><li>psql / SQL Workbench</li></ul>
+</div>
+      <p>Redshift è il data warehouse managed di AWS: SQL colonnare <strong>MPP</strong> (Massively Parallel Processing) pensato per query analitiche su TB-PB di dati. Non sostituisce un OLTP — sostituisce un Teradata/Snowflake.</p>
+<h2 id="1-architettura-mpp">1. Architettura MPP</h2>
+<pre><code class="language-mermaid">flowchart TB
+    Client[BI client / SQL] --&gt; Leader[Leader node&lt;br/&gt;SQL planner, aggregation]
+    Leader --&gt; CN1[Compute node 1&lt;br/&gt;slices 0-3]
+    Leader --&gt; CN2[Compute node 2&lt;br/&gt;slices 4-7]
+    Leader --&gt; CN3[Compute node N&lt;br/&gt;slices ...]
+    CN1 --&gt; MS[(RA3 Managed Storage&lt;br/&gt;S3-backed)]
+    CN2 --&gt; MS
+    CN3 --&gt; MS
+</code></pre>
+<ul>
+<li><strong>Leader node</strong>: parsing, planning, distribuzione fasi ai compute, aggregazione finale. Non interroghi mai i compute direttamente.</li>
+<li><strong>Compute nodes</strong>: ognuno diviso in <strong>slice</strong> (1 slice per vCPU). Ogni slice esegue la sua fase in parallelo sui dati locali.</li>
+<li><strong>Storage colonnare</strong>: stessa colonna di milioni di righe in pochi blocchi compressi. Query analitica scansiona solo le colonne richieste.</li>
+</ul>
+<h2 id="2-node-types-e-redshift-serverless">2. Node types e Redshift Serverless</h2>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Storage</th>
+<th>Quando</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>RA3</strong> (ra3.xlplus, ra3.4xlarge, ra3.16xlarge)</td>
+<td><strong>Managed storage</strong> (S3 + cache locale SSD), pay-per-GB indipendente da compute</td>
+<td>default moderno, separa scaling compute da storage</td>
+</tr>
+<tr>
+<td><strong>DC2</strong> (dc2.large, dc2.8xlarge)</td>
+<td>SSD locale fisso</td>
+<td>legacy, per dataset &lt; 1 TB con priorità latency, in fase di phase-out</td>
+</tr>
+<tr>
+<td><strong>Redshift Serverless</strong></td>
+<td>RA3 managed storage</td>
+<td>no cluster da gestire; capacity in <strong>RPU</strong> (Redshift Processing Units), pay-per-second</td>
+</tr>
+</tbody>
+</table>
+<p>Redshift Serverless: ideale per workload spiky o nuovi progetti. Setti base RPU (8-512) e max, paghi quando query attive. Cold start ~5-10 s alla prima query dopo idle.</p>
+<h2 id="3-distribution-e-sort-key">3. Distribution e sort key</h2>
+<p><strong>Distribution style</strong>: come Redshift distribuisce le righe sui slice.</p>
+<table>
+<thead>
+<tr>
+<th>Style</th>
+<th>Quando</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>AUTO</strong> (default)</td>
+<td>Redshift sceglie da sé in base alle dimensioni — buono per partire</td>
+</tr>
+<tr>
+<td><strong>KEY</strong></td>
+<td>distribuisci per colonna (es. <code>user_id</code>) → JOIN co-locati sulla stessa key sono veloci, no shuffle</td>
+</tr>
+<tr>
+<td><strong>ALL</strong></td>
+<td>la tabella <strong>intera replicata su ogni node</strong> → solo per dimension table piccole (&lt;2-3M righe)</td>
+</tr>
+<tr>
+<td><strong>EVEN</strong></td>
+<td>round-robin, no JOIN co-located ma load bilanciato</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Sort key</strong>: come ordinare fisicamente i blocchi per <strong>zone-map pruning</strong> (saltare blocchi che non matchano la WHERE).</p>
+<ul>
+<li><strong>Compound</strong> (default): efficace se filtri sempre col primo campo. Es. sort key <code>(event_date, user_id)</code> ottimo per <code>WHERE event_date='2026-05-21'</code>.</li>
+<li><strong>Interleaved</strong>: pesa ogni colonna ugualmente. Buona per query ad-hoc su qualsiasi campo della key, ma overhead in VACUUM.</li>
+</ul>
+<pre><code class="language-sql">CREATE TABLE events (
+  event_id   BIGINT,
+  user_id    BIGINT,
+  event_date DATE,
+  payload    SUPER
+)
+DISTKEY (user_id)
+SORTKEY (event_date, user_id);
+</code></pre>
+<h2 id="4-spectrum-federated-query-zero-etl">4. Spectrum, federated query, zero-ETL</h2>
+<p><strong>Redshift Spectrum</strong>: query su dati esterni in <strong>S3</strong> via <code>EXTERNAL TABLE</code> (Parquet/ORC). Catalog su AWS Glue. Paghi $5 per TB scansionato (come Athena). Pattern data lake: hot data in Redshift managed, cold/storico in S3 + Spectrum.</p>
+<pre><code class="language-sql">CREATE EXTERNAL SCHEMA spectrum_logs
+FROM DATA CATALOG DATABASE 'logs_db'
+IAM_ROLE 'arn:aws:iam::111:role/RedshiftSpectrumRole';
+
+SELECT date_trunc('day', ts), COUNT(*)
+FROM spectrum_logs.access_logs
+WHERE ts &gt; '2026-01-01'
+GROUP BY 1;
+</code></pre>
+<p><strong>Federated query</strong>: <code>SELECT</code> diretto su Aurora/RDS Postgres senza copiare dati. Push-down dei filtri quando possibile.</p>
+<p><strong>Zero-ETL integration</strong>: AWS replica automaticamente dati operativi in Redshift senza pipeline custom.
+- <strong>Aurora → Redshift</strong>: change data capture continuo, lag tipico secondi.
+- <strong>DynamoDB → Redshift</strong>: idem, eventi Streams convertiti.
+- Salta il classico stack Glue/Kinesis/Lambda per "portare i dati nel warehouse".</p>
+<h2 id="5-materialized-views-concurrency-scaling-wlm">5. Materialized Views, concurrency scaling, WLM</h2>
+<ul>
+<li><strong>Materialized Views</strong>: precomputate, refresh <code>INCREMENTAL</code> o <code>FULL</code>. Auto-refresh con <code>AUTO REFRESH YES</code>. Il planner riscrive query automaticamente per usarle.</li>
+<li><strong>Concurrency scaling</strong>: quando la coda WLM si riempie, Redshift spinna cluster <strong>transienti</strong> che servono query extra. Pay-per-second, 1h gratis al giorno.</li>
+<li><strong>Workload Management (WLM)</strong>: code di query con priorità e memoria assegnata. <strong>Automatic WLM</strong> (default moderno) gestisce dinamicamente; manual WLM per controllo fine.</li>
+<li><strong>AQUA</strong> (Advanced Query Accelerator): cache hardware in front of S3 per query Spectrum. Auto-abilitato su RA3.</li>
+</ul>
+<h2 id="6-redshift-ml-e-analytics">6. Redshift ML e analytics</h2>
+<p>Crei modelli ML direttamente in SQL, training su SageMaker dietro le quinte:</p>
+<pre><code class="language-sql">CREATE MODEL churn_predictor
+FROM (SELECT age, plan, last_login_days, churn FROM customers)
+TARGET churn
+FUNCTION ml_fn_predict_churn
+IAM_ROLE 'arn:...'
+SETTINGS (S3_BUCKET 'my-ml-bucket');
+
+SELECT customer_id, ml_fn_predict_churn(age, plan, last_login_days)
+FROM customers;
+</code></pre>
+<p>Casi: forecasting, classification, regression, anomaly detection — senza tirare i dati fuori dal warehouse.</p>
+<h2 id="7-snapshot-cross-region-copy-security">7. Snapshot, cross-region copy, security</h2>
+<ul>
+<li><strong>Snapshot automatici</strong>: ogni 8h o ogni 5 GB di cambio. Retention 1-35 gg.</li>
+<li><strong>Manual snapshot</strong>: retention illimitata, condivisibili cross-account.</li>
+<li><strong>Cross-region snapshot copy</strong> per DR: copia continua a una secondary region.</li>
+<li><strong>Encryption</strong> KMS at-rest, SSL in-transit.</li>
+<li><strong>VPC routing</strong>: cluster in subnet privata, enhanced VPC routing forza tutto il traffico COPY/UNLOAD attraverso VPC (per VPC endpoints S3).</li>
+</ul>
+<h2 id="8-esercizio">8. Esercizio</h2>
+<details>
+<summary>Migrazione: 5 TB di event log in Postgres on-prem, query analitiche prendono ore. Target Redshift. Che dimensionamento e schema?</summary>
+
+**Sizing**:
+- 5 TB iniziali, crescita 200 GB/mese → RA3 con managed storage scala indipendentemente.
+- Start: 2x `ra3.xlplus` (32 GB RAM, 4 vCPU each) o **Redshift Serverless** base 32 RPU se workload spiky.
+- Concurrency scaling per query interattive multiple.
+
+**Schema fact table `events`**:
+- `DISTKEY (user_id)` se i JOIN principali sono su user; altrimenti `DISTSTYLE EVEN` per spread uniforme.
+- `SORTKEY (event_date, event_type)` — quasi tutte le query analitiche filtrano per date range.
+- Storage colonnare auto-comprime; usa `ANALYZE COMPRESSION` post-import.
+- Dimension table piccole (`users`, `products`): `DISTSTYLE ALL`.
+
+**Migrazione dati**:
+- Export Postgres a Parquet → S3.
+- `COPY events FROM 's3://.../' IAM_ROLE '...' FORMAT PARQUET;` (parallelo su tutte le slice).
+- Hot data ultimo anno in Redshift; storico in S3 + Spectrum.
+
+**Costo stimato**: ~$1.5k/mese provisioned, oppure $400-800/mese Serverless con workload 30% del giorno attivo.
+</details>
+
+<details>
+<summary>Devi alimentare Redshift in tempo reale da DynamoDB (orders) + Aurora Postgres (users). Pipeline?</summary>
+
+Vecchio mondo (3+ servizi): DynamoDB Streams → Lambda → Kinesis Firehose → S3 → Glue → COPY into Redshift. Aurora: Debezium o Kinesis Data Streams → idem. Manutenzione costante, lag 5-15 min.
+
+**2026 way: zero-ETL integration**:
+
+1. Console Redshift → "Integrations" → crea integrazione **DynamoDB → Redshift** sul table `orders`. AWS replica automatic.
+2. Crea **Aurora → Redshift zero-ETL** sul cluster Aurora Postgres `users`. CDC continuo.
+3. In Redshift query JOIN-ano `orders` + `users` con lag tipico **secondi**.
+
+Zero codice ETL, zero infra da mantenere, lag analitico ridotto da 15 min a < 30 s. Costo extra solo lo storage Redshift (compute è quello che hai già).
+
+Limiti zero-ETL: schema source deve essere "ragionevole" (no tipi esotici), DDL changes vanno gestite, throughput soggetto a quote.
+</details>
+
+<blockquote>
+<p><strong>Riassunto</strong>: Redshift = data warehouse MPP colonnare; RA3 con managed storage o Serverless RPU; distribution KEY/ALL/EVEN/AUTO + sort key per zone-map pruning; Spectrum query su S3 esterno; federated query su Aurora/RDS; zero-ETL Aurora/DynamoDB → Redshift senza pipeline custom; Materialized Views auto-refresh; concurrency scaling per spike; Redshift ML in SQL via SageMaker.</p>
+</blockquote>
+      <nav class="pager">
+<a href="25-purpose-built-dbs.html" class="prev"><span class="label">← Precedente</span><span class="title">Purpose-built DB — ElastiCache, MemoryDB, Neptune, DocumentDB, Keyspaces, Timestream, QLDB</span></a>
+<a href="27-sqs-sns-eventbridge.html" class="next"><span class="label">Successivo →</span><span class="title">SQS, SNS, EventBridge — messaging ed eventi</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>AWS Zero to Hero</strong> — percorso completo, in italiano, dalle primitive all'architettura avanzata.</p><p>Materiale didattico aperto. Nessuna sponsorizzazione, nessun affiliate link, nessuna affiliazione con AWS. Quando un concetto è oscuro, torna indietro: AWS è una piramide di primitive, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

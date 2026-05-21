@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>ItemReader: flat file, XML/JSON, JDBC cursor/paging, JPA, multi-resource — Java + Spring Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">☕</div>
+      <div>
+        <div class="brand-title">JAVA · SPRING</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="10" height="20" fill="#009246"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ce2b37"/></svg> IT</span><a href="../en/pages/38-spring-batch-itemreader.html" class="lang-link" title="Switch to English"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="30" height="20" fill="#012169"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#fff" stroke-width="3"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#c8102e" stroke-width="1.5"/><path d="M15,0 v20 M0,10 h30" stroke="#fff" stroke-width="5"/><path d="M15,0 v20 M0,10 h30" stroke="#c8102e" stroke-width="3"/></svg> EN</a></div>
+  </div>
+  <div class="search-wrap">
+    <div class="search-row">
+      <div class="search-inputwrap">
+        <span class="search-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"/>
+            <line x1="20" y1="20" x2="16.65" y2="16.65"/>
+          </svg>
+        </span>
+        <input class="search-input" id="search-input" type="text" placeholder="cerca... (premi /)" autocomplete="off" aria-label="Search">
+        <button class="search-clear" id="search-clear" type="button" aria-label="Clear" title="Clear">&times;</button>
+      </div>
+      <button class="search-btn" id="search-btn" type="button" aria-label="CERCA" title="CERCA">CERCA</button>
+    </div>
+    <div class="search-hits" id="search-hits" role="listbox"></div>
+  </div>
+  <div class="sidebar-nav">
+    <nav class="nav-section">
+      <div class="nav-section-title">Percorso</div>
+      <ul class="nav-list">
+        <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+        <li class="nav-item"><a href="../pages/00-percorso-e-mindset.html" class=""><span class="num">00</span>Il percorso e la giusta mentalità</a></li><li class="nav-item"><a href="../pages/01-introduzione-java.html" class=""><span class="num">01</span>Java: cos&#x27;è davvero, JVM/JRE/JDK, primo programma</a></li><li class="nav-item"><a href="../pages/02-sintassi-base.html" class=""><span class="num">02</span>Sintassi di base: tipi, variabili, operatori, controllo di flusso</a></li><li class="nav-item"><a href="../pages/03-stringhe-array-io.html" class=""><span class="num">03</span>Stringhe, array, I/O da console</a></li><li class="nav-item"><a href="../pages/04-oop-classi-oggetti.html" class=""><span class="num">04</span>OOP I — Classi, oggetti, costruttori, this, package, visibilità</a></li><li class="nav-item"><a href="../pages/05-oop-ereditarieta-polimorfismo.html" class=""><span class="num">05</span>OOP II — Ereditarietà, polimorfismo, interfacce, classi astratte</a></li><li class="nav-item"><a href="../pages/06-equals-hashcode-immutabilita.html" class=""><span class="num">06</span>OOP III — equals, hashCode, toString, immutabilità, record</a></li><li class="nav-item"><a href="../pages/07-eccezioni.html" class=""><span class="num">07</span>Eccezioni: checked vs unchecked, try-with-resources, custom</a></li><li class="nav-item"><a href="../pages/08-generics.html" class=""><span class="num">08</span>Generics: tipi parametrici, PECS, type erasure, wildcards</a></li><li class="nav-item"><a href="../pages/09-collections.html" class=""><span class="num">09</span>Collections: List, Set, Map, Queue, complessità, scelta della struttura</a></li><li class="nav-item"><a href="../pages/10-stream-lambda-optional.html" class=""><span class="num">10</span>Stream API, lambda, functional interfaces, Optional</a></li><li class="nav-item"><a href="../pages/11-io-nio.html" class=""><span class="num">11</span>I/O e NIO.2: File, Path, channels, buffer</a></li><li class="nav-item"><a href="../pages/12-concurrency-thread.html" class=""><span class="num">12</span>Concurrency I — Thread, sincronizzazione, volatile, Java Memory Model</a></li><li class="nav-item"><a href="../pages/13-executor-future-completablefuture.html" class=""><span class="num">13</span>Concurrency II — ExecutorService, Future, CompletableFuture</a></li><li class="nav-item"><a href="../pages/14-concurrency-jucconcurrent.html" class=""><span class="num">14</span>Concurrency III — java.util.concurrent: locks, atomics, concurrent collections</a></li><li class="nav-item"><a href="../pages/15-jvm-internals.html" class=""><span class="num">15</span>JVM internals: classloader, bytecode, runtime data areas, JIT</a></li><li class="nav-item"><a href="../pages/16-memoria-gc.html" class=""><span class="num">16</span>Memoria e garbage collection: G1, ZGC, Shenandoah</a></li><li class="nav-item"><a href="../pages/17-profiling-jfr.html" class=""><span class="num">17</span>Profiling: JFR, async-profiler, jstack, heap dump, jcmd</a></li><li class="nav-item"><a href="../pages/18-java-moderno.html" class=""><span class="num">18</span>Java moderno: dal 8 al 21 — features chiave</a></li><li class="nav-item"><a href="../pages/19-jdbc.html" class=""><span class="num">19</span>JDBC: connessione, PreparedStatement, transazioni, isolation levels</a></li><li class="nav-item"><a href="../pages/20-jpa-hibernate.html" class=""><span class="num">20</span>JPA / Hibernate: entità, relazioni, lazy/eager, N+1, cache</a></li><li class="nav-item"><a href="../pages/21-sql-essenziale.html" class=""><span class="num">21</span>SQL essenziale per chi sviluppa in Java</a></li><li class="nav-item"><a href="../pages/22-spring-intro-ioc-di.html" class=""><span class="num">22</span>Spring intro: IoC, DI, ApplicationContext, BeanFactory</a></li><li class="nav-item"><a href="../pages/23-spring-beans-lifecycle.html" class=""><span class="num">23</span>Bean: scopes, lifecycle, BeanPostProcessor, FactoryBean</a></li><li class="nav-item"><a href="../pages/24-spring-configurazione.html" class=""><span class="num">24</span>Configurazione: Java config, @ComponentScan, profili, conditionals, properties</a></li><li class="nav-item"><a href="../pages/25-spring-aop-transactional.html" class=""><span class="num">25</span>AOP, proxy, @Transactional: cosa accade davvero</a></li><li class="nav-item"><a href="../pages/26-spring-boot.html" class=""><span class="num">26</span>Spring Boot: auto-configuration, starters, Actuator</a></li><li class="nav-item"><a href="../pages/27-spring-data-jpa.html" class=""><span class="num">27</span>Spring Data JPA: Repository, derived queries, paginazione, Specification</a></li><li class="nav-item"><a href="../pages/28-spring-mvc-rest.html" class=""><span class="num">28</span>Spring MVC: DispatcherServlet, controller, REST endpoint</a></li><li class="nav-item"><a href="../pages/29-rest-openapi-hateoas.html" class=""><span class="num">29</span>REST: best practice, OpenAPI/Swagger, HATEOAS, versionamento</a></li><li class="nav-item"><a href="../pages/30-spring-webflux.html" class=""><span class="num">30</span>Spring WebFlux + Reactor: Mono, Flux, programmazione reattiva</a></li><li class="nav-item"><a href="../pages/31-spring-security.html" class=""><span class="num">31</span>Spring Security: filter chain, autenticazione, autorizzazione, JWT, OAuth2</a></li><li class="nav-item"><a href="../pages/32-spring-cloud.html" class=""><span class="num">32</span>Spring Cloud: Config Server, Discovery, Gateway, Resilience4j</a></li><li class="nav-item"><a href="../pages/33-testing.html" class=""><span class="num">33</span>Testing: JUnit 5, Mockito, MockMvc, Testcontainers</a></li><li class="nav-item"><a href="../pages/34-spring-batch-intro.html" class=""><span class="num">34</span>Spring Batch intro: domain model, Job, Step, primo batch</a></li><li class="nav-item"><a href="../pages/35-spring-batch-jobrepository.html" class=""><span class="num">35</span>JobRepository, JobLauncher, schema dei metadati</a></li><li class="nav-item"><a href="../pages/36-spring-batch-chunk-skip-retry.html" class=""><span class="num">36</span>Chunk processing: commit interval, skip, retry, fault tolerance</a></li><li class="nav-item"><a href="../pages/37-spring-batch-tasklet-flow.html" class=""><span class="num">37</span>Tasklet vs Chunk; flow control: decisioni, split, conditional</a></li><li class="nav-item"><a href="../pages/38-spring-batch-itemreader.html" class="active"><span class="num">38</span>ItemReader: flat file, XML/JSON, JDBC cursor/paging, JPA, multi-resource</a></li><li class="nav-item"><a href="../pages/39-spring-batch-itemwriter.html" class=""><span class="num">39</span>ItemWriter: file, JDBC, JPA, composite, classifier, batch insert</a></li><li class="nav-item"><a href="../pages/40-spring-batch-scaling-partitioning.html" class=""><span class="num">40</span>Scaling: multi-threaded step, partitioning, remote chunking/partitioning</a></li><li class="nav-item"><a href="../pages/41-spring-batch-listeners-restart-k8s.html" class=""><span class="num">41</span>Listeners, restart, monitoring, integrazione con Spring Boot e Kubernetes</a></li><li class="nav-item"><a href="../pages/42-design-patterns.html" class=""><span class="num">42</span>Design pattern in Java/Spring: GoF + DDD-lite</a></li><li class="nav-item"><a href="../pages/43-performance-observability.html" class=""><span class="num">43</span>Performance tuning e observability production-grade</a></li><li class="nav-item"><a href="../pages/44-esercizi-sintesi.html" class=""><span class="num">44</span>50 esercizi cumulativi: dalla sintassi a Spring Batch</a></li><li class="nav-item"><a href="../pages/45-progetto-finale-etl.html" class=""><span class="num">45</span>Progetto finale guidato: ETL bancario notturno</a></li>
+      </ul>
+    </nav>
+  </div>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Spring Batch</span>
+        <span>Sezione 38 di 45</span>
+        <span class="level-tag level-adv">Livello: avanzato</span>
+      </div>
+      <h1>ItemReader: flat file, XML/JSON, JDBC cursor/paging, JPA, multi-resource</h1>
+      <p class="summary">Tutti gli ItemReader della libreria standard. FlatFileItemReader, JsonItemReader, StaxEventItemReader. Cursor-based vs paging JDBC. JpaPagingItemReader. MultiResourceItemReader. Custom reader. Restartability.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Spring Batch</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>Sezione 37</li></ul>
+  <div class="label">Strumenti</div>
+  <ul class="source-list"><li>Spring Batch 5.x</li></ul>
+</div>
+      <h2 id="flatfileitemreader-file-delimitati-e-fixed-length"><code>FlatFileItemReader</code>: file delimitati e fixed-length</h2>
+<pre><code class="language-java">@Bean
+public FlatFileItemReader&lt;Customer&gt; csvReader() {
+    return new FlatFileItemReaderBuilder&lt;Customer&gt;()
+        .name(&quot;customerReader&quot;)
+        .resource(new FileSystemResource(&quot;input/customers.csv&quot;))
+        .linesToSkip(1)
+        .delimited().delimiter(&quot;,&quot;).quoteCharacter('&quot;')
+        .names(&quot;id&quot;, &quot;name&quot;, &quot;email&quot;, &quot;city&quot;)
+        .fieldSetMapper(fs -&gt; new Customer(
+            fs.readLong(&quot;id&quot;), fs.readString(&quot;name&quot;),
+            fs.readString(&quot;email&quot;), fs.readString(&quot;city&quot;)
+        ))
+        .build();
+}
+</code></pre>
+<h3 id="fixed-length">Fixed-length</h3>
+<pre><code class="language-java">.fixedLength()
+.columns(new Range[]{ new Range(1, 10), new Range(11, 40), new Range(41, 80) })
+.names(&quot;id&quot;, &quot;name&quot;, &quot;email&quot;)
+</code></pre>
+<h3 id="header-parsing">Header parsing</h3>
+<pre><code class="language-java">.linesToSkip(1)
+.skippedLinesCallback(line -&gt; log.info(&quot;header: {}&quot;, line))
+</code></pre>
+<h3 id="linemapper-custom"><code>LineMapper</code> custom</h3>
+<pre><code class="language-java">.lineMapper((line, lineNumber) -&gt; {
+    // parsing custom (es. JSON per riga)
+    return parseJsonLine(line);
+})
+</code></pre>
+<h2 id="jsonitemreader-file-json-con-array"><code>JsonItemReader</code>: file JSON con array</h2>
+<pre><code class="language-java">@Bean
+public JsonItemReader&lt;Customer&gt; jsonReader() {
+    return new JsonItemReaderBuilder&lt;Customer&gt;()
+        .name(&quot;jsonReader&quot;)
+        .resource(new FileSystemResource(&quot;input/customers.json&quot;))
+        .jsonObjectReader(new JacksonJsonObjectReader&lt;&gt;(Customer.class))
+        .build();
+}
+</code></pre>
+<p>Si aspetta un file con array root: <code>[ {...}, {...}, ... ]</code>.</p>
+<p>Per JSON Lines (un oggetto per riga) usa <code>FlatFileItemReader</code> con un mapper Jackson.</p>
+<h2 id="staxeventitemreader-xml-streaming"><code>StaxEventItemReader</code>: XML streaming</h2>
+<pre><code class="language-java">@Bean
+public StaxEventItemReader&lt;Customer&gt; xmlReader() {
+    return new StaxEventItemReaderBuilder&lt;Customer&gt;()
+        .name(&quot;xmlReader&quot;)
+        .resource(new FileSystemResource(&quot;input/customers.xml&quot;))
+        .addFragmentRootElements(&quot;customer&quot;)
+        .unmarshaller(jaxb2Marshaller())
+        .build();
+}
+</code></pre>
+<p>Streaming = legge un elemento <code>&lt;customer&gt;</code> alla volta, non tutto in memoria.</p>
+<h2 id="jdbc-cursor-vs-paging">JDBC: cursor vs paging</h2>
+<h3 id="jdbccursoritemreader-cursore-lato-server"><code>JdbcCursorItemReader</code>: cursore lato server</h3>
+<pre><code class="language-java">@Bean
+public JdbcCursorItemReader&lt;Order&gt; cursorReader(DataSource ds) {
+    return new JdbcCursorItemReaderBuilder&lt;Order&gt;()
+        .name(&quot;ordersCursor&quot;)
+        .dataSource(ds)
+        .sql(&quot;SELECT id, customer_id, total FROM orders WHERE status = 'NEW'&quot;)
+        .rowMapper((rs, rn) -&gt; new Order(rs.getLong(&quot;id&quot;),
+            rs.getLong(&quot;customer_id&quot;), rs.getBigDecimal(&quot;total&quot;)))
+        .build();
+}
+</code></pre>
+<ul>
+<li><strong>Pro</strong>: stream lineare, basso overhead.</li>
+<li><strong>Contro</strong>: tiene una connessione aperta a lungo. Restart difficile (devi ricomporre da <code>sortedBy</code> + offset salvato).</li>
+</ul>
+<h3 id="jdbcpagingitemreader-paging"><code>JdbcPagingItemReader</code>: paging</h3>
+<pre><code class="language-java">@Bean
+public JdbcPagingItemReader&lt;Order&gt; pagingReader(DataSource ds) {
+    Map&lt;String, Order&gt; sortKeys = Map.of(&quot;id&quot;, Order.ASCENDING);
+
+    return new JdbcPagingItemReaderBuilder&lt;Order&gt;()
+        .name(&quot;ordersPaging&quot;)
+        .dataSource(ds)
+        .selectClause(&quot;SELECT id, customer_id, total&quot;)
+        .fromClause(&quot;FROM orders&quot;)
+        .whereClause(&quot;status = :status&quot;)
+        .parameterValues(Map.of(&quot;status&quot;, &quot;NEW&quot;))
+        .sortKeys(sortKeys)
+        .pageSize(500)
+        .rowMapper(...)
+        .build();
+}
+</code></pre>
+<ul>
+<li><strong>Pro</strong>: ogni pagina è una query separata; connessione tenuta poco.</li>
+<li><strong>Pro</strong>: facile da restartare (riprende dall'ultimo id).</li>
+<li><strong>Contro</strong>: deep paging può essere lento. Indici su <code>sortKeys</code> obbligatori.</li>
+</ul>
+<blockquote>
+<p><strong>In produzione, preferisci paging</strong>: scalabile, restartable.</p>
+</blockquote>
+<h2 id="jpapagingitemreader"><code>JpaPagingItemReader</code></h2>
+<pre><code class="language-java">@Bean
+public JpaPagingItemReader&lt;Customer&gt; jpaReader(EntityManagerFactory emf) {
+    return new JpaPagingItemReaderBuilder&lt;Customer&gt;()
+        .name(&quot;jpaReader&quot;)
+        .entityManagerFactory(emf)
+        .queryString(&quot;SELECT c FROM Customer c WHERE c.active = true ORDER BY c.id&quot;)
+        .pageSize(500)
+        .build();
+}
+</code></pre>
+<p>Trappola: il <code>PersistenceContext</code> cresce per pagina. Usa <code>JpaPagingItemReader</code> con <code>setSaveState(false)</code> o pulizia esplicita per dataset grandi.</p>
+<h2 id="multiresourceitemreader"><code>MultiResourceItemReader</code></h2>
+<p>Quando hai N file da elaborare in un solo step:</p>
+<pre><code class="language-java">@Bean
+public MultiResourceItemReader&lt;Customer&gt; multiReader() {
+    var r = new MultiResourceItemReader&lt;Customer&gt;();
+    r.setName(&quot;multi&quot;);
+    r.setResources(new PathMatchingResourcePatternResolver()
+        .getResources(&quot;classpath:input/customers-*.csv&quot;));
+    r.setDelegate(csvReader());
+    return r;
+}
+</code></pre>
+<p>Spring scorre file per file, salvando lo stato (utile per restart).</p>
+<h2 id="iteratoritemreader-lista-in-memoria"><code>IteratorItemReader</code> (lista in memoria)</h2>
+<pre><code class="language-java">@Bean
+public IteratorItemReader&lt;String&gt; staticReader() {
+    return new IteratorItemReader&lt;&gt;(List.of(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;).iterator());
+}
+</code></pre>
+<p>Utile per test e per dati piccoli.</p>
+<h2 id="custom-itemreadert">Custom <code>ItemReader&lt;T&gt;</code></h2>
+<pre><code class="language-java">@Component
+@StepScope
+public class MyReader implements ItemReader&lt;Order&gt;, ItemStream {
+
+    private Iterator&lt;Order&gt; it;
+    private long position;
+
+    @Override
+    public void open(ExecutionContext ctx) {
+        position = ctx.getLong(&quot;position&quot;, 0);
+        it = mySource.iteratorFrom(position);
+    }
+
+    @Override
+    public Order read() {
+        if (!it.hasNext()) return null;
+        position++;
+        return it.next();
+    }
+
+    @Override
+    public void update(ExecutionContext ctx) {
+        ctx.putLong(&quot;position&quot;, position);
+    }
+
+    @Override
+    public void close() {}
+}
+</code></pre>
+<p>Per essere <strong>restartable</strong>, implementa <code>ItemStream</code>: <code>open/update/close</code> salvano lo stato nell'<code>ExecutionContext</code>.</p>
+<h2 id="stepscope"><code>@StepScope</code></h2>
+<pre><code class="language-java">@Bean
+@StepScope
+public FlatFileItemReader&lt;X&gt; reader(@Value(&quot;#{jobParameters['inputFile']}&quot;) String filename) {
+    return new FlatFileItemReaderBuilder&lt;X&gt;()...
+        .resource(new FileSystemResource(filename))
+        .build();
+}
+</code></pre>
+<p><code>@StepScope</code> crea il bean <strong>una volta per step execution</strong> invece che singleton. Permette di iniettare <code>#{jobParameters['x']}</code> o <code>#{stepExecutionContext['y']}</code>.</p>
+<h2 id="esercizi">Esercizi</h2>
+<details>
+<summary>Es 38.1 — Multi-resource CSV</summary>
+
+Cartella `input/` con `customers-2026-05-19.csv`, `customers-2026-05-20.csv`, ... Crea un `MultiResourceItemReader` che li legge tutti.
+
+</details>
+
+<details>
+<summary>Es 38.2 — JDBC paging</summary>
+
+Migra da `JdbcCursorItemReader` a `JdbcPagingItemReader`. Confronta tempo di esecuzione e comportamento al restart.
+
+</details>
+
+<details>
+<summary>Es 38.3 — Custom reader API</summary>
+
+`ItemReader` che chiama un endpoint paginato HTTP (`GET /api/items?page=N`) e ritorna gli oggetti uno alla volta. Restartable via `ExecutionContext`.
+
+</details>
+
+<h2 id="cosa-devi-portarti-via">Cosa devi portarti via</h2>
+<ul>
+<li><code>FlatFileItemReader</code> (CSV/fixed), <code>JsonItemReader</code>, <code>StaxEventItemReader</code> per file.</li>
+<li>JDBC: <strong>paging &gt; cursor</strong> in produzione.</li>
+<li><code>JpaPagingItemReader</code> per leggere entità.</li>
+<li><code>MultiResourceItemReader</code> per N file.</li>
+<li>Custom reader: implementa <code>ItemStream</code> per essere restartable.</li>
+<li><code>@StepScope</code> per accesso a parametri dinamici.</li>
+</ul>
+<p>Prossimo: ItemWriter (file, JDBC, JPA, composite).</p>
+      <nav class="pager">
+<a href="37-spring-batch-tasklet-flow.html" class="prev"><span class="label">← Precedente</span><span class="title">Tasklet vs Chunk; flow control: decisioni, split, conditional</span></a>
+<a href="39-spring-batch-itemwriter.html" class="next"><span class="label">Successivo →</span><span class="title">ItemWriter: file, JDBC, JPA, composite, classifier, batch insert</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Java + Spring Zero to Hero</strong> — percorso completo da Java base a Spring Batch in produzione.</p><p>Materiale a scopo educativo. Codice sotto licenza MIT; usalo liberamente nei tuoi progetti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body, {delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true, background: '#15191e', primaryColor: '#1d2530',
+      primaryTextColor: '#eef1f5', primaryBorderColor: '#f89820',
+      lineColor: '#6db33f', secondaryColor: '#1a1f25', tertiaryColor: '#222a33',
+      mainBkg: '#1d2530', nodeBorder: '#f89820', clusterBkg: '#0f1318',
+      clusterBorder: '#2a3340', titleColor: '#f89820',
+      edgeLabelBackground: '#0f1318', textColor: '#eef1f5',
+      labelTextColor: '#eef1f5', actorBkg: '#1d2530', actorBorder: '#f89820',
+      actorTextColor: '#f89820', actorLineColor: '#6db33f',
+      signalColor: '#eef1f5', signalTextColor: '#eef1f5',
+      labelBoxBkgColor: '#1d2530', labelBoxBorderColor: '#f89820',
+      noteBkgColor: '#fff6a8', noteTextColor: '#0f1318', noteBorderColor: '#fff6a8',
+      activationBkgColor: '#1d2530', activationBorderColor: '#f89820',
+      sequenceNumberColor: '#0f1318'
+    },
+    flowchart: { curve: 'basis', padding: 16 },
+    sequence: { mirrorActors: false, bottomMarginAdj: 10 },
+    fontFamily: 'JetBrains Mono, Cascadia Code, Consolas, monospace'
+  });
+</script>
+</body>
+</html>

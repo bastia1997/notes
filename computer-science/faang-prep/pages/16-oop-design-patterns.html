@@ -1,0 +1,548 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OOP e design patterns — FAANG Prep</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">F</div>
+      <div>
+        <div class="brand-title">FAANG Prep</div>
+        <div class="brand-subtitle">DS&amp;A · System Design</div>
+      </div>
+    </div>
+    <div class="lang-bar">
+      <a class="lang-switcher" href="../en/pages/16-oop-design-patterns.html" title="English"><span class="flag-icon">🇬🇧</span><span class="flag-label">English</span></a>
+    </div>
+  </div>
+  <div class="search-wrap">
+    <input class="search-input" id="search-input" placeholder="Cerca nei contenuti... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/00-introduzione.html" class=""><span class="num">00</span>Introduzione e come usare questo percorso</a></li><li class="nav-item"><a href="../pages/01-complessita.html" class=""><span class="num">01</span>Complessità computazionale (Big-O)</a></li><li class="nav-item"><a href="../pages/02-array-stringhe.html" class=""><span class="num">02</span>Array e stringhe</a></li><li class="nav-item"><a href="../pages/03-hashmap-set.html" class=""><span class="num">03</span>Hashmap e set</a></li><li class="nav-item"><a href="../pages/04-linked-list.html" class=""><span class="num">04</span>Linked list</a></li><li class="nav-item"><a href="../pages/05-stack-coda.html" class=""><span class="num">05</span>Stack e coda</a></li><li class="nav-item"><a href="../pages/06-alberi.html" class=""><span class="num">06</span>Alberi (binary tree e BST)</a></li><li class="nav-item"><a href="../pages/07-heap.html" class=""><span class="num">07</span>Heap e priority queue</a></li><li class="nav-item"><a href="../pages/08-grafi.html" class=""><span class="num">08</span>Grafi</a></li><li class="nav-item"><a href="../pages/09-trie.html" class=""><span class="num">09</span>Trie (prefix tree)</a></li><li class="nav-item"><a href="../pages/10-ricorsione-backtracking.html" class=""><span class="num">10</span>Ricorsione e backtracking</a></li><li class="nav-item"><a href="../pages/11-sorting-searching.html" class=""><span class="num">11</span>Sorting e searching</a></li><li class="nav-item"><a href="../pages/12-two-pointers-sliding-window.html" class=""><span class="num">12</span>Two pointers e sliding window</a></li><li class="nav-item"><a href="../pages/13-greedy.html" class=""><span class="num">13</span>Greedy</a></li><li class="nav-item"><a href="../pages/14-dp.html" class=""><span class="num">14</span>Dynamic programming</a></li><li class="nav-item"><a href="../pages/15-bit-manipulation.html" class=""><span class="num">15</span>Bit manipulation</a></li><li class="nav-item"><a href="../pages/16-oop-design-patterns.html" class="active"><span class="num">16</span>OOP e design patterns</a></li><li class="nav-item"><a href="../pages/17-system-design.html" class=""><span class="num">17</span>System design — fondamenti</a></li><li class="nav-item"><a href="../pages/18-system-design-esempi.html" class=""><span class="num">18</span>System design — esempi end-to-end</a></li><li class="nav-item"><a href="../pages/19-concorrenza.html" class=""><span class="num">19</span>Concorrenza e parallelismo</a></li><li class="nav-item"><a href="../pages/20-database-sql.html" class=""><span class="num">20</span>Database e SQL</a></li><li class="nav-item"><a href="../pages/21-os-networking.html" class=""><span class="num">21</span>OS e networking</a></li><li class="nav-item"><a href="../pages/22-coding-patterns.html" class=""><span class="num">22</span>I 16 coding patterns dei colloqui</a></li><li class="nav-item"><a href="../pages/23-behavioral-star.html" class=""><span class="num">23</span>Behavioral interview — STAR e Amazon LP</a></li><li class="nav-item"><a href="../pages/24-mock-interviews.html" class=""><span class="num">24</span>Mock interview e strategia in colloquio</a></li><li class="nav-item"><a href="../pages/25-roadmap-90-giorni.html" class=""><span class="num">25</span>Roadmap 90 giorni — piano operativo</a></li><li class="nav-item"><a href="../pages/26-banca-esercizi.html" class=""><span class="num">26</span>Banca esercizi — 200+ problemi FAANG</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Software design</span>
+        <span>Sezione 16 di 26</span>
+      </div>
+      <h1>OOP e design patterns</h1>
+      <p class="summary">4 pilastri OOP da zero, SOLID con esempi concreti, design patterns GoF essenziali, problemi tipo &quot;Design X&quot; risolti.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Software design</div>
+  
+  
+</div>
+      <p>I round "Design X" (Parking Lot, Tic-Tac-Toe, Snake Game, Elevator) sono spesso parte del loop FAANG (specialmente Amazon, Microsoft, Apple, Bloomberg). Non testano algoritmi: testano <strong>se sai modellare un sistema reale in classi pulite</strong>.</p>
+<p>Questo capitolo ti dà tutto quello che serve.</p>
+<h2 id="parte-1-cose-la-oop-davvero">Parte 1 — Cos'è la OOP, davvero</h2>
+<h3 id="il-problema-che-la-oop-risolve">Il problema che la OOP risolve</h3>
+<p>Quando i programmi crescono oltre poche centinaia di righe, organizzare il codice diventa la sfida principale. Senza struttura:</p>
+<ul>
+<li>Lo stesso pezzo di logica viene duplicato in tanti posti.</li>
+<li>Modificare una cosa rompe altre dieci.</li>
+<li>Aggiungere una nuova feature richiede di cambiare codice ovunque.</li>
+</ul>
+<p>OOP (Object-Oriented Programming) è un <strong>modo di organizzare il codice</strong> che mira a risolvere questo. L'idea: raggruppa <strong>dati</strong> e <strong>comportamenti</strong> correlati in unità chiamate <strong>oggetti</strong>.</p>
+<h3 id="i-4-pilastri">I 4 pilastri</h3>
+<h4 id="1-encapsulation-incapsulamento">1. Encapsulation (incapsulamento)</h4>
+<p>Nascondi i dettagli interni di un oggetto, esponi solo un'<strong>API pubblica</strong>.</p>
+<pre><code class="language-python">class Counter:
+    def __init__(self):
+        self._count = 0           # privato per convenzione (_underscore)
+    def increment(self):
+        self._count += 1
+    def get(self):
+        return self._count
+</code></pre>
+<p>Chi usa <code>Counter</code> non vede <code>_count</code>. Domani puoi cambiarne il tipo (da int a dict per tracciare per chiave) senza rompere chi lo usa.</p>
+<p><strong>Perché?</strong> Modifiche interne non rompono il mondo esterno. Riduce la "superficie di attacco" dei bug.</p>
+<h4 id="2-inheritance-ereditarieta">2. Inheritance (ereditarietà)</h4>
+<p>Una classe può <strong>estendere</strong> un'altra, ereditando attributi e metodi.</p>
+<pre><code class="language-python">class Animal:
+    def __init__(self, name):
+        self.name = name
+    def speak(self):
+        raise NotImplementedError
+
+class Dog(Animal):
+    def speak(self):
+        return &quot;Bau!&quot;
+
+class Cat(Animal):
+    def speak(self):
+        return &quot;Miao!&quot;
+</code></pre>
+<p><code>Dog</code> e <code>Cat</code> riusano <code>__init__</code> di <code>Animal</code> e ne specializzano <code>speak</code>.</p>
+<h4 id="3-polymorphism-polimorfismo">3. Polymorphism (polimorfismo)</h4>
+<p>Stessa interfaccia, comportamenti diversi.</p>
+<pre><code class="language-python">animals = [Dog(&quot;Rex&quot;), Cat(&quot;Felix&quot;)]
+for a in animals:
+    print(a.name, a.speak())   # ognuno parla diversamente
+</code></pre>
+<p>Il codice tratta gli oggetti come <code>Animal</code> senza sapere quale sottoclasse. Lo "smistamento" è automatico (<strong>dynamic dispatch</strong>).</p>
+<h4 id="4-abstraction-astrazione">4. Abstraction (astrazione)</h4>
+<p>Lavora con "concetti" astratti, non con implementazioni concrete.</p>
+<pre><code class="language-python">def feed(animal: Animal):
+    animal.eat()
+</code></pre>
+<p><code>feed</code> non sa né si interessa se è un cane o un gatto. Lavora con l'astrazione <code>Animal</code>.</p>
+<h2 id="parte-2-solid-i-5-principi-del-design-oop">Parte 2 — SOLID: i 5 principi del design OOP</h2>
+<p>Acronimo. Memorizzalo: in colloquio te lo possono chiedere.</p>
+<h3 id="s-single-responsibility">S — Single Responsibility</h3>
+<blockquote>
+<p>Una classe = una responsabilità.</p>
+</blockquote>
+<p>Una classe non dovrebbe avere "due motivi per cambiare". Esempio negativo:</p>
+<pre><code class="language-python">class UserManager:
+    def create_user(self, ...): ...
+    def send_email(self, ...): ...
+    def write_log(self, ...): ...
+    def export_to_csv(self, ...): ...
+</code></pre>
+<p>4 responsabilità diverse. Difficile da testare, manutenere, evolvere.</p>
+<p>Meglio: <code>UserService</code>, <code>EmailService</code>, <code>Logger</code>, <code>Exporter</code> separati.</p>
+<h3 id="o-openclosed">O — Open/Closed</h3>
+<blockquote>
+<p>Aperta a estensione, chiusa a modifica.</p>
+</blockquote>
+<p>Dovresti poter aggiungere comportamento senza <strong>modificare</strong> il codice esistente.</p>
+<p>Esempio: invece di <code>if/elif</code> per ogni tipo di forma, usa polimorfismo:</p>
+<pre><code class="language-python"># MALE: chiusa a estensione (devi modificare per nuove forme)
+def area(shape):
+    if shape.type == 'circle': return pi * shape.r**2
+    elif shape.type == 'square': return shape.side**2
+    # nuova forma → modifichi questa funzione
+
+# BENE: aperta
+class Shape:
+    def area(self): ...
+class Circle(Shape):
+    def area(self): return pi * self.r**2
+class Square(Shape):
+    def area(self): return self.side**2
+# nuova forma → aggiungi una classe, niente modifiche
+</code></pre>
+<h3 id="l-liskov-substitution">L — Liskov Substitution</h3>
+<blockquote>
+<p>Una sottoclasse deve poter sostituire la classe base senza rompere il client.</p>
+</blockquote>
+<p>Se <code>Square extends Rectangle</code> con <code>setWidth/setHeight</code>, il client si aspetta che <code>setWidth(3); setHeight(5)</code> produca area 15. Ma <code>Square</code> forza width=height → bug. <strong>Violazione LSP</strong>.</p>
+<p>Lezione: non ogni "is-a" reale è "is-a" in OOP. Un quadrato è un rettangolo nella geometria, <strong>ma non nel codice se i contratti differiscono</strong>.</p>
+<h3 id="i-interface-segregation">I — Interface Segregation</h3>
+<blockquote>
+<p>Molte interfacce piccole &gt; una grande.</p>
+</blockquote>
+<p>Un'interfaccia <code>IWorker</code> con 20 metodi è scomoda: chi implementa "leggero" deve riempire 15 metodi inutili.</p>
+<p>Meglio: <code>IReader</code>, <code>IWriter</code>, <code>IPrinter</code>. Ogni implementazione adotta solo quelle che le servono.</p>
+<h3 id="d-dependency-inversion">D — Dependency Inversion</h3>
+<blockquote>
+<p>Dipendi da astrazioni, non da concrete.</p>
+</blockquote>
+<pre><code class="language-python"># MALE
+class OrderService:
+    def __init__(self):
+        self.db = MySQLDatabase()   # dipende da DB concreto
+
+# BENE
+class OrderService:
+    def __init__(self, db: Database):
+        self.db = db   # dipende da astrazione
+</code></pre>
+<p>Conseguenza: nei test passi un <code>MockDatabase</code>, in produzione <code>MySQLDatabase</code>. Codice flessibile e testabile.</p>
+<h2 id="parte-3-composition-vs-inheritance">Parte 3 — Composition vs inheritance</h2>
+<p>Anti-pattern classico OOP: <strong>abusare</strong> dell'ereditarietà.</p>
+<pre><code class="language-python">class Bird:
+    def fly(self): ...
+class Ostrich(Bird):
+    def fly(self): raise NotImplementedError   # VIOLA LSP!
+</code></pre>
+<p>Lo struzzo non vola. Forzato a essere <code>Bird</code> solo perché "è un uccello".</p>
+<p><strong>Composition over inheritance</strong>: piuttosto che ereditare, <strong>composisci</strong>.</p>
+<pre><code class="language-python">class FlyBehaviour:
+    def fly(self): ...
+class NoFlyBehaviour(FlyBehaviour):
+    def fly(self): pass
+
+class Bird:
+    def __init__(self, fly_b: FlyBehaviour):
+        self.fly_b = fly_b
+    def fly(self): self.fly_b.fly()
+
+eagle = Bird(NormalFlyBehaviour())
+ostrich = Bird(NoFlyBehaviour())
+</code></pre>
+<p>Più flessibile: cambi comportamento al runtime, riusi i behaviour in più classi.</p>
+<p>Regola in colloquio: <strong>mai eredità più di 1-2 livelli profondi</strong>.</p>
+<h2 id="parte-4-design-patterns-essenziali-gof">Parte 4 — Design Patterns essenziali (GoF)</h2>
+<p>I "Gang of Four" hanno descritto 23 pattern. <strong>Devi conoscere bene 8</strong>.</p>
+<h3 id="1-singleton">1. Singleton</h3>
+<p>Una sola istanza globale.</p>
+<pre><code class="language-python">class Logger:
+    _instance = None
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance
+</code></pre>
+<p><strong>Quando</strong>: logger, config, connection pool. <strong>Anti-pattern</strong> se diventa "global state nascosto".</p>
+<p>In Python preferisci modulo-level globals (più semplici).</p>
+<h3 id="2-factory">2. Factory</h3>
+<p>Funzione/classe che crea istanze concrete senza esporre i costruttori al client.</p>
+<pre><code class="language-python">class ShapeFactory:
+    @staticmethod
+    def create(kind: str) -&gt; Shape:
+        if kind == &quot;circle&quot;: return Circle()
+        elif kind == &quot;square&quot;: return Square()
+        raise ValueError(kind)
+</code></pre>
+<p>Il client chiede <code>factory.create("circle")</code> senza conoscere <code>Circle</code>. Cambia implementazione → cambi solo la factory.</p>
+<h3 id="3-builder">3. Builder</h3>
+<p>Costruisce oggetti complessi step-by-step. Fluent API.</p>
+<pre><code class="language-python">pizza = (PizzaBuilder()
+         .with_dough(&quot;thin&quot;)
+         .with_topping(&quot;ham&quot;)
+         .with_topping(&quot;cheese&quot;)
+         .build())
+</code></pre>
+<p><strong>Quando</strong>: oggetto con tanti parametri opzionali. Più leggibile di un costruttore con 12 argomenti.</p>
+<h3 id="4-observer-pub-sub">4. Observer (pub-sub)</h3>
+<p>Soggetto notifica osservatori al cambiamento.</p>
+<pre><code class="language-python">class Subject:
+    def __init__(self):
+        self.observers = []
+    def attach(self, o):
+        self.observers.append(o)
+    def notify(self, event):
+        for o in self.observers:
+            o.update(event)
+</code></pre>
+<p><strong>Quando</strong>: UI (modello → vista), event-driven systems.</p>
+<h3 id="5-strategy">5. Strategy</h3>
+<p>Algoritmi intercambiabili tramite oggetto.</p>
+<pre><code class="language-python">class Sorter:
+    def __init__(self, strategy):
+        self.strategy = strategy
+    def sort(self, arr):
+        return self.strategy.sort(arr)
+
+# strategies concrete: QuickSort(), MergeSort(), HeapSort()
+</code></pre>
+<p><strong>Quando</strong>: hai più modi di fare la stessa cosa e vuoi scegliere a runtime.</p>
+<h3 id="6-decorator">6. Decorator</h3>
+<p>Aggiunge funzionalità a un oggetto senza modificare la classe.</p>
+<pre><code class="language-python">class Coffee:
+    def cost(self): return 5
+
+class MilkDecorator:
+    def __init__(self, base):
+        self.base = base
+    def cost(self):
+        return self.base.cost() + 1
+
+coffee = MilkDecorator(MilkDecorator(Coffee()))   # caffè con doppio latte
+coffee.cost()   # 7
+</code></pre>
+<p><strong>Quando</strong>: aggiungere caratteristiche (logging, caching, auth) a metodi esistenti.</p>
+<p>Python ha sintassi nativa <code>@decorator</code> per funzioni.</p>
+<h3 id="7-adapter">7. Adapter</h3>
+<p>Trasforma un'interfaccia in un'altra che il client si aspetta.</p>
+<p><strong>Quando</strong>: integrare una libreria esterna che non matcha il tuo design.</p>
+<h3 id="8-iterator">8. Iterator</h3>
+<p>Espone elementi sequenzialmente senza esporre la struttura sottostante.</p>
+<p>In Python: <code>__iter__</code>/<code>__next__</code>. Anche generator (<code>yield</code>) è pattern Iterator.</p>
+<h2 id="parte-5-workflow-design-x-in-colloquio">Parte 5 — Workflow "Design X" in colloquio</h2>
+<p>Per ogni problema "design", segui 6 step:</p>
+<h3 id="1-clarify-requirements-5-min">1. Clarify requirements (5 min)</h3>
+<ul>
+<li>Cosa deve fare il sistema?</li>
+<li>Chi sono gli utenti?</li>
+<li>Cosa NON serve?</li>
+</ul>
+<p>Questo dimostra rigore. Non saltarlo mai.</p>
+<h3 id="2-identifica-le-entita">2. Identifica le entità</h3>
+<p>Nomi nei requisiti → potenziali classi.</p>
+<h3 id="3-identifica-i-comportamenti">3. Identifica i comportamenti</h3>
+<p>Verbi nei requisiti → potenziali metodi.</p>
+<h3 id="4-disegna-le-relazioni">4. Disegna le relazioni</h3>
+<ul>
+<li><strong>Composition</strong> (has-a): X ha un Y.</li>
+<li><strong>Inheritance</strong> (is-a): X è un tipo di Y.</li>
+<li><strong>Aggregation</strong>: X usa Y ma non lo possiede.</li>
+</ul>
+<p>Cardinalità: 1-1, 1-N, N-N.</p>
+<h3 id="5-scrivi-le-firme-delle-classi">5. Scrivi le firme delle classi</h3>
+<p>Costruttore + metodi pubblici. <strong>Niente implementazione completa</strong> (non hai tempo).</p>
+<h3 id="6-discuti-edge-case-estensioni">6. Discuti edge case + estensioni</h3>
+<p>Concurrency, persistenza, scalabilità, autorizzazioni.</p>
+<h2 id="parte-6-esercizi-design-x">Parte 6 — Esercizi "Design X"</h2>
+<h3 id="esercizio-161-parking-lot-medium">Esercizio 16.1 — Parking Lot <span class="problem-tag medium">MEDIUM</span></h3>
+<details><summary>Soluzione completa</summary>
+
+**Requisiti** (chiariti):
+
+- Veicoli di 3 tipi: motorcycle, car, truck.
+- Spot di 3 tipi: small (solo moto), compact (moto+car), large (tutti).
+- Multi-livello.
+- Operazioni: park, leave, ticket.
+
+**Entità**: Vehicle, Spot, Level, ParkingLot, Ticket.
+
+
+<pre><code class="language-python">from enum import Enum
+from typing import Optional
+
+class VType(Enum):
+    MOTO = 1; CAR = 2; TRUCK = 3
+
+class SType(Enum):
+    SMALL = 1; COMPACT = 2; LARGE = 3
+
+class Vehicle:
+    def __init__(self, plate, vtype: VType):
+        self.plate = plate
+        self.vtype = vtype
+
+class Spot:
+    def __init__(self, sid, stype: SType):
+        self.sid = sid
+        self.stype = stype
+        self.vehicle: Optional[Vehicle] = None
+    def can_fit(self, v: Vehicle):
+        if self.stype == SType.SMALL: return v.vtype == VType.MOTO
+        if self.stype == SType.COMPACT: return v.vtype in (VType.MOTO, VType.CAR)
+        return True
+    def park(self, v: Vehicle):
+        self.vehicle = v
+    def free(self):
+        v = self.vehicle; self.vehicle = None; return v
+
+class Level:
+    def __init__(self, lid, spots):
+        self.lid = lid
+        self.spots = spots
+    def park(self, v: Vehicle) -&gt; Optional[Spot]:
+        for s in self.spots:
+            if s.vehicle is None and s.can_fit(v):
+                s.park(v)
+                return s
+        return None
+
+class ParkingLot:
+    def __init__(self, levels):
+        self.levels = levels
+        self.plate_to_spot = {}
+    def park(self, v: Vehicle) -&gt; Optional[Spot]:
+        for lvl in self.levels:
+            s = lvl.park(v)
+            if s:
+                self.plate_to_spot[v.plate] = s
+                return s
+        return None
+    def leave(self, plate):
+        s = self.plate_to_spot.pop(plate, None)
+        if s: return s.free()
+        return None
+</code></pre>
+
+
+**Da discutere**: tariffazione (subclassa Ticket), prenotazioni, concorrenza (lock per level).
+</details>
+
+<h3 id="esercizio-162-tic-tac-toe-medium">Esercizio 16.2 — Tic-Tac-Toe <span class="problem-tag medium">MEDIUM</span></h3>
+<details><summary>Soluzione "O(1) per mossa"</summary>
+
+Trick: per ogni riga/colonna/diagonale, mantieni un contatore con +1 per giocatore 1, -1 per giocatore 2. Se raggiunge ±n, qualcuno vince.
+
+
+<pre><code class="language-python">class TicTacToe:
+    def __init__(self, n):
+        self.n = n
+        self.rows = [0] * n
+        self.cols = [0] * n
+        self.diag = 0
+        self.anti = 0
+    def move(self, row, col, player):
+        val = 1 if player == 1 else -1
+        self.rows[row] += val
+        self.cols[col] += val
+        if row == col: self.diag += val
+        if row + col == self.n - 1: self.anti += val
+        if (abs(self.rows[row]) == self.n or
+            abs(self.cols[col]) == self.n or
+            abs(self.diag) == self.n or
+            abs(self.anti) == self.n):
+            return player
+        return 0
+</code></pre>
+
+
+O(1) per mossa. Notare il bel trucco del +1/-1 per "indistinguere" il vincitore.
+</details>
+
+<h3 id="esercizio-163-lru-cache-medium">Esercizio 16.3 — LRU Cache <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Vedi cap. 04 (DLL + hashmap).</p>
+<h3 id="esercizio-164-logger-rate-limiter-medium">Esercizio 16.4 — Logger Rate Limiter <span class="problem-tag medium">MEDIUM</span></h3>
+<details><summary>Soluzione</summary>
+
+
+<pre><code class="language-python">class Logger:
+    def __init__(self):
+        self.last = {}
+    def should_print(self, ts, msg):
+        if msg in self.last and ts - self.last[msg] &lt; 10:
+            return False
+        self.last[msg] = ts
+        return True
+</code></pre>
+
+
+Semplice ma è proprio una "design question": hashmap msg → last_ts.
+</details>
+
+<h3 id="esercizio-165-hit-counter-medium">Esercizio 16.5 — Hit Counter <span class="problem-tag medium">MEDIUM</span></h3>
+<details><summary>Soluzione</summary>
+
+
+<pre><code class="language-python">from collections import deque
+class HitCounter:
+    def __init__(self):
+        self.q = deque()
+    def hit(self, t):
+        self.q.append(t)
+    def get_hits(self, t):
+        while self.q and self.q[0] &lt;= t - 300:
+            self.q.popleft()
+        return len(self.q)
+</code></pre>
+
+
+Deque per buffer di timestamps. Pop quelli più vecchi di 300 secondi.
+</details>
+
+<h3 id="esercizio-166-snake-game-medium">Esercizio 16.6 — Snake Game <span class="problem-tag medium">MEDIUM</span></h3>
+<details><summary>Soluzione</summary>
+
+
+<pre><code class="language-python">from collections import deque
+class SnakeGame:
+    def __init__(self, w, h, food):
+        self.w = w; self.h = h
+        self.food = deque(food)
+        self.snake = deque([(0, 0)])
+        self.body = {(0, 0)}
+        self.score = 0
+    def move(self, direction):
+        head = self.snake[-1]
+        d = {'U':(-1,0),'D':(1,0),'L':(0,-1),'R':(0,1)}[direction]
+        nh = (head[0]+d[0], head[1]+d[1])
+        if not (0 &lt;= nh[0] &lt; self.h and 0 &lt;= nh[1] &lt; self.w):
+            return -1
+        if self.food and tuple(self.food[0]) == nh:
+            self.food.popleft()
+            self.score += 1
+        else:
+            tail = self.snake.popleft()
+            self.body.discard(tail)
+        if nh in self.body: return -1
+        self.snake.append(nh)
+        self.body.add(nh)
+        return self.score
+</code></pre>
+
+
+Snake come deque (testa/coda). Set per controllo O(1) "collide con sé stesso".
+</details>
+
+<h3 id="esercizio-167-elevator-system-hard">Esercizio 16.7 — Elevator System <span class="problem-tag hard">HARD</span></h3>
+<details><summary>Approccio skeleton</summary>
+
+Classi: `Elevator` (stato: piano corrente, direzione, queue di richieste), `ElevatorController` (riceve richieste e le assegna agli ascensori).
+
+Algoritmo classico: **SCAN/LOOK** ("scan in una direzione finché ci sono richieste, poi inverti").
+
+Discuti: priorità di assegnamento (vicino, stessa direzione), gestione emergenze, capacità max.
+</details>
+
+<h3 id="esercizio-168-in-memory-file-system-hard">Esercizio 16.8 — In-Memory File System <span class="problem-tag hard">HARD</span></h3>
+<details><summary>Idea</summary>
+
+Trie di nodi: ogni nodo è una directory o un file. `Node.children` = dict di subnodes. `Node.content` per file.
+
+Operazioni: `ls(path)`, `mkdir(path)`, `addContent(path, content)`, `readContent(path)`.
+
+Esercizio sulla manipolazione di alberi di nomi.
+</details>
+
+<h2 id="riassunto">Riassunto</h2>
+<ol>
+<li><strong>4 pilastri OOP</strong>: encapsulation, inheritance, polymorphism, abstraction.</li>
+<li><strong>SOLID</strong>: Single Responsibility, Open/Closed, Liskov, Interface Segregation, Dependency Inversion.</li>
+<li><strong>Composition &gt; Inheritance</strong>. Ereditarietà oltre 2 livelli è red flag.</li>
+<li><strong>8 GoF pattern essenziali</strong>: Singleton, Factory, Builder, Observer, Strategy, Decorator, Adapter, Iterator.</li>
+<li><strong>"Design X" in colloquio</strong>: clarify → entità → comportamenti → relazioni → firme → edge case.</li>
+</ol>
+<p>Quando ti chiedono "design X", <strong>non gettarti sul codice</strong>. Chiarisci requisiti, disegna classi alla lavagna, poi codifica le firme.</p>
+      <nav class="pager">
+<a href="15-bit-manipulation.html" class="prev"><span class="label">← Precedente</span><span class="title">Bit manipulation</span></a>
+<a href="17-system-design.html" class="next"><span class="label">Successivo →</span><span class="title">System design — fondamenti</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>FAANG Prep</strong> — percorso completo di preparazione: DS&amp;A, system design, behavioral. Costruito per spaccare ai colloqui di Big Tech.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-index.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true,
+      background: '#161922',
+      primaryColor: '#1d2230',
+      primaryTextColor: '#e6e8ee',
+      primaryBorderColor: '#6cf',
+      lineColor: '#7a8194',
+      secondaryColor: '#262b3a',
+      tertiaryColor: '#0f1117',
+      mainBkg: '#1d2230',
+      secondBkg: '#262b3a',
+      tertiaryBkg: '#161922',
+      nodeBorder: '#6cf',
+      clusterBkg: '#161922',
+      clusterBorder: '#262b3a',
+      titleColor: '#6cf',
+      edgeLabelBackground: '#161922',
+      fontFamily: 'Cascadia Code, monospace'
+    }
+  });
+  document.querySelectorAll('pre > code.language-mermaid').forEach((codeEl) => {
+    const pre = codeEl.parentElement;
+    const div = document.createElement('div');
+    div.className = 'mermaid';
+    div.textContent = codeEl.textContent;
+    pre.replaceWith(div);
+  });
+  mermaid.run();
+</script>
+</body>
+</html>

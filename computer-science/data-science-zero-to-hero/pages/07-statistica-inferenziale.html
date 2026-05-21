@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Statistica inferenziale e test di ipotesi — Data Science Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#3a4a7a',primaryTextColor:'#e8eef0',primaryBorderColor:'#5a6aa0',lineColor:'#8a9499',background:'#11171a'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">Σ</div>
+      <div>
+        <div class="brand-title">DATA SCIENCE</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">🇮🇹 IT</span><a href="../en/pages/07-inferential-statistics.html" class="lang-link" title="Switch to English">🇬🇧 EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-cos-e-data-science.html" class=""><span class="num">01</span>Cos&#x27;è la data science (e cosa non è)</a></li><li class="nav-item"><a href="../pages/02-python-per-data-science.html" class=""><span class="num">02</span>Python per data science: setup professionale</a></li><li class="nav-item"><a href="../pages/02b-matematica-essenziale.html" class=""><span class="num">02b</span>Matematica del liceo che ti serve davvero</a></li><li class="nav-item"><a href="../pages/03-algebra-lineare.html" class=""><span class="num">03</span>Algebra lineare per data scientist</a></li><li class="nav-item"><a href="../pages/04-calcolo-ottimizzazione.html" class=""><span class="num">04</span>Calcolo, gradiente e ottimizzazione</a></li><li class="nav-item"><a href="../pages/05-probabilita.html" class=""><span class="num">05</span>Probabilità: la lingua dell&#x27;incertezza</a></li><li class="nav-item"><a href="../pages/06-statistica-descrittiva.html" class=""><span class="num">06</span>Statistica descrittiva</a></li><li class="nav-item"><a href="../pages/07-statistica-inferenziale.html" class="active"><span class="num">07</span>Statistica inferenziale e test di ipotesi</a></li><li class="nav-item"><a href="../pages/08-distribuzioni.html" class=""><span class="num">08</span>Distribuzioni di probabilità che incontrerai</a></li><li class="nav-item"><a href="../pages/09-numpy.html" class=""><span class="num">09</span>NumPy: pensare in array</a></li><li class="nav-item"><a href="../pages/10-pandas.html" class=""><span class="num">10</span>Pandas: il coltellino svizzero</a></li><li class="nav-item"><a href="../pages/11-sql.html" class=""><span class="num">11</span>SQL per data scientist</a></li><li class="nav-item"><a href="../pages/12-visualizzazione.html" class=""><span class="num">12</span>Visualizzazione: matplotlib, seaborn, plotly</a></li><li class="nav-item"><a href="../pages/13-data-wrangling.html" class=""><span class="num">13</span>Pulizia e data wrangling</a></li><li class="nav-item"><a href="../pages/14-feature-engineering.html" class=""><span class="num">14</span>Feature engineering</a></li><li class="nav-item"><a href="../pages/15-eda.html" class=""><span class="num">15</span>EDA: Exploratory Data Analysis</a></li><li class="nav-item"><a href="../pages/16-ml-fondamenti.html" class=""><span class="num">16</span>ML: fondamenti — bias, varianza, validazione</a></li><li class="nav-item"><a href="../pages/17-regressione-lineare.html" class=""><span class="num">17</span>Regressione lineare e regolarizzazione</a></li><li class="nav-item"><a href="../pages/18-regressione-logistica.html" class=""><span class="num">18</span>Regressione logistica e classificazione</a></li><li class="nav-item"><a href="../pages/19-knn-naive-bayes-svm.html" class=""><span class="num">19</span>KNN, Naive Bayes, SVM</a></li><li class="nav-item"><a href="../pages/20-alberi-decisionali.html" class=""><span class="num">20</span>Alberi decisionali</a></li><li class="nav-item"><a href="../pages/21-random-forest-boosting.html" class=""><span class="num">21</span>Random Forest, Gradient Boosting, XGBoost</a></li><li class="nav-item"><a href="../pages/22-clustering.html" class=""><span class="num">22</span>Clustering: K-Means, DBSCAN, GMM, gerarchico</a></li><li class="nav-item"><a href="../pages/23-pca-tsne-umap.html" class=""><span class="num">23</span>Riduzione dimensionale: PCA, t-SNE, UMAP</a></li><li class="nav-item"><a href="../pages/24-metriche-validazione.html" class=""><span class="num">24</span>Metriche, cross-validation, leakage</a></li><li class="nav-item"><a href="../pages/25-sbilanciamento-classi.html" class=""><span class="num">25</span>Sbilanciamento di classi</a></li><li class="nav-item"><a href="../pages/26-hyperparameter-tuning.html" class=""><span class="num">26</span>Hyperparameter tuning</a></li><li class="nav-item"><a href="../pages/27-reti-neurali.html" class=""><span class="num">27</span>Reti neurali: dalle basi al backprop</a></li><li class="nav-item"><a href="../pages/28-pytorch.html" class=""><span class="num">28</span>PyTorch: dal toy model al training loop</a></li><li class="nav-item"><a href="../pages/29-cnn.html" class=""><span class="num">29</span>CNN per computer vision</a></li><li class="nav-item"><a href="../pages/30-rnn-lstm.html" class=""><span class="num">30</span>RNN, LSTM, GRU per sequenze</a></li><li class="nav-item"><a href="../pages/31-transformer.html" class=""><span class="num">31</span>Transformer e attention</a></li><li class="nav-item"><a href="../pages/32-nlp-llm.html" class=""><span class="num">32</span>NLP: dal text mining ai LLM</a></li><li class="nav-item"><a href="../pages/33-time-series.html" class=""><span class="num">33</span>Time series e forecasting</a></li><li class="nav-item"><a href="../pages/34-mlops.html" class=""><span class="num">34</span>MLOps: deployment, monitoring, drift</a></li><li class="nav-item"><a href="../pages/35-bayesian-causal.html" class=""><span class="num">35</span>Inferenza bayesiana e causale</a></li><li class="nav-item"><a href="../pages/36-capstone-carriera.html" class=""><span class="num">36</span>Capstone, portfolio, carriera</a></li><li class="nav-item"><a href="../pages/37-glossario.html" class=""><span class="num">37</span>Glossario A-Z</a></li><li class="nav-item"><a href="../pages/38-formulario.html" class=""><span class="num">38</span>Formulario: tutte le formule del percorso</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Statistica</span>
+        <span>Sezione 8 di 39</span>
+        <span class="level-tag level-int">Livello: intermedio</span>
+      </div>
+      <h1>Statistica inferenziale e test di ipotesi</h1>
+      <p class="summary">Stimatori, intervalli di confidenza, p-value (e perché tutti li interpretano male), test t, chi-quadrato, ANOVA, potenza statistica.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Statistica</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>[[probabilita]]</li><li>[[statistica-descrittiva]]</li></ul>
+  <div class="label">Strumenti</div>
+  <ul class="source-list"><li>scipy.stats, statsmodels</li></ul>
+</div>
+      <h2 id="inferenza-in-una-riga">Inferenza in una riga</h2>
+<blockquote>
+<p>Dati osservati di un <strong>campione</strong>, cosa possiamo dire della <strong>popolazione</strong>?</p>
+</blockquote>
+<p>Tutto il resto è dettaglio tecnico. Le risposte vengono in due forme: <strong>stime</strong> (con intervalli di confidenza) e <strong>test</strong> (con p-value).</p>
+<h2 id="stimatori-puntuali">Stimatori puntuali</h2>
+<p>Vogliamo stimare un parametro $\theta$ (es: media popolazione $\mu$) dai dati. Un <strong>stimatore</strong> $\hat{\theta}$ è una funzione del campione.</p>
+<p>Proprietà che vogliamo:</p>
+<ul>
+<li><strong>Non distorto</strong> (unbiased): $E[\hat{\theta}] = \theta$</li>
+<li><strong>Consistente</strong>: $\hat{\theta} \to \theta$ al crescere di $n$</li>
+<li><strong>Efficiente</strong>: bassa varianza tra gli stimatori non distorti</li>
+</ul>
+<p>La <strong>media campionaria</strong> $\bar{X}$ è non distorta, consistente, efficiente (per dati gaussiani) per stimare $\mu$.</p>
+<h3 id="mle-maximum-likelihood-estimation">MLE — Maximum Likelihood Estimation</h3>
+<p>Il metodo principe per costruire stimatori. Data una famiglia di modelli $p(x | \theta)$ e dati $x_1, \dots, x_n$ iid, la <strong>verosimiglianza</strong> è:</p>
+<p>$$L(\theta) = \prod_{i=1}^n p(x_i | \theta)$$</p>
+<p>MLE sceglie $\theta$ che massimizza $L$ (o equivalentemente $\log L$, che è numericamente più stabile e algebricamente più gestibile).</p>
+<p><strong>Esempio</strong>: $X_i \sim \mathcal{N}(\mu, \sigma^2)$. La MLE di $\mu$ è $\bar{X}$, e di $\sigma^2$ è $\frac{1}{n}\sum (x_i - \bar{X})^2$. (Nota: con $n$, non $n-1$. La versione MLE è distorta verso il basso; per non distorta si usa $n-1$.)</p>
+<p>MLE generalizza a regressione, logistica, modelli misti, NN — sotto, ogni "training" è massimizzazione di una log-likelihood (o minimizzazione della cross-entropy negativa).</p>
+<h2 id="intervalli-di-confidenza">Intervalli di confidenza</h2>
+<p>Un <strong>intervallo di confidenza al 95%</strong> per $\mu$ è una procedura che produce intervalli i quali, <strong>al ripetersi dell'esperimento</strong>, conterrebbero $\mu$ nel 95% dei casi.</p>
+<p><strong>Interpretazione corretta</strong>: </p>
+<blockquote>
+<p>"Se ripetessimo lo studio 100 volte, ~95 dei 100 intervalli costruiti includerebbero il vero $\mu$."</p>
+</blockquote>
+<p><strong>Interpretazione SBAGLIATA</strong> (che fanno tutti):</p>
+<blockquote>
+<p>"C'è 95% di probabilità che $\mu$ stia in questo intervallo." (Quello è bayesiano — credible interval — diverso.)</p>
+</blockquote>
+<p>Per la media:</p>
+<p>$$\bar{x} \pm t_{n-1, 1-\alpha/2} \cdot \frac{s}{\sqrt{n}}$$</p>
+<p>dove $t$ è il quantile della t-Student con $n-1$ gradi di libertà.</p>
+<pre><code class="language-python">import numpy as np
+from scipy import stats
+
+x = np.random.normal(50, 10, 30)
+mean = x.mean()
+se = stats.sem(x)              # s/√n
+ci = stats.t.interval(0.95, len(x)-1, loc=mean, scale=se)
+print(mean, ci)
+</code></pre>
+<h3 id="bootstrap-lic-senza-assumere-nulla">Bootstrap: l'IC senza assumere nulla</h3>
+<p>Quando non vuoi assumere normalità o non hai una formula chiusa:</p>
+<ol>
+<li>Ricampiona con rimpiazzo dai dati $B$ volte (es: $B=1000$).</li>
+<li>Calcola la statistica su ogni ricampionamento.</li>
+<li>Prendi i percentili 2.5 e 97.5 della distribuzione delle statistiche.</li>
+</ol>
+<pre><code class="language-python">rng = np.random.default_rng(0)
+B = 5000
+boot_means = [rng.choice(x, size=len(x), replace=True).mean() for _ in range(B)]
+np.percentile(boot_means, [2.5, 97.5])
+</code></pre>
+<p>Bootstrap funziona per quasi qualsiasi statistica: mediana, IQR, R², metriche di ML.</p>
+<h2 id="test-di-ipotesi">Test di ipotesi</h2>
+<p>Ogni test è un dialogo:</p>
+<ol>
+<li>Stabilisci un'<strong>ipotesi nulla</strong> $H_0$ (di solito "non c'è effetto").</li>
+<li>Stabilisci l'<strong>alternativa</strong> $H_1$.</li>
+<li>Calcola una <strong>statistica test</strong> $T$ dai dati.</li>
+<li>Sotto $H_0$, $T$ ha una certa distribuzione nota.</li>
+<li>Calcola la probabilità di osservare $T$ o un valore più estremo, <strong>assumendo $H_0$ vera</strong>. Questo è il <strong>p-value</strong>.</li>
+<li>Se p-value &lt; $\alpha$ (tipicamente 0.05), rifiuti $H_0$.</li>
+</ol>
+<h3 id="cose-davvero-il-p-value">Cos'è davvero il p-value</h3>
+<blockquote>
+<p>"p-value = probabilità di osservare dati estremi come questi (o più estremi), <strong>assumendo che $H_0$ sia vera</strong>."</p>
+</blockquote>
+<p><strong>Non è</strong>:
+- P($H_0$ vera | dati). Non è una probabilità su $H_0$.
+- La probabilità di sbagliare a rifiutare.
+- Una misura dell'<strong>ampiezza dell'effetto</strong>. p=0.001 con effetto microscopico è clinicamente irrilevante.</p>
+<h3 id="errori-di-tipo-i-e-ii">Errori di tipo I e II</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>$H_0$ vera</th>
+<th>$H_0$ falsa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Rifiuti $H_0$</strong></td>
+<td>Errore tipo I (α) — falso positivo</td>
+<td>Decisione corretta (potenza $1-\beta$)</td>
+</tr>
+<tr>
+<td><strong>Non rifiuti $H_0$</strong></td>
+<td>Decisione corretta</td>
+<td>Errore tipo II (β) — falso negativo</td>
+</tr>
+</tbody>
+</table>
+<p>$\alpha$ è scelto da te (di solito 0.05). $\beta$ dipende dall'ampiezza dell'effetto e da $n$. <strong>Più campioni = più potenza</strong>.</p>
+<h2 id="i-test-che-ti-servono">I test che ti servono</h2>
+<h3 id="t-test">t-test</h3>
+<p>Confronta medie. Tre versioni:</p>
+<ul>
+<li><strong>One sample</strong>: $\bar{x}$ vs valore atteso $\mu_0$.</li>
+<li><strong>Two sample independent</strong>: $\bar{x}_1$ vs $\bar{x}_2$ (gruppi separati).</li>
+<li><strong>Paired</strong>: due misure sugli stessi soggetti (pre/post).</li>
+</ul>
+<p>Assunzioni: dati ~normali (TLC aiuta per $n&gt;30$), varianze ~uguali (per la versione classica; usa <strong>Welch</strong> se diverse).</p>
+<pre><code class="language-python">from scipy.stats import ttest_ind, ttest_rel
+ttest_ind(group_a, group_b, equal_var=False)   # Welch
+</code></pre>
+<h3 id="mann-whitney-u-wilcoxon">Mann-Whitney U / Wilcoxon</h3>
+<p>Non-parametrici, sostituiscono il t-test quando i dati non sono normali (skew, code).</p>
+<pre><code class="language-python">from scipy.stats import mannwhitneyu
+mannwhitneyu(group_a, group_b, alternative='two-sided')
+</code></pre>
+<h3 id="anova">ANOVA</h3>
+<p>Confronta $k &gt; 2$ gruppi. $H_0$: tutte le medie uguali.</p>
+<pre><code class="language-python">from scipy.stats import f_oneway
+f_oneway(group_a, group_b, group_c)
+</code></pre>
+<p>Se rifiuti, segue test <strong>post-hoc</strong> (Tukey HSD) per capire quali coppie differiscono.</p>
+<h3 id="chi-quadrato">Chi-quadrato</h3>
+<p>Per categoriali. Due tipi:</p>
+<ul>
+<li><strong>Goodness of fit</strong>: una variabile categoriale segue una distribuzione attesa?</li>
+<li><strong>Indipendenza</strong>: due categoriali sono indipendenti?</li>
+</ul>
+<pre><code class="language-python">import pandas as pd
+from scipy.stats import chi2_contingency
+table = pd.crosstab(df.gender, df.purchased)
+chi2, p, dof, expected = chi2_contingency(table)
+</code></pre>
+<h3 id="test-di-normalita">Test di normalità</h3>
+<ul>
+<li><strong>Shapiro-Wilk</strong> (<code>scipy.stats.shapiro</code>): potente per $n &lt; 5000$.</li>
+<li><strong>Anderson-Darling</strong>, <strong>Kolmogorov-Smirnov</strong>.</li>
+<li><strong>Q-Q plot</strong>: il modo grafico migliore. Se i punti stanno sulla retta, è normale.</li>
+</ul>
+<blockquote>
+<p><strong>Caveat</strong>: con $n$ grande, ogni test di normalità rifiuta $H_0$ anche per scostamenti minimi. Usa il <strong>Q-Q plot</strong> e il senso comune.</p>
+</blockquote>
+<h2 id="correzione-per-test-multipli">Correzione per test multipli</h2>
+<p>Se fai 20 test indipendenti con $\alpha=0.05$, ti aspetti $\sim 1$ falso positivo per puro caso. In genomica o in A/B test su molte metriche, <strong>bisogna correggere</strong>:</p>
+<ul>
+<li><strong>Bonferroni</strong>: $\alpha_{adj} = \alpha / m$. Conservativo.</li>
+<li><strong>Benjamini-Hochberg (FDR)</strong>: controlla la frazione di falsi positivi tra i rifiutati. Meno conservativo, standard in biologia.</li>
+</ul>
+<pre><code class="language-python">from statsmodels.stats.multitest import multipletests
+reject, p_adj, _, _ = multipletests(p_values, alpha=0.05, method='fdr_bh')
+</code></pre>
+<h2 id="potenza-statistica-e-sample-size">Potenza statistica e sample size</h2>
+<p>Prima di lanciare uno studio: quanti campioni servono per rilevare un effetto di una certa ampiezza?</p>
+<p>Per un t-test a due campioni con effetto <strong>Cohen's d = 0.5</strong> (medio), $\alpha=0.05$, potenza 80%, servono <strong>~64 soggetti per gruppo</strong>.</p>
+<pre><code class="language-python">from statsmodels.stats.power import TTestIndPower
+power = TTestIndPower()
+power.solve_power(effect_size=0.5, alpha=0.05, power=0.8)
+# ≈ 63.7
+</code></pre>
+<blockquote>
+<p>Lezione: un test che non rifiuta non significa "$H_0$ è vera". Potrebbe significare "$n$ era troppo piccolo".</p>
+</blockquote>
+<h2 id="ab-testing-nel-mondo-reale">A/B testing nel mondo reale</h2>
+<pre><code class="language-mermaid">flowchart LR
+    A[Definisci metrica primaria] --&gt; B[Calcola sample size&lt;br/&gt;con MDE realistico]
+    B --&gt; C[Assegna utenti&lt;br/&gt;casualmente A/B]
+    C --&gt; D[Raccogli dati&lt;br/&gt;fino a sample size]
+    D --&gt; E[Analizza UNA volta&lt;br/&gt;al termine]
+    E --&gt; F[Decidi]
+</code></pre>
+<p><strong>Errori frequenti</strong>:</p>
+<ol>
+<li><strong>Peeking</strong>: guardare i risultati ogni giorno e fermare quando sembra significativo. Inflaziona il falso positivo. Usa <strong>sequential testing</strong> o <strong>always-valid p-values</strong> se vuoi early stopping.</li>
+<li><strong>Metriche multiple</strong>: testare 10 metriche aumenta la probabilità di falso positivo. Pre-registra la metrica primaria.</li>
+<li><strong>Effetto novelty</strong>: il nuovo design eccita gli utenti i primi giorni. Run per almeno 1–2 settimane.</li>
+<li><strong>Assegnazione non casuale</strong>: per device, per cohort, per location. Verifica sempre il bilanciamento.</li>
+</ol>
+<h2 id="bayesiano-vs-frequentista-in-30-secondi">Bayesiano vs frequentista in 30 secondi</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Frequentista</th>
+<th>Bayesiano</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Parametri</td>
+<td>Fissi (sconosciuti)</td>
+<td>Variabili aleatorie con distribuzione</td>
+</tr>
+<tr>
+<td>Output</td>
+<td>p-value, IC</td>
+<td>Posterior, credible interval</td>
+</tr>
+<tr>
+<td>Prior</td>
+<td>Non c'è</td>
+<td>Sì</td>
+</tr>
+<tr>
+<td>Interpretazione IC/credible</td>
+<td>Sulla procedura</td>
+<td>Sul parametro</td>
+</tr>
+<tr>
+<td>Costo computazionale</td>
+<td>Basso</td>
+<td>Spesso alto (MCMC)</td>
+</tr>
+</tbody>
+</table>
+<p>Entrambi funzionano. In industria il frequentista domina (A/B test, regression analysis). In ricerca scientifica bayesiano sta crescendo.</p>
+<h2 id="esercizi">Esercizi</h2>
+<details>
+<summary>Esercizio 1 — IC manuale</summary>
+
+Hai $n=25$, $\bar{x}=78$, $s=12$. Calcola l'IC al 95% per $\mu$.
+
+**Soluzione**: $t_{24, 0.975} \approx 2.064$. SE = $12/\sqrt{25} = 2.4$. IC = $78 \pm 2.064 \cdot 2.4 = 78 \pm 4.95 = [73.05, 82.95]$.
+</details>
+
+<details>
+<summary>Esercizio 2 — Quanto effetto è "vero"?</summary>
+
+Un test mostra p = 0.04 con effetto = 0.5 punti percentuali su una metrica con media 50%. È un risultato importante?
+
+**Risposta**: probabilmente no. La significatività statistica non implica significatività pratica. 0.5pp su 50% è un miglioramento dell'1% relativo: spesso il costo dell'implementazione lo annulla. **Sempre riportare effect size** (Cohen's d, OR, lift) accanto al p-value.
+</details>
+
+<details>
+<summary>Esercizio 3 — A/B test simulato</summary>
+
+Simula un A/B test in cui il gruppo trattamento ha conversion rate 10.5% vs controllo 10%. Quanti campioni per gruppo servono per p<0.05 con potenza 80%?
+
+
+<pre><code class="language-python">from statsmodels.stats.power import NormalIndPower
+from statsmodels.stats.proportion import proportion_effectsize
+es = proportion_effectsize(0.105, 0.10)
+n = NormalIndPower().solve_power(effect_size=es, alpha=0.05, power=0.8)
+print(int(n))  # ~60000 per gruppo
+</code></pre>
+
+
+Lezione: piccoli effetti su rate richiedono enormi sample size. Per questo A/B test su feature minori richiedono settimane di traffico Netflix-scale.
+</details>
+
+<details>
+<summary>Esercizio 4 — Multiple testing</summary>
+
+Simula 100 test indipendenti tutti sotto $H_0$ con $\alpha=0.05$. Quanti rifiuti aspetti? Verifica.
+
+
+<pre><code class="language-python">import numpy as np
+from scipy.stats import ttest_1samp
+rng = np.random.default_rng(0)
+ps = []
+for _ in range(100):
+    x = rng.normal(0, 1, 30)
+    _, p = ttest_1samp(x, 0)
+    ps.append(p)
+print(sum(p &lt; 0.05 for p in ps))  # ~5
+</code></pre>
+
+
+Ora applica Bonferroni e BH:
+
+<pre><code class="language-python">from statsmodels.stats.multitest import multipletests
+print(&quot;Bonferroni:&quot;, multipletests(ps, alpha=0.05, method='bonferroni')[0].sum())
+print(&quot;BH (FDR):&quot;, multipletests(ps, alpha=0.05, method='fdr_bh')[0].sum())
+</code></pre>
+
+</details>
+
+<details>
+<summary>Esercizio 5 — Bootstrap CI per la mediana</summary>
+
+
+<pre><code class="language-python">import numpy as np
+rng = np.random.default_rng(0)
+x = rng.lognormal(0, 1, 200)
+
+B = 5000
+boot = np.array([np.median(rng.choice(x, len(x), replace=True)) for _ in range(B)])
+ci = np.percentile(boot, [2.5, 97.5])
+print(f&quot;mediana: {np.median(x):.3f}, IC: {ci}&quot;)
+</code></pre>
+
+
+Confronta con un'IC analitica (che per la mediana è complessa). Bootstrap rende facile l'inferenza per quasi qualsiasi statistica.
+</details>
+
+<h2 id="cosa-portarti-via">Cosa portarti via</h2>
+<ul>
+<li>p-value $\neq$ P(H_0 vera). Imparalo a memoria.</li>
+<li>IC al 95% è una proprietà della <strong>procedura</strong>, non del singolo intervallo.</li>
+<li>Bootstrap = swiss army knife per IC senza assunzioni di normalità.</li>
+<li>Effect size importa quanto la significatività.</li>
+<li>A/B test fatti male sono peggio di non farli.</li>
+</ul>
+<p>Prossimo: le distribuzioni di probabilità che incontrerai ogni giorno.</p>
+      <nav class="pager">
+<a href="06-statistica-descrittiva.html" class="prev"><span class="label">← Precedente</span><span class="title">Statistica descrittiva</span></a>
+<a href="08-distribuzioni.html" class="next"><span class="label">Successivo →</span><span class="title">Distribuzioni di probabilità che incontrerai</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Data Science Zero to Hero</strong> — percorso completo, in italiano, dalla matematica al deployment.</p><p>Materiale didattico aperto. Le formule sono lì per essere capite, non temute. Quando un concetto è oscuro, torna indietro: la data science è una piramide, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

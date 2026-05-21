@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>Listeners, restart, monitoring, integrazione con Spring Boot e Kubernetes — Java + Spring Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">☕</div>
+      <div>
+        <div class="brand-title">JAVA · SPRING</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="10" height="20" fill="#009246"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ce2b37"/></svg> IT</span><a href="../en/pages/41-spring-batch-listeners-restart-k8s.html" class="lang-link" title="Switch to English"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="30" height="20" fill="#012169"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#fff" stroke-width="3"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#c8102e" stroke-width="1.5"/><path d="M15,0 v20 M0,10 h30" stroke="#fff" stroke-width="5"/><path d="M15,0 v20 M0,10 h30" stroke="#c8102e" stroke-width="3"/></svg> EN</a></div>
+  </div>
+  <div class="search-wrap">
+    <div class="search-row">
+      <div class="search-inputwrap">
+        <span class="search-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"/>
+            <line x1="20" y1="20" x2="16.65" y2="16.65"/>
+          </svg>
+        </span>
+        <input class="search-input" id="search-input" type="text" placeholder="cerca... (premi /)" autocomplete="off" aria-label="Search">
+        <button class="search-clear" id="search-clear" type="button" aria-label="Clear" title="Clear">&times;</button>
+      </div>
+      <button class="search-btn" id="search-btn" type="button" aria-label="CERCA" title="CERCA">CERCA</button>
+    </div>
+    <div class="search-hits" id="search-hits" role="listbox"></div>
+  </div>
+  <div class="sidebar-nav">
+    <nav class="nav-section">
+      <div class="nav-section-title">Percorso</div>
+      <ul class="nav-list">
+        <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+        <li class="nav-item"><a href="../pages/00-percorso-e-mindset.html" class=""><span class="num">00</span>Il percorso e la giusta mentalità</a></li><li class="nav-item"><a href="../pages/01-introduzione-java.html" class=""><span class="num">01</span>Java: cos&#x27;è davvero, JVM/JRE/JDK, primo programma</a></li><li class="nav-item"><a href="../pages/02-sintassi-base.html" class=""><span class="num">02</span>Sintassi di base: tipi, variabili, operatori, controllo di flusso</a></li><li class="nav-item"><a href="../pages/03-stringhe-array-io.html" class=""><span class="num">03</span>Stringhe, array, I/O da console</a></li><li class="nav-item"><a href="../pages/04-oop-classi-oggetti.html" class=""><span class="num">04</span>OOP I — Classi, oggetti, costruttori, this, package, visibilità</a></li><li class="nav-item"><a href="../pages/05-oop-ereditarieta-polimorfismo.html" class=""><span class="num">05</span>OOP II — Ereditarietà, polimorfismo, interfacce, classi astratte</a></li><li class="nav-item"><a href="../pages/06-equals-hashcode-immutabilita.html" class=""><span class="num">06</span>OOP III — equals, hashCode, toString, immutabilità, record</a></li><li class="nav-item"><a href="../pages/07-eccezioni.html" class=""><span class="num">07</span>Eccezioni: checked vs unchecked, try-with-resources, custom</a></li><li class="nav-item"><a href="../pages/08-generics.html" class=""><span class="num">08</span>Generics: tipi parametrici, PECS, type erasure, wildcards</a></li><li class="nav-item"><a href="../pages/09-collections.html" class=""><span class="num">09</span>Collections: List, Set, Map, Queue, complessità, scelta della struttura</a></li><li class="nav-item"><a href="../pages/10-stream-lambda-optional.html" class=""><span class="num">10</span>Stream API, lambda, functional interfaces, Optional</a></li><li class="nav-item"><a href="../pages/11-io-nio.html" class=""><span class="num">11</span>I/O e NIO.2: File, Path, channels, buffer</a></li><li class="nav-item"><a href="../pages/12-concurrency-thread.html" class=""><span class="num">12</span>Concurrency I — Thread, sincronizzazione, volatile, Java Memory Model</a></li><li class="nav-item"><a href="../pages/13-executor-future-completablefuture.html" class=""><span class="num">13</span>Concurrency II — ExecutorService, Future, CompletableFuture</a></li><li class="nav-item"><a href="../pages/14-concurrency-jucconcurrent.html" class=""><span class="num">14</span>Concurrency III — java.util.concurrent: locks, atomics, concurrent collections</a></li><li class="nav-item"><a href="../pages/15-jvm-internals.html" class=""><span class="num">15</span>JVM internals: classloader, bytecode, runtime data areas, JIT</a></li><li class="nav-item"><a href="../pages/16-memoria-gc.html" class=""><span class="num">16</span>Memoria e garbage collection: G1, ZGC, Shenandoah</a></li><li class="nav-item"><a href="../pages/17-profiling-jfr.html" class=""><span class="num">17</span>Profiling: JFR, async-profiler, jstack, heap dump, jcmd</a></li><li class="nav-item"><a href="../pages/18-java-moderno.html" class=""><span class="num">18</span>Java moderno: dal 8 al 21 — features chiave</a></li><li class="nav-item"><a href="../pages/19-jdbc.html" class=""><span class="num">19</span>JDBC: connessione, PreparedStatement, transazioni, isolation levels</a></li><li class="nav-item"><a href="../pages/20-jpa-hibernate.html" class=""><span class="num">20</span>JPA / Hibernate: entità, relazioni, lazy/eager, N+1, cache</a></li><li class="nav-item"><a href="../pages/21-sql-essenziale.html" class=""><span class="num">21</span>SQL essenziale per chi sviluppa in Java</a></li><li class="nav-item"><a href="../pages/22-spring-intro-ioc-di.html" class=""><span class="num">22</span>Spring intro: IoC, DI, ApplicationContext, BeanFactory</a></li><li class="nav-item"><a href="../pages/23-spring-beans-lifecycle.html" class=""><span class="num">23</span>Bean: scopes, lifecycle, BeanPostProcessor, FactoryBean</a></li><li class="nav-item"><a href="../pages/24-spring-configurazione.html" class=""><span class="num">24</span>Configurazione: Java config, @ComponentScan, profili, conditionals, properties</a></li><li class="nav-item"><a href="../pages/25-spring-aop-transactional.html" class=""><span class="num">25</span>AOP, proxy, @Transactional: cosa accade davvero</a></li><li class="nav-item"><a href="../pages/26-spring-boot.html" class=""><span class="num">26</span>Spring Boot: auto-configuration, starters, Actuator</a></li><li class="nav-item"><a href="../pages/27-spring-data-jpa.html" class=""><span class="num">27</span>Spring Data JPA: Repository, derived queries, paginazione, Specification</a></li><li class="nav-item"><a href="../pages/28-spring-mvc-rest.html" class=""><span class="num">28</span>Spring MVC: DispatcherServlet, controller, REST endpoint</a></li><li class="nav-item"><a href="../pages/29-rest-openapi-hateoas.html" class=""><span class="num">29</span>REST: best practice, OpenAPI/Swagger, HATEOAS, versionamento</a></li><li class="nav-item"><a href="../pages/30-spring-webflux.html" class=""><span class="num">30</span>Spring WebFlux + Reactor: Mono, Flux, programmazione reattiva</a></li><li class="nav-item"><a href="../pages/31-spring-security.html" class=""><span class="num">31</span>Spring Security: filter chain, autenticazione, autorizzazione, JWT, OAuth2</a></li><li class="nav-item"><a href="../pages/32-spring-cloud.html" class=""><span class="num">32</span>Spring Cloud: Config Server, Discovery, Gateway, Resilience4j</a></li><li class="nav-item"><a href="../pages/33-testing.html" class=""><span class="num">33</span>Testing: JUnit 5, Mockito, MockMvc, Testcontainers</a></li><li class="nav-item"><a href="../pages/34-spring-batch-intro.html" class=""><span class="num">34</span>Spring Batch intro: domain model, Job, Step, primo batch</a></li><li class="nav-item"><a href="../pages/35-spring-batch-jobrepository.html" class=""><span class="num">35</span>JobRepository, JobLauncher, schema dei metadati</a></li><li class="nav-item"><a href="../pages/36-spring-batch-chunk-skip-retry.html" class=""><span class="num">36</span>Chunk processing: commit interval, skip, retry, fault tolerance</a></li><li class="nav-item"><a href="../pages/37-spring-batch-tasklet-flow.html" class=""><span class="num">37</span>Tasklet vs Chunk; flow control: decisioni, split, conditional</a></li><li class="nav-item"><a href="../pages/38-spring-batch-itemreader.html" class=""><span class="num">38</span>ItemReader: flat file, XML/JSON, JDBC cursor/paging, JPA, multi-resource</a></li><li class="nav-item"><a href="../pages/39-spring-batch-itemwriter.html" class=""><span class="num">39</span>ItemWriter: file, JDBC, JPA, composite, classifier, batch insert</a></li><li class="nav-item"><a href="../pages/40-spring-batch-scaling-partitioning.html" class=""><span class="num">40</span>Scaling: multi-threaded step, partitioning, remote chunking/partitioning</a></li><li class="nav-item"><a href="../pages/41-spring-batch-listeners-restart-k8s.html" class="active"><span class="num">41</span>Listeners, restart, monitoring, integrazione con Spring Boot e Kubernetes</a></li><li class="nav-item"><a href="../pages/42-design-patterns.html" class=""><span class="num">42</span>Design pattern in Java/Spring: GoF + DDD-lite</a></li><li class="nav-item"><a href="../pages/43-performance-observability.html" class=""><span class="num">43</span>Performance tuning e observability production-grade</a></li><li class="nav-item"><a href="../pages/44-esercizi-sintesi.html" class=""><span class="num">44</span>50 esercizi cumulativi: dalla sintassi a Spring Batch</a></li><li class="nav-item"><a href="../pages/45-progetto-finale-etl.html" class=""><span class="num">45</span>Progetto finale guidato: ETL bancario notturno</a></li>
+      </ul>
+    </nav>
+  </div>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Spring Batch</span>
+        <span>Sezione 41 di 45</span>
+        <span class="level-tag level-exp">Livello: esperto</span>
+      </div>
+      <h1>Listeners, restart, monitoring, integrazione con Spring Boot e Kubernetes</h1>
+      <p class="summary">Tutti i listener: Job, Step, Chunk, Item, Skip, Retry. Restart in pratica: cosa serve, cosa NON è restartable. Monitoring con Micrometer/Prometheus. Spring Cloud Task. Job su Kubernetes (Spring Cloud Data Flow o CronJob).</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Spring Batch</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>Sezione 40</li></ul>
+  <div class="label">Strumenti</div>
+  <ul class="source-list"><li>Spring Boot 3.x</li><li>Kubernetes</li><li>Prometheus</li></ul>
+</div>
+      <h2 id="listener-riepilogati">Listener riepilogati</h2>
+<table>
+<thead>
+<tr>
+<th>Listener</th>
+<th>Hook</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>JobExecutionListener</code></td>
+<td><code>beforeJob</code>, <code>afterJob</code></td>
+</tr>
+<tr>
+<td><code>StepExecutionListener</code></td>
+<td><code>beforeStep</code>, <code>afterStep</code></td>
+</tr>
+<tr>
+<td><code>ChunkListener</code></td>
+<td><code>beforeChunk</code>, <code>afterChunk</code>, <code>afterChunkError</code></td>
+</tr>
+<tr>
+<td><code>ItemReadListener&lt;T&gt;</code></td>
+<td><code>beforeRead</code>, <code>afterRead</code>, <code>onReadError</code></td>
+</tr>
+<tr>
+<td><code>ItemProcessListener&lt;I, O&gt;</code></td>
+<td><code>beforeProcess</code>, <code>afterProcess</code>, <code>onProcessError</code></td>
+</tr>
+<tr>
+<td><code>ItemWriteListener&lt;O&gt;</code></td>
+<td><code>beforeWrite</code>, <code>afterWrite</code>, <code>onWriteError</code></td>
+</tr>
+<tr>
+<td><code>SkipListener&lt;I, O&gt;</code></td>
+<td>skip in read/process/write</td>
+</tr>
+<tr>
+<td><code>RetryListener</code></td>
+<td>open/close/onError di retry</td>
+</tr>
+</tbody>
+</table>
+<p>Implementazione con annotation:</p>
+<pre><code class="language-java">@Component
+public class JobLogger {
+    @BeforeJob
+    public void before(JobExecution exec) {
+        log.info(&quot;starting job {} #{}&quot;, exec.getJobInstance().getJobName(), exec.getId());
+    }
+    @AfterJob
+    public void after(JobExecution exec) {
+        log.info(&quot;job {} ended status={}&quot;, exec.getJobInstance().getJobName(), exec.getStatus());
+    }
+}
+</code></pre>
+<p>Registra:</p>
+<pre><code class="language-java">new JobBuilder(&quot;import&quot;, jr).listener(jobLogger).start(...)
+</code></pre>
+<h2 id="restart-in-pratica">Restart in pratica</h2>
+<p>Per restartare un job:</p>
+<ol>
+<li>La precedente esecuzione deve essere in stato <code>FAILED</code> o <code>STOPPED</code> (non <code>COMPLETED</code>).</li>
+<li>Stessi <code>JobParameters</code> identifying.</li>
+<li>Reader / writer devono essere <strong>stateful</strong> (implementare <code>ItemStream</code>).</li>
+</ol>
+<pre><code class="language-java">op.restart(jobExecutionId);
+</code></pre>
+<p>Spring Batch:
+1. Carica l'<code>ExecutionContext</code> salvato.
+2. Riattiva il reader col contesto: il reader sa dove era arrivato.
+3. Riprende da lì.</p>
+<h3 id="cosa-non-e-restartable">Cosa NON è restartable</h3>
+<ul>
+<li>Step con <code>.allowStartIfComplete(true)</code>: rieseguito anche se OK.</li>
+<li>Step già <code>COMPLETED</code> viene <strong>saltato</strong>, non rifatto.</li>
+<li>Custom reader senza <code>ItemStream</code>: ricomincia da capo.</li>
+</ul>
+<h2 id="cosa-salvare-nellexecutioncontext">Cosa salvare nell'ExecutionContext</h2>
+<p>Se tu modifichi stato esterno (es. file scaricato), salva nel contesto:</p>
+<pre><code class="language-java">@AfterStep
+public ExitStatus afterStep(StepExecution se) {
+    se.getExecutionContext().putString(&quot;lastFileProcessed&quot;, file.getName());
+    return ExitStatus.COMPLETED;
+}
+</code></pre>
+<p>Al restart leggi da <code>BeforeStep</code>.</p>
+<h2 id="monitoring">Monitoring</h2>
+<p>Spring Batch espone metriche <strong>Micrometer</strong>:</p>
+<ul>
+<li><code>spring.batch.job</code> (timer)</li>
+<li><code>spring.batch.step</code> (timer)</li>
+<li><code>spring.batch.item.read</code> / <code>process</code> / <code>write</code> (counter)</li>
+<li><code>spring.batch.chunk.write</code> (timer)</li>
+</ul>
+<p>Con <code>spring-boot-starter-actuator</code> + <code>micrometer-registry-prometheus</code>:</p>
+<pre><code>GET /actuator/prometheus
+</code></pre>
+<p>Grafana dashboard:
+- Tempo medio per job.
+- Throughput (record/s).
+- Failure rate.
+- Skip count per job.</p>
+<h2 id="job-custom-event">Job custom event</h2>
+<p>Pubblicare evento al termine del job:</p>
+<pre><code class="language-java">@Component
+public class JobNotifyListener implements JobExecutionListener {
+    private final ApplicationEventPublisher publisher;
+
+    @Override
+    public void afterJob(JobExecution exec) {
+        publisher.publishEvent(new JobFinishedEvent(exec.getJobInstance().getJobName(),
+                                                   exec.getStatus()));
+    }
+}
+
+// e poi un listener che manda mail/Slack
+@EventListener
+public void onJobFinished(JobFinishedEvent e) {
+    if (e.status() != BatchStatus.COMPLETED) {
+        slack.send(&quot;⚠️ Job &quot; + e.name() + &quot; ended &quot; + e.status());
+    }
+}
+</code></pre>
+<h2 id="spring-cloud-task">Spring Cloud Task</h2>
+<p>Estensione che traccia esecuzioni di "task" (job batch) come record persistenti. Si integra con Spring Cloud Data Flow per orchestrazione/UI.</p>
+<pre><code class="language-xml">&lt;dependency&gt;
+  &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+  &lt;artifactId&gt;spring-cloud-starter-task&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+<pre><code class="language-java">@SpringBootApplication
+@EnableTask
+public class App { }
+</code></pre>
+<p>Tabelle <code>TASK_EXECUTION</code> complementari a <code>BATCH_*</code>.</p>
+<h2 id="spring-batch-su-kubernetes">Spring Batch su Kubernetes</h2>
+<h3 id="opzione-1-cronjob-k8s-che-lancia-un-container">Opzione 1: CronJob K8s che lancia un container</h3>
+<pre><code class="language-yaml">apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: nightly-import
+spec:
+  schedule: &quot;0 2 * * *&quot;   # ogni notte alle 2
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: app
+            image: acme/import-job:1.2.3
+            args: [&quot;--spring.batch.job.names=importJob&quot;]
+          restartPolicy: OnFailure
+</code></pre>
+<p>Vantaggi:
+- Niente schedulatore in Java.
+- K8s gestisce restart, logging, monitoring.
+- Resource limits per pod.</p>
+<p>Configurazione importanti:
+- <code>spring.batch.job.names</code>: nome del job da eseguire.
+- <code>spring.batch.job.enabled=true</code> (in K8s lo vuoi attivo).
+- Lettura <code>JobParameters</code> da env var: <code>--businessDate=${BUSINESS_DATE}</code>.</p>
+<h3 id="opzione-2-spring-cloud-data-flow">Opzione 2: Spring Cloud Data Flow</h3>
+<p>UI + REST API per orchestrare job in K8s. Complessità maggiore, ma utile per ambienti enterprise con decine di job.</p>
+<h3 id="opzione-3-argo-workflows">Opzione 3: Argo Workflows</h3>
+<p>Per DAG complessi (più di un singolo job).</p>
+<h2 id="best-practice-per-produzione">Best practice per produzione</h2>
+<ol>
+<li><strong>Idempotenza in scrittura</strong> (upsert, ON CONFLICT).</li>
+<li><strong>Restart-safe</strong>: reader stateful, writer idempotente.</li>
+<li><strong>Logging strutturato</strong> con <code>traceId</code>.</li>
+<li><strong>Metriche Micrometer</strong> esposte a Prometheus.</li>
+<li><strong>Alert</strong> su FAILED, su durata anomala, su skip_count alto.</li>
+<li><strong>JobParameters</strong> che includono <strong>businessDate</strong>: rilanciare per la stessa data ⟶ stesso effetto.</li>
+<li><strong>Lock per evitare concorrenza</strong> sullo stesso JobInstance (Spring Batch ti protegge solo se la JVM è la stessa).</li>
+<li><strong>Test integrati</strong> con Testcontainers + <code>JobLauncherTestUtils</code>.</li>
+</ol>
+<pre><code class="language-java">@SpringBatchTest
+@SpringBootTest
+class ImportJobTest {
+
+    @Autowired JobLauncherTestUtils utils;
+
+    @Test
+    void importsAllRecords() throws Exception {
+        JobExecution exec = utils.launchJob();
+        assertThat(exec.getStatus()).isEqualTo(BatchStatus.COMPLETED);
+        assertThat(exec.getStepExecutions().iterator().next().getWriteCount()).isEqualTo(1000);
+    }
+}
+</code></pre>
+<h2 id="esercizi">Esercizi</h2>
+<details>
+<summary>Es 41.1 — JobExecutionListener completo</summary>
+
+Listener che logga tempi, record letti/scritti/skippati, e manda evento Slack se FAILED.
+
+</details>
+
+<details>
+<summary>Es 41.2 — Restart funzionante</summary>
+
+Job in 3 step: A,B,C. Forza fail in B. Restart: A viene saltato, B riparte dall'inizio (default).
+
+</details>
+
+<details>
+<summary>Es 41.3 — Esponi metriche Prometheus</summary>
+
+Aggiungi Actuator + Micrometer-Prometheus. Lancia job. Verifica `/actuator/prometheus` ha `spring_batch_*`.
+
+</details>
+
+<details>
+<summary>Es 41.4 — Test con JobLauncherTestUtils</summary>
+
+Test che lancia un mini-job con un piccolo CSV embedded e verifica `read_count`, `write_count`.
+
+</details>
+
+<h2 id="cosa-devi-portarti-via">Cosa devi portarti via</h2>
+<ul>
+<li>Listener su ogni livello: job, step, chunk, item.</li>
+<li>Restart richiede reader stateful (<code>ItemStream</code>).</li>
+<li>Salva nell'ExecutionContext lo stato necessario.</li>
+<li>Monitoring: Micrometer + Prometheus + Grafana.</li>
+<li>Su K8s: <strong>CronJob</strong> è il pattern semplice e pulito.</li>
+<li>Idempotenza + restart-safe + logging + metriche = production ready.</li>
+</ul>
+<p>Prossimo: design patterns in Java/Spring (sintesi).</p>
+      <nav class="pager">
+<a href="40-spring-batch-scaling-partitioning.html" class="prev"><span class="label">← Precedente</span><span class="title">Scaling: multi-threaded step, partitioning, remote chunking/partitioning</span></a>
+<a href="42-design-patterns.html" class="next"><span class="label">Successivo →</span><span class="title">Design pattern in Java/Spring: GoF + DDD-lite</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Java + Spring Zero to Hero</strong> — percorso completo da Java base a Spring Batch in produzione.</p><p>Materiale a scopo educativo. Codice sotto licenza MIT; usalo liberamente nei tuoi progetti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body, {delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true, background: '#15191e', primaryColor: '#1d2530',
+      primaryTextColor: '#eef1f5', primaryBorderColor: '#f89820',
+      lineColor: '#6db33f', secondaryColor: '#1a1f25', tertiaryColor: '#222a33',
+      mainBkg: '#1d2530', nodeBorder: '#f89820', clusterBkg: '#0f1318',
+      clusterBorder: '#2a3340', titleColor: '#f89820',
+      edgeLabelBackground: '#0f1318', textColor: '#eef1f5',
+      labelTextColor: '#eef1f5', actorBkg: '#1d2530', actorBorder: '#f89820',
+      actorTextColor: '#f89820', actorLineColor: '#6db33f',
+      signalColor: '#eef1f5', signalTextColor: '#eef1f5',
+      labelBoxBkgColor: '#1d2530', labelBoxBorderColor: '#f89820',
+      noteBkgColor: '#fff6a8', noteTextColor: '#0f1318', noteBorderColor: '#fff6a8',
+      activationBkgColor: '#1d2530', activationBorderColor: '#f89820',
+      sequenceNumberColor: '#0f1318'
+    },
+    flowchart: { curve: 'basis', padding: 16 },
+    sequence: { mirrorActors: false, bottomMarginAdj: 10 },
+    fontFamily: 'JetBrains Mono, Cascadia Code, Consolas, monospace'
+  });
+</script>
+</body>
+</html>

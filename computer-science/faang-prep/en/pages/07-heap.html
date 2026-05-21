@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Heap and priority queue — FAANG Prep</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">F</div>
+      <div>
+        <div class="brand-title">FAANG Prep</div>
+        <div class="brand-subtitle">DS&amp;A · System Design</div>
+      </div>
+    </div>
+    <div class="lang-bar">
+      <a class="lang-switcher" href="../../pages/07-heap.html" title="Italiano"><span class="flag-icon">🇮🇹</span><span class="flag-label">Italiano</span></a>
+    </div>
+  </div>
+  <div class="search-wrap">
+    <input class="search-input" id="search-input" placeholder="Search content... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/00-introduction.html" class=""><span class="num">00</span>Introduction and how to use this path</a></li><li class="nav-item"><a href="../pages/01-complexity.html" class=""><span class="num">01</span>Computational complexity (Big-O)</a></li><li class="nav-item"><a href="../pages/02-arrays-strings.html" class=""><span class="num">02</span>Arrays and strings</a></li><li class="nav-item"><a href="../pages/03-hashmap-set.html" class=""><span class="num">03</span>Hashmap and set</a></li><li class="nav-item"><a href="../pages/04-linked-list.html" class=""><span class="num">04</span>Linked list</a></li><li class="nav-item"><a href="../pages/05-stack-queue.html" class=""><span class="num">05</span>Stack and queue</a></li><li class="nav-item"><a href="../pages/06-trees.html" class=""><span class="num">06</span>Trees (binary tree and BST)</a></li><li class="nav-item"><a href="../pages/07-heap.html" class="active"><span class="num">07</span>Heap and priority queue</a></li><li class="nav-item"><a href="../pages/08-graphs.html" class=""><span class="num">08</span>Graphs</a></li><li class="nav-item"><a href="../pages/09-trie.html" class=""><span class="num">09</span>Trie (prefix tree)</a></li><li class="nav-item"><a href="../pages/10-recursion-backtracking.html" class=""><span class="num">10</span>Recursion and backtracking</a></li><li class="nav-item"><a href="../pages/11-sorting-searching.html" class=""><span class="num">11</span>Sorting and searching</a></li><li class="nav-item"><a href="../pages/12-two-pointers-sliding-window.html" class=""><span class="num">12</span>Two pointers and sliding window</a></li><li class="nav-item"><a href="../pages/13-greedy.html" class=""><span class="num">13</span>Greedy</a></li><li class="nav-item"><a href="../pages/14-dp.html" class=""><span class="num">14</span>Dynamic programming</a></li><li class="nav-item"><a href="../pages/15-bit-manipulation.html" class=""><span class="num">15</span>Bit manipulation</a></li><li class="nav-item"><a href="../pages/16-oop-design-patterns.html" class=""><span class="num">16</span>OOP and design patterns</a></li><li class="nav-item"><a href="../pages/17-system-design.html" class=""><span class="num">17</span>System design — fundamentals</a></li><li class="nav-item"><a href="../pages/18-system-design-examples.html" class=""><span class="num">18</span>System design — end-to-end examples</a></li><li class="nav-item"><a href="../pages/19-concurrency.html" class=""><span class="num">19</span>Concurrency and parallelism</a></li><li class="nav-item"><a href="../pages/20-database-sql.html" class=""><span class="num">20</span>Database and SQL</a></li><li class="nav-item"><a href="../pages/21-os-networking.html" class=""><span class="num">21</span>OS and networking</a></li><li class="nav-item"><a href="../pages/22-coding-patterns.html" class=""><span class="num">22</span>The 16 interview coding patterns</a></li><li class="nav-item"><a href="../pages/23-behavioral-star.html" class=""><span class="num">23</span>Behavioral interview — STAR and Amazon LP</a></li><li class="nav-item"><a href="../pages/24-mock-interviews.html" class=""><span class="num">24</span>Mock interview and interview strategy</a></li><li class="nav-item"><a href="../pages/25-roadmap-90-days.html" class=""><span class="num">25</span>90-day Roadmap — operational plan</a></li><li class="nav-item"><a href="../pages/26-problem-bank.html" class=""><span class="num">26</span>Problem bank — 200+ FAANG problems</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Data structures</span>
+        <span>Section 7 of 26</span>
+      </div>
+      <h1>Heap and priority queue</h1>
+      <p class="summary">Complete binary tree, min/max heap visualized, top-K, two heaps for streaming median. Tool for &quot;extract min/max repeatedly&quot;.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Data structures</div>
+  
+  
+</div>
+      <p>The heap is the right structure when you must <strong>repeatedly extract minimum (or maximum)</strong>. It's at the heart of Dijkstra, top-K, streaming median.</p>
+<p>In Python it's <code>heapq</code> and is <strong>only min-heap</strong>. For max-heap you cheat.</p>
+<h2 id="part-1-what-a-heap-really-is">Part 1 — What a heap really is</h2>
+<h3 id="complete-binary-tree">Complete binary tree</h3>
+<p>A heap is a <strong>complete binary tree</strong> (all levels full except possibly last, filled left-to-right) with a special property: for every node, <strong>value is ≤ children</strong> (min-heap) or <strong>≥ children</strong> (max-heap).</p>
+<p>Example min-heap:</p>
+<pre><code class="language-mermaid">flowchart TD
+    n1((1)) --&gt; n3((3))
+    n1 --&gt; n5((5))
+    n3 --&gt; n4((4))
+    n3 --&gt; n8((8))
+    n5 --&gt; n6((6))
+    n5 --&gt; n9((9))
+    n4 --&gt; n7((7))
+</code></pre>
+<p>Note:</p>
+<ul>
+<li>1 is the min. Always at top.</li>
+<li>1 ≤ 3, 1 ≤ 5. 3 ≤ 4, 3 ≤ 8. 5 ≤ 6, 5 ≤ 9. 4 ≤ 7.</li>
+<li>Tree is "compact", filled left-to-right.</li>
+</ul>
+<h3 id="not-a-bst">NOT a BST</h3>
+<p>In a BST, left &lt; node &lt; right. Here no: 4 and 8 are both children of 3, but there's no "total" ordering on children. Just "every parent ≤ children".</p>
+<p>So a heap <strong>doesn't</strong> support "find value X in O(log n)". For that you need BSTs. Heap only supports "what's the min/max" (O(1)) and "extract min/max" (O(log n)).</p>
+<h3 id="implementation-array-not-pointers">Implementation: array, not pointers</h3>
+<p>Genius trick: represent complete binary tree as array, exploiting numerical positions.</p>
+<p>For node at index <code>i</code>:</p>
+<ul>
+<li>Parent: <code>(i-1) // 2</code></li>
+<li>Left child: <code>2i + 1</code></li>
+<li>Right child: <code>2i + 2</code></li>
+</ul>
+<p>Heap above as array: <code>[1, 3, 5, 4, 8, 6, 9, 7]</code>.</p>
+<p>Verify: node <code>4</code> at index 3. Parent = (3-1)//2 = 1 = <code>3</code>. ✓</p>
+<p><strong>No pointers</strong>, <strong>contiguous memory</strong>, <strong>cache-friendly</strong>. Elegant.</p>
+<h2 id="part-2-operations-how-they-work">Part 2 — Operations: how they work</h2>
+<h3 id="push-heappush-olog-n">Push (heappush): O(log n)</h3>
+<ol>
+<li>Add value at end of array.</li>
+<li><strong>Bubble up</strong>: compare with parent. If smaller (min-heap), swap. Repeat.</li>
+</ol>
+<p><code>log n</code> comparisons at most (tree height).</p>
+<h3 id="pop-heappop-olog-n">Pop (heappop): O(log n)</h3>
+<ol>
+<li>Result is root (<code>arr[0]</code>).</li>
+<li>Move last element to root.</li>
+<li><strong>Bubble down</strong>: compare with smaller child. If larger, swap. Repeat.</li>
+</ol>
+<p><code>log n</code>.</p>
+<h3 id="heapify-list-heap-in-on">Heapify (list → heap in O(n))</h3>
+<p>Surprisingly, building a heap from an array is <strong>O(n)</strong>, not O(n log n). Bubble-down from middle up to root.</p>
+<p>Analysis: most nodes are near leaves (few operations). Few high nodes pay O(log n). Sum: O(n).</p>
+<h2 id="part-3-python-heapq-api">Part 3 — Python <code>heapq</code> API</h2>
+<pre><code class="language-python">import heapq
+h = []
+heapq.heappush(h, x)         # O(log n)
+x = heapq.heappop(h)         # O(log n), returns min
+top = h[0]                   # peek without pop, O(1)
+heapq.heapify(arr)           # in-place, O(n)
+
+# Top K smallest or largest
+heapq.nsmallest(k, arr)
+heapq.nlargest(k, arr)
+
+# Push + pop in one shot (faster)
+heapq.heappushpop(h, x)      # push then pop
+heapq.heapreplace(h, x)      # pop then push (assumes non-empty)
+</code></pre>
+<h3 id="max-heap-in-python-negate-values">Max-heap in Python: negate values</h3>
+<p><code>heapq</code> is only min-heap. Standard trick: negate.</p>
+<pre><code class="language-python"># Simulated max-heap
+h = []
+heapq.heappush(h, -x)
+top_max = -heapq.heappop(h)
+</code></pre>
+<h3 id="heap-of-tuples">Heap of tuples</h3>
+<p>When comparing by composite priority, use tuples. Python compares lexicographically.</p>
+<pre><code class="language-python">heapq.heappush(h, (priority, value))
+</code></pre>
+<p><strong>Subtle problem</strong>: if two tuples have same priority and <code>value</code> isn't comparable (e.g. dict, custom object), Python raises TypeError.</p>
+<p><strong>Solution</strong>: add a counter as "tiebreaker":</p>
+<pre><code class="language-python">counter = 0
+heapq.heappush(h, (priority, counter, value))
+counter += 1
+</code></pre>
+<h2 id="part-4-fundamental-patterns">Part 4 — Fundamental patterns</h2>
+<h3 id="pattern-1-top-k-elements">Pattern 1 — Top K elements</h3>
+<p>Typical question: "the K largest/smallest/most frequent elements".</p>
+<p><strong>Brute force</strong>: sort everything → O(n log n).</p>
+<p><strong>Optimal with heap</strong>: keep a <strong>min-heap of size k</strong>. For each new element, if larger than top (i.e. min of k you have), replace.</p>
+<pre><code class="language-python">def top_k_largest(arr, k):
+    h = []
+    for x in arr:
+        if len(h) &lt; k:
+            heapq.heappush(h, x)
+        elif x &gt; h[0]:
+            heapq.heapreplace(h, x)
+    return h   # the k largest, not sorted
+</code></pre>
+<p><strong>Why min-heap for k largest?</strong> Because top (min) is the <strong>candidate to discard</strong> if a better new element arrives.</p>
+<p>Complexity: <strong>O(n log k)</strong>, O(k) space. For <code>n=1M</code>, <code>k=10</code>: ~33M ops vs 20M → similar in practice but with O(k) memory.</p>
+<h3 id="pattern-2-merge-k-sorted-lists">Pattern 2 — Merge K sorted lists</h3>
+<p>Given K sorted lists, merge them.</p>
+<p><strong>Idea</strong>: initial heap with first element of each list. Pop min, push next from same list.</p>
+<pre><code class="language-python">def merge_k(lists):
+    h = []
+    for i, lst in enumerate(lists):
+        if lst:
+            heapq.heappush(h, (lst[0].val, i, lst[0]))
+    dummy = tail = ListNode()
+    while h:
+        v, i, node = heapq.heappop(h)
+        tail.next = node
+        tail = tail.next
+        if node.next:
+            heapq.heappush(h, (node.next.val, i, node.next))
+    return dummy.next
+</code></pre>
+<p>Complexity: O(N log k) where N is total, k is number of lists.</p>
+<h3 id="pattern-3-two-heaps-for-streaming-median">Pattern 3 — Two heaps for streaming median</h3>
+<p>Problem: receive numbers one at a time, must answer in O(1) "what's the median of all I've seen so far?".</p>
+<p><strong>Brilliant idea</strong>: keep two heaps.</p>
+<ul>
+<li><code>lo</code>: max-heap (negated) of lower half.</li>
+<li><code>hi</code>: min-heap of upper half.</li>
+</ul>
+<p>Maintain invariant: <code>lo</code> has same number of elements as <code>hi</code>, or one more.</p>
+<p>Median:</p>
+<ul>
+<li>If <code>|lo| &gt; |hi|</code>: median = top of <code>lo</code>.</li>
+<li>If equal: median = (top lo + top hi) / 2.</li>
+</ul>
+<p>When adding a new number:</p>
+<ol>
+<li>Push to lo (with negation).</li>
+<li>Move max of lo to hi (maintains order).</li>
+<li>If hi has more elements than lo, move back.</li>
+</ol>
+<pre><code class="language-python">import heapq
+class MedianFinder:
+    def __init__(self):
+        self.lo = []   # max-heap (negated)
+        self.hi = []   # min-heap
+
+    def add(self, x):
+        heapq.heappush(self.lo, -heapq.heappushpop(self.hi, x))
+        if len(self.lo) &gt; len(self.hi):
+            heapq.heappush(self.hi, -heapq.heappop(self.lo))
+
+    def find_median(self):
+        if len(self.hi) &gt; len(self.lo):
+            return self.hi[0]
+        return (self.hi[0] - self.lo[0]) / 2
+</code></pre>
+<p>O(log n) per add, O(1) per find.</p>
+<h3 id="pattern-4-scheduling-simulation">Pattern 4 — Scheduling / Simulation</h3>
+<p>Heap on <code>(next_event_time, event)</code>. Always extract closest event.</p>
+<p>Examples: Meeting Rooms II, Task Scheduler.</p>
+<h3 id="pattern-5-dijkstra">Pattern 5 — Dijkstra</h3>
+<p>Heap of <code>(distance, node)</code>. Always extract unvisited node with smallest distance. Already seen in ch. 08.</p>
+<h2 id="part-5-common-traps">Part 5 — Common traps</h2>
+<h3 id="1-heapq-is-only-min-heap">1. <code>heapq</code> is only min-heap</h3>
+<p>For max, negate. Forgetting it is a common bug.</p>
+<h3 id="2-heap-does-not-maintain-global-order">2. Heap does NOT maintain global order</h3>
+<p>Only "top is min". Iterating a heap does <strong>not</strong> give elements in order. To get them sorted, do repeated pops.</p>
+<h3 id="3-comparison-of-non-comparable-objects">3. Comparison of non-comparable objects</h3>
+<p>Tuples <code>(priority, object)</code> break if two have same priority and object doesn't implement <code>__lt__</code>. Add intermediate counter.</p>
+<h3 id="4-heapifyarr-modifies-arr-in-place">4. <code>heapify(arr)</code> modifies <code>arr</code> in-place</h3>
+<p>If you want to keep the original, copy first.</p>
+<h3 id="5-heapqnlargestk-arr-on-huge-array">5. <code>heapq.nlargest(k, arr)</code> on huge array</h3>
+<p><code>nlargest</code> is O(n log k). For <code>k &gt; n/2</code>, prefer <code>sorted(arr)[-k:]</code> (O(n log n)).</p>
+<h2 id="exercises">Exercises</h2>
+<h3 id="exercise-71-kth-largest-element-medium">Exercise 7.1 — Kth Largest Element <span class="problem-tag medium">MEDIUM</span></h3>
+<details><summary>Solution</summary>
+
+
+<pre><code class="language-python">import heapq
+def kth_largest(arr, k):
+    return heapq.nlargest(k, arr)[-1]
+</code></pre>
+
+
+O(n log k). For O(n) you'd need Quickselect.
+</details>
+
+<h3 id="exercise-72-top-k-frequent-elements-medium">Exercise 7.2 — Top K Frequent Elements <span class="problem-tag medium">MEDIUM</span></h3>
+<details><summary>Solution</summary>
+
+
+<pre><code class="language-python">from collections import Counter
+def top_k(arr, k):
+    c = Counter(arr)
+    return heapq.nlargest(k, c.keys(), key=c.get)
+</code></pre>
+
+
+`heapq.nlargest` with `key` lets you order by custom key.
+</details>
+
+<h3 id="exercise-73-k-closest-points-to-origin-medium">Exercise 7.3 — K Closest Points to Origin <span class="problem-tag medium">MEDIUM</span></h3>
+<details><summary>Solution</summary>
+
+Max-heap of size k. For each point, if closer than top, replace.
+
+
+<pre><code class="language-python">def k_closest(points, k):
+    h = []
+    for x, y in points:
+        d = x*x + y*y
+        if len(h) &lt; k:
+            heapq.heappush(h, (-d, x, y))   # max-heap via negation
+        elif -h[0][0] &gt; d:
+            heapq.heapreplace(h, (-d, x, y))
+    return [[x, y] for _, x, y in h]
+</code></pre>
+
+
+O(n log k).
+
+**Note**: we use squared distance (no sqrt) — faster and preserves order.
+</details>
+
+<h3 id="exercise-74-merge-k-sorted-lists-hard">Exercise 7.4 — Merge K Sorted Lists <span class="problem-tag hard">HARD</span></h3>
+<p>See Part 4 pattern 2.</p>
+<h3 id="exercise-75-find-median-from-data-stream-hard">Exercise 7.5 — Find Median from Data Stream <span class="problem-tag hard">HARD</span></h3>
+<p>See Part 4 pattern 3.</p>
+<h3 id="exercise-76-meeting-rooms-ii-medium">Exercise 7.6 — Meeting Rooms II <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Given <code>intervals = [(start, end), ...]</code>, min number of rooms needed.</p>
+<details><summary>Reasoning</summary>
+
+**Idea**: sort by start. Heap of end times of currently occupied rooms.
+
+For each new meeting:
+
+- If the room that frees earliest (heap top) frees by the new start → reuse it (pop).
+- Push new end time.
+
+Result = final heap size.
+
+
+<pre><code class="language-python">def min_meeting_rooms(intervals):
+    intervals.sort(key=lambda x: x[0])
+    h = []
+    for s, e in intervals:
+        if h and h[0] &lt;= s:
+            heapq.heappop(h)
+        heapq.heappush(h, e)
+    return len(h)
+</code></pre>
+
+
+O(n log n).
+</details>
+
+<h3 id="exercise-77-task-scheduler-medium">Exercise 7.7 — Task Scheduler <span class="problem-tag medium">MEDIUM</span></h3>
+<p>You have tasks with cooldown n between same tasks. Min time to complete them.</p>
+<details><summary>Solution</summary>
+
+Max-heap of frequencies + queue of tasks in cooldown.
+
+
+<pre><code class="language-python">from collections import Counter, deque
+def least_interval(tasks, n):
+    c = Counter(tasks)
+    h = [-v for v in c.values()]
+    heapq.heapify(h)
+    time = 0
+    q = deque()   # (negated_count, ready_time)
+    while h or q:
+        time += 1
+        if h:
+            cnt = heapq.heappop(h) + 1
+            if cnt &lt; 0:
+                q.append((cnt, time + n))
+        if q and q[0][1] == time:
+            heapq.heappush(h, q.popleft()[0])
+    return time
+</code></pre>
+
+</details>
+
+<h3 id="exercise-78-kth-smallest-in-sorted-matrix-medium">Exercise 7.8 — Kth Smallest in Sorted Matrix <span class="problem-tag medium">MEDIUM</span></h3>
+<p>n×n matrix with sorted rows and columns. K-th smallest.</p>
+<details><summary>Solution</summary>
+
+Min-heap initialized with (mat[0][0], 0, 0). Pop, push neighbors.
+
+
+<pre><code class="language-python">def kth_smallest(M, k):
+    n = len(M)
+    h = [(M[0][0], 0, 0)]
+    seen = {(0, 0)}
+    for _ in range(k - 1):
+        v, i, j = heapq.heappop(h)
+        for di, dj in [(1, 0), (0, 1)]:
+            ni, nj = i + di, j + dj
+            if ni &lt; n and nj &lt; n and (ni, nj) not in seen:
+                heapq.heappush(h, (M[ni][nj], ni, nj))
+                seen.add((ni, nj))
+    return h[0][0]
+</code></pre>
+
+
+O(k log k).
+
+Binary search on value in O(n log(max-min)) also exists, but less intuitive.
+</details>
+
+<h3 id="exercise-79-last-stone-weight-easy">Exercise 7.9 — Last Stone Weight <span class="problem-tag easy">EASY</span></h3>
+<details><summary>Solution</summary>
+
+Max-heap. Extract two largest; if different, reinsert difference.
+
+
+<pre><code class="language-python">def last_stone_weight(stones):
+    h = [-s for s in stones]
+    heapq.heapify(h)
+    while len(h) &gt; 1:
+        a = -heapq.heappop(h)
+        b = -heapq.heappop(h)
+        if a &gt; b:
+            heapq.heappush(h, -(a - b))
+    return -h[0] if h else 0
+</code></pre>
+
+</details>
+
+<h3 id="exercise-710-reorganize-string-medium">Exercise 7.10 — Reorganize String <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Rearrange string so no adjacent character is equal. "" if impossible.</p>
+<details><summary>Solution</summary>
+
+Max-heap of frequencies. At each step take the **two most frequent** available, add to output, decrement.
+
+
+<pre><code class="language-python">def reorganize(s):
+    c = Counter(s)
+    if max(c.values()) &gt; (len(s) + 1) // 2:
+        return &quot;&quot;
+    h = [(-v, k) for k, v in c.items()]
+    heapq.heapify(h)
+    out = []
+    while len(h) &gt;= 2:
+        v1, c1 = heapq.heappop(h)
+        v2, c2 = heapq.heappop(h)
+        out += [c1, c2]
+        if v1 + 1: heapq.heappush(h, (v1 + 1, c1))
+        if v2 + 1: heapq.heappush(h, (v2 + 1, c2))
+    if h:
+        out.append(h[0][1])
+    return &quot;&quot;.join(out)
+</code></pre>
+
+
+**Initial check**: if a character has frequency > ceil(n/2), impossible. E.g. "aab" has a=2 and (3+1)/2 = 2. OK. "aaab" has a=3 > (4+1)/2 = 2. Impossible.
+</details>
+
+<h2 id="summary">Summary</h2>
+<ol>
+<li><strong>Heap = complete binary tree + parent vs children invariant</strong>. Implemented as array.</li>
+<li><strong>O(log n) push/pop</strong>, <strong>O(1) peek</strong>, <strong>O(n) heapify</strong>.</li>
+<li><strong><code>heapq</code> is min-heap</strong>. For max, negate.</li>
+<li><strong>Top-K</strong>: min-heap of size k, replace if larger than top.</li>
+<li><strong>Two heaps for streaming median</strong>: max-heap lower + min-heap upper.</li>
+<li><strong>Scheduling pattern</strong>: heap on next event times.</li>
+</ol>
+      <nav class="pager">
+<a href="06-trees.html" class="prev"><span class="label">← Previous</span><span class="title">Trees (binary tree and BST)</span></a>
+<a href="08-graphs.html" class="next"><span class="label">Next →</span><span class="title">Graphs</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>FAANG Prep</strong> — complete prep path: DS&amp;A, system design, behavioral. Built to crush Big Tech interviews.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-index.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true,
+      background: '#161922',
+      primaryColor: '#1d2230',
+      primaryTextColor: '#e6e8ee',
+      primaryBorderColor: '#6cf',
+      lineColor: '#7a8194',
+      secondaryColor: '#262b3a',
+      tertiaryColor: '#0f1117',
+      mainBkg: '#1d2230',
+      secondBkg: '#262b3a',
+      tertiaryBkg: '#161922',
+      nodeBorder: '#6cf',
+      clusterBkg: '#161922',
+      clusterBorder: '#262b3a',
+      titleColor: '#6cf',
+      edgeLabelBackground: '#161922',
+      fontFamily: 'Cascadia Code, monospace'
+    }
+  });
+  document.querySelectorAll('pre > code.language-mermaid').forEach((codeEl) => {
+    const pre = codeEl.parentElement;
+    const div = document.createElement('div');
+    div.className = 'mermaid';
+    div.textContent = codeEl.textContent;
+    pre.replaceWith(div);
+  });
+  mermaid.run();
+</script>
+</body>
+</html>

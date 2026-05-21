@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Black-Scholes and the Greeks — Financial Literacy Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#3a3a2a',primaryTextColor:'#f4f1e8',primaryBorderColor:'#9b7d34',lineColor:'#9a9685',background:'#181c27'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">€</div>
+      <div>
+        <div class="brand-title">FINANZA</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/23-black-scholes-greche.html" class="lang-link" title="Passa all'italiano">IT</a><span class="lang-active" title="English">EN</span></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="search... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-what-is-money.html" class=""><span class="num">01</span>What money actually is (and how it changed)</a></li><li class="nav-item"><a href="../pages/02-financial-system.html" class=""><span class="num">02</span>The financial system: how it actually works</a></li><li class="nav-item"><a href="../pages/03-central-banks.html" class=""><span class="num">03</span>Central banks (ECB, Fed, BOE, BOJ)</a></li><li class="nav-item"><a href="../pages/04-inflation.html" class=""><span class="num">04</span>Inflation, deflation, purchasing power</a></li><li class="nav-item"><a href="../pages/05-personal-budget.html" class=""><span class="num">05</span>Personal budget and cash flow</a></li><li class="nav-item"><a href="../pages/06-financial-pyramid.html" class=""><span class="num">06</span>Financial pyramid and emergency fund</a></li><li class="nav-item"><a href="../pages/07-accounts-and-payments.html" class=""><span class="num">07</span>Current accounts, deposit accounts, payment systems</a></li><li class="nav-item"><a href="../pages/08-credit-score.html" class=""><span class="num">08</span>Credit score, credit bureaus and financial identity</a></li><li class="nav-item"><a href="../pages/09-types-of-banks.html" class=""><span class="num">09</span>Types of banks (and why neobanks are different)</a></li><li class="nav-item"><a href="../pages/10-bank-balance-sheet-basel.html" class=""><span class="num">10</span>Bank balance sheets and Basel III/IV</a></li><li class="nav-item"><a href="../pages/11-mortgages.html" class=""><span class="num">11</span>Mortgages (fixed, floating, mixed, switching, public-employee schemes)</a></li><li class="nav-item"><a href="../pages/12-loans-cards-salary-assignment.html" class=""><span class="num">12</span>Personal loans, revolving cards, salary-assignment loans</a></li><li class="nav-item"><a href="../pages/13-financial-markets.html" class=""><span class="num">13</span>Financial markets: how they actually work</a></li><li class="nav-item"><a href="../pages/14-stocks.html" class=""><span class="num">14</span>Stocks: what you really buy when you buy a stock</a></li><li class="nav-item"><a href="../pages/15-bonds.html" class=""><span class="num">15</span>Bonds: coupon, price, yield, duration</a></li><li class="nav-item"><a href="../pages/16-etfs-funds.html" class=""><span class="num">16</span>ETFs, mutual funds, active vs passive management</a></li><li class="nav-item"><a href="../pages/17-asset-allocation-mpt.html" class=""><span class="num">17</span>Asset allocation and Modern Portfolio Theory (MPT)</a></li><li class="nav-item"><a href="../pages/18-diversification-correlation.html" class=""><span class="num">18</span>Diversification, correlation, and unsystematic risk</a></li><li class="nav-item"><a href="../pages/19-fundamental-analysis.html" class=""><span class="num">19</span>Fundamental analysis: DCF, multiples, ratios</a></li><li class="nav-item"><a href="../pages/20-technical-analysis.html" class=""><span class="num">20</span>Technical analysis (and why academia is skeptical)</a></li><li class="nav-item"><a href="../pages/21-capm-fama-french.html" class=""><span class="num">21</span>CAPM and multi-factor models (Fama-French)</a></li><li class="nav-item"><a href="../pages/22-derivatives.html" class=""><span class="num">22</span>Derivatives: futures, options, swaps, forwards</a></li><li class="nav-item"><a href="../pages/23-black-scholes-greeks.html" class="active"><span class="num">23</span>Black-Scholes and the Greeks</a></li><li class="nav-item"><a href="../pages/24-var-cvar-risk-management.html" class=""><span class="num">24</span>Quantitative risk management: VaR and CVaR</a></li><li class="nav-item"><a href="../pages/25-stress-tests-scenarios.html" class=""><span class="num">25</span>Stress tests, extreme scenarios, tail risk</a></li><li class="nav-item"><a href="../pages/26-behavioral-finance.html" class=""><span class="num">26</span>Behavioral finance: the biases that wreck your investments</a></li><li class="nav-item"><a href="../pages/27-macroeconomics-for-investors.html" class=""><span class="num">27</span>Essential macroeconomics for investors</a></li><li class="nav-item"><a href="../pages/28-exchange-rates-forex.html" class=""><span class="num">28</span>Exchange rates and Forex</a></li><li class="nav-item"><a href="../pages/29-commodities.html" class=""><span class="num">29</span>Commodities: gold, oil, metals, agri</a></li><li class="nav-item"><a href="../pages/30-financial-crises-history.html" class=""><span class="num">30</span>Financial crises in history: what keeps repeating</a></li><li class="nav-item"><a href="../pages/31-investment-taxation-italy.html" class=""><span class="num">31</span>Investment taxation in Italy (and elsewhere)</a></li><li class="nav-item"><a href="../pages/32-pension-retirement-tfr.html" class=""><span class="num">32</span>Pension system: state pension, supplementary funds, TFR</a></li><li class="nav-item"><a href="../pages/33-insurance.html" class=""><span class="num">33</span>Insurance: what you actually need vs what is just fees</a></li><li class="nav-item"><a href="../pages/34-real-estate-reit.html" class=""><span class="num">34</span>Real estate: buying, renting, REITs, fractional investing</a></li><li class="nav-item"><a href="../pages/35-crypto-blockchain-defi.html" class=""><span class="num">35</span>Crypto, Bitcoin, Ethereum, stablecoins, DeFi</a></li><li class="nav-item"><a href="../pages/36-fintech.html" class=""><span class="num">36</span>Fintech: robo-advisors, neobanking, BNPL, embedded finance</a></li><li class="nav-item"><a href="../pages/37-esg-sustainable-finance.html" class=""><span class="num">37</span>ESG and sustainable finance</a></li><li class="nav-item"><a href="../pages/38-ai-in-finance.html" class=""><span class="num">38</span>AI in finance: ML for trading, robo-advisors, credit scoring, LLM</a></li><li class="nav-item"><a href="../pages/39-building-portfolio.html" class=""><span class="num">39</span>Building a portfolio: lazy, three-fund, all-weather, core-satellite</a></li><li class="nav-item"><a href="../pages/40-dca-lump-sum-rebalancing.html" class=""><span class="num">40</span>DCA vs lump sum, rebalancing and tax loss harvesting</a></li><li class="nav-item"><a href="../pages/41-fire-financial-independence.html" class=""><span class="num">41</span>FIRE, financial independence and longevity planning</a></li><li class="nav-item"><a href="../pages/42-frauds-common-mistakes.html" class=""><span class="num">42</span>Frauds, scams, common mistakes: how not to lose everything</a></li><li class="nav-item"><a href="../pages/43-glossary-az.html" class=""><span class="num">43</span>A–Z Glossary</a></li><li class="nav-item"><a href="../pages/44-formula-sheet.html" class=""><span class="num">44</span>Formula Sheet</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Derivatives</span>
+        <span>Section 23 of 44</span>
+        <span class="level-tag level-exp">Level: expert</span>
+      </div>
+      <h1>Black-Scholes and the Greeks</h1>
+      <p class="summary">The 1973 formula that revolutionized finance: intuitive derivation, step-by-step calculation, Greeks (Delta, Gamma, Vega, Theta, Rho) and implied volatility.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Derivatives</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>Read [Derivatives: futures, options, swaps](22-derivatives.html)</li><li>Standard normal distribution</li><li>Logarithms, exponentials, partial derivatives</li></ul>
+  <div class="label">Tools / references</div>
+  <ul class="source-list"><li>Excel (NORMSDIST for Φ)</li><li>Python with scipy.stats.norm</li><li>Standard normal tables</li></ul>
+</div>
+      <p>In 1973, two months after the Chicago Board Options Exchange opened, <strong>Fischer Black</strong> and <strong>Myron Scholes</strong> published "The Pricing of Options and Corporate Liabilities". The same year <strong>Robert Merton</strong> developed the same equation with a more rigorous approach. A closed-form model for European option prices was born: the <strong>Black-Scholes-Merton formula</strong>.</p>
+<p>The impact was enormous. For the first time traders had a mathematical reference to judge whether an option was rich or cheap. Option desks exploded. Scholes and Merton won the <strong>1997 Nobel</strong> (Black had died two years earlier). And the same year, ironically, the LTCM hedge fund where both worked defaulted on a $100B exposure.</p>
+<p>In this chapter: model assumptions, sketch of the PDE, closed-form for European call, step-by-step numerical calculation, put-call parity, the five Greeks (Delta, Gamma, Vega, Theta, Rho), implied volatility, smile/skew, alternative models (Heston, SABR), dynamic hedging, Python implementation.</p>
+<h2 id="1-model-assumptions">1. Model assumptions</h2>
+<p>Black-Scholes doesn't work "by magic". It rests on strong assumptions:</p>
+<ol>
+<li><strong>Lognormal underlying</strong>: log-returns are normally distributed with constant mean and variance. Equivalently: $S_T$ follows geometric Brownian motion.</li>
+<li><strong>Constant volatility $\sigma$</strong> across time and strikes. (False in the real world: see §10.)</li>
+<li><strong>Constant risk-free rate $r$</strong> and default-free.</li>
+<li><strong>No dividends</strong> (base version; Merton variant adds $q$).</li>
+<li><strong>No transaction costs</strong>, no taxes, divisible underlying.</li>
+<li><strong>Unlimited short selling</strong> and free funding access.</li>
+<li><strong>No arbitrage</strong>.</li>
+<li><strong>Continuous markets</strong>: portfolios can be rebalanced continuously.</li>
+<li><strong>European option</strong>: exercise only at maturity.</li>
+</ol>
+<p>None hold perfectly, but the model works "well enough" for near-the-money options on liquid underlyings.</p>
+<h2 id="2-sketch-of-the-black-scholes-merton-pde">2. Sketch of the Black-Scholes-Merton PDE</h2>
+<p>Build portfolio $\Pi$ of one option plus $-\Delta$ units of the underlying. Writing $\Pi$'s evolution via Itô's lemma and requiring instantaneous risk-free return (no arbitrage), you obtain the PDE:</p>
+<p>$$\frac{\partial V}{\partial t} + \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} + rS\frac{\partial V}{\partial S} - rV = 0$$</p>
+<p>With boundary condition $V(S,T) = \max(S-K,0)$ for a call. The explicit solution is the closed-form below. (See Hull, <em>Options Futures</em>, ch. 15 for the rigorous derivation; or Wilmott, <em>Quantitative Finance</em>.)</p>
+<h2 id="3-the-closed-form">3. The closed-form</h2>
+<p>For a <strong>European call</strong> on a non-dividend-paying underlying:</p>
+<p>$$\boxed{C = S_0 \Phi(d_1) - K e^{-rT} \Phi(d_2)}$$</p>
+<p>For a <strong>European put</strong>:</p>
+<p>$$\boxed{P = K e^{-rT} \Phi(-d_2) - S_0 \Phi(-d_1)}$$</p>
+<p>Where:</p>
+<p>$$d_1 = \frac{\ln(S_0/K) + (r + \sigma^2/2)T}{\sigma\sqrt{T}}$$</p>
+<p>$$d_2 = d_1 - \sigma\sqrt{T} = \frac{\ln(S_0/K) + (r - \sigma^2/2)T}{\sigma\sqrt{T}}$$</p>
+<p>And $\Phi(\cdot)$ is the <strong>standard normal CDF</strong> (integral of the Gaussian bell).</p>
+<h3 id="31-intuitive-interpretation">3.1 Intuitive interpretation</h3>
+<ul>
+<li>$\Phi(d_2)$ is (under the risk-neutral measure) the <strong>probability the option ends ITM</strong> (i.e. $S_T &gt; K$).</li>
+<li>$\Phi(d_1)$ is the call's <strong>delta</strong>, i.e. price sensitivity to the underlying.</li>
+<li>$S_0 \Phi(d_1)$ is the expected underlying value conditional on exercise.</li>
+<li>$K e^{-rT} \Phi(d_2)$ is the PV of the strike paid on exercise.</li>
+</ul>
+<p>In short: call price = (expected value of receiving the underlying if exercised) − (PV of strike if exercised).</p>
+<h2 id="4-step-by-step-numerical-calculation">4. Step-by-step numerical calculation</h2>
+<p>Concrete example: $S=100$, $K=100$, $r=4\%$, $\sigma=20\%$, $T=1$ year. Compute the European call price.</p>
+<p><strong>Step 1</strong>: compute $d_1$.</p>
+<p>$$d_1 = \frac{\ln(100/100) + (0.04 + 0.20^2/2) \cdot 1}{0.20 \cdot \sqrt{1}}$$</p>
+<p>$$d_1 = \frac{0 + (0.04 + 0.02)}{0.20} = \frac{0.06}{0.20} = 0.30$$</p>
+<p><strong>Step 2</strong>: compute $d_2$.</p>
+<p>$$d_2 = d_1 - \sigma\sqrt{T} = 0.30 - 0.20 = 0.10$$</p>
+<p><strong>Step 3</strong>: read $\Phi(d_1)$ and $\Phi(d_2)$ from standard normal tables.</p>
+<table>
+<thead>
+<tr>
+<th>z</th>
+<th>Φ(z)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.00</td>
+<td>0.5000</td>
+</tr>
+<tr>
+<td>0.10</td>
+<td>0.5398</td>
+</tr>
+<tr>
+<td>0.20</td>
+<td>0.5793</td>
+</tr>
+<tr>
+<td>0.30</td>
+<td>0.6179</td>
+</tr>
+<tr>
+<td>0.40</td>
+<td>0.6554</td>
+</tr>
+<tr>
+<td>0.50</td>
+<td>0.6915</td>
+</tr>
+</tbody>
+</table>
+<p>So $\Phi(0.30) = 0.6179$ and $\Phi(0.10) = 0.5398$.</p>
+<p><strong>Step 4</strong>: compute $e^{-rT}$.</p>
+<p>$$e^{-0.04 \cdot 1} = e^{-0.04} \approx 0.9608$$</p>
+<p><strong>Step 5</strong>: assemble the formula.</p>
+<p>$$C = 100 \cdot 0.6179 - 100 \cdot 0.9608 \cdot 0.5398$$</p>
+<p>$$C = 61.79 - 51.86 = 9.93$$</p>
+<p><strong>Call price ≈ 9.93</strong>.</p>
+<p><strong>Step 6</strong> (bonus): get the put via parity.</p>
+<p>$$P = C - S_0 + K e^{-rT} = 9.93 - 100 + 96.08 = 6.01$$</p>
+<p>Direct check:</p>
+<p>$$P = K e^{-rT} \Phi(-d_2) - S_0 \Phi(-d_1)$$
+$$= 96.08 \cdot (1 - 0.5398) - 100 \cdot (1 - 0.6179)$$
+$$= 96.08 \cdot 0.4602 - 100 \cdot 0.3821$$
+$$= 44.21 - 38.21 = 6.00$$</p>
+<p>(The small gap from 6.01 is rounding in the tables.)</p>
+<h2 id="5-put-call-parity-check">5. Put-Call Parity (check)</h2>
+<p>For European options without dividends:</p>
+<p>$$C - P = S_0 - K e^{-rT}$$</p>
+<p>Our example: $C - P = 9.93 - 6.00 = 3.93$. And $S_0 - Ke^{-rT} = 100 - 96.08 = 3.92$. Matches (rounding error).</p>
+<p>If it failed, an arbitrage would exist: sell the rich leg, buy the synthetic, lock the profit.</p>
+<h2 id="6-the-greeks-price-sensitivities">6. The Greeks: price sensitivities</h2>
+<p>The <strong>Greeks</strong> are partial derivatives of the option price with respect to the various parameters. Used to <strong>manage the risk</strong> of an option book.</p>
+<h3 id="61-delta">6.1 Delta</h3>
+<p>$$\Delta = \frac{\partial C}{\partial S} = \Phi(d_1) \quad \text{(call)}$$</p>
+<p>$$\Delta = \Phi(d_1) - 1 = -\Phi(-d_1) \quad \text{(put)}$$</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Delta range</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Call deep ITM</td>
+<td>→ 1</td>
+</tr>
+<tr>
+<td>Call ATM</td>
+<td>≈ 0.5</td>
+</tr>
+<tr>
+<td>Call deep OTM</td>
+<td>→ 0</td>
+</tr>
+<tr>
+<td>Put deep ITM</td>
+<td>→ −1</td>
+</tr>
+<tr>
+<td>Put ATM</td>
+<td>≈ −0.5</td>
+</tr>
+<tr>
+<td>Put deep OTM</td>
+<td>→ 0</td>
+</tr>
+</tbody>
+</table>
+<p>Interpretation: if underlying rises by $1, a call with $\Delta=0.6$ rises by $0.6. Delta is also the hedge ratio: to hedge 1 short call you buy $\Delta$ units of underlying (delta hedging).</p>
+<p>Our example: $\Delta_{\text{call}} = \Phi(0.30) = 0.6179$.</p>
+<h3 id="62-gamma">6.2 Gamma</h3>
+<p>$$\Gamma = \frac{\partial^2 C}{\partial S^2} = \frac{\phi(d_1)}{S_0 \sigma \sqrt{T}}$$</p>
+<p>Where $\phi(\cdot)$ is the standard normal density: $\phi(z) = \frac{1}{\sqrt{2\pi}} e^{-z^2/2}$.</p>
+<p>Gamma is <strong>convexity</strong>: tells how Delta changes when $S$ changes. Maximum ATM, decreases both ITM and OTM. Always positive for long call and long put.</p>
+<p>Our example: $\phi(0.30) = \frac{1}{\sqrt{2\pi}} e^{-0.045} \approx 0.3814$. So $\Gamma = 0.3814 / (100 \cdot 0.20 \cdot 1) = 0.01907$. If $S$ rises by 1, $\Delta$ rises by 0.019.</p>
+<h3 id="63-vega">6.3 Vega</h3>
+<p>$$\mathcal{V} = \frac{\partial C}{\partial \sigma} = S_0 \sqrt{T} \cdot \phi(d_1)$$</p>
+<p>(Note: Vega isn't a real Greek letter, just a convention.)</p>
+<p>Vega measures sensitivity to $\sigma$. A 1 percentage point move (e.g. 20% to 21%) changes the price by Vega/100.</p>
+<p>Our example: $\mathcal{V} = 100 \cdot 1 \cdot 0.3814 = 38.14$. With vol moving from 20% to 21%, call goes from 9.93 to ~9.93 + 0.3814 = <strong>10.31</strong>.</p>
+<h3 id="64-theta">6.4 Theta</h3>
+<p>$$\Theta_{\text{call}} = -\frac{S_0 \sigma \phi(d_1)}{2\sqrt{T}} - rK e^{-rT}\Phi(d_2)$$</p>
+<p>Theta is the <strong>time derivative</strong> (always negative for long options): time value "decays" as maturity approaches. The famous <strong>time decay</strong>.</p>
+<p>Our example (annualized):
+$$\Theta = -\frac{100 \cdot 0.20 \cdot 0.3814}{2} - 0.04 \cdot 96.08 \cdot 0.5398 \approx -3.81 - 2.07 = -5.88 \text{ €/year}$$</p>
+<p>Divided by 252 trading days: ≈ <strong>−€0.023/day</strong>. Every day, the call loses 2.3 cents (other things equal).</p>
+<h3 id="65-rho">6.5 Rho</h3>
+<p>$$\rho_{\text{call}} = KT e^{-rT} \Phi(d_2)$$</p>
+<p>Sensitivity to the risk-free rate. Higher $r$ → higher call price (opportunity cost of holding cash). Rho is the "least important" Greek because $r$ moves little over short horizons.</p>
+<p>Our example: $\rho = 100 \cdot 1 \cdot 0.9608 \cdot 0.5398 \approx 51.86$. 1pp change in $r$ → 0.5186 impact on price.</p>
+<h3 id="66-summary-table">6.6 Summary table</h3>
+<p>Greeks at our point $S=100, K=100, r=4\%, \sigma=20\%, T=1$:</p>
+<table>
+<thead>
+<tr>
+<th>Greek</th>
+<th>Value</th>
+<th>Practical meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$\Delta$ (Delta)</td>
+<td>0.6179</td>
+<td>+€1 in S → +€0.62 in C</td>
+</tr>
+<tr>
+<td>$\Gamma$ (Gamma)</td>
+<td>0.01907</td>
+<td>+€1 in S → +0.019 in $\Delta$</td>
+</tr>
+<tr>
+<td>$\mathcal{V}$ (Vega)</td>
+<td>38.14</td>
+<td>+1pp σ → +€0.38 in C</td>
+</tr>
+<tr>
+<td>$\Theta$ (Theta)</td>
+<td>−5.88/year</td>
+<td>each day: −€0.023</td>
+</tr>
+<tr>
+<td>$\rho$ (Rho)</td>
+<td>51.86</td>
+<td>+1pp r → +€0.52 in C</td>
+</tr>
+</tbody>
+</table>
+<h2 id="7-implied-volatility">7. Implied volatility</h2>
+<p>All formula parameters are observable <strong>except $\sigma$</strong>. So in practice you go the other way: given market price $C_{\text{mkt}}$, find the $\sigma$ that plugged into the formula returns $C_{\text{mkt}}$.</p>
+<p>$$\sigma_{\text{implied}} : BS(S, K, r, T, \sigma) = C_{\text{mkt}}$$</p>
+<p>Solved numerically (Newton-Raphson or bisection). Implied volatility (IV) is the "market's forecast" of future underlying volatility.</p>
+<h3 id="71-vix">7.1 VIX</h3>
+<p>The <strong>VIX</strong> (CBOE Volatility Index) is a weighted average of 30-day IV from S&amp;P 500 options. The market's "fear gauge":</p>
+<ul>
+<li>VIX &lt; 15: low expected vol, calm market.</li>
+<li>VIX 15–25: normal.</li>
+<li>VIX &gt; 30: stress.</li>
+<li>VIX &gt; 50: panic (e.g. 2008, March 2020 COVID).</li>
+</ul>
+<h2 id="8-volatility-smile-and-skew">8. Volatility smile and skew</h2>
+<p>Implied volatility isn't constant (contrary to Black-Scholes assumption). Plotted against strike $K$ it takes characteristic shapes.</p>
+<h3 id="81-smile">8.1 Smile</h3>
+<p>In FX and indices, deep ITM/OTM options have higher IV than ATM. Smile-shaped curve.</p>
+<h3 id="82-skew">8.2 Skew</h3>
+<p>On equity indices (S&amp;P 500, FTSE MIB), OTM put IV is much higher than OTM call IV. The <strong>volatility skew</strong>, appeared visibly after the <strong>19 October 1987</strong> crash ("Black Monday"). Reflects market fear of downside crashes.</p>
+<pre><code class="language-mermaid">flowchart LR
+    A[OTM put&lt;br/&gt;high IV] --&gt; B[ATM&lt;br/&gt;medium IV]
+    B --&gt; C[OTM call&lt;br/&gt;lower IV]
+</code></pre>
+<p>Implication: Black-Scholes with constant $\sigma$ underprices OTM puts and overprices OTM calls vs market. Hence more sophisticated models.</p>
+<h2 id="9-alternative-models-sketches">9. Alternative models (sketches)</h2>
+<h3 id="91-heston-1993">9.1 Heston (1993)</h3>
+<p><strong>Stochastic</strong> volatility following its own mean-reverting process:</p>
+<p>$$dv_t = \kappa(\theta - v_t)dt + \xi\sqrt{v_t}\,dW_t$$</p>
+<p>Naturally generates smile/skew. Semi-analytic pricing via Fourier transform. Used by investment banks for FX and equity index.</p>
+<h3 id="92-sabr-2002-hagan-et-al">9.2 SABR (2002, Hagan et al.)</h3>
+<p>4-parameter model ($\alpha, \beta, \rho, \nu$) very popular for interest rate options (swaptions). Good empirical skew fit.</p>
+<h3 id="93-jump-models-merton-1976-kou-2002">9.3 Jump models (Merton 1976, Kou 2002)</h3>
+<p>Add a Poisson process to the underlying. Capture gaps and crashes.</p>
+<h3 id="94-local-volatility-dupire-1994">9.4 Local volatility (Dupire 1994)</h3>
+<p>$\sigma(S,t)$ is a deterministic function of underlying and time. Calibrates perfectly to an observed IV surface, but poor at generating future dynamics.</p>
+<h2 id="10-dynamic-hedging-delta-hedging">10. Dynamic hedging (delta hedging)</h2>
+<p>Idea: if you sell a call and want to be "neutral" to the underlying, buy $\Delta$ shares. But since $\Delta$ changes (Gamma!), you must <strong>rebalance</strong> continuously.</p>
+<p>Example: sell 100 calls with $\Delta = 0.6$ (60 equivalent shares). Buy 60 shares. Next day $S$ rose, $\Delta$ is 0.65 → buy 5 more shares. Rebalance.</p>
+<p>Costs: every rebalance incurs commissions and bid-ask spread. In theory (Black-Scholes) continuous delta hedging perfectly replicates the option. In practice there's replication error + costs. Option desk "P&amp;L attribution" decomposes P&amp;L between Theta (collected by selling options), Vega (IV exposure), Gamma scalping (rebalancing P&amp;L), Rho.</p>
+<h2 id="11-python-implementation">11. Python implementation</h2>
+<pre><code class="language-python">import numpy as np
+from scipy.stats import norm
+
+def bs_call(S, K, r, T, sigma):
+    d1 = (np.log(S/K) + (r + 0.5*sigma**2)*T) / (sigma*np.sqrt(T))
+    d2 = d1 - sigma*np.sqrt(T)
+    C  = S*norm.cdf(d1) - K*np.exp(-r*T)*norm.cdf(d2)
+    return C
+
+def bs_put(S, K, r, T, sigma):
+    d1 = (np.log(S/K) + (r + 0.5*sigma**2)*T) / (sigma*np.sqrt(T))
+    d2 = d1 - sigma*np.sqrt(T)
+    P  = K*np.exp(-r*T)*norm.cdf(-d2) - S*norm.cdf(-d1)
+    return P
+
+def greeks(S, K, r, T, sigma):
+    d1 = (np.log(S/K) + (r + 0.5*sigma**2)*T) / (sigma*np.sqrt(T))
+    d2 = d1 - sigma*np.sqrt(T)
+    delta = norm.cdf(d1)
+    gamma = norm.pdf(d1) / (S*sigma*np.sqrt(T))
+    vega  = S*np.sqrt(T)*norm.pdf(d1)
+    theta = -S*sigma*norm.pdf(d1)/(2*np.sqrt(T)) - r*K*np.exp(-r*T)*norm.cdf(d2)
+    rho   = K*T*np.exp(-r*T)*norm.cdf(d2)
+    return dict(delta=delta, gamma=gamma, vega=vega, theta=theta, rho=rho)
+
+# Example
+print(bs_call(100, 100, 0.04, 1, 0.20))   # ~9.93
+print(greeks(100, 100, 0.04, 1, 0.20))
+</code></pre>
+<p>For <strong>implied volatility</strong> use Newton-Raphson:</p>
+<pre><code class="language-python">def implied_vol(C_mkt, S, K, r, T, tol=1e-6, max_iter=100):
+    sigma = 0.2  # initial guess
+    for _ in range(max_iter):
+        price = bs_call(S, K, r, T, sigma)
+        d1 = (np.log(S/K) + (r + 0.5*sigma**2)*T) / (sigma*np.sqrt(T))
+        vega = S*np.sqrt(T)*norm.pdf(d1)
+        diff = price - C_mkt
+        if abs(diff) &lt; tol:
+            return sigma
+        sigma -= diff / vega
+    return sigma
+</code></pre>
+<h2 id="12-exercises">12. Exercises</h2>
+<details><summary>Exercise: European put price</summary>
+
+$S=100$, $K=110$, $r=3\%$, $\sigma=25\%$, $T=0.5$. Compute the put price.
+
+1. $d_1 = [\ln(100/110) + (0.03 + 0.5\cdot 0.0625)\cdot 0.5] / (0.25 \cdot \sqrt{0.5}) = [-0.0953 + 0.03065] / 0.1768 = -0.0647/0.1768 = -0.366$.
+2. $d_2 = -0.366 - 0.1768 = -0.543$.
+3. $\Phi(-d_1) = \Phi(0.366) \approx 0.6428$.
+4. $\Phi(-d_2) = \Phi(0.543) \approx 0.7065$.
+5. $Ke^{-rT} = 110 \cdot e^{-0.015} \approx 108.36$.
+6. $P = 108.36 \cdot 0.7065 - 100 \cdot 0.6428 = 76.56 - 64.28 = $ **€12.28**.
+
+</details>
+
+<details><summary>Exercise: delta hedging</summary>
+
+You sold 1000 calls on a stock with $\Delta = 0.45$. How many shares to be delta-neutral?
+
+1000 · 0.45 = **450 shares**. Next day $\Delta$ is 0.52 → 1000·0.52 = 520 shares. Buy 70 more to stay neutral.
+
+P&L between rebalances depends on how much $S$ moved vs what IV predicted (this is **gamma scalping**).
+
+</details>
+
+<details><summary>Exercise: what happens to an ATM call 1 day before maturity?</summary>
+
+$S=K=100$, $r=4\%$, $\sigma=20\%$, $T=1/365$.
+
+1. $d_1 = [0 + (0.04 + 0.02) \cdot 0.00274] / (0.20 \cdot 0.05234) = 0.000164 / 0.01047 = 0.0157$.
+2. $d_2 = 0.0157 - 0.01047 = 0.00527$.
+3. $\Phi(0.0157) \approx 0.5063$, $\Phi(0.00527) \approx 0.5021$.
+4. $C = 100 \cdot 0.5063 - 100 \cdot e^{-0.000109} \cdot 0.5021 \approx 50.63 - 50.20 = $ **€0.43**.
+
+At 1 day, time value is almost zero. The ATM call is worth only the "hope" of moving in the next 24h: roughly $\sim \sigma\sqrt{T}/\sqrt{2\pi} \cdot S \approx 0.20 \cdot 0.0524 \cdot 100 \cdot 0.4 \approx €0.42$.
+
+</details>
+
+<h2 id="13-critiques-and-limits">13. Critiques and limits</h2>
+<ul>
+<li><strong>Constant $\sigma$</strong> is false (see skew/smile).</li>
+<li><strong>Lognormal distribution</strong> badly underestimates fat tails (crashes are far more frequent than predicted).</li>
+<li><strong>Continuous markets</strong> are fiction: weekends and holidays can't be hedged.</li>
+<li><strong>No transaction costs</strong>: continuous delta hedging is unrealistic; you rebalance discretely.</li>
+<li><strong>Constant rates and dividends</strong>: acceptable over short horizons, problematic for LEAPS (multi-year options).</li>
+<li><strong>Underlying liquidity</strong>: on illiquid single names the model misfires.</li>
+</ul>
+<p>Despite all this, BS is still the <strong>lingua franca</strong> of the options market: even users of Heston or SABR quote and manage in terms of "BS-implied vol", and more sophisticated pricers are refinements of the base model.</p>
+<h2 id="14-references">14. References</h2>
+<ul>
+<li>Black, Scholes (1973), "The Pricing of Options and Corporate Liabilities", <em>Journal of Political Economy</em>.</li>
+<li>Merton (1973), "Theory of Rational Option Pricing", <em>Bell Journal of Economics</em>.</li>
+<li>Hull, <em>Options, Futures, and Other Derivatives</em> (chapters 15–19).</li>
+<li>Wilmott, <em>Paul Wilmott on Quantitative Finance</em> (3 vols).</li>
+<li>Gatheral, <em>The Volatility Surface</em>.</li>
+</ul>
+<h2 id="key-takeaways">Key takeaways</h2>
+<ul>
+<li><strong>Black-Scholes (1973)</strong> is the first closed-form model for European options.</li>
+<li>Strong assumptions: lognormal underlying, constant $\sigma$ and $r$, no arbitrage, continuous markets.</li>
+<li>Call formula: $C = S_0 \Phi(d_1) - K e^{-rT} \Phi(d_2)$.</li>
+<li>Numerical example (S=K=100, r=4%, σ=20%, T=1): <strong>call ≈ €9.93</strong>.</li>
+<li><strong>Put-Call Parity</strong>: $C - P = S_0 - K e^{-rT}$.</li>
+<li>Greeks: $\Delta$ (sensitivity to S), $\Gamma$ (convexity), $\mathcal{V}$ (Vega, sensitivity to σ), $\Theta$ (time decay), $\rho$ (sensitivity to r).</li>
+<li><strong>Implied volatility</strong> = σ that reproduces the market price; the <strong>VIX</strong> measures it on the S&amp;P 500.</li>
+<li><strong>Smile/skew</strong> post-1987 shows $\sigma$ is not constant: Heston, SABR, local vol emerge.</li>
+<li><strong>Delta hedging</strong> is the base strategy for managing an options book; <strong>Gamma scalping</strong> is its P&amp;L byproduct.</li>
+<li>Python implementation in ~15 lines with <code>scipy.stats.norm</code>.</li>
+</ul>
+      <nav class="pager">
+<a href="22-derivatives.html" class="prev"><span class="label">← Previous</span><span class="title">Derivatives: futures, options, swaps, forwards</span></a>
+<a href="24-var-cvar-risk-management.html" class="next"><span class="label">Next →</span><span class="title">Quantitative risk management: VaR and CVaR</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Financial Literacy Zero to Hero</strong> — complete path, in English, from money basics to derivative pricing.</p><p>Open educational material. No sponsorships, no affiliate links. When a concept is unclear, go back: finance is a pyramid, not a tree you skip across.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+</body>
+</html>

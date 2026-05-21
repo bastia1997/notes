@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Logistic regression and classification — Data Science Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#3a4a7a',primaryTextColor:'#e8eef0',primaryBorderColor:'#5a6aa0',lineColor:'#8a9499',background:'#11171a'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">Σ</div>
+      <div>
+        <div class="brand-title">DATA SCIENCE</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/18-regressione-logistica.html" class="lang-link" title="Passa all'italiano">🇮🇹 IT</a><span class="lang-active" title="English">🇬🇧 EN</span></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="search... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-what-is-data-science.html" class=""><span class="num">01</span>What is data science (and what isn&#x27;t)</a></li><li class="nav-item"><a href="../pages/02-python-for-data-science.html" class=""><span class="num">02</span>Python for data science: pro setup</a></li><li class="nav-item"><a href="../pages/02b-math-essentials.html" class=""><span class="num">02b</span>High-school math you actually need</a></li><li class="nav-item"><a href="../pages/03-linear-algebra.html" class=""><span class="num">03</span>Linear algebra for data scientists</a></li><li class="nav-item"><a href="../pages/04-calculus-optimization.html" class=""><span class="num">04</span>Calculus, gradients, and optimization</a></li><li class="nav-item"><a href="../pages/05-probability.html" class=""><span class="num">05</span>Probability: the language of uncertainty</a></li><li class="nav-item"><a href="../pages/06-descriptive-statistics.html" class=""><span class="num">06</span>Descriptive statistics</a></li><li class="nav-item"><a href="../pages/07-inferential-statistics.html" class=""><span class="num">07</span>Inferential statistics and hypothesis testing</a></li><li class="nav-item"><a href="../pages/08-distributions.html" class=""><span class="num">08</span>Probability distributions you&#x27;ll meet</a></li><li class="nav-item"><a href="../pages/09-numpy.html" class=""><span class="num">09</span>NumPy: thinking in arrays</a></li><li class="nav-item"><a href="../pages/10-pandas.html" class=""><span class="num">10</span>Pandas: the swiss army knife</a></li><li class="nav-item"><a href="../pages/11-sql.html" class=""><span class="num">11</span>SQL for data scientists</a></li><li class="nav-item"><a href="../pages/12-visualization.html" class=""><span class="num">12</span>Visualization: matplotlib, seaborn, plotly</a></li><li class="nav-item"><a href="../pages/13-data-wrangling.html" class=""><span class="num">13</span>Cleaning and data wrangling</a></li><li class="nav-item"><a href="../pages/14-feature-engineering.html" class=""><span class="num">14</span>Feature engineering</a></li><li class="nav-item"><a href="../pages/15-eda.html" class=""><span class="num">15</span>EDA: Exploratory Data Analysis</a></li><li class="nav-item"><a href="../pages/16-ml-fundamentals.html" class=""><span class="num">16</span>ML: fundamentals — bias, variance, validation</a></li><li class="nav-item"><a href="../pages/17-linear-regression.html" class=""><span class="num">17</span>Linear regression and regularization</a></li><li class="nav-item"><a href="../pages/18-logistic-regression.html" class="active"><span class="num">18</span>Logistic regression and classification</a></li><li class="nav-item"><a href="../pages/19-knn-naive-bayes-svm.html" class=""><span class="num">19</span>KNN, Naive Bayes, SVM</a></li><li class="nav-item"><a href="../pages/20-decision-trees.html" class=""><span class="num">20</span>Decision trees</a></li><li class="nav-item"><a href="../pages/21-random-forest-boosting.html" class=""><span class="num">21</span>Random Forest, Gradient Boosting, XGBoost</a></li><li class="nav-item"><a href="../pages/22-clustering.html" class=""><span class="num">22</span>Clustering: K-Means, DBSCAN, GMM, hierarchical</a></li><li class="nav-item"><a href="../pages/23-pca-tsne-umap.html" class=""><span class="num">23</span>Dimensionality reduction: PCA, t-SNE, UMAP</a></li><li class="nav-item"><a href="../pages/24-metrics-validation.html" class=""><span class="num">24</span>Metrics, cross-validation, leakage</a></li><li class="nav-item"><a href="../pages/25-class-imbalance.html" class=""><span class="num">25</span>Class imbalance</a></li><li class="nav-item"><a href="../pages/26-hyperparameter-tuning.html" class=""><span class="num">26</span>Hyperparameter tuning</a></li><li class="nav-item"><a href="../pages/27-neural-networks.html" class=""><span class="num">27</span>Neural networks: from fundamentals to backprop</a></li><li class="nav-item"><a href="../pages/28-pytorch.html" class=""><span class="num">28</span>PyTorch: from toy model to training loop</a></li><li class="nav-item"><a href="../pages/29-cnn.html" class=""><span class="num">29</span>CNN for computer vision</a></li><li class="nav-item"><a href="../pages/30-rnn-lstm.html" class=""><span class="num">30</span>RNN, LSTM, GRU for sequences</a></li><li class="nav-item"><a href="../pages/31-transformer.html" class=""><span class="num">31</span>Transformer and attention</a></li><li class="nav-item"><a href="../pages/32-nlp-llm.html" class=""><span class="num">32</span>NLP: from text mining to LLMs</a></li><li class="nav-item"><a href="../pages/33-time-series.html" class=""><span class="num">33</span>Time series and forecasting</a></li><li class="nav-item"><a href="../pages/34-mlops.html" class=""><span class="num">34</span>MLOps: deployment, monitoring, drift</a></li><li class="nav-item"><a href="../pages/35-bayesian-causal.html" class=""><span class="num">35</span>Bayesian and Causal Inference</a></li><li class="nav-item"><a href="../pages/36-capstone-career.html" class=""><span class="num">36</span>Capstone, portfolio, career</a></li><li class="nav-item"><a href="../pages/37-glossary.html" class=""><span class="num">37</span>Glossary A-Z</a></li><li class="nav-item"><a href="../pages/38-formula-sheet.html" class=""><span class="num">38</span>Formula Sheet: all the formulas from the course</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Machine Learning</span>
+        <span>Section 19 of 39</span>
+        <span class="level-tag level-int">Level: intermediate</span>
+      </div>
+      <h1>Logistic regression and classification</h1>
+      <p class="summary">Sigmoid, log-loss, odds and log-odds, MLE, multi-class, decision thresholds. &#x27;Logistic&#x27; beats NN in 60% of real tabular problems.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Machine Learning</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>[[linear-regression]]</li><li>[[calculus-optimization]]</li></ul>
+  <div class="label">Tools</div>
+  <ul class="source-list"><li>scikit-learn, statsmodels</li></ul>
+</div>
+      <h2 id="why-not-ols-for-classification">Why not OLS for classification</h2>
+<p>If you apply OLS to $y \in {0, 1}$, you get:</p>
+<ul>
+<li>Predictions outside $[0, 1]$ (nonsensical as probabilities).</li>
+<li>Heteroscedasticity (variance depends on $p$).</li>
+<li>Inadequate loss: the model "barely punishes" a certain error (e.g., prediction 0.99 when true is 0).</li>
+</ul>
+<p>Solution: <strong>logistic regression</strong>.</p>
+<h2 id="the-model">The model</h2>
+<p>For class-1 probability:</p>
+<p>$$P(y=1 | \mathbf{x}) = \sigma(\mathbf{w}^T \mathbf{x} + b) = \frac{1}{1 + e^{-(\mathbf{w}^T \mathbf{x} + b)}}$$</p>
+<p>The <strong>sigmoid</strong> $\sigma$ squashes $(-\infty, \infty)$ into $(0, 1)$.</p>
+<div class="chart"><svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg">
+<line x1="30" y1="160" x2="340" y2="160" stroke="#555"/>
+<line x1="180" y1="20" x2="180" y2="160" stroke="#555"/>
+<line x1="30" y1="30" x2="340" y2="30" stroke="#333" stroke-dasharray="3,3"/>
+<line x1="30" y1="95" x2="340" y2="95" stroke="#333" stroke-dasharray="3,3"/>
+<path d="M 30 158 C 130 158 230 32 340 32" fill="none" stroke="#7aa2ff" stroke-width="2.5"/>
+<text x="345" y="34" fill="#7aa2ff" font-size="11">1</text>
+<text x="345" y="99" fill="#7aa2ff" font-size="11">0.5</text>
+<text x="345" y="165" fill="#7aa2ff" font-size="11">0</text>
+<text x="185" y="175" fill="#ffb347" font-size="11">z=0</text>
+</svg><div class="chart-caption">Sigmoid: linear near 0, saturates at 0 and 1.</div></div>
+
+<h2 id="log-odds-logit">Log-odds (logit)</h2>
+<p>Rearranging:</p>
+<p>$$\log \frac{P(y=1|x)}{P(y=0|x)} = \mathbf{w}^T \mathbf{x} + b$$</p>
+<p><strong>Log-odds</strong> is linear in $\mathbf{x}$. Interpretation:</p>
+<blockquote>
+<p>$w_j$ = log-odds increase for one extra unit of $x_j$.</p>
+</blockquote>
+<p>Exponentiating: $e^{w_j}$ = <strong>odds multiplier</strong> per extra unit of $x_j$. E.g., $w_j = 0.69 \Rightarrow e^{0.69} \approx 2$: presence of that feature <strong>doubles the odds</strong>.</p>
+<h2 id="loss-log-likelihood">Loss: log-likelihood</h2>
+<p>For a single example:</p>
+<p>$$P(y_i | \mathbf{x}_i) = p_i^{y_i} (1 - p_i)^{1 - y_i}$$</p>
+<p>Likelihood across all examples:</p>
+<p>$$L(\mathbf{w}) = \prod_i p_i^{y_i} (1-p_i)^{1-y_i}$$</p>
+<p>Log-likelihood (maximize) or <strong>negative cross-entropy</strong> (minimize):</p>
+<p>$$-\log L(\mathbf{w}) = -\sum_i [y_i \log p_i + (1 - y_i) \log(1-p_i)]$$</p>
+<p>This loss is <strong>convex</strong> in $\mathbf{w}$ → gradient descent finds the global minimum. No closed form like OLS, but convergence is guaranteed.</p>
+<h2 id="gradient">Gradient</h2>
+<p>For those who want to derive:</p>
+<p>$$\nabla_{\mathbf{w}} L = X^T (\mathbf{p} - \mathbf{y})$$</p>
+<p>where $\mathbf{p}$ is the vector of predicted probabilities. Same form as OLS, with $\mathbf{p}$ in place of $\hat{y}$. Beautiful.</p>
+<p>So:</p>
+<p>$$\mathbf{w}_{t+1} = \mathbf{w}_t - \eta X^T (\mathbf{p}_t - \mathbf{y})$$</p>
+<h2 id="example">Example</h2>
+<pre><code class="language-python">from sklearn.linear_model import LogisticRegression
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
+from sklearn.datasets import load_breast_cancer
+
+X, y = load_breast_cancer(return_X_y=True)
+X_tr, X_te, y_tr, y_te = train_test_split(X, y, stratify=y, random_state=0)
+
+sc = StandardScaler().fit(X_tr)
+X_tr_s = sc.transform(X_tr); X_te_s = sc.transform(X_te)
+
+m = LogisticRegression(C=1.0, max_iter=5000).fit(X_tr_s, y_tr)
+print(&quot;Accuracy:&quot;, m.score(X_te_s, y_te))
+print(&quot;Coefficients (first 5):&quot;, m.coef_[0, :5])
+</code></pre>
+<blockquote>
+<p><code>C</code> is the <strong>inverse</strong> of regularization: large <code>C</code> = little reg, small <code>C</code> = strong. Default <code>C=1.0</code>.</p>
+</blockquote>
+<h2 id="regularization-again">Regularization (again)</h2>
+<pre><code class="language-python">LogisticRegression(penalty='l2', C=1.0)       # default Ridge-like
+LogisticRegression(penalty='l1', solver='liblinear', C=0.5)
+LogisticRegression(penalty='elasticnet', solver='saga', l1_ratio=0.5, C=0.5)
+</code></pre>
+<p>L1 does automatic feature selection.</p>
+<h2 id="multi-class-two-strategies">Multi-class: two strategies</h2>
+<h3 id="one-vs-rest-ovr">One-vs-Rest (OvR)</h3>
+<p>$K$ binary classifiers, each "class $k$" vs "everything else". Pick the class with the highest probability.</p>
+<h3 id="softmax-multinomial-logistic">Softmax (Multinomial Logistic)</h3>
+<p>Direct generalization:</p>
+<p>$$P(y=k | \mathbf{x}) = \frac{e^{\mathbf{w}_k^T \mathbf{x}}}{\sum_j e^{\mathbf{w}_j^T \mathbf{x}}}$$</p>
+<p>Loss = categorical cross-entropy:</p>
+<p>$$L = -\sum_i \sum_k \mathbb{1}[y_i=k] \log P(y_i=k|x_i)$$</p>
+<pre><code class="language-python">LogisticRegression(multi_class='multinomial', solver='lbfgs')
+</code></pre>
+<blockquote>
+<p>sklearn default <code>'auto'</code> picks multinomial when solver supports it. Generally better than OvR.</p>
+</blockquote>
+<h2 id="decision-threshold">Decision threshold</h2>
+<p>By default <code>predict()</code> uses threshold 0.5. But 0.5 isn't sacred:</p>
+<ul>
+<li>If <strong>false positives</strong> are costly (e.g., spam blocking important emails) → higher threshold.</li>
+<li>If <strong>false negatives</strong> are costly (e.g., undiagnosed cancer) → lower threshold.</li>
+</ul>
+<p>Choose threshold by <strong>cost</strong>:</p>
+<pre><code class="language-python">proba = m.predict_proba(X_te)[:, 1]
+y_pred = (proba &gt; 0.3).astype(int)
+</code></pre>
+<p>Pro approach: optimize threshold on validation w.r.t. the metric you care about (F1, precision at fixed recall, etc.).</p>
+<h2 id="classification-metrics">Classification metrics</h2>
+<p>See dedicated section. Quick summary:</p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Formula</th>
+<th>When</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Accuracy</td>
+<td>$(TP+TN)/N$</td>
+<td>balanced classes, equal costs</td>
+</tr>
+<tr>
+<td>Precision</td>
+<td>$TP/(TP+FP)$</td>
+<td>care about positives correctness</td>
+</tr>
+<tr>
+<td>Recall</td>
+<td>$TP/(TP+FN)$</td>
+<td>care about catching all positives</td>
+</tr>
+<tr>
+<td>F1</td>
+<td>P, R harmonic mean</td>
+<td>trade-off</td>
+</tr>
+<tr>
+<td>AUC ROC</td>
+<td>area under ROC</td>
+<td>ranking, threshold-independent</td>
+</tr>
+<tr>
+<td>AUC PR</td>
+<td>area under Precision-Recall</td>
+<td>for imbalanced classes</td>
+</tr>
+<tr>
+<td>Log loss</td>
+<td>cross-entropy</td>
+<td>probability calibration</td>
+</tr>
+</tbody>
+</table>
+<h2 id="calibrated-probabilities">Calibrated probabilities</h2>
+<p>Logistic produces <strong>fairly calibrated</strong> probabilities by default. Verify with a <strong>reliability diagram</strong>:</p>
+<pre><code class="language-python">from sklearn.calibration import calibration_curve
+prob_true, prob_pred = calibration_curve(y_te, m.predict_proba(X_te)[:, 1], n_bins=10)
+import matplotlib.pyplot as plt
+plt.plot([0,1],[0,1], '--', color='gray')
+plt.plot(prob_pred, prob_true, marker='o')
+plt.xlabel('Predicted probability'); plt.ylabel('Real fraction')
+</code></pre>
+<p>If the curve is below the diagonal: model overestimates. Above: underestimates.</p>
+<p>To <strong>calibrate</strong>:</p>
+<pre><code class="language-python">from sklearn.calibration import CalibratedClassifierCV
+cal = CalibratedClassifierCV(m, method='sigmoid', cv=5).fit(X_tr, y_tr)
+</code></pre>
+<blockquote>
+<p>Random Forest and SVM tend to be poorly calibrated. Logistic is already OK.</p>
+</blockquote>
+<h2 id="logit-in-the-real-world-interpretability">Logit in the real world: interpretability</h2>
+<p>Domains where logistic remains the main model:</p>
+<ul>
+<li><strong>Medicine</strong>: clinical scoring, calibration critical.</li>
+<li><strong>Finance/credit</strong>: regulators require interpretability.</li>
+<li><strong>Marketing</strong>: lift, propensity scoring.</li>
+<li><strong>Politics/sociology</strong>: understand variable effects.</li>
+</ul>
+<p>The fact that <code>exp(w_j)</code> is an odds ratio is crucial for communication. "Smoking multiplies lung cancer odds by 15×" is something you can write and people understand.</p>
+<h2 id="exercises">Exercises</h2>
+<details>
+<summary>Exercise 1 — Interpreting coefficients</summary>
+
+Logistic model with `age` (years) and `smoker` (0/1). Standardized coefs: $w_\text{age} = 0.04$, $w_\text{smoke} = 1.5$.
+
+- How much do odds increase per extra year?
+- How much for being a smoker?
+
+**Answer**: $e^{0.04} \approx 1.041$ → +4.1% per year. $e^{1.5} \approx 4.48$ → odds nearly 4.5× for smokers.
+</details>
+
+<details>
+<summary>Exercise 2 — Implement logistic from scratch</summary>
+
+
+<pre><code class="language-python">import numpy as np
+
+def sigmoid(z): return 1 / (1 + np.exp(-z))
+
+def train(X, y, lr=0.1, n_iter=1000):
+    X_ = np.column_stack([np.ones(len(X)), X])
+    w = np.zeros(X_.shape[1])
+    for _ in range(n_iter):
+        p = sigmoid(X_ @ w)
+        grad = X_.T @ (p - y) / len(y)
+        w -= lr * grad
+    return w
+
+# test
+rng = np.random.default_rng(0)
+X = rng.standard_normal((500, 3))
+true_w = np.array([0.5, 1.0, -1.5])
+y = (sigmoid(0.2 + X @ true_w) &gt; rng.uniform(size=500)).astype(int)
+w_hat = train(X, y, lr=0.5, n_iter=2000)
+print(&quot;hat:&quot;, w_hat)        # ~[0.2, 0.5, 1.0, -1.5]
+</code></pre>
+
+</details>
+
+<details>
+<summary>Exercise 3 — Threshold tuning</summary>
+
+For cancer screening, false negatives are catastrophic. Find the threshold producing recall ≥ 0.95:
+
+
+<pre><code class="language-python">from sklearn.metrics import precision_recall_curve
+proba = m.predict_proba(X_val)[:, 1]
+prec, rec, thr = precision_recall_curve(y_val, proba)
+mask = rec &gt;= 0.95
+idx = np.argmax(prec[:-1] * mask[:-1])
+print(f&quot;threshold: {thr[idx]:.3f}, precision: {prec[idx]:.3f}, recall: {rec[idx]:.3f}&quot;)
+</code></pre>
+
+</details>
+
+<details>
+<summary>Exercise 4 — Logistic vs trees</summary>
+
+On Titanic, train logistic and Random Forest. Compare AUC and interpretability.
+
+
+<pre><code class="language-python">import seaborn as sns
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import roc_auc_score
+from sklearn.model_selection import train_test_split
+
+df = sns.load_dataset('titanic').dropna(subset=['age','embarked'])
+y = df.survived
+X = df[['pclass','age','sibsp','parch','fare']].assign(
+    male=(df.sex == 'male').astype(int)
+)
+X_tr, X_te, y_tr, y_te = train_test_split(X, y, stratify=y, random_state=0)
+
+sc = StandardScaler().fit(X_tr)
+lr = LogisticRegression(max_iter=2000).fit(sc.transform(X_tr), y_tr)
+rf = RandomForestClassifier(n_estimators=300, random_state=0).fit(X_tr, y_tr)
+
+print(&quot;Logistic AUC:&quot;, roc_auc_score(y_te, lr.predict_proba(sc.transform(X_te))[:,1]))
+print(&quot;RF AUC:&quot;, roc_auc_score(y_te, rf.predict_proba(X_te)[:,1]))
+print(&quot;Logistic coefficients:&quot;, dict(zip(X.columns, lr.coef_[0])))
+</code></pre>
+
+
+Often on Titanic: RF slightly better, but logistic more interpretable.
+</details>
+
+<h2 id="takeaways">Takeaways</h2>
+<ul>
+<li>Logistic = OLS with sigmoid and log-loss.</li>
+<li>Coefficients = log-odds. $e^w$ = odds ratio.</li>
+<li>Convex loss → global minimum.</li>
+<li>Decision threshold: 0.5 default, but rarely optimal for asymmetric costs.</li>
+<li>Calibrated probabilities "out of the box" — more than almost any other model.</li>
+</ul>
+<p>Next: KNN and Naive Bayes — simple, still useful models.</p>
+      <nav class="pager">
+<a href="17-linear-regression.html" class="prev"><span class="label">← Previous</span><span class="title">Linear regression and regularization</span></a>
+<a href="19-knn-naive-bayes-svm.html" class="next"><span class="label">Next →</span><span class="title">KNN, Naive Bayes, SVM</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Data Science Zero to Hero</strong> — complete path, in English, from math to deployment.</p><p>Open didactic material. Formulas are here to be understood, not feared. When a concept is unclear, go back: data science is a pyramid, not a tree you skip across.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+</body>
+</html>

@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VPC — fundamentals — AWS Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#232f3e',primaryTextColor:'#ffffff',primaryBorderColor:'#ff9900',lineColor:'#8a99ad',background:'#0c1320'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">λ</div>
+      <div>
+        <div class="brand-title">AWS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/09-vpc-fondamenti.html" class="lang-link" title="Passa all'italiano">IT</a><span class="lang-active" title="English">EN</span></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="search... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-what-is-cloud-and-aws.html" class=""><span class="num">01</span>What the cloud is, and what AWS is</a></li><li class="nav-item"><a href="../pages/02-global-infrastructure.html" class=""><span class="num">02</span>Global infrastructure: Regions, AZs, Edge</a></li><li class="nav-item"><a href="../pages/03-account-root-billing.html" class=""><span class="num">03</span>AWS account, root user, billing</a></li><li class="nav-item"><a href="../pages/04-iam-fundamentals.html" class=""><span class="num">04</span>IAM — fundamentals (users, groups, roles, policies)</a></li><li class="nav-item"><a href="../pages/05-iam-advanced.html" class=""><span class="num">05</span>IAM advanced: conditional policies, STS, ABAC</a></li><li class="nav-item"><a href="../pages/06-cli-sdk-iac.html" class=""><span class="num">06</span>CLI, SDK, CloudShell, IaC primer</a></li><li class="nav-item"><a href="../pages/07-pricing-billing.html" class=""><span class="num">07</span>Pricing, billing, free tier, cost tools</a></li><li class="nav-item"><a href="../pages/08-organizations-multi-account.html" class=""><span class="num">08</span>AWS Organizations &amp; multi-account strategy</a></li><li class="nav-item"><a href="../pages/09-vpc-fundamentals.html" class="active"><span class="num">09</span>VPC — fundamentals</a></li><li class="nav-item"><a href="../pages/10-vpc-advanced.html" class=""><span class="num">10</span>VPC advanced: peering, TGW, PrivateLink, endpoints</a></li><li class="nav-item"><a href="../pages/11-route53-cloudfront.html" class=""><span class="num">11</span>Route 53, CloudFront, Global Accelerator</a></li><li class="nav-item"><a href="../pages/12-hybrid-vpn-directconnect.html" class=""><span class="num">12</span>Hybrid: VPN, Direct Connect, PrivateLink</a></li><li class="nav-item"><a href="../pages/13-ec2-fundamentals.html" class=""><span class="num">13</span>EC2 — fundamentals (instances, AMIs, lifecycle)</a></li><li class="nav-item"><a href="../pages/14-ec2-advanced-spot-nitro.html" class=""><span class="num">14</span>EC2 advanced — Spot, Placement Groups, Nitro, hibernation</a></li><li class="nav-item"><a href="../pages/15-asg-elb.html" class=""><span class="num">15</span>Auto Scaling Groups + Elastic Load Balancing</a></li><li class="nav-item"><a href="../pages/16-lambda-deep-dive.html" class=""><span class="num">16</span>Lambda deep dive</a></li><li class="nav-item"><a href="../pages/17-containers-ecs-eks-fargate.html" class=""><span class="num">17</span>Containers: ECS, EKS, Fargate, ECR</a></li><li class="nav-item"><a href="../pages/18-specialty-compute.html" class=""><span class="num">18</span>Specialty compute: Batch, Lightsail, Outposts, Wavelength, Beanstalk</a></li><li class="nav-item"><a href="../pages/19-ebs-efs-fsx.html" class=""><span class="num">19</span>EBS, EFS, FSx, Instance Store</a></li><li class="nav-item"><a href="../pages/20-s3-deep-dive.html" class=""><span class="num">20</span>S3 — deep dive</a></li><li class="nav-item"><a href="../pages/21-archive-snow-gateway-backup.html" class=""><span class="num">21</span>Glacier, Snow, Storage Gateway, DataSync, AWS Backup</a></li><li class="nav-item"><a href="../pages/22-rds.html" class=""><span class="num">22</span>RDS — managed relational DBs (engines, Multi-AZ, replicas, Proxy)</a></li><li class="nav-item"><a href="../pages/23-aurora-deep-dive.html" class=""><span class="num">23</span>Aurora deep dive — shared storage, Serverless v2, Global Database</a></li><li class="nav-item"><a href="../pages/24-dynamodb-deep-dive.html" class=""><span class="num">24</span>DynamoDB deep dive — partitions, GSI, Streams, single-table</a></li><li class="nav-item"><a href="../pages/25-purpose-built-dbs.html" class=""><span class="num">25</span>Purpose-built DBs — ElastiCache, MemoryDB, Neptune, DocumentDB, Keyspaces, Timestream, QLDB</a></li><li class="nav-item"><a href="../pages/26-redshift-data-warehousing.html" class=""><span class="num">26</span>Redshift — MPP data warehousing and zero-ETL</a></li><li class="nav-item"><a href="../pages/27-sqs-sns-eventbridge.html" class=""><span class="num">27</span>SQS, SNS, EventBridge — messaging and events</a></li><li class="nav-item"><a href="../pages/28-step-functions-mq-appflow.html" class=""><span class="num">28</span>Step Functions, MQ, AppFlow — orchestration and integration</a></li><li class="nav-item"><a href="../pages/29-athena-glue-lakeformation.html" class=""><span class="num">29</span>Athena, Glue, Lake Formation — the AWS data lake</a></li><li class="nav-item"><a href="../pages/30-emr-kinesis-msk.html" class=""><span class="num">30</span>EMR, Kinesis, MSK — big data and streaming</a></li><li class="nav-item"><a href="../pages/31-opensearch-quicksight.html" class=""><span class="num">31</span>OpenSearch and QuickSight — search and BI</a></li><li class="nav-item"><a href="../pages/32-sagemaker-overview.html" class=""><span class="num">32</span>SageMaker — the end-to-end ML platform</a></li><li class="nav-item"><a href="../pages/33-bedrock-ai-services.html" class=""><span class="num">33</span>Bedrock and AI services — managed GenAI and ML</a></li><li class="nav-item"><a href="../pages/34-iac-cloudformation-cdk-terraform.html" class=""><span class="num">34</span>IaC on AWS — CloudFormation, CDK, SAM, Terraform</a></li><li class="nav-item"><a href="../pages/35-ci-cd-pipeline.html" class=""><span class="num">35</span>CI/CD on AWS — CodePipeline, CodeBuild, CodeDeploy, CodeCatalyst</a></li><li class="nav-item"><a href="../pages/36-observability-cloudwatch-xray.html" class=""><span class="num">36</span>Observability — CloudWatch, X-Ray, CloudTrail, Config, SSM</a></li><li class="nav-item"><a href="../pages/37-kms-secrets-acm.html" class=""><span class="num">37</span>Encryption — KMS, CloudHSM, Secrets Manager, Parameter Store, ACM</a></li><li class="nav-item"><a href="../pages/38-waf-shield-guardduty-inspector.html" class=""><span class="num">38</span>Threat detection — WAF, Shield, GuardDuty, Inspector, Macie, Security Hub</a></li><li class="nav-item"><a href="../pages/39-governance-org-controltower-identitycenter.html" class=""><span class="num">39</span>Governance — Organizations, Control Tower, Identity Center</a></li><li class="nav-item"><a href="../pages/40-migration-mgn-dms-snow.html" class=""><span class="num">40</span>Migration — MGN, DMS, Snow family, Discovery, Migration Hub</a></li><li class="nav-item"><a href="../pages/41-cost-optimization-finops.html" class=""><span class="num">41</span>Cost optimization and FinOps</a></li><li class="nav-item"><a href="../pages/42-well-architected.html" class=""><span class="num">42</span>Well-Architected Framework — 6 pillars, lenses, review</a></li><li class="nav-item"><a href="../pages/43-architecture-patterns.html" class=""><span class="num">43</span>Architecture patterns — 3-tier, serverless, event-driven, microservices</a></li><li class="nav-item"><a href="../pages/44-disaster-recovery-multi-region.html" class=""><span class="num">44</span>Disaster Recovery and Multi-Region</a></li><li class="nav-item"><a href="../pages/45-reference-architectures.html" class=""><span class="num">45</span>Real-world reference architectures</a></li><li class="nav-item"><a href="../pages/46-advanced-networking.html" class=""><span class="num">46</span>Advanced networking deep dive</a></li><li class="nav-item"><a href="../pages/47-containers-deep-dive.html" class=""><span class="num">47</span>Containers deep dive — EKS, Karpenter, service mesh</a></li><li class="nav-item"><a href="../pages/48-serverless-patterns.html" class=""><span class="num">48</span>Serverless patterns deep dive</a></li><li class="nav-item"><a href="../pages/49-genai-rag-agents.html" class=""><span class="num">49</span>Generative AI on AWS — RAG and Agents</a></li><li class="nav-item"><a href="../pages/50-aws-certifications.html" class=""><span class="num">50</span>AWS Certifications — roadmap and study guide</a></li><li class="nav-item"><a href="../pages/51-glossary-az.html" class=""><span class="num">51</span>Glossary A-Z</a></li><li class="nav-item"><a href="../pages/52-cheatsheet.html" class=""><span class="num">52</span>Cheat sheet: services, limits, instance families</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Networking</span>
+        <span>Section 9 of 52</span>
+        <span class="level-tag level-int">Level: intermediate</span>
+      </div>
+      <h1>VPC — fundamentals</h1>
+      <p class="summary">Virtual Private Cloud: CIDR, public/private subnets, route tables, Internet Gateway, NAT, security groups vs NACL. Networking on AWS is the skill that separates juniors from seniors.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Networking</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>sections 1-2</li><li>know what a CIDR is (e.g. 10.0.0.0/16)</li></ul>
+  <div class="label">Tools / references</div>
+  <ul class="source-list"><li>AWS CLI</li><li>AWS Reachability Analyzer for debugging</li></ul>
+</div>
+      <p>A VPC (Virtual Private Cloud) is the isolated logical network where all your resources live. No EC2 exists "outside a VPC" (even the default ones are inside an auto-created default VPC). Understanding VPCs, subnets, route tables and security groups is the non-negotiable skill for anyone deploying anything more complex than a standalone Lambda.</p>
+<h2 id="1-cidr-the-ip-plan">1. CIDR — the IP plan</h2>
+<p>When creating a VPC you pick a <strong>CIDR block</strong> (IPv4 range), e.g. <code>10.0.0.0/16</code> = 65,536 addresses. Recommended ranges (RFC1918):</p>
+<ul>
+<li><code>10.0.0.0/8</code> (16M IPs)</li>
+<li><code>172.16.0.0/12</code> (1M IPs)</li>
+<li><code>192.168.0.0/16</code> (65k IPs)</li>
+</ul>
+<p>Key points:</p>
+<ul>
+<li><strong>Don't overlap</strong> CIDRs between VPCs if you might peer them or use TGW later.</li>
+<li><strong>Leave room to grow</strong>: a /16 beats a /22.</li>
+<li><strong>AWS reserves the first 4 + last IP</strong> of each subnet (e.g. in <code>10.0.1.0/24</code>: <code>.0</code> network, <code>.1</code> router, <code>.2</code> DNS, <code>.3</code> reserved, <code>.255</code> broadcast → 251 usable IPs).</li>
+<li><strong>Secondary CIDR</strong>: you can add additional CIDRs to an existing VPC (handy when you run out).</li>
+<li><strong>IPv6</strong>: optional, range provided by AWS (<code>/56</code>).</li>
+</ul>
+<h2 id="2-subnets-public-and-private">2. Subnets: public and private</h2>
+<p>A <strong>subnet</strong> is a portion of the VPC CIDR tied to a specific AZ. A subnet is "public" or "private" not by attribute but by the <strong>route table</strong> associated with it:</p>
+<ul>
+<li><strong>Public</strong>: route table with <code>0.0.0.0/0 → Internet Gateway</code>. Instances here can send/receive Internet traffic.</li>
+<li><strong>Private</strong>: no IGW in the route table. To go out, you need a NAT Gateway (or VPC endpoint for AWS services).</li>
+</ul>
+<pre><code class="language-mermaid">flowchart LR
+    subgraph vpc[VPC 10.0.0.0/16]
+        subgraph az1[AZ a]
+            pub_a[Public subnet&lt;br&gt;10.0.1.0/24]
+            priv_a[Private subnet&lt;br&gt;10.0.11.0/24]
+        end
+        subgraph az2[AZ b]
+            pub_b[Public subnet&lt;br&gt;10.0.2.0/24]
+            priv_b[Private subnet&lt;br&gt;10.0.12.0/24]
+        end
+        igw[Internet Gateway]
+        natgw[NAT Gateway]
+        pub_a --&gt; igw
+        pub_b --&gt; igw
+        natgw --&gt; igw
+        priv_a --&gt; natgw
+        priv_b --&gt; natgw
+    end
+</code></pre>
+<p>Typical layout: <strong>2 public subnets</strong> (load balancer, bastion, NAT) + <strong>2 private subnets</strong> (app servers, RDS), one pair per AZ.</p>
+<h2 id="3-route-tables">3. Route tables</h2>
+<p>A table saying "traffic to CIDR X goes to target Y". Possible targets: <code>Internet Gateway</code>, <code>NAT Gateway</code>, <code>Transit Gateway</code>, <code>VPC Peering</code>, <code>VPC Endpoint</code>, <code>Virtual Private Gateway</code> (VPN). A route table is associated with 0+ subnets; each subnet has <strong>exactly 1 active route table</strong> (the explicitly associated one or the VPC's main).</p>
+<p>Example private route table:</p>
+<table>
+<thead>
+<tr>
+<th>Destination</th>
+<th>Target</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>10.0.0.0/16</code></td>
+<td><code>local</code> (auto, immutable)</td>
+</tr>
+<tr>
+<td><code>0.0.0.0/0</code></td>
+<td><code>nat-0123abc</code></td>
+</tr>
+<tr>
+<td><code>pl-xxxxxx</code> (S3 Prefix List)</td>
+<td><code>vpce-yyy</code> (Gateway Endpoint)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="4-internet-gateway-vs-nat-gateway">4. Internet Gateway vs NAT Gateway</h2>
+<p><strong>IGW</strong>: logical, free, scalable gateway. Allows bidirectional Internet ↔ VPC, but instances need a <strong>public IP</strong> (or Elastic IP) to be reachable from outside. Free and redundant.</p>
+<p><strong>NAT Gateway</strong>: managed gateway doing Network Address Translation: private instances egress to the Internet using the NAT's public IP, but are not reachable from outside. Cost: <strong>$0.045/h ≈ $32/month</strong> + <strong>$0.045/GB processed</strong>. One per AZ for HA (otherwise AZ-dependency).</p>
+<p>NAT alternatives:</p>
+<ul>
+<li><strong>NAT Instance</strong>: self-managed EC2 (cheap but maintenance).</li>
+<li><strong>VPC Gateway Endpoint</strong> for S3/DynamoDB: FREE, avoids NAT traffic.</li>
+<li><strong>VPC Interface Endpoint</strong> for other AWS services: paid ($0.01/h per AZ + data), but avoids NAT.</li>
+</ul>
+<h2 id="5-security-group-vs-nacl">5. Security Group vs NACL</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Security Group</th>
+<th>NACL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Layer</td>
+<td>instance (ENI)</td>
+<td>subnet</td>
+</tr>
+<tr>
+<td>Stateful?</td>
+<td><strong>Yes</strong> (return traffic auto-allowed)</td>
+<td><strong>No</strong> (must allow both directions)</td>
+</tr>
+<tr>
+<td>Rules</td>
+<td><code>Allow</code> only</td>
+<td><code>Allow</code> and <code>Deny</code></td>
+</tr>
+<tr>
+<td>Evaluation</td>
+<td>all rules evaluated, 1 match suffices</td>
+<td>numerical, lowest first</td>
+</tr>
+<tr>
+<td>Default</td>
+<td>inbound deny all, outbound allow all</td>
+<td>inbound allow all, outbound allow all (default NACL)</td>
+</tr>
+</tbody>
+</table>
+<p>2026 best practice: use <strong>security groups only</strong> for 95% of cases. NACL only for subnet-wide IP blacklists (e.g. block a hostile /24 without modifying every SG).</p>
+<p>Example SG for a web server:</p>
+<pre><code>Inbound:
+  - HTTPS 443 from 0.0.0.0/0
+  - HTTP 80 from 0.0.0.0/0 (for HTTPS redirect)
+  - SSH 22 from SG `bastion-sg`
+Outbound:
+  - all to 0.0.0.0/0 (default)
+</code></pre>
+<p><strong>Killer trick</strong>: the source of an SG rule can be <strong>another SG</strong> (e.g. <code>db-sg</code> allows 5432 from <code>app-sg</code>). You don't write IPs: AWS expands dynamically. Survives auto-scaling.</p>
+<h2 id="6-dns-inside-a-vpc">6. DNS inside a VPC</h2>
+<p>VPC has internal DNS (<code>amazon-provided DNS server</code>) at <code>VPC_CIDR + 2</code> (e.g. <code>10.0.0.2</code>). Two flags:</p>
+<ul>
+<li><code>enableDnsSupport</code> (default true): DNS resolution works.</li>
+<li><code>enableDnsHostnames</code> (default false on non-default VPCs): EC2s get a hostname <code>ip-10-0-1-23.eu-west-1.compute.internal</code>.</li>
+</ul>
+<p>For private DNS (e.g. resolve <code>my-db.internal.acme.com</code> only inside the VPC): <strong>Route 53 Private Hosted Zone</strong> associated with the VPC.</p>
+<h2 id="7-basic-commands">7. Basic commands</h2>
+<pre><code class="language-bash"># Create VPC
+aws ec2 create-vpc --cidr-block 10.0.0.0/16 \
+  --tag-specifications 'ResourceType=vpc,Tags=[{Key=Name,Value=acme-prod}]'
+
+# Public + private subnet in AZ a
+aws ec2 create-subnet --vpc-id vpc-xxx --availability-zone eu-west-1a \
+  --cidr-block 10.0.1.0/24 --tag-specifications 'ResourceType=subnet,Tags=[{Key=Name,Value=public-a}]'
+aws ec2 create-subnet --vpc-id vpc-xxx --availability-zone eu-west-1a \
+  --cidr-block 10.0.11.0/24 --tag-specifications 'ResourceType=subnet,Tags=[{Key=Name,Value=private-a}]'
+
+# IGW
+aws ec2 create-internet-gateway
+aws ec2 attach-internet-gateway --vpc-id vpc-xxx --internet-gateway-id igw-yyy
+
+# Public route table
+aws ec2 create-route-table --vpc-id vpc-xxx
+aws ec2 create-route --route-table-id rtb-pub --destination-cidr-block 0.0.0.0/0 --gateway-id igw-yyy
+aws ec2 associate-route-table --subnet-id subnet-pub-a --route-table-id rtb-pub
+</code></pre>
+<p>In production <strong>do not write this by hand</strong>: use Terraform/CDK (see section 34).</p>
+<h2 id="8-exercise">8. Exercise</h2>
+<details>
+<summary>3-tier web app (frontend, app, db). Sketch the minimum resilient network.</summary>
+
+VPC `10.0.0.0/16` across 2 AZs:
+
+- 2 **public** subnets (`10.0.1.0/24` AZ-a, `10.0.2.0/24` AZ-b): hold ALB.
+- 2 **private app** subnets (`10.0.11.0/24` AZ-a, `10.0.12.0/24` AZ-b): hold EC2/Fargate.
+- 2 **private data** subnets (`10.0.21.0/24` AZ-a, `10.0.22.0/24` AZ-b): hold RDS Multi-AZ.
+
+- 1 NAT Gateway **per AZ** (HA, but costly). For dev: 1 NAT is enough.
+- SGs: `alb-sg` (443 from 0/0), `app-sg` (8080 from `alb-sg`), `db-sg` (5432 from `app-sg`).
+- VPC Gateway Endpoint for S3 + DynamoDB (free, cuts NAT traffic).
+
+This survives AZ-a failure → traffic routes through AZ-b. Security: only ALB exposed, app/db private.
+</details>
+
+<details>
+<summary>You need SSH only from a corporate network. How?</summary>
+
+Three options:
+
+1. **Security group with corp CIDR source**: `22 from 203.0.113.0/24`. Simple but reveals the EC2 IP and requires maintaining the IP list.
+2. **SSM Session Manager** (recommended): no port 22 open, access via IAM API. EC2 needs SSM Agent + `AmazonSSMManagedInstanceCore` role. Auto audit log in CloudTrail.
+3. **Bastion host** in a public subnet with a restricted SG, then SSH to private instances. Legacy pattern but still in use.
+
+Best practice: SSM Session Manager. No open ports, no SSH keys to manage.
+</details>
+
+<blockquote>
+<p><strong>Summary</strong>: VPC = isolated logical network; subnet = chunk of VPC in 1 AZ; public vs private depends on the route table; IGW for Internet traffic (free), NAT Gateway for private-subnet egress ($$); SG = stateful per-instance, NACL = stateless per-subnet (rarely used); SG-source-as-another-SG is the killer pattern. Multi-AZ is mandatory for HA.</p>
+</blockquote>
+      <nav class="pager">
+<a href="08-organizations-multi-account.html" class="prev"><span class="label">← Previous</span><span class="title">AWS Organizations &amp; multi-account strategy</span></a>
+<a href="10-vpc-advanced.html" class="next"><span class="label">Next →</span><span class="title">VPC advanced: peering, TGW, PrivateLink, endpoints</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>AWS Zero to Hero</strong> — complete path, in English, from primitives to advanced architecture.</p><p>Open educational material. No sponsorships, no affiliate links, no affiliation with AWS. When a concept is unclear, go back: AWS is a pyramid of primitives, not a tree you skip across.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+</body>
+</html>

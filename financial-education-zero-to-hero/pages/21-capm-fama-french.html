@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CAPM e modelli multi-fattoriali (Fama-French) — Educazione Finanziaria Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#3a3a2a',primaryTextColor:'#f4f1e8',primaryBorderColor:'#9b7d34',lineColor:'#9a9685',background:'#181c27'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">€</div>
+      <div>
+        <div class="brand-title">FINANZA</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">IT</span><a href="../en/pages/21-capm-fama-french.html" class="lang-link" title="Switch to English">EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-cos-e-il-denaro.html" class=""><span class="num">01</span>Cos&#x27;è il denaro (e come è cambiato)</a></li><li class="nav-item"><a href="../pages/02-sistema-finanziario.html" class=""><span class="num">02</span>Il sistema finanziario: come funziona davvero</a></li><li class="nav-item"><a href="../pages/03-banche-centrali.html" class=""><span class="num">03</span>Banche centrali (BCE, FED, BOE, BOJ)</a></li><li class="nav-item"><a href="../pages/04-inflazione.html" class=""><span class="num">04</span>Inflazione, deflazione, potere d&#x27;acquisto</a></li><li class="nav-item"><a href="../pages/05-budget-personale.html" class=""><span class="num">05</span>Budget personale e cash flow</a></li><li class="nav-item"><a href="../pages/06-piramide-finanziaria.html" class=""><span class="num">06</span>Piramide finanziaria e fondo emergenza</a></li><li class="nav-item"><a href="../pages/07-conti-e-pagamenti.html" class=""><span class="num">07</span>Conti correnti, conti deposito, sistemi di pagamento</a></li><li class="nav-item"><a href="../pages/08-credit-score-crif.html" class=""><span class="num">08</span>Credit score, CRIF e identità finanziaria</a></li><li class="nav-item"><a href="../pages/09-tipi-di-banche.html" class=""><span class="num">09</span>Tipologie di banche (e perché le neobank sono diverse)</a></li><li class="nav-item"><a href="../pages/10-bilancio-banca-basilea.html" class=""><span class="num">10</span>Il bilancio di una banca e Basilea III/IV</a></li><li class="nav-item"><a href="../pages/11-mutui.html" class=""><span class="num">11</span>Mutui (fisso, variabile, misto, surroga, INPS)</a></li><li class="nav-item"><a href="../pages/12-prestiti-carte-cessione.html" class=""><span class="num">12</span>Prestiti personali, carte revolving, cessione del quinto</a></li><li class="nav-item"><a href="../pages/13-mercati-finanziari.html" class=""><span class="num">13</span>Mercati finanziari: come funzionano davvero</a></li><li class="nav-item"><a href="../pages/14-azioni.html" class=""><span class="num">14</span>Azioni: cosa compri davvero quando compri un&#x27;azione</a></li><li class="nav-item"><a href="../pages/15-obbligazioni.html" class=""><span class="num">15</span>Obbligazioni: cedola, prezzo, yield, duration</a></li><li class="nav-item"><a href="../pages/16-etf-fondi.html" class=""><span class="num">16</span>ETF, fondi comuni e gestione attiva vs passiva</a></li><li class="nav-item"><a href="../pages/17-asset-allocation-mpt.html" class=""><span class="num">17</span>Asset allocation e teoria moderna del portafoglio (MPT)</a></li><li class="nav-item"><a href="../pages/18-diversificazione-correlazione.html" class=""><span class="num">18</span>Diversificazione, correlazione e rischio non sistematico</a></li><li class="nav-item"><a href="../pages/19-analisi-fondamentale.html" class=""><span class="num">19</span>Analisi fondamentale: DCF, multipli, ratio</a></li><li class="nav-item"><a href="../pages/20-analisi-tecnica.html" class=""><span class="num">20</span>Analisi tecnica (e perché l&#x27;accademia è scettica)</a></li><li class="nav-item"><a href="../pages/21-capm-fama-french.html" class="active"><span class="num">21</span>CAPM e modelli multi-fattoriali (Fama-French)</a></li><li class="nav-item"><a href="../pages/22-derivati.html" class=""><span class="num">22</span>Derivati: futures, opzioni, swap, forward</a></li><li class="nav-item"><a href="../pages/23-black-scholes-greche.html" class=""><span class="num">23</span>Black-Scholes e le greche</a></li><li class="nav-item"><a href="../pages/24-var-cvar-risk-management.html" class=""><span class="num">24</span>Risk management quantitativo: VaR e CVaR</a></li><li class="nav-item"><a href="../pages/25-stress-test-scenari.html" class=""><span class="num">25</span>Stress test, scenari estremi, tail risk</a></li><li class="nav-item"><a href="../pages/26-behavioral-finance.html" class=""><span class="num">26</span>Behavioral finance: i bias che ti rovinano gli investimenti</a></li><li class="nav-item"><a href="../pages/27-macroeconomia-investitori.html" class=""><span class="num">27</span>Macroeconomia essenziale per investitori</a></li><li class="nav-item"><a href="../pages/28-tassi-cambio-forex.html" class=""><span class="num">28</span>Tassi di cambio e Forex</a></li><li class="nav-item"><a href="../pages/29-commodities.html" class=""><span class="num">29</span>Commodities: oro, petrolio, metalli, agri</a></li><li class="nav-item"><a href="../pages/30-crisi-finanziarie-storia.html" class=""><span class="num">30</span>Crisi finanziarie nella storia: cosa si ripete</a></li><li class="nav-item"><a href="../pages/31-tassazione-investimenti-italia.html" class=""><span class="num">31</span>Tassazione degli investimenti in Italia (e come è altrove)</a></li><li class="nav-item"><a href="../pages/32-previdenza-pensione-tfr.html" class=""><span class="num">32</span>Previdenza: INPS, pensione di base, fondi pensione, TFR</a></li><li class="nav-item"><a href="../pages/33-assicurazioni.html" class=""><span class="num">33</span>Assicurazioni: cosa serve davvero e cosa è solo commissione</a></li><li class="nav-item"><a href="../pages/34-immobiliare-reit.html" class=""><span class="num">34</span>Immobiliare: comprare, affittare, REIT, mattoncino digitale</a></li><li class="nav-item"><a href="../pages/35-crypto-blockchain-defi.html" class=""><span class="num">35</span>Crypto, Bitcoin, Ethereum, stablecoin, DeFi</a></li><li class="nav-item"><a href="../pages/36-fintech.html" class=""><span class="num">36</span>Fintech: robo-advisor, neobanking, BNPL, embedded finance</a></li><li class="nav-item"><a href="../pages/37-esg-finanza-sostenibile.html" class=""><span class="num">37</span>ESG e finanza sostenibile</a></li><li class="nav-item"><a href="../pages/38-ai-in-finanza.html" class=""><span class="num">38</span>AI nella finanza: ML per trading, robo-advisor, credit scoring, LLM</a></li><li class="nav-item"><a href="../pages/39-costruire-portafoglio.html" class=""><span class="num">39</span>Costruire un portafoglio: lazy, three-fund, all-weather, core-satellite</a></li><li class="nav-item"><a href="../pages/40-pac-pic-ribilanciamento.html" class=""><span class="num">40</span>PAC vs PIC, ribilanciamento e tax loss harvesting</a></li><li class="nav-item"><a href="../pages/41-fire-indipendenza-finanziaria.html" class=""><span class="num">41</span>FIRE, indipendenza finanziaria e longevity planning</a></li><li class="nav-item"><a href="../pages/42-frodi-errori-comuni.html" class=""><span class="num">42</span>Frodi, truffe, errori comuni: come non perdere tutto</a></li><li class="nav-item"><a href="../pages/43-glossario-az.html" class=""><span class="num">43</span>Glossario A–Z</a></li><li class="nav-item"><a href="../pages/44-formulario.html" class=""><span class="num">44</span>Formulario</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Modelli</span>
+        <span>Sezione 21 di 44</span>
+        <span class="level-tag level-adv">Livello: avanzato</span>
+      </div>
+      <h1>CAPM e modelli multi-fattoriali (Fama-French)</h1>
+      <p class="summary">Dal CAPM di Sharpe ai modelli a 3, 4 e 5 fattori di Fama-French e Carhart: come stimare il rendimento atteso di un titolo, beta e alpha.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Modelli</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>Concetti base di rischio e rendimento</li><li>Aver letto [Diversificazione e portafogli](18-diversificazione-portafoglio.html)</li><li>Statistica: media, varianza, covarianza, regressione lineare</li></ul>
+  <div class="label">Strumenti / riferimenti</div>
+  <ul class="source-list"><li>Foglio Excel (regressione OLS)</li><li>Python (statsmodels) per regressioni multifattoriali</li><li>Dati Fama-French (Ken French Data Library, free)</li></ul>
+</div>
+      <p>Quando un'azienda investe in un nuovo impianto, o un investitore deve decidere quanto ci si aspetta di guadagnare comprando un'azione, serve un modello che dica: "dato il rischio di questa attività, qual è il rendimento atteso?". Per decenni la risposta è stata il <strong>CAPM</strong> (Capital Asset Pricing Model). Poi sono arrivate le anomalie, e con esse i modelli multi-fattoriali di Fama-French e Carhart.</p>
+<p>In questo capitolo costruiamo i modelli storicamente e matematicamente: prima Markowitz, poi Sharpe-Lintner-Mossin (il CAPM), poi le crepe degli anni '80, poi Fama-French 3 fattori (1992), 5 fattori (2015), il momentum di Carhart, un cenno all'APT di Ross. Concludiamo con una regressione concreta su Eni.</p>
+<h2 id="1-sfondo-markowitz-e-la-frontiera-efficiente">1. Sfondo: Markowitz e la frontiera efficiente</h2>
+<p>Harry Markowitz (1952, Nobel 1990): per un investitore razionale che valuta solo media e varianza, esiste una <strong>frontiera efficiente</strong> di portafogli che, dato un livello di rischio, massimizzano il rendimento atteso. Il portafoglio ottimale combina asset diversi per ridurre la varianza grazie alle correlazioni &lt; 1.</p>
+<p>Tobin (1958) aggiunge l'asset risk-free e dimostra il <strong>two-fund separation theorem</strong>: tutti gli investitori razionali combinano lo stesso portafoglio rischioso (il "portafoglio di mercato") con il risk-free in proporzioni diverse a seconda dell'avversione al rischio. La linea che li unisce è la <strong>Capital Market Line (CML)</strong>:</p>
+<p>$$E[R_p] = R_f + \frac{E[R_m] - R_f}{\sigma_m} \sigma_p$$</p>
+<p>Lo slope è il <strong>Sharpe ratio</strong> del portafoglio di mercato.</p>
+<h2 id="2-il-capm-tre-fondatori-una-formula">2. Il CAPM: tre fondatori, una formula</h2>
+<p>Negli anni '60, William Sharpe (Nobel 1990), John Lintner e Jan Mossin arrivano indipendentemente alla stessa equazione. È il <strong>Capital Asset Pricing Model</strong>.</p>
+<h3 id="21-le-ipotesi">2.1 Le ipotesi</h3>
+<p>Per derivare il CAPM servono ipotesi forti:</p>
+<ol>
+<li>Investitori razionali con utilità mean-variance.</li>
+<li>Mercati senza costi di transazione, senza tasse.</li>
+<li>Asset infinitamente divisibili.</li>
+<li>Possibilità di prendere/dare a prestito al risk-free senza limiti.</li>
+<li>Aspettative omogenee (tutti vedono le stesse media-varianza-covarianze).</li>
+<li>Mercato in equilibrio.</li>
+</ol>
+<p>Nessuna di queste regge nel mondo reale. Ma il modello è un punto di partenza utile.</p>
+<h3 id="22-la-formula">2.2 La formula</h3>
+<p>$$E[R_i] = R_f + \beta_i (E[R_m] - R_f)$$</p>
+<table>
+<thead>
+<tr>
+<th>Simbolo</th>
+<th>Significato</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$E[R_i]$</td>
+<td>Rendimento atteso del titolo $i$</td>
+</tr>
+<tr>
+<td>$R_f$</td>
+<td>Tasso risk-free (es. BTP a 10 anni, Treasury, Bund)</td>
+</tr>
+<tr>
+<td>$E[R_m]$</td>
+<td>Rendimento atteso del portafoglio di mercato</td>
+</tr>
+<tr>
+<td>$E[R_m] - R_f$</td>
+<td><strong>Equity Risk Premium</strong> (premio per il rischio azionario)</td>
+</tr>
+<tr>
+<td>$\beta_i$</td>
+<td>Beta del titolo: sensibilità del titolo al mercato</td>
+</tr>
+</tbody>
+</table>
+<p>L'idea: in equilibrio, il rendimento atteso di un titolo dipende solo dal suo <strong>rischio sistematico</strong> (misurato da $\beta$), non dal rischio idiosincratico (che si diversifica via).</p>
+<h3 id="23-la-security-market-line">2.3 La Security Market Line</h3>
+<p>In un grafico beta-rendimento atteso, il CAPM è una retta:</p>
+<pre><code class="language-mermaid">flowchart LR
+    A[beta = 0&lt;br/&gt;R = Rf] --&gt; B[beta = 1&lt;br/&gt;R = Rm]
+    B --&gt; C[beta &gt; 1&lt;br/&gt;R &gt; Rm più rischio più rendimento atteso]
+    A --&gt; D[beta &lt; 0&lt;br/&gt;R &lt; Rf asset 'assicurazione']
+</code></pre>
+<p>Tutti i titoli <strong>dovrebbero</strong> stare sulla SML in equilibrio. Quelli sopra (alpha positivo) sono "sottovalutati", quelli sotto sono "sopravvalutati". Cercare alpha = trovare titoli fuori dalla SML.</p>
+<h2 id="3-il-beta-cosa-e-davvero">3. Il beta: cosa è davvero</h2>
+<p>Il beta misura quanto un titolo si muove insieme al mercato. Formalmente:</p>
+<p>$$\beta_i = \frac{Cov(R_i, R_m)}{Var(R_m)} = \rho_{i,m} \cdot \frac{\sigma_i}{\sigma_m}$$</p>
+<table>
+<thead>
+<tr>
+<th>Beta</th>
+<th>Interpretazione</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>β = 0</td>
+<td>Indipendente dal mercato (utility, treasuries)</td>
+</tr>
+<tr>
+<td>0 &lt; β &lt; 1</td>
+<td>Difensivo (meno volatile del mercato) — beni di consumo, healthcare</td>
+</tr>
+<tr>
+<td>β = 1</td>
+<td>Si muove come il mercato (indice stesso)</td>
+</tr>
+<tr>
+<td>β &gt; 1</td>
+<td>Aggressivo (più volatile) — tech, banche, ciclici</td>
+</tr>
+<tr>
+<td>β &lt; 0</td>
+<td>Anti-ciclico — raro (oro in alcune fasi)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="31-come-si-stima-il-beta">3.1 Come si stima il beta</h3>
+<p>Regressione OLS dei rendimenti del titolo sui rendimenti del mercato:</p>
+<p>$$R_{i,t} - R_{f,t} = \alpha_i + \beta_i (R_{m,t} - R_{f,t}) + \varepsilon_{i,t}$$</p>
+<p>Il coefficiente $\beta_i$ è la pendenza, $\alpha_i$ è l'intercetta (l'<strong>alpha di Jensen</strong> — vedi §6.3). Si usano tipicamente 60 mesi (5 anni) di rendimenti mensili.</p>
+<h3 id="32-beta-levered-vs-unlevered-formula-hamada">3.2 Beta levered vs unlevered (formula Hamada)</h3>
+<p>Il beta di un'azienda dipende dalla sua leva finanziaria. Se cambia D/E, cambia anche il beta dell'equity. <strong>Hamada (1972)</strong>:</p>
+<p>$$\beta_L = \beta_U \left[ 1 + (1-t) \frac{D}{E} \right]$$</p>
+<p>Dove $\beta_L$ è il beta dell'equity (osservato sul mercato), $\beta_U$ è il beta unlevered (rischio operativo puro), $D/E$ è il rapporto debito/equity, $t$ è l'aliquota fiscale.</p>
+<p>Esempio: Eni ha $\beta_L = 0.9$, $D/E = 0.5$, $t=24\%$. Allora:
+$$\beta_U = \frac{0.9}{1 + (1-0.24) \cdot 0.5} = \frac{0.9}{1.38} = 0.65$$</p>
+<p>Usi: confronti tra aziende con leve diverse, valutazione DCF dopo refinancing.</p>
+<h3 id="33-esempio-numerico-rendimento-atteso-di-eni">3.3 Esempio numerico: rendimento atteso di Eni</h3>
+<p>Dati assunti: $\beta_{\text{Eni}} = 0.9$, $R_f = 3\%$ (BTP 10y), premium $E[R_m]-R_f = 5\%$.</p>
+<p>$$E[R_{\text{Eni}}] = 3\% + 0.9 \cdot 5\% = 3\% + 4.5\% = 7.5\%$$</p>
+<p>Quindi, secondo il CAPM, Eni dovrebbe rendere 7.5% all'anno in media. Se realmente rende il 9%, ha alpha = +1.5%. Se rende il 6%, alpha = −1.5%.</p>
+<h2 id="4-le-crepe-nel-capm">4. Le crepe nel CAPM</h2>
+<p>Già dagli anni '70 emergono dati che il CAPM non spiega.</p>
+<h3 id="41-effetto-size-banz-1981">4.1 Effetto size (Banz 1981)</h3>
+<p>I titoli a <strong>piccola capitalizzazione</strong> rendono storicamente di più di quanto previsto dal CAPM. Lo small-cap premium esiste in tutti i mercati sviluppati su orizzonti lunghi.</p>
+<h3 id="42-effetto-value-stattman-1980-rosenberg-reid-lanstein-1985">4.2 Effetto value (Stattman 1980, Rosenberg-Reid-Lanstein 1985)</h3>
+<p>I titoli con <strong>alto book-to-market</strong> (value) rendono di più di quelli con basso B/M (growth). Anche questo non è spiegato dal CAPM.</p>
+<h3 id="43-momentum-jegadeesh-titman-1993">4.3 Momentum (Jegadeesh-Titman 1993)</h3>
+<p>Titoli che hanno performato bene negli ultimi 3–12 mesi tendono a continuare bene nei successivi 3–12 mesi. Anomalia robusta in tutti i mercati testati.</p>
+<h3 id="44-anomalia-liquidita-pastor-stambaugh-2003">4.4 Anomalia liquidità (Pastor-Stambaugh 2003)</h3>
+<p>Titoli meno liquidi richiedono premio aggiuntivo.</p>
+<h3 id="45-bassa-beta-puzzle">4.5 Bassa beta puzzle</h3>
+<p>Titoli a beta basso rendono <strong>più</strong> di quanto il CAPM prevede. Titoli ad alto beta rendono meno. La SML empirica è più piatta di quella teorica. Frazzini-Pedersen (2014) costruiscono la strategia "Betting Against Beta" che genera alpha.</p>
+<h2 id="5-fama-french-3-fattori-1992">5. Fama-French 3 fattori (1992)</h2>
+<p>Eugene Fama e Kenneth French nel 1992 propongono: il CAPM è insufficiente, servono <strong>tre fattori</strong>.</p>
+<p>$$R_i - R_f = \alpha_i + \beta_{MKT,i}(R_m - R_f) + s_i \cdot SMB + h_i \cdot HML + \varepsilon_i$$</p>
+<table>
+<thead>
+<tr>
+<th>Fattore</th>
+<th>Cosa misura</th>
+<th>Costruzione</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>MKT</strong></td>
+<td>Premio di mercato</td>
+<td>$R_m - R_f$, come nel CAPM</td>
+</tr>
+<tr>
+<td><strong>SMB</strong></td>
+<td>Small Minus Big</td>
+<td>Rendimento portafoglio small-cap meno large-cap</td>
+</tr>
+<tr>
+<td><strong>HML</strong></td>
+<td>High Minus Low</td>
+<td>Rendimento portafoglio high B/M (value) meno low B/M (growth)</td>
+</tr>
+</tbody>
+</table>
+<p>I coefficienti $\beta_{MKT}$, $s$, $h$ misurano l'esposizione del titolo a ciascun fattore.</p>
+<h3 id="51-interpretazione">5.1 Interpretazione</h3>
+<p>Se $s &gt; 0$ il titolo si comporta come uno small-cap. Se $h &gt; 0$ è value, se $h &lt; 0$ è growth. Un fondo che dichiara di fare "value investing" dovrebbe avere $h$ statisticamente significativo e positivo.</p>
+<h3 id="52-esempio-numerico">5.2 Esempio numerico</h3>
+<p>Stima 5 anni di rendimenti mensili di un titolo, fai regressione sui fattori FF3. Risultati ipotetici:</p>
+<p>$$R_i - R_f = 0.0\% + 0.95 \cdot MKT + 0.30 \cdot SMB + 0.40 \cdot HML$$</p>
+<p>Lettura: titolo con esposizione di mercato quasi 1, small-cap tilt moderato (+0.30), forte tilt value (+0.40). Alpha zero → il manager non sta aggiungendo valore al netto dei fattori.</p>
+<h2 id="6-fama-french-5-fattori-2015">6. Fama-French 5 fattori (2015)</h2>
+<p>Nel 2015 Fama e French aggiungono altri due fattori:</p>
+<p>$$R_i - R_f = \alpha_i + \beta_{MKT}(R_m - R_f) + s \cdot SMB + h \cdot HML + r \cdot RMW + c \cdot CMA + \varepsilon$$</p>
+<table>
+<thead>
+<tr>
+<th>Fattore</th>
+<th>Significato</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>RMW</strong></td>
+<td>Robust Minus Weak (profittabilità): aziende con margini alti meno aziende con margini bassi</td>
+</tr>
+<tr>
+<td><strong>CMA</strong></td>
+<td>Conservative Minus Aggressive (investimento): aziende che investono poco meno aziende che investono molto</td>
+</tr>
+</tbody>
+</table>
+<p>L'evidenza: aggiungendo RMW e CMA, il fattore HML diventa quasi superfluo. Le anomalie di value sono in parte spiegate da quality (profittabilità) e investment.</p>
+<h2 id="7-carhart-4-fattori-1997">7. Carhart 4 fattori (1997)</h2>
+<p>Mark Carhart aggiunge il <strong>momentum</strong> ai 3 fattori originali:</p>
+<p>$$R_i - R_f = \alpha + \beta_{MKT}(R_m - R_f) + s \cdot SMB + h \cdot HML + w \cdot WML + \varepsilon$$</p>
+<table>
+<thead>
+<tr>
+<th>Fattore</th>
+<th>Significato</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>WML</strong></td>
+<td>Winners Minus Losers (momentum): top decile per rendimento passato 12m − bottom decile</td>
+</tr>
+</tbody>
+</table>
+<p>Carhart 4 è oggi lo standard per valutare i mutual fund. Se un fondo ha alpha positivo solo perché segue il momentum, Carhart lo smaschera.</p>
+<h2 id="8-apt-lalternativa-di-ross-1976">8. APT: l'alternativa di Ross (1976)</h2>
+<p><strong>Arbitrage Pricing Theory</strong> di Stephen Ross. Idea: in assenza di arbitraggio, il rendimento atteso di un titolo è una combinazione lineare di <strong>K fattori sistematici</strong> (non specificati a priori).</p>
+<p>$$E[R_i] = R_f + \sum_{k=1}^{K} \beta_{i,k} \cdot \lambda_k$$</p>
+<p>Dove $\lambda_k$ è il premio del fattore $k$. APT è più generale del CAPM (che è il caso K=1) ma non dice quali siano i fattori. I modelli Fama-French sono una specificazione concreta dell'APT.</p>
+<h2 id="9-alpha-di-jensen-e-valutazione-di-fondi">9. Alpha di Jensen e valutazione di fondi</h2>
+<p>L'<strong>alpha di Jensen</strong> (Michael Jensen, 1968) è l'intercetta della regressione CAPM:</p>
+<p>$$\alpha_i = \bar{R}_i - [R_f + \beta_i (\bar{R}_m - R_f)]$$</p>
+<p>Misura il "valore aggiunto" del gestore. Se $\alpha &gt; 0$ statisticamente significativo → skill. Se $\alpha = 0$ → il manager performa esattamente come ci si aspetta dato il beta. Se $\alpha &lt; 0$ → distrugge valore.</p>
+<p>L'evidenza empirica (decenni di studi su mutual fund): la maggioranza dei fondi attivi ha alpha <strong>negativo</strong> dopo le commissioni. È il principale argomento a favore dei fondi indicizzati passivi.</p>
+<h2 id="10-sharpe-ratio-treynor-information-ratio">10. Sharpe ratio, Treynor, Information ratio</h2>
+<p>Misure di performance correlate al CAPM:</p>
+<table>
+<thead>
+<tr>
+<th>Misura</th>
+<th>Formula</th>
+<th>Cosa misura</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Sharpe ratio</strong></td>
+<td>$(R_p - R_f) / \sigma_p$</td>
+<td>Rendimento extra per unità di volatilità totale</td>
+</tr>
+<tr>
+<td><strong>Treynor ratio</strong></td>
+<td>$(R_p - R_f) / \beta_p$</td>
+<td>Rendimento extra per unità di rischio sistematico</td>
+</tr>
+<tr>
+<td><strong>Information ratio</strong></td>
+<td>$\alpha / \sigma_\varepsilon$</td>
+<td>Alpha per unità di rischio idiosincratico</td>
+</tr>
+<tr>
+<td><strong>Sortino ratio</strong></td>
+<td>$(R_p - R_f) / \sigma_{\text{downside}}$</td>
+<td>Penalizza solo la volatilità negativa</td>
+</tr>
+</tbody>
+</table>
+<h2 id="11-regressione-passo-passo-esempio-python">11. Regressione passo passo: esempio Python</h2>
+<pre><code class="language-python">import pandas as pd
+import statsmodels.api as sm
+
+# Carica dati: rendimenti mensili titolo, mercato, risk-free
+# (es. da yfinance per il titolo, Ken French data library per fattori)
+df = pd.read_csv(&quot;data.csv&quot;)  # colonne: R_i, R_m, R_f, SMB, HML
+df[&quot;excess_i&quot;] = df[&quot;R_i&quot;] - df[&quot;R_f&quot;]
+df[&quot;excess_m&quot;] = df[&quot;R_m&quot;] - df[&quot;R_f&quot;]
+
+# CAPM
+X = sm.add_constant(df[&quot;excess_m&quot;])
+model_capm = sm.OLS(df[&quot;excess_i&quot;], X).fit()
+print(model_capm.summary())
+# alpha = model_capm.params[0], beta = model_capm.params[1]
+
+# Fama-French 3 fattori
+X = sm.add_constant(df[[&quot;excess_m&quot;, &quot;SMB&quot;, &quot;HML&quot;]])
+model_ff3 = sm.OLS(df[&quot;excess_i&quot;], X).fit()
+print(model_ff3.summary())
+</code></pre>
+<p>Output tipico: alpha vicino a zero, beta_MKT ≈ 1, t-stat dei coefficienti che ti dicono quali fattori sono significativi.</p>
+<h2 id="12-esercizi">12. Esercizi</h2>
+<details><summary>Esercizio: stima il rendimento atteso di un titolo con CAPM</summary>
+
+Dati: $R_f = 4\%$ (Treasury 10y USA), $E[R_m] = 9\%$ (S&P 500 storico), $\beta = 1.3$ (es. Tesla).
+
+$E[R] = 4\% + 1.3 \cdot (9\% - 4\%) = 4\% + 6.5\% = $ **10.5%** annuo.
+
+Se realmente Tesla rende 25% all'anno per 5 anni, è solo perché il mercato è andato bene o c'è alpha vero? Devi vedere il rendimento di mercato in quegli anni e calcolare il residuo.
+
+</details>
+
+<details><summary>Esercizio: beta levered/unlevered</summary>
+
+Azienda A ha $\beta = 1.4$, $D/E = 1$, $t=25\%$. Azienda B (stesso settore, paragonabile) ha $D/E = 0.3$. Stima il beta di B partendo dal beta di A.
+
+1. Unlever A: $\beta_U = 1.4 / [1 + 0.75 \cdot 1] = 1.4 / 1.75 = $ **0.80**.
+2. Re-lever per B: $\beta_{L,B} = 0.80 \cdot [1 + 0.75 \cdot 0.30] = 0.80 \cdot 1.225 = $ **0.98**.
+
+B ha beta più basso perché ha meno leva. Stesso business di A, ma capital structure diversa.
+
+</details>
+
+<details><summary>Esercizio: leggi una regressione FF3</summary>
+
+Output regressione FF3 (5 anni mensili) di un fondo:
+
+
+<pre><code>const     0.0030   t=2.5
+MKT       0.95     t=22.1
+SMB       0.55     t=4.8
+HML       0.20     t=1.9
+R²        0.91
+</code></pre>
+
+
+Interpretazione:
+1. Alpha mensile = 0.30% (annualizzato ≈ 3.7%), **statisticamente significativo** (t > 2). Il manager genera valore al netto dei fattori.
+2. Beta di mercato ≈ 1, normale per un fondo azionario diversificato.
+3. SMB = 0.55 positivo e significativo → forte tilt small-cap.
+4. HML = 0.20 borderline → leggero tilt value, ma non statisticamente forte.
+5. R² 91% → i 3 fattori spiegano quasi tutta la varianza dei rendimenti. Buon fit.
+
+Verdetto: fondo small-cap-tilted, vero alpha. Da considerare.
+
+</details>
+
+<h2 id="13-limiti-dei-modelli-multi-fattoriali">13. Limiti dei modelli multi-fattoriali</h2>
+<ul>
+<li><strong>Data mining</strong>: gli accademici hanno trovato oltre 300 "fattori" pubblicati. Molti sono spuri. McLean-Pontiff (2016) mostrano che il 50% di questi fattori scompare dopo la pubblicazione.</li>
+<li><strong>Stabilità nel tempo</strong>: i premi dei fattori variano molto (HML è stato negativo per ampi periodi post-2007).</li>
+<li><strong>Identificazione</strong>: cosa rappresenta "veramente" SMB o HML? Rischio sistematico latente, distortion comportamentale, o data mining? Dibattito aperto.</li>
+</ul>
+<h2 id="14-risorse">14. Risorse</h2>
+<ul>
+<li>Sharpe (1964), "Capital Asset Prices", <em>Journal of Finance</em>.</li>
+<li>Fama-French (1992), "The Cross-Section of Expected Stock Returns".</li>
+<li>Fama-French (2015), "A Five-Factor Asset Pricing Model".</li>
+<li>Carhart (1997), "On Persistence in Mutual Fund Performance".</li>
+<li><strong>Ken French Data Library</strong> (gratuita): https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html</li>
+</ul>
+<h2 id="punti-chiave">Punti chiave</h2>
+<ul>
+<li><strong>CAPM</strong> (Sharpe-Lintner-Mossin): $E[R_i] = R_f + \beta_i(E[R_m]-R_f)$. Rischio sistematico è l'unico prezzato.</li>
+<li><strong>Beta</strong>: covarianza con il mercato / varianza del mercato. Stimato per regressione OLS.</li>
+<li><strong>Hamada</strong>: relazione tra beta levered e unlevered (correzione per leva).</li>
+<li>Anomalie (size, value, momentum, low-beta) hanno fatto crollare il CAPM puro.</li>
+<li><strong>Fama-French 3</strong> (1992): MKT + SMB + HML.</li>
+<li><strong>Fama-French 5</strong> (2015): aggiunge RMW (profittabilità) e CMA (investimento).</li>
+<li><strong>Carhart 4</strong> (1997): aggiunge WML (momentum).</li>
+<li><strong>APT</strong> (Ross 1976): K fattori non specificati, generalizzazione del CAPM.</li>
+<li><strong>Alpha di Jensen</strong>: intercetta della regressione, misura il "valore aggiunto" del gestore.</li>
+<li>La maggioranza dei fondi attivi ha alpha negativo dopo le commissioni → forte argomento per gli ETF passivi.</li>
+</ul>
+      <nav class="pager">
+<a href="20-analisi-tecnica.html" class="prev"><span class="label">← Precedente</span><span class="title">Analisi tecnica (e perché l&#x27;accademia è scettica)</span></a>
+<a href="22-derivati.html" class="next"><span class="label">Successivo →</span><span class="title">Derivati: futures, opzioni, swap, forward</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Educazione Finanziaria Zero to Hero</strong> — percorso completo, in italiano, dai fondamentali al pricing dei derivati.</p><p>Materiale didattico aperto. Nessuna sponsorizzazione, nessun affiliate link. Quando un concetto è oscuro, torna indietro: la finanza è una piramide, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

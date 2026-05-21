@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Disaster Recovery and Multi-Region — AWS Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#232f3e',primaryTextColor:'#ffffff',primaryBorderColor:'#ff9900',lineColor:'#8a99ad',background:'#0c1320'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">λ</div>
+      <div>
+        <div class="brand-title">AWS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/44-disaster-recovery-multi-region.html" class="lang-link" title="Passa all'italiano">IT</a><span class="lang-active" title="English">EN</span></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="search... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-what-is-cloud-and-aws.html" class=""><span class="num">01</span>What the cloud is, and what AWS is</a></li><li class="nav-item"><a href="../pages/02-global-infrastructure.html" class=""><span class="num">02</span>Global infrastructure: Regions, AZs, Edge</a></li><li class="nav-item"><a href="../pages/03-account-root-billing.html" class=""><span class="num">03</span>AWS account, root user, billing</a></li><li class="nav-item"><a href="../pages/04-iam-fundamentals.html" class=""><span class="num">04</span>IAM — fundamentals (users, groups, roles, policies)</a></li><li class="nav-item"><a href="../pages/05-iam-advanced.html" class=""><span class="num">05</span>IAM advanced: conditional policies, STS, ABAC</a></li><li class="nav-item"><a href="../pages/06-cli-sdk-iac.html" class=""><span class="num">06</span>CLI, SDK, CloudShell, IaC primer</a></li><li class="nav-item"><a href="../pages/07-pricing-billing.html" class=""><span class="num">07</span>Pricing, billing, free tier, cost tools</a></li><li class="nav-item"><a href="../pages/08-organizations-multi-account.html" class=""><span class="num">08</span>AWS Organizations &amp; multi-account strategy</a></li><li class="nav-item"><a href="../pages/09-vpc-fundamentals.html" class=""><span class="num">09</span>VPC — fundamentals</a></li><li class="nav-item"><a href="../pages/10-vpc-advanced.html" class=""><span class="num">10</span>VPC advanced: peering, TGW, PrivateLink, endpoints</a></li><li class="nav-item"><a href="../pages/11-route53-cloudfront.html" class=""><span class="num">11</span>Route 53, CloudFront, Global Accelerator</a></li><li class="nav-item"><a href="../pages/12-hybrid-vpn-directconnect.html" class=""><span class="num">12</span>Hybrid: VPN, Direct Connect, PrivateLink</a></li><li class="nav-item"><a href="../pages/13-ec2-fundamentals.html" class=""><span class="num">13</span>EC2 — fundamentals (instances, AMIs, lifecycle)</a></li><li class="nav-item"><a href="../pages/14-ec2-advanced-spot-nitro.html" class=""><span class="num">14</span>EC2 advanced — Spot, Placement Groups, Nitro, hibernation</a></li><li class="nav-item"><a href="../pages/15-asg-elb.html" class=""><span class="num">15</span>Auto Scaling Groups + Elastic Load Balancing</a></li><li class="nav-item"><a href="../pages/16-lambda-deep-dive.html" class=""><span class="num">16</span>Lambda deep dive</a></li><li class="nav-item"><a href="../pages/17-containers-ecs-eks-fargate.html" class=""><span class="num">17</span>Containers: ECS, EKS, Fargate, ECR</a></li><li class="nav-item"><a href="../pages/18-specialty-compute.html" class=""><span class="num">18</span>Specialty compute: Batch, Lightsail, Outposts, Wavelength, Beanstalk</a></li><li class="nav-item"><a href="../pages/19-ebs-efs-fsx.html" class=""><span class="num">19</span>EBS, EFS, FSx, Instance Store</a></li><li class="nav-item"><a href="../pages/20-s3-deep-dive.html" class=""><span class="num">20</span>S3 — deep dive</a></li><li class="nav-item"><a href="../pages/21-archive-snow-gateway-backup.html" class=""><span class="num">21</span>Glacier, Snow, Storage Gateway, DataSync, AWS Backup</a></li><li class="nav-item"><a href="../pages/22-rds.html" class=""><span class="num">22</span>RDS — managed relational DBs (engines, Multi-AZ, replicas, Proxy)</a></li><li class="nav-item"><a href="../pages/23-aurora-deep-dive.html" class=""><span class="num">23</span>Aurora deep dive — shared storage, Serverless v2, Global Database</a></li><li class="nav-item"><a href="../pages/24-dynamodb-deep-dive.html" class=""><span class="num">24</span>DynamoDB deep dive — partitions, GSI, Streams, single-table</a></li><li class="nav-item"><a href="../pages/25-purpose-built-dbs.html" class=""><span class="num">25</span>Purpose-built DBs — ElastiCache, MemoryDB, Neptune, DocumentDB, Keyspaces, Timestream, QLDB</a></li><li class="nav-item"><a href="../pages/26-redshift-data-warehousing.html" class=""><span class="num">26</span>Redshift — MPP data warehousing and zero-ETL</a></li><li class="nav-item"><a href="../pages/27-sqs-sns-eventbridge.html" class=""><span class="num">27</span>SQS, SNS, EventBridge — messaging and events</a></li><li class="nav-item"><a href="../pages/28-step-functions-mq-appflow.html" class=""><span class="num">28</span>Step Functions, MQ, AppFlow — orchestration and integration</a></li><li class="nav-item"><a href="../pages/29-athena-glue-lakeformation.html" class=""><span class="num">29</span>Athena, Glue, Lake Formation — the AWS data lake</a></li><li class="nav-item"><a href="../pages/30-emr-kinesis-msk.html" class=""><span class="num">30</span>EMR, Kinesis, MSK — big data and streaming</a></li><li class="nav-item"><a href="../pages/31-opensearch-quicksight.html" class=""><span class="num">31</span>OpenSearch and QuickSight — search and BI</a></li><li class="nav-item"><a href="../pages/32-sagemaker-overview.html" class=""><span class="num">32</span>SageMaker — the end-to-end ML platform</a></li><li class="nav-item"><a href="../pages/33-bedrock-ai-services.html" class=""><span class="num">33</span>Bedrock and AI services — managed GenAI and ML</a></li><li class="nav-item"><a href="../pages/34-iac-cloudformation-cdk-terraform.html" class=""><span class="num">34</span>IaC on AWS — CloudFormation, CDK, SAM, Terraform</a></li><li class="nav-item"><a href="../pages/35-ci-cd-pipeline.html" class=""><span class="num">35</span>CI/CD on AWS — CodePipeline, CodeBuild, CodeDeploy, CodeCatalyst</a></li><li class="nav-item"><a href="../pages/36-observability-cloudwatch-xray.html" class=""><span class="num">36</span>Observability — CloudWatch, X-Ray, CloudTrail, Config, SSM</a></li><li class="nav-item"><a href="../pages/37-kms-secrets-acm.html" class=""><span class="num">37</span>Encryption — KMS, CloudHSM, Secrets Manager, Parameter Store, ACM</a></li><li class="nav-item"><a href="../pages/38-waf-shield-guardduty-inspector.html" class=""><span class="num">38</span>Threat detection — WAF, Shield, GuardDuty, Inspector, Macie, Security Hub</a></li><li class="nav-item"><a href="../pages/39-governance-org-controltower-identitycenter.html" class=""><span class="num">39</span>Governance — Organizations, Control Tower, Identity Center</a></li><li class="nav-item"><a href="../pages/40-migration-mgn-dms-snow.html" class=""><span class="num">40</span>Migration — MGN, DMS, Snow family, Discovery, Migration Hub</a></li><li class="nav-item"><a href="../pages/41-cost-optimization-finops.html" class=""><span class="num">41</span>Cost optimization and FinOps</a></li><li class="nav-item"><a href="../pages/42-well-architected.html" class=""><span class="num">42</span>Well-Architected Framework — 6 pillars, lenses, review</a></li><li class="nav-item"><a href="../pages/43-architecture-patterns.html" class=""><span class="num">43</span>Architecture patterns — 3-tier, serverless, event-driven, microservices</a></li><li class="nav-item"><a href="../pages/44-disaster-recovery-multi-region.html" class="active"><span class="num">44</span>Disaster Recovery and Multi-Region</a></li><li class="nav-item"><a href="../pages/45-reference-architectures.html" class=""><span class="num">45</span>Real-world reference architectures</a></li><li class="nav-item"><a href="../pages/46-advanced-networking.html" class=""><span class="num">46</span>Advanced networking deep dive</a></li><li class="nav-item"><a href="../pages/47-containers-deep-dive.html" class=""><span class="num">47</span>Containers deep dive — EKS, Karpenter, service mesh</a></li><li class="nav-item"><a href="../pages/48-serverless-patterns.html" class=""><span class="num">48</span>Serverless patterns deep dive</a></li><li class="nav-item"><a href="../pages/49-genai-rag-agents.html" class=""><span class="num">49</span>Generative AI on AWS — RAG and Agents</a></li><li class="nav-item"><a href="../pages/50-aws-certifications.html" class=""><span class="num">50</span>AWS Certifications — roadmap and study guide</a></li><li class="nav-item"><a href="../pages/51-glossary-az.html" class=""><span class="num">51</span>Glossary A-Z</a></li><li class="nav-item"><a href="../pages/52-cheatsheet.html" class=""><span class="num">52</span>Cheat sheet: services, limits, instance families</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Architecture</span>
+        <span>Section 44 of 52</span>
+        <span class="level-tag level-adv">Level: advanced</span>
+      </div>
+      <h1>Disaster Recovery and Multi-Region</h1>
+      <p class="summary">RTO/RPO, 4 DR strategies (Backup-Restore, Pilot Light, Warm Standby, Multi-site Active-Active), DRS, Aurora Global, DynamoDB Global Tables, Route 53 failover, gameday testing.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Architecture</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>sections 22, 23, 42</li></ul>
+  <div class="label">Tools / references</div>
+  <ul class="source-list"><li>AWS Elastic Disaster Recovery</li><li>Route 53</li><li>AWS Resilience Hub</li></ul>
+</div>
+      <p>A <strong>Disaster Recovery (DR)</strong> plan defines how to recover from a disaster: AWS region down, corrupted dataset, ransomware attack, single-vendor failure. The key question is not "if" it will happen, but "how much data do I lose" and "how long until I'm operational again".</p>
+<h2 id="1-rto-and-rpo-the-2-metrics">1. RTO and RPO — the 2 metrics</h2>
+<ul>
+<li><strong>RTO (Recovery Time Objective)</strong>: max acceptable downtime. If RTO = 1h, the system must be restored within 1h of the disaster.</li>
+<li><strong>RPO (Recovery Point Objective)</strong>: max acceptable data loss. If RPO = 5 min, I accept losing up to 5 min of transactions.</li>
+</ul>
+<p>Example: a core bank has RPO=0 RTO=seconds (losing transactions is unacceptable). A blog with RPO=24h RTO=4h is fine. The more aggressive the goals, the higher the cost.</p>
+<pre><code class="language-mermaid">flowchart LR
+    A[Disaster&lt;br/&gt;t=0] --&gt; B[System down]
+    B --&gt; C[Recovery start&lt;br/&gt;t=RTO?]
+    C --&gt; D[System up&lt;br/&gt;with data from t=-RPO]
+    D --&gt; E[Operations&lt;br/&gt;resume]
+    style B fill:#f99
+    style D fill:#9f9
+</code></pre>
+<h2 id="2-the-4-aws-dr-strategies">2. The 4 AWS DR strategies</h2>
+<table>
+<thead>
+<tr>
+<th>Strategy</th>
+<th>RPO</th>
+<th>RTO</th>
+<th>Idle cost</th>
+<th>When</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Backup &amp; Restore</strong></td>
+<td>hours-days</td>
+<td>hours-days</td>
+<td>very low</td>
+<td>tier 3 apps, archives</td>
+</tr>
+<tr>
+<td><strong>Pilot Light</strong></td>
+<td>minutes</td>
+<td>tens of min-hours</td>
+<td>low</td>
+<td>core off, data replicated</td>
+</tr>
+<tr>
+<td><strong>Warm Standby</strong></td>
+<td>seconds-min</td>
+<td>minutes</td>
+<td>medium</td>
+<td>reduced infra always on</td>
+</tr>
+<tr>
+<td><strong>Multi-site Active-Active</strong></td>
+<td>near 0</td>
+<td>seconds</td>
+<td>high (2x prod)</td>
+<td>tier 0 critical</td>
+</tr>
+</tbody>
+</table>
+<h3 id="backup-restore">Backup &amp; Restore</h3>
+<p>Regular snapshots (EBS, RDS) replicated cross-region. On DR you recreate infra (CloudFormation/Terraform) and restore. Cheap but high RTO (could take 1 day).</p>
+<h3 id="pilot-light">Pilot Light</h3>
+<p>Infra "off" ready in the DR region: data continuously replicated (RDS cross-region snapshots, S3 CRR, DynamoDB Global), compute scaled to zero (ASG min=0). On DR: scale ASG, switch DNS. RTO 30-60 min.</p>
+<h3 id="warm-standby">Warm Standby</h3>
+<p>Reduced version of the infra (e.g. 1 EC2 instead of 10) always running in the DR region. On DR: scale up and switch. RTO 5-15 min.</p>
+<h3 id="multi-site-active-active">Multi-site Active-Active</h3>
+<p>Traffic distributed across 2+ regions (Route 53 latency-based or geo). Each region serves everything. On DR: Route 53 health check removes the down region. RTO seconds. Cost: 2x and you must solve consistency.</p>
+<h2 id="3-aws-elastic-disaster-recovery-drs">3. AWS Elastic Disaster Recovery (DRS)</h2>
+<p>Managed service that performs <strong>block-level replication</strong> of servers (on-prem or cloud) to AWS. Continuous replication, RPO seconds. On DR: launch EC2 instances from the replica, RTO ~10 min.</p>
+<p>Use case: lift-and-shift DR, physical DC migration, hybrid. Replaces CloudEndure (acquired 2019).</p>
+<h2 id="4-cross-region-database-replication">4. Cross-region database replication</h2>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Mechanism</th>
+<th>RPO</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Aurora Global Database</strong></td>
+<td>dedicated physical log shipping</td>
+<td>&lt; 1 sec, RTO &lt; 1 min</td>
+</tr>
+<tr>
+<td><strong>DynamoDB Global Tables</strong></td>
+<td>multi-master, every region read+write</td>
+<td>seconds (eventual consistency)</td>
+</tr>
+<tr>
+<td><strong>RDS cross-region read replica</strong></td>
+<td>async replication</td>
+<td>seconds-minutes</td>
+</tr>
+<tr>
+<td><strong>S3 CRR</strong> (Cross-Region Replication)</td>
+<td>async object copy</td>
+<td>seconds-minutes</td>
+</tr>
+<tr>
+<td><strong>EBS snapshot cross-region</strong></td>
+<td>copied snapshots</td>
+<td>hours (manual or EventBridge)</td>
+</tr>
+<tr>
+<td><strong>ElastiCache Global Datastore</strong></td>
+<td>Redis cross-region</td>
+<td>&lt; 1 sec</td>
+</tr>
+</tbody>
+</table>
+<p>Aurora Global is the gold standard for multi-region relational DBs: on DR the secondary can be promoted to primary in &lt; 1 min with one API call.</p>
+<h2 id="5-route-53-failover-and-routing-policy">5. Route 53 failover and routing policy</h2>
+<p>Route 53 implements <strong>DNS failover</strong> with health checks:</p>
+<ul>
+<li><strong>Failover routing</strong>: primary active, secondary activated only if primary health check fails.</li>
+<li><strong>Latency-based</strong>: client goes to the lowest-latency region.</li>
+<li><strong>Geolocation</strong>: routing by country/continent (EU vs US compliance).</li>
+<li><strong>Weighted</strong>: A/B testing or cross-region canary.</li>
+<li><strong>Multivalue answer</strong>: returns up to 8 IPs, client-side load balancing.</li>
+</ul>
+<p>Health check: HTTP/HTTPS/TCP endpoint, configurable threshold, CloudWatch alarm trigger.</p>
+<p><strong>Route 53 Application Recovery Controller (ARC)</strong>: for critical Active-Active, manual <strong>routing control</strong> (DR switch via atomic guaranteed API, not waiting on DNS TTL) + continuous <strong>readiness checks</strong> (verify the DR region is actually capable of serving).</p>
+<h2 id="6-multi-region-active-active-architecture">6. Multi-region Active-Active architecture</h2>
+<pre><code class="language-mermaid">flowchart TB
+    U[Global users] --&gt; R53[Route 53&lt;br/&gt;latency + health check]
+    R53 --&gt;|EU users| CFEU[CloudFront EU]
+    R53 --&gt;|US users| CFUS[CloudFront US]
+    CFEU --&gt; APIEU[API GW eu-west-1]
+    CFUS --&gt; APIUS[API GW us-east-1]
+    APIEU --&gt; LEU[Lambda EU]
+    APIUS --&gt; LUS[Lambda US]
+    LEU --&gt; DDB1[(DynamoDB&lt;br/&gt;Global Tables)]
+    LUS --&gt; DDB1
+    LEU --&gt; AGEU[(Aurora Global&lt;br/&gt;primary EU)]
+    LUS --&gt; AGRR[(Aurora Global&lt;br/&gt;read US)]
+    AGEU -.replica.-&gt; AGRR
+    LUS --&gt;|writes via cross-region| AGEU
+    ARC[Route 53 ARC&lt;br/&gt;routing control] -.-&gt; R53
+    RH[Resilience Hub&lt;br/&gt;continuous assess] -.-&gt; APIEU
+    RH -.-&gt; APIUS
+</code></pre>
+<h2 id="7-consistency-challenges-cap">7. Consistency challenges (CAP)</h2>
+<p>Multi-region active-active surfaces problems that single-region does not:</p>
+<ul>
+<li><strong>CAP theorem</strong>: in case of partition between regions you choose between Consistency and Availability. AWS managed services pick A (DynamoDB Global, S3) → eventual consistency.</li>
+<li><strong>Last-writer-wins</strong>: DynamoDB Global uses timestamps, last write wins. If two regions write the same item in the same window, you lose one.</li>
+<li><strong>Conflict resolution</strong>: patterns like CRDT (counter), vector clock, or "all writes go to one region" (write follows reader).</li>
+<li><strong>Clock skew</strong>: timestamps are not perfect across regions; NTP is not enough for global ordering. Use logical clock or coordination layer (DynamoDB conditional writes).</li>
+</ul>
+<p>Rule of thumb: if you need <strong>strong-consistent global transactions</strong>, multi-region is hard and you probably must accept RTO &gt; 0 (active-passive with Aurora Global).</p>
+<h2 id="8-gameday-and-aws-resilience-hub">8. Gameday and AWS Resilience Hub</h2>
+<p><strong>Gameday</strong>: planned exercise where the team simulates a disaster (e.g. terminates the primary region, induces faults with <strong>Fault Injection Service</strong>) and verifies actual RTO/RPO. Best practice: at least 1-2 gamedays/year for critical workloads.</p>
+<p><strong>AWS Resilience Hub</strong>: tool that ingests CloudFormation/Terraform/CDK, computes target vs actual RTO/RPO, suggests improvements, integrates with FIS for automated tests. Free for the first 5 workloads.</p>
+<h2 id="9-exercise">9. Exercise</h2>
+<details>
+<summary>E-commerce with RTO=15 min, RPO=1 min. Which strategy?</summary>
+
+**Warm Standby**: reduced infra always on in the DR region (1 small EC2, ASG min=1) + Aurora Global Database (RPO < 1s, RTO < 1min) + DynamoDB Global Tables + S3 CRR + Route 53 failover.
+
+On DR (e.g. primary region down): Route 53 health check fails, traffic shifts to DR. ASG scales from 1 to N. Aurora secondary promoted primary via API. Total time: 5-10 min, within RTO.
+
+Cost: ~20-30% more than primary alone, acceptable for a critical app. Multi-site active-active would be overkill (doubles cost to gain ~10 min RTO).
+</details>
+
+<details>
+<summary>You have a legacy on-prem app. You want DR on AWS without rebuilding anything.</summary>
+
+**AWS Elastic Disaster Recovery (DRS)**: install the DRS agent on every server (Windows/Linux), continuous block-level replication to AWS. RPO seconds.
+
+On DR: from the DRS console you launch "recovery", the service spins up EC2 instances from the replica with same IP/config in a few minutes. RTO ~10 min.
+
+Cost: you pay only the staging storage (EBS) + low per-server replication cost. Zero idle compute cost. When back to normal, failback to on-prem or keep living on AWS (de facto migration).
+</details>
+
+<blockquote>
+<p><strong>Summary</strong>: RTO/RPO define objectives; 4 DR strategies (Backup-Restore &lt; Pilot Light &lt; Warm Standby &lt; Multi-site, increasing cost decreasing RTO); Aurora Global + DynamoDB Global Tables + S3 CRR + Route 53 failover are the building blocks; multi-site active-active requires consistency handling (CAP, last-writer-wins); DRS for lift-and-shift; Resilience Hub + gameday + FIS for testing; an untested DR is a fake DR.</p>
+</blockquote>
+      <nav class="pager">
+<a href="43-architecture-patterns.html" class="prev"><span class="label">← Previous</span><span class="title">Architecture patterns — 3-tier, serverless, event-driven, microservices</span></a>
+<a href="45-reference-architectures.html" class="next"><span class="label">Next →</span><span class="title">Real-world reference architectures</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>AWS Zero to Hero</strong> — complete path, in English, from primitives to advanced architecture.</p><p>Open educational material. No sponsorships, no affiliate links, no affiliation with AWS. When a concept is unclear, go back: AWS is a pyramid of primitives, not a tree you skip across.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+</body>
+</html>

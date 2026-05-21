@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NumPy: thinking in arrays — Data Science Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#3a4a7a',primaryTextColor:'#e8eef0',primaryBorderColor:'#5a6aa0',lineColor:'#8a9499',background:'#11171a'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">Σ</div>
+      <div>
+        <div class="brand-title">DATA SCIENCE</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/09-numpy.html" class="lang-link" title="Passa all'italiano">🇮🇹 IT</a><span class="lang-active" title="English">🇬🇧 EN</span></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="search... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-what-is-data-science.html" class=""><span class="num">01</span>What is data science (and what isn&#x27;t)</a></li><li class="nav-item"><a href="../pages/02-python-for-data-science.html" class=""><span class="num">02</span>Python for data science: pro setup</a></li><li class="nav-item"><a href="../pages/02b-math-essentials.html" class=""><span class="num">02b</span>High-school math you actually need</a></li><li class="nav-item"><a href="../pages/03-linear-algebra.html" class=""><span class="num">03</span>Linear algebra for data scientists</a></li><li class="nav-item"><a href="../pages/04-calculus-optimization.html" class=""><span class="num">04</span>Calculus, gradients, and optimization</a></li><li class="nav-item"><a href="../pages/05-probability.html" class=""><span class="num">05</span>Probability: the language of uncertainty</a></li><li class="nav-item"><a href="../pages/06-descriptive-statistics.html" class=""><span class="num">06</span>Descriptive statistics</a></li><li class="nav-item"><a href="../pages/07-inferential-statistics.html" class=""><span class="num">07</span>Inferential statistics and hypothesis testing</a></li><li class="nav-item"><a href="../pages/08-distributions.html" class=""><span class="num">08</span>Probability distributions you&#x27;ll meet</a></li><li class="nav-item"><a href="../pages/09-numpy.html" class="active"><span class="num">09</span>NumPy: thinking in arrays</a></li><li class="nav-item"><a href="../pages/10-pandas.html" class=""><span class="num">10</span>Pandas: the swiss army knife</a></li><li class="nav-item"><a href="../pages/11-sql.html" class=""><span class="num">11</span>SQL for data scientists</a></li><li class="nav-item"><a href="../pages/12-visualization.html" class=""><span class="num">12</span>Visualization: matplotlib, seaborn, plotly</a></li><li class="nav-item"><a href="../pages/13-data-wrangling.html" class=""><span class="num">13</span>Cleaning and data wrangling</a></li><li class="nav-item"><a href="../pages/14-feature-engineering.html" class=""><span class="num">14</span>Feature engineering</a></li><li class="nav-item"><a href="../pages/15-eda.html" class=""><span class="num">15</span>EDA: Exploratory Data Analysis</a></li><li class="nav-item"><a href="../pages/16-ml-fundamentals.html" class=""><span class="num">16</span>ML: fundamentals — bias, variance, validation</a></li><li class="nav-item"><a href="../pages/17-linear-regression.html" class=""><span class="num">17</span>Linear regression and regularization</a></li><li class="nav-item"><a href="../pages/18-logistic-regression.html" class=""><span class="num">18</span>Logistic regression and classification</a></li><li class="nav-item"><a href="../pages/19-knn-naive-bayes-svm.html" class=""><span class="num">19</span>KNN, Naive Bayes, SVM</a></li><li class="nav-item"><a href="../pages/20-decision-trees.html" class=""><span class="num">20</span>Decision trees</a></li><li class="nav-item"><a href="../pages/21-random-forest-boosting.html" class=""><span class="num">21</span>Random Forest, Gradient Boosting, XGBoost</a></li><li class="nav-item"><a href="../pages/22-clustering.html" class=""><span class="num">22</span>Clustering: K-Means, DBSCAN, GMM, hierarchical</a></li><li class="nav-item"><a href="../pages/23-pca-tsne-umap.html" class=""><span class="num">23</span>Dimensionality reduction: PCA, t-SNE, UMAP</a></li><li class="nav-item"><a href="../pages/24-metrics-validation.html" class=""><span class="num">24</span>Metrics, cross-validation, leakage</a></li><li class="nav-item"><a href="../pages/25-class-imbalance.html" class=""><span class="num">25</span>Class imbalance</a></li><li class="nav-item"><a href="../pages/26-hyperparameter-tuning.html" class=""><span class="num">26</span>Hyperparameter tuning</a></li><li class="nav-item"><a href="../pages/27-neural-networks.html" class=""><span class="num">27</span>Neural networks: from fundamentals to backprop</a></li><li class="nav-item"><a href="../pages/28-pytorch.html" class=""><span class="num">28</span>PyTorch: from toy model to training loop</a></li><li class="nav-item"><a href="../pages/29-cnn.html" class=""><span class="num">29</span>CNN for computer vision</a></li><li class="nav-item"><a href="../pages/30-rnn-lstm.html" class=""><span class="num">30</span>RNN, LSTM, GRU for sequences</a></li><li class="nav-item"><a href="../pages/31-transformer.html" class=""><span class="num">31</span>Transformer and attention</a></li><li class="nav-item"><a href="../pages/32-nlp-llm.html" class=""><span class="num">32</span>NLP: from text mining to LLMs</a></li><li class="nav-item"><a href="../pages/33-time-series.html" class=""><span class="num">33</span>Time series and forecasting</a></li><li class="nav-item"><a href="../pages/34-mlops.html" class=""><span class="num">34</span>MLOps: deployment, monitoring, drift</a></li><li class="nav-item"><a href="../pages/35-bayesian-causal.html" class=""><span class="num">35</span>Bayesian and Causal Inference</a></li><li class="nav-item"><a href="../pages/36-capstone-career.html" class=""><span class="num">36</span>Capstone, portfolio, career</a></li><li class="nav-item"><a href="../pages/37-glossary.html" class=""><span class="num">37</span>Glossary A-Z</a></li><li class="nav-item"><a href="../pages/38-formula-sheet.html" class=""><span class="num">38</span>Formula Sheet: all the formulas from the course</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Tooling</span>
+        <span>Section 10 of 39</span>
+        <span class="level-tag level-int">Level: intermediate</span>
+      </div>
+      <h1>NumPy: thinking in arrays</h1>
+      <p class="summary">ndarray, dtypes, broadcasting, advanced indexing, vectorization, the operations you need daily (and those that look similar but aren&#x27;t).</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Tooling</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>[[python-for-data-science]]</li><li>[[linear-algebra]]</li></ul>
+  <div class="label">Tools</div>
+  <ul class="source-list"><li>numpy</li></ul>
+</div>
+      <h2 id="why-numpy">Why NumPy</h2>
+<p>All numerical computation in Python flows through NumPy: pandas, scikit-learn, PyTorch (its APIs deliberately mimic NumPy), TensorFlow, JAX, OpenCV.</p>
+<p><strong>What makes it fast</strong>:</p>
+<ul>
+<li><strong>Contiguous memory</strong> arrays (a linear block, not scattered Python objects).</li>
+<li>Operations executed in <strong>C</strong> under the hood.</li>
+<li><strong>Vectorization</strong>: writing <code>a + b</code> instead of a for loop calls a single C function on the whole array.</li>
+</ul>
+<p>Comparison: summing 10⁶ numbers.</p>
+<pre><code class="language-python">import numpy as np, time
+arr = np.arange(1_000_000)
+lst = list(range(1_000_000))
+
+t = time.perf_counter(); sum(lst); print(f&quot;python sum: {time.perf_counter()-t:.3f}s&quot;)
+t = time.perf_counter(); arr.sum(); print(f&quot;numpy sum: {time.perf_counter()-t:.4f}s&quot;)
+# python sum: ~0.020s
+# numpy sum: ~0.0007s  → ~30x faster
+</code></pre>
+<h2 id="ndarray-and-dtype">ndarray and dtype</h2>
+<pre><code class="language-python">import numpy as np
+
+a = np.array([1, 2, 3])
+a.shape       # (3,)
+a.dtype       # int64
+a.ndim        # 1
+a.size        # 3
+a.nbytes      # 24 (3 elements × 8 bytes)
+</code></pre>
+<h3 id="numeric-types-dtypes">Numeric types (dtypes)</h3>
+<table>
+<thead>
+<tr>
+<th>dtype</th>
+<th>bytes</th>
+<th>range</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>int8</code></td>
+<td>1</td>
+<td>-128..127</td>
+</tr>
+<tr>
+<td><code>int32</code></td>
+<td>4</td>
+<td>±2.1·10⁹</td>
+</tr>
+<tr>
+<td><code>int64</code></td>
+<td>8</td>
+<td>±9.2·10¹⁸</td>
+</tr>
+<tr>
+<td><code>float16</code></td>
+<td>2</td>
+<td>~10⁻⁵..10⁵, 3 digits</td>
+</tr>
+<tr>
+<td><code>float32</code></td>
+<td>4</td>
+<td>~10⁻³⁸..10³⁸, 7 digits</td>
+</tr>
+<tr>
+<td><code>float64</code></td>
+<td>8</td>
+<td>~10⁻³⁰⁸..10³⁰⁸, 15 digits</td>
+</tr>
+<tr>
+<td><code>bool</code></td>
+<td>1</td>
+<td>True/False</td>
+</tr>
+<tr>
+<td><code>complex128</code></td>
+<td>16</td>
+<td>complex numbers</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Choosing the right dtype can cut RAM by 4-8×. <code>float32</code> instead of <code>float64</code> doubles GPU speed without significant loss for ML.</p>
+</blockquote>
+<pre><code class="language-python">a = np.zeros(1_000_000, dtype=np.float32)
+a.nbytes  # 4 MB (vs 8 MB with float64)
+</code></pre>
+<h2 id="creating-arrays">Creating arrays</h2>
+<pre><code class="language-python">np.array([1,2,3])             # from list
+np.zeros((3, 4))              # all zeros, shape (3,4)
+np.ones((2, 3))               # all ones
+np.full((2, 2), 7)            # all 7s
+np.eye(4)                     # 4x4 identity
+np.arange(0, 10, 0.5)         # like range, but float
+np.linspace(0, 1, 11)         # 11 evenly spaced 0..1
+np.logspace(0, 3, 4)          # [1, 10, 100, 1000]
+np.empty((2, 2))              # uninitialized (faster, BEWARE)
+</code></pre>
+<h3 id="random-the-modern-api">Random — the modern API</h3>
+<p>The legacy API <code>np.random.rand</code>, <code>np.random.normal</code> etc. <strong>should be avoided</strong> (global state). Use the <strong>Generator</strong>:</p>
+<pre><code class="language-python">rng = np.random.default_rng(seed=42)
+rng.standard_normal((100, 5))
+rng.integers(0, 10, size=20)
+rng.choice([0, 1], size=50, p=[0.3, 0.7])
+rng.shuffle(array)
+</code></pre>
+<p>Reproducible, thread-safe, officially recommended.</p>
+<h2 id="indexing-and-slicing">Indexing and slicing</h2>
+<h3 id="1d-slicing">1D slicing</h3>
+<pre><code class="language-python">a = np.arange(10)
+a[2:5]     # [2 3 4]
+a[::2]     # [0 2 4 6 8]
+a[::-1]    # reverse
+</code></pre>
+<blockquote>
+<p>NumPy slicing creates a <strong>view</strong> (no copy). Modifying the view modifies the original. For explicit copy: <code>a[2:5].copy()</code>.</p>
+</blockquote>
+<h3 id="2d-slicing">2D slicing</h3>
+<pre><code class="language-python">A = np.arange(20).reshape(4, 5)
+A[1, 2]        # 7
+A[1]           # row 1
+A[:, 2]        # column 2
+A[:2, 1:4]     # submatrix
+</code></pre>
+<h3 id="fancy-indexing">Fancy indexing</h3>
+<pre><code class="language-python">a = np.arange(10) * 10
+a[[1, 3, 5]]        # [10 30 50]
+A[[0, 2]]           # rows 0 and 2
+
+# bool mask
+a[a &gt; 30]           # [40 50 60 70 80 90]
+
+# combined
+A[A &gt; 10] = 0
+</code></pre>
+<blockquote>
+<p>Fancy indexing creates <strong>copies</strong>, slicing creates <strong>views</strong>. Common source of bugs.</p>
+</blockquote>
+<h2 id="element-wise-operations">Element-wise operations</h2>
+<pre><code class="language-python">a = np.array([1, 2, 3])
+b = np.array([4, 5, 6])
+
+a + b           # [5 7 9]
+a * b           # [4 10 18]  (NOT dot product)
+a ** 2          # [1 4 9]
+np.sqrt(a)
+np.exp(a)
+np.log(a)
+np.sin(a)
+</code></pre>
+<p><strong>All</strong> NumPy <strong>ufuncs</strong> (universal functions) are vectorized and very fast.</p>
+<h3 id="aggregations">Aggregations</h3>
+<pre><code class="language-python">A = np.arange(12).reshape(3, 4)
+A.sum()             # 66
+A.sum(axis=0)       # [12 15 18 21] (per column)
+A.sum(axis=1)       # [6 22 38] (per row)
+A.mean(axis=0)
+A.std(ddof=1)
+A.argmax()          # index of max (on flattened)
+A.argmax(axis=1)    # index per row
+</code></pre>
+<blockquote>
+<p>Mnemonic: <code>axis=0</code> means "collapse rows" → output has shape of a row. <code>axis=1</code> collapses columns.</p>
+</blockquote>
+<h2 id="broadcasting-in-detail">Broadcasting (in detail)</h2>
+<p>Rules:</p>
+<ol>
+<li>Align shapes to the right.</li>
+<li>Dimensions must be <strong>equal</strong> or <strong>one must be 1</strong>.</li>
+<li>Size-1 dimensions are virtually "stretched".</li>
+</ol>
+<p>Examples:</p>
+<pre><code class="language-python">A = np.ones((3, 4))
+b = np.array([10, 20, 30, 40])      # shape (4,)
+A + b                                # (3,4) + (4,) → broadcasts to (3,4)
+
+c = np.array([[1], [2], [3]])       # shape (3,1)
+A + c                                # (3,4) + (3,1) → broadcasts to (3,4)
+</code></pre>
+<h3 id="tricky-case">Tricky case</h3>
+<pre><code class="language-python">A = np.ones((3, 4))
+b = np.array([10, 20, 30])           # shape (3,) — NO!
+A + b                                # ValueError
+A + b[:, None]                       # now b is (3,1), works
+</code></pre>
+<p><code>b[:, None]</code> adds a dimension. <code>None</code> is alias for <code>np.newaxis</code>.</p>
+<h2 id="reshape-concat-split">Reshape, concat, split</h2>
+<pre><code class="language-python">a = np.arange(12)
+a.reshape(3, 4)
+a.reshape(2, -1)         # -1 = &quot;you figure it out&quot;
+a.T                      # transpose (for 2D)
+
+# concatenation
+np.concatenate([a, b], axis=0)
+np.vstack([a, b])
+np.hstack([a, b])
+np.column_stack([a, b])
+
+# split
+np.split(a, 3)
+np.array_split(a, 5)
+</code></pre>
+<h2 id="linear-algebra-recap">Linear algebra (recap)</h2>
+<pre><code class="language-python">A @ B                    # matrix multiplication
+np.linalg.inv(A)         # inverse (rarely)
+np.linalg.solve(A, b)    # solve Ax=b
+np.linalg.eig(A)         # eigenvalues
+np.linalg.svd(A)         # SVD
+np.linalg.norm(v)
+</code></pre>
+<h2 id="tricks-and-common-patterns">Tricks and common patterns</h2>
+<h3 id="manual-one-hot-encoding">Manual one-hot encoding</h3>
+<pre><code class="language-python">y = np.array([0, 1, 2, 1, 0])
+n_classes = 3
+one_hot = np.eye(n_classes)[y]
+</code></pre>
+<h3 id="distance-matrix">Distance matrix</h3>
+<p>Euclidean distances between all row pairs:</p>
+<pre><code class="language-python">X = np.random.randn(100, 5)
+diff = X[:, None, :] - X[None, :, :]   # (100, 100, 5)
+D = np.sqrt((diff ** 2).sum(axis=-1))
+
+# better (faster, avoids 3D):
+sq = (X ** 2).sum(axis=1)
+D2 = np.sqrt(sq[:, None] + sq[None, :] - 2 * X @ X.T)
+</code></pre>
+<h3 id="where-select-clip">where, select, clip</h3>
+<pre><code class="language-python">np.where(x &gt; 0, x, 0)        # ReLU
+np.clip(x, 0, 10)            # clamp in [0, 10]
+np.select([x&lt;0, x&lt;5], [-1, 1], default=10)
+</code></pre>
+<h3 id="argsort-and-top-k">Argsort and top-k</h3>
+<pre><code class="language-python">a = np.array([3, 1, 4, 1, 5, 9, 2, 6])
+np.argsort(a)              # indices to sort
+a[np.argsort(a)]           # sorted
+np.argsort(a)[-3:][::-1]   # top-3 descending
+np.argpartition(a, -3)[-3:]  # top-3 (unsorted, O(n))
+</code></pre>
+<h2 id="memory-layout-views-copies-the-trap">Memory layout, views, copies — the trap</h2>
+<pre><code class="language-python">A = np.arange(12).reshape(3, 4)
+B = A[:, ::2]      # view
+B[0, 0] = 999
+A[0, 0]            # 999 — A also modified!
+
+C = A[[0, 1]]      # fancy indexing → copy
+C[0, 0] = 0
+A[0, 0]            # unchanged
+</code></pre>
+<p>In doubt: <code>arr.flags.writeable</code>, <code>arr.base is None</code> (None = owns memory, not view).</p>
+<h2 id="performance-profile-and-optimize">Performance: profile and optimize</h2>
+<pre><code class="language-python">import numpy as np
+
+arr = np.array([1, 2, 3], dtype=np.float32)
+
+# preallocate
+out = np.empty(n)
+for i in range(n):
+    out[i] = compute(i)
+# better: vectorize
+
+# np.einsum is gold for complex ops
+np.einsum('ij,jk-&gt;ik', A, B)        # equivalent to A @ B
+np.einsum('ii-&gt;i', A)               # diagonal
+np.einsum('ij,ij-&gt;i', A, A)         # squared row norms
+</code></pre>
+<h2 id="exercises">Exercises</h2>
+<details>
+<summary>Exercise 1 — Standardization</summary>
+
+Standardize a matrix (mean 0, std 1 per column) **without** scikit-learn:
+
+
+<pre><code class="language-python">X = np.random.randn(100, 5) * 10 + 5
+mu = X.mean(0)
+sigma = X.std(0, ddof=1)
+X_std = (X - mu) / sigma
+print(X_std.mean(0), X_std.std(0, ddof=1))  # ~[0,...] [1,...]
+</code></pre>
+
+</details>
+
+<details>
+<summary>Exercise 2 — Outlier detection with z-score</summary>
+
+Find outliers (|z| > 3) in a 1D dataset.
+
+
+<pre><code class="language-python">x = np.concatenate([np.random.randn(100), [10, -8, 12]])
+z = (x - x.mean()) / x.std()
+outliers = np.where(np.abs(z) &gt; 3)[0]
+print(outliers)  # indices of 3 outliers
+</code></pre>
+
+</details>
+
+<details>
+<summary>Exercise 3 — Mini-batch sampling</summary>
+
+Create a function that splits $X$ (n × p) into batches of size 32, in random order:
+
+
+<pre><code class="language-python">def batches(X, y, batch_size=32, seed=None):
+    rng = np.random.default_rng(seed)
+    idx = rng.permutation(len(X))
+    for start in range(0, len(X), batch_size):
+        b = idx[start:start+batch_size]
+        yield X[b], y[b]
+
+for Xb, yb in batches(X, y, 32):
+    train_step(Xb, yb)
+</code></pre>
+
+</details>
+
+<details>
+<summary>Exercise 4 — 1D convolution without scipy</summary>
+
+
+<pre><code class="language-python">def conv1d(x, k):
+    return np.array([
+        (x[i:i+len(k)] * k).sum()
+        for i in range(len(x) - len(k) + 1)
+    ])
+
+x = np.array([1, 2, 3, 4, 5])
+k = np.array([1, 0, -1])
+print(conv1d(x, k))  # [-2 -2 -2]
+</code></pre>
+
+</details>
+
+<details>
+<summary>Exercise 5 — Pairwise Euclidean distance matrix</summary>
+
+
+<pre><code class="language-python">def pairwise_dist(X):
+    sq = (X**2).sum(axis=1)
+    return np.sqrt(np.maximum(sq[:, None] + sq[None, :] - 2 * X @ X.T, 0))
+
+X = np.random.randn(5, 3)
+D = pairwise_dist(X)
+assert np.allclose(D, D.T)
+assert np.allclose(np.diag(D), 0)
+</code></pre>
+
+</details>
+
+<details>
+<summary>Exercise 6 — Numerically stable softmax</summary>
+
+
+<pre><code class="language-python">def softmax(x, axis=-1):
+    x = x - x.max(axis=axis, keepdims=True)   # stability: subtract max
+    e = np.exp(x)
+    return e / e.sum(axis=axis, keepdims=True)
+
+logits = np.array([1000., 1001., 1002.])
+softmax(logits)  # [0.09, 0.24, 0.67] — without subtraction: NaN
+</code></pre>
+
+
+Standard trick: subtracting the max doesn't change the result (by exp + normalization properties) but avoids exp of huge numbers.
+</details>
+
+<h2 id="takeaways">Takeaways</h2>
+<ul>
+<li>Think in arrays, not for loops.</li>
+<li>Broadcasting multiplies expressive power — study it.</li>
+<li>Slicing = view, fancy = copy. Confusing them = bugs.</li>
+<li><code>np.linalg.solve</code> &gt; <code>inv()</code>. <code>@</code> for matmul, <code>*</code> element-wise.</li>
+<li><code>default_rng()</code> for randomness — not the legacy API.</li>
+<li><code>np.einsum</code> is a saber. Learn when ready.</li>
+</ul>
+<p>Next: pandas, the swiss army knife for tabular data.</p>
+      <nav class="pager">
+<a href="08-distributions.html" class="prev"><span class="label">← Previous</span><span class="title">Probability distributions you&#x27;ll meet</span></a>
+<a href="10-pandas.html" class="next"><span class="label">Next →</span><span class="title">Pandas: the swiss army knife</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Data Science Zero to Hero</strong> — complete path, in English, from math to deployment.</p><p>Open didactic material. Formulas are here to be understood, not feared. When a concept is unclear, go back: data science is a pyramid, not a tree you skip across.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+</body>
+</html>

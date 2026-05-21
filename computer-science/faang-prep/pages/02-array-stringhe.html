@@ -1,0 +1,962 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Array e stringhe — FAANG Prep</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">F</div>
+      <div>
+        <div class="brand-title">FAANG Prep</div>
+        <div class="brand-subtitle">DS&amp;A · System Design</div>
+      </div>
+    </div>
+    <div class="lang-bar">
+      <a class="lang-switcher" href="../en/pages/02-arrays-strings.html" title="English"><span class="flag-icon">🇬🇧</span><span class="flag-label">English</span></a>
+    </div>
+  </div>
+  <div class="search-wrap">
+    <input class="search-input" id="search-input" placeholder="Cerca nei contenuti... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/00-introduzione.html" class=""><span class="num">00</span>Introduzione e come usare questo percorso</a></li><li class="nav-item"><a href="../pages/01-complessita.html" class=""><span class="num">01</span>Complessità computazionale (Big-O)</a></li><li class="nav-item"><a href="../pages/02-array-stringhe.html" class="active"><span class="num">02</span>Array e stringhe</a></li><li class="nav-item"><a href="../pages/03-hashmap-set.html" class=""><span class="num">03</span>Hashmap e set</a></li><li class="nav-item"><a href="../pages/04-linked-list.html" class=""><span class="num">04</span>Linked list</a></li><li class="nav-item"><a href="../pages/05-stack-coda.html" class=""><span class="num">05</span>Stack e coda</a></li><li class="nav-item"><a href="../pages/06-alberi.html" class=""><span class="num">06</span>Alberi (binary tree e BST)</a></li><li class="nav-item"><a href="../pages/07-heap.html" class=""><span class="num">07</span>Heap e priority queue</a></li><li class="nav-item"><a href="../pages/08-grafi.html" class=""><span class="num">08</span>Grafi</a></li><li class="nav-item"><a href="../pages/09-trie.html" class=""><span class="num">09</span>Trie (prefix tree)</a></li><li class="nav-item"><a href="../pages/10-ricorsione-backtracking.html" class=""><span class="num">10</span>Ricorsione e backtracking</a></li><li class="nav-item"><a href="../pages/11-sorting-searching.html" class=""><span class="num">11</span>Sorting e searching</a></li><li class="nav-item"><a href="../pages/12-two-pointers-sliding-window.html" class=""><span class="num">12</span>Two pointers e sliding window</a></li><li class="nav-item"><a href="../pages/13-greedy.html" class=""><span class="num">13</span>Greedy</a></li><li class="nav-item"><a href="../pages/14-dp.html" class=""><span class="num">14</span>Dynamic programming</a></li><li class="nav-item"><a href="../pages/15-bit-manipulation.html" class=""><span class="num">15</span>Bit manipulation</a></li><li class="nav-item"><a href="../pages/16-oop-design-patterns.html" class=""><span class="num">16</span>OOP e design patterns</a></li><li class="nav-item"><a href="../pages/17-system-design.html" class=""><span class="num">17</span>System design — fondamenti</a></li><li class="nav-item"><a href="../pages/18-system-design-esempi.html" class=""><span class="num">18</span>System design — esempi end-to-end</a></li><li class="nav-item"><a href="../pages/19-concorrenza.html" class=""><span class="num">19</span>Concorrenza e parallelismo</a></li><li class="nav-item"><a href="../pages/20-database-sql.html" class=""><span class="num">20</span>Database e SQL</a></li><li class="nav-item"><a href="../pages/21-os-networking.html" class=""><span class="num">21</span>OS e networking</a></li><li class="nav-item"><a href="../pages/22-coding-patterns.html" class=""><span class="num">22</span>I 16 coding patterns dei colloqui</a></li><li class="nav-item"><a href="../pages/23-behavioral-star.html" class=""><span class="num">23</span>Behavioral interview — STAR e Amazon LP</a></li><li class="nav-item"><a href="../pages/24-mock-interviews.html" class=""><span class="num">24</span>Mock interview e strategia in colloquio</a></li><li class="nav-item"><a href="../pages/25-roadmap-90-giorni.html" class=""><span class="num">25</span>Roadmap 90 giorni — piano operativo</a></li><li class="nav-item"><a href="../pages/26-banca-esercizi.html" class=""><span class="num">26</span>Banca esercizi — 200+ problemi FAANG</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Strutture dati</span>
+        <span>Sezione 2 di 26</span>
+      </div>
+      <h1>Array e stringhe</h1>
+      <p class="summary">Dalle fondamenta — memoria, indirizzi, indici — fino ai pattern principali. Le strutture più chieste in colloquio, spiegate dal nulla.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Strutture dati</div>
+  
+  
+</div>
+      <p>Sono il <strong>70% dei problemi di interview</strong>. Padroneggia questo capitolo a fondo e hai già fatto metà del lavoro.</p>
+<p>Iniziamo dalla base assoluta.</p>
+<h2 id="parte-1-cose-un-array-davvero">Parte 1 — Cos'è un array, davvero</h2>
+<h3 id="la-memoria-del-computer-e-un-nastro-di-celle">La memoria del computer è un nastro di celle</h3>
+<p>Il computer ha una <strong>memoria RAM</strong>, che puoi immaginare come un enorme nastro di celle numerate. Ogni cella contiene un byte (8 bit, un numero da 0 a 255). Ogni cella ha un <strong>indirizzo</strong>: 0, 1, 2, 3, ...</p>
+<div style="background:#161922;border:1px solid #262b3a;border-radius:8px;padding:16px;margin:14px 0;overflow-x:auto;">
+<svg viewBox="0 0 480 100" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;display:block;margin:auto;font-family:'Cascadia Code',monospace;">
+  <defs>
+    <style>
+      .cell { fill:#1d2230; stroke:#262b3a; stroke-width:1; }
+      .ct { fill:#e6e8ee; font-size:14px; font-weight:600; }
+      .addr { fill:#7a8194; font-size:11px; }
+      .lbl { fill:#b6bdcc; font-size:12px; font-weight:600; }
+    </style>
+  </defs>
+  <text class="lbl" x="5" y="20">Indirizzo</text>
+  <text class="lbl" x="5" y="55">Contenuto</text>
+  <g transform="translate(75, 5)">
+    <text class="addr" x="20"  y="14" text-anchor="middle">0</text>
+    <text class="addr" x="60"  y="14" text-anchor="middle">1</text>
+    <text class="addr" x="100" y="14" text-anchor="middle">2</text>
+    <text class="addr" x="140" y="14" text-anchor="middle">3</text>
+    <text class="addr" x="180" y="14" text-anchor="middle">4</text>
+    <text class="addr" x="220" y="14" text-anchor="middle">5</text>
+    <text class="addr" x="260" y="14" text-anchor="middle">6</text>
+    <text class="addr" x="320" y="14" text-anchor="middle">...</text>
+    <rect class="cell" x="0"   y="22" width="40" height="40"/>
+    <rect class="cell" x="40"  y="22" width="40" height="40"/>
+    <rect class="cell" x="80"  y="22" width="40" height="40"/>
+    <rect class="cell" x="120" y="22" width="40" height="40"/>
+    <rect class="cell" x="160" y="22" width="40" height="40"/>
+    <rect class="cell" x="200" y="22" width="40" height="40"/>
+    <rect class="cell" x="240" y="22" width="40" height="40"/>
+    <rect class="cell" x="280" y="22" width="60" height="40" stroke-dasharray="4,3"/>
+    <text class="ct" x="20"  y="48" text-anchor="middle">42</text>
+    <text class="ct" x="60"  y="48" text-anchor="middle">17</text>
+    <text class="ct" x="100" y="48" text-anchor="middle">99</text>
+    <text class="ct" x="140" y="48" text-anchor="middle">03</text>
+    <text class="ct" x="180" y="48" text-anchor="middle">77</text>
+    <text class="ct" x="220" y="48" text-anchor="middle">12</text>
+    <text class="ct" x="260" y="48" text-anchor="middle">88</text>
+    <text class="ct" x="310" y="48" text-anchor="middle">...</text>
+  </g>
+</svg>
+</div>
+
+<h3 id="un-array-e-un-blocco-contiguo-di-celle">Un array è un blocco contiguo di celle</h3>
+<p>Un array è semplicemente un <strong>blocco di celle adiacenti</strong> dedicate a contenere elementi dello stesso tipo. Se ho un array di 5 interi da 32 bit (4 byte ciascuno), sta in 20 celle consecutive.</p>
+<p>Diciamo che il primo elemento è all'indirizzo 1000. Allora:</p>
+<ul>
+<li><code>arr[0]</code> → indirizzo 1000</li>
+<li><code>arr[1]</code> → indirizzo 1004</li>
+<li><code>arr[2]</code> → indirizzo 1008</li>
+<li>...</li>
+<li><code>arr[i]</code> → indirizzo <code>1000 + i × 4</code></li>
+</ul>
+<h3 id="perche-arri-e-o1">Perché <code>arr[i]</code> è O(1)</h3>
+<p>Ecco la magia: per accedere ad <code>arr[i]</code> il computer fa <strong>una sola operazione aritmetica</strong>: calcola <code>base + i × dimensione_elemento</code>. Indipendentemente da <code>i</code>. Quindi è O(1).</p>
+<p>Se l'array è in cache, l'accesso è effettivamente istantaneo (~1 ns). Per questo gli array sono "cache-friendly": elementi vicini in indice sono vicini in memoria → quando ne carichi uno, ne carica anche di adiacenti in cache.</p>
+<h3 id="cosa-succede-in-python">Cosa succede in Python?</h3>
+<p>In Python <code>list</code> è leggermente diverso dall'array C: contiene <strong>puntatori</strong> a oggetti (perché Python è "duck-typed"). Ma l'idea è la stessa: accesso a <code>list[i]</code> è O(1).</p>
+<h3 id="limiti">Limiti</h3>
+<p>Per essere O(1), l'array ha bisogno di stare <strong>in un blocco contiguo</strong>. Conseguenze:</p>
+<ul>
+<li><strong>Insert al centro è O(n)</strong>: per fare spazio devi spostare gli elementi successivi.</li>
+<li><strong>Pop al centro è O(n)</strong>: stesso motivo.</li>
+<li><strong>Append in coda è O(1) ammortizzato</strong>: di solito c'è spazio "in fondo". Quando si riempie, l'array si <strong>rialloca</strong> (raddoppia capacità) e copia tutto → O(n) ogni tanto.</li>
+</ul>
+<pre><code>prima:     [42, 17, 99, _, _, _, _, _]   capacity 8, size 3
+append 7:  [42, 17, 99, 7, _, _, _, _]   capacity 8, size 4  → O(1)
+... finché size raggiunge capacity ...
+append:    rialloca a capacity 16, copia tutto → O(n) raro
+</code></pre>
+<p>In media, questo è <strong>O(1) ammortizzato</strong>.</p>
+<h2 id="parte-2-stringhe-array-di-caratteri-ma-immutabili">Parte 2 — Stringhe: array di caratteri ma immutabili</h2>
+<p>In Python (e Java) una stringa è <strong>un array di caratteri immutabile</strong>. Immutabile significa: <strong>non puoi modificarla, solo crearne una nuova</strong>.</p>
+<pre><code class="language-python">s = &quot;hello&quot;
+s[0] = 'H'    # TypeError: 'str' object does not support item assignment
+</code></pre>
+<p>Per modificarla devi creare una nuova stringa:</p>
+<pre><code class="language-python">s = &quot;H&quot; + s[1:]   # &quot;Hello&quot;
+</code></pre>
+<h3 id="perche-immutabile">Perché immutabile?</h3>
+<p>Tre motivi:</p>
+<ol>
+<li><strong>Sicurezza</strong>: una funzione che riceve una stringa è sicura che non venga modificata "alle spalle".</li>
+<li><strong>Hashing</strong>: le stringhe possono essere chiavi di dict (richiede hashabilità, che richiede immutabilità).</li>
+<li><strong>Caching/interning</strong>: Python può riusare la stessa stringa in più posti (es. <code>"hello"</code> letterale).</li>
+</ol>
+<h3 id="la-trappola-della-concatenazione">La trappola della concatenazione</h3>
+<pre><code class="language-python">risultato = &quot;&quot;
+for c in chars:
+    risultato += c
+</code></pre>
+<p>Sembra O(n). <strong>È O(n²)</strong>. Perché ogni <code>+=</code> crea una nuova stringa copiando tutti i caratteri precedenti. Iterazione <code>i</code> copia <code>i</code> caratteri. Totale: <code>1 + 2 + ... + n = n²/2</code>.</p>
+<p>Soluzione: <strong>costruisci una lista di char, poi join alla fine</strong>.</p>
+<pre><code class="language-python">parti = []
+for c in chars:
+    parti.append(c)
+risultato = &quot;&quot;.join(parti)   # O(n) totale
+</code></pre>
+<p>Questo è uno dei trucchi più importanti per il colloquio Python.</p>
+<h2 id="parte-3-array-a-2d-matrici">Parte 3 — Array a 2D (matrici)</h2>
+<p>Una matrice 2D è un "array di array". In Python:</p>
+<pre><code class="language-python">mat = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9],
+]
+mat[r][c]   # riga r, colonna c
+</code></pre>
+<h3 id="creare-una-matrice-n-m-vuota">Creare una matrice n × m vuota</h3>
+<pre><code class="language-python"># CORRETTO:
+mat = [[0] * m for _ in range(n)]
+</code></pre>
+<h3 id="trappola-classica-laliasing">Trappola classica: l'aliasing</h3>
+<pre><code class="language-python"># SBAGLIATO:
+mat = [[0] * m] * n
+mat[0][0] = 1
+print(mat)   # Tutte le righe modificate!
+# [[1, 0, 0], [1, 0, 0], [1, 0, 0]]
+</code></pre>
+<p><strong>Perché?</strong> <code>[[0]*m] * n</code> ripete <code>n</code> volte <strong>lo stesso riferimento</strong> alla riga <code>[0]*m</code>. Modificando una "riga" stai modificando l'unica esistente.</p>
+<p>La versione con <strong>list comprehension</strong> invece crea oggetti distinti ogni volta.</p>
+<h3 id="visitare-una-matrice">Visitare una matrice</h3>
+<pre><code class="language-python">for r in range(len(mat)):
+    for c in range(len(mat[0])):
+        print(mat[r][c])
+</code></pre>
+<p>Complessità: O(n × m). Per una matrice n×n: O(n²).</p>
+<h3 id="vicini-in-una-griglia-4-direzioni">Vicini in una griglia (4-direzioni)</h3>
+<p>Quasi ogni problema su griglia ha questo idiom:</p>
+<pre><code class="language-python">DIRS = [(-1, 0), (1, 0), (0, -1), (0, 1)]  # up, down, left, right
+for dr, dc in DIRS:
+    nr, nc = r + dr, c + dc
+    if 0 &lt;= nr &lt; R and 0 &lt;= nc &lt; C:
+        ...
+</code></pre>
+<p>8-direzioni (diagonali incluse):</p>
+<pre><code class="language-python">DIRS = [(-1,-1), (-1,0), (-1,1), (0,-1), (0,1), (1,-1), (1,0), (1,1)]
+</code></pre>
+<h2 id="parte-4-operazioni-python-essenziali">Parte 4 — Operazioni Python essenziali</h2>
+<p>Tutte da padroneggiare a memoria:</p>
+<h3 id="creazione">Creazione</h3>
+<pre><code class="language-python">arr = []                 # vuoto
+arr = [0] * n            # n zeri
+arr = list(range(n))     # [0, 1, ..., n-1]
+arr = [i*2 for i in range(n)]   # list comprehension
+mat = [[0]*m for _ in range(n)]
+</code></pre>
+<h3 id="slicing-larma-segreta-di-python">Slicing — l'arma segreta di Python</h3>
+<pre><code class="language-python">arr[i:j]      # da i (incluso) a j (escluso). Crea COPIA, O(k) con k=j-i.
+arr[:k]       # primi k
+arr[k:]       # da k in poi
+arr[::-1]     # reverse (copia)
+arr[::2]      # ogni 2 elementi
+arr[1:5:2]    # da 1 a 5, step 2
+</code></pre>
+<p><strong>Attenzione</strong>: lo slicing <strong>copia</strong>. Per array grandi, occhio alla memoria.</p>
+<h3 id="modifiche">Modifiche</h3>
+<pre><code class="language-python">arr.append(x)        # in coda, O(1) am.
+arr.pop()            # rimuove e ritorna ultimo, O(1)
+arr.pop(0)           # rimuove e ritorna primo, O(n) — EVITA!
+arr.insert(i, x)     # O(n)
+arr.remove(x)        # rimuove prima occorrenza, O(n)
+arr.reverse()        # in-place, O(n)
+arr.sort()           # in-place, O(n log n)
+sorted(arr)          # ritorna copia ordinata
+arr.extend([1, 2])   # concatena un'altra lista
+</code></pre>
+<h3 id="stringhe">Stringhe</h3>
+<pre><code class="language-python">s.lower(), s.upper(), s.strip(), s.title()
+s.startswith(&quot;a&quot;), s.endswith(&quot;z&quot;)
+s.replace(&quot;a&quot;, &quot;b&quot;)
+s.split(&quot;,&quot;)         # split su separatore
+s.split()            # default: split su whitespace
+&quot;,&quot;.join(lista)      # concatena con separatore
+s.find(&quot;sub&quot;)        # primo indice o -1
+s.count(&quot;a&quot;)
+ord('a'), chr(97)    # carattere ↔ codice ASCII
+s.isdigit(), s.isalpha(), s.isalnum()
+</code></pre>
+<h2 id="parte-5-i-5-pattern-fondamentali">Parte 5 — I 5 pattern fondamentali</h2>
+<p>Ora il pezzo grosso. Quasi tutti i problemi su array si riducono a uno di questi pattern.</p>
+<h3 id="pattern-1-two-pointers">Pattern 1 — Two pointers</h3>
+<p><strong>L'idea</strong>: invece di due loop annidati (O(n²)), usa <strong>due indici</strong> che si muovono in modo coordinato (O(n)).</p>
+<p>Quando funziona:</p>
+<ul>
+<li>Array <strong>ordinato</strong>.</li>
+<li>Cerchi <strong>coppie/triplette</strong> con somma target.</li>
+<li>Cerchi un <strong>palindromo</strong> o simmetria.</li>
+</ul>
+<p>Esempio: "in un array ordinato, trova due indici la cui somma è target".</p>
+<pre><code class="language-python">def two_sum_sorted(arr, target):
+    l, r = 0, len(arr) - 1
+    while l &lt; r:
+        s = arr[l] + arr[r]
+        if s == target:
+            return (l, r)
+        elif s &lt; target:
+            l += 1     # serve un numero più grande → muovi sinistra
+        else:
+            r -= 1     # serve uno più piccolo → muovi destra
+    return None
+</code></pre>
+<p><strong>Perché funziona?</strong> Sfruttiamo l'ordinamento. Se la somma è troppo piccola, <strong>l'unico modo</strong> per aumentarla è muovere <code>l</code> a destra (l'altro estremo è già il massimo). Se è troppo grande, abbassiamo <code>r</code>. Mai indietro, mai duplicati, sempre verso il centro.</p>
+<p>Complessità: <strong>O(n)</strong> (ogni iterazione avanza l o r di 1, in totale al massimo <code>n</code> iterazioni).</p>
+<h3 id="pattern-2-sliding-window">Pattern 2 — Sliding window</h3>
+<p><strong>L'idea</strong>: mantenere una "finestra" <code>[l, r]</code> sull'array, che si <strong>estende a destra</strong> quando puoi, <strong>contrae a sinistra</strong> quando devi.</p>
+<p>Quando funziona:</p>
+<ul>
+<li><strong>Sottoarray/sottostringa contigua</strong> con qualche proprietà (somma, distinct count, ecc.).</li>
+<li><em>"Più lunga/più corta"</em>, <em>"esiste"</em>, <em>"conta"</em> — molti trigger.</li>
+</ul>
+<p>Esempio: "lunghezza massima di sottostringa senza caratteri ripetuti".</p>
+<pre><code class="language-python">def longest_unique(s):
+    last_seen = {}      # char -&gt; ultimo indice visto
+    l = 0
+    best = 0
+    for r, c in enumerate(s):
+        if c in last_seen and last_seen[c] &gt;= l:
+            l = last_seen[c] + 1  # contrai a sinistra
+        last_seen[c] = r
+        best = max(best, r - l + 1)
+    return best
+</code></pre>
+<p>Traccia su <code>s = "abcabcbb"</code>:</p>
+<pre><code>r=0 c='a': last={a:0}, l=0, best=1     window [0,0] = &quot;a&quot;
+r=1 c='b': last={a:0,b:1}, l=0, best=2 window [0,1] = &quot;ab&quot;
+r=2 c='c': last={a:0,b:1,c:2}, l=0, best=3 window [0,2] = &quot;abc&quot;
+r=3 c='a': 'a' visto a 0 ≥ l=0 → l=1.  last={a:3,b:1,c:2}, best=3
+r=4 c='b': 'b' visto a 1 ≥ l=1 → l=2.  last={a:3,b:4,c:2}, best=3
+r=5 c='c': 'c' visto a 2 ≥ l=2 → l=3.  best=3
+r=6 c='b': 'b' visto a 4 ≥ l=3 → l=5.  best=3 (window [5,6])
+r=7 c='b': 'b' visto a 6 ≥ l=5 → l=7.  best=3
+</code></pre>
+<p>Complessità: <strong>O(n)</strong>. <code>r</code> avanza ad ogni iterazione del <code>for</code>. <code>l</code> avanza solo a destra. Totale al massimo 2n movimenti.</p>
+<h3 id="pattern-3-prefix-sum">Pattern 3 — Prefix sum</h3>
+<p><strong>L'idea</strong>: precalcolare le <strong>somme cumulative</strong> in un array, così le somme di range diventano O(1).</p>
+<pre><code class="language-python">def costruisci_prefix(arr):
+    pre = [0]
+    for x in arr:
+        pre.append(pre[-1] + x)
+    return pre
+
+# pre[i] = somma di arr[0..i-1]
+# Somma di arr[i..j] (inclusivi) = pre[j+1] - pre[i]
+</code></pre>
+<p>Esempio: <code>arr = [3, 1, 4, 1, 5, 9, 2]</code>, <code>pre = [0, 3, 4, 8, 9, 14, 23, 25]</code>.</p>
+<p>Somma di <code>arr[2..4]</code> = <code>4 + 1 + 5 = 10</code>. Verifica: <code>pre[5] - pre[2] = 14 - 4 = 10</code>. ✓</p>
+<p><strong>Quando usarlo</strong>:</p>
+<ul>
+<li>Devi rispondere a tante query del tipo "somma del range [i, j]".</li>
+<li>Vuoi ridurre <code>O(n)</code> per query a <code>O(1)</code> per query (costo: <code>O(n)</code> di preprocessing).</li>
+<li>Combinato con hashmap: "conta sottoarray con somma esatta k" (vedi cap. hashmap).</li>
+</ul>
+<h3 id="pattern-4-hashmap-based">Pattern 4 — Hashmap-based</h3>
+<p><strong>L'idea</strong>: usa un <code>dict</code> o <code>set</code> per ricordare informazioni viste, riducendo brute force <code>O(n²)</code> a <code>O(n)</code>.</p>
+<p>Esempio classico: <strong>Two Sum</strong> (array NON ordinato, trova due indici con somma = target).</p>
+<pre><code class="language-python">def two_sum(arr, target):
+    seen = {}   # valore -&gt; indice
+    for i, x in enumerate(arr):
+        if target - x in seen:
+            return [seen[target - x], i]
+        seen[x] = i
+</code></pre>
+<p><strong>Perché funziona?</strong> Per ogni <code>x</code>, invece di scorrere il resto dell'array per cercare il complemento, controlliamo se l'abbiamo <strong>già visto prima</strong>. Una sola passata, lookup O(1).</p>
+<p>Dettagli importanti in <a href="03-hashmap-set.html">cap. 03 — Hashmap</a>.</p>
+<h3 id="pattern-5-sort-scan">Pattern 5 — Sort + scan</h3>
+<p><strong>L'idea</strong>: a volte ordinare prima rende il problema banale. Paghi <code>O(n log n)</code> per il sort ma poi risolvi in <code>O(n)</code>.</p>
+<p>Esempio: <strong>rimuovi duplicati</strong> in-place.</p>
+<pre><code class="language-python">def remove_duplicates(arr):
+    # Assumi arr ordinato
+    if not arr: return 0
+    w = 1   # write pointer
+    for r in range(1, len(arr)):
+        if arr[r] != arr[r-1]:
+            arr[w] = arr[r]
+            w += 1
+    return w   # nuova lunghezza
+</code></pre>
+<p>In-place, O(n) tempo, O(1) spazio.</p>
+<h2 id="parte-6-le-5-trappole-che-fanno-cadere-il-90-dei-candidati">Parte 6 — Le 5 trappole che fanno cadere il 90% dei candidati</h2>
+<h3 id="trappola-1-aliasing-di-liste">Trappola 1 — Aliasing di liste</h3>
+<p>Già vista. <code>[[0]*m] * n</code> crea righe condivise. Usa list comprehension.</p>
+<h3 id="trappola-2-modificare-larray-durante-iterazione">Trappola 2 — Modificare l'array durante iterazione</h3>
+<pre><code class="language-python"># SBAGLIATO
+for x in arr:
+    if cond(x): arr.remove(x)   # salta elementi!
+
+# CORRETTO 1: filtro
+arr = [x for x in arr if not cond(x)]
+
+# CORRETTO 2: itera al contrario
+for i in range(len(arr) - 1, -1, -1):
+    if cond(arr[i]): arr.pop(i)
+</code></pre>
+<h3 id="trappola-3-off-by-one">Trappola 3 — Off-by-one</h3>
+<p>Il bug più comune. Per ogni range, chiediti:</p>
+<ul>
+<li>È <strong>inclusivo</strong> o <strong>esclusivo</strong> sui due lati?</li>
+<li>Il loop fa <code>&lt; n</code> o <code>&lt;= n</code>?</li>
+<li>L'indice parte da 0 o da 1?</li>
+</ul>
+<p>Convenzione Python: <code>range(a, b)</code> = <code>[a, a+1, ..., b-1]</code> (escluso b). <code>arr[i:j]</code> = <code>arr[i], ..., arr[j-1]</code> (escluso j).</p>
+<p>In colloquio, <strong>traccia l'algoritmo su un esempio piccolo</strong> prima di dichiarare done.</p>
+<h3 id="trappola-4-concatenazione-di-stringhe-in-loop">Trappola 4 — Concatenazione di stringhe in loop</h3>
+<p>Già vista. <code>s += c</code> in loop = O(n²). Usa <code>''.join(lista)</code>.</p>
+<h3 id="trappola-5-copia-vs-riferimento">Trappola 5 — Copia vs riferimento</h3>
+<pre><code class="language-python">a = [1, 2, 3]
+b = a
+b.append(4)
+print(a)   # [1, 2, 3, 4] !! Stesso oggetto
+</code></pre>
+<p>Per copiare:</p>
+<pre><code class="language-python">b = a[:]        # shallow copy
+b = list(a)
+b = a.copy()
+
+import copy
+b = copy.deepcopy(a)   # se ci sono nested list
+</code></pre>
+<h2 id="parte-7-snippet-doro">Parte 7 — Snippet d'oro</h2>
+<p>Da memorizzare. In colloquio non hai tempo di riderivarli.</p>
+<h3 id="reverse-in-place-di-un-range">Reverse in-place di un range</h3>
+<pre><code class="language-python">def reverse_range(arr, i, j):
+    while i &lt; j:
+        arr[i], arr[j] = arr[j], arr[i]
+        i += 1
+        j -= 1
+</code></pre>
+<h3 id="rotazione-di-un-array-di-k-posizioni-3-reverse">Rotazione di un array di k posizioni (3 reverse)</h3>
+<pre><code class="language-python">def rotate(arr, k):
+    n = len(arr)
+    k %= n
+    reverse_range(arr, 0, n-1)
+    reverse_range(arr, 0, k-1)
+    reverse_range(arr, k, n-1)
+</code></pre>
+<p>Esempio: <code>[1,2,3,4,5]</code>, <code>k=2</code>:</p>
+<pre><code>inizio:       [1, 2, 3, 4, 5]
+reverse all:  [5, 4, 3, 2, 1]
+reverse 0..1: [4, 5, 3, 2, 1]
+reverse 2..4: [4, 5, 1, 2, 3]
+</code></pre>
+<p>✓ Ruotato a destra di 2.</p>
+<h3 id="counter-di-frequenze">Counter di frequenze</h3>
+<pre><code class="language-python">from collections import Counter
+freq = Counter(&quot;abracadabra&quot;)
+# Counter({'a': 5, 'b': 2, 'r': 2, 'c': 1, 'd': 1})
+freq.most_common(3)   # [('a',5), ('b',2), ('r',2)]
+</code></pre>
+<h3 id="verifica-anagramma">Verifica anagramma</h3>
+<pre><code class="language-python">def is_anagram(a, b):
+    return Counter(a) == Counter(b)
+</code></pre>
+<p>O(n+m). Alternativa <code>sorted(a) == sorted(b)</code> è O(n log n).</p>
+<h3 id="verifica-palindromo-con-filtro-alfanumerico">Verifica palindromo (con filtro alfanumerico)</h3>
+<pre><code class="language-python">def is_palindrome(s):
+    l, r = 0, len(s) - 1
+    while l &lt; r:
+        while l &lt; r and not s[l].isalnum():
+            l += 1
+        while l &lt; r and not s[r].isalnum():
+            r -= 1
+        if s[l].lower() != s[r].lower():
+            return False
+        l += 1
+        r -= 1
+    return True
+</code></pre>
+<p>Two pointers con skip dei caratteri non alfanumerici.</p>
+<h2 id="esercizi-guidati">Esercizi guidati</h2>
+<h3 id="esercizio-21-two-sum-easy">Esercizio 2.1 — Two Sum <span class="problem-tag easy">EASY</span></h3>
+<p>Dato un array <code>arr</code> e un target <code>t</code>, trova due indici <code>i, j</code> con <code>arr[i] + arr[j] = t</code>. Garantito esista una soluzione.</p>
+<details><summary>Ragionamento dal nulla</summary>
+
+**Brute force**: prova tutte le coppie. Due loop annidati → O(n²).
+
+
+<pre><code class="language-python">for i in range(n):
+    for j in range(i+1, n):
+        if arr[i] + arr[j] == t:
+            return [i, j]
+</code></pre>
+
+
+**Posso fare meglio?** Sì, applicando il **pattern hashmap**. Per ogni `x` che vedo, mi chiedo: "ho già visto `t - x`?". Se sì, ho la mia coppia. Se no, ricordo `x` per il futuro.
+
+
+<pre><code class="language-python">def two_sum(arr, t):
+    seen = {}   # valore -&gt; indice
+    for i, x in enumerate(arr):
+        complemento = t - x
+        if complemento in seen:
+            return [seen[complemento], i]
+        seen[x] = i
+</code></pre>
+
+
+**Complessità**: tempo O(n) (una sola passata, ogni lookup è O(1)), spazio O(n) (hashmap può contenere fino a n elementi).
+
+**Lezione**: trasformare un problema "trova due cose che combinano" in "trova una cosa che combina con quello che ho già visto". È il pattern hashmap classico.
+</details>
+
+<h3 id="esercizio-22-best-time-to-buysell-stock-easy">Esercizio 2.2 — Best Time to Buy/Sell Stock <span class="problem-tag easy">EASY</span></h3>
+<p>Array <code>prices</code>: <code>prices[i]</code> = prezzo dell'azione al giorno <code>i</code>. Compri 1 azione in un giorno e vendi in un giorno successivo. Massimo profitto.</p>
+<details><summary>Ragionamento</summary>
+
+**Brute force**: prova tutte le coppie (i, j) con i<j, calcola `prices[j] - prices[i]`, tieni il massimo. O(n²).
+
+**Ottimizzazione**: cosa serve veramente? Per ogni giorno `j`, voglio sapere il **minimo prezzo visto finora** (in qualche giorno precedente). Se lo so, il miglior profitto vendendo al giorno `j` è `prices[j] - min_visto`.
+
+Quindi tieni una variabile `min_visto` aggiornata mentre scorri.
+
+
+<pre><code class="language-python">def max_profit(prices):
+    min_visto = float('inf')
+    best = 0
+    for p in prices:
+        min_visto = min(min_visto, p)
+        best = max(best, p - min_visto)
+    return best
+</code></pre>
+
+
+O(n) tempo, O(1) spazio.
+
+**Lezione**: spesso "il minimo/massimo visto finora" è una sola variabile da aggiornare. Non serve un array. Risparmi spazio.
+</details>
+
+<h3 id="esercizio-23-move-zeroes-easy">Esercizio 2.3 — Move Zeroes <span class="problem-tag easy">EASY</span></h3>
+<p>Sposta tutti gli zeri alla fine, mantenendo l'ordine degli altri elementi. In-place.</p>
+<details><summary>Ragionamento</summary>
+
+**Idea**: due puntatori. Un "write pointer" che indica dove scrivere il prossimo non-zero. Un "read pointer" che scorre tutto.
+
+
+<pre><code class="language-python">def move_zeroes(arr):
+    w = 0
+    for r in range(len(arr)):
+        if arr[r] != 0:
+            arr[w], arr[r] = arr[r], arr[w]
+            w += 1
+</code></pre>
+
+
+Lo swap è importante: invece di sovrascrivere e poi aggiungere zeri alla fine, swappi così "raccogli" gli zero in fondo automaticamente.
+
+Trace su `[0, 1, 0, 3, 12]`:
+
+
+<pre><code>r=0 arr[r]=0: skip. arr=[0,1,0,3,12], w=0
+r=1 arr[r]=1: swap arr[0]&lt;-&gt;arr[1]. arr=[1,0,0,3,12], w=1
+r=2 arr[r]=0: skip. w=1
+r=3 arr[r]=3: swap arr[1]&lt;-&gt;arr[3]. arr=[1,3,0,0,12], w=2
+r=4 arr[r]=12: swap arr[2]&lt;-&gt;arr[4]. arr=[1,3,12,0,0], w=3
+</code></pre>
+
+
+✓ Risultato: `[1, 3, 12, 0, 0]`.
+
+O(n) tempo, O(1) spazio.
+</details>
+
+<h3 id="esercizio-24-container-with-most-water-medium">Esercizio 2.4 — Container With Most Water <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Array <code>heights</code>. Scegli due indici <code>i &lt; j</code>: l'area è <code>(j-i) × min(heights[i], heights[j])</code> (immagina due barre verticali e l'acqua tra loro). Trova area massima.</p>
+<details><summary>Ragionamento (importante!)</summary>
+
+**Brute force**: tutte le coppie. O(n²).
+
+**Idea two pointers**: parti dai due estremi (`l=0, r=n-1`). Hai l'area più larga possibile. Poi muovi i pointer verso il centro per "esplorare" altre opzioni.
+
+Domanda: **quale muovere**?
+
+Risposta: **quello con altezza minore**. Perché? Se muovi quello con altezza maggiore:
+
+- La larghezza diminuisce.
+- L'altezza minima **non può aumentare** (è ancora limitata dall'altra barra, che era già la più bassa).
+
+Quindi l'area può solo restare uguale o diminuire. Inutile.
+
+Se muovi quello con altezza minore:
+
+- La larghezza diminuisce.
+- L'altezza minima **potrebbe aumentare** (se incontri una barra più alta).
+
+C'è speranza. Quindi muovi sempre il pointer "basso".
+
+
+<pre><code class="language-python">def max_area(h):
+    l, r = 0, len(h) - 1
+    best = 0
+    while l &lt; r:
+        area = (r - l) * min(h[l], h[r])
+        best = max(best, area)
+        if h[l] &lt; h[r]:
+            l += 1
+        else:
+            r -= 1
+    return best
+</code></pre>
+
+
+O(n).
+
+**Lezione**: per fare two pointers correttamente, devi sempre **giustificare quale pointer muovere e perché**. Non è meccanico.
+</details>
+
+<h3 id="esercizio-25-3sum-medium">Esercizio 2.5 — 3Sum <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Trova tutte le triplette <code>(a, b, c)</code> distinte con <code>a + b + c = 0</code>.</p>
+<details><summary>Ragionamento</summary>
+
+**Brute force**: triplo loop → O(n³).
+
+**Idea**: fissa un elemento `arr[i]`, poi il resto è "2Sum con target = -arr[i]" sul resto dell'array. Se ordini l'array, puoi fare 2Sum con two pointers in O(n).
+
+
+<pre><code class="language-python">def three_sum(arr):
+    arr.sort()
+    res = []
+    n = len(arr)
+    for i in range(n - 2):
+        if arr[i] &gt; 0: break   # ottimizzazione: tutti pos, non zero
+        if i &gt; 0 and arr[i] == arr[i-1]: continue   # skip duplicati
+        l, r = i + 1, n - 1
+        while l &lt; r:
+            s = arr[i] + arr[l] + arr[r]
+            if s == 0:
+                res.append([arr[i], arr[l], arr[r]])
+                l += 1
+                r -= 1
+                # skip duplicati
+                while l &lt; r and arr[l] == arr[l-1]: l += 1
+                while l &lt; r and arr[r] == arr[r+1]: r -= 1
+            elif s &lt; 0:
+                l += 1
+            else:
+                r -= 1
+    return res
+</code></pre>
+
+
+O(n²). Lo skip dei duplicati è la parte sottile: senza, otterresti `[-1,-1,2]` e `[-1,-1,2]` se l'array ha `-1` due volte.
+
+**Lezione**: fissa una variabile, riduci a un sotto-problema noto (2Sum). Sort + two pointers è il combo killer.
+</details>
+
+<h3 id="esercizio-26-product-except-self-medium">Esercizio 2.6 — Product Except Self <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Restituisci <code>out[i] = prodotto di tutti arr[j] con j ≠ i</code>. <strong>Senza divisione</strong>, in O(n).</p>
+<details><summary>Ragionamento</summary>
+
+**Brute force**: per ogni `i`, prodotto degli altri → O(n²).
+
+**Con divisione**: prodotto totale / arr[i]. O(n). Ma vietato (e gestisci zeri).
+
+**Trucco**: `out[i] = prodotto degli elementi a sinistra di i × prodotto degli elementi a destra di i`.
+
+Calcoliamo entrambi in due passate.
+
+
+<pre><code class="language-python">def product_except_self(arr):
+    n = len(arr)
+    out = [1] * n
+    # Prima passata: out[i] = prodotto a sinistra di i
+    pre = 1
+    for i in range(n):
+        out[i] = pre
+        pre *= arr[i]
+    # Seconda passata: moltiplica per prodotto a destra
+    suf = 1
+    for i in range(n - 1, -1, -1):
+        out[i] *= suf
+        suf *= arr[i]
+    return out
+</code></pre>
+
+
+Trace su `[1, 2, 3, 4]`:
+
+
+<pre><code>Dopo passata 1: out = [1, 1, 2, 6]  (prefix products)
+Passata 2:
+  i=3: out[3] = 6 * 1 = 6, suf = 4
+  i=2: out[2] = 2 * 4 = 8, suf = 12
+  i=1: out[1] = 1 * 12 = 12, suf = 24
+  i=0: out[0] = 1 * 24 = 24
+Risultato: [24, 12, 8, 6]
+</code></pre>
+
+
+Verifica: out[0] = 2·3·4 = 24 ✓, out[1] = 1·3·4 = 12 ✓, ecc.
+
+O(n) tempo, O(1) extra (escluso output).
+
+**Lezione**: pre e post passata sono un pattern. Memorizzalo, riappare ovunque.
+</details>
+
+<h3 id="esercizio-27-maximum-subarray-kadane-medium">Esercizio 2.7 — Maximum Subarray (Kadane) <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Sottoarray contiguo non vuoto con somma massima.</p>
+<details><summary>Ragionamento</summary>
+
+**Brute force**: tutti i sottoarray. O(n²) (o O(n³) ingenuamente, ma con prefix sum scende a O(n²)).
+
+**Idea Kadane**: per ogni posizione `i`, due possibilità:
+
+1. **Estendi** il sottoarray finito a `i-1`: somma corrente += arr[i].
+2. **Ricomincia** da `i`: somma corrente = arr[i].
+
+Scegli quello che dà più. Tieni traccia del massimo visto.
+
+
+<pre><code class="language-python">def max_subarray(arr):
+    cur = best = arr[0]
+    for x in arr[1:]:
+        cur = max(x, cur + x)
+        best = max(best, cur)
+    return best
+</code></pre>
+
+
+Trace su `[-2, 1, -3, 4, -1, 2, 1, -5, 4]`:
+
+
+<pre><code>i=0 x=-2:  cur=-2, best=-2
+i=1 x=1:   cur=max(1, -2+1)=1, best=1
+i=2 x=-3:  cur=max(-3, 1-3)=-2, best=1
+i=3 x=4:   cur=max(4, -2+4)=4, best=4
+i=4 x=-1:  cur=max(-1, 4-1)=3, best=4
+i=5 x=2:   cur=max(2, 3+2)=5, best=5
+i=6 x=1:   cur=max(1, 5+1)=6, best=6
+i=7 x=-5:  cur=max(-5, 6-5)=1, best=6
+i=8 x=4:   cur=max(4, 1+4)=5, best=6
+</code></pre>
+
+
+Risultato: 6 (sottoarray `[4, -1, 2, 1]`).
+
+O(n), O(1).
+
+**Lezione (la più importante per DP)**: Kadane è "DP in 1 variabile". Lo stato `cur` rappresenta "miglior sottoarray che termina **esattamente** in `i`". Il `max` su tutti i `cur` è la risposta. Si chiama anche **DP ottimizzata in spazio**.
+</details>
+
+<h3 id="esercizio-28-longest-substring-without-repeating-characters-medium">Esercizio 2.8 — Longest Substring Without Repeating Characters <span class="problem-tag medium">MEDIUM</span></h3>
+<details><summary>Soluzione</summary>
+
+Vedi snippet "longest_unique" sopra nel pattern sliding window. O(n).
+</details>
+
+<h3 id="esercizio-29-group-anagrams-medium">Esercizio 2.9 — Group Anagrams <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Raggruppa stringhe che sono anagrammi.</p>
+<details><summary>Ragionamento</summary>
+
+**Idea**: due stringhe sono anagrammi sse hanno la stessa "fingerprint". Una fingerprint canonica è `sorted(s)`.
+
+
+<pre><code class="language-python">from collections import defaultdict
+def group_anagrams(strs):
+    g = defaultdict(list)
+    for s in strs:
+        key = ''.join(sorted(s))
+        g[key].append(s)
+    return list(g.values())
+</code></pre>
+
+
+Alternativa più veloce (alfabeto fisso): chiave = tupla di 26 contatori.
+
+O(n · k log k) con sorted; O(n · k) con counter.
+</details>
+
+<h3 id="esercizio-210-longest-palindromic-substring-medium">Esercizio 2.10 — Longest Palindromic Substring <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Sottostringa palindroma più lunga.</p>
+<details><summary>Ragionamento — expand around center</summary>
+
+**Brute force**: prova tutte le sottostringhe, controlla se palindroma. O(n³).
+
+**Idea**: ogni palindromo ha un **centro**. Per ogni possibile centro, espandi verso fuori finché matchano.
+
+Attenzione: due tipi di centro!
+
+- Centro singolo (palindromo dispari): es. "aba", centro = 'b' a indice 1.
+- Centro doppio (palindromo pari): es. "abba", centro tra indici 1 e 2.
+
+
+<pre><code class="language-python">def longest_pal(s):
+    def expand(l, r):
+        while l &gt;= 0 and r &lt; len(s) and s[l] == s[r]:
+            l -= 1
+            r += 1
+        return s[l+1:r]   # ultimi indici validi
+
+    best = &quot;&quot;
+    for i in range(len(s)):
+        odd = expand(i, i)
+        even = expand(i, i+1)
+        for cand in (odd, even):
+            if len(cand) &gt; len(best):
+                best = cand
+    return best
+</code></pre>
+
+
+Ogni espansione è O(n), per O(n) centri → **O(n²)**.
+
+Esiste anche **Manacher** in O(n), ma quasi mai chiesto.
+</details>
+
+<h3 id="esercizio-211-trapping-rain-water-hard">Esercizio 2.11 — Trapping Rain Water <span class="problem-tag hard">HARD</span></h3>
+<p>Array di altezze, calcola quanta acqua si raccoglie tra le barre dopo la pioggia.</p>
+<details><summary>Ragionamento</summary>
+
+**Insight chiave**: l'acqua sopra la posizione `i` è limitata da `min(max_a_sinistra, max_a_destra)`. Quindi:
+
+
+<pre><code>acqua[i] = max(0, min(maxL[i], maxR[i]) - h[i])
+</code></pre>
+
+
+**Versione O(n) spazio**: precomputa `maxL` e `maxR` con due passate. Poi una terza passata calcola la somma.
+
+**Versione O(1) spazio (two pointers)**: l'idea è geniale. Tieni due variabili `lmax` e `rmax`. Muovi sempre il pointer dal lato con altezza minore. Perché?
+
+Se `h[l] < h[r]`, allora `maxL` ad `l` è già `>= h[l]`. E `maxR` ad `l` è almeno `h[r] > h[l]`. Quindi il minimo dei due `max` è `lmax`. L'acqua sopra `l` è `lmax - h[l]`.
+
+
+<pre><code class="language-python">def trap(h):
+    l, r = 0, len(h) - 1
+    lmax = rmax = 0
+    water = 0
+    while l &lt; r:
+        if h[l] &lt; h[r]:
+            lmax = max(lmax, h[l])
+            water += lmax - h[l]
+            l += 1
+        else:
+            rmax = max(rmax, h[r])
+            water += rmax - h[r]
+            r -= 1
+    return water
+</code></pre>
+
+
+O(n) tempo, O(1) spazio.
+
+**Lezione**: problema "hard" per la non-ovvietà dell'invariante. Una volta visto, è molto pulito.
+</details>
+
+<h3 id="esercizio-212-rotate-image-medium">Esercizio 2.12 — Rotate Image <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Matrice n×n. Ruotala di 90° in senso orario, in-place.</p>
+<details><summary>Ragionamento</summary>
+
+Rotazione 90° = **trasponi** poi **inverti ogni riga**.
+
+
+<pre><code class="language-python">def rotate(M):
+    n = len(M)
+    # Trasposta in-place
+    for i in range(n):
+        for j in range(i+1, n):
+            M[i][j], M[j][i] = M[j][i], M[i][j]
+    # Reverse ogni riga
+    for row in M:
+        row.reverse()
+</code></pre>
+
+
+Verifica su 3×3:
+
+| Iniziale | | | | Trasposta | | | | Reverse righe |
+|--|--|--|--|--|--|--|--|--|
+| 1 | 2 | 3 | → | 1 | 4 | 7 | → | 7 4 1 |
+| 4 | 5 | 6 | | 2 | 5 | 8 | | 8 5 2 |
+| 7 | 8 | 9 | | 3 | 6 | 9 | | 9 6 3 |
+
+✓ Ruotata di 90° orario.
+
+O(n²), O(1).
+</details>
+
+<h3 id="esercizio-213-spiral-matrix-medium">Esercizio 2.13 — Spiral Matrix <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Stampa elementi di una matrice in ordine a spirale.</p>
+<details><summary>Soluzione</summary>
+
+
+<pre><code class="language-python">def spiral(M):
+    res = []
+    top, bot = 0, len(M) - 1
+    lef, rig = 0, len(M[0]) - 1
+    while top &lt;= bot and lef &lt;= rig:
+        for j in range(lef, rig + 1): res.append(M[top][j])
+        top += 1
+        for i in range(top, bot + 1): res.append(M[i][rig])
+        rig -= 1
+        if top &lt;= bot:
+            for j in range(rig, lef - 1, -1): res.append(M[bot][j])
+            bot -= 1
+        if lef &lt;= rig:
+            for i in range(bot, top - 1, -1): res.append(M[i][lef])
+            lef += 1
+    return res
+</code></pre>
+
+
+Quattro layer "boundary". Ad ogni giro si stringono. Gli `if` finali evitano di processare due volte righe/colonne in matrici non quadrate.
+</details>
+
+<h3 id="esercizio-214-search-range-in-sorted-medium">Esercizio 2.14 — Search Range in Sorted <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Array ordinato, trova prima e ultima posizione di un target. O(log n).</p>
+<details><summary>Soluzione</summary>
+
+
+<pre><code class="language-python">from bisect import bisect_left, bisect_right
+def search_range(arr, t):
+    l = bisect_left(arr, t)
+    r = bisect_right(arr, t) - 1
+    if l &lt;= r and l &lt; len(arr) and arr[l] == t:
+        return [l, r]
+    return [-1, -1]
+</code></pre>
+
+
+`bisect_left(arr, t)` = primo indice in cui inserire `t` mantenendo l'ordine = primo indice ≥ t. Vedi cap. 11 binary search per il dettaglio.
+</details>
+
+<h3 id="esercizio-215-median-of-two-sorted-arrays-hard">Esercizio 2.15 — Median of Two Sorted Arrays <span class="problem-tag hard">HARD</span></h3>
+<p>Due array ordinati, trova la mediana in O(log(min(n,m))).</p>
+<details><summary>Solo soluzione (è un problema da Hard "famoso")</summary>
+
+Idea: binary search sull'array più corto, partiziona entrambi a metà.
+
+
+<pre><code class="language-python">def find_median(a, b):
+    if len(a) &gt; len(b): a, b = b, a
+    n, m = len(a), len(b)
+    lo, hi = 0, n
+    half = (n + m + 1) // 2
+    while lo &lt;= hi:
+        i = (lo + hi) // 2
+        j = half - i
+        al = a[i-1] if i &gt; 0 else float('-inf')
+        ar = a[i]   if i &lt; n else float('inf')
+        bl = b[j-1] if j &gt; 0 else float('-inf')
+        br = b[j]   if j &lt; m else float('inf')
+        if al &lt;= br and bl &lt;= ar:
+            if (n + m) % 2: return max(al, bl)
+            return (max(al, bl) + min(ar, br)) / 2
+        elif al &gt; br: hi = i - 1
+        else: lo = i + 1
+</code></pre>
+
+
+Vale la pena conoscerlo, ma chiesto raramente.
+</details>
+
+<h2 id="riassunto-del-capitolo">Riassunto del capitolo</h2>
+<ol>
+<li><strong>Array</strong> = blocco contiguo, accesso O(1), insert/delete in mezzo O(n), append O(1) ammortizzato.</li>
+<li><strong>Stringhe in Python sono immutabili</strong> → concatenazione in loop è O(n²); usa <code>''.join(lista)</code>.</li>
+<li><strong>Matrici</strong>: attento all'aliasing <code>[[0]*m]*n</code> (sbagliato), usa list comprehension.</li>
+<li><strong>5 pattern fondamentali</strong>: two pointers, sliding window, prefix sum, hashmap, sort+scan.</li>
+<li><strong>Trappole</strong>: aliasing, modifica in iterazione, off-by-one, concatenazione stringhe, riferimento vs copia.</li>
+</ol>
+<p>Quando hai padronanza di questo capitolo, dovresti riconoscere il pattern di qualsiasi problema su array in &lt; 60 secondi. Vai al <a href="03-hashmap-set.html">cap. 03 — Hashmap</a>.</p>
+      <nav class="pager">
+<a href="01-complessita.html" class="prev"><span class="label">← Precedente</span><span class="title">Complessità computazionale (Big-O)</span></a>
+<a href="03-hashmap-set.html" class="next"><span class="label">Successivo →</span><span class="title">Hashmap e set</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>FAANG Prep</strong> — percorso completo di preparazione: DS&amp;A, system design, behavioral. Costruito per spaccare ai colloqui di Big Tech.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-index.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true,
+      background: '#161922',
+      primaryColor: '#1d2230',
+      primaryTextColor: '#e6e8ee',
+      primaryBorderColor: '#6cf',
+      lineColor: '#7a8194',
+      secondaryColor: '#262b3a',
+      tertiaryColor: '#0f1117',
+      mainBkg: '#1d2230',
+      secondBkg: '#262b3a',
+      tertiaryBkg: '#161922',
+      nodeBorder: '#6cf',
+      clusterBkg: '#161922',
+      clusterBorder: '#262b3a',
+      titleColor: '#6cf',
+      edgeLabelBackground: '#161922',
+      fontFamily: 'Cascadia Code, monospace'
+    }
+  });
+  document.querySelectorAll('pre > code.language-mermaid').forEach((codeEl) => {
+    const pre = codeEl.parentElement;
+    const div = document.createElement('div');
+    div.className = 'mermaid';
+    div.textContent = codeEl.textContent;
+    pre.replaceWith(div);
+  });
+  mermaid.run();
+</script>
+</body>
+</html>

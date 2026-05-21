@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Greedy — FAANG Prep</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">F</div>
+      <div>
+        <div class="brand-title">FAANG Prep</div>
+        <div class="brand-subtitle">DS&amp;A · System Design</div>
+      </div>
+    </div>
+    <div class="lang-bar">
+      <a class="lang-switcher" href="../../pages/13-greedy.html" title="Italiano"><span class="flag-icon">🇮🇹</span><span class="flag-label">Italiano</span></a>
+    </div>
+  </div>
+  <div class="search-wrap">
+    <input class="search-input" id="search-input" placeholder="Search content... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/00-introduction.html" class=""><span class="num">00</span>Introduction and how to use this path</a></li><li class="nav-item"><a href="../pages/01-complexity.html" class=""><span class="num">01</span>Computational complexity (Big-O)</a></li><li class="nav-item"><a href="../pages/02-arrays-strings.html" class=""><span class="num">02</span>Arrays and strings</a></li><li class="nav-item"><a href="../pages/03-hashmap-set.html" class=""><span class="num">03</span>Hashmap and set</a></li><li class="nav-item"><a href="../pages/04-linked-list.html" class=""><span class="num">04</span>Linked list</a></li><li class="nav-item"><a href="../pages/05-stack-queue.html" class=""><span class="num">05</span>Stack and queue</a></li><li class="nav-item"><a href="../pages/06-trees.html" class=""><span class="num">06</span>Trees (binary tree and BST)</a></li><li class="nav-item"><a href="../pages/07-heap.html" class=""><span class="num">07</span>Heap and priority queue</a></li><li class="nav-item"><a href="../pages/08-graphs.html" class=""><span class="num">08</span>Graphs</a></li><li class="nav-item"><a href="../pages/09-trie.html" class=""><span class="num">09</span>Trie (prefix tree)</a></li><li class="nav-item"><a href="../pages/10-recursion-backtracking.html" class=""><span class="num">10</span>Recursion and backtracking</a></li><li class="nav-item"><a href="../pages/11-sorting-searching.html" class=""><span class="num">11</span>Sorting and searching</a></li><li class="nav-item"><a href="../pages/12-two-pointers-sliding-window.html" class=""><span class="num">12</span>Two pointers and sliding window</a></li><li class="nav-item"><a href="../pages/13-greedy.html" class="active"><span class="num">13</span>Greedy</a></li><li class="nav-item"><a href="../pages/14-dp.html" class=""><span class="num">14</span>Dynamic programming</a></li><li class="nav-item"><a href="../pages/15-bit-manipulation.html" class=""><span class="num">15</span>Bit manipulation</a></li><li class="nav-item"><a href="../pages/16-oop-design-patterns.html" class=""><span class="num">16</span>OOP and design patterns</a></li><li class="nav-item"><a href="../pages/17-system-design.html" class=""><span class="num">17</span>System design — fundamentals</a></li><li class="nav-item"><a href="../pages/18-system-design-examples.html" class=""><span class="num">18</span>System design — end-to-end examples</a></li><li class="nav-item"><a href="../pages/19-concurrency.html" class=""><span class="num">19</span>Concurrency and parallelism</a></li><li class="nav-item"><a href="../pages/20-database-sql.html" class=""><span class="num">20</span>Database and SQL</a></li><li class="nav-item"><a href="../pages/21-os-networking.html" class=""><span class="num">21</span>OS and networking</a></li><li class="nav-item"><a href="../pages/22-coding-patterns.html" class=""><span class="num">22</span>The 16 interview coding patterns</a></li><li class="nav-item"><a href="../pages/23-behavioral-star.html" class=""><span class="num">23</span>Behavioral interview — STAR and Amazon LP</a></li><li class="nav-item"><a href="../pages/24-mock-interviews.html" class=""><span class="num">24</span>Mock interview and interview strategy</a></li><li class="nav-item"><a href="../pages/25-roadmap-90-days.html" class=""><span class="num">25</span>90-day Roadmap — operational plan</a></li><li class="nav-item"><a href="../pages/26-problem-bank.html" class=""><span class="num">26</span>Problem bank — 200+ FAANG problems</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Algorithms</span>
+        <span>Section 13 of 26</span>
+      </div>
+      <h1>Greedy</h1>
+      <p class="summary">When a locally &quot;obvious&quot; choice leads to global optimum. Recognizing greedy problems, the exchange argument, when to stop and switch to DP.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Algorithms</div>
+  
+  
+</div>
+      <p>Greedy is the simplest technique to write — and the most treacherous to use well. <strong>It doesn't always work</strong>. You must know when you can use it, and prove it (or convince yourself, in interview).</p>
+<h2 id="part-1-the-idea">Part 1 — The idea</h2>
+<p>A greedy algorithm makes, at each step, the <strong>locally best choice</strong>, hoping it leads to the global optimum.</p>
+<p>Analogy: to reach a mountain peak, <strong>always go uphill</strong>. Greedy. Works if the mountain is "convex" (single peak). Doesn't work if there are intermediate valleys to cross.</p>
+<h3 id="example-that-works-coin-change-uk">Example that WORKS — Coin change (UK)</h3>
+<p>You must give X cents in change with coins <code>[1, 2, 5, 10, 20, 50, 100]</code>. Min number of coins.</p>
+<p>Greedy: at each step take the largest coin not exceeding X.</p>
+<p>X = 87:
+- 50 → leaves 37
+- 20 → leaves 17
+- 10 → leaves 7
+- 5 → leaves 2
+- 2 → leaves 0</p>
+<p>5 coins. <strong>Works</strong>.</p>
+<h3 id="example-that-doesnt-work-change-with-weird-coins">Example that DOESN'T WORK — Change with weird coins</h3>
+<p>Same problem, coins <code>[1, 3, 4]</code>. X = 6.</p>
+<p>Greedy: 4, 1, 1 → 3 coins.</p>
+<p>Optimal: 3, 3 → <strong>2 coins</strong>.</p>
+<p>Greedy made a mistake. You need DP.</p>
+<h3 id="lesson">Lesson</h3>
+<p>Greedy works only if you have two properties:</p>
+<ol>
+<li><strong>Greedy choice property</strong>: global optimum can be built always making locally optimal choices.</li>
+<li><strong>Optimal substructure</strong>: optimum of the problem contains optima of sub-problems.</li>
+</ol>
+<p>When (1) is missing, greedy fails.</p>
+<h2 id="part-2-how-you-prove-greedy-in-interview">Part 2 — How you "prove" greedy in interview</h2>
+<p>No formal proof needed. Just two arguments, in order:</p>
+<h3 id="argument-1-examples">Argument 1 — Examples</h3>
+<p>Try greedy on 2-3 small inputs. If it works, ok. <strong>Look for counterexamples</strong>: inputs where greedy fails. If you find them, discard it.</p>
+<h3 id="argument-2-exchange-argument-informal">Argument 2 — Exchange argument (informal)</h3>
+<p>Assume the optimal solution OPT doesn't make the greedy choice at some point. Show that you can "swap" OPT's choice with greedy's without worsening. If you succeed, greedy is optimal.</p>
+<p>Classic example: <strong>Activity Selection</strong>.</p>
+<blockquote>
+<p>You have a set of activities (start, end). Max number non-overlapping.</p>
+</blockquote>
+<p><strong>Greedy</strong>: sort by <code>end</code>, take the first that starts after the end of the last taken.</p>
+<p><strong>Why optimal?</strong> Suppose OPT doesn't take the activity with min <code>end</code>. Then OPT takes some other activity <code>A</code> with end &gt; greedy's end. Replacing A with greedy in OPT, <strong>I don't interfere with subsequent</strong> ones (because greedy ends first). Same number of activities, but with greedy. Iterating: the optimal solution can be rewritten using greedy. □</p>
+<h2 id="part-3-fundamental-patterns">Part 3 — Fundamental patterns</h2>
+<h3 id="pattern-1-sort-scan">Pattern 1 — Sort + scan</h3>
+<p>Sort by some metric, one pass.</p>
+<p><strong>Activity Selection / Non-overlapping Intervals</strong>:</p>
+<pre><code class="language-python">def max_non_overlap(intervals):
+    intervals.sort(key=lambda x: x[1])   # sort by END!
+    count = 0
+    end = float('-inf')
+    for s, e in intervals:
+        if s &gt;= end:
+            count += 1
+            end = e
+    return count
+</code></pre>
+<p><strong>Why sort by end, not start?</strong> See above. Choosing the activity that ends first leaves more room for others.</p>
+<h3 id="pattern-2-heap-for-next-best">Pattern 2 — Heap for "next best"</h3>
+<p>When "local best" changes dynamically. Heap keeps top in O(log n).</p>
+<p>Example: Task Scheduler (ch. 07).</p>
+<h3 id="pattern-3-two-passes">Pattern 3 — Two passes</h3>
+<p>Sometimes one pass isn't enough. Pass left-to-right + pass right-to-left.</p>
+<p>Example: <strong>Candy distribution</strong>. Each child has a rating. Children with rating greater than neighbors receive more candy. Min total.</p>
+<pre><code class="language-python">def candy(ratings):
+    n = len(ratings)
+    c = [1] * n
+    # Pass left-to-right: handle left neighbors
+    for i in range(1, n):
+        if ratings[i] &gt; ratings[i-1]:
+            c[i] = c[i-1] + 1
+    # Pass right-to-left: handle right neighbors
+    for i in range(n - 2, -1, -1):
+        if ratings[i] &gt; ratings[i+1]:
+            c[i] = max(c[i], c[i+1] + 1)
+    return sum(c)
+</code></pre>
+<p>One pass alone isn't enough because each child has two neighbors, and one direction doesn't see the other.</p>
+<h3 id="pattern-4-greedy-local-invariant">Pattern 4 — Greedy + local invariant</h3>
+<p>Maintain something that stays "true" during the scan.</p>
+<p>Example: Jump Game.</p>
+<blockquote>
+<p>Array of jumps. <code>arr[i]</code> = max jump from i. Can you reach the last index?</p>
+</blockquote>
+<p><strong>Greedy</strong>: keep <code>reach</code> = max reachable index so far. For each i, if i &gt; reach, fail. Otherwise update reach.</p>
+<pre><code class="language-python">def can_jump(nums):
+    reach = 0
+    for i, x in enumerate(nums):
+        if i &gt; reach:
+            return False
+        reach = max(reach, i + x)
+    return True
+</code></pre>
+<p>O(n). Invariant: "up to <code>reach</code> all are reachable".</p>
+<h2 id="part-4-when-not-to-use-greedy">Part 4 — When NOT to use greedy</h2>
+<p>Triggers of "probably DP, not greedy":</p>
+<ul>
+<li>"Number of ways..." → DP counting.</li>
+<li>"How many X max with budget Y" → Knapsack-like, usually DP.</li>
+<li>"Coin change with arbitrary coins" → DP.</li>
+<li>"Subset with sum X" → DP.</li>
+<li>"Obvious greedy gives counterexample in 3 minutes" → DP.</li>
+</ul>
+<p><strong>Operative rule of thumb</strong>:</p>
+<ul>
+<li>If you must "choose k out of n" and <strong>order DOESN'T matter</strong>: probably DP.</li>
+<li>If you must "order" or "min number of X" with sequential and independent choices: probably greedy.</li>
+</ul>
+<h2 id="part-5-guided-exercises">Part 5 — Guided exercises</h2>
+<h3 id="exercise-131-jump-game-medium">Exercise 13.1 — Jump Game <span class="problem-tag medium">MEDIUM</span></h3>
+<p>See Part 3 pattern 4.</p>
+<h3 id="exercise-132-jump-game-ii-medium">Exercise 13.2 — Jump Game II <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Minimum number of jumps to reach the end.</p>
+<details><summary>Reasoning</summary>
+
+**Implicit BFS**: each "jump" covers an interval. Find the farthest reachable point from current interval, that's the next level.
+
+
+<pre><code class="language-python">def jump(nums):
+    jumps = 0
+    cur_end = 0
+    farthest = 0
+    for i in range(len(nums) - 1):
+        farthest = max(farthest, i + nums[i])
+        if i == cur_end:
+            jumps += 1
+            cur_end = farthest
+    return jumps
+</code></pre>
+
+
+**Idea**: each "jump" extends the reachable radius. When you exhaust the current jump's radius, make a new jump to the farthest point seen so far.
+</details>
+
+<h3 id="exercise-133-gas-station-medium">Exercise 13.3 — Gas Station <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Cycle of stations with gas[i] and cost[i]. Station to start from to complete the loop, or -1.</p>
+<details><summary>Reasoning</summary>
+
+**Insight 1**: If sum(gas) < sum(cost), impossible.
+
+**Insight 2**: If from `i` the reserve goes negative at point `j`, then **no station between `i` and `j`** can be the start. Why? If you started at `k` with `i ≤ k ≤ j`, you'd have a starting point with less fuel (because you didn't accumulate the surplus between `i` and `k`). So the first candidate is `j+1`.
+
+
+<pre><code class="language-python">def can_complete(gas, cost):
+    if sum(gas) &lt; sum(cost): return -1
+    start = 0
+    tank = 0
+    for i in range(len(gas)):
+        tank += gas[i] - cost[i]
+        if tank &lt; 0:
+            start = i + 1
+            tank = 0
+    return start
+</code></pre>
+
+
+O(n).
+</details>
+
+<h3 id="exercise-134-non-overlapping-intervals-medium">Exercise 13.4 — Non-overlapping Intervals <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Min intervals to remove to have no overlaps.</p>
+<details><summary>Solution</summary>
+
+
+<pre><code class="language-python">def erase_overlap(intervals):
+    intervals.sort(key=lambda x: x[1])
+    end = float('-inf')
+    kept = 0
+    for s, e in intervals:
+        if s &gt;= end:
+            kept += 1
+            end = e
+    return len(intervals) - kept
+</code></pre>
+
+
+= "total - how many I can keep without overlap". Activity Selection pattern.
+</details>
+
+<h3 id="exercise-135-merge-intervals-medium">Exercise 13.5 — Merge Intervals <span class="problem-tag medium">MEDIUM</span></h3>
+<details><summary>Solution</summary>
+
+
+<pre><code class="language-python">def merge_intervals(intervals):
+    intervals.sort()
+    res = []
+    for s, e in intervals:
+        if res and res[-1][1] &gt;= s:
+            res[-1][1] = max(res[-1][1], e)
+        else:
+            res.append([s, e])
+    return res
+</code></pre>
+
+
+Sort by start. If next overlaps with last merged, extend. Otherwise, new interval.
+</details>
+
+<h3 id="exercise-136-insert-interval-medium">Exercise 13.6 — Insert Interval <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Insert <code>[s, e]</code> in sorted list, merging if necessary.</p>
+<details><summary>Solution</summary>
+
+Three phases:
+
+1. Copy intervals that end **before** the new one.
+2. Merge those overlapping.
+3. Copy the rest.
+
+
+<pre><code class="language-python">def insert(intervals, new):
+    res = []
+    i = 0
+    n = len(intervals)
+    while i &lt; n and intervals[i][1] &lt; new[0]:
+        res.append(intervals[i])
+        i += 1
+    while i &lt; n and intervals[i][0] &lt;= new[1]:
+        new[0] = min(new[0], intervals[i][0])
+        new[1] = max(new[1], intervals[i][1])
+        i += 1
+    res.append(new)
+    res.extend(intervals[i:])
+    return res
+</code></pre>
+
+
+O(n).
+</details>
+
+<h3 id="exercise-137-task-scheduler-medium">Exercise 13.7 — Task Scheduler <span class="problem-tag medium">MEDIUM</span></h3>
+<p>See ch. 07.</p>
+<h3 id="exercise-138-partition-labels-medium">Exercise 13.8 — Partition Labels <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Partition string into parts such that each letter appears in at most one part.</p>
+<details><summary>Reasoning</summary>
+
+Pre-compute **last position** of each char. Expand window until you reach the last position of all chars seen inside.
+
+
+<pre><code class="language-python">def partition_labels(s):
+    last = {c: i for i, c in enumerate(s)}
+    res = []
+    start = end = 0
+    for i, c in enumerate(s):
+        end = max(end, last[c])
+        if i == end:
+            res.append(end - start + 1)
+            start = i + 1
+    return res
+</code></pre>
+
+</details>
+
+<h3 id="exercise-139-hand-of-straights-medium">Exercise 13.9 — Hand of Straights <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Can you divide <code>hand</code> into groups of k consecutive cards?</p>
+<details><summary>Solution</summary>
+
+
+<pre><code class="language-python">from collections import Counter
+def is_n_straight(hand, k):
+    if len(hand) % k: return False
+    c = Counter(hand)
+    for x in sorted(c):
+        if c[x] &gt; 0:
+            n = c[x]
+            for i in range(k):
+                if c[x + i] &lt; n: return False
+                c[x + i] -= n
+    return True
+</code></pre>
+
+
+Greedy: start from smallest card, "consume" k consecutive starting there.
+</details>
+
+<h3 id="exercise-1310-min-arrows-to-burst-balloons-medium">Exercise 13.10 — Min Arrows to Burst Balloons <span class="problem-tag medium">MEDIUM</span></h3>
+<details><summary>Solution</summary>
+
+
+<pre><code class="language-python">def find_min_arrows(points):
+    points.sort(key=lambda p: p[1])
+    arrows = 0
+    end = float('-inf')
+    for s, e in points:
+        if s &gt; end:
+            arrows += 1
+            end = e
+    return arrows
+</code></pre>
+
+
+Activity Selection pattern.
+</details>
+
+<h2 id="summary">Summary</h2>
+<ol>
+<li><strong>Greedy = locally optimal choice at each step</strong>, hoping for global optimum.</li>
+<li><strong>Works only if</strong> the problem's structure allows. Often verified with examples/exchange argument.</li>
+<li><strong>Main patterns</strong>: sort + scan, "next best" heap, two passes, local invariant.</li>
+<li><strong>When NOT works</strong>: often DP is needed.</li>
+<li><strong>Activity Selection pattern</strong>: sort by <strong>end</strong>, not start.</li>
+</ol>
+<p>When in doubt: "does greedy work here?", <strong>build 2 counterexamples</strong>. If it survives, use it; otherwise, DP.</p>
+      <nav class="pager">
+<a href="12-two-pointers-sliding-window.html" class="prev"><span class="label">← Previous</span><span class="title">Two pointers and sliding window</span></a>
+<a href="14-dp.html" class="next"><span class="label">Next →</span><span class="title">Dynamic programming</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>FAANG Prep</strong> — complete prep path: DS&amp;A, system design, behavioral. Built to crush Big Tech interviews.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-index.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true,
+      background: '#161922',
+      primaryColor: '#1d2230',
+      primaryTextColor: '#e6e8ee',
+      primaryBorderColor: '#6cf',
+      lineColor: '#7a8194',
+      secondaryColor: '#262b3a',
+      tertiaryColor: '#0f1117',
+      mainBkg: '#1d2230',
+      secondBkg: '#262b3a',
+      tertiaryBkg: '#161922',
+      nodeBorder: '#6cf',
+      clusterBkg: '#161922',
+      clusterBorder: '#262b3a',
+      titleColor: '#6cf',
+      edgeLabelBackground: '#161922',
+      fontFamily: 'Cascadia Code, monospace'
+    }
+  });
+  document.querySelectorAll('pre > code.language-mermaid').forEach((codeEl) => {
+    const pre = codeEl.parentElement;
+    const div = document.createElement('div');
+    div.className = 'mermaid';
+    div.textContent = codeEl.textContent;
+    pre.replaceWith(div);
+  });
+  mermaid.run();
+</script>
+</body>
+</html>

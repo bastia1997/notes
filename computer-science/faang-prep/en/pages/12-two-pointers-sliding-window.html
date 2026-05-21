@@ -1,0 +1,702 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Two pointers and sliding window — FAANG Prep</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">F</div>
+      <div>
+        <div class="brand-title">FAANG Prep</div>
+        <div class="brand-subtitle">DS&amp;A · System Design</div>
+      </div>
+    </div>
+    <div class="lang-bar">
+      <a class="lang-switcher" href="../../pages/12-two-pointers-sliding-window.html" title="Italiano"><span class="flag-icon">🇮🇹</span><span class="flag-label">Italiano</span></a>
+    </div>
+  </div>
+  <div class="search-wrap">
+    <input class="search-input" id="search-input" placeholder="Search content... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/00-introduction.html" class=""><span class="num">00</span>Introduction and how to use this path</a></li><li class="nav-item"><a href="../pages/01-complexity.html" class=""><span class="num">01</span>Computational complexity (Big-O)</a></li><li class="nav-item"><a href="../pages/02-arrays-strings.html" class=""><span class="num">02</span>Arrays and strings</a></li><li class="nav-item"><a href="../pages/03-hashmap-set.html" class=""><span class="num">03</span>Hashmap and set</a></li><li class="nav-item"><a href="../pages/04-linked-list.html" class=""><span class="num">04</span>Linked list</a></li><li class="nav-item"><a href="../pages/05-stack-queue.html" class=""><span class="num">05</span>Stack and queue</a></li><li class="nav-item"><a href="../pages/06-trees.html" class=""><span class="num">06</span>Trees (binary tree and BST)</a></li><li class="nav-item"><a href="../pages/07-heap.html" class=""><span class="num">07</span>Heap and priority queue</a></li><li class="nav-item"><a href="../pages/08-graphs.html" class=""><span class="num">08</span>Graphs</a></li><li class="nav-item"><a href="../pages/09-trie.html" class=""><span class="num">09</span>Trie (prefix tree)</a></li><li class="nav-item"><a href="../pages/10-recursion-backtracking.html" class=""><span class="num">10</span>Recursion and backtracking</a></li><li class="nav-item"><a href="../pages/11-sorting-searching.html" class=""><span class="num">11</span>Sorting and searching</a></li><li class="nav-item"><a href="../pages/12-two-pointers-sliding-window.html" class="active"><span class="num">12</span>Two pointers and sliding window</a></li><li class="nav-item"><a href="../pages/13-greedy.html" class=""><span class="num">13</span>Greedy</a></li><li class="nav-item"><a href="../pages/14-dp.html" class=""><span class="num">14</span>Dynamic programming</a></li><li class="nav-item"><a href="../pages/15-bit-manipulation.html" class=""><span class="num">15</span>Bit manipulation</a></li><li class="nav-item"><a href="../pages/16-oop-design-patterns.html" class=""><span class="num">16</span>OOP and design patterns</a></li><li class="nav-item"><a href="../pages/17-system-design.html" class=""><span class="num">17</span>System design — fundamentals</a></li><li class="nav-item"><a href="../pages/18-system-design-examples.html" class=""><span class="num">18</span>System design — end-to-end examples</a></li><li class="nav-item"><a href="../pages/19-concurrency.html" class=""><span class="num">19</span>Concurrency and parallelism</a></li><li class="nav-item"><a href="../pages/20-database-sql.html" class=""><span class="num">20</span>Database and SQL</a></li><li class="nav-item"><a href="../pages/21-os-networking.html" class=""><span class="num">21</span>OS and networking</a></li><li class="nav-item"><a href="../pages/22-coding-patterns.html" class=""><span class="num">22</span>The 16 interview coding patterns</a></li><li class="nav-item"><a href="../pages/23-behavioral-star.html" class=""><span class="num">23</span>Behavioral interview — STAR and Amazon LP</a></li><li class="nav-item"><a href="../pages/24-mock-interviews.html" class=""><span class="num">24</span>Mock interview and interview strategy</a></li><li class="nav-item"><a href="../pages/25-roadmap-90-days.html" class=""><span class="num">25</span>90-day Roadmap — operational plan</a></li><li class="nav-item"><a href="../pages/26-problem-bank.html" class=""><span class="num">26</span>Problem bank — 200+ FAANG problems</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Algorithms</span>
+        <span>Section 12 of 26</span>
+      </div>
+      <h1>Two pointers and sliding window</h1>
+      <p class="summary">The two patterns that turn O(n²) into O(n) on 40% of medium problems. Explained from scratch, with cell-by-cell execution trace.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Algorithms</div>
+  
+  
+</div>
+      <p>If you master just these two patterns, you already have tools for <strong>40% of medium problems</strong> on arrays and strings. Simple in idea but subtle in details.</p>
+<h2 id="part-1-why-these-patterns-exist">Part 1 — Why these patterns exist</h2>
+<h3 id="the-fundamental-problem">The fundamental problem</h3>
+<p>Many array problems seem to require trying all pairs/triples. Examples:</p>
+<ul>
+<li>"Find two elements summing to target" — seems O(n²).</li>
+<li>"Find the longest substring with some property" — seems O(n²) or O(n³).</li>
+<li>"Count subarrays with exact sum k" — seems O(n²).</li>
+</ul>
+<p>Brute force scanning all combinations: O(n²) or worse.</p>
+<p><strong>Two pointers</strong> and <strong>sliding window</strong> are two techniques that, exploiting the <strong>structure</strong> of the problem, reduce to O(n) by making indices "move" in a coordinated way.</p>
+<h3 id="when-you-can-use-them">When you "can" use them</h3>
+<ul>
+<li>Two pointers works when <strong>moving one of the pointers in a monotonic direction</strong> is justified.</li>
+<li>Sliding window works when you can keep a <strong>state</strong> of the window and <strong>update the state in O(1)</strong> entering/exiting.</li>
+</ul>
+<p>If you don't have this "monotonicity" or "updatable state", they're not applicable.</p>
+<h2 id="part-2-two-pointers-in-depth">Part 2 — Two pointers in depth</h2>
+<h3 id="configuration-1-colliding-extremes">Configuration 1: colliding extremes</h3>
+<p>The two pointers start from the two opposite ends and move toward the center.</p>
+<div style="background:#161922;border:1px solid #262b3a;border-radius:8px;padding:16px;margin:14px 0;overflow-x:auto;">
+<svg viewBox="0 0 380 100" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;display:block;margin:auto;font-family:'Cascadia Code',monospace;">
+  <defs>
+    <style>
+      .cell { fill:#1d2230; stroke:#262b3a; stroke-width:1; }
+      .cell-l { fill:#6cf3; stroke:#6cf; stroke-width:2; }
+      .cell-r { fill:#ff79c63; stroke:#ff79c6; stroke-width:2; }
+      .ct { fill:#e6e8ee; font-size:14px; font-weight:600; }
+    </style>
+  </defs>
+  <g transform="translate(15, 30)">
+    <rect class="cell-l" x="0" y="0" width="40" height="40"/>
+    <rect class="cell" x="40" y="0" width="40" height="40"/>
+    <rect class="cell" x="80" y="0" width="40" height="40"/>
+    <rect class="cell" x="120" y="0" width="40" height="40"/>
+    <rect class="cell" x="160" y="0" width="40" height="40"/>
+    <rect class="cell" x="200" y="0" width="40" height="40"/>
+    <rect class="cell" x="240" y="0" width="40" height="40"/>
+    <rect class="cell" x="280" y="0" width="40" height="40"/>
+    <rect class="cell-r" x="320" y="0" width="40" height="40"/>
+    <text class="ct" x="20" y="25" text-anchor="middle">a</text>
+    <text class="ct" x="60" y="25" text-anchor="middle">b</text>
+    <text class="ct" x="100" y="25" text-anchor="middle">c</text>
+    <text class="ct" x="140" y="25" text-anchor="middle">d</text>
+    <text class="ct" x="180" y="25" text-anchor="middle">e</text>
+    <text class="ct" x="220" y="25" text-anchor="middle">f</text>
+    <text class="ct" x="260" y="25" text-anchor="middle">g</text>
+    <text class="ct" x="300" y="25" text-anchor="middle">h</text>
+    <text class="ct" x="340" y="25" text-anchor="middle">i</text>
+    <text fill="#6cf" font-size="13" font-weight="700" x="20" y="60" text-anchor="middle">l →</text>
+    <text fill="#ff79c6" font-size="13" font-weight="700" x="340" y="60" text-anchor="middle">← r</text>
+  </g>
+</svg>
+</div>
+
+<p>They move while <code>l &lt; r</code>.</p>
+<p><strong>When to use it</strong>:</p>
+<ul>
+<li><strong>Sorted</strong> array.</li>
+<li>Pairs/triplets with target sum.</li>
+<li>Palindrome check.</li>
+<li>Container with most water.</li>
+</ul>
+<h4 id="example-1-two-sum-on-sorted-array">Example 1: Two Sum on sorted array</h4>
+<pre><code class="language-python">def two_sum_sorted(arr, target):
+    l, r = 0, len(arr) - 1
+    while l &lt; r:
+        s = arr[l] + arr[r]
+        if s == target:
+            return [l, r]
+        elif s &lt; target:
+            l += 1     # small sum → increase left (toward higher values)
+        else:
+            r -= 1     # large sum → decrease right
+</code></pre>
+<p><strong>Why does it work?</strong> We exploit the sorting. If <code>s &lt; target</code>, we know the only way to increase is to move <code>l</code> right (<code>r</code> is already the max). Never backward, never duplicates. Each iteration advances a pointer → at most <code>n</code> iterations → O(n).</p>
+<h4 id="example-2-container-with-most-water">Example 2: Container With Most Water</h4>
+<p><code>arr[i]</code> = height of bar <code>i</code>. Choose <code>i &lt; j</code>: area is <code>(j-i) × min(arr[i], arr[j])</code>. Max area.</p>
+<pre><code class="language-python">def max_area(h):
+    l, r = 0, len(h) - 1
+    best = 0
+    while l &lt; r:
+        area = (r - l) * min(h[l], h[r])
+        best = max(best, area)
+        if h[l] &lt; h[r]:
+            l += 1
+        else:
+            r -= 1
+    return best
+</code></pre>
+<p><strong>Why move the "low" pointer?</strong> If I move the high one:</p>
+<ul>
+<li>Width decreases.</li>
+<li>Min height remains bounded by the low pointer (so at most equal).</li>
+</ul>
+<p>→ Area can only decrease. Useless.</p>
+<p>If I move the low one:</p>
+<ul>
+<li>Width decreases.</li>
+<li>Min height <strong>might</strong> increase (if I meet a taller bar).</li>
+</ul>
+<p>→ There's hope.</p>
+<p><strong>Lesson</strong>: analyzing "which pointer to move and why" is the heart of two pointers. Always justify.</p>
+<h3 id="configuration-2-same-direction-slowfast">Configuration 2: same direction (slow/fast)</h3>
+<p>Both pointers start from left and advance. <code>slow</code> "writes", <code>fast</code> "explores".</p>
+<div style="background:#161922;border:1px solid #262b3a;border-radius:8px;padding:16px;margin:14px 0;overflow-x:auto;">
+<svg viewBox="0 0 360 90" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;display:block;margin:auto;font-family:'Cascadia Code',monospace;">
+  <defs>
+    <style>
+      .cell { fill:#1d2230; stroke:#262b3a; stroke-width:1; }
+      .cell-slow { fill:#50fa7b33; stroke:#50fa7b; stroke-width:2; }
+      .cell-fast { fill:#ffb86c33; stroke:#ffb86c; stroke-width:2; }
+      .ct { fill:#e6e8ee; font-size:14px; font-weight:600; }
+    </style>
+  </defs>
+  <g transform="translate(15, 15)">
+    <rect class="cell-slow" x="0" y="0" width="40" height="40"/>
+    <rect class="cell" x="40" y="0" width="40" height="40"/>
+    <rect class="cell-fast" x="80" y="0" width="40" height="40"/>
+    <rect class="cell" x="120" y="0" width="40" height="40"/>
+    <rect class="cell" x="160" y="0" width="40" height="40"/>
+    <rect class="cell" x="200" y="0" width="40" height="40"/>
+    <rect class="cell" x="240" y="0" width="40" height="40"/>
+    <text class="ct" x="20" y="25" text-anchor="middle">a</text>
+    <text class="ct" x="60" y="25" text-anchor="middle">b</text>
+    <text class="ct" x="100" y="25" text-anchor="middle">c</text>
+    <text class="ct" x="140" y="25" text-anchor="middle">d</text>
+    <text class="ct" x="180" y="25" text-anchor="middle">e</text>
+    <text class="ct" x="220" y="25" text-anchor="middle">f</text>
+    <text class="ct" x="260" y="25" text-anchor="middle">g</text>
+    <text fill="#50fa7b" font-size="12" font-weight="700" x="20" y="60" text-anchor="middle">slow</text>
+    <text fill="#ffb86c" font-size="12" font-weight="700" x="100" y="60" text-anchor="middle">fast</text>
+  </g>
+</svg>
+</div>
+
+<p><strong>When</strong>:</p>
+<ul>
+<li>Remove duplicates in-place.</li>
+<li>Move zeros / partition.</li>
+</ul>
+<h4 id="example-remove-duplicates-sorted-array">Example: Remove Duplicates (sorted array)</h4>
+<pre><code class="language-python">def remove_duplicates(arr):
+    if not arr: return 0
+    w = 1   # write pointer (slow)
+    for r in range(1, len(arr)):
+        if arr[r] != arr[r-1]:
+            arr[w] = arr[r]
+            w += 1
+    return w   # new length
+</code></pre>
+<p>Trace on <code>[1, 1, 2, 3, 3, 4]</code>:</p>
+<pre><code>r=1 arr[r]=1, prev=1, equal → skip. arr=[1,1,2,3,3,4], w=1
+r=2 arr[r]=2, prev=1, different → arr[1]=2, w=2. arr=[1,2,2,3,3,4]
+r=3 arr[r]=3, prev=2, different → arr[2]=3, w=3. arr=[1,2,3,3,3,4]
+r=4 arr[r]=3, prev=3, equal → skip.
+r=5 arr[r]=4, prev=3, different → arr[3]=4, w=4. arr=[1,2,3,4,3,4]
+</code></pre>
+<p>Result: length 4, first 4 elements are <code>[1, 2, 3, 4]</code>. ✓</p>
+<h3 id="configuration-3-two-arrays-in-parallel">Configuration 3: two arrays in parallel</h3>
+<p>Two indices, one for each array. Typical in merges.</p>
+<pre><code class="language-python">def merge_sorted(a, b):
+    out = []
+    i = j = 0
+    while i &lt; len(a) and j &lt; len(b):
+        if a[i] &lt;= b[j]:
+            out.append(a[i])
+            i += 1
+        else:
+            out.append(b[j])
+            j += 1
+    out.extend(a[i:])
+    out.extend(b[j:])
+    return out
+</code></pre>
+<p>Each iteration advances one of the two pointers → O(n + m).</p>
+<h2 id="part-3-sliding-window-in-depth">Part 3 — Sliding window in depth</h2>
+<h3 id="the-visualized-idea">The visualized idea</h3>
+<p>A window <code>[l, r]</code> scans the array. Keep a <strong>state</strong> (e.g. sum, char count, dictionary).</p>
+<p>Grow right (<code>r++</code>), update state.</p>
+<p>If invariant violated, contract left (<code>l++</code>), update state.</p>
+<div style="background:#161922;border:1px solid #262b3a;border-radius:8px;padding:18px;margin:16px 0;overflow-x:auto;">
+<svg viewBox="0 0 540 240" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;display:block;margin:auto;font-family:'Cascadia Code',monospace;">
+  <defs>
+    <style>
+      .cell { fill:#1d2230; stroke:#262b3a; stroke-width:1; }
+      .cell-win { fill:#1d3a5c; stroke:#6cf; stroke-width:2; }
+      .cell-text { fill:#e6e8ee; font-size:14px; font-weight:600; }
+      .ptr { fill:#ffb86c; font-size:12px; font-weight:700; }
+      .step-label { fill:#7a8194; font-size:12px; }
+    </style>
+  </defs>
+  <text class="step-label" x="10" y="22">Step 1: window [l=1, r=3]</text>
+  <g transform="translate(10, 35)">
+    <rect class="cell" x="0"   y="0" width="40" height="40"/>
+    <rect class="cell-win" x="40"  y="0" width="40" height="40"/>
+    <rect class="cell-win" x="80"  y="0" width="40" height="40"/>
+    <rect class="cell-win" x="120" y="0" width="40" height="40"/>
+    <rect class="cell" x="160" y="0" width="40" height="40"/>
+    <rect class="cell" x="200" y="0" width="40" height="40"/>
+    <rect class="cell" x="240" y="0" width="40" height="40"/>
+    <text class="cell-text" x="20"  y="25" text-anchor="middle">a</text>
+    <text class="cell-text" x="60"  y="25" text-anchor="middle">b</text>
+    <text class="cell-text" x="100" y="25" text-anchor="middle">c</text>
+    <text class="cell-text" x="140" y="25" text-anchor="middle">d</text>
+    <text class="cell-text" x="180" y="25" text-anchor="middle">e</text>
+    <text class="cell-text" x="220" y="25" text-anchor="middle">f</text>
+    <text class="cell-text" x="260" y="25" text-anchor="middle">g</text>
+    <text class="ptr" x="60"  y="60" text-anchor="middle">l</text>
+    <text class="ptr" x="140" y="60" text-anchor="middle">r</text>
+  </g>
+  <text class="step-label" x="10" y="105">Step 2: r advances → window grows</text>
+  <g transform="translate(10, 118)">
+    <rect class="cell" x="0"   y="0" width="40" height="40"/>
+    <rect class="cell-win" x="40"  y="0" width="40" height="40"/>
+    <rect class="cell-win" x="80"  y="0" width="40" height="40"/>
+    <rect class="cell-win" x="120" y="0" width="40" height="40"/>
+    <rect class="cell-win" x="160" y="0" width="40" height="40"/>
+    <rect class="cell" x="200" y="0" width="40" height="40"/>
+    <rect class="cell" x="240" y="0" width="40" height="40"/>
+    <text class="cell-text" x="20"  y="25" text-anchor="middle">a</text>
+    <text class="cell-text" x="60"  y="25" text-anchor="middle">b</text>
+    <text class="cell-text" x="100" y="25" text-anchor="middle">c</text>
+    <text class="cell-text" x="140" y="25" text-anchor="middle">d</text>
+    <text class="cell-text" x="180" y="25" text-anchor="middle">e</text>
+    <text class="cell-text" x="220" y="25" text-anchor="middle">f</text>
+    <text class="cell-text" x="260" y="25" text-anchor="middle">g</text>
+    <text class="ptr" x="60"  y="60" text-anchor="middle">l</text>
+    <text class="ptr" x="180" y="60" text-anchor="middle">r</text>
+  </g>
+  <text class="step-label" x="10" y="188">Step 3: invariant violated → l advances, window contracts</text>
+  <g transform="translate(10, 201)">
+    <rect class="cell" x="0"   y="0" width="40" height="40"/>
+    <rect class="cell" x="40"  y="0" width="40" height="40"/>
+    <rect class="cell-win" x="80"  y="0" width="40" height="40"/>
+    <rect class="cell-win" x="120" y="0" width="40" height="40"/>
+    <rect class="cell-win" x="160" y="0" width="40" height="40"/>
+    <rect class="cell" x="200" y="0" width="40" height="40"/>
+    <rect class="cell" x="240" y="0" width="40" height="40"/>
+    <text class="cell-text" x="20"  y="25" text-anchor="middle">a</text>
+    <text class="cell-text" x="60"  y="25" text-anchor="middle">b</text>
+    <text class="cell-text" x="100" y="25" text-anchor="middle">c</text>
+    <text class="cell-text" x="140" y="25" text-anchor="middle">d</text>
+    <text class="cell-text" x="180" y="25" text-anchor="middle">e</text>
+    <text class="cell-text" x="220" y="25" text-anchor="middle">f</text>
+    <text class="cell-text" x="260" y="25" text-anchor="middle">g</text>
+    <text class="ptr" x="100" y="60" text-anchor="middle">l</text>
+    <text class="ptr" x="180" y="60" text-anchor="middle">r</text>
+  </g>
+</svg>
+</div>
+
+<h3 id="universal-template">Universal template</h3>
+<pre><code class="language-python">def sliding_window(arr):
+    l = 0
+    state = init_state()
+    best = init_best()
+    for r in range(len(arr)):
+        # 1. INCLUDE arr[r] in window (update state)
+        update_add(state, arr[r])
+        # 2. While invariant violated, CONTRACT left
+        while not valid(state):
+            update_remove(state, arr[l])
+            l += 1
+        # 3. Now arr[l..r] is valid; update best
+        best = improve(best, l, r, state)
+    return best
+</code></pre>
+<h3 id="complexity">Complexity</h3>
+<p><strong>Always O(n)</strong>. Even if it looks "while inside a for", both pointers only move right, at most <code>n</code> moves each → 2n total.</p>
+<h3 id="window-types">Window types</h3>
+<h4 id="type-a-fixed-size-window">Type A: fixed-size window</h4>
+<p>The window always has size <code>k</code>.</p>
+<pre><code class="language-python">def max_sum_k(arr, k):
+    s = sum(arr[:k])    # initial sum
+    best = s
+    for r in range(k, len(arr)):
+        s += arr[r] - arr[r-k]   # arr[r] enters, arr[r-k] exits
+        best = max(best, s)
+    return best
+</code></pre>
+<h4 id="type-b-variable-size-longest-with-constraint">Type B: variable-size "longest with constraint"</h4>
+<p>Expand right. When invariant violated, contract left until valid.</p>
+<p>Example: max length with at most k distinct characters.</p>
+<pre><code class="language-python">from collections import defaultdict
+def longest_k_distinct(s, k):
+    cnt = defaultdict(int)
+    l = 0
+    best = 0
+    for r, c in enumerate(s):
+        cnt[c] += 1
+        while len(cnt) &gt; k:   # invariant violated
+            cnt[s[l]] -= 1
+            if cnt[s[l]] == 0:
+                del cnt[s[l]]
+            l += 1
+        best = max(best, r - l + 1)
+    return best
+</code></pre>
+<h4 id="type-c-variable-size-shortest-covering">Type C: variable-size "shortest covering"</h4>
+<p>Expand until you match everything. Then contract while you can without losing coverage.</p>
+<p>Example: Minimum Window Substring (see below).</p>
+<h2 id="part-4-practical-difference-two-pointers-vs-sliding-window">Part 4 — Practical difference: two pointers vs sliding window</h2>
+<table>
+<thead>
+<tr>
+<th>Characteristic</th>
+<th>Sliding window</th>
+<th>Two pointers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Typical structure</td>
+<td>contiguous subarray/substring</td>
+<td>often sorted array</td>
+</tr>
+<tr>
+<td>"Longest/shortest contains X"</td>
+<td>yes</td>
+<td>rare</td>
+</tr>
+<tr>
+<td>"Pair/triple with sum"</td>
+<td>rare</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>State (Counter, set, sum)</td>
+<td>almost always</td>
+<td>sometimes</td>
+</tr>
+<tr>
+<td>Movement</td>
+<td>r monotonic, l monotonic</td>
+<td>can both move</td>
+</tr>
+</tbody>
+</table>
+<p>Sliding window is a <strong>special case</strong> of two pointers. But useful to distinguish mentally.</p>
+<h2 id="part-5-guided-exercises">Part 5 — Guided exercises</h2>
+<h3 id="exercise-121-two-sum-ii-sorted-medium">Exercise 12.1 — Two Sum II (sorted) <span class="problem-tag medium">MEDIUM</span></h3>
+<p>See Part 2.</p>
+<h3 id="exercise-122-valid-palindrome-easy">Exercise 12.2 — Valid Palindrome <span class="problem-tag easy">EASY</span></h3>
+<details><summary>Solution</summary>
+
+
+<pre><code class="language-python">def is_pal(s):
+    l, r = 0, len(s) - 1
+    while l &lt; r:
+        while l &lt; r and not s[l].isalnum(): l += 1
+        while l &lt; r and not s[r].isalnum(): r -= 1
+        if s[l].lower() != s[r].lower(): return False
+        l += 1; r -= 1
+    return True
+</code></pre>
+
+
+Two pointers at edges, skip non-alphanumeric.
+</details>
+
+<h3 id="exercise-123-remove-duplicates-easy">Exercise 12.3 — Remove Duplicates <span class="problem-tag easy">EASY</span></h3>
+<p>See Part 2.</p>
+<h3 id="exercise-124-squares-of-sorted-array-easy">Exercise 12.4 — Squares of Sorted Array <span class="problem-tag easy">EASY</span></h3>
+<p>Sorted array (can contain negatives). Return sorted array of squares. O(n).</p>
+<details><summary>Reasoning</summary>
+
+The square of the largest in absolute value is the **max**. Two pointers at edges: compare `|arr[l]|` and `|arr[r]|`, take the larger, position from end of result.
+
+
+<pre><code class="language-python">def sorted_squares(arr):
+    n = len(arr)
+    res = [0] * n
+    l, r = 0, n - 1
+    w = n - 1
+    while l &lt;= r:
+        if abs(arr[l]) &gt; abs(arr[r]):
+            res[w] = arr[l] * arr[l]
+            l += 1
+        else:
+            res[w] = arr[r] * arr[r]
+            r -= 1
+        w -= 1
+    return res
+</code></pre>
+
+
+Fill from end to start. O(n).
+</details>
+
+<h3 id="exercise-125-max-average-subarray-length-k-easy">Exercise 12.5 — Max Average Subarray Length K <span class="problem-tag easy">EASY</span></h3>
+<details><summary>Solution</summary>
+
+Fixed-size window:
+
+
+<pre><code class="language-python">def find_max_average(arr, k):
+    s = sum(arr[:k])
+    best = s
+    for r in range(k, len(arr)):
+        s += arr[r] - arr[r-k]
+        best = max(best, s)
+    return best / k
+</code></pre>
+
+</details>
+
+<h3 id="exercise-126-longest-substring-without-repeating-characters-medium">Exercise 12.6 — Longest Substring Without Repeating Characters <span class="problem-tag medium">MEDIUM</span></h3>
+<details><summary>Solution</summary>
+
+
+<pre><code class="language-python">def longest_unique(s):
+    last = {}
+    l = 0; best = 0
+    for r, c in enumerate(s):
+        if c in last and last[c] &gt;= l:
+            l = last[c] + 1
+        last[c] = r
+        best = max(best, r - l + 1)
+    return best
+</code></pre>
+
+
+Sliding window. When I see a duplicate inside the window, jump `l` right after the duplicate's last position.
+</details>
+
+<h3 id="exercise-127-longest-repeating-character-replacement-medium">Exercise 12.7 — Longest Repeating Character Replacement <span class="problem-tag medium">MEDIUM</span></h3>
+<p>String s + integer k. You can replace at most k characters. Longest substring with all same letters.</p>
+<details><summary>Reasoning</summary>
+
+A window is valid if `(length - max_freq_char) ≤ k`. That is: number of "replacements" needed is how many chars aren't the dominant one.
+
+
+<pre><code class="language-python">def longest_repeat(s, k):
+    cnt = {}
+    max_f = 0
+    l = 0; best = 0
+    for r, c in enumerate(s):
+        cnt[c] = cnt.get(c, 0) + 1
+        max_f = max(max_f, cnt[c])
+        if (r - l + 1) - max_f &gt; k:
+            cnt[s[l]] -= 1
+            l += 1
+        best = max(best, r - l + 1)
+    return best
+</code></pre>
+
+
+**Subtle**: `max_f` isn't decremented when contracting. It's OK because final `best` depends on windows where `max_f` was actually max. No need for a "precise" value, just the historical max.
+</details>
+
+<h3 id="exercise-128-permutation-in-string-medium">Exercise 12.8 — Permutation in String <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Does <code>s2</code> contain a permutation of <code>s1</code>?</p>
+<details><summary>Solution</summary>
+
+Fixed-size window of length `|s1|` on `s2`, compare Counter.
+
+
+<pre><code class="language-python">from collections import Counter
+def check_inclusion(s1, s2):
+    if len(s1) &gt; len(s2): return False
+    c1 = Counter(s1)
+    c2 = Counter(s2[:len(s1)])
+    if c1 == c2: return True
+    for i in range(len(s1), len(s2)):
+        c2[s2[i]] += 1
+        c2[s2[i-len(s1)]] -= 1
+        if c2[s2[i-len(s1)]] == 0:
+            del c2[s2[i-len(s1)]]
+        if c1 == c2: return True
+    return False
+</code></pre>
+
+</details>
+
+<h3 id="exercise-129-minimum-window-substring-hard">Exercise 12.9 — Minimum Window Substring <span class="problem-tag hard">HARD</span></h3>
+<p>Shortest substring of <code>s</code> containing all chars of <code>t</code> (with multiplicity).</p>
+<details><summary>Reasoning</summary>
+
+Sliding window "shortest covering":
+
+1. `need = Counter(t)`: required chars.
+2. `have`: chars currently in window.
+3. `missing`: how many chars still missing to cover `t`.
+
+Expand right: each "useful" char decrements `missing`. When `missing == 0`, valid window → try to contract.
+
+
+<pre><code class="language-python">from collections import Counter
+def min_window(s, t):
+    need = Counter(t)
+    have = {}
+    missing = len(t)
+    l = 0
+    best = (float('inf'), 0, 0)
+    for r, c in enumerate(s):
+        if need.get(c, 0) &gt; 0:
+            if have.get(c, 0) &lt; need[c]:
+                missing -= 1
+        have[c] = have.get(c, 0) + 1
+        while missing == 0:
+            if r - l + 1 &lt; best[0]:
+                best = (r - l + 1, l, r)
+            have[s[l]] -= 1
+            if need.get(s[l], 0) &gt; 0 and have[s[l]] &lt; need[s[l]]:
+                missing += 1
+            l += 1
+    return &quot;&quot; if best[0] == float('inf') else s[best[1]:best[2]+1]
+</code></pre>
+
+
+O(n+m). One of the most asked (Meta, Google).
+</details>
+
+<h3 id="exercise-1210-sliding-window-maximum-hard">Exercise 12.10 — Sliding Window Maximum <span class="problem-tag hard">HARD</span></h3>
+<p>Max in each window of length k, in total O(n).</p>
+<details><summary>Reasoning</summary>
+
+**Brute force**: for each window, max in O(k). Total O(nk).
+
+**Idea (monotonic deque)**: keep a **deque** of **indices** with values decreasing from the front. Head is always the window's max.
+
+When a new element `arr[r]` enters:
+
+- Remove from queue all indices whose values are **less** than `arr[r]` (they'll never be max again).
+- Push `r`.
+
+When window advances (`r >= k`):
+
+- If head is outside window (`dq[0] <= r - k`), remove it.
+- Output `arr[dq[0]]`.
+
+
+<pre><code class="language-python">from collections import deque
+def max_sliding_window(arr, k):
+    dq = deque()
+    res = []
+    for i, x in enumerate(arr):
+        while dq and arr[dq[-1]] &lt;= x:
+            dq.pop()
+        dq.append(i)
+        if dq[0] &lt;= i - k:
+            dq.popleft()
+        if i &gt;= k - 1:
+            res.append(arr[dq[0]])
+    return res
+</code></pre>
+
+
+**Lesson**: the "monotonic deque" is an advanced sliding window variant. Guarantees O(n) even for problems that seem to need O(nk).
+</details>
+
+<h3 id="exercise-1211-fruit-into-baskets-medium">Exercise 12.11 — Fruit Into Baskets <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Array of fruit types. You have 2 baskets (1 type per basket). Max amount collectable.</p>
+<details><summary>Solution</summary>
+
+Reducible to "longest substring with at most 2 distinct chars". See exercise 3.9.
+</details>
+
+<h3 id="exercise-1212-subarrays-with-k-different-integers-hard">Exercise 12.12 — Subarrays with K Different Integers <span class="problem-tag hard">HARD</span></h3>
+<p>Count subarrays with exactly k distinct integers.</p>
+<details><summary>Reasoning (important)</summary>
+
+**Problem**: "exactly k distinct" is hard directly. But:
+
+`exactly(k) = atMost(k) - atMost(k-1)`
+
+That is: subarrays with at most k distinct minus those with at most k-1 distinct = those with exactly k.
+
+`atMost(k)` is classic sliding window.
+
+
+<pre><code class="language-python">def subarrays_k_distinct(arr, k):
+    def at_most(k):
+        cnt = {}
+        l = res = 0
+        for r, x in enumerate(arr):
+            cnt[x] = cnt.get(x, 0) + 1
+            while len(cnt) &gt; k:
+                cnt[arr[l]] -= 1
+                if cnt[arr[l]] == 0:
+                    del cnt[arr[l]]
+                l += 1
+            res += r - l + 1   # all subarrays ending at r
+        return res
+    return at_most(k) - at_most(k - 1)
+</code></pre>
+
+
+**Precious technique**: "exactly X" = "atMost(X) - atMost(X-1)". Reused in tons of problems.
+
+**Why `res += r - l + 1`**? The number of valid subarrays ending at `r` is `r - l + 1` (all with left ∈ [l, r]).
+</details>
+
+<h2 id="chapter-summary">Chapter summary</h2>
+<ol>
+<li><strong>Two pointers</strong>: two coordinated indices. Works if you have monotonicity/sorting.</li>
+<li><strong>Sliding window</strong>: window <code>[l, r]</code>. Expand right, contract left when invariant violated.</li>
+<li><strong>Always justify "why I move this pointer"</strong>. It's the heart of the technique.</li>
+<li><strong>Window state</strong>: Counter, dict, sum, set. Updatable in O(1) entering/exiting.</li>
+<li><strong>3 window types</strong>: fixed-size, longest, shortest covering.</li>
+<li><strong>Advanced tricks</strong>: monotonic deque (O(n) for max in window), "exactly = atMost(k) - atMost(k-1)".</li>
+</ol>
+<p>When these two patterns come naturally to you, much of the "easy" problems become really easy.</p>
+      <nav class="pager">
+<a href="11-sorting-searching.html" class="prev"><span class="label">← Previous</span><span class="title">Sorting and searching</span></a>
+<a href="13-greedy.html" class="next"><span class="label">Next →</span><span class="title">Greedy</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>FAANG Prep</strong> — complete prep path: DS&amp;A, system design, behavioral. Built to crush Big Tech interviews.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-index.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true,
+      background: '#161922',
+      primaryColor: '#1d2230',
+      primaryTextColor: '#e6e8ee',
+      primaryBorderColor: '#6cf',
+      lineColor: '#7a8194',
+      secondaryColor: '#262b3a',
+      tertiaryColor: '#0f1117',
+      mainBkg: '#1d2230',
+      secondBkg: '#262b3a',
+      tertiaryBkg: '#161922',
+      nodeBorder: '#6cf',
+      clusterBkg: '#161922',
+      clusterBorder: '#262b3a',
+      titleColor: '#6cf',
+      edgeLabelBackground: '#161922',
+      fontFamily: 'Cascadia Code, monospace'
+    }
+  });
+  document.querySelectorAll('pre > code.language-mermaid').forEach((codeEl) => {
+    const pre = codeEl.parentElement;
+    const div = document.createElement('div');
+    div.className = 'mermaid';
+    div.textContent = codeEl.textContent;
+    pre.replaceWith(div);
+  });
+  mermaid.run();
+</script>
+</body>
+</html>

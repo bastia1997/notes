@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Python per data science: setup professionale — Data Science Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#3a4a7a',primaryTextColor:'#e8eef0',primaryBorderColor:'#5a6aa0',lineColor:'#8a9499',background:'#11171a'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">Σ</div>
+      <div>
+        <div class="brand-title">DATA SCIENCE</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">🇮🇹 IT</span><a href="../en/pages/02-python-for-data-science.html" class="lang-link" title="Switch to English">🇬🇧 EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-cos-e-data-science.html" class=""><span class="num">01</span>Cos&#x27;è la data science (e cosa non è)</a></li><li class="nav-item"><a href="../pages/02-python-per-data-science.html" class="active"><span class="num">02</span>Python per data science: setup professionale</a></li><li class="nav-item"><a href="../pages/02b-matematica-essenziale.html" class=""><span class="num">02b</span>Matematica del liceo che ti serve davvero</a></li><li class="nav-item"><a href="../pages/03-algebra-lineare.html" class=""><span class="num">03</span>Algebra lineare per data scientist</a></li><li class="nav-item"><a href="../pages/04-calcolo-ottimizzazione.html" class=""><span class="num">04</span>Calcolo, gradiente e ottimizzazione</a></li><li class="nav-item"><a href="../pages/05-probabilita.html" class=""><span class="num">05</span>Probabilità: la lingua dell&#x27;incertezza</a></li><li class="nav-item"><a href="../pages/06-statistica-descrittiva.html" class=""><span class="num">06</span>Statistica descrittiva</a></li><li class="nav-item"><a href="../pages/07-statistica-inferenziale.html" class=""><span class="num">07</span>Statistica inferenziale e test di ipotesi</a></li><li class="nav-item"><a href="../pages/08-distribuzioni.html" class=""><span class="num">08</span>Distribuzioni di probabilità che incontrerai</a></li><li class="nav-item"><a href="../pages/09-numpy.html" class=""><span class="num">09</span>NumPy: pensare in array</a></li><li class="nav-item"><a href="../pages/10-pandas.html" class=""><span class="num">10</span>Pandas: il coltellino svizzero</a></li><li class="nav-item"><a href="../pages/11-sql.html" class=""><span class="num">11</span>SQL per data scientist</a></li><li class="nav-item"><a href="../pages/12-visualizzazione.html" class=""><span class="num">12</span>Visualizzazione: matplotlib, seaborn, plotly</a></li><li class="nav-item"><a href="../pages/13-data-wrangling.html" class=""><span class="num">13</span>Pulizia e data wrangling</a></li><li class="nav-item"><a href="../pages/14-feature-engineering.html" class=""><span class="num">14</span>Feature engineering</a></li><li class="nav-item"><a href="../pages/15-eda.html" class=""><span class="num">15</span>EDA: Exploratory Data Analysis</a></li><li class="nav-item"><a href="../pages/16-ml-fondamenti.html" class=""><span class="num">16</span>ML: fondamenti — bias, varianza, validazione</a></li><li class="nav-item"><a href="../pages/17-regressione-lineare.html" class=""><span class="num">17</span>Regressione lineare e regolarizzazione</a></li><li class="nav-item"><a href="../pages/18-regressione-logistica.html" class=""><span class="num">18</span>Regressione logistica e classificazione</a></li><li class="nav-item"><a href="../pages/19-knn-naive-bayes-svm.html" class=""><span class="num">19</span>KNN, Naive Bayes, SVM</a></li><li class="nav-item"><a href="../pages/20-alberi-decisionali.html" class=""><span class="num">20</span>Alberi decisionali</a></li><li class="nav-item"><a href="../pages/21-random-forest-boosting.html" class=""><span class="num">21</span>Random Forest, Gradient Boosting, XGBoost</a></li><li class="nav-item"><a href="../pages/22-clustering.html" class=""><span class="num">22</span>Clustering: K-Means, DBSCAN, GMM, gerarchico</a></li><li class="nav-item"><a href="../pages/23-pca-tsne-umap.html" class=""><span class="num">23</span>Riduzione dimensionale: PCA, t-SNE, UMAP</a></li><li class="nav-item"><a href="../pages/24-metriche-validazione.html" class=""><span class="num">24</span>Metriche, cross-validation, leakage</a></li><li class="nav-item"><a href="../pages/25-sbilanciamento-classi.html" class=""><span class="num">25</span>Sbilanciamento di classi</a></li><li class="nav-item"><a href="../pages/26-hyperparameter-tuning.html" class=""><span class="num">26</span>Hyperparameter tuning</a></li><li class="nav-item"><a href="../pages/27-reti-neurali.html" class=""><span class="num">27</span>Reti neurali: dalle basi al backprop</a></li><li class="nav-item"><a href="../pages/28-pytorch.html" class=""><span class="num">28</span>PyTorch: dal toy model al training loop</a></li><li class="nav-item"><a href="../pages/29-cnn.html" class=""><span class="num">29</span>CNN per computer vision</a></li><li class="nav-item"><a href="../pages/30-rnn-lstm.html" class=""><span class="num">30</span>RNN, LSTM, GRU per sequenze</a></li><li class="nav-item"><a href="../pages/31-transformer.html" class=""><span class="num">31</span>Transformer e attention</a></li><li class="nav-item"><a href="../pages/32-nlp-llm.html" class=""><span class="num">32</span>NLP: dal text mining ai LLM</a></li><li class="nav-item"><a href="../pages/33-time-series.html" class=""><span class="num">33</span>Time series e forecasting</a></li><li class="nav-item"><a href="../pages/34-mlops.html" class=""><span class="num">34</span>MLOps: deployment, monitoring, drift</a></li><li class="nav-item"><a href="../pages/35-bayesian-causal.html" class=""><span class="num">35</span>Inferenza bayesiana e causale</a></li><li class="nav-item"><a href="../pages/36-capstone-carriera.html" class=""><span class="num">36</span>Capstone, portfolio, carriera</a></li><li class="nav-item"><a href="../pages/37-glossario.html" class=""><span class="num">37</span>Glossario A-Z</a></li><li class="nav-item"><a href="../pages/38-formulario.html" class=""><span class="num">38</span>Formulario: tutte le formule del percorso</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Fondamenti</span>
+        <span>Sezione 2 di 39</span>
+        <span class="level-tag level-beg">Livello: principiante</span>
+      </div>
+      <h1>Python per data science: setup professionale</h1>
+      <p class="summary">Ambienti virtuali, gestione dipendenze, Jupyter vs script, decoratori e iteratori, gli idiomi che ti distinguono da un principiante.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Fondamenti</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>saper installare un programma</li><li>concetti base di programmazione (variabili, if, for)</li></ul>
+  <div class="label">Strumenti</div>
+  <ul class="source-list"><li>Python 3.11+</li><li>uv (o conda)</li><li>Jupyter Lab</li><li>VS Code</li></ul>
+</div>
+      <h2 id="perche-python-e-non-r-julia-scala">Perché Python (e non R, Julia, Scala)</h2>
+<p>Risposta breve: l'ecosistema. NumPy/SciPy/Pandas + scikit-learn + PyTorch/TensorFlow + Hugging Face è la combinazione più potente al mondo per ML applicato, e tutto parla Python.</p>
+<table>
+<thead>
+<tr>
+<th>Linguaggio</th>
+<th>Punto forte</th>
+<th>Quando ha senso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Python</strong></td>
+<td>Ecosistema gigantesco, generalista</td>
+<td>Quasi sempre</td>
+</tr>
+<tr>
+<td><strong>R</strong></td>
+<td>Statistica avanzata, grafica (ggplot2)</td>
+<td>Ricerca, biostatistica, accademia</td>
+</tr>
+<tr>
+<td><strong>Julia</strong></td>
+<td>Velocità (compilato JIT), sintassi matematica</td>
+<td>Calcolo scientifico pesante</td>
+</tr>
+<tr>
+<td><strong>Scala/Spark</strong></td>
+<td>Big data distribuito</td>
+<td>Pipeline su cluster</td>
+</tr>
+<tr>
+<td><strong>SQL</strong></td>
+<td>Manipolazione dati relazionali</td>
+<td>Sempre, in parallelo a Python</td>
+</tr>
+</tbody>
+</table>
+<p>Imparerai Python + SQL. Punto.</p>
+<h2 id="setup-la-versione-professionale">Setup: la versione professionale</h2>
+<h3 id="step-1-python-311-via-uv-o-conda">Step 1 — Python 3.11+ via uv (o conda)</h3>
+<p><strong>uv</strong> è il package manager moderno scritto in Rust (Astral, 2024). 10–100× più veloce di pip. Lo userai per gestire ambienti.</p>
+<pre><code class="language-bash"># Windows (PowerShell)
+powershell -ExecutionPolicy ByPass -c &quot;irm https://astral.sh/uv/install.ps1 | iex&quot;
+
+# macOS / Linux
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Verifica
+uv --version
+</code></pre>
+<p>Alternativa storica: <strong>conda / miniconda</strong>, se preferisci il classico (più lento ma più diffuso in università).</p>
+<h3 id="step-2-un-progetto-pulito">Step 2 — Un progetto pulito</h3>
+<p>Mai installare pacchetti nell'ambiente Python di sistema. <strong>Mai.</strong> Crea un ambiente per progetto:</p>
+<pre><code class="language-bash">mkdir mio-progetto-ds
+cd mio-progetto-ds
+uv venv --python 3.11
+source .venv/bin/activate    # Linux/macOS
+.venv\Scripts\activate       # Windows
+</code></pre>
+<p>Installa lo stack base:</p>
+<pre><code class="language-bash">uv pip install numpy pandas scikit-learn matplotlib seaborn jupyterlab ipykernel
+</code></pre>
+<h3 id="step-3-versionare-le-dipendenze">Step 3 — Versionare le dipendenze</h3>
+<p>Crea un <code>pyproject.toml</code> (moderno) o <code>requirements.txt</code> (classico):</p>
+<pre><code class="language-toml"># pyproject.toml
+[project]
+name = &quot;mio-progetto&quot;
+version = &quot;0.1.0&quot;
+requires-python = &quot;&gt;=3.11&quot;
+dependencies = [
+    &quot;numpy&gt;=1.26&quot;,
+    &quot;pandas&gt;=2.1&quot;,
+    &quot;scikit-learn&gt;=1.4&quot;,
+    &quot;matplotlib&gt;=3.8&quot;,
+    &quot;seaborn&gt;=0.13&quot;,
+    &quot;jupyterlab&gt;=4.0&quot;,
+]
+</code></pre>
+<p>Poi <code>uv sync</code> ricrea l'ambiente identico ovunque. Non commettere mai <code>.venv/</code>. Aggiungi al <code>.gitignore</code>:</p>
+<pre><code class="language-gitignore">.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.DS_Store
+data/raw/         # dati grezzi NON in git
+*.csv             # se sono &gt; 50MB
+.env              # secret
+</code></pre>
+<h2 id="jupyter-vs-script-quando-usare-cosa">Jupyter vs script: quando usare cosa</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Jupyter / Colab</th>
+<th>Script (.py)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Esplorazione iniziale</strong></td>
+<td>✅ ottimo</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>Visualizzazione</strong></td>
+<td>✅ inline</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>Codice riusabile</strong></td>
+<td>❌ caos</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>Test / CI</strong></td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>Pipeline produzione</strong></td>
+<td>❌ MAI</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>Insegnamento</strong></td>
+<td>✅</td>
+<td>⚠️</td>
+</tr>
+</tbody>
+</table>
+<p>Regola operativa: <strong>Jupyter per esplorare, script per riusare</strong>. Quando una cella in notebook fa qualcosa di utile, refactorala in una funzione in un <code>.py</code> e importala. Notebook eterni con 50 celle disordinate sono il peccato originale del DS junior.</p>
+<h2 id="sintassi-python-che-devi-padroneggiare">Sintassi Python che devi padroneggiare</h2>
+<h3 id="comprensioni-di-listedizionariset">Comprensioni di liste/dizionari/set</h3>
+<pre><code class="language-python">quadrati = [x**2 for x in range(10)]
+pari = [x for x in range(20) if x % 2 == 0]
+mappa = {nome: len(nome) for nome in [&quot;alice&quot;, &quot;bob&quot;, &quot;claire&quot;]}
+unici = {x % 7 for x in range(100)}
+</code></pre>
+<p>Sono più veloci dei <code>for</code> loop equivalenti e Pythonic. <strong>Non abusarne</strong>: una comprehension annidata su 3 livelli è meno leggibile di un for.</p>
+<h3 id="unpacking-e-starred-expressions">Unpacking e starred expressions</h3>
+<pre><code class="language-python">a, b, c = [1, 2, 3]
+first, *rest = [1, 2, 3, 4, 5]      # first=1, rest=[2,3,4,5]
+*init, last = [1, 2, 3, 4, 5]       # init=[1,2,3,4], last=5
+a, b = b, a                          # swap senza temp
+
+def f(**kwargs):
+    print(kwargs)
+f(**{&quot;x&quot;: 1, &quot;y&quot;: 2})                # x=1, y=2
+
+# unione di dict (3.9+)
+a = {&quot;x&quot;: 1}; b = {&quot;y&quot;: 2}
+c = a | b                            # {&quot;x&quot;: 1, &quot;y&quot;: 2}
+</code></pre>
+<h3 id="f-string-con-format-spec">f-string con format spec</h3>
+<pre><code class="language-python">x = 3.14159
+print(f&quot;{x:.2f}&quot;)        # 3.14
+print(f&quot;{x:&gt;10.3f}&quot;)     # padding a destra
+print(f&quot;{x:.2%}&quot;)        # percentuale: 314.16%
+print(f&quot;{1234567:,}&quot;)    # 1,234,567 (separatori)
+print(f&quot;{0.001:e}&quot;)      # 1.000000e-03 (scientifica)
+print(f&quot;{x=}&quot;)           # debug: 'x=3.14159' (3.8+)
+</code></pre>
+<h3 id="funzioni-argomenti-type-hints-args-kwargs">Funzioni: argomenti, type hints, <em>args / </em>*kwargs</h3>
+<pre><code class="language-python">from typing import Optional
+
+def predict(
+    model,
+    X,
+    threshold: float = 0.5,
+    *,                              # tutto dopo è keyword-only
+    return_proba: bool = False,
+    feature_names: Optional[list] = None,
+) -&gt; &quot;np.ndarray&quot;:
+    ...
+</code></pre>
+<p><strong>Linee guida</strong>:</p>
+<ul>
+<li>Type hints obbligatori in codice di produzione, consigliati ovunque.</li>
+<li>Argomenti default <strong>mai mutabili</strong> (no <code>def f(x=[])</code>): condivisi tra chiamate, sorgente infinito di bug.</li>
+<li>Keyword-only (dopo <code>*</code>) per booleani: <code>predict(X, return_proba=True)</code> è più chiaro di <code>predict(X, True)</code>.</li>
+</ul>
+<h3 id="iteratori-e-generatori">Iteratori e generatori</h3>
+<pre><code class="language-python"># generatore (memory-friendly)
+def primi_n(n):
+    for i in range(2, n):
+        if all(i % j != 0 for j in range(2, int(i**0.5)+1)):
+            yield i
+
+# uso
+list(primi_n(50))
+# o streaming:
+for p in primi_n(1_000_000):
+    if p &gt; 100: break
+</code></pre>
+<p><code>itertools</code> è una miniera d'oro. Almeno questi:</p>
+<pre><code class="language-python">from itertools import chain, combinations, permutations, product, groupby, accumulate
+
+list(chain([1,2], [3,4]))                # [1, 2, 3, 4]
+list(combinations([1,2,3], 2))           # [(1,2), (1,3), (2,3)]
+list(product([0,1], repeat=3))           # tutti i 8 vettori binari di lunghezza 3
+list(accumulate([1,2,3,4]))              # [1, 3, 6, 10]  (somma cumulativa)
+</code></pre>
+<h3 id="decoratori-almeno-questi-3">Decoratori (almeno questi 3)</h3>
+<pre><code class="language-python">from functools import lru_cache, wraps
+import time
+
+@lru_cache(maxsize=128)
+def fib(n):
+    return n if n &lt; 2 else fib(n-1) + fib(n-2)
+
+def timeit(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        t0 = time.perf_counter()
+        r = func(*args, **kwargs)
+        print(f&quot;{func.__name__}: {time.perf_counter()-t0:.3f}s&quot;)
+        return r
+    return wrapper
+
+@timeit
+def somma_quadrati(n):
+    return sum(i*i for i in range(n))
+</code></pre>
+<h3 id="context-manager">Context manager</h3>
+<pre><code class="language-python">with open(&quot;data.csv&quot;) as f:
+    data = f.read()
+# il file è chiuso anche se c'è un'eccezione
+
+# scriviti il tuo:
+from contextlib import contextmanager
+@contextmanager
+def cronometro(nome):
+    t = time.perf_counter()
+    yield
+    print(f&quot;{nome}: {time.perf_counter()-t:.2f}s&quot;)
+
+with cronometro(&quot;training&quot;):
+    model.fit(X, y)
+</code></pre>
+<h2 id="anti-pattern-frequenti-nei-junior">Anti-pattern frequenti nei junior</h2>
+<table>
+<thead>
+<tr>
+<th>Anti-pattern</th>
+<th>Perché è male</th>
+<th>Cosa fare</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>df = df.append(row)</code> in un loop</td>
+<td>O(n²), terribile</td>
+<td>accumulare in lista e <code>pd.DataFrame()</code></td>
+</tr>
+<tr>
+<td><code>for i in range(len(lst))</code></td>
+<td>non Pythonic</td>
+<td><code>for x in lst</code> o <code>for i, x in enumerate(lst)</code></td>
+</tr>
+<tr>
+<td>Eccezioni catch-all <code>except:</code></td>
+<td>mangia anche <code>KeyboardInterrupt</code></td>
+<td><code>except SpecificError as e:</code></td>
+</tr>
+<tr>
+<td>Path con stringhe e <code>+</code></td>
+<td>rotto su Windows</td>
+<td><code>from pathlib import Path</code></td>
+</tr>
+<tr>
+<td><code>import *</code></td>
+<td>namespace inquinato</td>
+<td><code>from x import y, z</code></td>
+</tr>
+<tr>
+<td>Notebook ordinati alla buona</td>
+<td>irriproducibile</td>
+<td>celle che girano top→bottom, sempre</td>
+</tr>
+</tbody>
+</table>
+<h2 id="strumenti-che-voglio-nel-tuo-workflow">Strumenti che voglio nel tuo workflow</h2>
+<ol>
+<li><strong>black</strong> o <strong>ruff format</strong> — formatta il codice automaticamente. Niente più discussioni.</li>
+<li><strong>ruff</strong> — linter velocissimo (sostituisce flake8 + isort + pyupgrade).</li>
+<li><strong>mypy</strong> o <strong>pyright</strong> — type checker statico, opzionale ma molto utile.</li>
+<li><strong>pytest</strong> — testing.</li>
+<li><strong>pre-commit</strong> — esegue tutto al commit, così non ti dimentichi.</li>
+</ol>
+<p>Installa il minimo indispensabile:</p>
+<pre><code class="language-bash">uv pip install ruff pytest pre-commit
+</code></pre>
+<p>E un <code>.pre-commit-config.yaml</code> minimal:</p>
+<pre><code class="language-yaml">repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.4.0
+    hooks:
+      - id: ruff
+      - id: ruff-format
+</code></pre>
+<p><code>pre-commit install</code> e ogni commit verrà ripulito automaticamente.</p>
+<h2 id="vs-code-le-4-estensioni-essenziali">VS Code, le 4 estensioni essenziali</h2>
+<ol>
+<li><strong>Python</strong> (Microsoft)</li>
+<li><strong>Jupyter</strong> (Microsoft) — esegue notebook nell'editor</li>
+<li><strong>Pylance</strong> — type checking</li>
+<li><strong>Ruff</strong> (Astral)</li>
+</ol>
+<p>Bonus: <strong>Data Wrangler</strong> per esplorare DataFrame visualmente.</p>
+<h2 id="esercizi">Esercizi</h2>
+<details>
+<summary>Esercizio 1 — Setup completo da zero</summary>
+
+Su un PC pulito (o in una nuova cartella):
+
+1. Installa uv.
+2. Crea progetto `pratica-ds`, ambiente Python 3.11.
+3. Installa `numpy pandas scikit-learn matplotlib jupyterlab`.
+4. Lancia `jupyter lab`.
+5. Crea un notebook che importa numpy e stampa `np.random.randn(5)`.
+6. Esce, riattiva l'ambiente, ricostruiscilo da `pyproject.toml`.
+
+Se tutti i passi funzionano senza Googlare, sei pronto.
+</details>
+
+<details>
+<summary>Esercizio 2 — Refactor anti-pattern</summary>
+
+Trasforma questo codice in versione Pythonic:
+
+
+<pre><code class="language-python">result = []
+for i in range(len(numeri)):
+    if numeri[i] &gt; 0:
+        result.append(numeri[i] * 2)
+</code></pre>
+
+
+**Soluzione:**
+
+<pre><code class="language-python">result = [n * 2 for n in numeri if n &gt; 0]
+</code></pre>
+
+
+Una riga, più veloce, più leggibile.
+</details>
+
+<details>
+<summary>Esercizio 3 — Generatore di Fibonacci infinito</summary>
+
+Scrivi un generatore che produca Fibonacci all'infinito. Usalo per stampare il 1000-esimo termine.
+
+
+<pre><code class="language-python">def fib_inf():
+    a, b = 0, 1
+    while True:
+        yield a
+        a, b = b, a + b
+
+from itertools import islice
+print(next(islice(fib_inf(), 1000, 1001)))
+</code></pre>
+
+
+Domanda di follow-up: `fib_inf()` calcola tutti i numeri prima del 1000-esimo, o si ferma al bisogno? (Risposta: si ferma al bisogno — è proprio lo scopo dei generatori.)
+</details>
+
+<details>
+<summary>Esercizio 4 — Decoratore che logga input e output</summary>
+
+Scrivi un decoratore `@log_io` che stampa argomenti e valore di ritorno di una funzione:
+
+
+<pre><code class="language-python">@log_io
+def somma(a, b):
+    return a + b
+
+somma(2, 3)
+# Output:
+# somma(2, 3) → 5
+</code></pre>
+
+
+**Soluzione:**
+
+<pre><code class="language-python">from functools import wraps
+def log_io(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        all_args = &quot;, &quot;.join(
+            [repr(a) for a in args] +
+            [f&quot;{k}={v!r}&quot; for k, v in kwargs.items()]
+        )
+        result = func(*args, **kwargs)
+        print(f&quot;{func.__name__}({all_args}) → {result!r}&quot;)
+        return result
+    return wrapper
+</code></pre>
+
+</details>
+
+<details>
+<summary>Esercizio 5 — Lettura file di grandi dimensioni</summary>
+
+Hai un file `access.log` da 5 GB. Devi contare quante righe contengono `"ERROR"`. **Non puoi** caricarlo in memoria. Soluzione?
+
+
+<pre><code class="language-python">with open(&quot;access.log&quot;) as f:
+    n = sum(1 for line in f if &quot;ERROR&quot; in line)
+print(n)
+</code></pre>
+
+
+Perché funziona: `open()` restituisce un iteratore riga-per-riga. La generator expression scorre senza materializzare in lista.
+</details>
+
+<h2 id="cosa-portarti-via">Cosa portarti via</h2>
+<ul>
+<li><strong>Mai</strong> scrivere in Python di sistema. Sempre venv/conda per progetto.</li>
+<li><strong>Type hints + ruff format</strong>: la differenza visibile tra junior e senior.</li>
+<li><strong>Comprensione di iteratori / generatori</strong>: la chiave per gestire dati grossi senza fare boom RAM.</li>
+<li><strong>Notebook per esplorare, script per produrre</strong>.</li>
+</ul>
+<h2 id="letture-consigliate">Letture consigliate</h2>
+<ul>
+<li><strong>Luciano Ramalho</strong> — "Fluent Python" (2ª ed.): se vuoi diventare davvero forte in Python, è il libro.</li>
+<li><strong>Brett Slatkin</strong> — "Effective Python": 90 ricette da senior.</li>
+<li>Documentazione ufficiale di <code>itertools</code>, <code>functools</code>, <code>collections</code>. Leggile.</li>
+</ul>
+<p>Nella prossima sezione: matematica. Algebra lineare resa masticabile.</p>
+      <nav class="pager">
+<a href="01-cos-e-data-science.html" class="prev"><span class="label">← Precedente</span><span class="title">Cos&#x27;è la data science (e cosa non è)</span></a>
+<a href="02b-matematica-essenziale.html" class="next"><span class="label">Successivo →</span><span class="title">Matematica del liceo che ti serve davvero</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Data Science Zero to Hero</strong> — percorso completo, in italiano, dalla matematica al deployment.</p><p>Materiale didattico aperto. Le formule sono lì per essere capite, non temute. Quando un concetto è oscuro, torna indietro: la data science è una piramide, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Linear algebra for data scientists — Data Science Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#3a4a7a',primaryTextColor:'#e8eef0',primaryBorderColor:'#5a6aa0',lineColor:'#8a9499',background:'#11171a'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">Σ</div>
+      <div>
+        <div class="brand-title">DATA SCIENCE</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/03-algebra-lineare.html" class="lang-link" title="Passa all'italiano">🇮🇹 IT</a><span class="lang-active" title="English">🇬🇧 EN</span></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="search... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-what-is-data-science.html" class=""><span class="num">01</span>What is data science (and what isn&#x27;t)</a></li><li class="nav-item"><a href="../pages/02-python-for-data-science.html" class=""><span class="num">02</span>Python for data science: pro setup</a></li><li class="nav-item"><a href="../pages/02b-math-essentials.html" class=""><span class="num">02b</span>High-school math you actually need</a></li><li class="nav-item"><a href="../pages/03-linear-algebra.html" class="active"><span class="num">03</span>Linear algebra for data scientists</a></li><li class="nav-item"><a href="../pages/04-calculus-optimization.html" class=""><span class="num">04</span>Calculus, gradients, and optimization</a></li><li class="nav-item"><a href="../pages/05-probability.html" class=""><span class="num">05</span>Probability: the language of uncertainty</a></li><li class="nav-item"><a href="../pages/06-descriptive-statistics.html" class=""><span class="num">06</span>Descriptive statistics</a></li><li class="nav-item"><a href="../pages/07-inferential-statistics.html" class=""><span class="num">07</span>Inferential statistics and hypothesis testing</a></li><li class="nav-item"><a href="../pages/08-distributions.html" class=""><span class="num">08</span>Probability distributions you&#x27;ll meet</a></li><li class="nav-item"><a href="../pages/09-numpy.html" class=""><span class="num">09</span>NumPy: thinking in arrays</a></li><li class="nav-item"><a href="../pages/10-pandas.html" class=""><span class="num">10</span>Pandas: the swiss army knife</a></li><li class="nav-item"><a href="../pages/11-sql.html" class=""><span class="num">11</span>SQL for data scientists</a></li><li class="nav-item"><a href="../pages/12-visualization.html" class=""><span class="num">12</span>Visualization: matplotlib, seaborn, plotly</a></li><li class="nav-item"><a href="../pages/13-data-wrangling.html" class=""><span class="num">13</span>Cleaning and data wrangling</a></li><li class="nav-item"><a href="../pages/14-feature-engineering.html" class=""><span class="num">14</span>Feature engineering</a></li><li class="nav-item"><a href="../pages/15-eda.html" class=""><span class="num">15</span>EDA: Exploratory Data Analysis</a></li><li class="nav-item"><a href="../pages/16-ml-fundamentals.html" class=""><span class="num">16</span>ML: fundamentals — bias, variance, validation</a></li><li class="nav-item"><a href="../pages/17-linear-regression.html" class=""><span class="num">17</span>Linear regression and regularization</a></li><li class="nav-item"><a href="../pages/18-logistic-regression.html" class=""><span class="num">18</span>Logistic regression and classification</a></li><li class="nav-item"><a href="../pages/19-knn-naive-bayes-svm.html" class=""><span class="num">19</span>KNN, Naive Bayes, SVM</a></li><li class="nav-item"><a href="../pages/20-decision-trees.html" class=""><span class="num">20</span>Decision trees</a></li><li class="nav-item"><a href="../pages/21-random-forest-boosting.html" class=""><span class="num">21</span>Random Forest, Gradient Boosting, XGBoost</a></li><li class="nav-item"><a href="../pages/22-clustering.html" class=""><span class="num">22</span>Clustering: K-Means, DBSCAN, GMM, hierarchical</a></li><li class="nav-item"><a href="../pages/23-pca-tsne-umap.html" class=""><span class="num">23</span>Dimensionality reduction: PCA, t-SNE, UMAP</a></li><li class="nav-item"><a href="../pages/24-metrics-validation.html" class=""><span class="num">24</span>Metrics, cross-validation, leakage</a></li><li class="nav-item"><a href="../pages/25-class-imbalance.html" class=""><span class="num">25</span>Class imbalance</a></li><li class="nav-item"><a href="../pages/26-hyperparameter-tuning.html" class=""><span class="num">26</span>Hyperparameter tuning</a></li><li class="nav-item"><a href="../pages/27-neural-networks.html" class=""><span class="num">27</span>Neural networks: from fundamentals to backprop</a></li><li class="nav-item"><a href="../pages/28-pytorch.html" class=""><span class="num">28</span>PyTorch: from toy model to training loop</a></li><li class="nav-item"><a href="../pages/29-cnn.html" class=""><span class="num">29</span>CNN for computer vision</a></li><li class="nav-item"><a href="../pages/30-rnn-lstm.html" class=""><span class="num">30</span>RNN, LSTM, GRU for sequences</a></li><li class="nav-item"><a href="../pages/31-transformer.html" class=""><span class="num">31</span>Transformer and attention</a></li><li class="nav-item"><a href="../pages/32-nlp-llm.html" class=""><span class="num">32</span>NLP: from text mining to LLMs</a></li><li class="nav-item"><a href="../pages/33-time-series.html" class=""><span class="num">33</span>Time series and forecasting</a></li><li class="nav-item"><a href="../pages/34-mlops.html" class=""><span class="num">34</span>MLOps: deployment, monitoring, drift</a></li><li class="nav-item"><a href="../pages/35-bayesian-causal.html" class=""><span class="num">35</span>Bayesian and Causal Inference</a></li><li class="nav-item"><a href="../pages/36-capstone-career.html" class=""><span class="num">36</span>Capstone, portfolio, career</a></li><li class="nav-item"><a href="../pages/37-glossary.html" class=""><span class="num">37</span>Glossary A-Z</a></li><li class="nav-item"><a href="../pages/38-formula-sheet.html" class=""><span class="num">38</span>Formula Sheet: all the formulas from the course</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Mathematics</span>
+        <span>Section 4 of 39</span>
+        <span class="level-tag level-int">Level: intermediate</span>
+      </div>
+      <h1>Linear algebra for data scientists</h1>
+      <p class="summary">Vectors, matrices, dot products, norms, eigenvalues. Without linear algebra PCA, regression, NN, embeddings are black boxes — here we open the box.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Mathematics</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>high-school math (2D vectors, linear systems)</li></ul>
+  <div class="label">Tools</div>
+  <ul class="source-list"><li>paper + pencil</li><li>NumPy for verification</li></ul>
+</div>
+      <h2 id="why-you-really-need-it">Why you really need it</h2>
+<p>Data in ML is <strong>always</strong> matrices: $n$ rows (observations), $p$ columns (features). Every operation on this data — projecting, rotating, compressing, classifying — is linear algebra. Without it, scikit-learn is a black box.</p>
+<p>Concepts that need linear algebra directly:</p>
+<ul>
+<li><strong>PCA</strong> (eigenvalues of the covariance matrix)</li>
+<li><strong>Linear regression</strong> (closed-form solution: $\hat{\beta} = (X^T X)^{-1} X^T y$)</li>
+<li><strong>Recommender systems</strong> (matrix factorization, SVD)</li>
+<li><strong>Neural networks</strong> (each layer is $y = W x + b$)</li>
+<li><strong>Embeddings</strong> (vectors in high-dimensional spaces)</li>
+<li><strong>Attention</strong> in Transformers (a "smart" matrix multiplication)</li>
+</ul>
+<h2 id="vectors">Vectors</h2>
+<p>A <strong>vector</strong> is an ordered list of numbers:</p>
+<p>$$\mathbf{v} = \begin{bmatrix} 3 \ -1 \ 2 \end{bmatrix} \in \mathbb{R}^3$$</p>
+<p>In ML, a vector typically represents <strong>one observation</strong>: e.g. a customer is $(age, income, spend, \dots) \in \mathbb{R}^p$ where $p$ is the number of features.</p>
+<h3 id="basic-operations">Basic operations</h3>
+<p><strong>Sum</strong>: component-wise.</p>
+<p>$$\begin{bmatrix} 1 \ 2 \ 3 \end{bmatrix} + \begin{bmatrix} 4 \ 5 \ 6 \end{bmatrix} = \begin{bmatrix} 5 \ 7 \ 9 \end{bmatrix}$$</p>
+<p><strong>Scalar product</strong>: multiplies each component.</p>
+<p>$$2 \cdot \begin{bmatrix} 1 \ 2 \ 3 \end{bmatrix} = \begin{bmatrix} 2 \ 4 \ 6 \end{bmatrix}$$</p>
+<h3 id="dot-product">Dot product</h3>
+<p>The <strong>heart</strong> of applied linear algebra. Definition:</p>
+<p>$$\mathbf{a} \cdot \mathbf{b} = \sum_{i=1}^{n} a_i b_i = a_1 b_1 + a_2 b_2 + \dots + a_n b_n$$</p>
+<p>Example: $(1, 2, 3) \cdot (4, 5, 6) = 4 + 10 + 18 = 32$.</p>
+<p><strong>Geometric interpretation</strong>:</p>
+<p>$$\mathbf{a} \cdot \mathbf{b} = |\mathbf{a}| |\mathbf{b}| \cos\theta$$</p>
+<p>where $\theta$ is the angle between vectors. Key consequences:</p>
+<ul>
+<li>If $\mathbf{a} \cdot \mathbf{b} = 0$, they are <strong>orthogonal</strong> (perpendicular).</li>
+<li>If $\mathbf{a} \cdot \mathbf{b} &gt; 0$, they point "in the same direction".</li>
+<li>It's the basis of <strong>cosine similarity</strong>: $\cos\theta = \frac{\mathbf{a} \cdot \mathbf{b}}{|\mathbf{a}| |\mathbf{b}|}$, used everywhere in NLP and recommenders.</li>
+</ul>
+<div class="chart"><svg viewBox="0 0 360 200" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#7aa2ff"/></marker><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#ffb347"/></marker></defs>
+<line x1="40" y1="170" x2="340" y2="170" stroke="#444" stroke-width="1"/>
+<line x1="40" y1="20" x2="40" y2="170" stroke="#444" stroke-width="1"/>
+<line x1="40" y1="170" x2="220" y2="50" stroke="#7aa2ff" stroke-width="2.5" marker-end="url(#ah)"/>
+<line x1="40" y1="170" x2="300" y2="110" stroke="#ffb347" stroke-width="2.5" marker-end="url(#ah2)"/>
+<path d="M 79 161 A 40 40 0 0 1 73 148" fill="none" stroke="#c084fc" stroke-width="2"/>
+<text x="92" y="152" fill="#c084fc" font-size="13">θ</text>
+<text x="225" y="42" fill="#7aa2ff" font-size="13">a</text>
+<text x="305" y="105" fill="#ffb347" font-size="13">b</text>
+</svg><div class="chart-caption">Two vectors in ℝ²: the dot product measures how aligned they are.</div></div>
+
+<h3 id="norms">Norms</h3>
+<p>The <strong>L2 norm</strong> (Euclidean length):</p>
+<p>$$|\mathbf{v}|_2 = \sqrt{\sum_i v_i^2}$$</p>
+<p>The <strong>L1 norm</strong> (sum of absolute values):</p>
+<p>$$|\mathbf{v}|_1 = \sum_i |v_i|$$</p>
+<p>In ML they appear as regularization: <strong>Ridge</strong> uses L2, <strong>Lasso</strong> uses L1 — we'll see why they produce different behavior (Lasso forces coefficients exactly to zero, Ridge shrinks them but rarely zeros them). It depends on the shape of the norm "ball":</p>
+<div class="chart"><svg viewBox="0 0 280 160" xmlns="http://www.w3.org/2000/svg">
+<g transform="translate(70,80)">
+  <line x1="-60" y1="0" x2="60" y2="0" stroke="#555"/>
+  <line x1="0" y1="-60" x2="0" y2="60" stroke="#555"/>
+  <polygon points="0,-50 50,0 0,50 -50,0" fill="rgba(255,179,71,0.18)" stroke="#ffb347" stroke-width="2"/>
+  <text x="-25" y="-65" fill="#ffb347" font-size="12">‖v‖₁=1</text>
+</g>
+<g transform="translate(210,80)">
+  <line x1="-60" y1="0" x2="60" y2="0" stroke="#555"/>
+  <line x1="0" y1="-60" x2="0" y2="60" stroke="#555"/>
+  <circle r="50" fill="rgba(122,162,255,0.18)" stroke="#7aa2ff" stroke-width="2"/>
+  <text x="-25" y="-65" fill="#7aa2ff" font-size="12">‖v‖₂=1</text>
+</g>
+</svg><div class="chart-caption">L1 unit ball (diamond) vs L2 (circle). Diamond corners force sparse solutions.</div></div>
+
+<h2 id="matrices">Matrices</h2>
+<p>A <strong>matrix</strong> $A \in \mathbb{R}^{m \times n}$ is a grid of numbers with $m$ rows and $n$ columns:</p>
+<p>$$A = \begin{bmatrix} 1 &amp; 2 &amp; 3 \ 4 &amp; 5 &amp; 6 \end{bmatrix} \in \mathbb{R}^{2 \times 3}$$</p>
+<p>In ML, a <strong>design matrix</strong> $X$ has shape $(n, p)$: $n$ observations, $p$ features. Each row is one example.</p>
+<h3 id="matrix-multiplication">Matrix multiplication</h3>
+<p>Rule: to multiply $A \cdot B$, the number of columns of $A$ must equal rows of $B$.</p>
+<p>$$A_{m \times k} \cdot B_{k \times n} = C_{m \times n}$$</p>
+<p>Element $C_{ij}$ is the dot product of row $i$ of $A$ with column $j$ of $B$:</p>
+<p>$$C_{ij} = \sum_{l=1}^{k} A_{il} B_{lj}$$</p>
+<p>Example:
+$$\begin{bmatrix} 1 &amp; 2 \ 3 &amp; 4 \end{bmatrix} \cdot \begin{bmatrix} 5 &amp; 6 \ 7 &amp; 8 \end{bmatrix} = \begin{bmatrix} 19 &amp; 22 \ 43 &amp; 50 \end{bmatrix}$$</p>
+<p>Computing $(1,1)$: $1 \cdot 5 + 2 \cdot 7 = 19$. <strong>Always verify by hand</strong> a small example — it's the only way to cement the intuition.</p>
+<blockquote>
+<p><strong>Beware</strong>: matrix multiplication <strong>is not commutative</strong>: $AB \neq BA$ in general.</p>
+</blockquote>
+<h3 id="identity-inverse-transpose">Identity, inverse, transpose</h3>
+<p><strong>Identity</strong> $I_n$: 1 on the diagonal, 0 elsewhere. $I A = A I = A$.</p>
+<p><strong>Transpose</strong> $A^T$: swap rows and columns. $(A^T)<em ji="ji">{ij} = A</em>$.</p>
+<p><strong>Inverse</strong> $A^{-1}$: exists only for <strong>square non-singular</strong> matrices, satisfies $A A^{-1} = I$.</p>
+<p>For $2 \times 2$:
+$$\begin{bmatrix} a &amp; b \ c &amp; d \end{bmatrix}^{-1} = \frac{1}{ad-bc} \begin{bmatrix} d &amp; -b \ -c &amp; a \end{bmatrix}$$</p>
+<p>where $ad - bc$ is the <strong>determinant</strong>. If zero, the matrix is singular and can't be inverted.</p>
+<blockquote>
+<p><strong>In practice you never compute the inverse by hand</strong> in ML. You solve a linear system with numerical methods (LU, QR, Cholesky). Computing the inverse to then multiply is unstable and slow.</p>
+</blockquote>
+<h3 id="matrix-rank">Matrix rank</h3>
+<p>The <strong>rank</strong> is the number of linearly independent rows (or columns). An $n \times p$ matrix has max rank $\min(n, p)$.</p>
+<ul>
+<li>If $X$ has <strong>collinear</strong> columns (e.g., two identical features), rank drops and $X^T X$ becomes singular → linear regression blows up.</li>
+<li>Fix: remove redundant features or use regularization (Ridge is immune).</li>
+</ul>
+<h2 id="linear-systems-and-regression">Linear systems and regression</h2>
+<p>The fundamental equation of half of ML:</p>
+<p>$$\mathbf{y} = X \boldsymbol{\beta} + \boldsymbol{\epsilon}$$</p>
+<p>where:
+- $\mathbf{y} \in \mathbb{R}^n$ — target
+- $X \in \mathbb{R}^{n \times p}$ — features
+- $\boldsymbol{\beta} \in \mathbb{R}^p$ — coefficients (what we want to find)
+- $\boldsymbol{\epsilon}$ — noise</p>
+<p><strong>Linear regression</strong> finds $\boldsymbol{\beta}$ minimizing $|\mathbf{y} - X\boldsymbol{\beta}|_2^2$. Closed-form solution (<strong>OLS — Ordinary Least Squares</strong>):</p>
+<p>$$\hat{\boldsymbol{\beta}} = (X^T X)^{-1} X^T \mathbf{y}$$</p>
+<p>This formula is <strong>the most important</strong> of the whole path. It will appear everywhere: kernel ridge, GLM, neural networks, Gaussian processes. You'll understand its derivation in the linear regression section.</p>
+<h2 id="eigenvalues-and-eigenvectors">Eigenvalues and eigenvectors</h2>
+<p>For a square matrix $A$, an <strong>eigenvector</strong> $\mathbf{v}$ and its <strong>eigenvalue</strong> $\lambda$ satisfy:</p>
+<p>$$A \mathbf{v} = \lambda \mathbf{v}$$</p>
+<p>Meaning: applying $A$ to $\mathbf{v}$ produces the same $\mathbf{v}$ scaled by $\lambda$. Geometrically, $\mathbf{v}$ is a "preferred direction" of the transformation.</p>
+<p><strong>Example</strong>: $A = \begin{bmatrix} 2 &amp; 0 \ 0 &amp; 3 \end{bmatrix}$. Eigenvectors: $(1,0)$ with $\lambda=2$, $(0,1)$ with $\lambda=3$.</p>
+<div class="chart"><svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ah3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#7aa2ff"/></marker><marker id="ah4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#ffb347"/></marker></defs>
+<g transform="translate(20,100)">
+  <line x1="0" y1="0" x2="280" y2="0" stroke="#444"/>
+  <line x1="140" y1="-90" x2="140" y2="90" stroke="#444"/>
+  <line x1="140" y1="0" x2="180" y2="0" stroke="#7aa2ff" stroke-width="3" marker-end="url(#ah3)"/>
+  <line x1="140" y1="0" x2="140" y2="-60" stroke="#ffb347" stroke-width="3" marker-end="url(#ah4)"/>
+  <text x="195" y="-4" fill="#7aa2ff" font-size="11">Av (λ=2)</text>
+  <text x="150" y="-65" fill="#ffb347" font-size="11">Av (λ=3)</text>
+  <line x1="140" y1="0" x2="160" y2="0" stroke="#7aa2ff" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <line x1="140" y1="0" x2="140" y2="-20" stroke="#ffb347" stroke-width="1.5" stroke-dasharray="3,2"/>
+</g>
+</svg><div class="chart-caption">A scales vectors along its principal directions (eigenvectors) by factors λ (eigenvalues).</div></div>
+
+<p><strong>Spectral decomposition</strong>: for a symmetric matrix $A$, you can write $A = Q \Lambda Q^T$ where $\Lambda$ is diagonal with eigenvalues and $Q$ has eigenvectors as columns. This is the key to <strong>PCA</strong>.</p>
+<h2 id="svd-the-swiss-army-knife">SVD: the Swiss army knife</h2>
+<p><strong>Singular Value Decomposition</strong> factors any matrix $A \in \mathbb{R}^{m \times n}$ as:</p>
+<p>$$A = U \Sigma V^T$$</p>
+<p>where:
+- $U \in \mathbb{R}^{m \times m}$, $V \in \mathbb{R}^{n \times n}$ orthogonal matrices (rotations)
+- $\Sigma \in \mathbb{R}^{m \times n}$ diagonal with <strong>singular values</strong> $\sigma_1 \geq \sigma_2 \geq \dots \geq 0$</p>
+<p>Interpretation: every linear transformation is a <strong>rotation + scaling + rotation</strong>.</p>
+<div class="chart"><svg viewBox="0 0 560 180" xmlns="http://www.w3.org/2000/svg">
+<g transform="translate(20,10)">
+  <text x="50" y="-2" fill="#8b949e" font-size="11" text-anchor="middle">unit circle</text>
+  <circle cx="50" cy="80" r="40" fill="rgba(122,162,255,0.12)" stroke="#7aa2ff" stroke-width="2"/>
+  <line x1="50" y1="80" x2="90" y2="80" stroke="#ffb347" stroke-width="2"/>
+  <line x1="50" y1="80" x2="50" y2="40" stroke="#5ee2c4" stroke-width="2"/>
+</g>
+<text x="135" y="95" fill="#c084fc" font-size="14">→ Vᵀ</text>
+<g transform="translate(160,10)">
+  <text x="50" y="-2" fill="#8b949e" font-size="11" text-anchor="middle">rotation</text>
+  <circle cx="50" cy="80" r="40" fill="rgba(122,162,255,0.12)" stroke="#7aa2ff" stroke-width="2"/>
+  <line x1="50" y1="80" x2="78" y2="52" stroke="#ffb347" stroke-width="2"/>
+  <line x1="50" y1="80" x2="78" y2="108" stroke="#5ee2c4" stroke-width="2"/>
+</g>
+<text x="275" y="95" fill="#c084fc" font-size="14">→ Σ</text>
+<g transform="translate(300,10)">
+  <text x="60" y="-2" fill="#8b949e" font-size="11" text-anchor="middle">scaling (ellipse)</text>
+  <ellipse cx="60" cy="80" rx="55" ry="25" fill="rgba(122,162,255,0.12)" stroke="#7aa2ff" stroke-width="2"/>
+  <line x1="60" y1="80" x2="98" y2="61" stroke="#ffb347" stroke-width="2"/>
+  <line x1="60" y1="80" x2="79" y2="98" stroke="#5ee2c4" stroke-width="2"/>
+</g>
+<text x="435" y="95" fill="#c084fc" font-size="14">→ U</text>
+<g transform="translate(460,10)">
+  <text x="50" y="-2" fill="#8b949e" font-size="11" text-anchor="middle">rotation</text>
+  <ellipse cx="50" cy="80" rx="55" ry="25" fill="rgba(122,162,255,0.12)" stroke="#7aa2ff" stroke-width="2" transform="rotate(-25 50 80)"/>
+  <line x1="50" y1="80" x2="80" y2="48" stroke="#ffb347" stroke-width="2"/>
+  <line x1="50" y1="80" x2="34" y2="100" stroke="#5ee2c4" stroke-width="2"/>
+</g>
+<text x="280" y="170" fill="#7aa2ff" font-size="11" text-anchor="middle">Arbitrary matrix = rotation → scaling (in 2 directions) → rotation.</text>
+</svg><div class="chart-caption">SVD decomposes ANY linear transformation into three simple operations. The σ values are the ellipse axes.</div></div>
+
+<p><strong>Applications</strong>:</p>
+<ul>
+<li><strong>PCA</strong>: top $k$ singular values capture the principal variance; truncating to $k$ compresses data.</li>
+<li><strong>Recommender systems</strong>: SVD of user×movie matrix factors into latent factors.</li>
+<li><strong>Pseudoinverse</strong> $A^+$: needed when $A$ is non-square or singular. Equals $V \Sigma^+ U^T$ where $\Sigma^+$ inverts non-zero singular values.</li>
+</ul>
+<h2 id="numpy-all-this-in-practice">NumPy: all this in practice</h2>
+<pre><code class="language-python">import numpy as np
+
+# vectors
+v = np.array([1, 2, 3])
+w = np.array([4, 5, 6])
+
+v + w                       # sum
+v * w                       # element-wise product
+v @ w                       # dot product → 32
+np.dot(v, w)                # equivalent
+np.linalg.norm(v)           # ||v||₂ = √14
+
+# matrices
+A = np.array([[1, 2], [3, 4]])
+B = np.array([[5, 6], [7, 8]])
+
+A @ B                       # matrix multiplication
+A * B                       # element-wise (NOT matrix mult!)
+A.T                         # transpose
+np.linalg.inv(A)            # inverse (rarely needed)
+np.linalg.det(A)            # determinant
+np.linalg.matrix_rank(A)    # rank
+
+# eigenvalues
+eigvals, eigvecs = np.linalg.eig(A)
+
+# SVD
+U, S, Vt = np.linalg.svd(A)
+
+# solve Ax = b (do NOT use inv)
+b = np.array([1, 2])
+x = np.linalg.solve(A, b)   # more stable than inv(A) @ b
+</code></pre>
+<blockquote>
+<p><strong>Golden rule</strong>: use <code>@</code> for matrix multiplication, <code>*</code> for element-wise. Never confuse them.</p>
+</blockquote>
+<h2 id="broadcasting-numpys-superpower">Broadcasting: NumPy's superpower</h2>
+<p>When you operate between arrays of different shapes, NumPy "stretches" them automatically:</p>
+<pre><code class="language-python">A = np.array([[1, 2, 3],
+              [4, 5, 6]])    # shape (2, 3)
+v = np.array([10, 20, 30])   # shape (3,)
+
+A + v
+# array([[11, 22, 33],
+#        [14, 25, 36]])
+</code></pre>
+<p>Broadcasting rules (simplified): align shapes right, dimensions must be equal or one must be 1.</p>
+<pre><code class="language-python"># OK: (3, 1) + (1, 4) → (3, 4)
+# OK: (5, 1) + (5,) → (5, 5)
+# NO: (3, 2) + (4,) → ValueError
+</code></pre>
+<p>Common example — centering a matrix:</p>
+<pre><code class="language-python">X = np.random.randn(100, 5)        # 100 observations, 5 features
+X_centered = X - X.mean(axis=0)    # subtract per-column mean
+# X.mean(axis=0).shape == (5,)
+# broadcast to (100, 5)
+</code></pre>
+<h2 id="exercises">Exercises</h2>
+<details>
+<summary>Exercise 1 — Dot product by hand</summary>
+
+Compute by hand: $(2, -1, 4) \cdot (3, 5, -2)$.
+
+**Solution**: $6 - 5 - 8 = -7$. Verify with NumPy.
+</details>
+
+<details>
+<summary>Exercise 2 — Check orthogonality</summary>
+
+Are $(1, 2)$ and $(-2, 1)$ orthogonal? And $(1, 2, 3)$ and $(4, -5, 2)$?
+
+**Solution**: First: $-2 + 2 = 0$ → yes. Second: $4 - 10 + 6 = 0$ → yes.
+</details>
+
+<details>
+<summary>Exercise 3 — Matrix multiplication</summary>
+
+Compute $A \cdot B$ by hand where:
+
+$$A = \begin{bmatrix} 2 & 1 \\ -1 & 3 \end{bmatrix}, \quad B = \begin{bmatrix} 4 & 0 \\ 1 & 2 \end{bmatrix}$$
+
+**Solution**:
+$$AB = \begin{bmatrix} 2\cdot4+1\cdot1 & 2\cdot0+1\cdot2 \\ -1\cdot4+3\cdot1 & -1\cdot0+3\cdot2 \end{bmatrix} = \begin{bmatrix} 9 & 2 \\ -1 & 6 \end{bmatrix}$$
+</details>
+
+<details>
+<summary>Exercise 4 — OLS in 5 lines</summary>
+
+Implement OLS from scratch and compare with sklearn:
+
+
+<pre><code class="language-python">import numpy as np
+from sklearn.linear_model import LinearRegression
+
+rng = np.random.default_rng(42)
+X = rng.standard_normal((100, 3))
+y = X @ np.array([1.5, -2.0, 0.5]) + rng.standard_normal(100) * 0.1
+
+# OLS by hand
+X_b = np.column_stack([np.ones(100), X])    # intercept
+beta = np.linalg.inv(X_b.T @ X_b) @ X_b.T @ y
+print(&quot;manual:&quot;, beta)
+
+# sklearn
+m = LinearRegression().fit(X, y)
+print(&quot;sklearn:&quot;, m.intercept_, m.coef_)
+</code></pre>
+
+
+They must match up to numerical error. (In practice replace `inv(X.T @ X) @ X.T @ y` with `np.linalg.lstsq(X_b, y, rcond=None)[0]` — more stable.)
+</details>
+
+<details>
+<summary>Exercise 5 — Cosine similarity between documents</summary>
+
+Three short documents as bag-of-words vectors over a 4-word vocab:
+
+- $d_1 = (3, 0, 1, 0)$ — "dog cat dog dog"
+- $d_2 = (2, 0, 1, 1)$ — "dog cat dog fox"
+- $d_3 = (0, 4, 0, 0)$ — "mouse mouse mouse mouse"
+
+Compute cosine similarity for each pair.
+
+
+<pre><code class="language-python">import numpy as np
+docs = np.array([[3,0,1,0],[2,0,1,1],[0,4,0,0]])
+def cos_sim(a, b):
+    return (a @ b) / (np.linalg.norm(a)*np.linalg.norm(b))
+
+for i in range(3):
+    for j in range(i+1, 3):
+        print(f&quot;d{i+1}-d{j+1}: {cos_sim(docs[i], docs[j]):.3f}&quot;)
+</code></pre>
+
+
+Expected output: d1–d2 ≈ 0.96 (very similar), d1–d3 = 0 (orthogonal), d2–d3 = 0.
+
+This is exactly how early search engines worked, and still how RAG (Retrieval-Augmented Generation) does it today.
+</details>
+
+<details>
+<summary>Exercise 6 — Matrix rank</summary>
+
+What's the rank of:
+$$M = \begin{bmatrix} 1 & 2 & 3 \\ 2 & 4 & 6 \\ 0 & 0 & 0 \end{bmatrix}?$$
+
+**Solution**: rank 1. The second row is 2× the first, third is zero. Only one independent row.
+
+
+<pre><code class="language-python">np.linalg.matrix_rank(np.array([[1,2,3],[2,4,6],[0,0,0]]))  # 1
+</code></pre>
+
+</details>
+
+<details>
+<summary>Exercise 7 — PCA from scratch (preview)</summary>
+
+Using SVD, reduce a random 5D dataset to 2D:
+
+
+<pre><code class="language-python">rng = np.random.default_rng(0)
+X = rng.standard_normal((200, 5))
+X_c = X - X.mean(0)
+U, S, Vt = np.linalg.svd(X_c, full_matrices=False)
+X_2d = U[:, :2] * S[:2]    # projection onto top 2 components
+print(X_2d.shape)          # (200, 2)
+</code></pre>
+
+
+Details in the PCA section. For now, enjoy the fact you just reduced 5 dimensions to 2 in four lines of code.
+</details>
+
+<h2 id="takeaways">Takeaways</h2>
+<ul>
+<li>Data is matrices, and models are matrix transformations.</li>
+<li>Dot product = similarity. Norms = "how big". Eigenvalues = preferred directions.</li>
+<li>$\hat{\beta} = (X^T X)^{-1} X^T y$ is the formula to memorize.</li>
+<li>SVD is the Swiss army knife: PCA, recommenders, pseudoinverse.</li>
+<li><strong>Never</strong> compute the inverse explicitly: use <code>np.linalg.solve</code> or <code>lstsq</code>.</li>
+</ul>
+<h2 id="further-reading">Further reading</h2>
+<ul>
+<li><strong>Gilbert Strang</strong> — "Introduction to Linear Algebra" (and his MIT 18.06 YouTube lectures, free): the cure for anyone who hates linear algebra.</li>
+<li><strong>3Blue1Brown</strong> — "Essence of Linear Algebra" (YouTube): 15 videos, 3 hours total, will rewire your brain.</li>
+<li><strong>Boyd &amp; Vandenberghe</strong> — "Introduction to Applied Linear Algebra" (free online): application-oriented.</li>
+</ul>
+<p>Next: calculus and gradient descent. The engine of every neural network.</p>
+      <nav class="pager">
+<a href="02b-math-essentials.html" class="prev"><span class="label">← Previous</span><span class="title">High-school math you actually need</span></a>
+<a href="04-calculus-optimization.html" class="next"><span class="label">Next →</span><span class="title">Calculus, gradients, and optimization</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Data Science Zero to Hero</strong> — complete path, in English, from math to deployment.</p><p>Open didactic material. Formulas are here to be understood, not feared. When a concept is unclear, go back: data science is a pyramid, not a tree you skip across.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+</body>
+</html>

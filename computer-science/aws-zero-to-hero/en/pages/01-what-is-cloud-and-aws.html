@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What the cloud is, and what AWS is — AWS Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#232f3e',primaryTextColor:'#ffffff',primaryBorderColor:'#ff9900',lineColor:'#8a99ad',background:'#0c1320'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">λ</div>
+      <div>
+        <div class="brand-title">AWS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/01-cos-e-aws-cloud.html" class="lang-link" title="Passa all'italiano">IT</a><span class="lang-active" title="English">EN</span></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="search... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-what-is-cloud-and-aws.html" class="active"><span class="num">01</span>What the cloud is, and what AWS is</a></li><li class="nav-item"><a href="../pages/02-global-infrastructure.html" class=""><span class="num">02</span>Global infrastructure: Regions, AZs, Edge</a></li><li class="nav-item"><a href="../pages/03-account-root-billing.html" class=""><span class="num">03</span>AWS account, root user, billing</a></li><li class="nav-item"><a href="../pages/04-iam-fundamentals.html" class=""><span class="num">04</span>IAM — fundamentals (users, groups, roles, policies)</a></li><li class="nav-item"><a href="../pages/05-iam-advanced.html" class=""><span class="num">05</span>IAM advanced: conditional policies, STS, ABAC</a></li><li class="nav-item"><a href="../pages/06-cli-sdk-iac.html" class=""><span class="num">06</span>CLI, SDK, CloudShell, IaC primer</a></li><li class="nav-item"><a href="../pages/07-pricing-billing.html" class=""><span class="num">07</span>Pricing, billing, free tier, cost tools</a></li><li class="nav-item"><a href="../pages/08-organizations-multi-account.html" class=""><span class="num">08</span>AWS Organizations &amp; multi-account strategy</a></li><li class="nav-item"><a href="../pages/09-vpc-fundamentals.html" class=""><span class="num">09</span>VPC — fundamentals</a></li><li class="nav-item"><a href="../pages/10-vpc-advanced.html" class=""><span class="num">10</span>VPC advanced: peering, TGW, PrivateLink, endpoints</a></li><li class="nav-item"><a href="../pages/11-route53-cloudfront.html" class=""><span class="num">11</span>Route 53, CloudFront, Global Accelerator</a></li><li class="nav-item"><a href="../pages/12-hybrid-vpn-directconnect.html" class=""><span class="num">12</span>Hybrid: VPN, Direct Connect, PrivateLink</a></li><li class="nav-item"><a href="../pages/13-ec2-fundamentals.html" class=""><span class="num">13</span>EC2 — fundamentals (instances, AMIs, lifecycle)</a></li><li class="nav-item"><a href="../pages/14-ec2-advanced-spot-nitro.html" class=""><span class="num">14</span>EC2 advanced — Spot, Placement Groups, Nitro, hibernation</a></li><li class="nav-item"><a href="../pages/15-asg-elb.html" class=""><span class="num">15</span>Auto Scaling Groups + Elastic Load Balancing</a></li><li class="nav-item"><a href="../pages/16-lambda-deep-dive.html" class=""><span class="num">16</span>Lambda deep dive</a></li><li class="nav-item"><a href="../pages/17-containers-ecs-eks-fargate.html" class=""><span class="num">17</span>Containers: ECS, EKS, Fargate, ECR</a></li><li class="nav-item"><a href="../pages/18-specialty-compute.html" class=""><span class="num">18</span>Specialty compute: Batch, Lightsail, Outposts, Wavelength, Beanstalk</a></li><li class="nav-item"><a href="../pages/19-ebs-efs-fsx.html" class=""><span class="num">19</span>EBS, EFS, FSx, Instance Store</a></li><li class="nav-item"><a href="../pages/20-s3-deep-dive.html" class=""><span class="num">20</span>S3 — deep dive</a></li><li class="nav-item"><a href="../pages/21-archive-snow-gateway-backup.html" class=""><span class="num">21</span>Glacier, Snow, Storage Gateway, DataSync, AWS Backup</a></li><li class="nav-item"><a href="../pages/22-rds.html" class=""><span class="num">22</span>RDS — managed relational DBs (engines, Multi-AZ, replicas, Proxy)</a></li><li class="nav-item"><a href="../pages/23-aurora-deep-dive.html" class=""><span class="num">23</span>Aurora deep dive — shared storage, Serverless v2, Global Database</a></li><li class="nav-item"><a href="../pages/24-dynamodb-deep-dive.html" class=""><span class="num">24</span>DynamoDB deep dive — partitions, GSI, Streams, single-table</a></li><li class="nav-item"><a href="../pages/25-purpose-built-dbs.html" class=""><span class="num">25</span>Purpose-built DBs — ElastiCache, MemoryDB, Neptune, DocumentDB, Keyspaces, Timestream, QLDB</a></li><li class="nav-item"><a href="../pages/26-redshift-data-warehousing.html" class=""><span class="num">26</span>Redshift — MPP data warehousing and zero-ETL</a></li><li class="nav-item"><a href="../pages/27-sqs-sns-eventbridge.html" class=""><span class="num">27</span>SQS, SNS, EventBridge — messaging and events</a></li><li class="nav-item"><a href="../pages/28-step-functions-mq-appflow.html" class=""><span class="num">28</span>Step Functions, MQ, AppFlow — orchestration and integration</a></li><li class="nav-item"><a href="../pages/29-athena-glue-lakeformation.html" class=""><span class="num">29</span>Athena, Glue, Lake Formation — the AWS data lake</a></li><li class="nav-item"><a href="../pages/30-emr-kinesis-msk.html" class=""><span class="num">30</span>EMR, Kinesis, MSK — big data and streaming</a></li><li class="nav-item"><a href="../pages/31-opensearch-quicksight.html" class=""><span class="num">31</span>OpenSearch and QuickSight — search and BI</a></li><li class="nav-item"><a href="../pages/32-sagemaker-overview.html" class=""><span class="num">32</span>SageMaker — the end-to-end ML platform</a></li><li class="nav-item"><a href="../pages/33-bedrock-ai-services.html" class=""><span class="num">33</span>Bedrock and AI services — managed GenAI and ML</a></li><li class="nav-item"><a href="../pages/34-iac-cloudformation-cdk-terraform.html" class=""><span class="num">34</span>IaC on AWS — CloudFormation, CDK, SAM, Terraform</a></li><li class="nav-item"><a href="../pages/35-ci-cd-pipeline.html" class=""><span class="num">35</span>CI/CD on AWS — CodePipeline, CodeBuild, CodeDeploy, CodeCatalyst</a></li><li class="nav-item"><a href="../pages/36-observability-cloudwatch-xray.html" class=""><span class="num">36</span>Observability — CloudWatch, X-Ray, CloudTrail, Config, SSM</a></li><li class="nav-item"><a href="../pages/37-kms-secrets-acm.html" class=""><span class="num">37</span>Encryption — KMS, CloudHSM, Secrets Manager, Parameter Store, ACM</a></li><li class="nav-item"><a href="../pages/38-waf-shield-guardduty-inspector.html" class=""><span class="num">38</span>Threat detection — WAF, Shield, GuardDuty, Inspector, Macie, Security Hub</a></li><li class="nav-item"><a href="../pages/39-governance-org-controltower-identitycenter.html" class=""><span class="num">39</span>Governance — Organizations, Control Tower, Identity Center</a></li><li class="nav-item"><a href="../pages/40-migration-mgn-dms-snow.html" class=""><span class="num">40</span>Migration — MGN, DMS, Snow family, Discovery, Migration Hub</a></li><li class="nav-item"><a href="../pages/41-cost-optimization-finops.html" class=""><span class="num">41</span>Cost optimization and FinOps</a></li><li class="nav-item"><a href="../pages/42-well-architected.html" class=""><span class="num">42</span>Well-Architected Framework — 6 pillars, lenses, review</a></li><li class="nav-item"><a href="../pages/43-architecture-patterns.html" class=""><span class="num">43</span>Architecture patterns — 3-tier, serverless, event-driven, microservices</a></li><li class="nav-item"><a href="../pages/44-disaster-recovery-multi-region.html" class=""><span class="num">44</span>Disaster Recovery and Multi-Region</a></li><li class="nav-item"><a href="../pages/45-reference-architectures.html" class=""><span class="num">45</span>Real-world reference architectures</a></li><li class="nav-item"><a href="../pages/46-advanced-networking.html" class=""><span class="num">46</span>Advanced networking deep dive</a></li><li class="nav-item"><a href="../pages/47-containers-deep-dive.html" class=""><span class="num">47</span>Containers deep dive — EKS, Karpenter, service mesh</a></li><li class="nav-item"><a href="../pages/48-serverless-patterns.html" class=""><span class="num">48</span>Serverless patterns deep dive</a></li><li class="nav-item"><a href="../pages/49-genai-rag-agents.html" class=""><span class="num">49</span>Generative AI on AWS — RAG and Agents</a></li><li class="nav-item"><a href="../pages/50-aws-certifications.html" class=""><span class="num">50</span>AWS Certifications — roadmap and study guide</a></li><li class="nav-item"><a href="../pages/51-glossary-az.html" class=""><span class="num">51</span>Glossary A-Z</a></li><li class="nav-item"><a href="../pages/52-cheatsheet.html" class=""><span class="num">52</span>Cheat sheet: services, limits, instance families</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Foundations</span>
+        <span>Section 1 of 52</span>
+        <span class="level-tag level-beg">Level: beginner</span>
+      </div>
+      <h1>What the cloud is, and what AWS is</h1>
+      <p class="summary">The cloud is not &#x27;someone else&#x27;s computer&#x27;. Understanding IaaS/PaaS/SaaS, the shared-responsibility model, why AWS was born, and what &#x27;pay-as-you-go&#x27; actually means.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Foundations</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>know what a server is (broadly)</li><li>no prior AWS knowledge required</li></ul>
+  <div class="label">Tools / references</div>
+  <ul class="source-list"><li>browser for the AWS console (free tier)</li><li>credit card (registration only — no charges if you stay in free tier)</li></ul>
+</div>
+      <p>Before touching a single service, you need the right mental model. Cloud computing isn't "the internet" and isn't "someone else's computer". It's a shift in <strong>economic and operating model</strong>: from buying hardware and paying for it upfront (CAPEX) to renting compute capacity by the minute, billed by usage (OPEX). This page gives you the conceptual foundation and the "why" of everything in the next 51 sections.</p>
+<h2 id="1-what-changed-in-2006">1. What changed in 2006</h2>
+<p>On March 14, 2006 Amazon launched <strong>S3</strong>: object storage accessible over HTTP, billed per GB-month. A few months later came <strong>EC2</strong>: on-demand virtual machines, billed per hour. For the first time, a developer with a credit card could spin up 100 servers in 5 minutes — no contract, no data center, no CAPEX. That's the break. Everything else — the 200+ other services — came after.</p>
+<p>Pre-cloud, launching a web startup meant: (a) estimating peak traffic for the next 3 years, (b) buying servers for that peak, (c) hoping you didn't go bust before amortizing them, (d) also hoping you didn't underestimate — because adding capacity meant ordering hardware with an 8-week lead time. Result: either under-provisioning (site crashes when you go viral) or over-provisioning (you pay for servers used at 12%).</p>
+<h2 id="2-the-three-as-a-service">2. The three "as a Service"</h2>
+<table>
+<thead>
+<tr>
+<th>model</th>
+<th>what you manage</th>
+<th>what the provider manages</th>
+<th>AWS example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>IaaS</strong> (Infrastructure)</td>
+<td>OS, runtime, app, data</td>
+<td>virtualization, servers, network, storage</td>
+<td>EC2, EBS, VPC</td>
+</tr>
+<tr>
+<td><strong>PaaS</strong> (Platform)</td>
+<td>app, data</td>
+<td>everything else + runtime</td>
+<td>Elastic Beanstalk, Lambda, RDS</td>
+</tr>
+<tr>
+<td><strong>SaaS</strong> (Software)</td>
+<td>configuration and data</td>
+<td>everything</td>
+<td>Amazon Connect, WorkMail, Chime</td>
+</tr>
+</tbody>
+</table>
+<p>The higher you go (IaaS → PaaS → SaaS), the less you manage, but the less flexibility you have. Lambda is wonderful because you don't think about the operating system. It's less wonderful if you need to install a custom kernel driver.</p>
+<pre><code class="language-mermaid">flowchart LR
+    subgraph onprem[on-premises]
+        A1[application]
+        A2[data]
+        A3[runtime]
+        A4[OS]
+        A5[virtualization]
+        A6[servers]
+        A7[storage]
+        A8[networking]
+    end
+    subgraph iaas[IaaS]
+        B1[application]
+        B2[data]
+        B3[runtime]
+        B4[OS]
+    end
+    subgraph paas[PaaS]
+        C1[application]
+        C2[data]
+    end
+    subgraph saas[SaaS]
+        D1[configuration]
+    end
+</code></pre>
+<h2 id="3-shared-responsibility-model">3. Shared responsibility model</h2>
+<p>Probably the single most important slide in all of AWS. AWS is responsible for the <strong>security of the cloud</strong> (hardware, software running on their servers, physical data centers). You are responsible for the <strong>security in the cloud</strong> (configuration of your services, IAM, data, logical networking).</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>AWS handles</th>
+<th>You handle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hardware, data center, power, cooling</td>
+<td>✓</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Hypervisor, host OS</td>
+<td>✓</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Managed services (RDS DB engine, Lambda runtime)</td>
+<td>✓</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Operating system on your EC2</td>
+<td>—</td>
+<td>✓ (patching, hardening)</td>
+</tr>
+<tr>
+<td>IAM, security group, NACL configuration</td>
+<td>—</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>Encryption of your data</td>
+<td>—</td>
+<td>✓ (with KMS)</td>
+</tr>
+<tr>
+<td>Application code</td>
+<td>—</td>
+<td>✓</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Practical implication</strong>: if you leave an S3 bucket public by accident and it ends up in the news, that's on you. AWS gives you the tools to lock it down (Block Public Access is now default), but configuration is the customer's responsibility. We'll see dozens of cases where this boundary triggers incidents.</p>
+<h2 id="4-the-five-real-benefits-not-the-marketing">4. The five real benefits (not the marketing)</h2>
+<ol>
+<li><strong>Elasticity</strong>: go from 10 to 1,000 servers in minutes, and from 1,000 back to 10 when the peak ends. No CAPEX locked up.</li>
+<li><strong>Pay-as-you-go</strong>: you pay only what you use, by the second (Lambda, Fargate), the hour (EC2 on-demand), the GB-month (S3), the request (DynamoDB on-demand).</li>
+<li><strong>Global reach</strong>: 30+ regions worldwide. Deploy in Tokyo, Frankfurt and São Paulo in 30 minutes, without owning data centers there.</li>
+<li><strong>Managed services</strong>: instead of installing and patching PostgreSQL on a VM, you use RDS Postgres. AWS handles backups, failover, patching. Cost: less control, lock-in.</li>
+<li><strong>Time-to-market</strong>: idea → prototype in production in days, not months.</li>
+</ol>
+<p>And the three <strong>anti-benefits</strong> marketing skips:</p>
+<ul>
+<li><strong>Unpredictable cost</strong>: the same elasticity that helps on the way up burns you on the way down. A bug that calls Lambda in a loop can cost you $10k overnight (true story, multiple times).</li>
+<li><strong>Lock-in</strong>: the more proprietary services you use (DynamoDB, Step Functions, Cognito), the harder it is to leave. Postgres on EC2 is portable; DynamoDB isn't.</li>
+<li><strong>Complexity</strong>: 200+ services, 17 ways to do networking, 5 queueing services. Without discipline it turns into chaos.</li>
+</ul>
+<h2 id="5-aws-in-30-seconds-what-it-offers">5. AWS in 30 seconds: what it offers</h2>
+<p>To orient yourself, picture AWS as a big supermarket divided into aisles. The aisles you'll meet in this path:</p>
+<table>
+<thead>
+<tr>
+<th>Aisle</th>
+<th>Typical services</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Compute</strong></td>
+<td>EC2, Lambda, ECS, EKS, Fargate, Batch</td>
+</tr>
+<tr>
+<td><strong>Storage</strong></td>
+<td>S3, EBS, EFS, FSx, Glacier</td>
+</tr>
+<tr>
+<td><strong>Database</strong></td>
+<td>RDS, Aurora, DynamoDB, ElastiCache, Redshift</td>
+</tr>
+<tr>
+<td><strong>Networking</strong></td>
+<td>VPC, Route 53, CloudFront, Direct Connect, Transit Gateway</td>
+</tr>
+<tr>
+<td><strong>Security &amp; Identity</strong></td>
+<td>IAM, KMS, Secrets Manager, GuardDuty, WAF</td>
+</tr>
+<tr>
+<td><strong>Application Integration</strong></td>
+<td>SQS, SNS, EventBridge, Step Functions</td>
+</tr>
+<tr>
+<td><strong>Analytics</strong></td>
+<td>Athena, Glue, EMR, Kinesis, OpenSearch</td>
+</tr>
+<tr>
+<td><strong>ML / AI</strong></td>
+<td>SageMaker, Bedrock, Rekognition, Comprehend</td>
+</tr>
+<tr>
+<td><strong>DevOps</strong></td>
+<td>CloudFormation, CDK, CodePipeline, CloudWatch, Systems Manager</td>
+</tr>
+<tr>
+<td><strong>Management</strong></td>
+<td>Organizations, Control Tower, Config, CloudTrail</td>
+</tr>
+</tbody>
+</table>
+<p>That's thousands of pages of docs. But underneath, they're <strong>combinations of a few primitives</strong>: compute attached to storage, fronted by an IAM principal, exposed through a load balancer inside a VPC, protected by a security group. The rest is syntactic sugar.</p>
+<h2 id="6-pricing-in-three-words">6. Pricing in three words</h2>
+<p>Every service has three typical cost components:</p>
+<ol>
+<li><strong>Compute / requests</strong>: EC2 hours, Lambda seconds, millions of DynamoDB requests.</li>
+<li><strong>Storage</strong>: GB-months on S3/EBS/snapshots.</li>
+<li><strong>Data transfer</strong>: egress traffic to the internet (ingress is almost always free).</li>
+</ol>
+<p>Item 3 is the one that gets everyone. <strong>Egress from AWS to the internet costs ~$0.09/GB in major regions</strong> (volume discounts apply, and starting in 2024 100 GB/month to internet is free). 1 TB of user traffic ≈ $90. If you move 100 TB/month, that's ~$9,000 in bandwidth alone. Your "$5/month EC2" app can have $900/month of egress if your users download video.</p>
+<p>We'll cover pricing in detail in section 7. For now: <strong>the cloud bill is the sum of hundreds of micro-costs</strong>. Winning on one (e.g. moving the DB to Aurora Serverless) and losing on another (e.g. leaving CloudWatch Logs with no retention) is the most common pattern.</p>
+<h2 id="7-four-mental-models-to-memorize">7. Four mental models to memorize</h2>
+<ol>
+<li><strong>A Region is isolated</strong>: everything in AWS is regional. When you launch an EC2 you pick a Region (e.g. <code>eu-west-1</code> Ireland). That instance lives there only. If you want geographic resilience, you replicate across Regions yourself (not free — see section 44).</li>
+<li><strong>Multi-AZ is the default for HA</strong>: within a Region there are Availability Zones (physically separate data centers). To be "Highly Available" you need to live across at least 2 AZs (see section 2).</li>
+<li><strong>Everything is API</strong>: the web console is just a client calling REST/JSON APIs signed with AWS Signature V4. You can do the same things with the <code>aws</code> CLI, the Python/JS/Java SDK, Terraform, CloudFormation. Console is for exploration; production is IaC.</li>
+<li><strong>IAM authorizes every call</strong>: every single API call goes through IAM, which decides whether that principal (user/role) can perform that action on that resource. If IAM says no, the call fails. Even if you're "admin", if you don't have the permission, it fails.</li>
+</ol>
+<h2 id="8-exercise-think-like-a-cloud-architect">8. Exercise: think like a cloud architect</h2>
+<details>
+<summary>You have a static site (HTML+CSS+JS) receiving 1 million visits/month. On AWS what's the minimum monthly cost?</summary>
+
+**Worked answer.** Static site = S3 (object storage) + CloudFront (global CDN) + Route 53 (DNS).
+
+- **S3**: 1 GB of assets = $0.023/month. Negligible.
+- **CloudFront**: 1M requests ≈ $0.75; assuming 500 KB/visit = 500 GB/month of egress from CDN ≈ $42 (at $0.085/GB in US/EU edges). Free tier: 1 TB/month and 10M requests/month free perpetually.
+- **Route 53**: hosted zone $0.50/month + ~$0.40 per million DNS queries.
+
+**Total ~$45/month** in production, **~$1/month** if you stay in the CloudFront free tier. Compare with a dedicated VPS: ~$10/month, but no global CDN, no automatic scaling, and you manage everything. The difference isn't the price; it's what you get.
+</details>
+
+<details>
+<summary>Same question but the site is a Node.js app with PostgreSQL and ~100 daily active users. Estimate the minimum.</summary>
+
+**Worked answer.** Three architectures with growing cost/complexity:
+
+- **Lowest tier**: AWS Lightsail (containerized PaaS) ~$7–$15/month all-in.
+- **"AWS-native basic"**: EC2 t4g.small ($12/month) + RDS db.t4g.micro Postgres ($14/month) + EBS 20 GB ($2/month) + minimal traffic ≈ **$30/month**.
+- **"Serverless"**: Lambda + API Gateway + Aurora Serverless v2 minimum (0.5 ACU) ≈ $50–$80/month (Aurora Serverless v2 has a ~$43/month floor unless it scales to zero).
+
+**Lesson**: serverless isn't always cheaper at low traffic. It becomes cheaper as load is sporadic but spiky.
+</details>
+
+<h2 id="9-what-you-do-not-learn-from-this-page">9. What you do NOT learn from this page</h2>
+<ul>
+<li>Details of any single service: we'll cover EC2 in 2 dedicated sections, S3 in 1, IAM in 2.</li>
+<li>How to configure your first instance: the next section opens the account; section 4 touches IAM.</li>
+<li>What to choose: EC2 vs Lambda vs Fargate has its own sections (17, 43, 48).</li>
+</ul>
+<p>The point here is just the <strong>mental model</strong>: cloud = composable primitives, pay-per-use, globally distributed, authorized by IAM, managed by API. Keep these five words in mind: the rest of the path is variance on this theme.</p>
+<blockquote>
+<p><strong>One-line summary</strong>: AWS is a catalogue of composable primitives (compute, storage, network, identity, events) billed by consumption, accessed via signed APIs, replicable across 30+ global Regions; you pay what you use and are responsible for configuration (shared-responsibility model).</p>
+</blockquote>
+      <nav class="pager">
+<a href="../index.html" class="prev"><span class="label">← Home</span><span class="title">Index</span></a>
+<a href="02-global-infrastructure.html" class="next"><span class="label">Next →</span><span class="title">Global infrastructure: Regions, AZs, Edge</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>AWS Zero to Hero</strong> — complete path, in English, from primitives to advanced architecture.</p><p>Open educational material. No sponsorships, no affiliate links, no affiliation with AWS. When a concept is unclear, go back: AWS is a pyramid of primitives, not a tree you skip across.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+</body>
+</html>

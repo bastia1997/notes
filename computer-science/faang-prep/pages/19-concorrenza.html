@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Concorrenza e parallelismo — FAANG Prep</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">F</div>
+      <div>
+        <div class="brand-title">FAANG Prep</div>
+        <div class="brand-subtitle">DS&amp;A · System Design</div>
+      </div>
+    </div>
+    <div class="lang-bar">
+      <a class="lang-switcher" href="../en/pages/19-concurrency.html" title="English"><span class="flag-icon">🇬🇧</span><span class="flag-label">English</span></a>
+    </div>
+  </div>
+  <div class="search-wrap">
+    <input class="search-input" id="search-input" placeholder="Cerca nei contenuti... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/00-introduzione.html" class=""><span class="num">00</span>Introduzione e come usare questo percorso</a></li><li class="nav-item"><a href="../pages/01-complessita.html" class=""><span class="num">01</span>Complessità computazionale (Big-O)</a></li><li class="nav-item"><a href="../pages/02-array-stringhe.html" class=""><span class="num">02</span>Array e stringhe</a></li><li class="nav-item"><a href="../pages/03-hashmap-set.html" class=""><span class="num">03</span>Hashmap e set</a></li><li class="nav-item"><a href="../pages/04-linked-list.html" class=""><span class="num">04</span>Linked list</a></li><li class="nav-item"><a href="../pages/05-stack-coda.html" class=""><span class="num">05</span>Stack e coda</a></li><li class="nav-item"><a href="../pages/06-alberi.html" class=""><span class="num">06</span>Alberi (binary tree e BST)</a></li><li class="nav-item"><a href="../pages/07-heap.html" class=""><span class="num">07</span>Heap e priority queue</a></li><li class="nav-item"><a href="../pages/08-grafi.html" class=""><span class="num">08</span>Grafi</a></li><li class="nav-item"><a href="../pages/09-trie.html" class=""><span class="num">09</span>Trie (prefix tree)</a></li><li class="nav-item"><a href="../pages/10-ricorsione-backtracking.html" class=""><span class="num">10</span>Ricorsione e backtracking</a></li><li class="nav-item"><a href="../pages/11-sorting-searching.html" class=""><span class="num">11</span>Sorting e searching</a></li><li class="nav-item"><a href="../pages/12-two-pointers-sliding-window.html" class=""><span class="num">12</span>Two pointers e sliding window</a></li><li class="nav-item"><a href="../pages/13-greedy.html" class=""><span class="num">13</span>Greedy</a></li><li class="nav-item"><a href="../pages/14-dp.html" class=""><span class="num">14</span>Dynamic programming</a></li><li class="nav-item"><a href="../pages/15-bit-manipulation.html" class=""><span class="num">15</span>Bit manipulation</a></li><li class="nav-item"><a href="../pages/16-oop-design-patterns.html" class=""><span class="num">16</span>OOP e design patterns</a></li><li class="nav-item"><a href="../pages/17-system-design.html" class=""><span class="num">17</span>System design — fondamenti</a></li><li class="nav-item"><a href="../pages/18-system-design-esempi.html" class=""><span class="num">18</span>System design — esempi end-to-end</a></li><li class="nav-item"><a href="../pages/19-concorrenza.html" class="active"><span class="num">19</span>Concorrenza e parallelismo</a></li><li class="nav-item"><a href="../pages/20-database-sql.html" class=""><span class="num">20</span>Database e SQL</a></li><li class="nav-item"><a href="../pages/21-os-networking.html" class=""><span class="num">21</span>OS e networking</a></li><li class="nav-item"><a href="../pages/22-coding-patterns.html" class=""><span class="num">22</span>I 16 coding patterns dei colloqui</a></li><li class="nav-item"><a href="../pages/23-behavioral-star.html" class=""><span class="num">23</span>Behavioral interview — STAR e Amazon LP</a></li><li class="nav-item"><a href="../pages/24-mock-interviews.html" class=""><span class="num">24</span>Mock interview e strategia in colloquio</a></li><li class="nav-item"><a href="../pages/25-roadmap-90-giorni.html" class=""><span class="num">25</span>Roadmap 90 giorni — piano operativo</a></li><li class="nav-item"><a href="../pages/26-banca-esercizi.html" class=""><span class="num">26</span>Banca esercizi — 200+ problemi FAANG</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Sistemi</span>
+        <span>Sezione 19 di 26</span>
+      </div>
+      <h1>Concorrenza e parallelismo</h1>
+      <p class="summary">Thread vs processi visualizzati, race condition esemplificata, deadlock spiegato. Producer/consumer, semafori. Quanto basta per non fare brutta figura.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Sistemi</div>
+  
+  
+</div>
+      <p>Argomento "deep CS" che entra di più nei colloqui infra/backend. Per ruoli puramente algoritmici resta secondario, ma una solida infarinatura ti distingue.</p>
+<h2 id="parte-1-concorrenza-vs-parallelismo">Parte 1 — Concorrenza vs parallelismo</h2>
+<h3 id="definizioni">Definizioni</h3>
+<ul>
+<li><strong>Concorrenza</strong>: più task <strong>logicamente</strong> in corso. Possono interleavare su una sola CPU (multitasking).</li>
+<li><strong>Parallelismo</strong>: più task <strong>fisicamente</strong> in esecuzione su più CPU.</li>
+</ul>
+<p>Analogia (Rob Pike):</p>
+<ul>
+<li>Concorrenza: un cuoco che cucina più piatti, alternando i passi.</li>
+<li>Parallelismo: 4 cuochi, ognuno con il suo piatto.</li>
+</ul>
+<p>In Python il <strong>GIL</strong> (Global Interpreter Lock) impedisce a thread di eseguire bytecode Python in parallelo. Quindi thread sono utili per I/O-bound (rilasciano GIL durante I/O), ma <strong>non per CPU-bound</strong> parallelo. Per parallelismo CPU, usa <code>multiprocessing</code> (processi separati) o C-extension che rilasciano GIL.</p>
+<h2 id="parte-2-processi-vs-thread">Parte 2 — Processi vs thread</h2>
+<h3 id="processo">Processo</h3>
+<p>Un <strong>processo</strong> è un'istanza in esecuzione di un programma. Ha:</p>
+<ul>
+<li>Spazio di memoria proprio (isolamento totale).</li>
+<li>File descriptors.</li>
+<li>Tabella di system resources.</li>
+<li>Almeno 1 thread.</li>
+</ul>
+<h3 id="thread">Thread</h3>
+<p>Un <strong>thread</strong> è un'unità di scheduling all'interno di un processo. Condivide con altri thread dello stesso processo:</p>
+<ul>
+<li>Heap (memoria dinamica).</li>
+<li>File descriptors.</li>
+<li>Codice.</li>
+</ul>
+<p>Ognuno ha proprio:</p>
+<ul>
+<li>Stack (call stack + variabili locali).</li>
+<li>Registri CPU.</li>
+</ul>
+<h3 id="tabella-di-confronto">Tabella di confronto</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Processo</th>
+<th>Thread</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Memoria</td>
+<td>propria</td>
+<td>condivisa con peers</td>
+</tr>
+<tr>
+<td>Comunicazione</td>
+<td>IPC (pipe, socket, queue)</td>
+<td>variabili condivise</td>
+</tr>
+<tr>
+<td>Crash</td>
+<td>isolato (altri processi vivi)</td>
+<td>rischia di abbattere il processo</td>
+</tr>
+<tr>
+<td>Spawn cost</td>
+<td>alto</td>
+<td>basso</td>
+</tr>
+<tr>
+<td>Context switch</td>
+<td>costoso</td>
+<td>leggero</td>
+</tr>
+</tbody>
+</table>
+<h3 id="context-switch">Context switch</h3>
+<p>Quando l'OS sospende un task e ne avvia un altro: salva registri/PC del corrente, carica quelli del prossimo. Costo: 1-10 μs su Linux. Causa cache miss → impatto reale più alto.</p>
+<h2 id="parte-3-race-condition">Parte 3 — Race condition</h2>
+<p>Il problema più infame della concorrenza. Due thread leggono/scrivono lo stesso dato senza sincronizzazione → risultato dipendente dall'<strong>interleaving</strong>.</p>
+<h3 id="esempio-classico">Esempio classico</h3>
+<pre><code class="language-python">counter = 0
+def inc():
+    global counter
+    counter += 1
+</code></pre>
+<p>Cosa succede a livello macchina:</p>
+<ol>
+<li>Carica <code>counter</code> in registro.</li>
+<li>+1.</li>
+<li>Scrive registro in memoria.</li>
+</ol>
+<p>Tre operazioni separate. Se due thread eseguono <code>inc()</code> contemporaneamente:</p>
+<pre><code>Thread A: carica counter (=0) in reg
+Thread B: carica counter (=0) in reg
+Thread A: +1 → reg=1
+Thread A: scrive 1 → counter=1
+Thread B: +1 → reg=1
+Thread B: scrive 1 → counter=1
+</code></pre>
+<p>Risultato: counter = 1, non 2. Un incremento "perso".</p>
+<p>Con 1000 thread che fanno inc(), il valore finale <strong>non sarà 1000</strong>.</p>
+<h3 id="soluzione-lock-mutex">Soluzione: lock (mutex)</h3>
+<p>Una "regione critica" accessibile da un solo thread alla volta.</p>
+<pre><code class="language-python">import threading
+lock = threading.Lock()
+counter = 0
+
+def inc():
+    global counter
+    with lock:
+        counter += 1
+</code></pre>
+<p>Ora i tre passi sono <strong>atomici</strong> (dal punto di vista degli altri thread). 1000 thread → 1000 finale, garantito.</p>
+<h2 id="parte-4-sync-primitives">Parte 4 — Sync primitives</h2>
+<h3 id="mutex-lock">Mutex (lock)</h3>
+<p>1 thread alla volta. Acquisisci → lavora → rilascia.</p>
+<h3 id="semaforo">Semaforo</h3>
+<p>Generalizzazione: N thread possono entrare contemporaneamente. Contatore interno.</p>
+<pre><code class="language-python">sem = threading.Semaphore(5)   # max 5 simultanei
+sem.acquire()
+# lavoro...
+sem.release()
+</code></pre>
+<p>Usato per: limit di connessioni concorrenti, pool di risorse.</p>
+<h3 id="condition-variable">Condition variable</h3>
+<p>Wait/signal su un predicato. <em>"Aspetta che qualcuno mi svegli quando la condizione X è vera."</em></p>
+<pre><code class="language-python">cond = threading.Condition()
+with cond:
+    while not predicate():
+        cond.wait()   # rilascia il lock e aspetta
+    # qui predicate è vero
+</code></pre>
+<p>Da un altro thread:</p>
+<pre><code class="language-python">with cond:
+    cambia_stato()
+    cond.notify()       # sveglia 1 thread che aspetta
+    # oppure cond.notify_all()
+</code></pre>
+<h3 id="spinlock">Spinlock</h3>
+<p>"Busy-wait": loop finché il lock è disponibile. Veloce per attese brevi (no context switch). Spreca CPU se l'attesa è lunga.</p>
+<h3 id="rwlock-reader-writer">RWLock (reader-writer)</h3>
+<p>Molti reader contemporaneamente, ma writer esclusivo. Utile per workload read-heavy.</p>
+<h3 id="atomic-operations">Atomic operations</h3>
+<p>Operazioni hardware che leggono+modificano+scrivono in <strong>un singolo step</strong> (CAS, fetch-add). Senza lock per cose semplici.</p>
+<p>In Python: la maggior parte non sono atomiche per via del GIL. In C/Java esistono <code>AtomicInteger</code>, <code>compare_exchange_strong</code>, ecc.</p>
+<h2 id="parte-5-deadlock">Parte 5 — Deadlock</h2>
+<p>Due thread aspettano l'uno la risorsa dell'altro.</p>
+<pre><code class="language-mermaid">flowchart LR
+    TA[Thread A] --&gt;|tiene| L1[Lock L1]
+    TB[Thread B] --&gt;|tiene| L2[Lock L2]
+    TA -.-&gt;|aspetta| L2
+    TB -.-&gt;|aspetta| L1
+    style TA fill:#ff6b6b,color:#0a0c12
+    style TB fill:#ff6b6b,color:#0a0c12
+</code></pre>
+<p>Circular wait → nessuno può avanzare. <strong>Deadlock</strong>.</p>
+<h3 id="condizioni-di-coffman">Condizioni di Coffman</h3>
+<p>Tutte e 4 devono valere:</p>
+<ol>
+<li><strong>Mutual exclusion</strong>: risorse non condivisibili.</li>
+<li><strong>Hold and wait</strong>: un thread tiene una risorsa mentre ne aspetta un'altra.</li>
+<li><strong>No preemption</strong>: l'OS non può strappare risorse.</li>
+<li><strong>Circular wait</strong>: catena circolare di attese.</li>
+</ol>
+<h3 id="prevenzione">Prevenzione</h3>
+<p>Rompi almeno una condizione. La più semplice: <strong>ordinamento globale dei lock</strong>. Ogni thread acquisisce in ordine fisso (es. sempre L1 prima di L2).</p>
+<p>Altra: <code>try_acquire</code> con timeout. Se non riesci, rilascia tutto e ricomincia.</p>
+<h2 id="parte-6-altri-problemi-sottili">Parte 6 — Altri problemi sottili</h2>
+<h3 id="livelock">Livelock</h3>
+<p>I thread si "accorgono" e si scansano a vicenda, ma non avanzano mai. Es. due persone che si scansano nello stesso senso in corridoio.</p>
+<h3 id="starvation">Starvation</h3>
+<p>Un thread non riesce mai a prendere il lock perché altri sono sempre più "fortunati". Soluzione: lock <strong>fair</strong> (FIFO).</p>
+<h3 id="race-condition-senza-data-race">Race condition senza data race</h3>
+<p>Anche senza accesso concorrente alla stessa variabile, l'<strong>ordine</strong> delle operazioni può rompere logica. Es. "check then act" non atomico.</p>
+<pre><code class="language-python"># Race condition logica:
+if file_exists(path):    # check
+    open(path)            # act
+# Se qualcuno cancella file tra check e act, crash.
+</code></pre>
+<h2 id="parte-7-producer-consumer-il-problema-canonico">Parte 7 — Producer-consumer (il problema canonico)</h2>
+<p>Producer mettono item in coda. Consumer li tolgono. Coda condivisa, <strong>bloccante</strong> quando vuota (consumer aspetta) o piena (producer aspetta).</p>
+<pre><code class="language-python">import threading, queue
+
+q = queue.Queue(maxsize=10)
+
+def producer():
+    while True:
+        item = produce()
+        q.put(item)   # blocca se piena
+
+def consumer():
+    while True:
+        item = q.get()   # blocca se vuota
+        consume(item)
+        q.task_done()
+</code></pre>
+<p><code>queue.Queue</code> di Python è thread-safe (lock interno). Soluzione standard.</p>
+<h2 id="parte-8-asyncawait-concorrenza-single-threaded">Parte 8 — Async/await (concorrenza single-threaded)</h2>
+<p>Modello alternativo per <strong>I/O-bound</strong>: niente thread. Single thread con un event loop che gestisce migliaia di task "in attesa".</p>
+<pre><code class="language-python">import asyncio
+import aiohttp
+
+async def fetch(session, url):
+    async with session.get(url) as r:
+        return await r.text()
+
+async def main(urls):
+    async with aiohttp.ClientSession() as session:
+        results = await asyncio.gather(*[fetch(session, u) for u in urls])
+    return results
+</code></pre>
+<p><strong>Quando</strong>:</p>
+<ul>
+<li>Tante richieste I/O concorrenti (HTTP, DB).</li>
+<li>Niente CPU-bound (un singolo thread non parallelizza CPU).</li>
+</ul>
+<p>Pro: niente lock, niente context switch costosi. Pro: scali a <strong>10000+</strong> task in un singolo thread.</p>
+<p>Contro: codice "viral" — devi propagare <code>async</code> ovunque. Debugging meno familiare.</p>
+<h2 id="parte-9-altri-modelli">Parte 9 — Altri modelli</h2>
+<h3 id="actor-model-erlang-akka">Actor model (Erlang, Akka)</h3>
+<p>Ogni "actor" ha:
+- Mailbox (queue di messaggi in arrivo).
+- Stato privato (no condivisione!).
+- Handler che processa messaggi.</p>
+<p>Comunicazione <strong>solo per messaggi</strong>. Niente memoria condivisa, niente race condition.</p>
+<h3 id="csp-channels-go">CSP / channels (Go)</h3>
+<blockquote>
+<p><em>"Don't communicate by sharing memory; share memory by communicating."</em></p>
+</blockquote>
+<p>Goroutine (thread leggeri) + channel (queue tipizzata). Modello elegante per gran parte dei problemi concorrenti.</p>
+<h2 id="parte-10-esercizi">Parte 10 — Esercizi</h2>
+<h3 id="esercizio-191-bounded-blocking-queue-medium">Esercizio 19.1 — Bounded Blocking Queue <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Implementa coda thread-safe con dimensione massima.</p>
+<details><summary>Soluzione</summary>
+
+
+<pre><code class="language-python">import threading
+class BoundedBlockingQueue:
+    def __init__(self, cap):
+        self.cap = cap
+        self.q = []
+        self.lock = threading.Lock()
+        self.not_full = threading.Condition(self.lock)
+        self.not_empty = threading.Condition(self.lock)
+
+    def enqueue(self, x):
+        with self.not_full:
+            while len(self.q) &gt;= self.cap:
+                self.not_full.wait()
+            self.q.append(x)
+            self.not_empty.notify()
+
+    def dequeue(self):
+        with self.not_empty:
+            while not self.q:
+                self.not_empty.wait()
+            x = self.q.pop(0)
+            self.not_full.notify()
+            return x
+
+    def size(self):
+        with self.lock:
+            return len(self.q)
+</code></pre>
+
+
+Pattern condition variable: `while not predicate(): cond.wait()`.
+</details>
+
+<h3 id="esercizio-192-print-in-order-easy">Esercizio 19.2 — Print in Order <span class="problem-tag easy">EASY</span></h3>
+<p>Tre thread chiamano <code>first()</code>, <code>second()</code>, <code>third()</code> in ordine arbitrario. Forza output 1→2→3.</p>
+<details><summary>Soluzione</summary>
+
+
+<pre><code class="language-python">import threading
+class Foo:
+    def __init__(self):
+        self.s2 = threading.Semaphore(0)
+        self.s3 = threading.Semaphore(0)
+    def first(self, fn):
+        fn()
+        self.s2.release()
+    def second(self, fn):
+        self.s2.acquire()
+        fn()
+        self.s3.release()
+    def third(self, fn):
+        self.s3.acquire()
+        fn()
+</code></pre>
+
+
+Semafori inizializzati a 0. `second` aspetta `s2` (rilasciato da first). `third` aspetta `s3` (rilasciato da second). Catena.
+</details>
+
+<h3 id="esercizio-193-dining-philosophers-hard">Esercizio 19.3 — Dining Philosophers <span class="problem-tag hard">HARD</span></h3>
+<p>5 filosofi, 5 forchette in cerchio. Ognuno serve 2 forchette adiacenti. Niente deadlock, niente starvation.</p>
+<details><summary>Soluzione (un'approccio)</summary>
+
+Filosofi pari prendono prima sinistra, dispari prima destra. Rompe il circular wait.
+
+Alternativa: un "waiter" (semaforo globale) permette al massimo 4 filosofi a sedere → impossibile deadlock.
+</details>
+
+<h3 id="esercizio-194-building-h2o-medium">Esercizio 19.4 — Building H2O <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Thread emettono <code>H</code> o <code>O</code>. Devi raggrupparli in molecole 2H + 1O alla volta.</p>
+<details><summary>Soluzione</summary>
+
+
+<pre><code class="language-python">import threading
+class H2O:
+    def __init__(self):
+        self.h_sem = threading.Semaphore(2)
+        self.o_sem = threading.Semaphore(0)
+        self.barrier = threading.Barrier(3)
+    def hydrogen(self, rel):
+        self.h_sem.acquire()
+        self.barrier.wait()
+        rel()
+        self.o_sem.release()
+    def oxygen(self, rel):
+        self.o_sem.acquire(); self.o_sem.acquire()
+        self.barrier.wait()
+        rel()
+        self.h_sem.release(); self.h_sem.release()
+</code></pre>
+
+
+Barrier sincronizza 3 thread (2H + 1O) prima di rilasciare.
+</details>
+
+<h3 id="esercizio-195-web-crawler-multithreaded-medium">Esercizio 19.5 — Web Crawler Multithreaded <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Approccio concettuale: pool di worker, queue di URL pending, set visited thread-safe (con lock), rate limiting per host (token bucket).</p>
+<h3 id="esercizio-196-fizz-buzz-multithreaded-medium">Esercizio 19.6 — Fizz Buzz Multithreaded <span class="problem-tag medium">MEDIUM</span></h3>
+<p>4 thread: stampano "Fizz", "Buzz", "FizzBuzz", numero. Coordina l'ordine.</p>
+<details><summary>Soluzione (skeleton)</summary>
+
+Lock + condition variable. Ogni thread aspetta finché non è il suo turno (basato su `i % 3 == 0` o `% 5 == 0`).
+</details>
+
+<h2 id="riassunto">Riassunto</h2>
+<ol>
+<li><strong>Concorrenza ≠ parallelismo</strong>. In Python (GIL), thread sono utili per I/O, non per CPU-bound.</li>
+<li><strong>Processi</strong>: isolati, IPC per comunicare. <strong>Thread</strong>: condividono memoria nello stesso processo.</li>
+<li><strong>Race condition</strong>: due thread accedono concorrentemente → bug nondeterministici. Risolvi con lock.</li>
+<li><strong>Deadlock</strong>: 4 condizioni di Coffman. Rompi una (es. ordinamento lock globale).</li>
+<li><strong>Sync primitives</strong>: mutex, semaforo, condition variable, RWLock, atomic.</li>
+<li><strong>Producer/consumer</strong>: pattern canonico. In Python <code>queue.Queue</code> thread-safe.</li>
+<li><strong>Async/await</strong>: alternativa single-threaded per I/O-bound.</li>
+</ol>
+<p>Concorrenza è "muscolo" che si costruisce con la pratica e con i fallimenti reali. In colloquio: padroneggia i pattern base sopra.</p>
+      <nav class="pager">
+<a href="18-system-design-esempi.html" class="prev"><span class="label">← Precedente</span><span class="title">System design — esempi end-to-end</span></a>
+<a href="20-database-sql.html" class="next"><span class="label">Successivo →</span><span class="title">Database e SQL</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>FAANG Prep</strong> — percorso completo di preparazione: DS&amp;A, system design, behavioral. Costruito per spaccare ai colloqui di Big Tech.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-index.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true,
+      background: '#161922',
+      primaryColor: '#1d2230',
+      primaryTextColor: '#e6e8ee',
+      primaryBorderColor: '#6cf',
+      lineColor: '#7a8194',
+      secondaryColor: '#262b3a',
+      tertiaryColor: '#0f1117',
+      mainBkg: '#1d2230',
+      secondBkg: '#262b3a',
+      tertiaryBkg: '#161922',
+      nodeBorder: '#6cf',
+      clusterBkg: '#161922',
+      clusterBorder: '#262b3a',
+      titleColor: '#6cf',
+      edgeLabelBackground: '#161922',
+      fontFamily: 'Cascadia Code, monospace'
+    }
+  });
+  document.querySelectorAll('pre > code.language-mermaid').forEach((codeEl) => {
+    const pre = codeEl.parentElement;
+    const div = document.createElement('div');
+    div.className = 'mermaid';
+    div.textContent = codeEl.textContent;
+    pre.replaceWith(div);
+  });
+  mermaid.run();
+</script>
+</body>
+</html>

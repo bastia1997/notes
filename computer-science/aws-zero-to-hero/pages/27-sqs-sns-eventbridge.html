@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SQS, SNS, EventBridge — messaging ed eventi — AWS Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#232f3e',primaryTextColor:'#ffffff',primaryBorderColor:'#ff9900',lineColor:'#8a99ad',background:'#0c1320'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">λ</div>
+      <div>
+        <div class="brand-title">AWS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">IT</span><a href="../en/pages/27-sqs-sns-eventbridge.html" class="lang-link" title="Switch to English">EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-cos-e-aws-cloud.html" class=""><span class="num">01</span>Cos&#x27;è il cloud e cos&#x27;è AWS</a></li><li class="nav-item"><a href="../pages/02-infrastruttura-globale.html" class=""><span class="num">02</span>Infrastruttura globale: Region, AZ, Edge</a></li><li class="nav-item"><a href="../pages/03-account-root-billing.html" class=""><span class="num">03</span>Account AWS, utente root, billing</a></li><li class="nav-item"><a href="../pages/04-iam-fondamenti.html" class=""><span class="num">04</span>IAM — fondamenti (utenti, gruppi, ruoli, policy)</a></li><li class="nav-item"><a href="../pages/05-iam-avanzato.html" class=""><span class="num">05</span>IAM avanzato: policy condizionali, STS, ABAC</a></li><li class="nav-item"><a href="../pages/06-cli-sdk-iac.html" class=""><span class="num">06</span>CLI, SDK, CloudShell, IaC primer</a></li><li class="nav-item"><a href="../pages/07-pricing-billing.html" class=""><span class="num">07</span>Pricing, billing, free tier, cost tools</a></li><li class="nav-item"><a href="../pages/08-organizations-multi-account.html" class=""><span class="num">08</span>AWS Organizations &amp; strategia multi-account</a></li><li class="nav-item"><a href="../pages/09-vpc-fondamenti.html" class=""><span class="num">09</span>VPC — fondamenti</a></li><li class="nav-item"><a href="../pages/10-vpc-avanzato.html" class=""><span class="num">10</span>VPC avanzato: peering, TGW, PrivateLink, endpoint</a></li><li class="nav-item"><a href="../pages/11-route53-cloudfront.html" class=""><span class="num">11</span>Route 53, CloudFront, Global Accelerator</a></li><li class="nav-item"><a href="../pages/12-hybrid-vpn-directconnect.html" class=""><span class="num">12</span>Hybrid: VPN, Direct Connect, PrivateLink</a></li><li class="nav-item"><a href="../pages/13-ec2-fondamenti.html" class=""><span class="num">13</span>EC2 — fondamenti (istanze, AMI, lifecycle)</a></li><li class="nav-item"><a href="../pages/14-ec2-avanzato-spot-nitro.html" class=""><span class="num">14</span>EC2 avanzato — Spot, Placement Groups, Nitro, hibernation</a></li><li class="nav-item"><a href="../pages/15-asg-elb.html" class=""><span class="num">15</span>Auto Scaling Groups + Elastic Load Balancing</a></li><li class="nav-item"><a href="../pages/16-lambda-deep-dive.html" class=""><span class="num">16</span>Lambda deep dive</a></li><li class="nav-item"><a href="../pages/17-containers-ecs-eks-fargate.html" class=""><span class="num">17</span>Containers: ECS, EKS, Fargate, ECR</a></li><li class="nav-item"><a href="../pages/18-specialty-compute.html" class=""><span class="num">18</span>Specialty compute: Batch, Lightsail, Outposts, Wavelength, Beanstalk</a></li><li class="nav-item"><a href="../pages/19-ebs-efs-fsx.html" class=""><span class="num">19</span>EBS, EFS, FSx, Instance Store</a></li><li class="nav-item"><a href="../pages/20-s3-deep-dive.html" class=""><span class="num">20</span>S3 — deep dive</a></li><li class="nav-item"><a href="../pages/21-archive-snow-gateway-backup.html" class=""><span class="num">21</span>Glacier, Snow, Storage Gateway, DataSync, AWS Backup</a></li><li class="nav-item"><a href="../pages/22-rds.html" class=""><span class="num">22</span>RDS — relational DB managed (engines, Multi-AZ, replicas, Proxy)</a></li><li class="nav-item"><a href="../pages/23-aurora-deep-dive.html" class=""><span class="num">23</span>Aurora deep dive — storage condiviso, Serverless v2, Global Database</a></li><li class="nav-item"><a href="../pages/24-dynamodb-deep-dive.html" class=""><span class="num">24</span>DynamoDB deep dive — partition, GSI, Streams, single-table</a></li><li class="nav-item"><a href="../pages/25-purpose-built-dbs.html" class=""><span class="num">25</span>Purpose-built DB — ElastiCache, MemoryDB, Neptune, DocumentDB, Keyspaces, Timestream, QLDB</a></li><li class="nav-item"><a href="../pages/26-redshift-data-warehousing.html" class=""><span class="num">26</span>Redshift — data warehousing MPP e zero-ETL</a></li><li class="nav-item"><a href="../pages/27-sqs-sns-eventbridge.html" class="active"><span class="num">27</span>SQS, SNS, EventBridge — messaging ed eventi</a></li><li class="nav-item"><a href="../pages/28-step-functions-mq-appflow.html" class=""><span class="num">28</span>Step Functions, MQ, AppFlow — orchestrazione e integrazione</a></li><li class="nav-item"><a href="../pages/29-athena-glue-lakeformation.html" class=""><span class="num">29</span>Athena, Glue, Lake Formation — il data lake AWS</a></li><li class="nav-item"><a href="../pages/30-emr-kinesis-msk.html" class=""><span class="num">30</span>EMR, Kinesis, MSK — big data e streaming</a></li><li class="nav-item"><a href="../pages/31-opensearch-quicksight.html" class=""><span class="num">31</span>OpenSearch e QuickSight — search e BI</a></li><li class="nav-item"><a href="../pages/32-sagemaker-overview.html" class=""><span class="num">32</span>SageMaker — la piattaforma ML end-to-end</a></li><li class="nav-item"><a href="../pages/33-bedrock-ai-services.html" class=""><span class="num">33</span>Bedrock e AI services — GenAI e ML managed</a></li><li class="nav-item"><a href="../pages/34-iac-cloudformation-cdk-terraform.html" class=""><span class="num">34</span>IaC su AWS — CloudFormation, CDK, SAM, Terraform</a></li><li class="nav-item"><a href="../pages/35-ci-cd-pipeline.html" class=""><span class="num">35</span>CI/CD su AWS — CodePipeline, CodeBuild, CodeDeploy, CodeCatalyst</a></li><li class="nav-item"><a href="../pages/36-observability-cloudwatch-xray.html" class=""><span class="num">36</span>Observability — CloudWatch, X-Ray, CloudTrail, Config, SSM</a></li><li class="nav-item"><a href="../pages/37-kms-secrets-acm.html" class=""><span class="num">37</span>Crittografia — KMS, CloudHSM, Secrets Manager, Parameter Store, ACM</a></li><li class="nav-item"><a href="../pages/38-waf-shield-guardduty-inspector.html" class=""><span class="num">38</span>Threat detection — WAF, Shield, GuardDuty, Inspector, Macie, Security Hub</a></li><li class="nav-item"><a href="../pages/39-governance-org-controltower-identitycenter.html" class=""><span class="num">39</span>Governance — Organizations, Control Tower, Identity Center</a></li><li class="nav-item"><a href="../pages/40-migration-mgn-dms-snow.html" class=""><span class="num">40</span>Migration — MGN, DMS, Snow family, Discovery, Migration Hub</a></li><li class="nav-item"><a href="../pages/41-cost-optimization-finops.html" class=""><span class="num">41</span>Cost optimization e FinOps</a></li><li class="nav-item"><a href="../pages/42-well-architected.html" class=""><span class="num">42</span>Well-Architected Framework — 6 pillar, lens, review</a></li><li class="nav-item"><a href="../pages/43-architecture-patterns.html" class=""><span class="num">43</span>Architecture patterns — 3-tier, serverless, event-driven, microservices</a></li><li class="nav-item"><a href="../pages/44-disaster-recovery-multi-region.html" class=""><span class="num">44</span>Disaster Recovery e Multi-Region</a></li><li class="nav-item"><a href="../pages/45-reference-architectures.html" class=""><span class="num">45</span>Reference architectures real-world</a></li><li class="nav-item"><a href="../pages/46-advanced-networking.html" class=""><span class="num">46</span>Advanced networking deep dive</a></li><li class="nav-item"><a href="../pages/47-containers-deep-dive.html" class=""><span class="num">47</span>Containers deep dive — EKS, Karpenter, service mesh</a></li><li class="nav-item"><a href="../pages/48-serverless-patterns.html" class=""><span class="num">48</span>Serverless patterns deep dive</a></li><li class="nav-item"><a href="../pages/49-genai-rag-agents.html" class=""><span class="num">49</span>Generative AI su AWS — RAG e Agents</a></li><li class="nav-item"><a href="../pages/50-certificazioni-aws.html" class=""><span class="num">50</span>Certificazioni AWS — roadmap e study guide</a></li><li class="nav-item"><a href="../pages/51-glossario-az.html" class=""><span class="num">51</span>Glossario A-Z</a></li><li class="nav-item"><a href="../pages/52-cheatsheet.html" class=""><span class="num">52</span>Cheat sheet: servizi, limiti, instance families</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Integration</span>
+        <span>Sezione 27 di 52</span>
+        <span class="level-tag level-int">Livello: intermedio</span>
+      </div>
+      <h1>SQS, SNS, EventBridge — messaging ed eventi</h1>
+      <p class="summary">Code, topic pub/sub e bus eventi: tre primitive per disaccoppiare microservizi. Quando usare 1-a-1, 1-a-molti o event-driven.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Integration</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>sezione 16</li><li>sezione 17</li></ul>
+  <div class="label">Strumenti / riferimenti</div>
+  <ul class="source-list"><li>AWS CLI</li><li>EventBridge Scheduler</li></ul>
+</div>
+      <p>Disaccoppiare i componenti è il primo passo per scalare. AWS offre tre primitive: <strong>SQS</strong> (code punto-a-punto), <strong>SNS</strong> (topic pub/sub) ed <strong>EventBridge</strong> (bus eventi con pattern matching). Capire quando usare cosa evita architetture pasticciate.</p>
+<h2 id="1-quando-usare-cosa">1. Quando usare cosa</h2>
+<pre><code class="language-mermaid">flowchart LR
+  A[Producer] --&gt;|1-to-1, lavoro async| SQS[(SQS Queue)]
+  SQS --&gt; Worker
+  B[Producer] --&gt;|1-to-many, broadcast| SNS{{SNS Topic}}
+  SNS --&gt; S1[Email]
+  SNS --&gt; S2[Lambda]
+  SNS --&gt; S3[SQS]
+  C[Producer SaaS/AWS/Custom] --&gt;|eventi tipati| EB((EventBridge Bus))
+  EB --&gt;|rule + pattern| T1[Lambda]
+  EB --&gt;|rule + pattern| T2[Step Functions]
+</code></pre>
+<p>Regola pratica: <strong>SQS</strong> se il consumer fa lavoro a quantità (job queue), <strong>SNS</strong> se devi fanout statico a pochi destinatari, <strong>EventBridge</strong> se vuoi filtrare per contenuto e dirigere a target dinamici.</p>
+<h2 id="2-sqs-code-gestite">2. SQS — code gestite</h2>
+<p>Due tipi:</p>
+<table>
+<thead>
+<tr>
+<th>Caratteristica</th>
+<th>Standard</th>
+<th>FIFO</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Throughput</td>
+<td>illimitato</td>
+<td>300 TPS (3000 con batching), 70k con high-throughput mode</td>
+</tr>
+<tr>
+<td>Ordering</td>
+<td>best-effort</td>
+<td>garantito per MessageGroupId</td>
+</tr>
+<tr>
+<td>Delivery</td>
+<td>at-least-once</td>
+<td>exactly-once (dedup window 5 min)</td>
+</tr>
+<tr>
+<td>Prezzo</td>
+<td>$0.40/M</td>
+<td>$0.50/M</td>
+</tr>
+</tbody>
+</table>
+<p>Concetti chiave:
+- <strong>Visibility timeout</strong>: quando un consumer fa <code>ReceiveMessage</code>, il messaggio diventa invisibile per N secondi. Se non viene cancellato entro quel tempo, torna visibile. Default 30s, max 12h.
+- <strong>Long polling</strong> (<code>WaitTimeSeconds=20</code>): riduce richieste vuote e costi. Usare sempre.
+- <strong>Dead-Letter Queue (DLQ)</strong>: dopo N tentativi (<code>maxReceiveCount</code>), il messaggio finisce in una coda separata per analisi.
+- <strong>Delay queue</strong>: ritardo iniziale 0-900s.
+- <strong>Message size</strong>: max 256 KB. Per payload più grandi, <strong>Extended Client Library</strong> mette il body in S3 e in coda viaggia solo il puntatore.</p>
+<pre><code class="language-bash">aws sqs send-message \
+  --queue-url https://sqs.eu-west-1.amazonaws.com/123/jobs \
+  --message-body '{&quot;orderId&quot;:&quot;o-42&quot;}' \
+  --message-attributes 'priority={DataType=String,StringValue=high}'
+</code></pre>
+<h2 id="3-sns-pubsub-topic">3. SNS — pub/sub topic</h2>
+<p>Un publisher pubblica su un <strong>topic</strong>, N subscriber ricevono. Protocolli supportati: HTTP/HTTPS, email, SMS, push mobile, <strong>SQS</strong>, <strong>Lambda</strong>, Kinesis Firehose. Pattern <strong>fan-out</strong> classico: SNS → N code SQS, ognuna processata indipendentemente da un servizio diverso.</p>
+<ul>
+<li><strong>FIFO topic</strong> + FIFO queue per ordering end-to-end.</li>
+<li><strong>Message filtering</strong>: ogni subscription può avere una filter policy JSON, riceve solo eventi che matchano.</li>
+<li><strong>Message Data Protection</strong>: maschera PII automaticamente.</li>
+</ul>
+<p>Gotcha: senza filter policy ogni subscriber riceve tutto e paga ogni delivery.</p>
+<h2 id="4-eventbridge-il-bus-eventi">4. EventBridge — il bus eventi</h2>
+<p>3 tipi di bus:
+- <strong>Default bus</strong>: eventi nativi AWS (EC2 state change, S3 object created se attivato, ecc.).
+- <strong>Custom bus</strong>: i tuoi eventi applicativi.
+- <strong>Partner bus</strong>: eventi da SaaS (Datadog, Auth0, Shopify, Zendesk…).</p>
+<p>Una <strong>rule</strong> definisce un <strong>event pattern</strong> (JSON) e fino a 5 <strong>target</strong>.</p>
+<pre><code class="language-json">{
+  &quot;source&quot;: [&quot;myapp.orders&quot;],
+  &quot;detail-type&quot;: [&quot;OrderPlaced&quot;],
+  &quot;detail&quot;: { &quot;amount&quot;: [{ &quot;numeric&quot;: [&quot;&gt;&quot;, 1000] }] }
+}
+</code></pre>
+<p>Feature avanzate:
+- <strong>Schema Registry</strong>: discover automatico dei tipi di evento, genera codice.
+- <strong>Archive + Replay</strong>: registra tutti gli eventi e ri-iniettali per debug o backfill.
+- <strong>Pipes</strong>: source → (filter + enrich) → target, sostituisce molto codice glue Lambda. Source può essere SQS, Kinesis, DynamoDB Streams, MSK.
+- <strong>Scheduler</strong>: cron managed con scala a milioni di schedule (sostituisce CloudWatch Events Rules per cron).</p>
+<h2 id="5-latenza-e-throughput">5. Latenza e throughput</h2>
+<table>
+<thead>
+<tr>
+<th>Servizio</th>
+<th>Latenza tipica</th>
+<th>Throughput</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SQS Standard</td>
+<td>10-100 ms</td>
+<td>illimitato</td>
+</tr>
+<tr>
+<td>SNS Standard</td>
+<td>30-100 ms</td>
+<td>molto alto</td>
+</tr>
+<tr>
+<td>EventBridge</td>
+<td>0.5-2 s end-to-end</td>
+<td>10k/s per region (raise)</td>
+</tr>
+</tbody>
+</table>
+<p>EventBridge <strong>non</strong> è per real-time sub-secondo. Per quello SNS o Kinesis.</p>
+<h2 id="6-anti-pattern">6. Anti-pattern</h2>
+<ul>
+<li>Usare SQS come "buffer per evitare di scalare il DB": funziona finché non hai backlog cronico. Risolvi prima la causa.</li>
+<li>Mettere logica di business in filter policy SNS/EventBridge: diventa illeggibile.</li>
+<li>Dimenticarsi la DLQ: i poison message ti riempiono la coda e bruciano lambda invocations.</li>
+<li>Visibility timeout &lt; tempo medio di processing → duplicati a cascata.</li>
+</ul>
+<h2 id="7-pricing-rapido">7. Pricing rapido</h2>
+<ul>
+<li><strong>SQS</strong>: $0.40/M richieste standard. Una <code>ReceiveMessage</code> long-poll = 1 richiesta.</li>
+<li><strong>SNS</strong>: $0.50/M publish + costo delivery per protocollo (SMS caro!).</li>
+<li><strong>EventBridge</strong>: $1/M eventi custom, eventi AWS gratis nel default bus.</li>
+</ul>
+<h2 id="8-esercizio">8. Esercizio</h2>
+<details>
+<summary>5 microservizi devono reagire a "OrderPlaced", ognuno con filtri diversi. Cosa usi?</summary>
+
+**EventBridge custom bus**. Un evento solo, 5 rule con event pattern specifici, 5 target (Lambda / SQS / Step Functions). Vantaggi vs SNS fan-out + SQS: filtering più ricco (numeric, exists, anything-but), schema registry, archive+replay per debug. SNS+SQS funziona ma il filtering è meno espressivo e il debug più rumoroso.
+</details>
+
+<details>
+<summary>Worker che processa video 10 minuti. Visibility timeout consigliato?</summary>
+
+Visibility timeout almeno 12-15 minuti (con margine), oppure chiamare `ChangeMessageVisibility` periodicamente come heartbeat. Se il worker crasha, il messaggio torna visibile e un altro worker lo riprende. Imposta `maxReceiveCount=3` con DLQ per evitare loop infiniti sui video corrotti.
+</details>
+
+<blockquote>
+<p><strong>Riassunto</strong>: SQS = code 1-a-1 con visibility timeout e DLQ; SNS = pub/sub fan-out a pochi target; EventBridge = bus eventi con pattern matching, schema registry, Pipes e Scheduler. Scegli in base a cardinalità destinatari e necessità di filtering.</p>
+</blockquote>
+      <nav class="pager">
+<a href="26-redshift-data-warehousing.html" class="prev"><span class="label">← Precedente</span><span class="title">Redshift — data warehousing MPP e zero-ETL</span></a>
+<a href="28-step-functions-mq-appflow.html" class="next"><span class="label">Successivo →</span><span class="title">Step Functions, MQ, AppFlow — orchestrazione e integrazione</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>AWS Zero to Hero</strong> — percorso completo, in italiano, dalle primitive all'architettura avanzata.</p><p>Materiale didattico aperto. Nessuna sponsorizzazione, nessun affiliate link, nessuna affiliazione con AWS. Quando un concetto è oscuro, torna indietro: AWS è una piramide di primitive, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

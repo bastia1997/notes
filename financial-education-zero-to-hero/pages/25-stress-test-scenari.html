@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stress test, scenari estremi, tail risk — Educazione Finanziaria Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#3a3a2a',primaryTextColor:'#f4f1e8',primaryBorderColor:'#9b7d34',lineColor:'#9a9685',background:'#181c27'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">€</div>
+      <div>
+        <div class="brand-title">FINANZA</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">IT</span><a href="../en/pages/25-stress-tests-scenarios.html" class="lang-link" title="Switch to English">EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-cos-e-il-denaro.html" class=""><span class="num">01</span>Cos&#x27;è il denaro (e come è cambiato)</a></li><li class="nav-item"><a href="../pages/02-sistema-finanziario.html" class=""><span class="num">02</span>Il sistema finanziario: come funziona davvero</a></li><li class="nav-item"><a href="../pages/03-banche-centrali.html" class=""><span class="num">03</span>Banche centrali (BCE, FED, BOE, BOJ)</a></li><li class="nav-item"><a href="../pages/04-inflazione.html" class=""><span class="num">04</span>Inflazione, deflazione, potere d&#x27;acquisto</a></li><li class="nav-item"><a href="../pages/05-budget-personale.html" class=""><span class="num">05</span>Budget personale e cash flow</a></li><li class="nav-item"><a href="../pages/06-piramide-finanziaria.html" class=""><span class="num">06</span>Piramide finanziaria e fondo emergenza</a></li><li class="nav-item"><a href="../pages/07-conti-e-pagamenti.html" class=""><span class="num">07</span>Conti correnti, conti deposito, sistemi di pagamento</a></li><li class="nav-item"><a href="../pages/08-credit-score-crif.html" class=""><span class="num">08</span>Credit score, CRIF e identità finanziaria</a></li><li class="nav-item"><a href="../pages/09-tipi-di-banche.html" class=""><span class="num">09</span>Tipologie di banche (e perché le neobank sono diverse)</a></li><li class="nav-item"><a href="../pages/10-bilancio-banca-basilea.html" class=""><span class="num">10</span>Il bilancio di una banca e Basilea III/IV</a></li><li class="nav-item"><a href="../pages/11-mutui.html" class=""><span class="num">11</span>Mutui (fisso, variabile, misto, surroga, INPS)</a></li><li class="nav-item"><a href="../pages/12-prestiti-carte-cessione.html" class=""><span class="num">12</span>Prestiti personali, carte revolving, cessione del quinto</a></li><li class="nav-item"><a href="../pages/13-mercati-finanziari.html" class=""><span class="num">13</span>Mercati finanziari: come funzionano davvero</a></li><li class="nav-item"><a href="../pages/14-azioni.html" class=""><span class="num">14</span>Azioni: cosa compri davvero quando compri un&#x27;azione</a></li><li class="nav-item"><a href="../pages/15-obbligazioni.html" class=""><span class="num">15</span>Obbligazioni: cedola, prezzo, yield, duration</a></li><li class="nav-item"><a href="../pages/16-etf-fondi.html" class=""><span class="num">16</span>ETF, fondi comuni e gestione attiva vs passiva</a></li><li class="nav-item"><a href="../pages/17-asset-allocation-mpt.html" class=""><span class="num">17</span>Asset allocation e teoria moderna del portafoglio (MPT)</a></li><li class="nav-item"><a href="../pages/18-diversificazione-correlazione.html" class=""><span class="num">18</span>Diversificazione, correlazione e rischio non sistematico</a></li><li class="nav-item"><a href="../pages/19-analisi-fondamentale.html" class=""><span class="num">19</span>Analisi fondamentale: DCF, multipli, ratio</a></li><li class="nav-item"><a href="../pages/20-analisi-tecnica.html" class=""><span class="num">20</span>Analisi tecnica (e perché l&#x27;accademia è scettica)</a></li><li class="nav-item"><a href="../pages/21-capm-fama-french.html" class=""><span class="num">21</span>CAPM e modelli multi-fattoriali (Fama-French)</a></li><li class="nav-item"><a href="../pages/22-derivati.html" class=""><span class="num">22</span>Derivati: futures, opzioni, swap, forward</a></li><li class="nav-item"><a href="../pages/23-black-scholes-greche.html" class=""><span class="num">23</span>Black-Scholes e le greche</a></li><li class="nav-item"><a href="../pages/24-var-cvar-risk-management.html" class=""><span class="num">24</span>Risk management quantitativo: VaR e CVaR</a></li><li class="nav-item"><a href="../pages/25-stress-test-scenari.html" class="active"><span class="num">25</span>Stress test, scenari estremi, tail risk</a></li><li class="nav-item"><a href="../pages/26-behavioral-finance.html" class=""><span class="num">26</span>Behavioral finance: i bias che ti rovinano gli investimenti</a></li><li class="nav-item"><a href="../pages/27-macroeconomia-investitori.html" class=""><span class="num">27</span>Macroeconomia essenziale per investitori</a></li><li class="nav-item"><a href="../pages/28-tassi-cambio-forex.html" class=""><span class="num">28</span>Tassi di cambio e Forex</a></li><li class="nav-item"><a href="../pages/29-commodities.html" class=""><span class="num">29</span>Commodities: oro, petrolio, metalli, agri</a></li><li class="nav-item"><a href="../pages/30-crisi-finanziarie-storia.html" class=""><span class="num">30</span>Crisi finanziarie nella storia: cosa si ripete</a></li><li class="nav-item"><a href="../pages/31-tassazione-investimenti-italia.html" class=""><span class="num">31</span>Tassazione degli investimenti in Italia (e come è altrove)</a></li><li class="nav-item"><a href="../pages/32-previdenza-pensione-tfr.html" class=""><span class="num">32</span>Previdenza: INPS, pensione di base, fondi pensione, TFR</a></li><li class="nav-item"><a href="../pages/33-assicurazioni.html" class=""><span class="num">33</span>Assicurazioni: cosa serve davvero e cosa è solo commissione</a></li><li class="nav-item"><a href="../pages/34-immobiliare-reit.html" class=""><span class="num">34</span>Immobiliare: comprare, affittare, REIT, mattoncino digitale</a></li><li class="nav-item"><a href="../pages/35-crypto-blockchain-defi.html" class=""><span class="num">35</span>Crypto, Bitcoin, Ethereum, stablecoin, DeFi</a></li><li class="nav-item"><a href="../pages/36-fintech.html" class=""><span class="num">36</span>Fintech: robo-advisor, neobanking, BNPL, embedded finance</a></li><li class="nav-item"><a href="../pages/37-esg-finanza-sostenibile.html" class=""><span class="num">37</span>ESG e finanza sostenibile</a></li><li class="nav-item"><a href="../pages/38-ai-in-finanza.html" class=""><span class="num">38</span>AI nella finanza: ML per trading, robo-advisor, credit scoring, LLM</a></li><li class="nav-item"><a href="../pages/39-costruire-portafoglio.html" class=""><span class="num">39</span>Costruire un portafoglio: lazy, three-fund, all-weather, core-satellite</a></li><li class="nav-item"><a href="../pages/40-pac-pic-ribilanciamento.html" class=""><span class="num">40</span>PAC vs PIC, ribilanciamento e tax loss harvesting</a></li><li class="nav-item"><a href="../pages/41-fire-indipendenza-finanziaria.html" class=""><span class="num">41</span>FIRE, indipendenza finanziaria e longevity planning</a></li><li class="nav-item"><a href="../pages/42-frodi-errori-comuni.html" class=""><span class="num">42</span>Frodi, truffe, errori comuni: come non perdere tutto</a></li><li class="nav-item"><a href="../pages/43-glossario-az.html" class=""><span class="num">43</span>Glossario A–Z</a></li><li class="nav-item"><a href="../pages/44-formulario.html" class=""><span class="num">44</span>Formulario</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Risk management</span>
+        <span>Sezione 25 di 44</span>
+        <span class="level-tag level-adv">Livello: avanzato</span>
+      </div>
+      <h1>Stress test, scenari estremi, tail risk</h1>
+      <p class="summary">Andare oltre il VaR: stress test regolatori, scenari ipotetici, code grasse, Extreme Value Theory, black swan e portafogli personali.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Risk management</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>Hai letto la sezione su VaR/CVaR</li><li>Sai cosa è una distribuzione di probabilità</li><li>Familiarità con portafogli multi-asset</li></ul>
+  <div class="label">Strumenti / riferimenti</div>
+  <ul class="source-list"><li>Python + scipy + arch</li><li>Excel</li><li>Dati storici (Yahoo, FRED, Stooq)</li></ul>
+</div>
+      <p>VaR e ES sono utili ma vivono dentro un campione di dati che non ha mai visto Lehman, mai visto il 1929, mai visto un -22 sigma. Lo stress test è il modo onesto di chiedersi: "se domani succede una cosa che il mio modello considera quasi impossibile, dove finisco?". È quello che regolatori, banche e (dovresti) tu fare prima di lasciar correre la prossima moda.</p>
+<h2 id="cosa-e-uno-stress-test">Cosa è uno stress test</h2>
+<p>Un <strong>stress test</strong> valuta come un'istituzione o un portafoglio reagirebbe a uno scenario avverso ipotetico. È diverso da VaR/ES in tre punti:</p>
+<ol>
+<li><strong>Non è probabilistico</strong>: non chiedi "qual è il 99° percentile" ma "cosa succede se accade Y".</li>
+<li><strong>Lo scenario è estremo e plausibile</strong>: non un movimento medio + 3σ, ma il replay del 2008 o uno scenario disegnato a tavolino dai supervisori.</li>
+<li><strong>L'output è P&amp;L, capitale residuo, liquidità</strong>, non solo una metrica di rischio.</li>
+</ol>
+<pre><code class="language-mermaid">flowchart LR
+    S[Scenario avverso] --&gt; P[Portafoglio]
+    P --&gt; RV[Rivalutazione mark-to-market]
+    RV --&gt; PnL[Perdite]
+    PnL --&gt; Cap[Capitale residuo]
+    PnL --&gt; Liq[Liquidità residua]
+    Cap --&gt; Bool{passa?}
+    Liq --&gt; Bool
+</code></pre>
+<h2 id="i-grandi-stress-test-regolatori">I grandi stress test regolatori</h2>
+<h3 id="stati-uniti-dfast-e-ccar">Stati Uniti: DFAST e CCAR</h3>
+<p>Dopo il 2008, il Dodd-Frank Act ha introdotto il <strong>DFAST</strong> (Dodd-Frank Act Stress Test): le banche con asset &gt; 250 mld $ devono simulare il loro bilancio sotto tre scenari (baseline, adverse, severely adverse). Il <strong>CCAR</strong> (Comprehensive Capital Analysis and Review) aggiunge la valutazione qualitativa del processo interno di pianificazione del capitale. Frequenza: annuale, gestito dalla Fed.</p>
+<p>Esempio scenario "severely adverse" 2024:
+- PIL USA reale: $-7.8\%$ in 4 trimestri.
+- Disoccupazione: $4\% \rightarrow 10\%$.
+- Indice azionario: $-55\%$.
+- Volatilità: VIX $\rightarrow 75$.
+- Spread BBB: $+575$ bps.
+- House Price Index: $-32\%$.</p>
+<h3 id="europa-eba-stress-test">Europa: EBA stress test</h3>
+<p>L'<strong>EBA</strong> (European Banking Authority) coordina gli stress test biennali sulle ~70 banche maggiori dell'EU. Scenari macroeconomici elaborati con ESRB e BCE.</p>
+<p>Esempio EBA 2023 scenario avverso (orizzonte 2023–2025):
+- PIL EU cumulato: $-6.0\%$ vs baseline.
+- Disoccupazione: $+6.1$ punti percentuali.
+- Inflazione: persistente alta poi disinflazione brusca.
+- Equity: $-55\%$ EU.
+- Immobiliare residenziale: $-21\%$.
+- Immobiliare commerciale: $-32\%$.
+- HICP: shock energetico secondario.</p>
+<p>Output: ogni banca pubblica il proprio CET1 ratio stressato. Soglia indicativa: $&gt;5.5\%$ (in passato), oggi più qualitativa.</p>
+<h3 id="altri-framework">Altri framework</h3>
+<ul>
+<li><strong>BoE Solvency Stress Test</strong> (UK): annuale post-Brexit.</li>
+<li><strong>CBE/PBOC</strong> (Cina): meno trasparente.</li>
+<li><strong>Solvency II ORSA</strong> per le assicurazioni (annuale, internalmente prodotto).</li>
+<li><strong>IMF FSAP</strong> (Financial Sector Assessment Program): valutazioni sistemiche per paesi.</li>
+</ul>
+<h2 id="tre-approcci-metodologici">Tre approcci metodologici</h2>
+<h3 id="1-historical-scenarios">1. Historical scenarios</h3>
+<p>Replay di una crisi passata applicata al portafoglio attuale. Esempi tipici:</p>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Periodo</th>
+<th style="text-align: right;">Equity USA</th>
+<th style="text-align: right;">Spread credito</th>
+<th style="text-align: right;">Tassi 10y USA</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Black Monday</td>
+<td>ott 1987</td>
+<td style="text-align: right;">$-20\%$ in 1 giorno</td>
+<td style="text-align: right;">$+50$ bps</td>
+<td style="text-align: right;">$-100$ bps</td>
+</tr>
+<tr>
+<td>LTCM/Russia</td>
+<td>ago-set 1998</td>
+<td style="text-align: right;">$-19\%$</td>
+<td style="text-align: right;">$+200$ bps</td>
+<td style="text-align: right;">$-100$ bps</td>
+</tr>
+<tr>
+<td>Dotcom</td>
+<td>2000–02</td>
+<td style="text-align: right;">$-49\%$</td>
+<td style="text-align: right;">$+250$ bps</td>
+<td style="text-align: right;">$-300$ bps</td>
+</tr>
+<tr>
+<td>Lehman</td>
+<td>sett-ott 2008</td>
+<td style="text-align: right;">$-30\%$ in 6 sett</td>
+<td style="text-align: right;">$+650$ bps</td>
+<td style="text-align: right;">$-200$ bps</td>
+</tr>
+<tr>
+<td>Eurocrisi</td>
+<td>lug-ago 2011</td>
+<td style="text-align: right;">$-19\%$</td>
+<td style="text-align: right;">$+300$ bps EU</td>
+<td style="text-align: right;">$-150$ bps</td>
+</tr>
+<tr>
+<td>Taper tantrum</td>
+<td>mag-set 2013</td>
+<td style="text-align: right;">$-5\%$</td>
+<td style="text-align: right;">$+50$ bps</td>
+<td style="text-align: right;">$+140$ bps</td>
+</tr>
+<tr>
+<td>Covid</td>
+<td>feb-mar 2020</td>
+<td style="text-align: right;">$-34\%$ in 5 sett</td>
+<td style="text-align: right;">$+400$ bps</td>
+<td style="text-align: right;">$-100$ bps</td>
+</tr>
+<tr>
+<td>Inflation+rates</td>
+<td>2022</td>
+<td style="text-align: right;">$-25\%$</td>
+<td style="text-align: right;">$+250$ bps</td>
+<td style="text-align: right;">$+250$ bps</td>
+</tr>
+</tbody>
+</table>
+<p>Pro: dati reali, già coerenti tra asset class.
+Contro: la prossima crisi non sarà identica.</p>
+<h3 id="2-hypotheticalad-hoc-scenarios">2. Hypothetical/ad hoc scenarios</h3>
+<p>Costruisci uno scenario nuovo a tavolino. Esempio "shock geopolitico Asia":
+- Petrolio $+50\%$ in 1 mese.
+- EUR/USD: $-15\%$.
+- Equity tech: $-40\%$.
+- Spread emerging markets: $+500$ bps.
+- Tassi DM: $+100$ bps.</p>
+<p>Pro: cattura rischi forward-looking che la storia non ha visto.
+Contro: soggettivo, rischio di "compiacenza".</p>
+<h3 id="3-reverse-stress-test">3. Reverse stress test</h3>
+<p>Si inverte la domanda: <strong>quale scenario porterebbe la banca / il portafoglio a fallire?</strong> Si parte dal punto di rottura (es. CET1 &lt; soglia, drawdown &gt; 40%) e si cercano i moviment<strong>i</strong> coerenti che ci portano lì. Strumento potente perché trova "i denti scoperti".</p>
+<pre><code class="language-mermaid">flowchart LR
+    F[Fallimento / KO] --&gt; R[Reverse]
+    R --&gt; S1[Quale shock equity?]
+    R --&gt; S2[Quale shock tassi?]
+    R --&gt; S3[Quale concentrazione?]
+    S1 --&gt; A[Azioni preventive]
+    S2 --&gt; A
+    S3 --&gt; A
+</code></pre>
+<h2 id="tail-risk-perche-le-distribuzioni-reali-sono-fat-tailed">Tail risk: perché le distribuzioni reali sono fat-tailed</h2>
+<p>Il modello gaussiano dice che un movimento $&gt; 5\sigma$ è "uno ogni 7 milioni di giorni" (1 ogni $\sim$28.000 anni di mercato). Eppure ne vediamo regolarmente.</p>
+<table>
+<thead>
+<tr>
+<th>Evento</th>
+<th style="text-align: right;">Mossa</th>
+<th style="text-align: right;">Sigma gauss</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Black Monday 1987 (S&amp;P)</td>
+<td style="text-align: right;">$-20.5\%$ in 1 giorno</td>
+<td style="text-align: right;">$\sim -22\sigma$</td>
+</tr>
+<tr>
+<td>Flash Crash 2010</td>
+<td style="text-align: right;">$-9\%$ intraday</td>
+<td style="text-align: right;">$\sim -8\sigma$</td>
+</tr>
+<tr>
+<td>Brexit (GBP)</td>
+<td style="text-align: right;">$-8\%$ in poche ore</td>
+<td style="text-align: right;">$\sim -10\sigma$</td>
+</tr>
+<tr>
+<td>SNB sblocca CHF (2015)</td>
+<td style="text-align: right;">EUR/CHF $-19\%$</td>
+<td style="text-align: right;">$\sim -50\sigma$</td>
+</tr>
+<tr>
+<td>Vix 5 feb 2018 ("Volmageddon")</td>
+<td style="text-align: right;">$+115\%$ in 1 giorno</td>
+<td style="text-align: right;">impossibile gauss</td>
+</tr>
+</tbody>
+</table>
+<p>Sono "impossibili" solo se assumi gaussiana. La realtà:</p>
+<ul>
+<li><strong>Skewness</strong>: code asimmetriche. Equity ha skew negativa: crash più frequenti di rally simmetrici.</li>
+<li><strong>Kurtosis</strong>: code grasse. Equity ha kurtosis 5–15, vs 3 della normale.</li>
+<li><strong>Cluster di volatilità</strong>: i giorni cattivi vengono in fila (Mandelbrot, 1963 → GARCH, Engle 1982).</li>
+</ul>
+<h2 id="distribuzioni-non-gaussiane">Distribuzioni non gaussiane</h2>
+<h3 id="student-t">Student-t</h3>
+<p>Generalizza la normale con un parametro $\nu$ (gradi di libertà) che controlla la pesantezza delle code:</p>
+<p>$$f(x) = \frac{\Gamma(\frac{\nu+1}{2})}{\sqrt{\nu\pi}\Gamma(\frac{\nu}{2})}\left(1+\frac{x^2}{\nu}\right)^{-\frac{\nu+1}{2}}$$</p>
+<p>Per $\nu \to \infty$ ritorna gauss. Per $\nu=5$ è una buona approssimazione per rendimenti azionari giornalieri. Code: $P(|X| &gt; x) \sim x^{-\nu}$.</p>
+<h3 id="pareto-power-law">Pareto / Power law</h3>
+<p>Distribuzione "scale-free":</p>
+<p>$$P(X &gt; x) = \left(\frac{x_{min}}{x}\right)^{\alpha}$$</p>
+<p>Tipica di catastrofi naturali, dimensione delle perdite operative, magnitudo terremoti. Per $\alpha \le 2$ la varianza è infinita; per $\alpha \le 1$ anche la media è infinita.</p>
+<h3 id="extreme-value-theory-evt">Extreme Value Theory (EVT)</h3>
+<p>Teorema di Fisher-Tippett-Gnedenko: il massimo (o minimo) di tante variabili iid, opportunamente normalizzato, converge a una <strong>Generalized Extreme Value distribution (GEV)</strong> con tre famiglie (Gumbel, Fréchet, Weibull a seconda del parametro di forma $\xi$).</p>
+<p>Approccio pratico <strong>Peaks Over Threshold (POT)</strong>: scegli una soglia $u$ alta, modelli gli eccessi $X - u | X &gt; u$ con la <strong>Generalized Pareto Distribution (GPD)</strong>. Stimi i parametri con MLE e ottieni VaR/ES con code modellate correttamente.</p>
+<p>$$P(X-u &gt; y | X&gt;u) = \left(1+\frac{\xi y}{\beta}\right)^{-1/\xi}$$</p>
+<p>Code grasse $\Leftrightarrow \xi &gt; 0$. Per S&amp;P 500 daily: $\xi \approx 0.2-0.3$.</p>
+<h2 id="black-swan-vs-grey-rhino">Black swan vs grey rhino</h2>
+<p>Due metafore utili per distinguere tipi di rischio.</p>
+<p><strong>Black swan</strong> (Taleb, 2007): evento (a) raro, (b) estremo, (c) razionalizzato a posteriori. Il punto è che non è prevedibile nemmeno in linea di principio. Esempio: l'11 settembre, Fukushima, Covid-19 nell'inverno 2019.</p>
+<p><strong>Grey rhino</strong> (Wucker, 2016): evento ad alta probabilità, alto impatto, <strong>visibile in anticipo ma ignorato</strong>. Esempio: bolla immobiliare 2007 segnalata da molti dal 2005, eurocrisi prevedibile a chi guardava gli spread greci 2008–2010, accumulo di debito sovrano dopo Covid.</p>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Probabilità</th>
+<th>Visibilità</th>
+<th>Lezione</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Black swan</td>
+<td>bassissima</td>
+<td>nulla</td>
+<td>costruisci robustezza, non previsione</td>
+</tr>
+<tr>
+<td>Grey rhino</td>
+<td>media-alta</td>
+<td>alta</td>
+<td>agisci sui segnali, evita il cinismo</td>
+</tr>
+</tbody>
+</table>
+<h2 id="stress-test-su-un-portafoglio-personale">Stress test su un portafoglio personale</h2>
+<p>Hai un portafoglio di 80.000 €:
+- 40.000 € (50%) MSCI World ETF.
+- 20.000 € (25%) Euro Aggregate Bond ETF.
+- 10.000 € (12.5%) immobiliare via REIT (VNQ).
+- 8.000 € (10%) oro fisico (lingotti).
+- 2.000 € (2.5%) crypto (BTC).</p>
+<p>Applichiamo tre scenari.</p>
+<h3 id="scenario-a-2008-reload">Scenario A: "2008 reload"</h3>
+<table>
+<thead>
+<tr>
+<th>Asset</th>
+<th style="text-align: right;">Shock</th>
+<th style="text-align: right;">Perdita €</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Equity global</td>
+<td style="text-align: right;">$-50\%$</td>
+<td style="text-align: right;">$-20.000$</td>
+</tr>
+<tr>
+<td>Bond agg EU</td>
+<td style="text-align: right;">$-3\%$</td>
+<td style="text-align: right;">$-600$</td>
+</tr>
+<tr>
+<td>REIT</td>
+<td style="text-align: right;">$-65\%$</td>
+<td style="text-align: right;">$-6.500$</td>
+</tr>
+<tr>
+<td>Oro</td>
+<td style="text-align: right;">$+15\%$</td>
+<td style="text-align: right;">$+1.200$</td>
+</tr>
+<tr>
+<td>BTC (non esisteva, simuliamo)</td>
+<td style="text-align: right;">$-80\%$</td>
+<td style="text-align: right;">$-1.600$</td>
+</tr>
+<tr>
+<td><strong>Totale</strong></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"><strong>$-27.500$ € (-34%)</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="scenario-b-inflazione-2022-reload">Scenario B: "Inflazione 2022 reload"</h3>
+<table>
+<thead>
+<tr>
+<th>Asset</th>
+<th style="text-align: right;">Shock</th>
+<th style="text-align: right;">Perdita €</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Equity</td>
+<td style="text-align: right;">$-25\%$</td>
+<td style="text-align: right;">$-10.000$</td>
+</tr>
+<tr>
+<td>Bond</td>
+<td style="text-align: right;">$-18\%$</td>
+<td style="text-align: right;">$-3.600$</td>
+</tr>
+<tr>
+<td>REIT</td>
+<td style="text-align: right;">$-30\%$</td>
+<td style="text-align: right;">$-3.000$</td>
+</tr>
+<tr>
+<td>Oro</td>
+<td style="text-align: right;">$0\%$</td>
+<td style="text-align: right;">$0$</td>
+</tr>
+<tr>
+<td>BTC</td>
+<td style="text-align: right;">$-65\%$</td>
+<td style="text-align: right;">$-1.300$</td>
+</tr>
+<tr>
+<td><strong>Totale</strong></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"><strong>$-17.900$ € (-22%)</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Lezione amara del 2022: la classica diversificazione 60/40 non protegge quando crollano insieme equity e bond.</p>
+<h3 id="scenario-c-crisi-euro-grave">Scenario C: "Crisi euro grave"</h3>
+<table>
+<thead>
+<tr>
+<th>Asset</th>
+<th style="text-align: right;">Shock</th>
+<th style="text-align: right;">Perdita €</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Equity (50% EU)</td>
+<td style="text-align: right;">$-35\%$</td>
+<td style="text-align: right;">$-14.000$</td>
+</tr>
+<tr>
+<td>Bond EU agg</td>
+<td style="text-align: right;">$-12\%$</td>
+<td style="text-align: right;">$-2.400$</td>
+</tr>
+<tr>
+<td>REIT EU</td>
+<td style="text-align: right;">$-30\%$</td>
+<td style="text-align: right;">$-3.000$</td>
+</tr>
+<tr>
+<td>Oro</td>
+<td style="text-align: right;">$+25\%$</td>
+<td style="text-align: right;">$+2.000$</td>
+</tr>
+<tr>
+<td>BTC</td>
+<td style="text-align: right;">$-30\%$</td>
+<td style="text-align: right;">$-600$</td>
+</tr>
+<tr>
+<td>Rischio cambio EUR debole</td>
+<td style="text-align: right;">$-5\%$ su asset USD</td>
+<td style="text-align: right;">implicito</td>
+</tr>
+<tr>
+<td><strong>Totale</strong></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"><strong>$-18.000$ € (-22%)</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Tre numeri brutti, ma utili: ora sai che la tua "perdita peggiore plausibile" è intorno al 30–35%, non il 12% che ti dice il VaR 99% annuale. Tarare leva, riserve di liquidità e tempi di entrata in pensione <strong>su questi numeri</strong>, non sul VaR.</p>
+<h2 id="curva-di-code-grasse-vs-gaussiana">Curva di code grasse vs gaussiana</h2>
+<p><svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;background:#fafafa">
+  <path d="M 20 200 C 80 200, 120 195, 150 180 S 190 60, 200 50 S 250 180, 280 195 L 380 200 Z" fill="#3366cc" fill-opacity="0.3" stroke="#3366cc"/>
+  <path d="M 20 195 C 70 192, 110 180, 140 160 S 190 60, 200 55 S 260 170, 290 188 L 380 198 Z" fill="#cc3333" fill-opacity="0.2" stroke="#cc3333" stroke-dasharray="4 2"/>
+  <text x="200" y="215" font-size="11" text-anchor="middle">Rendimento (sigma)</text>
+  <text x="200" y="45" font-size="10" text-anchor="middle" fill="#3366cc">Gauss</text>
+  <text x="60" y="195" font-size="10" fill="#cc3333">Code grasse</text>
+  <text x="340" y="195" font-size="10" fill="#cc3333">(t di Student / EVT)</text>
+</svg></p>
+<p>La curva tratteggiata rossa ha più massa nelle code: stesse 2σ ma probabilità di estremo 3–5 volte la gaussiana.</p>
+<h2 id="pratica-con-python-evt-su-sp-500">Pratica con Python: EVT su S&amp;P 500</h2>
+<pre><code class="language-python">import numpy as np
+import pandas as pd
+import yfinance as yf
+from scipy.stats import genpareto
+
+df = yf.download(&quot;^GSPC&quot;, start=&quot;2000-01-01&quot;)
+rets = df[&quot;Close&quot;].pct_change().dropna()
+losses = -rets  # perdite positive
+
+# Peaks Over Threshold: soglia al 95° percentile
+u = losses.quantile(0.95)
+excesses = losses[losses &gt; u] - u
+
+# Fit GPD
+shape, loc, scale = genpareto.fit(excesses, floc=0)
+print(f&quot;xi (forma) = {shape:.3f}, beta (scala) = {scale:.4f}, u = {u:.4f}&quot;)
+
+# VaR ed ES al 99.5% con EVT
+n = len(losses)
+nu = len(excesses)
+p = 0.995
+var_evt = u + (scale/shape) * (((n*(1-p))/nu)**(-shape) - 1)
+es_evt = (var_evt + scale - shape*u) / (1 - shape)
+print(f&quot;VaR 99.5% EVT = {var_evt:.4f} ({var_evt*100:.2f}%)&quot;)
+print(f&quot;ES  99.5% EVT = {es_evt:.4f} ({es_evt*100:.2f}%)&quot;)
+</code></pre>
+<p>Tipico output post-2020: $\xi \approx 0.25$, conferma code grasse. $VaR_{99.5\%}$ EVT è ~30–50% più alto del gaussiano.</p>
+<h2 id="lezioni-delle-tre-grandi-crisi-recenti">Lezioni delle tre grandi crisi recenti</h2>
+<h3 id="2008-leva-e-correlazioni-nascoste">2008 — leva e correlazioni nascoste</h3>
+<p>CDO mortgage-backed con rating AAA si rivelarono junk quando le correlazioni residenziali tra stati USA, considerate basse, schizzarono a 1 nello stress. <strong>Lezione</strong>: le correlazioni storiche non valgono in crisi.</p>
+<h3 id="2020-liquidita">2020 — liquidità</h3>
+<p>In poche settimane il mercato treasury USA ebbe problemi di liquidità (spread bid-ask 10x normale). Fondi del mercato monetario in difficoltà. <strong>Lezione</strong>: anche gli asset "sicuri" possono diventare illiquidi nello stress. Servono stress test di liquidità, non solo di solvibilità.</p>
+<h3 id="2022-correlazione-equity-bond-positiva">2022 — correlazione equity-bond positiva</h3>
+<p>Per 20 anni il "60/40" funzionava perché in stress azioni giù = bond su. Nel 2022, entrambi -15%/-20%. <strong>Lezione</strong>: la diversificazione classica fallisce quando lo shock è di tipo "inflation" anziché "growth".</p>
+<details>
+<summary>Esercizio: progetta un reverse stress test sul tuo portafoglio</summary>
+
+1. Definisci il tuo punto di rottura: es. "non posso permettermi un drawdown > 35%, perché dovrei interrompere il piano".
+2. Considera tre dimensioni di rischio: equity, tassi/spread, valuta (se hai asset USD).
+3. Trova combinazioni di shock che producono $-35\%$. Esempi:
+   - Equity $-50\%$, bond $-10\%$, oro $-5\%$: simulalo.
+   - Equity $-30\%$, bond $-25\%$, EUR/USD $+15\%$ (se hai 30% in USD).
+4. Per ciascuna combinazione: è plausibile? Storicamente esiste? Hai protezione?
+5. Definisci 3 azioni preventive: es. ridurre equity a 50%, aggiungere 5% in oro, costruire 12 mesi di liquidità.
+6. Stabilisci una "trigger rule": se equity globale fa $-25\%$, ribilanci dentro 30 giorni.
+
+Risultato atteso: una pagina A4 con scenari e azioni. Conservala. Rileggila ogni 6 mesi.
+
+</details>
+
+<h2 id="cosa-portare-a-casa">Cosa portare a casa</h2>
+<ul>
+<li>Lo <strong>stress test</strong> ti fa domande che VaR/ES non possono fare: "se accade X, dove finisco?"</li>
+<li>I regolatori usano scenari ad hoc (DFAST/CCAR, EBA, BoE) con shock macro consistenti.</li>
+<li>Esistono tre approcci: <strong>historical</strong>, <strong>hypothetical</strong>, <strong>reverse</strong>.</li>
+<li>Le distribuzioni reali sono <strong>fat-tailed</strong>: Student-t, Pareto, EVT modellano le code meglio della gauss.</li>
+<li><strong>Black swan</strong> vs <strong>grey rhino</strong>: lavora su entrambi, ma il grey rhino è quello su cui hai più scuse se ti fai trovare impreparato.</li>
+<li>Sul tuo portafoglio: replay 2008, 2020, 2022 + reverse stress = niente sorpresa, niente panico, niente vendite forzate.</li>
+</ul>
+      <nav class="pager">
+<a href="24-var-cvar-risk-management.html" class="prev"><span class="label">← Precedente</span><span class="title">Risk management quantitativo: VaR e CVaR</span></a>
+<a href="26-behavioral-finance.html" class="next"><span class="label">Successivo →</span><span class="title">Behavioral finance: i bias che ti rovinano gli investimenti</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Educazione Finanziaria Zero to Hero</strong> — percorso completo, in italiano, dai fondamentali al pricing dei derivati.</p><p>Materiale didattico aperto. Nessuna sponsorizzazione, nessun affiliate link. Quando un concetto è oscuro, torna indietro: la finanza è una piramide, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Transformer and attention — Data Science Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#3a4a7a',primaryTextColor:'#e8eef0',primaryBorderColor:'#5a6aa0',lineColor:'#8a9499',background:'#11171a'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">Σ</div>
+      <div>
+        <div class="brand-title">DATA SCIENCE</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/31-transformer.html" class="lang-link" title="Passa all'italiano">🇮🇹 IT</a><span class="lang-active" title="English">🇬🇧 EN</span></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="search... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-what-is-data-science.html" class=""><span class="num">01</span>What is data science (and what isn&#x27;t)</a></li><li class="nav-item"><a href="../pages/02-python-for-data-science.html" class=""><span class="num">02</span>Python for data science: pro setup</a></li><li class="nav-item"><a href="../pages/02b-math-essentials.html" class=""><span class="num">02b</span>High-school math you actually need</a></li><li class="nav-item"><a href="../pages/03-linear-algebra.html" class=""><span class="num">03</span>Linear algebra for data scientists</a></li><li class="nav-item"><a href="../pages/04-calculus-optimization.html" class=""><span class="num">04</span>Calculus, gradients, and optimization</a></li><li class="nav-item"><a href="../pages/05-probability.html" class=""><span class="num">05</span>Probability: the language of uncertainty</a></li><li class="nav-item"><a href="../pages/06-descriptive-statistics.html" class=""><span class="num">06</span>Descriptive statistics</a></li><li class="nav-item"><a href="../pages/07-inferential-statistics.html" class=""><span class="num">07</span>Inferential statistics and hypothesis testing</a></li><li class="nav-item"><a href="../pages/08-distributions.html" class=""><span class="num">08</span>Probability distributions you&#x27;ll meet</a></li><li class="nav-item"><a href="../pages/09-numpy.html" class=""><span class="num">09</span>NumPy: thinking in arrays</a></li><li class="nav-item"><a href="../pages/10-pandas.html" class=""><span class="num">10</span>Pandas: the swiss army knife</a></li><li class="nav-item"><a href="../pages/11-sql.html" class=""><span class="num">11</span>SQL for data scientists</a></li><li class="nav-item"><a href="../pages/12-visualization.html" class=""><span class="num">12</span>Visualization: matplotlib, seaborn, plotly</a></li><li class="nav-item"><a href="../pages/13-data-wrangling.html" class=""><span class="num">13</span>Cleaning and data wrangling</a></li><li class="nav-item"><a href="../pages/14-feature-engineering.html" class=""><span class="num">14</span>Feature engineering</a></li><li class="nav-item"><a href="../pages/15-eda.html" class=""><span class="num">15</span>EDA: Exploratory Data Analysis</a></li><li class="nav-item"><a href="../pages/16-ml-fundamentals.html" class=""><span class="num">16</span>ML: fundamentals — bias, variance, validation</a></li><li class="nav-item"><a href="../pages/17-linear-regression.html" class=""><span class="num">17</span>Linear regression and regularization</a></li><li class="nav-item"><a href="../pages/18-logistic-regression.html" class=""><span class="num">18</span>Logistic regression and classification</a></li><li class="nav-item"><a href="../pages/19-knn-naive-bayes-svm.html" class=""><span class="num">19</span>KNN, Naive Bayes, SVM</a></li><li class="nav-item"><a href="../pages/20-decision-trees.html" class=""><span class="num">20</span>Decision trees</a></li><li class="nav-item"><a href="../pages/21-random-forest-boosting.html" class=""><span class="num">21</span>Random Forest, Gradient Boosting, XGBoost</a></li><li class="nav-item"><a href="../pages/22-clustering.html" class=""><span class="num">22</span>Clustering: K-Means, DBSCAN, GMM, hierarchical</a></li><li class="nav-item"><a href="../pages/23-pca-tsne-umap.html" class=""><span class="num">23</span>Dimensionality reduction: PCA, t-SNE, UMAP</a></li><li class="nav-item"><a href="../pages/24-metrics-validation.html" class=""><span class="num">24</span>Metrics, cross-validation, leakage</a></li><li class="nav-item"><a href="../pages/25-class-imbalance.html" class=""><span class="num">25</span>Class imbalance</a></li><li class="nav-item"><a href="../pages/26-hyperparameter-tuning.html" class=""><span class="num">26</span>Hyperparameter tuning</a></li><li class="nav-item"><a href="../pages/27-neural-networks.html" class=""><span class="num">27</span>Neural networks: from fundamentals to backprop</a></li><li class="nav-item"><a href="../pages/28-pytorch.html" class=""><span class="num">28</span>PyTorch: from toy model to training loop</a></li><li class="nav-item"><a href="../pages/29-cnn.html" class=""><span class="num">29</span>CNN for computer vision</a></li><li class="nav-item"><a href="../pages/30-rnn-lstm.html" class=""><span class="num">30</span>RNN, LSTM, GRU for sequences</a></li><li class="nav-item"><a href="../pages/31-transformer.html" class="active"><span class="num">31</span>Transformer and attention</a></li><li class="nav-item"><a href="../pages/32-nlp-llm.html" class=""><span class="num">32</span>NLP: from text mining to LLMs</a></li><li class="nav-item"><a href="../pages/33-time-series.html" class=""><span class="num">33</span>Time series and forecasting</a></li><li class="nav-item"><a href="../pages/34-mlops.html" class=""><span class="num">34</span>MLOps: deployment, monitoring, drift</a></li><li class="nav-item"><a href="../pages/35-bayesian-causal.html" class=""><span class="num">35</span>Bayesian and Causal Inference</a></li><li class="nav-item"><a href="../pages/36-capstone-career.html" class=""><span class="num">36</span>Capstone, portfolio, career</a></li><li class="nav-item"><a href="../pages/37-glossary.html" class=""><span class="num">37</span>Glossary A-Z</a></li><li class="nav-item"><a href="../pages/38-formula-sheet.html" class=""><span class="num">38</span>Formula Sheet: all the formulas from the course</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Deep Learning</span>
+        <span>Section 32 of 39</span>
+        <span class="level-tag level-adv">Level: advanced</span>
+      </div>
+      <h1>Transformer and attention</h1>
+      <p class="summary">Attention is all you need. Encoder/decoder architecture, multi-head, positional encoding. The foundation of BERT, GPT, Stable Diffusion.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Deep Learning</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>[[rnn-lstm]]</li><li>[[linear-algebra]]</li></ul>
+  <div class="label">Tools</div>
+  <ul class="source-list"><li>torch, HuggingFace transformers</li></ul>
+</div>
+      <h2 id="the-attention-is-all-you-need-moment-vaswani-et-al-2017">The "Attention is all you need" moment (Vaswani et al., 2017)</h2>
+<p>Transformers have revolutionized deep learning. Everything we call "AI" today — ChatGPT, Claude, DALL·E, Stable Diffusion, Whisper — is based on Transformers.</p>
+<p>The central idea: <strong>recurrence is not needed</strong>. With the right mechanism (attention), a sequence can be processed entirely in parallel.</p>
+<h2 id="scaled-dot-product-attention">Scaled dot-product attention</h2>
+<p>For each element in the sequence, the question is: "which other elements should I focus on?".</p>
+<p>Three projections of the input:</p>
+<p>$$Q = X W_Q \quad K = X W_K \quad V = X W_V$$</p>
+<p>where $X \in \mathbb{R}^{n \times d}$ and $W_Q, W_K, W_V \in \mathbb{R}^{d \times d_k}$.</p>
+<p>Attention:</p>
+<p>$$\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{Q K^T}{\sqrt{d_k}}\right) V$$</p>
+<p><strong>Interpretation</strong>:</p>
+<ul>
+<li>$Q K^T \in \mathbb{R}^{n \times n}$: dot product of each query with each key → "attention" scores.</li>
+<li>$\sqrt{d_k}$: normalization that prevents softmax from saturating.</li>
+<li>softmax → probability distribution over all elements.</li>
+<li>multiply by $V$: weighted sum of the values.</li>
+</ul>
+<pre><code class="language-mermaid">flowchart LR
+    X[input X] --&gt; Q[Q = XW_Q]
+    X --&gt; K[K = XW_K]
+    X --&gt; V[V = XW_V]
+    Q --&gt; S[Q·Kᵀ /√d_k]
+    K --&gt; S
+    S --&gt; SF[softmax]
+    SF --&gt; A[× V]
+    V --&gt; A
+    A --&gt; O[output]
+</code></pre>
+<pre><code class="language-python">import torch, math
+import torch.nn.functional as F
+
+def attention(Q, K, V):
+    d_k = Q.size(-1)
+    scores = Q @ K.transpose(-2, -1) / math.sqrt(d_k)
+    weights = F.softmax(scores, dim=-1)
+    return weights @ V
+</code></pre>
+<h3 id="attention-illustrated-on-a-sentence">Attention illustrated on a sentence</h3>
+<p>Sentence: "the cat eats". 3 tokens. Each token looks at the others and asks "how relevant am I to <em>me</em>?". The result is a $3 \times 3$ matrix of <strong>attention weights</strong> (rows = "who is looking", columns = "who is being looked at"):</p>
+<div class="chart"><svg viewBox="0 0 460 220" xmlns="http://www.w3.org/2000/svg">
+<text x="230" y="14" fill="#7aa2ff" font-size="12" text-anchor="middle">Attention matrix (output of softmax(QKᵀ/√d))</text>
+
+<text x="60" y="50" fill="#8b949e" font-size="11">→ the</text>
+<text x="60" y="100" fill="#8b949e" font-size="11">→ cat</text>
+<text x="60" y="150" fill="#8b949e" font-size="11">→ eats</text>
+
+<text x="130" y="30" fill="#8b949e" font-size="11" text-anchor="middle">the</text>
+<text x="220" y="30" fill="#8b949e" font-size="11" text-anchor="middle">cat</text>
+<text x="310" y="30" fill="#8b949e" font-size="11" text-anchor="middle">eats</text>
+
+<rect x="100" y="40" width="60" height="20" fill="rgba(122,162,255,0.85)"/>
+<rect x="190" y="40" width="60" height="20" fill="rgba(122,162,255,0.10)"/>
+<rect x="280" y="40" width="60" height="20" fill="rgba(122,162,255,0.05)"/>
+<text x="130" y="55" fill="#fff" font-size="10" text-anchor="middle">0.85</text>
+<text x="220" y="55" fill="#7aa2ff" font-size="10" text-anchor="middle">0.10</text>
+<text x="310" y="55" fill="#7aa2ff" font-size="10" text-anchor="middle">0.05</text>
+
+<rect x="100" y="90" width="60" height="20" fill="rgba(122,162,255,0.15)"/>
+<rect x="190" y="90" width="60" height="20" fill="rgba(122,162,255,0.65)"/>
+<rect x="280" y="90" width="60" height="20" fill="rgba(122,162,255,0.20)"/>
+<text x="130" y="105" fill="#7aa2ff" font-size="10" text-anchor="middle">0.15</text>
+<text x="220" y="105" fill="#fff" font-size="10" text-anchor="middle">0.65</text>
+<text x="310" y="105" fill="#7aa2ff" font-size="10" text-anchor="middle">0.20</text>
+
+<rect x="100" y="140" width="60" height="20" fill="rgba(122,162,255,0.05)"/>
+<rect x="190" y="140" width="60" height="20" fill="rgba(122,162,255,0.45)"/>
+<rect x="280" y="140" width="60" height="20" fill="rgba(122,162,255,0.50)"/>
+<text x="130" y="155" fill="#7aa2ff" font-size="10" text-anchor="middle">0.05</text>
+<text x="220" y="155" fill="#fff" font-size="10" text-anchor="middle">0.45</text>
+<text x="310" y="155" fill="#fff" font-size="10" text-anchor="middle">0.50</text>
+
+<text x="230" y="195" fill="#8b949e" font-size="11" text-anchor="middle">each row sums to 1 (softmax)</text>
+<text x="230" y="210" fill="#ffb347" font-size="11" text-anchor="middle">"eats" attends strongly to "cat" (who eats) and itself</text>
+</svg><div class="chart-caption">Self-attention: a weight matrix that says "how much each token attends to every other".</div></div>
+
+<p>The output for the token "eats" will be:</p>
+<p>$$\text{out}<em>\text{eats} = 0.05 \cdot V</em>\text{the} + 0.45 \cdot V_\text{cat} + 0.50 \cdot V_\text{eats}$$</p>
+<p>where $V_i$ are the "value vectors" of the tokens. The model learns $W_Q, W_K, W_V$ so that these weighted sums produce representations useful for the final task (classification, generation, etc.).</p>
+<blockquote>
+<p><strong>Why it's brilliant</strong>: the matrix is computed in <strong>a single matrix multiplication</strong> $QK^T$, parallelizable on GPU. The RNN had to do this in 3 sequential steps. Hence the 2017 revolution.</p>
+</blockquote>
+<h2 id="multi-head-attention">Multi-head attention</h2>
+<p>A single attention head has limited capacity. The input is <strong>projected into multiple independent "heads"</strong>, each learning different relationships:</p>
+<p>$$\text{MultiHead}(Q,K,V) = \text{Concat}(\text{head}_1, \dots, \text{head}_h) W^O$$</p>
+<p>with each $\text{head}_i = \text{Attention}(QW_i^Q, KW_i^K, VW_i^V)$.</p>
+<pre><code class="language-python">mha = torch.nn.MultiheadAttention(embed_dim=512, num_heads=8, batch_first=True)
+out, attn = mha(query, key, value)
+</code></pre>
+<h2 id="positions-positional-encoding">Positions: positional encoding</h2>
+<p>Attention is <strong>permutation-invariant</strong>: without positional information, "the dog eats" and "eats the dog" are equivalent. Positional encodings are added to the embeddings:</p>
+<p><strong>Sinusoidal</strong> (original Transformer):</p>
+<p>$$PE_{pos, 2i} = \sin(pos / 10000^{2i/d}), \quad PE_{pos, 2i+1} = \cos(pos / 10000^{2i/d})$$</p>
+<p><strong>Learned</strong>: a learned positional embedding matrix.</p>
+<p><strong>RoPE</strong> (Rotary Position Embedding, GPT-NeoX, Llama): rotates Q and K in space based on position. Has become the modern standard.</p>
+<h2 id="the-full-architecture-transformer-encoderdecoder">The full architecture: Transformer Encoder/Decoder</h2>
+<pre><code class="language-mermaid">flowchart TD
+    subgraph Encoder
+        E1[Input + PosEnc] --&gt; E2[Multi-Head Self-Attention]
+        E2 --&gt; E3[Add+LayerNorm] --&gt; E4[FFN] --&gt; E5[Add+LayerNorm]
+        E5 -.-&gt;|&quot;× N layers&quot;| E2
+    end
+    subgraph Decoder
+        D1[Output + PosEnc] --&gt; D2[Masked Self-Attention]
+        D2 --&gt; D3[Add+LN] --&gt; D4[Cross-Attention&lt;br/&gt;on encoder] --&gt; D5[Add+LN] --&gt; D6[FFN] --&gt; D7[Add+LN]
+        D7 -.-&gt;|&quot;× N layers&quot;| D2
+    end
+    E5 --&gt; D4
+    D7 --&gt; O[Linear + Softmax]
+</code></pre>
+<p>Transformer "encoder" block:</p>
+<pre><code class="language-python">class TransformerBlock(nn.Module):
+    def __init__(self, d=512, h=8, ff=2048, drop=0.1):
+        super().__init__()
+        self.attn = nn.MultiheadAttention(d, h, dropout=drop, batch_first=True)
+        self.norm1 = nn.LayerNorm(d)
+        self.ffn = nn.Sequential(nn.Linear(d, ff), nn.GELU(), nn.Linear(ff, d))
+        self.norm2 = nn.LayerNorm(d)
+        self.drop = nn.Dropout(drop)
+
+    def forward(self, x, mask=None):
+        a, _ = self.attn(x, x, x, attn_mask=mask)
+        x = self.norm1(x + self.drop(a))           # residual + LN
+        f = self.ffn(x)
+        x = self.norm2(x + self.drop(f))
+        return x
+</code></pre>
+<blockquote>
+<p>Note: <strong>residual connection</strong> + <strong>LayerNorm</strong> everywhere. Same pattern as ResNets.</p>
+</blockquote>
+<h2 id="famous-variants">Famous variants</h2>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Type</th>
+<th>Year</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>BERT</strong></td>
+<td>Encoder only</td>
+<td>2018</td>
+<td>Masked LM, bidirectional, embeddings</td>
+</tr>
+<tr>
+<td><strong>GPT-2 / GPT-3</strong></td>
+<td>Decoder only</td>
+<td>2019/2020</td>
+<td>Autoregressive, generation</td>
+</tr>
+<tr>
+<td><strong>T5</strong></td>
+<td>Encoder-Decoder</td>
+<td>2019</td>
+<td>Everything as text-to-text</td>
+</tr>
+<tr>
+<td><strong>ViT</strong></td>
+<td>Encoder only</td>
+<td>2020</td>
+<td>For images (patch tokens)</td>
+</tr>
+<tr>
+<td><strong>GPT-4 / Claude / Gemini</strong></td>
+<td>Decoder only scaled</td>
+<td>2023+</td>
+<td>State-of-the-art LLM</td>
+</tr>
+<tr>
+<td><strong>Whisper</strong></td>
+<td>Encoder-Decoder</td>
+<td>2022</td>
+<td>Speech-to-text</td>
+</tr>
+</tbody>
+</table>
+<h2 id="encoder-only-bert-like">Encoder-only (BERT-like)</h2>
+<p>Used for: classification, embeddings, NER, sentence similarity.</p>
+<p>Pre-training: <strong>Masked Language Modeling</strong> — mask 15% of tokens, predict them.</p>
+<h2 id="decoder-only-gpt-like">Decoder-only (GPT-like)</h2>
+<p>Used for: generation, completion, instruction-following.</p>
+<p>Pre-training: <strong>Next Token Prediction</strong> — autoregressive.</p>
+<p>Attention is "masked" to prevent looking at future tokens during training.</p>
+<h2 id="encoder-decoder-t5-bart">Encoder-Decoder (T5, BART)</h2>
+<p>Used for: translation, summarization, question answering.</p>
+<h2 id="computational-complexity">Computational complexity</h2>
+<p>Attention is $O(n^2 d)$ where $n$ is the sequence length. Quadratic → explodes with long sequences.</p>
+<p>Modern solutions (2024-2026):
+- <strong>Flash Attention</strong>: memory and speed optimization.
+- <strong>Sparse / Local Attention</strong>: local windows only.
+- <strong>Linear Attention</strong>: approximations with $O(n)$ complexity.
+- <strong>State Space Models</strong> (Mamba, S4, S6): alternative to Transformers, linear in $n$.</p>
+<h2 id="huggingface-transformers">HuggingFace transformers</h2>
+<p>The practical way to use pre-trained Transformers:</p>
+<pre><code class="language-bash">pip install transformers datasets
+</code></pre>
+<pre><code class="language-python">from transformers import AutoTokenizer, AutoModel
+tok = AutoTokenizer.from_pretrained(&quot;bert-base-multilingual-cased&quot;)
+model = AutoModel.from_pretrained(&quot;bert-base-multilingual-cased&quot;)
+
+inputs = tok(&quot;The dog eats.&quot;, return_tensors='pt')
+out = model(**inputs)
+emb = out.last_hidden_state    # (1, n_tokens, 768)
+</code></pre>
+<h3 id="pipeline-for-common-tasks">Pipeline for common tasks</h3>
+<pre><code class="language-python">from transformers import pipeline
+sentiment = pipeline('sentiment-analysis')
+sentiment(&quot;Data science is wonderful.&quot;)
+# [{'label': 'POSITIVE', 'score': 0.9994}]
+
+translator = pipeline('translation', model='Helsinki-NLP/opus-mt-it-en')
+translator(&quot;Buongiorno, come stai?&quot;)
+</code></pre>
+<h3 id="fine-tuning-on-a-task">Fine-tuning on a task</h3>
+<pre><code class="language-python">from transformers import AutoTokenizer, AutoModelForSequenceClassification, Trainer, TrainingArguments
+from datasets import load_dataset
+
+ds = load_dataset('imdb').shuffle(seed=0)
+tok = AutoTokenizer.from_pretrained(&quot;distilbert-base-uncased&quot;)
+def tokenize(b): return tok(b['text'], truncation=True, max_length=256)
+ds = ds.map(tokenize, batched=True)
+ds.set_format('torch', columns=['input_ids','attention_mask','label'])
+
+model = AutoModelForSequenceClassification.from_pretrained(&quot;distilbert-base-uncased&quot;, num_labels=2)
+
+args = TrainingArguments(
+    output_dir='./out', evaluation_strategy='epoch',
+    per_device_train_batch_size=16, num_train_epochs=2,
+    learning_rate=2e-5, fp16=True,
+)
+trainer = Trainer(model=model, args=args,
+                  train_dataset=ds['train'].select(range(5000)),
+                  eval_dataset=ds['test'].select(range(1000)))
+trainer.train()
+</code></pre>
+<h2 id="exercises">Exercises</h2>
+<details>
+<summary>Exercise 1 — Manual attention</summary>
+
+
+<pre><code class="language-python">import torch
+import torch.nn.functional as F
+
+# 3 tokens, dimension 4
+X = torch.tensor([[1.,0,1,0],[0,1,0,1],[1,1,0,0]])
+W_q = torch.eye(4); W_k = torch.eye(4); W_v = torch.eye(4)
+
+Q = X @ W_q; K = X @ W_k; V = X @ W_v
+scores = Q @ K.T / 2.0    # √4 = 2
+weights = F.softmax(scores, dim=-1)
+print(weights)
+output = weights @ V
+print(output)
+</code></pre>
+
+
+Exercise: for which pairs is attention highest? Verify intuitively.
+</details>
+
+<details>
+<summary>Exercise 2 — Sentence embeddings</summary>
+
+
+<pre><code class="language-python">from sentence_transformers import SentenceTransformer
+model = SentenceTransformer('paraphrase-multilingual-MiniLM-L12-v2')
+sents = [&quot;The cat sleeps.&quot;, &quot;A feline rests.&quot;, &quot;I eat an apple.&quot;]
+emb = model.encode(sents)
+# cosine similarity
+import numpy as np
+def cos(a, b): return a @ b / (np.linalg.norm(a)*np.linalg.norm(b))
+print(cos(emb[0], emb[1]))   # high
+print(cos(emb[0], emb[2]))   # low
+</code></pre>
+
+</details>
+
+<details>
+<summary>Exercise 3 — Mini-GPT from scratch</summary>
+
+Implement a small decoder-only Transformer for char-level LM on any text. Karpathy has a video "Let's build GPT" (1h, on YouTube, free) — it's the definitive exercise. ~200 lines.
+
+Reference code: github.com/karpathy/nanoGPT.
+</details>
+
+<details>
+<summary>Exercise 4 — Q&A with a pre-trained Transformer</summary>
+
+
+<pre><code class="language-python">from transformers import pipeline
+qa = pipeline('question-answering', model='deepset/xlm-roberta-large-squad2')
+context = &quot;Transformers are a deep learning architecture introduced in 2017 by Vaswani et al.&quot;
+qa(question=&quot;When were Transformers introduced?&quot;, context=context)
+# {'answer': '2017', 'score': 0.9...}
+</code></pre>
+
+</details>
+
+<h2 id="key-takeaways">Key takeaways</h2>
+<ul>
+<li>Attention = "each token attends to every other", weighted sum.</li>
+<li>Multi-head = multiple attention "lenses" in parallel.</li>
+<li>Positional encoding is necessary (attention is permutation-invariant).</li>
+<li>Encoder-only (BERT), decoder-only (GPT), encoder-decoder (T5).</li>
+<li>HuggingFace is the go-to.</li>
+<li>Long sequences → Flash Attention, sparse models, state-space alternatives.</li>
+</ul>
+<p>Next: applied NLP — LLMs, retrieval, modern fine-tuning.</p>
+      <nav class="pager">
+<a href="30-rnn-lstm.html" class="prev"><span class="label">← Previous</span><span class="title">RNN, LSTM, GRU for sequences</span></a>
+<a href="32-nlp-llm.html" class="next"><span class="label">Next →</span><span class="title">NLP: from text mining to LLMs</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Data Science Zero to Hero</strong> — complete path, in English, from math to deployment.</p><p>Open didactic material. Formulas are here to be understood, not feared. When a concept is unclear, go back: data science is a pyramid, not a tree you skip across.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+</body>
+</html>

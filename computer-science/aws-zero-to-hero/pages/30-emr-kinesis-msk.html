@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EMR, Kinesis, MSK — big data e streaming — AWS Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#232f3e',primaryTextColor:'#ffffff',primaryBorderColor:'#ff9900',lineColor:'#8a99ad',background:'#0c1320'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">λ</div>
+      <div>
+        <div class="brand-title">AWS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">IT</span><a href="../en/pages/30-emr-kinesis-msk.html" class="lang-link" title="Switch to English">EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-cos-e-aws-cloud.html" class=""><span class="num">01</span>Cos&#x27;è il cloud e cos&#x27;è AWS</a></li><li class="nav-item"><a href="../pages/02-infrastruttura-globale.html" class=""><span class="num">02</span>Infrastruttura globale: Region, AZ, Edge</a></li><li class="nav-item"><a href="../pages/03-account-root-billing.html" class=""><span class="num">03</span>Account AWS, utente root, billing</a></li><li class="nav-item"><a href="../pages/04-iam-fondamenti.html" class=""><span class="num">04</span>IAM — fondamenti (utenti, gruppi, ruoli, policy)</a></li><li class="nav-item"><a href="../pages/05-iam-avanzato.html" class=""><span class="num">05</span>IAM avanzato: policy condizionali, STS, ABAC</a></li><li class="nav-item"><a href="../pages/06-cli-sdk-iac.html" class=""><span class="num">06</span>CLI, SDK, CloudShell, IaC primer</a></li><li class="nav-item"><a href="../pages/07-pricing-billing.html" class=""><span class="num">07</span>Pricing, billing, free tier, cost tools</a></li><li class="nav-item"><a href="../pages/08-organizations-multi-account.html" class=""><span class="num">08</span>AWS Organizations &amp; strategia multi-account</a></li><li class="nav-item"><a href="../pages/09-vpc-fondamenti.html" class=""><span class="num">09</span>VPC — fondamenti</a></li><li class="nav-item"><a href="../pages/10-vpc-avanzato.html" class=""><span class="num">10</span>VPC avanzato: peering, TGW, PrivateLink, endpoint</a></li><li class="nav-item"><a href="../pages/11-route53-cloudfront.html" class=""><span class="num">11</span>Route 53, CloudFront, Global Accelerator</a></li><li class="nav-item"><a href="../pages/12-hybrid-vpn-directconnect.html" class=""><span class="num">12</span>Hybrid: VPN, Direct Connect, PrivateLink</a></li><li class="nav-item"><a href="../pages/13-ec2-fondamenti.html" class=""><span class="num">13</span>EC2 — fondamenti (istanze, AMI, lifecycle)</a></li><li class="nav-item"><a href="../pages/14-ec2-avanzato-spot-nitro.html" class=""><span class="num">14</span>EC2 avanzato — Spot, Placement Groups, Nitro, hibernation</a></li><li class="nav-item"><a href="../pages/15-asg-elb.html" class=""><span class="num">15</span>Auto Scaling Groups + Elastic Load Balancing</a></li><li class="nav-item"><a href="../pages/16-lambda-deep-dive.html" class=""><span class="num">16</span>Lambda deep dive</a></li><li class="nav-item"><a href="../pages/17-containers-ecs-eks-fargate.html" class=""><span class="num">17</span>Containers: ECS, EKS, Fargate, ECR</a></li><li class="nav-item"><a href="../pages/18-specialty-compute.html" class=""><span class="num">18</span>Specialty compute: Batch, Lightsail, Outposts, Wavelength, Beanstalk</a></li><li class="nav-item"><a href="../pages/19-ebs-efs-fsx.html" class=""><span class="num">19</span>EBS, EFS, FSx, Instance Store</a></li><li class="nav-item"><a href="../pages/20-s3-deep-dive.html" class=""><span class="num">20</span>S3 — deep dive</a></li><li class="nav-item"><a href="../pages/21-archive-snow-gateway-backup.html" class=""><span class="num">21</span>Glacier, Snow, Storage Gateway, DataSync, AWS Backup</a></li><li class="nav-item"><a href="../pages/22-rds.html" class=""><span class="num">22</span>RDS — relational DB managed (engines, Multi-AZ, replicas, Proxy)</a></li><li class="nav-item"><a href="../pages/23-aurora-deep-dive.html" class=""><span class="num">23</span>Aurora deep dive — storage condiviso, Serverless v2, Global Database</a></li><li class="nav-item"><a href="../pages/24-dynamodb-deep-dive.html" class=""><span class="num">24</span>DynamoDB deep dive — partition, GSI, Streams, single-table</a></li><li class="nav-item"><a href="../pages/25-purpose-built-dbs.html" class=""><span class="num">25</span>Purpose-built DB — ElastiCache, MemoryDB, Neptune, DocumentDB, Keyspaces, Timestream, QLDB</a></li><li class="nav-item"><a href="../pages/26-redshift-data-warehousing.html" class=""><span class="num">26</span>Redshift — data warehousing MPP e zero-ETL</a></li><li class="nav-item"><a href="../pages/27-sqs-sns-eventbridge.html" class=""><span class="num">27</span>SQS, SNS, EventBridge — messaging ed eventi</a></li><li class="nav-item"><a href="../pages/28-step-functions-mq-appflow.html" class=""><span class="num">28</span>Step Functions, MQ, AppFlow — orchestrazione e integrazione</a></li><li class="nav-item"><a href="../pages/29-athena-glue-lakeformation.html" class=""><span class="num">29</span>Athena, Glue, Lake Formation — il data lake AWS</a></li><li class="nav-item"><a href="../pages/30-emr-kinesis-msk.html" class="active"><span class="num">30</span>EMR, Kinesis, MSK — big data e streaming</a></li><li class="nav-item"><a href="../pages/31-opensearch-quicksight.html" class=""><span class="num">31</span>OpenSearch e QuickSight — search e BI</a></li><li class="nav-item"><a href="../pages/32-sagemaker-overview.html" class=""><span class="num">32</span>SageMaker — la piattaforma ML end-to-end</a></li><li class="nav-item"><a href="../pages/33-bedrock-ai-services.html" class=""><span class="num">33</span>Bedrock e AI services — GenAI e ML managed</a></li><li class="nav-item"><a href="../pages/34-iac-cloudformation-cdk-terraform.html" class=""><span class="num">34</span>IaC su AWS — CloudFormation, CDK, SAM, Terraform</a></li><li class="nav-item"><a href="../pages/35-ci-cd-pipeline.html" class=""><span class="num">35</span>CI/CD su AWS — CodePipeline, CodeBuild, CodeDeploy, CodeCatalyst</a></li><li class="nav-item"><a href="../pages/36-observability-cloudwatch-xray.html" class=""><span class="num">36</span>Observability — CloudWatch, X-Ray, CloudTrail, Config, SSM</a></li><li class="nav-item"><a href="../pages/37-kms-secrets-acm.html" class=""><span class="num">37</span>Crittografia — KMS, CloudHSM, Secrets Manager, Parameter Store, ACM</a></li><li class="nav-item"><a href="../pages/38-waf-shield-guardduty-inspector.html" class=""><span class="num">38</span>Threat detection — WAF, Shield, GuardDuty, Inspector, Macie, Security Hub</a></li><li class="nav-item"><a href="../pages/39-governance-org-controltower-identitycenter.html" class=""><span class="num">39</span>Governance — Organizations, Control Tower, Identity Center</a></li><li class="nav-item"><a href="../pages/40-migration-mgn-dms-snow.html" class=""><span class="num">40</span>Migration — MGN, DMS, Snow family, Discovery, Migration Hub</a></li><li class="nav-item"><a href="../pages/41-cost-optimization-finops.html" class=""><span class="num">41</span>Cost optimization e FinOps</a></li><li class="nav-item"><a href="../pages/42-well-architected.html" class=""><span class="num">42</span>Well-Architected Framework — 6 pillar, lens, review</a></li><li class="nav-item"><a href="../pages/43-architecture-patterns.html" class=""><span class="num">43</span>Architecture patterns — 3-tier, serverless, event-driven, microservices</a></li><li class="nav-item"><a href="../pages/44-disaster-recovery-multi-region.html" class=""><span class="num">44</span>Disaster Recovery e Multi-Region</a></li><li class="nav-item"><a href="../pages/45-reference-architectures.html" class=""><span class="num">45</span>Reference architectures real-world</a></li><li class="nav-item"><a href="../pages/46-advanced-networking.html" class=""><span class="num">46</span>Advanced networking deep dive</a></li><li class="nav-item"><a href="../pages/47-containers-deep-dive.html" class=""><span class="num">47</span>Containers deep dive — EKS, Karpenter, service mesh</a></li><li class="nav-item"><a href="../pages/48-serverless-patterns.html" class=""><span class="num">48</span>Serverless patterns deep dive</a></li><li class="nav-item"><a href="../pages/49-genai-rag-agents.html" class=""><span class="num">49</span>Generative AI su AWS — RAG e Agents</a></li><li class="nav-item"><a href="../pages/50-certificazioni-aws.html" class=""><span class="num">50</span>Certificazioni AWS — roadmap e study guide</a></li><li class="nav-item"><a href="../pages/51-glossario-az.html" class=""><span class="num">51</span>Glossario A-Z</a></li><li class="nav-item"><a href="../pages/52-cheatsheet.html" class=""><span class="num">52</span>Cheat sheet: servizi, limiti, instance families</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Analytics</span>
+        <span>Sezione 30 di 52</span>
+        <span class="level-tag level-adv">Livello: avanzato</span>
+      </div>
+      <h1>EMR, Kinesis, MSK — big data e streaming</h1>
+      <p class="summary">Hadoop/Spark managed con EMR, streaming managed con Kinesis e Kafka managed con MSK. Quando preferire ognuno.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Analytics</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>sezione 13</li><li>sezione 29</li></ul>
+  <div class="label">Strumenti / riferimenti</div>
+  <ul class="source-list"><li>Spark / Hive</li><li>Kinesis CLI</li><li>Kafka CLI</li></ul>
+</div>
+      <p>Tre famiglie per dati in volume: <strong>EMR</strong> per batch big-data, <strong>Kinesis</strong> per streaming AWS-nativo, <strong>MSK</strong> per chi vuole Kafka standard. La scelta dipende da volume, latenza, ecosistema esistente e quanto cluster vuoi gestire.</p>
+<h2 id="1-emr-hadoopspark-managed">1. EMR — Hadoop/Spark managed</h2>
+<p>EMR (Elastic MapReduce) installa e configura <strong>Spark, Hive, Presto/Trino, HBase, Flink, Hudi, Iceberg</strong> su EC2 o EKS o serverless. Tre forme:</p>
+<table>
+<thead>
+<tr>
+<th>Forma</th>
+<th>Quando</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>EMR on EC2</strong></td>
+<td>Massimo controllo, cluster long-running o transient</td>
+</tr>
+<tr>
+<td><strong>EMR on EKS</strong></td>
+<td>Tu hai già EKS, vuoi co-location con altri workload, multitenancy</td>
+</tr>
+<tr>
+<td><strong>EMR Serverless</strong></td>
+<td>Job a burst, niente cluster da gestire, pay-per-vCPU-secondo</td>
+</tr>
+</tbody>
+</table>
+<p>Architettura tipica EC2: <strong>master</strong> node + <strong>core</strong> nodes (storage HDFS + compute) + <strong>task</strong> nodes (solo compute, ottimi per Spot al 70-90% di sconto). EMRFS sostituisce HDFS con <strong>S3</strong> come storage permanente: i cluster diventano stateless e usa-e-getta (transient).</p>
+<pre><code class="language-mermaid">flowchart LR
+  S3in[(S3 raw)] --&gt; Spark[EMR Spark job]
+  Spark --&gt; S3out[(S3 silver Parquet)]
+  Spark -.metadata.-&gt; GC[Glue Catalog]
+  S3out --&gt; Athena
+</code></pre>
+<p>Trappola: cluster long-running idle = bruciare soldi. Per pipeline batch giornaliere, <strong>EMR Serverless</strong> o <strong>transient cluster con StepFunctions</strong> sono quasi sempre meglio.</p>
+<h2 id="2-kinesis-data-streams">2. Kinesis Data Streams</h2>
+<p>Stream di record ordinati per <strong>partition key</strong>, suddivisi in <strong>shard</strong>. Ogni shard regge ~1000 record/s o 1 MB/s ingress, 2 MB/s egress.</p>
+<ul>
+<li><strong>Retention</strong>: 24h default, fino a 365 giorni a pagamento.</li>
+<li><strong>On-demand mode</strong>: AWS gestisce gli shard automaticamente (fino a 200 MB/s in scrittura, 400 MB/s lettura).</li>
+<li><strong>Enhanced fan-out (EFO)</strong>: consumer dedicato con 2 MB/s <strong>per consumer per shard</strong> (no contesa).</li>
+<li><strong>KCL</strong> (Kinesis Client Library) per consumer Java/Python con checkpoint in DynamoDB.</li>
+</ul>
+<pre><code class="language-bash">aws kinesis put-record \
+  --stream-name events \
+  --partition-key user-42 \
+  --data $(echo -n '{&quot;v&quot;:1}' | base64)
+</code></pre>
+<h2 id="3-kinesis-data-firehose">3. Kinesis Data Firehose</h2>
+<p><strong>Delivery stream</strong> completamente serverless. Buffera (per tempo o per size) e scarica a:
+- S3 (con conversione Parquet/ORC opzionale via Glue schema)
+- Redshift (via S3 + COPY)
+- OpenSearch
+- HTTP endpoint generico (Datadog, Splunk, MongoDB Atlas)</p>
+<p>Trasformazione opzionale con <strong>Lambda</strong> in-flight. Pricing per GB ingested. È il modo più semplice per "log applicativi → S3 Parquet pronto per Athena".</p>
+<h2 id="4-kinesis-video-streams">4. Kinesis Video Streams</h2>
+<p>Stream video con SDK Producer per camere/dispositivi, retention configurabile, integrazione con <strong>Rekognition Video</strong> per analisi real-time o on-demand. Niente a che vedere con Data Streams sotto al cofano.</p>
+<h2 id="5-msk-managed-streaming-for-kafka">5. MSK — Managed Streaming for Kafka</h2>
+<p><strong>Kafka 100% open-source managed</strong>. Compatibile con tutto l'ecosistema (Connect, Streams, Schema Registry, MirrorMaker, …).</p>
+<table>
+<thead>
+<tr>
+<th>Servizio</th>
+<th>Quando</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>MSK Provisioned</strong></td>
+<td>Tu scegli broker (es. kafka.m7g.large), storage, partition count</td>
+</tr>
+<tr>
+<td><strong>MSK Serverless</strong></td>
+<td>Pay-per-throughput, AWS gestisce capacità (fino a 200 MB/s)</td>
+</tr>
+<tr>
+<td><strong>MSK Connect</strong></td>
+<td>Kafka Connect managed per sink/source (Debezium CDC, S3 sink, ecc.)</td>
+</tr>
+</tbody>
+</table>
+<p>MSK conviene se: già usi Kafka, hai consumer/producer Kafka esistenti, vuoi multi-region MirrorMaker, hai bisogno di compaction, exactly-once transactions.</p>
+<h2 id="6-kinesis-vs-kafka-la-scelta">6. Kinesis vs Kafka: la scelta</h2>
+<table>
+<thead>
+<tr>
+<th>Aspetto</th>
+<th>Kinesis Data Streams</th>
+<th>MSK</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Operatività</td>
+<td>totalmente managed</td>
+<td>managed ma vedi broker</td>
+</tr>
+<tr>
+<td>Pricing</td>
+<td>per shard-ora + PUT payload</td>
+<td>per broker-ora + storage</td>
+</tr>
+<tr>
+<td>Ecosistema</td>
+<td>AWS-centrico</td>
+<td>enorme (Kafka Connect, Streams, ksqlDB)</td>
+</tr>
+<tr>
+<td>Multi-region</td>
+<td>manuale o cross-region replica</td>
+<td>MirrorMaker 2</td>
+</tr>
+<tr>
+<td>Latenza</td>
+<td>~70-200 ms end-to-end</td>
+<td>~5-50 ms</td>
+</tr>
+<tr>
+<td>Compaction</td>
+<td>no</td>
+<td>sì</td>
+</tr>
+<tr>
+<td>Lock-in</td>
+<td>AWS</td>
+<td>portabile</td>
+</tr>
+</tbody>
+</table>
+<p>Regola rapida: greenfield AWS-only → Kinesis. Esistente Kafka o ecosistema third-party → MSK.</p>
+<h2 id="7-pattern-di-costo">7. Pattern di costo</h2>
+<ul>
+<li>Kinesis Data Streams on-demand è comodo ma più caro a regime: fissa shard quando il throughput è prevedibile.</li>
+<li>Firehose è il modo più economico per "stream → S3" se non ti serve replay con consumer multipli.</li>
+<li>MSK Serverless ha un costo base non-zero (~$0.75/h per cluster): no per piccoli workload.</li>
+<li>EMR su Spot per task nodes: risparmio 70-90% sui job batch.</li>
+</ul>
+<h2 id="8-esercizio">8. Esercizio</h2>
+<details>
+<summary>Devi loggare 50.000 eventi clickstream/secondo da una web app a S3 in Parquet. Cosa scegli?</summary>
+
+**Kinesis Data Firehose** con conversione Parquet abilitata (Glue schema). Buffering 128 MB / 5 min, partizionamento dinamico per giorno (`!{partitionKeyFromQuery:dt}`). Zero cluster da gestire, pay-per-GB. Aggiungi Lambda transform se serve normalizzare. Athena query direttamente l'output. Kinesis Data Streams pure va bene ma richiede consumer custom; MSK è overkill.
+</details>
+
+<details>
+<summary>Job Spark pesante che gira 1h al giorno. EMR EC2, EKS o Serverless?</summary>
+
+**EMR Serverless**. Niente cluster da spegnere/avviare, niente Spot capacity da gestire, paghi solo la vCPU-secondo effettiva. Per cluster long-running 24/7 con > 4-6 ore di lavoro al giorno EC2 con Spot diventa competitivo, ma sotto quella soglia Serverless vince per ops + costo.
+</details>
+
+<blockquote>
+<p><strong>Riassunto</strong>: EMR = Hadoop/Spark managed (EC2, EKS, Serverless), usa Spot su task nodes; Kinesis = streaming AWS-nativo (Data Streams, Firehose serverless to S3/Redshift, Video); MSK = Kafka managed per chi ha già l'ecosistema. Greenfield → Kinesis, Kafka esistente → MSK.</p>
+</blockquote>
+      <nav class="pager">
+<a href="29-athena-glue-lakeformation.html" class="prev"><span class="label">← Precedente</span><span class="title">Athena, Glue, Lake Formation — il data lake AWS</span></a>
+<a href="31-opensearch-quicksight.html" class="next"><span class="label">Successivo →</span><span class="title">OpenSearch e QuickSight — search e BI</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>AWS Zero to Hero</strong> — percorso completo, in italiano, dalle primitive all'architettura avanzata.</p><p>Materiale didattico aperto. Nessuna sponsorizzazione, nessun affiliate link, nessuna affiliazione con AWS. Quando un concetto è oscuro, torna indietro: AWS è una piramide di primitive, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

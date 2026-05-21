@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Real-world reference architectures — AWS Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#232f3e',primaryTextColor:'#ffffff',primaryBorderColor:'#ff9900',lineColor:'#8a99ad',background:'#0c1320'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">λ</div>
+      <div>
+        <div class="brand-title">AWS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/45-reference-architectures.html" class="lang-link" title="Passa all'italiano">IT</a><span class="lang-active" title="English">EN</span></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="search... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-what-is-cloud-and-aws.html" class=""><span class="num">01</span>What the cloud is, and what AWS is</a></li><li class="nav-item"><a href="../pages/02-global-infrastructure.html" class=""><span class="num">02</span>Global infrastructure: Regions, AZs, Edge</a></li><li class="nav-item"><a href="../pages/03-account-root-billing.html" class=""><span class="num">03</span>AWS account, root user, billing</a></li><li class="nav-item"><a href="../pages/04-iam-fundamentals.html" class=""><span class="num">04</span>IAM — fundamentals (users, groups, roles, policies)</a></li><li class="nav-item"><a href="../pages/05-iam-advanced.html" class=""><span class="num">05</span>IAM advanced: conditional policies, STS, ABAC</a></li><li class="nav-item"><a href="../pages/06-cli-sdk-iac.html" class=""><span class="num">06</span>CLI, SDK, CloudShell, IaC primer</a></li><li class="nav-item"><a href="../pages/07-pricing-billing.html" class=""><span class="num">07</span>Pricing, billing, free tier, cost tools</a></li><li class="nav-item"><a href="../pages/08-organizations-multi-account.html" class=""><span class="num">08</span>AWS Organizations &amp; multi-account strategy</a></li><li class="nav-item"><a href="../pages/09-vpc-fundamentals.html" class=""><span class="num">09</span>VPC — fundamentals</a></li><li class="nav-item"><a href="../pages/10-vpc-advanced.html" class=""><span class="num">10</span>VPC advanced: peering, TGW, PrivateLink, endpoints</a></li><li class="nav-item"><a href="../pages/11-route53-cloudfront.html" class=""><span class="num">11</span>Route 53, CloudFront, Global Accelerator</a></li><li class="nav-item"><a href="../pages/12-hybrid-vpn-directconnect.html" class=""><span class="num">12</span>Hybrid: VPN, Direct Connect, PrivateLink</a></li><li class="nav-item"><a href="../pages/13-ec2-fundamentals.html" class=""><span class="num">13</span>EC2 — fundamentals (instances, AMIs, lifecycle)</a></li><li class="nav-item"><a href="../pages/14-ec2-advanced-spot-nitro.html" class=""><span class="num">14</span>EC2 advanced — Spot, Placement Groups, Nitro, hibernation</a></li><li class="nav-item"><a href="../pages/15-asg-elb.html" class=""><span class="num">15</span>Auto Scaling Groups + Elastic Load Balancing</a></li><li class="nav-item"><a href="../pages/16-lambda-deep-dive.html" class=""><span class="num">16</span>Lambda deep dive</a></li><li class="nav-item"><a href="../pages/17-containers-ecs-eks-fargate.html" class=""><span class="num">17</span>Containers: ECS, EKS, Fargate, ECR</a></li><li class="nav-item"><a href="../pages/18-specialty-compute.html" class=""><span class="num">18</span>Specialty compute: Batch, Lightsail, Outposts, Wavelength, Beanstalk</a></li><li class="nav-item"><a href="../pages/19-ebs-efs-fsx.html" class=""><span class="num">19</span>EBS, EFS, FSx, Instance Store</a></li><li class="nav-item"><a href="../pages/20-s3-deep-dive.html" class=""><span class="num">20</span>S3 — deep dive</a></li><li class="nav-item"><a href="../pages/21-archive-snow-gateway-backup.html" class=""><span class="num">21</span>Glacier, Snow, Storage Gateway, DataSync, AWS Backup</a></li><li class="nav-item"><a href="../pages/22-rds.html" class=""><span class="num">22</span>RDS — managed relational DBs (engines, Multi-AZ, replicas, Proxy)</a></li><li class="nav-item"><a href="../pages/23-aurora-deep-dive.html" class=""><span class="num">23</span>Aurora deep dive — shared storage, Serverless v2, Global Database</a></li><li class="nav-item"><a href="../pages/24-dynamodb-deep-dive.html" class=""><span class="num">24</span>DynamoDB deep dive — partitions, GSI, Streams, single-table</a></li><li class="nav-item"><a href="../pages/25-purpose-built-dbs.html" class=""><span class="num">25</span>Purpose-built DBs — ElastiCache, MemoryDB, Neptune, DocumentDB, Keyspaces, Timestream, QLDB</a></li><li class="nav-item"><a href="../pages/26-redshift-data-warehousing.html" class=""><span class="num">26</span>Redshift — MPP data warehousing and zero-ETL</a></li><li class="nav-item"><a href="../pages/27-sqs-sns-eventbridge.html" class=""><span class="num">27</span>SQS, SNS, EventBridge — messaging and events</a></li><li class="nav-item"><a href="../pages/28-step-functions-mq-appflow.html" class=""><span class="num">28</span>Step Functions, MQ, AppFlow — orchestration and integration</a></li><li class="nav-item"><a href="../pages/29-athena-glue-lakeformation.html" class=""><span class="num">29</span>Athena, Glue, Lake Formation — the AWS data lake</a></li><li class="nav-item"><a href="../pages/30-emr-kinesis-msk.html" class=""><span class="num">30</span>EMR, Kinesis, MSK — big data and streaming</a></li><li class="nav-item"><a href="../pages/31-opensearch-quicksight.html" class=""><span class="num">31</span>OpenSearch and QuickSight — search and BI</a></li><li class="nav-item"><a href="../pages/32-sagemaker-overview.html" class=""><span class="num">32</span>SageMaker — the end-to-end ML platform</a></li><li class="nav-item"><a href="../pages/33-bedrock-ai-services.html" class=""><span class="num">33</span>Bedrock and AI services — managed GenAI and ML</a></li><li class="nav-item"><a href="../pages/34-iac-cloudformation-cdk-terraform.html" class=""><span class="num">34</span>IaC on AWS — CloudFormation, CDK, SAM, Terraform</a></li><li class="nav-item"><a href="../pages/35-ci-cd-pipeline.html" class=""><span class="num">35</span>CI/CD on AWS — CodePipeline, CodeBuild, CodeDeploy, CodeCatalyst</a></li><li class="nav-item"><a href="../pages/36-observability-cloudwatch-xray.html" class=""><span class="num">36</span>Observability — CloudWatch, X-Ray, CloudTrail, Config, SSM</a></li><li class="nav-item"><a href="../pages/37-kms-secrets-acm.html" class=""><span class="num">37</span>Encryption — KMS, CloudHSM, Secrets Manager, Parameter Store, ACM</a></li><li class="nav-item"><a href="../pages/38-waf-shield-guardduty-inspector.html" class=""><span class="num">38</span>Threat detection — WAF, Shield, GuardDuty, Inspector, Macie, Security Hub</a></li><li class="nav-item"><a href="../pages/39-governance-org-controltower-identitycenter.html" class=""><span class="num">39</span>Governance — Organizations, Control Tower, Identity Center</a></li><li class="nav-item"><a href="../pages/40-migration-mgn-dms-snow.html" class=""><span class="num">40</span>Migration — MGN, DMS, Snow family, Discovery, Migration Hub</a></li><li class="nav-item"><a href="../pages/41-cost-optimization-finops.html" class=""><span class="num">41</span>Cost optimization and FinOps</a></li><li class="nav-item"><a href="../pages/42-well-architected.html" class=""><span class="num">42</span>Well-Architected Framework — 6 pillars, lenses, review</a></li><li class="nav-item"><a href="../pages/43-architecture-patterns.html" class=""><span class="num">43</span>Architecture patterns — 3-tier, serverless, event-driven, microservices</a></li><li class="nav-item"><a href="../pages/44-disaster-recovery-multi-region.html" class=""><span class="num">44</span>Disaster Recovery and Multi-Region</a></li><li class="nav-item"><a href="../pages/45-reference-architectures.html" class="active"><span class="num">45</span>Real-world reference architectures</a></li><li class="nav-item"><a href="../pages/46-advanced-networking.html" class=""><span class="num">46</span>Advanced networking deep dive</a></li><li class="nav-item"><a href="../pages/47-containers-deep-dive.html" class=""><span class="num">47</span>Containers deep dive — EKS, Karpenter, service mesh</a></li><li class="nav-item"><a href="../pages/48-serverless-patterns.html" class=""><span class="num">48</span>Serverless patterns deep dive</a></li><li class="nav-item"><a href="../pages/49-genai-rag-agents.html" class=""><span class="num">49</span>Generative AI on AWS — RAG and Agents</a></li><li class="nav-item"><a href="../pages/50-aws-certifications.html" class=""><span class="num">50</span>AWS Certifications — roadmap and study guide</a></li><li class="nav-item"><a href="../pages/51-glossary-az.html" class=""><span class="num">51</span>Glossary A-Z</a></li><li class="nav-item"><a href="../pages/52-cheatsheet.html" class=""><span class="num">52</span>Cheat sheet: services, limits, instance families</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Architecture</span>
+        <span>Section 45 of 52</span>
+        <span class="level-tag level-adv">Level: advanced</span>
+      </div>
+      <h1>Real-world reference architectures</h1>
+      <p class="summary">Reference architectures for real scenarios: multi-tenant SaaS, IoT platform, data lakehouse, media streaming, e-commerce, gaming, HPC, serverless data pipeline.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Architecture</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>section 43</li></ul>
+  <div class="label">Tools / references</div>
+  <ul class="source-list"><li>AWS Solutions Library</li><li>various per scenario</li></ul>
+</div>
+      <p><strong>Reference architectures</strong> are tested blueprints for recurring scenarios. AWS publishes dozens of free "AWS Solutions" (ready-to-deploy CloudFormation). This section covers the most-requested patterns, with services and trade-offs.</p>
+<h2 id="1-multi-tenant-saas">1. Multi-tenant SaaS</h2>
+<p>Three <strong>tenant isolation</strong> models:</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Isolation</th>
+<th>Cost</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Silo</strong></td>
+<td>per-tenant dedicated resources (separate account/VPC/DB)</td>
+<td>high</td>
+<td>banks, healthcare, dedicated enterprise</td>
+</tr>
+<tr>
+<td><strong>Pool</strong></td>
+<td>shared resources, tenants separated at app level (tenant_id key)</td>
+<td>low</td>
+<td>B2C SaaS, freemium</td>
+</tr>
+<tr>
+<td><strong>Hybrid / Bridge</strong></td>
+<td>mix: pool compute, silo DB for premium tier</td>
+<td>medium</td>
+<td>enterprise tier + free on same stack</td>
+</tr>
+</tbody>
+</table>
+<p>Pool isolation techniques:</p>
+<ul>
+<li><strong>IAM session tag</strong>: assume role with tag <code>tenant=abc</code>, IAM policy references <code>${aws:PrincipalTag/tenant}</code> to limit access to DynamoDB items/S3 prefix.</li>
+<li><strong>Cell-based architecture</strong>: groups of tenants in independent "cells" (e.g. 1000 tenants/cell). Limited blast radius, progressive cell-by-cell deploy.</li>
+<li><strong>Cognito user pool per tenant</strong> or single pool with custom attribute.</li>
+</ul>
+<pre><code class="language-mermaid">flowchart TB
+    U[Tenant users] --&gt; ALB[ALB + JWT verify]
+    ALB --&gt; APP[App layer ECS Fargate]
+    APP --&gt;|AssumeRole&lt;br/&gt;session tag tenant=X| STS[STS]
+    STS -.-&gt; APP
+    APP --&gt;|condition tenant=X| DDB[(DynamoDB pool&lt;br/&gt;PK: tenant_id#id)]
+    APP --&gt;|prefix /tenant=X/| S3[(S3 pool bucket)]
+    subgraph Enterprise tier silo
+        APP --&gt; RDS_E[(Dedicated RDS&lt;br/&gt;Enterprise tenant)]
+    end
+    CP[Control plane&lt;br/&gt;tenant onboarding] -.-&gt; DDB
+    CP -.-&gt; COG[Cognito]
+</code></pre>
+<h2 id="2-iot-platform">2. IoT platform</h2>
+<p>Standard stack to manage device fleets:</p>
+<ul>
+<li><strong>AWS IoT Core</strong>: managed MQTT broker, X.509 device auth, rules engine.</li>
+<li><strong>Greengrass</strong>: edge runtime for local processing (latency &lt; 100ms, offline).</li>
+<li><strong>IoT SiteWise</strong>: time-series for industrial assets (OPC-UA, modbus).</li>
+<li><strong>Kinesis Data Streams + Firehose</strong>: high-throughput ingestion, dumps to S3.</li>
+<li><strong>Timestream</strong>: time-series DB for IoT analytics.</li>
+<li><strong>QuickSight / Grafana</strong>: dashboards.</li>
+</ul>
+<p>Pattern: device → MQTT IoT Core → Rules Engine → (Kinesis for analytics + Lambda for real-time alert + DynamoDB for shadow state). For OTA use Device Management.</p>
+<h2 id="3-data-platform-lakehouse">3. Data platform / Lakehouse</h2>
+<p>"Modern data stack" architecture on AWS:</p>
+<pre><code class="language-mermaid">flowchart LR
+    SRC1[App DBs&lt;br/&gt;RDS, DynamoDB] --&gt;|DMS / CDC| RAW[(S3 Bronze&lt;br/&gt;raw landing)]
+    SRC2[SaaS&lt;br/&gt;Salesforce] --&gt;|AppFlow| RAW
+    SRC3[Streaming&lt;br/&gt;Kinesis] --&gt; RAW
+    RAW --&gt;|Glue ETL| CLEAN[(S3 Silver&lt;br/&gt;cleansed)]
+    CLEAN --&gt;|dbt / Glue| AGG[(S3 Gold&lt;br/&gt;business-ready)]
+    LF[Lake Formation&lt;br/&gt;governance, RBAC] -.-&gt; AGG
+    AGG --&gt; ATH[Athena&lt;br/&gt;ad-hoc SQL]
+    AGG --&gt; RS[Redshift Spectrum&lt;br/&gt;warehouse + lake]
+    AGG --&gt; SM[SageMaker&lt;br/&gt;ML]
+    AGG --&gt; QS[QuickSight&lt;br/&gt;BI]
+    GC[Glue Data Catalog] -.-&gt; ATH
+    GC -.-&gt; RS
+</code></pre>
+<p>Medallion architecture (Bronze → Silver → Gold) + Lake Formation for row-level security and cross-account sharing. "Data mesh" pattern if multiple teams/domains.</p>
+<h2 id="4-media-streaming">4. Media streaming</h2>
+<p>Live broadcast (e.g. sports, events):</p>
+<ul>
+<li><strong>MediaLive</strong>: live encoder (input RTMP/SRT, output HLS/DASH).</li>
+<li><strong>MediaPackage</strong>: just-in-time packaging (DRM, SCTE-35 ad insertion).</li>
+<li><strong>MediaConnect</strong>: secure contribution transport (replaces satellite).</li>
+<li><strong>MediaConvert</strong>: file-based VoD transcoding.</li>
+<li><strong>CloudFront</strong>: global CDN delivery.</li>
+</ul>
+<p>Architecture: camera → MediaConnect (contribution) → MediaLive (encode) → MediaPackage (multi-bitrate HLS/DASH) → CloudFront → player.</p>
+<h2 id="5-e-commerce">5. E-commerce</h2>
+<p>Typical stack:</p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Service</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Product catalog</td>
+<td>DynamoDB (PK product_id, GSI by category)</td>
+</tr>
+<tr>
+<td>Search</td>
+<td>OpenSearch (BM25 + vector for "find similar")</td>
+</tr>
+<tr>
+<td>Cart</td>
+<td>ElastiCache Redis (TTL 24h, fast read)</td>
+</tr>
+<tr>
+<td>Checkout</td>
+<td>Step Functions (saga: inventory→payment→shipping)</td>
+</tr>
+<tr>
+<td>Payments</td>
+<td>Lambda + Stripe/Adyen + KMS for PCI tokenization</td>
+</tr>
+<tr>
+<td>Notifications</td>
+<td>SNS (email) + Pinpoint (mobile push)</td>
+</tr>
+<tr>
+<td>Frontend</td>
+<td>Next.js on Amplify Hosting or S3+CloudFront</td>
+</tr>
+<tr>
+<td>Recommendation</td>
+<td>Personalize or custom SageMaker</td>
+</tr>
+<tr>
+<td>Analytics</td>
+<td>Kinesis → S3 → Athena/QuickSight</td>
+</tr>
+</tbody>
+</table>
+<p>Trick: aggressive product caching on CloudFront (TTL 1h with cache invalidation on update via SQS), DynamoDB for orders/writes, OpenSearch for complex queries.</p>
+<h2 id="6-gaming-backend">6. Gaming backend</h2>
+<ul>
+<li><strong>GameLift FleetIQ / Anywhere</strong>: matchmaking + managed game servers (spot pricing -75%).</li>
+<li><strong>DynamoDB</strong>: player profiles, leaderboard (atomic score).</li>
+<li><strong>Lambda + API Gateway</strong>: meta-game API (inventory, achievement).</li>
+<li><strong>AppSync GraphQL Subscriptions</strong>: real-time chat / lobby update.</li>
+<li><strong>Kinesis + Personalize</strong>: live analytics and in-game recommendations.</li>
+</ul>
+<p>For global leaderboard: DynamoDB with score sort key + Redis sorted set cache for top 100 (sub-ms reads).</p>
+<h2 id="7-hpc-high-performance-computing">7. HPC (High Performance Computing)</h2>
+<p>For scientific simulation, CFD, finance:</p>
+<ul>
+<li><strong>AWS ParallelCluster</strong>: open-source tool to orchestrate Slurm/PBS clusters on EC2.</li>
+<li><strong>EFA (Elastic Fabric Adapter)</strong>: custom NIC for MPI/NCCL kernel bypass, μs latency.</li>
+<li><strong>FSx for Lustre</strong>: POSIX parallel filesystem, TB/s throughput, integrated with S3 (sync on read/write).</li>
+<li><strong>Spot instances + capacity reservation</strong>: 70-90% cost reduction for batch jobs.</li>
+<li><strong>Batch / Step Functions</strong>: orchestrate DAG jobs.</li>
+</ul>
+<h2 id="8-serverless-data-pipeline">8. Serverless data pipeline</h2>
+<p>For small batches or events:</p>
+<pre><code class="language-python"># CDK pseudocode
+bucket = s3.Bucket(&quot;data-landing&quot;)
+bucket.add_event_notification(
+    s3.EventType.OBJECT_CREATED,
+    eventbridge.EventBridgeDestination(rule_to_lambda)
+)
+# Lambda does validation/enrichment, writes to S3 processed
+# Glue crawler updates Data Catalog
+# Athena query, QuickSight dashboard
+</code></pre>
+<p>S3 → EventBridge → Lambda (transform) → S3 → Glue (catalog) → Athena. Cost: a few $/month per TB for sporadic access.</p>
+<h2 id="9-exercise">9. Exercise</h2>
+<details>
+<summary>IoT smart-home startup, 50k devices, telemetry every 30s. Architecture?</summary>
+
+**Ingestion**: device → MQTT to IoT Core (X.509 auth). Rules Engine: 1 rule writes "shadow" (current state for mobile UI) to DynamoDB, 1 rule writes to Kinesis Data Streams for analytics.
+
+**Analytics**: Kinesis Firehose → S3 Bronze (parquet) + Lambda for real-time anomaly detection (e.g. abnormal consumption) → SNS push notification to user.
+
+**Mobile app backend**: API Gateway + Lambda + DynamoDB (shadow). Cognito for user auth.
+
+**Cost-saving**: 50k * 2/min = 100k msg/min = ~$200/month IoT Core + $50 Kinesis + $20 S3 storage. No EC2.
+</details>
+
+<details>
+<summary>B2B SaaS selling to small banks (10-100 users per tenant). Silo or pool?</summary>
+
+**Pragmatic hybrid**: single AWS account, but for each bank tenant create a dedicated VPC + RDS (silo data) and a shared ECS Fargate cluster (pool compute) with task role assumed with session tag `tenant=X`.
+
+Reason: banks often require data isolation for audit (mandatory silo DB), but shared compute cuts cost (one ECS cluster manages 100 tenants). Cognito user pool per tenant (URL `bank-x.yourapp.com`) or single pool with custom attribute.
+
+New tenant onboarding: Step Functions automates creation of VPC + RDS + Secrets Manager secret + Route 53 record in ~10 min.
+</details>
+
+<blockquote>
+<p><strong>Summary</strong>: multi-tenant SaaS pick silo/pool/hybrid based on compliance and cost, IAM session tag + cell-based; IoT = IoT Core + Greengrass + Kinesis + Timestream; lakehouse = Bronze/Silver/Gold on S3 + Glue + Lake Formation + Athena/Redshift; media = MediaLive/Package + CloudFront; e-commerce = DynamoDB+OpenSearch+Redis+Step Functions; gaming = GameLift + DynamoDB; HPC = ParallelCluster + EFA + FSx Lustre + Spot; serverless data pipeline = S3+EventBridge+Lambda+Glue+Athena.</p>
+</blockquote>
+      <nav class="pager">
+<a href="44-disaster-recovery-multi-region.html" class="prev"><span class="label">← Previous</span><span class="title">Disaster Recovery and Multi-Region</span></a>
+<a href="46-advanced-networking.html" class="next"><span class="label">Next →</span><span class="title">Advanced networking deep dive</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>AWS Zero to Hero</strong> — complete path, in English, from primitives to advanced architecture.</p><p>Open educational material. No sponsorships, no affiliate links, no affiliation with AWS. When a concept is unclear, go back: AWS is a pyramid of primitives, not a tree you skip across.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+</body>
+</html>

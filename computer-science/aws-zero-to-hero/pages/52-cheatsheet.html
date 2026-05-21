@@ -1,0 +1,1493 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cheat sheet: servizi, limiti, instance families — AWS Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#232f3e',primaryTextColor:'#ffffff',primaryBorderColor:'#ff9900',lineColor:'#8a99ad',background:'#0c1320'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">λ</div>
+      <div>
+        <div class="brand-title">AWS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">IT</span><a href="../en/pages/52-cheatsheet.html" class="lang-link" title="Switch to English">EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-cos-e-aws-cloud.html" class=""><span class="num">01</span>Cos&#x27;è il cloud e cos&#x27;è AWS</a></li><li class="nav-item"><a href="../pages/02-infrastruttura-globale.html" class=""><span class="num">02</span>Infrastruttura globale: Region, AZ, Edge</a></li><li class="nav-item"><a href="../pages/03-account-root-billing.html" class=""><span class="num">03</span>Account AWS, utente root, billing</a></li><li class="nav-item"><a href="../pages/04-iam-fondamenti.html" class=""><span class="num">04</span>IAM — fondamenti (utenti, gruppi, ruoli, policy)</a></li><li class="nav-item"><a href="../pages/05-iam-avanzato.html" class=""><span class="num">05</span>IAM avanzato: policy condizionali, STS, ABAC</a></li><li class="nav-item"><a href="../pages/06-cli-sdk-iac.html" class=""><span class="num">06</span>CLI, SDK, CloudShell, IaC primer</a></li><li class="nav-item"><a href="../pages/07-pricing-billing.html" class=""><span class="num">07</span>Pricing, billing, free tier, cost tools</a></li><li class="nav-item"><a href="../pages/08-organizations-multi-account.html" class=""><span class="num">08</span>AWS Organizations &amp; strategia multi-account</a></li><li class="nav-item"><a href="../pages/09-vpc-fondamenti.html" class=""><span class="num">09</span>VPC — fondamenti</a></li><li class="nav-item"><a href="../pages/10-vpc-avanzato.html" class=""><span class="num">10</span>VPC avanzato: peering, TGW, PrivateLink, endpoint</a></li><li class="nav-item"><a href="../pages/11-route53-cloudfront.html" class=""><span class="num">11</span>Route 53, CloudFront, Global Accelerator</a></li><li class="nav-item"><a href="../pages/12-hybrid-vpn-directconnect.html" class=""><span class="num">12</span>Hybrid: VPN, Direct Connect, PrivateLink</a></li><li class="nav-item"><a href="../pages/13-ec2-fondamenti.html" class=""><span class="num">13</span>EC2 — fondamenti (istanze, AMI, lifecycle)</a></li><li class="nav-item"><a href="../pages/14-ec2-avanzato-spot-nitro.html" class=""><span class="num">14</span>EC2 avanzato — Spot, Placement Groups, Nitro, hibernation</a></li><li class="nav-item"><a href="../pages/15-asg-elb.html" class=""><span class="num">15</span>Auto Scaling Groups + Elastic Load Balancing</a></li><li class="nav-item"><a href="../pages/16-lambda-deep-dive.html" class=""><span class="num">16</span>Lambda deep dive</a></li><li class="nav-item"><a href="../pages/17-containers-ecs-eks-fargate.html" class=""><span class="num">17</span>Containers: ECS, EKS, Fargate, ECR</a></li><li class="nav-item"><a href="../pages/18-specialty-compute.html" class=""><span class="num">18</span>Specialty compute: Batch, Lightsail, Outposts, Wavelength, Beanstalk</a></li><li class="nav-item"><a href="../pages/19-ebs-efs-fsx.html" class=""><span class="num">19</span>EBS, EFS, FSx, Instance Store</a></li><li class="nav-item"><a href="../pages/20-s3-deep-dive.html" class=""><span class="num">20</span>S3 — deep dive</a></li><li class="nav-item"><a href="../pages/21-archive-snow-gateway-backup.html" class=""><span class="num">21</span>Glacier, Snow, Storage Gateway, DataSync, AWS Backup</a></li><li class="nav-item"><a href="../pages/22-rds.html" class=""><span class="num">22</span>RDS — relational DB managed (engines, Multi-AZ, replicas, Proxy)</a></li><li class="nav-item"><a href="../pages/23-aurora-deep-dive.html" class=""><span class="num">23</span>Aurora deep dive — storage condiviso, Serverless v2, Global Database</a></li><li class="nav-item"><a href="../pages/24-dynamodb-deep-dive.html" class=""><span class="num">24</span>DynamoDB deep dive — partition, GSI, Streams, single-table</a></li><li class="nav-item"><a href="../pages/25-purpose-built-dbs.html" class=""><span class="num">25</span>Purpose-built DB — ElastiCache, MemoryDB, Neptune, DocumentDB, Keyspaces, Timestream, QLDB</a></li><li class="nav-item"><a href="../pages/26-redshift-data-warehousing.html" class=""><span class="num">26</span>Redshift — data warehousing MPP e zero-ETL</a></li><li class="nav-item"><a href="../pages/27-sqs-sns-eventbridge.html" class=""><span class="num">27</span>SQS, SNS, EventBridge — messaging ed eventi</a></li><li class="nav-item"><a href="../pages/28-step-functions-mq-appflow.html" class=""><span class="num">28</span>Step Functions, MQ, AppFlow — orchestrazione e integrazione</a></li><li class="nav-item"><a href="../pages/29-athena-glue-lakeformation.html" class=""><span class="num">29</span>Athena, Glue, Lake Formation — il data lake AWS</a></li><li class="nav-item"><a href="../pages/30-emr-kinesis-msk.html" class=""><span class="num">30</span>EMR, Kinesis, MSK — big data e streaming</a></li><li class="nav-item"><a href="../pages/31-opensearch-quicksight.html" class=""><span class="num">31</span>OpenSearch e QuickSight — search e BI</a></li><li class="nav-item"><a href="../pages/32-sagemaker-overview.html" class=""><span class="num">32</span>SageMaker — la piattaforma ML end-to-end</a></li><li class="nav-item"><a href="../pages/33-bedrock-ai-services.html" class=""><span class="num">33</span>Bedrock e AI services — GenAI e ML managed</a></li><li class="nav-item"><a href="../pages/34-iac-cloudformation-cdk-terraform.html" class=""><span class="num">34</span>IaC su AWS — CloudFormation, CDK, SAM, Terraform</a></li><li class="nav-item"><a href="../pages/35-ci-cd-pipeline.html" class=""><span class="num">35</span>CI/CD su AWS — CodePipeline, CodeBuild, CodeDeploy, CodeCatalyst</a></li><li class="nav-item"><a href="../pages/36-observability-cloudwatch-xray.html" class=""><span class="num">36</span>Observability — CloudWatch, X-Ray, CloudTrail, Config, SSM</a></li><li class="nav-item"><a href="../pages/37-kms-secrets-acm.html" class=""><span class="num">37</span>Crittografia — KMS, CloudHSM, Secrets Manager, Parameter Store, ACM</a></li><li class="nav-item"><a href="../pages/38-waf-shield-guardduty-inspector.html" class=""><span class="num">38</span>Threat detection — WAF, Shield, GuardDuty, Inspector, Macie, Security Hub</a></li><li class="nav-item"><a href="../pages/39-governance-org-controltower-identitycenter.html" class=""><span class="num">39</span>Governance — Organizations, Control Tower, Identity Center</a></li><li class="nav-item"><a href="../pages/40-migration-mgn-dms-snow.html" class=""><span class="num">40</span>Migration — MGN, DMS, Snow family, Discovery, Migration Hub</a></li><li class="nav-item"><a href="../pages/41-cost-optimization-finops.html" class=""><span class="num">41</span>Cost optimization e FinOps</a></li><li class="nav-item"><a href="../pages/42-well-architected.html" class=""><span class="num">42</span>Well-Architected Framework — 6 pillar, lens, review</a></li><li class="nav-item"><a href="../pages/43-architecture-patterns.html" class=""><span class="num">43</span>Architecture patterns — 3-tier, serverless, event-driven, microservices</a></li><li class="nav-item"><a href="../pages/44-disaster-recovery-multi-region.html" class=""><span class="num">44</span>Disaster Recovery e Multi-Region</a></li><li class="nav-item"><a href="../pages/45-reference-architectures.html" class=""><span class="num">45</span>Reference architectures real-world</a></li><li class="nav-item"><a href="../pages/46-advanced-networking.html" class=""><span class="num">46</span>Advanced networking deep dive</a></li><li class="nav-item"><a href="../pages/47-containers-deep-dive.html" class=""><span class="num">47</span>Containers deep dive — EKS, Karpenter, service mesh</a></li><li class="nav-item"><a href="../pages/48-serverless-patterns.html" class=""><span class="num">48</span>Serverless patterns deep dive</a></li><li class="nav-item"><a href="../pages/49-genai-rag-agents.html" class=""><span class="num">49</span>Generative AI su AWS — RAG e Agents</a></li><li class="nav-item"><a href="../pages/50-certificazioni-aws.html" class=""><span class="num">50</span>Certificazioni AWS — roadmap e study guide</a></li><li class="nav-item"><a href="../pages/51-glossario-az.html" class=""><span class="num">51</span>Glossario A-Z</a></li><li class="nav-item"><a href="../pages/52-cheatsheet.html" class="active"><span class="num">52</span>Cheat sheet: servizi, limiti, instance families</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Reference</span>
+        <span>Sezione 52 di 52</span>
+        <span class="level-tag level-int">Livello: intermedio</span>
+      </div>
+      <h1>Cheat sheet: servizi, limiti, instance families</h1>
+      <p class="summary">Reference card compatta: tabelle di servizi, limiti hard, instance type, storage class, comandi CLI, routing policy e acronimi.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Reference</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>tutte le sezioni precedenti</li></ul>
+  <div class="label">Strumenti / riferimenti</div>
+  <ul class="source-list"><li>AWS CLI</li></ul>
+</div>
+      <p>Reference card per esame e operatività. Tutte le tabelle sono pensate per consultazione rapida, non spiegano <em>perché</em>: per il "perché" vai alla sezione tematica.</p>
+<h2 id="1-service-quick-reference">1. Service quick reference</h2>
+<h3 id="compute">Compute</h3>
+<table>
+<thead>
+<tr>
+<th>Servizio</th>
+<th>Scopo</th>
+<th>Pricing</th>
+<th>Quando usarlo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>EC2</td>
+<td>VM on-demand</td>
+<td>per ora/secondo + EBS</td>
+<td>controllo OS, long-running</td>
+</tr>
+<tr>
+<td>Lambda</td>
+<td>Funzioni event-driven</td>
+<td>per invocazione + GB·s</td>
+<td>event-driven &lt; 15 min</td>
+</tr>
+<tr>
+<td>Fargate</td>
+<td>Container serverless</td>
+<td>per vCPU·s + GB·s</td>
+<td>container senza gestire EC2</td>
+</tr>
+<tr>
+<td>ECS</td>
+<td>Container orchestrator AWS</td>
+<td>gratis (paghi EC2/Fargate)</td>
+<td>container standard AWS</td>
+</tr>
+<tr>
+<td>EKS</td>
+<td>Kubernetes managed</td>
+<td>$0.10/h cluster + nodi</td>
+<td>k8s portabile multi-cloud</td>
+</tr>
+<tr>
+<td>App Runner</td>
+<td>PaaS HTTP</td>
+<td>per vCPU·s + GB·s + request</td>
+<td>web app semplici</td>
+</tr>
+<tr>
+<td>Batch</td>
+<td>Batch jobs</td>
+<td>gratis (paghi compute)</td>
+<td>job batch HPC/ML</td>
+</tr>
+<tr>
+<td>Lightsail</td>
+<td>VPS semplice</td>
+<td>flat rate $3-160/mese</td>
+<td>dev/POC senza complessità</td>
+</tr>
+</tbody>
+</table>
+<h3 id="storage">Storage</h3>
+<table>
+<thead>
+<tr>
+<th>Servizio</th>
+<th>Tipo</th>
+<th>Pricing</th>
+<th>Quando usarlo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S3</td>
+<td>Object</td>
+<td>$0.023/GB·mese + request</td>
+<td>file, backup, data lake</td>
+</tr>
+<tr>
+<td>EBS</td>
+<td>Block</td>
+<td>$0.08-0.125/GB·mese + IOPS</td>
+<td>disco EC2</td>
+</tr>
+<tr>
+<td>EFS</td>
+<td>NFS</td>
+<td>$0.30/GB·mese (standard)</td>
+<td>file system condiviso Linux</td>
+</tr>
+<tr>
+<td>FSx Windows</td>
+<td>SMB</td>
+<td>da $0.13/GB·mese</td>
+<td>file share Windows</td>
+</tr>
+<tr>
+<td>FSx Lustre</td>
+<td>Parallel FS</td>
+<td>da $0.14/GB·mese</td>
+<td>HPC, ML training</td>
+</tr>
+<tr>
+<td>S3 Glacier</td>
+<td>Archive</td>
+<td>da $0.004/GB·mese</td>
+<td>archivi a freddo</td>
+</tr>
+<tr>
+<td>Storage Gateway</td>
+<td>Hybrid</td>
+<td>$0.023/GB cache + S3</td>
+<td>on-prem ↔ AWS</td>
+</tr>
+</tbody>
+</table>
+<h3 id="database">Database</h3>
+<table>
+<thead>
+<tr>
+<th>Servizio</th>
+<th>Tipo</th>
+<th>Pricing</th>
+<th>Quando usarlo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RDS</td>
+<td>SQL managed</td>
+<td>per ora istanza + storage</td>
+<td>DB relazionale standard</td>
+</tr>
+<tr>
+<td>Aurora</td>
+<td>SQL distribuito</td>
+<td>per ora ACU/istanza + storage</td>
+<td>MySQL/Postgres ad alta perf</td>
+</tr>
+<tr>
+<td>Aurora Serverless v2</td>
+<td>Auto-scale</td>
+<td>per ACU·s</td>
+<td>workload variabile</td>
+</tr>
+<tr>
+<td>DynamoDB</td>
+<td>NoSQL KV</td>
+<td>per WCU/RCU o on-demand</td>
+<td>NoSQL serverless</td>
+</tr>
+<tr>
+<td>ElastiCache</td>
+<td>Cache (Redis/Memcached)</td>
+<td>per ora nodo</td>
+<td>cache in-memory</td>
+</tr>
+<tr>
+<td>MemoryDB</td>
+<td>Redis persistente</td>
+<td>per ora nodo</td>
+<td>primary DB Redis</td>
+</tr>
+<tr>
+<td>Neptune</td>
+<td>Graph</td>
+<td>per ora istanza</td>
+<td>grafi sociali, frodi</td>
+</tr>
+<tr>
+<td>Timestream</td>
+<td>Time-series</td>
+<td>per ingest + storage</td>
+<td>IoT, metriche</td>
+</tr>
+<tr>
+<td>Keyspaces</td>
+<td>Cassandra</td>
+<td>per WCU/RCU</td>
+<td>Cassandra managed</td>
+</tr>
+<tr>
+<td>Redshift</td>
+<td>DWH columnar</td>
+<td>per ora nodo o RPU</td>
+<td>analytics PB</td>
+</tr>
+</tbody>
+</table>
+<h3 id="networking">Networking</h3>
+<table>
+<thead>
+<tr>
+<th>Servizio</th>
+<th>Scopo</th>
+<th>Pricing</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>VPC</td>
+<td>Rete privata</td>
+<td>gratis (paghi NAT/endpoint)</td>
+</tr>
+<tr>
+<td>Route 53</td>
+<td>DNS</td>
+<td>$0.50/hosted zone + query</td>
+</tr>
+<tr>
+<td>CloudFront</td>
+<td>CDN</td>
+<td>per GB transferito + request</td>
+</tr>
+<tr>
+<td>ALB</td>
+<td>L7 HTTP LB</td>
+<td>$0.0225/h + LCU</td>
+</tr>
+<tr>
+<td>NLB</td>
+<td>L4 TCP/UDP LB</td>
+<td>$0.0225/h + LCU</td>
+</tr>
+<tr>
+<td>API Gateway REST</td>
+<td>API REST</td>
+<td>$3.50/M request + transfer</td>
+</tr>
+<tr>
+<td>API Gateway HTTP</td>
+<td>API HTTP cheap</td>
+<td>$1.00/M request</td>
+</tr>
+<tr>
+<td>Direct Connect</td>
+<td>Link dedicato</td>
+<td>per porta + per GB out</td>
+</tr>
+<tr>
+<td>VPN</td>
+<td>IPSec</td>
+<td>$0.05/h + per GB out</td>
+</tr>
+<tr>
+<td>Transit Gateway</td>
+<td>Hub VPC</td>
+<td>$0.05/h attachment + per GB</td>
+</tr>
+</tbody>
+</table>
+<h3 id="integration-messaging">Integration / messaging</h3>
+<table>
+<thead>
+<tr>
+<th>Servizio</th>
+<th>Scopo</th>
+<th>Pricing</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SQS</td>
+<td>Queue</td>
+<td>$0.40/M request</td>
+</tr>
+<tr>
+<td>SNS</td>
+<td>Pub/sub</td>
+<td>$0.50/M publish</td>
+</tr>
+<tr>
+<td>EventBridge</td>
+<td>Event bus</td>
+<td>$1.00/M event custom</td>
+</tr>
+<tr>
+<td>Step Functions Standard</td>
+<td>Workflow</td>
+<td>$0.025/M state transition</td>
+</tr>
+<tr>
+<td>Step Functions Express</td>
+<td>Workflow ad alto volume</td>
+<td>$1.00/M execution + durata</td>
+</tr>
+<tr>
+<td>MQ</td>
+<td>Broker tradizionale (Active/Rabbit)</td>
+<td>per ora broker</td>
+</tr>
+<tr>
+<td>AppFlow</td>
+<td>SaaS connector</td>
+<td>per run + per record</td>
+</tr>
+</tbody>
+</table>
+<h3 id="analytics">Analytics</h3>
+<table>
+<thead>
+<tr>
+<th>Servizio</th>
+<th>Scopo</th>
+<th>Pricing</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Athena</td>
+<td>SQL su S3</td>
+<td>$5/TB scansionato</td>
+</tr>
+<tr>
+<td>Glue</td>
+<td>ETL serverless</td>
+<td>$0.44/DPU·h</td>
+</tr>
+<tr>
+<td>EMR</td>
+<td>Hadoop/Spark</td>
+<td>per ora EC2 + EMR fee</td>
+</tr>
+<tr>
+<td>Kinesis Data Streams</td>
+<td>Streaming</td>
+<td>per shard·h + PUT</td>
+</tr>
+<tr>
+<td>Kinesis Firehose</td>
+<td>Streaming verso storage</td>
+<td>per GB ingest</td>
+</tr>
+<tr>
+<td>MSK</td>
+<td>Kafka managed</td>
+<td>per broker·h + storage</td>
+</tr>
+<tr>
+<td>OpenSearch</td>
+<td>Search/analytics</td>
+<td>per ora istanza + storage</td>
+</tr>
+<tr>
+<td>QuickSight</td>
+<td>BI</td>
+<td>$9-18/utente/mese</td>
+</tr>
+</tbody>
+</table>
+<h3 id="security-governance">Security / governance</h3>
+<table>
+<thead>
+<tr>
+<th>Servizio</th>
+<th>Scopo</th>
+<th>Pricing</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IAM</td>
+<td>Identity &amp; access</td>
+<td>gratis</td>
+</tr>
+<tr>
+<td>KMS</td>
+<td>Chiavi crypto</td>
+<td>$1/chiave/mese + request</td>
+</tr>
+<tr>
+<td>Secrets Manager</td>
+<td>Segreti rotanti</td>
+<td>$0.40/segreto/mese</td>
+</tr>
+<tr>
+<td>CloudTrail</td>
+<td>API audit</td>
+<td>management gratis, data $2/M event</td>
+</tr>
+<tr>
+<td>Config</td>
+<td>Compliance</td>
+<td>$0.003/config item</td>
+</tr>
+<tr>
+<td>GuardDuty</td>
+<td>Threat detection</td>
+<td>per GB analyzed</td>
+</tr>
+<tr>
+<td>Macie</td>
+<td>PII discovery</td>
+<td>per GB scanned</td>
+</tr>
+<tr>
+<td>Inspector</td>
+<td>CVE scan</td>
+<td>per istanza/h</td>
+</tr>
+<tr>
+<td>Security Hub</td>
+<td>Aggregator</td>
+<td>$0.001/finding</td>
+</tr>
+<tr>
+<td>WAF</td>
+<td>L7 firewall</td>
+<td>$5/ACL/mese + request</td>
+</tr>
+<tr>
+<td>Shield Standard</td>
+<td>DDoS base</td>
+<td>gratis</td>
+</tr>
+<tr>
+<td>Shield Advanced</td>
+<td>DDoS premium</td>
+<td>$3000/mese</td>
+</tr>
+</tbody>
+</table>
+<h2 id="2-ec2-instance-families">2. EC2 instance families</h2>
+<p>Naming: <code>&lt;famiglia&gt;&lt;gen&gt;&lt;suffisso&gt;.&lt;size&gt;</code>. Suffissi: <code>g</code>=Graviton (ARM), <code>a</code>=AMD, <code>i</code>=Intel, <code>n</code>=network-optimized, <code>d</code>=NVMe local, <code>z</code>=high-frequency, <code>e</code>=extended memory.</p>
+<table>
+<thead>
+<tr>
+<th>Famiglia</th>
+<th>vCPU:RAM</th>
+<th>Use case</th>
+<th>Esempi 2026</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>T</strong> burstable</td>
+<td>1:2 a 1:4</td>
+<td>dev, web a basso/medio carico</td>
+<td>t3, t4g</td>
+</tr>
+<tr>
+<td><strong>M</strong> general</td>
+<td>1:4</td>
+<td>web, app server, microservizi</td>
+<td>m6i, m7g, m7i, m7a</td>
+</tr>
+<tr>
+<td><strong>C</strong> compute</td>
+<td>1:2</td>
+<td>HPC, gaming, encoding, batch</td>
+<td>c7i, c7g, c7gn</td>
+</tr>
+<tr>
+<td><strong>R</strong> memory</td>
+<td>1:8</td>
+<td>DB, cache, in-memory analytics</td>
+<td>r7i, r7g, r7iz</td>
+</tr>
+<tr>
+<td><strong>X</strong> high memory</td>
+<td>1:16+</td>
+<td>SAP HANA, in-memory DB</td>
+<td>x2idn, x2iedn</td>
+</tr>
+<tr>
+<td><strong>u-</strong> ultra memory</td>
+<td>fino a 24 TB</td>
+<td>SAP HANA enterprise</td>
+<td>u-12tb1</td>
+</tr>
+<tr>
+<td><strong>I</strong> storage NVMe</td>
+<td>1:8 con NVMe local</td>
+<td>NoSQL, search, big data</td>
+<td>i4i, i4g</td>
+</tr>
+<tr>
+<td><strong>D</strong> storage HDD</td>
+<td>1:8 con HDD locale</td>
+<td>data lake, Hadoop</td>
+<td>d3, d3en</td>
+</tr>
+<tr>
+<td><strong>H</strong> storage HDD high-throughput</td>
+<td>1:8</td>
+<td>MapReduce</td>
+<td>h1</td>
+</tr>
+<tr>
+<td><strong>G</strong> GPU inference/grafica</td>
+<td>varia</td>
+<td>ML inference, gaming streaming</td>
+<td>g5, g6</td>
+</tr>
+<tr>
+<td><strong>P</strong> GPU training</td>
+<td>varia</td>
+<td>ML training, HPC</td>
+<td>p4d, p5 (H100)</td>
+</tr>
+<tr>
+<td><strong>Trn</strong> trainium</td>
+<td>varia</td>
+<td>ML training low-cost</td>
+<td>trn1, trn2</td>
+</tr>
+<tr>
+<td><strong>Inf</strong> inferentia</td>
+<td>varia</td>
+<td>ML inference low-cost</td>
+<td>inf2</td>
+</tr>
+<tr>
+<td><strong>F</strong> FPGA</td>
+<td>varia</td>
+<td>acc. custom hardware</td>
+<td>f2</td>
+</tr>
+</tbody>
+</table>
+<h3 id="size-scale">Size scale</h3>
+<p><code>nano</code> → <code>micro</code> → <code>small</code> → <code>medium</code> → <code>large</code> → <code>xlarge</code> → <code>2xlarge</code> → <code>4xlarge</code> → <code>8xlarge</code> → <code>12xlarge</code> → <code>16xlarge</code> → <code>24xlarge</code> → <code>metal</code>.</p>
+<p>Ogni step ~raddoppia vCPU e RAM. <code>metal</code> = bare-metal (no hypervisor).</p>
+<h2 id="3-ebs-volume-types">3. EBS volume types</h2>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>IOPS max</th>
+<th>Throughput max</th>
+<th>$/GB·mese</th>
+<th>Use case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>gp3</strong> (default)</td>
+<td>16k (config)</td>
+<td>1000 MB/s</td>
+<td>$0.08</td>
+<td>tutto, baseline 3k IOPS gratis</td>
+</tr>
+<tr>
+<td><strong>gp2</strong> (legacy)</td>
+<td>16k (legato a GB)</td>
+<td>250 MB/s</td>
+<td>$0.10</td>
+<td>usa gp3 invece</td>
+</tr>
+<tr>
+<td><strong>io2 Block Express</strong></td>
+<td>256k</td>
+<td>4000 MB/s</td>
+<td>$0.125 + IOPS</td>
+<td>DB enterprise mission-critical</td>
+</tr>
+<tr>
+<td><strong>io2</strong></td>
+<td>64k</td>
+<td>1000 MB/s</td>
+<td>$0.125 + IOPS</td>
+<td>DB ad alte performance</td>
+</tr>
+<tr>
+<td><strong>st1</strong></td>
+<td>500</td>
+<td>500 MB/s</td>
+<td>$0.045</td>
+<td>big data, log streaming sequenziale</td>
+</tr>
+<tr>
+<td><strong>sc1</strong></td>
+<td>250</td>
+<td>250 MB/s</td>
+<td>$0.015</td>
+<td>cold archive, raro accesso</td>
+</tr>
+</tbody>
+</table>
+<p>Durabilità: tutti <strong>99.8-99.9%</strong> AZ-locale (per cross-AZ → snapshot a S3 o replica).</p>
+<h2 id="4-s3-storage-classes">4. S3 storage classes</h2>
+<table>
+<thead>
+<tr>
+<th>Classe</th>
+<th>Durability</th>
+<th>Availability</th>
+<th>Retrieval</th>
+<th>$/GB·mese</th>
+<th>Min duration</th>
+<th>First-byte</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Standard</td>
+<td>11×9</td>
+<td>99.99%</td>
+<td>immediato</td>
+<td>$0.023</td>
+<td>nessuna</td>
+<td>ms</td>
+</tr>
+<tr>
+<td>Intelligent-Tiering</td>
+<td>11×9</td>
+<td>99.9%</td>
+<td>auto</td>
+<td>$0.023 + monitoring</td>
+<td>nessuna</td>
+<td>ms</td>
+</tr>
+<tr>
+<td>Standard-IA</td>
+<td>11×9</td>
+<td>99.9%</td>
+<td>immediato</td>
+<td>$0.0125</td>
+<td>30 giorni</td>
+<td>ms</td>
+</tr>
+<tr>
+<td>One Zone-IA</td>
+<td>11×9 1 AZ</td>
+<td>99.5%</td>
+<td>immediato</td>
+<td>$0.01</td>
+<td>30 giorni</td>
+<td>ms</td>
+</tr>
+<tr>
+<td>Glacier Instant</td>
+<td>11×9</td>
+<td>99.9%</td>
+<td>immediato</td>
+<td>$0.004</td>
+<td>90 giorni</td>
+<td>ms</td>
+</tr>
+<tr>
+<td>Glacier Flexible</td>
+<td>11×9</td>
+<td>99.99% post-restore</td>
+<td>min-ore</td>
+<td>$0.0036</td>
+<td>90 giorni</td>
+<td>1-12h</td>
+</tr>
+<tr>
+<td>Glacier Deep Archive</td>
+<td>11×9</td>
+<td>99.99% post-restore</td>
+<td>ore</td>
+<td>$0.00099</td>
+<td>180 giorni</td>
+<td>12-48h</td>
+</tr>
+</tbody>
+</table>
+<p>11×9 = 99.999999999% (perdita stimata 1 oggetto su 10 miliardi/anno).</p>
+<h2 id="5-lambda-limits">5. Lambda limits</h2>
+<table>
+<thead>
+<tr>
+<th>Risorsa</th>
+<th>Limite</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Timeout max</td>
+<td>15 min (900s)</td>
+</tr>
+<tr>
+<td>Memory</td>
+<td>128 MB → 10 240 MB (incrementi da 1 MB)</td>
+</tr>
+<tr>
+<td>vCPU</td>
+<td>proporzionali a memory (1769 MB = 1 vCPU completo)</td>
+</tr>
+<tr>
+<td>Package zip</td>
+<td>50 MB compresso, 250 MB unzipped</td>
+</tr>
+<tr>
+<td>Container image</td>
+<td>10 GB</td>
+</tr>
+<tr>
+<td>Layer count</td>
+<td>5 per funzione</td>
+</tr>
+<tr>
+<td>Ephemeral <code>/tmp</code></td>
+<td>512 MB → 10 240 MB</td>
+</tr>
+<tr>
+<td>Concurrency (soft)</td>
+<td>1000 per regione (request increase)</td>
+</tr>
+<tr>
+<td>Reserved concurrency</td>
+<td>per funzione</td>
+</tr>
+<tr>
+<td>Provisioned concurrency</td>
+<td>per funzione, paghi a costo orario</td>
+</tr>
+<tr>
+<td>Payload sync</td>
+<td>6 MB (request+response)</td>
+</tr>
+<tr>
+<td>Payload async</td>
+<td>256 KB</td>
+</tr>
+<tr>
+<td>ENI per VPC</td>
+<td>~auto-scaled (in passato fixed)</td>
+</tr>
+<tr>
+<td>Env variables</td>
+<td>4 KB totali</td>
+</tr>
+</tbody>
+</table>
+<h2 id="6-vpc-limits-per-region-soft-tranne-dove-indicato">6. VPC limits (per region, soft tranne dove indicato)</h2>
+<table>
+<thead>
+<tr>
+<th>Risorsa</th>
+<th>Limite default</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>VPC per region</td>
+<td>5</td>
+<td>request increase</td>
+</tr>
+<tr>
+<td>Subnet per VPC</td>
+<td>200</td>
+<td>hard</td>
+</tr>
+<tr>
+<td>Route table per VPC</td>
+<td>200</td>
+<td></td>
+</tr>
+<tr>
+<td>Route per route table</td>
+<td>50 (statiche) / 1000 (BGP propagated)</td>
+<td></td>
+</tr>
+<tr>
+<td>Security group per VPC</td>
+<td>2500</td>
+<td></td>
+</tr>
+<tr>
+<td>Rule per SG</td>
+<td>60 inbound + 60 outbound (estendibile a 1000)</td>
+<td></td>
+</tr>
+<tr>
+<td>SG per ENI</td>
+<td>5 (estendibile a 16)</td>
+<td></td>
+</tr>
+<tr>
+<td>NACL per VPC</td>
+<td>200</td>
+<td></td>
+</tr>
+<tr>
+<td>Rule per NACL</td>
+<td>20 inbound + 20 outbound (estendibile a 40)</td>
+<td></td>
+</tr>
+<tr>
+<td>Elastic IP</td>
+<td>5 (request)</td>
+<td></td>
+</tr>
+<tr>
+<td>Internet Gateway</td>
+<td>1 per VPC</td>
+<td></td>
+</tr>
+<tr>
+<td>NAT Gateway</td>
+<td>5 per AZ</td>
+<td></td>
+</tr>
+<tr>
+<td>VPC Peering</td>
+<td>50 per VPC (request a 125)</td>
+<td></td>
+</tr>
+<tr>
+<td>Endpoint per VPC</td>
+<td>50</td>
+<td></td>
+</tr>
+<tr>
+<td>TGW attachment</td>
+<td>5000</td>
+<td></td>
+</tr>
+<tr>
+<td>VPC CIDR block</td>
+<td>5 (estendibile a 50, max /16)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="7-iam-limits">7. IAM limits</h2>
+<table>
+<thead>
+<tr>
+<th>Risorsa</th>
+<th>Limite</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>User per account</td>
+<td>5000</td>
+</tr>
+<tr>
+<td>Group per account</td>
+<td>300</td>
+</tr>
+<tr>
+<td>Role per account</td>
+<td>5000 (estendibile)</td>
+</tr>
+<tr>
+<td>Policy managed customer</td>
+<td>1500 (estendibile a 5000)</td>
+</tr>
+<tr>
+<td>Policy managed AWS</td>
+<td>illimitate</td>
+</tr>
+<tr>
+<td>Policy attached per role</td>
+<td>10 managed + 1 inline (10k char)</td>
+</tr>
+<tr>
+<td>Policy attached per user</td>
+<td>10 managed + inline</td>
+</tr>
+<tr>
+<td>Policy size</td>
+<td>managed 6144 char, inline 2048 char</td>
+</tr>
+<tr>
+<td>Trust policy size</td>
+<td>2048 char</td>
+</tr>
+<tr>
+<td>MFA device per user</td>
+<td>8 (multi-MFA dal 2023)</td>
+</tr>
+<tr>
+<td>Access key per user</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Principal in trust policy</td>
+<td>combinabili in stringa, ma soggetti a size</td>
+</tr>
+<tr>
+<td>Session duration role</td>
+<td>1h default, fino 12h (configurable)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="8-dynamodb-limits">8. DynamoDB limits</h2>
+<table>
+<thead>
+<tr>
+<th>Risorsa</th>
+<th>Limite</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Item size max</td>
+<td>400 KB (compreso attribute name)</td>
+</tr>
+<tr>
+<td>Partition key</td>
+<td>max 2048 byte</td>
+</tr>
+<tr>
+<td>Sort key</td>
+<td>max 1024 byte</td>
+</tr>
+<tr>
+<td>Number of GSI</td>
+<td>20 per tabella</td>
+</tr>
+<tr>
+<td>Number of LSI</td>
+<td>5 per tabella</td>
+</tr>
+<tr>
+<td>BatchGetItem</td>
+<td>100 item o 16 MB</td>
+</tr>
+<tr>
+<td>BatchWriteItem</td>
+<td>25 PutItem/DeleteItem o 16 MB</td>
+</tr>
+<tr>
+<td>TransactWriteItems</td>
+<td>100 azioni, 4 MB totali</td>
+</tr>
+<tr>
+<td>TransactGetItems</td>
+<td>100 azioni, 4 MB totali</td>
+</tr>
+<tr>
+<td>Query/Scan result</td>
+<td>1 MB per page</td>
+</tr>
+<tr>
+<td>Partition throughput</td>
+<td>3000 RCU + 1000 WCU</td>
+</tr>
+<tr>
+<td>Provisioned throughput</td>
+<td>up to 40k RCU + 40k WCU per tabella (soft)</td>
+</tr>
+<tr>
+<td>On-demand</td>
+<td>40k RCU + 40k WCU automatic</td>
+</tr>
+</tbody>
+</table>
+<h2 id="9-rds-sizing-rules-of-thumb">9. RDS sizing rules of thumb</h2>
+<table>
+<thead>
+<tr>
+<th>Engine</th>
+<th>Max storage</th>
+<th>Max replica read</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MySQL</td>
+<td>64 TB</td>
+<td>5</td>
+</tr>
+<tr>
+<td>MariaDB</td>
+<td>64 TB</td>
+<td>5</td>
+</tr>
+<tr>
+<td>PostgreSQL</td>
+<td>64 TB</td>
+<td>5</td>
+</tr>
+<tr>
+<td>SQL Server</td>
+<td>16 TB</td>
+<td>15 (Multi-AZ)</td>
+</tr>
+<tr>
+<td>Oracle</td>
+<td>64 TB</td>
+<td>5</td>
+</tr>
+<tr>
+<td>Aurora MySQL/Postgres</td>
+<td>128 TB (auto)</td>
+<td>15</td>
+</tr>
+</tbody>
+</table>
+<p>Instance class principali: <code>db.t3/t4g</code> (burstable), <code>db.m6i/m7g</code> (general), <code>db.r6i/r7g</code> (memory), <code>db.x2g</code> (xlarge memory). Multi-AZ: standby in sync, failover ~60-120s.</p>
+<h2 id="10-aws-cli-comandi-piu-usati">10. AWS CLI — comandi più usati</h2>
+<pre><code class="language-bash"># Identity
+aws sts get-caller-identity
+aws configure
+aws configure list-profiles
+
+# S3
+aws s3 ls
+aws s3 ls s3://bucket
+aws s3 cp file.txt s3://bucket/
+aws s3 sync ./dir s3://bucket/dir
+aws s3 rm s3://bucket/key
+aws s3api put-bucket-policy --bucket b --policy file://p.json
+
+# EC2
+aws ec2 describe-instances --filters &quot;Name=tag:Env,Values=prod&quot;
+aws ec2 start-instances --instance-ids i-xxx
+aws ec2 stop-instances --instance-ids i-xxx
+aws ec2 terminate-instances --instance-ids i-xxx
+aws ec2 describe-security-groups
+aws ec2 run-instances --image-id ami-xxx --instance-type t3.micro
+
+# IAM
+aws iam list-users
+aws iam get-user --user-name alice
+aws iam list-attached-user-policies --user-name alice
+aws iam simulate-principal-policy --policy-source-arn ... --action-names s3:GetObject
+
+# Lambda
+aws lambda list-functions
+aws lambda invoke --function-name fn --payload '{&quot;k&quot;:&quot;v&quot;}' out.json
+aws lambda update-function-code --function-name fn --zip-file fileb://fn.zip
+
+# CloudFormation
+aws cloudformation deploy --template-file t.yaml --stack-name s
+aws cloudformation describe-stacks --stack-name s
+aws cloudformation list-stack-resources --stack-name s
+aws cloudformation delete-stack --stack-name s
+
+# Logs
+aws logs tail /aws/lambda/fn --follow
+aws logs filter-log-events --log-group-name X --filter-pattern &quot;ERROR&quot;
+
+# DynamoDB
+aws dynamodb scan --table-name T --limit 10
+aws dynamodb query --table-name T --key-condition-expression &quot;PK = :v&quot; \
+  --expression-attribute-values '{&quot;:v&quot;:{&quot;S&quot;:&quot;abc&quot;}}'
+aws dynamodb put-item --table-name T --item file://item.json
+
+# SSM
+aws ssm start-session --target i-xxx
+aws ssm send-command --instance-ids i-xxx --document-name AWS-RunShellScript \
+  --parameters 'commands=[&quot;uptime&quot;]'
+aws ssm get-parameter --name /app/dbpass --with-decryption
+
+# CloudWatch
+aws cloudwatch get-metric-statistics --namespace AWS/EC2 --metric-name CPUUtilization \
+  --dimensions Name=InstanceId,Value=i-xxx --start-time ... --end-time ... --period 60 --statistics Average
+
+# Cost
+aws ce get-cost-and-usage --time-period Start=2026-05-01,End=2026-05-21 \
+  --granularity DAILY --metrics UnblendedCost
+</code></pre>
+<h2 id="11-route-53-routing-policy">11. Route 53 routing policy</h2>
+<table>
+<thead>
+<tr>
+<th>Policy</th>
+<th>Use case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Simple</strong></td>
+<td>1 record statico, no failover</td>
+</tr>
+<tr>
+<td><strong>Weighted</strong></td>
+<td>A/B test, gradual rollout (es. 90/10)</td>
+</tr>
+<tr>
+<td><strong>Latency-based</strong></td>
+<td>route a region con latenza minore dal client</td>
+</tr>
+<tr>
+<td><strong>Failover</strong></td>
+<td>primary + secondary con health check</td>
+</tr>
+<tr>
+<td><strong>Geolocation</strong></td>
+<td>route per paese/continente (regulatory)</td>
+</tr>
+<tr>
+<td><strong>Geoproximity</strong></td>
+<td>route a region con bias geografico (Traffic Flow)</td>
+</tr>
+<tr>
+<td><strong>Multivalue answer</strong></td>
+<td>client-side LB con health check (fino a 8 record)</td>
+</tr>
+<tr>
+<td><strong>IP-based</strong></td>
+<td>route per CIDR client (advertising, CDN)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="12-pricing-model-summary">12. Pricing model summary</h2>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Esempi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Per ora/secondo</td>
+<td>EC2, RDS, ALB, NAT GW, EKS control plane</td>
+</tr>
+<tr>
+<td>Per request</td>
+<td>Lambda, API Gateway, S3 GET/PUT, SQS, SNS, EventBridge</td>
+</tr>
+<tr>
+<td>Per GB stored</td>
+<td>S3, EBS, EFS, RDS storage</td>
+</tr>
+<tr>
+<td>Per GB ingested</td>
+<td>Kinesis Firehose, CloudWatch Logs ingestion</td>
+</tr>
+<tr>
+<td>Per GB transferred out</td>
+<td>Internet egress, CloudFront, cross-region</td>
+</tr>
+<tr>
+<td>Per execution duration</td>
+<td>Lambda GB·s, Step Functions Express, Fargate vCPU·s</td>
+</tr>
+<tr>
+<td>Per provisioned capacity</td>
+<td>DynamoDB provisioned, EC2 Reserved, EBS Provisioned IOPS</td>
+</tr>
+<tr>
+<td>Per chiave/mese</td>
+<td>KMS CMK, Secrets Manager</td>
+</tr>
+<tr>
+<td>Per finding</td>
+<td>Security Hub, Inspector</td>
+</tr>
+<tr>
+<td>Flat fee</td>
+<td>Shield Advanced ($3000/mo), Lightsail bundle, GuardDuty trial</td>
+</tr>
+</tbody>
+</table>
+<p>Regola d'oro 80/20: i 5 driver di costo più comuni sono <strong>EC2 + EBS, RDS, NAT Gateway, S3 (storage + request), Data Transfer Out</strong>.</p>
+<h2 id="13-acronimi">13. Acronimi</h2>
+<table>
+<thead>
+<tr>
+<th>Acronimo</th>
+<th>Espansione</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ACL</td>
+<td>Access Control List</td>
+</tr>
+<tr>
+<td>ACM</td>
+<td>AWS Certificate Manager</td>
+</tr>
+<tr>
+<td>ALB</td>
+<td>Application Load Balancer</td>
+</tr>
+<tr>
+<td>AMI</td>
+<td>Amazon Machine Image</td>
+</tr>
+<tr>
+<td>ARN</td>
+<td>Amazon Resource Name</td>
+</tr>
+<tr>
+<td>ASG</td>
+<td>Auto Scaling Group</td>
+</tr>
+<tr>
+<td>AZ</td>
+<td>Availability Zone</td>
+</tr>
+<tr>
+<td>BYOIP</td>
+<td>Bring Your Own IP</td>
+</tr>
+<tr>
+<td>BYOK</td>
+<td>Bring Your Own Key</td>
+</tr>
+<tr>
+<td>CDK</td>
+<td>Cloud Development Kit</td>
+</tr>
+<tr>
+<td>CIDR</td>
+<td>Classless Inter-Domain Routing</td>
+</tr>
+<tr>
+<td>CMK</td>
+<td>Customer Master Key (oggi: KMS key)</td>
+</tr>
+<tr>
+<td>CRR</td>
+<td>Cross-Region Replication</td>
+</tr>
+<tr>
+<td>CW</td>
+<td>CloudWatch</td>
+</tr>
+<tr>
+<td>DLM</td>
+<td>Data Lifecycle Manager</td>
+</tr>
+<tr>
+<td>DLQ</td>
+<td>Dead Letter Queue</td>
+</tr>
+<tr>
+<td>DMS</td>
+<td>Database Migration Service</td>
+</tr>
+<tr>
+<td>DR</td>
+<td>Disaster Recovery</td>
+</tr>
+<tr>
+<td>DX</td>
+<td>Direct Connect</td>
+</tr>
+<tr>
+<td>EBS</td>
+<td>Elastic Block Store</td>
+</tr>
+<tr>
+<td>EC2</td>
+<td>Elastic Compute Cloud</td>
+</tr>
+<tr>
+<td>ECR</td>
+<td>Elastic Container Registry</td>
+</tr>
+<tr>
+<td>ECS</td>
+<td>Elastic Container Service</td>
+</tr>
+<tr>
+<td>EFS</td>
+<td>Elastic File System</td>
+</tr>
+<tr>
+<td>EIP</td>
+<td>Elastic IP</td>
+</tr>
+<tr>
+<td>EKS</td>
+<td>Elastic Kubernetes Service</td>
+</tr>
+<tr>
+<td>ENI</td>
+<td>Elastic Network Interface</td>
+</tr>
+<tr>
+<td>FSx</td>
+<td>File System x</td>
+</tr>
+<tr>
+<td>GA</td>
+<td>Global Accelerator / General Availability</td>
+</tr>
+<tr>
+<td>GWLB</td>
+<td>Gateway Load Balancer</td>
+</tr>
+<tr>
+<td>HSM</td>
+<td>Hardware Security Module</td>
+</tr>
+<tr>
+<td>IaC</td>
+<td>Infrastructure as Code</td>
+</tr>
+<tr>
+<td>IAM</td>
+<td>Identity and Access Management</td>
+</tr>
+<tr>
+<td>IGW</td>
+<td>Internet Gateway</td>
+</tr>
+<tr>
+<td>KMS</td>
+<td>Key Management Service</td>
+</tr>
+<tr>
+<td>LB</td>
+<td>Load Balancer</td>
+</tr>
+<tr>
+<td>MFA</td>
+<td>Multi-Factor Authentication</td>
+</tr>
+<tr>
+<td>MSK</td>
+<td>Managed Streaming for Kafka</td>
+</tr>
+<tr>
+<td>NACL</td>
+<td>Network Access Control List</td>
+</tr>
+<tr>
+<td>NAT</td>
+<td>Network Address Translation</td>
+</tr>
+<tr>
+<td>NLB</td>
+<td>Network Load Balancer</td>
+</tr>
+<tr>
+<td>OAC</td>
+<td>Origin Access Control</td>
+</tr>
+<tr>
+<td>OAI</td>
+<td>Origin Access Identity (legacy)</td>
+</tr>
+<tr>
+<td>RDS</td>
+<td>Relational Database Service</td>
+</tr>
+<tr>
+<td>RI</td>
+<td>Reserved Instance</td>
+</tr>
+<tr>
+<td>RPO</td>
+<td>Recovery Point Objective</td>
+</tr>
+<tr>
+<td>RTO</td>
+<td>Recovery Time Objective</td>
+</tr>
+<tr>
+<td>SCP</td>
+<td>Service Control Policy</td>
+</tr>
+<tr>
+<td>SG</td>
+<td>Security Group</td>
+</tr>
+<tr>
+<td>SNS</td>
+<td>Simple Notification Service</td>
+</tr>
+<tr>
+<td>SQS</td>
+<td>Simple Queue Service</td>
+</tr>
+<tr>
+<td>SRR</td>
+<td>Same-Region Replication</td>
+</tr>
+<tr>
+<td>SSE</td>
+<td>Server-Side Encryption</td>
+</tr>
+<tr>
+<td>SSM</td>
+<td>Systems Manager</td>
+</tr>
+<tr>
+<td>SSO</td>
+<td>Single Sign-On (oggi: IAM Identity Center)</td>
+</tr>
+<tr>
+<td>STS</td>
+<td>Security Token Service</td>
+</tr>
+<tr>
+<td>TGW</td>
+<td>Transit Gateway</td>
+</tr>
+<tr>
+<td>TTL</td>
+<td>Time To Live</td>
+</tr>
+<tr>
+<td>VPC</td>
+<td>Virtual Private Cloud</td>
+</tr>
+<tr>
+<td>VPN</td>
+<td>Virtual Private Network</td>
+</tr>
+<tr>
+<td>WAF</td>
+<td>Web Application Firewall</td>
+</tr>
+<tr>
+<td>WAFv2</td>
+<td>WAF version 2</td>
+</tr>
+<tr>
+<td>XR</td>
+<td>X-Ray</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Riassunto</strong>: questa è la <em>carta dei limiti</em> di AWS — tabelle compatte per famiglie EC2, storage class, limiti hard di IAM/VPC/Lambda/DynamoDB, comandi CLI essenziali, routing policy Route 53, modelli di pricing e ~60 acronimi. Tienila aperta mentre lavori o ti prepari all'esame.</p>
+</blockquote>
+      <nav class="pager">
+<a href="51-glossario-az.html" class="prev"><span class="label">← Precedente</span><span class="title">Glossario A-Z</span></a>
+<a href="../index.html" class="next"><span class="label">↩ Torna alla home</span><span class="title">Indice generale</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>AWS Zero to Hero</strong> — percorso completo, in italiano, dalle primitive all'architettura avanzata.</p><p>Materiale didattico aperto. Nessuna sponsorizzazione, nessun affiliate link, nessuna affiliazione con AWS. Quando un concetto è oscuro, torna indietro: AWS è una piramide di primitive, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

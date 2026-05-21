@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RNN, LSTM, GRU for sequences — Data Science Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#3a4a7a',primaryTextColor:'#e8eef0',primaryBorderColor:'#5a6aa0',lineColor:'#8a9499',background:'#11171a'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">Σ</div>
+      <div>
+        <div class="brand-title">DATA SCIENCE</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/30-rnn-lstm.html" class="lang-link" title="Passa all'italiano">🇮🇹 IT</a><span class="lang-active" title="English">🇬🇧 EN</span></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="search... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-what-is-data-science.html" class=""><span class="num">01</span>What is data science (and what isn&#x27;t)</a></li><li class="nav-item"><a href="../pages/02-python-for-data-science.html" class=""><span class="num">02</span>Python for data science: pro setup</a></li><li class="nav-item"><a href="../pages/02b-math-essentials.html" class=""><span class="num">02b</span>High-school math you actually need</a></li><li class="nav-item"><a href="../pages/03-linear-algebra.html" class=""><span class="num">03</span>Linear algebra for data scientists</a></li><li class="nav-item"><a href="../pages/04-calculus-optimization.html" class=""><span class="num">04</span>Calculus, gradients, and optimization</a></li><li class="nav-item"><a href="../pages/05-probability.html" class=""><span class="num">05</span>Probability: the language of uncertainty</a></li><li class="nav-item"><a href="../pages/06-descriptive-statistics.html" class=""><span class="num">06</span>Descriptive statistics</a></li><li class="nav-item"><a href="../pages/07-inferential-statistics.html" class=""><span class="num">07</span>Inferential statistics and hypothesis testing</a></li><li class="nav-item"><a href="../pages/08-distributions.html" class=""><span class="num">08</span>Probability distributions you&#x27;ll meet</a></li><li class="nav-item"><a href="../pages/09-numpy.html" class=""><span class="num">09</span>NumPy: thinking in arrays</a></li><li class="nav-item"><a href="../pages/10-pandas.html" class=""><span class="num">10</span>Pandas: the swiss army knife</a></li><li class="nav-item"><a href="../pages/11-sql.html" class=""><span class="num">11</span>SQL for data scientists</a></li><li class="nav-item"><a href="../pages/12-visualization.html" class=""><span class="num">12</span>Visualization: matplotlib, seaborn, plotly</a></li><li class="nav-item"><a href="../pages/13-data-wrangling.html" class=""><span class="num">13</span>Cleaning and data wrangling</a></li><li class="nav-item"><a href="../pages/14-feature-engineering.html" class=""><span class="num">14</span>Feature engineering</a></li><li class="nav-item"><a href="../pages/15-eda.html" class=""><span class="num">15</span>EDA: Exploratory Data Analysis</a></li><li class="nav-item"><a href="../pages/16-ml-fundamentals.html" class=""><span class="num">16</span>ML: fundamentals — bias, variance, validation</a></li><li class="nav-item"><a href="../pages/17-linear-regression.html" class=""><span class="num">17</span>Linear regression and regularization</a></li><li class="nav-item"><a href="../pages/18-logistic-regression.html" class=""><span class="num">18</span>Logistic regression and classification</a></li><li class="nav-item"><a href="../pages/19-knn-naive-bayes-svm.html" class=""><span class="num">19</span>KNN, Naive Bayes, SVM</a></li><li class="nav-item"><a href="../pages/20-decision-trees.html" class=""><span class="num">20</span>Decision trees</a></li><li class="nav-item"><a href="../pages/21-random-forest-boosting.html" class=""><span class="num">21</span>Random Forest, Gradient Boosting, XGBoost</a></li><li class="nav-item"><a href="../pages/22-clustering.html" class=""><span class="num">22</span>Clustering: K-Means, DBSCAN, GMM, hierarchical</a></li><li class="nav-item"><a href="../pages/23-pca-tsne-umap.html" class=""><span class="num">23</span>Dimensionality reduction: PCA, t-SNE, UMAP</a></li><li class="nav-item"><a href="../pages/24-metrics-validation.html" class=""><span class="num">24</span>Metrics, cross-validation, leakage</a></li><li class="nav-item"><a href="../pages/25-class-imbalance.html" class=""><span class="num">25</span>Class imbalance</a></li><li class="nav-item"><a href="../pages/26-hyperparameter-tuning.html" class=""><span class="num">26</span>Hyperparameter tuning</a></li><li class="nav-item"><a href="../pages/27-neural-networks.html" class=""><span class="num">27</span>Neural networks: from fundamentals to backprop</a></li><li class="nav-item"><a href="../pages/28-pytorch.html" class=""><span class="num">28</span>PyTorch: from toy model to training loop</a></li><li class="nav-item"><a href="../pages/29-cnn.html" class=""><span class="num">29</span>CNN for computer vision</a></li><li class="nav-item"><a href="../pages/30-rnn-lstm.html" class="active"><span class="num">30</span>RNN, LSTM, GRU for sequences</a></li><li class="nav-item"><a href="../pages/31-transformer.html" class=""><span class="num">31</span>Transformer and attention</a></li><li class="nav-item"><a href="../pages/32-nlp-llm.html" class=""><span class="num">32</span>NLP: from text mining to LLMs</a></li><li class="nav-item"><a href="../pages/33-time-series.html" class=""><span class="num">33</span>Time series and forecasting</a></li><li class="nav-item"><a href="../pages/34-mlops.html" class=""><span class="num">34</span>MLOps: deployment, monitoring, drift</a></li><li class="nav-item"><a href="../pages/35-bayesian-causal.html" class=""><span class="num">35</span>Bayesian and Causal Inference</a></li><li class="nav-item"><a href="../pages/36-capstone-career.html" class=""><span class="num">36</span>Capstone, portfolio, career</a></li><li class="nav-item"><a href="../pages/37-glossary.html" class=""><span class="num">37</span>Glossary A-Z</a></li><li class="nav-item"><a href="../pages/38-formula-sheet.html" class=""><span class="num">38</span>Formula Sheet: all the formulas from the course</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Deep Learning</span>
+        <span>Section 31 of 39</span>
+        <span class="level-tag level-adv">Level: advanced</span>
+      </div>
+      <h1>RNN, LSTM, GRU for sequences</h1>
+      <p class="summary">Recurrent networks, vanishing gradient, gating. The history that led to Transformers.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Deep Learning</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>[[pytorch]]</li><li>[[neural-networks]]</li></ul>
+  <div class="label">Tools</div>
+  <ul class="source-list"><li>torch.nn</li></ul>
+</div>
+      <h2 id="what-changes-with-sequences">What changes with sequences</h2>
+<p>Text, audio, time series, DNA: data where <strong>order matters</strong>. An MLP/CNN has no memory of the past. RNNs do.</p>
+<h2 id="basic-rnn">Basic RNN</h2>
+<p>At each step $t$, take input $x_t$ and previous state $h_{t-1}$, produce new state $h_t$ and (optionally) output $y_t$:</p>
+<p>$$h_t = \tanh(W_h h_{t-1} + W_x x_t + b)$$
+$$y_t = W_y h_t + b_y$$</p>
+<pre><code class="language-mermaid">flowchart LR
+    X1[x₁] --&gt; H1[h₁]
+    X2[x₂] --&gt; H2[h₂]
+    X3[x₃] --&gt; H3[h₃]
+    H1 --&gt; H2
+    H2 --&gt; H3
+    H1 --&gt; Y1[y₁]
+    H2 --&gt; Y2[y₂]
+    H3 --&gt; Y3[y₃]
+</code></pre>
+<p>Weights $W_h, W_x$ are shared across all timesteps (parameter sharing in time).</p>
+<h2 id="types-of-tasks-with-rnn">Types of tasks with RNN</h2>
+<ul>
+<li><strong>many-to-one</strong>: sentence classification → category.</li>
+<li><strong>one-to-many</strong>: image captioning, music generation.</li>
+<li><strong>many-to-many same length</strong>: POS tagging.</li>
+<li><strong>many-to-many encoder-decoder</strong>: translation, summarization.</li>
+</ul>
+<h2 id="the-vanishing-gradient-problem">The vanishing gradient problem</h2>
+<p>Backprop through T timesteps multiplies T times the gradients via the chain rule:</p>
+<p>$$\frac{\partial L}{\partial h_0} = \prod_{t=1}^T \frac{\partial h_t}{\partial h_{t-1}}$$</p>
+<p>With tanh the derivatives are $\leq 1$ → the product vanishes exponentially. The basic RNN <strong>cannot learn long-range dependencies</strong> (beyond ~10 steps).</p>
+<h2 id="lstm-long-short-term-memory-1997">LSTM (Long Short-Term Memory, 1997)</h2>
+<p>Hochreiter &amp; Schmidhuber introduce a memory state $c_t$ with <strong>gates</strong> that decide what to remember and what to discard.</p>
+<p>The 4 equations at its core:</p>
+<p>$$f_t = \sigma(W_f [h_{t-1}, x_t] + b_f) \quad \text{forget gate}$$
+$$i_t = \sigma(W_i [h_{t-1}, x_t] + b_i) \quad \text{input gate}$$
+$$\tilde{c}<em t-1="t-1">t = \tanh(W_c [h</em>$$
+$$o_t = \sigma(W_o [h_{t-1}, x_t] + b_o) \quad \text{output gate}$$}, x_t] + b_c) \quad \text{cell candidate</p>
+<p>And the 2 update equations:</p>
+<p>$$c_t = f_t \odot c_{t-1} + i_t \odot \tilde{c}_t$$
+$$h_t = o_t \odot \tanh(c_t)$$</p>
+<p>The key point: $c_t$ is a <strong>sum</strong>, not a product, of the previous cell. No vanishing for the memory cell.</p>
+<pre><code class="language-python">import torch.nn as nn
+lstm = nn.LSTM(input_size=64, hidden_size=128, num_layers=2,
+               batch_first=True, dropout=0.2, bidirectional=False)
+x = torch.randn(32, 50, 64)         # (batch, seq, features)
+out, (h, c) = lstm(x)
+# out: (32, 50, 128)
+# h, c: (num_layers, batch, hidden)
+</code></pre>
+<h2 id="gru-gated-recurrent-unit-2014">GRU (Gated Recurrent Unit, 2014)</h2>
+<p>Simpler version of LSTM, two gates instead of three:</p>
+<p>$$z_t = \sigma(W_z [h_{t-1}, x_t])\quad \text{update gate}$$
+$$r_t = \sigma(W_r [h_{t-1}, x_t])\quad \text{reset gate}$$
+$$\tilde{h}<em t-1="t-1">t = \tanh(W [r_t \odot h</em>, x_t])$$
+$$h_t = (1 - z_t) \odot h_{t-1} + z_t \odot \tilde{h}_t$$</p>
+<p>Fewer parameters than LSTM, often similar performance.</p>
+<pre><code class="language-python">gru = nn.GRU(input_size=64, hidden_size=128, batch_first=True)
+</code></pre>
+<h2 id="bidirectional">Bidirectional</h2>
+<p>Process the sequence forward <strong>and</strong> backward, concatenating the states:</p>
+<pre><code class="language-python">bilstm = nn.LSTM(64, 128, bidirectional=True, batch_first=True)
+out, _ = bilstm(x)
+# out: (32, 50, 256)   # 128 forward + 128 backward
+</code></pre>
+<p>Better for non-causal tasks (POS tagging, NER). Not for generation (text, time series) — the "future" cannot be seen.</p>
+<h2 id="padding-and-packing">Padding and packing</h2>
+<p>Sequences have variable length. They are <strong>padded</strong> to the same length in the batch, but <strong>packed</strong> to avoid wasting computation:</p>
+<pre><code class="language-python">from torch.nn.utils.rnn import pad_sequence, pack_padded_sequence, pad_packed_sequence
+
+seqs = [torch.randn(l, 64) for l in [10, 20, 15]]
+padded = pad_sequence(seqs, batch_first=True)   # (3, 20, 64)
+lens = torch.tensor([10, 20, 15])
+
+packed = pack_padded_sequence(padded, lens, batch_first=True, enforce_sorted=False)
+out_packed, _ = lstm(packed)
+out, _ = pad_packed_sequence(out_packed, batch_first=True)
+</code></pre>
+<h2 id="example-sentiment-classification">Example: sentiment classification</h2>
+<pre><code class="language-python">import torch, torch.nn as nn
+
+class TextClassifier(nn.Module):
+    def __init__(self, vocab, emb=128, hidden=256, n_classes=2):
+        super().__init__()
+        self.emb = nn.Embedding(vocab, emb, padding_idx=0)
+        self.rnn = nn.LSTM(emb, hidden, num_layers=2, dropout=0.3,
+                           batch_first=True, bidirectional=True)
+        self.fc = nn.Linear(hidden*2, n_classes)
+
+    def forward(self, x, lengths):
+        # x: (B, T) int
+        e = self.emb(x)
+        packed = nn.utils.rnn.pack_padded_sequence(
+            e, lengths.cpu(), batch_first=True, enforce_sorted=False)
+        _, (h, _) = self.rnn(packed)
+        # h: (num_layers*2, B, hidden) — take the final bi-directional states of the last layer
+        h_final = torch.cat([h[-2], h[-1]], dim=1)  # (B, hidden*2)
+        return self.fc(h_final)
+</code></pre>
+<h2 id="intrinsic-limitations">Intrinsic limitations</h2>
+<ul>
+<li><strong>Sequential computation</strong>: not parallelizable on GPU like CNN/Transformer.</li>
+<li><strong>Very long dependencies</strong>: even LSTM struggles beyond ~500 timesteps.</li>
+<li><strong>Single vector bottleneck</strong>: in encoder-decoder, the entire history is compressed into one $h$.</li>
+</ul>
+<p>These limitations led to <strong>attention</strong> and then to the <strong>Transformer</strong>.</p>
+<h2 id="when-to-still-use-rnnlstm-in-2026">When to still use RNN/LSTM in 2026</h2>
+<ul>
+<li><strong>Real-time streaming inference</strong> (1 step at a time, no batch).</li>
+<li><strong>Small models</strong> on edge devices (Transformer is memory-hungry).</li>
+<li><strong>Traditional time series</strong> where the pattern is short.</li>
+<li><strong>Biological sequences</strong> when the size is modest.</li>
+</ul>
+<p>For almost everything else: Transformer.</p>
+<h2 id="exercises">Exercises</h2>
+<details>
+<summary>Exercise 1 — RNN from scratch in NumPy</summary>
+
+
+<pre><code class="language-python">import numpy as np
+rng = np.random.default_rng(0)
+def relu(x): return np.maximum(0, x)
+
+T, d_in, d_h = 20, 5, 16
+W_x = rng.standard_normal((d_in, d_h)) * 0.1
+W_h = rng.standard_normal((d_h, d_h)) * 0.1
+b = np.zeros(d_h)
+x_seq = rng.standard_normal((T, d_in))
+h = np.zeros(d_h)
+for t in range(T):
+    h = np.tanh(x_seq[t] @ W_x + h @ W_h + b)
+print(h)
+</code></pre>
+
+
+Extension: also implement the output and manual backprop (lengthy, but instructive).
+</details>
+
+<details>
+<summary>Exercise 2 — Sentiment IMDB with LSTM</summary>
+
+Use torchtext or HuggingFace for IMDB. Model: 100D embedding + biLSTM 128 + linear. Target: F1 ≥ 0.85.
+
+
+<pre><code class="language-python"># pseudo:
+from datasets import load_dataset
+ds = load_dataset('imdb')
+# tokenize, build vocab, batch, train
+</code></pre>
+
+
+Sentiment IMDB is the "Hello World" of NLP.
+</details>
+
+<details>
+<summary>Exercise 3 — Time series forecasting</summary>
+
+Predict the next value of a time series (e.g.: airline passengers) using an LSTM:
+
+
+<pre><code class="language-python">import torch
+import torch.nn as nn
+import numpy as np
+
+# load Airpassengers or simulated
+y = np.cos(np.linspace(0, 30, 300)) + np.random.normal(0, 0.1, 300)
+
+# create (X, y) with window
+def windows(y, w=12):
+    X, t = [], []
+    for i in range(len(y)-w):
+        X.append(y[i:i+w]); t.append(y[i+w])
+    return np.array(X).reshape(-1, w, 1), np.array(t)
+
+X, t = windows(y)
+X = torch.tensor(X, dtype=torch.float32)
+t = torch.tensor(t, dtype=torch.float32)
+
+class M(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.lstm = nn.LSTM(1, 32, batch_first=True)
+        self.fc = nn.Linear(32, 1)
+    def forward(self, x):
+        out, _ = self.lstm(x)
+        return self.fc(out[:, -1]).squeeze()
+
+m = M()
+opt = torch.optim.AdamW(m.parameters(), lr=1e-2)
+for e in range(50):
+    pred = m(X)
+    loss = ((pred - t)**2).mean()
+    opt.zero_grad(); loss.backward(); opt.step()
+    if e%10==0: print(e, loss.item())
+</code></pre>
+
+</details>
+
+<h2 id="key-takeaways">Key takeaways</h2>
+<ul>
+<li>Basic RNN: vanishing gradient, max ~10 steps.</li>
+<li>LSTM/GRU: gating solves the vanishing, handles ~100-500 steps.</li>
+<li>Bidirectional for non-causal tasks, standard for generation.</li>
+<li>Padding + packing for batches with variable-length sequences.</li>
+<li>2026: Transformer has almost displaced RNN, but RNN survives for streaming and edge.</li>
+</ul>
+<p>Next: Transformer and attention.</p>
+      <nav class="pager">
+<a href="29-cnn.html" class="prev"><span class="label">← Previous</span><span class="title">CNN for computer vision</span></a>
+<a href="31-transformer.html" class="next"><span class="label">Next →</span><span class="title">Transformer and attention</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Data Science Zero to Hero</strong> — complete path, in English, from math to deployment.</p><p>Open didactic material. Formulas are here to be understood, not feared. When a concept is unclear, go back: data science is a pyramid, not a tree you skip across.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+</body>
+</html>

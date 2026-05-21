@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Neural networks: from fundamentals to backprop — Data Science Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#3a4a7a',primaryTextColor:'#e8eef0',primaryBorderColor:'#5a6aa0',lineColor:'#8a9499',background:'#11171a'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">Σ</div>
+      <div>
+        <div class="brand-title">DATA SCIENCE</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/27-reti-neurali.html" class="lang-link" title="Passa all'italiano">🇮🇹 IT</a><span class="lang-active" title="English">🇬🇧 EN</span></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="search... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-what-is-data-science.html" class=""><span class="num">01</span>What is data science (and what isn&#x27;t)</a></li><li class="nav-item"><a href="../pages/02-python-for-data-science.html" class=""><span class="num">02</span>Python for data science: pro setup</a></li><li class="nav-item"><a href="../pages/02b-math-essentials.html" class=""><span class="num">02b</span>High-school math you actually need</a></li><li class="nav-item"><a href="../pages/03-linear-algebra.html" class=""><span class="num">03</span>Linear algebra for data scientists</a></li><li class="nav-item"><a href="../pages/04-calculus-optimization.html" class=""><span class="num">04</span>Calculus, gradients, and optimization</a></li><li class="nav-item"><a href="../pages/05-probability.html" class=""><span class="num">05</span>Probability: the language of uncertainty</a></li><li class="nav-item"><a href="../pages/06-descriptive-statistics.html" class=""><span class="num">06</span>Descriptive statistics</a></li><li class="nav-item"><a href="../pages/07-inferential-statistics.html" class=""><span class="num">07</span>Inferential statistics and hypothesis testing</a></li><li class="nav-item"><a href="../pages/08-distributions.html" class=""><span class="num">08</span>Probability distributions you&#x27;ll meet</a></li><li class="nav-item"><a href="../pages/09-numpy.html" class=""><span class="num">09</span>NumPy: thinking in arrays</a></li><li class="nav-item"><a href="../pages/10-pandas.html" class=""><span class="num">10</span>Pandas: the swiss army knife</a></li><li class="nav-item"><a href="../pages/11-sql.html" class=""><span class="num">11</span>SQL for data scientists</a></li><li class="nav-item"><a href="../pages/12-visualization.html" class=""><span class="num">12</span>Visualization: matplotlib, seaborn, plotly</a></li><li class="nav-item"><a href="../pages/13-data-wrangling.html" class=""><span class="num">13</span>Cleaning and data wrangling</a></li><li class="nav-item"><a href="../pages/14-feature-engineering.html" class=""><span class="num">14</span>Feature engineering</a></li><li class="nav-item"><a href="../pages/15-eda.html" class=""><span class="num">15</span>EDA: Exploratory Data Analysis</a></li><li class="nav-item"><a href="../pages/16-ml-fundamentals.html" class=""><span class="num">16</span>ML: fundamentals — bias, variance, validation</a></li><li class="nav-item"><a href="../pages/17-linear-regression.html" class=""><span class="num">17</span>Linear regression and regularization</a></li><li class="nav-item"><a href="../pages/18-logistic-regression.html" class=""><span class="num">18</span>Logistic regression and classification</a></li><li class="nav-item"><a href="../pages/19-knn-naive-bayes-svm.html" class=""><span class="num">19</span>KNN, Naive Bayes, SVM</a></li><li class="nav-item"><a href="../pages/20-decision-trees.html" class=""><span class="num">20</span>Decision trees</a></li><li class="nav-item"><a href="../pages/21-random-forest-boosting.html" class=""><span class="num">21</span>Random Forest, Gradient Boosting, XGBoost</a></li><li class="nav-item"><a href="../pages/22-clustering.html" class=""><span class="num">22</span>Clustering: K-Means, DBSCAN, GMM, hierarchical</a></li><li class="nav-item"><a href="../pages/23-pca-tsne-umap.html" class=""><span class="num">23</span>Dimensionality reduction: PCA, t-SNE, UMAP</a></li><li class="nav-item"><a href="../pages/24-metrics-validation.html" class=""><span class="num">24</span>Metrics, cross-validation, leakage</a></li><li class="nav-item"><a href="../pages/25-class-imbalance.html" class=""><span class="num">25</span>Class imbalance</a></li><li class="nav-item"><a href="../pages/26-hyperparameter-tuning.html" class=""><span class="num">26</span>Hyperparameter tuning</a></li><li class="nav-item"><a href="../pages/27-neural-networks.html" class="active"><span class="num">27</span>Neural networks: from fundamentals to backprop</a></li><li class="nav-item"><a href="../pages/28-pytorch.html" class=""><span class="num">28</span>PyTorch: from toy model to training loop</a></li><li class="nav-item"><a href="../pages/29-cnn.html" class=""><span class="num">29</span>CNN for computer vision</a></li><li class="nav-item"><a href="../pages/30-rnn-lstm.html" class=""><span class="num">30</span>RNN, LSTM, GRU for sequences</a></li><li class="nav-item"><a href="../pages/31-transformer.html" class=""><span class="num">31</span>Transformer and attention</a></li><li class="nav-item"><a href="../pages/32-nlp-llm.html" class=""><span class="num">32</span>NLP: from text mining to LLMs</a></li><li class="nav-item"><a href="../pages/33-time-series.html" class=""><span class="num">33</span>Time series and forecasting</a></li><li class="nav-item"><a href="../pages/34-mlops.html" class=""><span class="num">34</span>MLOps: deployment, monitoring, drift</a></li><li class="nav-item"><a href="../pages/35-bayesian-causal.html" class=""><span class="num">35</span>Bayesian and Causal Inference</a></li><li class="nav-item"><a href="../pages/36-capstone-career.html" class=""><span class="num">36</span>Capstone, portfolio, career</a></li><li class="nav-item"><a href="../pages/37-glossary.html" class=""><span class="num">37</span>Glossary A-Z</a></li><li class="nav-item"><a href="../pages/38-formula-sheet.html" class=""><span class="num">38</span>Formula Sheet: all the formulas from the course</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Deep Learning</span>
+        <span>Section 28 of 39</span>
+        <span class="level-tag level-adv">Level: advanced</span>
+      </div>
+      <h1>Neural networks: from fundamentals to backprop</h1>
+      <p class="summary">Neuron, layer, activations, forward/backward pass, why they work. Understanding them without a framework — then you&#x27;ll use PyTorch.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Deep Learning</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>[[calculus-optimization]]</li><li>[[logistic-regression]]</li></ul>
+  <div class="label">Tools</div>
+  <ul class="source-list"><li>NumPy, PyTorch</li></ul>
+</div>
+      <h2 id="the-artificial-neuron">The artificial neuron</h2>
+<p>A highly simplified model of the biological neuron:</p>
+<p>$$y = \phi\left(\sum_j w_j x_j + b\right) = \phi(\mathbf{w}^T \mathbf{x} + b)$$</p>
+<p>where $\phi$ is a non-linear <strong>activation function</strong>.</p>
+<p>With $\phi$ = sigmoid, the neuron is exactly logistic regression. The novelty of NNs: <strong>stacking</strong> many neurons together.</p>
+<h2 id="multilayer-perceptron-mlp">Multilayer Perceptron (MLP)</h2>
+<pre><code class="language-mermaid">flowchart LR
+    I1((x₁)) --&gt; H1((h₁))
+    I1 --&gt; H2((h₂))
+    I1 --&gt; H3((h₃))
+    I2((x₂)) --&gt; H1
+    I2 --&gt; H2
+    I2 --&gt; H3
+    I3((x₃)) --&gt; H1
+    I3 --&gt; H2
+    I3 --&gt; H3
+    H1 --&gt; O((y))
+    H2 --&gt; O
+    H3 --&gt; O
+</code></pre>
+<p>Formally, a 2-layer network:</p>
+<p>$$\mathbf{h} = \phi(W_1 \mathbf{x} + \mathbf{b}_1)$$
+$$y = W_2 \mathbf{h} + \mathbf{b}_2$$</p>
+<p>With <strong>enough</strong> hidden neurons (and non-linear activations), a 2-layer MLP can approximate <strong>any continuous function</strong> (universal approximation theorem, Cybenko 1989, Hornik 1991).</p>
+<blockquote>
+<p>Translation: there is no "theoretical limit" to expressiveness. The challenge is making training converge, avoiding overfitting, and scaling.</p>
+</blockquote>
+<h2 id="activation-functions">Activation functions</h2>
+<h3 id="sigmoid-and-tanh-historical">Sigmoid and tanh (historical)</h3>
+<p>$$\sigma(z) = \frac{1}{1+e^{-z}}, \quad \tanh(z) = \frac{e^z - e^{-z}}{e^z + e^{-z}}$$</p>
+<p>Problems:
+- They saturate: derivative close to zero for large $|z|$ → <strong>vanishing gradient</strong>.
+- Sigmoid is not centered at 0.</p>
+<h3 id="relu-modern-default">ReLU (modern default)</h3>
+<p>$$\text{ReLU}(z) = \max(0, z)$$</p>
+<p>Advantages: derivative 1 for $z &gt; 0$, gradient does not vanish. Sparse (many zeros).
+Drawback: "dying ReLU" — neurons stuck at 0 forever.</p>
+<p>Variants: <strong>Leaky ReLU</strong> ($\max(\alpha z, z)$), <strong>ELU</strong>, <strong>GELU</strong> (used in Transformers).</p>
+<h3 id="softmax-multi-class-output">Softmax (multi-class output)</h3>
+<p>$$\text{softmax}(z)_i = \frac{e^{z_i}}{\sum_j e^{z_j}}$$</p>
+<p>Converts logits into a probability distribution over $K$ classes.</p>
+<div class="chart"><svg viewBox="0 0 480 160" xmlns="http://www.w3.org/2000/svg">
+<g transform="translate(20,10)">
+  <line x1="0" y1="130" x2="120" y2="130" stroke="#555"/>
+  <line x1="60" y1="20" x2="60" y2="130" stroke="#555"/>
+  <path d="M 0 128 C 40 128 80 22 120 22" fill="none" stroke="#7aa2ff" stroke-width="2"/>
+  <text x="60" y="148" fill="#7aa2ff" font-size="11" text-anchor="middle">sigmoid</text>
+</g>
+<g transform="translate(180,10)">
+  <line x1="0" y1="130" x2="120" y2="130" stroke="#555"/>
+  <line x1="60" y1="20" x2="60" y2="130" stroke="#555"/>
+  <path d="M 0 128 L 60 128 L 120 25" fill="none" stroke="#ffb347" stroke-width="2"/>
+  <text x="60" y="148" fill="#ffb347" font-size="11" text-anchor="middle">ReLU</text>
+</g>
+<g transform="translate(340,10)">
+  <line x1="0" y1="130" x2="120" y2="130" stroke="#555"/>
+  <line x1="60" y1="20" x2="60" y2="130" stroke="#555"/>
+  <path d="M 0 128 C 30 128 50 125 60 120 C 75 110 95 50 120 28" fill="none" stroke="#5ee2c4" stroke-width="2"/>
+  <text x="60" y="148" fill="#5ee2c4" font-size="11" text-anchor="middle">GELU</text>
+</g>
+</svg></div>
+
+<h2 id="forward-backward-on-a-6-weight-nn-complete-numerical-example">Forward + backward on a 6-weight NN (complete numerical example)</h2>
+<p>Before writing any code, let's see literally what happens when a single example passes through a tiny network. <strong>One careful reading is worth 10 tutorials.</strong></p>
+<p>Architecture: 2 inputs → 2 hidden neurons (sigmoid) → 1 output (sigmoid). MSE loss.</p>
+<div class="chart"><svg viewBox="0 0 560 280" xmlns="http://www.w3.org/2000/svg">
+<circle cx="60" cy="80" r="25" fill="rgba(122,162,255,0.18)" stroke="#7aa2ff" stroke-width="2"/>
+<text x="60" y="85" fill="#7aa2ff" font-size="13" text-anchor="middle">x₁=1</text>
+<circle cx="60" cy="200" r="25" fill="rgba(122,162,255,0.18)" stroke="#7aa2ff" stroke-width="2"/>
+<text x="60" y="205" fill="#7aa2ff" font-size="13" text-anchor="middle">x₂=2</text>
+
+<circle cx="260" cy="80" r="28" fill="rgba(192,132,252,0.18)" stroke="#c084fc" stroke-width="2"/>
+<text x="260" y="76" fill="#c084fc" font-size="11" text-anchor="middle">h₁</text>
+<text x="260" y="92" fill="#c084fc" font-size="9" text-anchor="middle">σ(z₁)</text>
+<circle cx="260" cy="200" r="28" fill="rgba(192,132,252,0.18)" stroke="#c084fc" stroke-width="2"/>
+<text x="260" y="196" fill="#c084fc" font-size="11" text-anchor="middle">h₂</text>
+<text x="260" y="212" fill="#c084fc" font-size="9" text-anchor="middle">σ(z₂)</text>
+
+<circle cx="460" cy="140" r="30" fill="rgba(255,179,71,0.18)" stroke="#ffb347" stroke-width="2"/>
+<text x="460" y="136" fill="#ffb347" font-size="11" text-anchor="middle">ŷ</text>
+<text x="460" y="152" fill="#ffb347" font-size="9" text-anchor="middle">σ(z₃)</text>
+
+<line x1="85" y1="80" x2="232" y2="80" stroke="#888" stroke-width="1"/>
+<text x="155" y="72" fill="#7aa2ff" font-size="10">w₁=0.5</text>
+<line x1="85" y1="80" x2="232" y2="200" stroke="#888" stroke-width="1"/>
+<text x="155" y="135" fill="#7aa2ff" font-size="10">w₃=-0.3</text>
+<line x1="85" y1="200" x2="232" y2="80" stroke="#888" stroke-width="1"/>
+<text x="155" y="160" fill="#7aa2ff" font-size="10">w₂=0.2</text>
+<line x1="85" y1="200" x2="232" y2="200" stroke="#888" stroke-width="1"/>
+<text x="155" y="218" fill="#7aa2ff" font-size="10">w₄=0.8</text>
+
+<line x1="288" y1="80" x2="432" y2="135" stroke="#888" stroke-width="1"/>
+<text x="350" y="100" fill="#ffb347" font-size="10">w₅=0.4</text>
+<line x1="288" y1="200" x2="432" y2="148" stroke="#888" stroke-width="1"/>
+<text x="350" y="180" fill="#ffb347" font-size="10">w₆=-0.6</text>
+
+<text x="60" y="30" fill="#8b949e" font-size="11" text-anchor="middle">INPUT</text>
+<text x="260" y="30" fill="#8b949e" font-size="11" text-anchor="middle">HIDDEN</text>
+<text x="460" y="40" fill="#8b949e" font-size="11" text-anchor="middle">OUTPUT</text>
+
+<text x="460" y="220" fill="#5ee2c4" font-size="11" text-anchor="middle">target y = 1</text>
+</svg><div class="chart-caption">Tiny network with 6 weights. No biases for simplicity. All values are made up to allow hand calculation.</div></div>
+
+<h3 id="step-1-forward-pass">Step 1 — Forward pass</h3>
+<p>We compute the weighted inputs ("logits") for each hidden neuron:</p>
+<p>$$z_1 = w_1 x_1 + w_2 x_2 = 0.5 \cdot 1 + 0.2 \cdot 2 = 0.9$$
+$$z_2 = w_3 x_1 + w_4 x_2 = -0.3 \cdot 1 + 0.8 \cdot 2 = 1.3$$</p>
+<p>We apply the sigmoid $\sigma(z) = 1/(1+e^{-z})$:</p>
+<p>$$h_1 = \sigma(0.9) = \frac{1}{1+e^{-0.9}} \approx 0.711$$
+$$h_2 = \sigma(1.3) \approx 0.786$$</p>
+<p>Final output:</p>
+<p>$$z_3 = w_5 h_1 + w_6 h_2 = 0.4 \cdot 0.711 + (-0.6) \cdot 0.786 = 0.284 - 0.472 = -0.188$$
+$$\hat{y} = \sigma(-0.188) \approx 0.453$$</p>
+<p>Target $y = 1$, predicted $\hat{y} \approx 0.453$. Far off. Let's compute the loss:</p>
+<p>$$L = \tfrac{1}{2}(y - \hat{y})^2 = \tfrac{1}{2}(1 - 0.453)^2 \approx 0.150$$</p>
+<h3 id="step-2-backward-pass-chain-rule-applied">Step 2 — Backward pass (chain rule applied)</h3>
+<p><strong>Goal</strong>: $\frac{\partial L}{\partial w_i}$ for each weight. We work backwards, layer by layer.</p>
+<p>For the sigmoid: $\sigma'(z) = \sigma(z)(1-\sigma(z))$.</p>
+<p><strong>Derivative of the loss with respect to the output</strong>:
+$$\frac{\partial L}{\partial \hat{y}} = \hat{y} - y = 0.453 - 1 = -0.547$$</p>
+<p><strong>Derivative of $\hat{y}$ with respect to $z_3$</strong>:
+$$\frac{\partial \hat{y}}{\partial z_3} = \sigma(z_3)(1-\sigma(z_3)) = 0.453 \cdot 0.547 \approx 0.248$$</p>
+<p>Combining, the "error signal" flowing back to $z_3$:
+$$\delta_3 = \frac{\partial L}{\partial z_3} = -0.547 \cdot 0.248 \approx -0.136$$</p>
+<p><strong>Gradient on the last layer weights</strong>:
+$$\frac{\partial L}{\partial w_5} = \delta_3 \cdot h_1 = -0.136 \cdot 0.711 \approx -0.097$$
+$$\frac{\partial L}{\partial w_6} = \delta_3 \cdot h_2 = -0.136 \cdot 0.786 \approx -0.107$$</p>
+<p><strong>Back to the hidden layer</strong>:
+$$\frac{\partial L}{\partial h_1} = \delta_3 \cdot w_5 = -0.136 \cdot 0.4 = -0.054$$
+$$\frac{\partial L}{\partial h_2} = \delta_3 \cdot w_6 = -0.136 \cdot (-0.6) = 0.082$$</p>
+<p>Multiply by the local sigmoid derivative to get $\delta_1, \delta_2$:
+$$\delta_1 = \frac{\partial L}{\partial z_1} = -0.054 \cdot \sigma(z_1)(1-\sigma(z_1)) = -0.054 \cdot 0.711 \cdot 0.289 \approx -0.011$$
+$$\delta_2 = 0.082 \cdot 0.786 \cdot 0.214 \approx 0.014$$</p>
+<p><strong>Gradient on the first layer weights</strong>:
+$$\frac{\partial L}{\partial w_1} = \delta_1 \cdot x_1 = -0.011 \cdot 1 = -0.011$$
+$$\frac{\partial L}{\partial w_2} = \delta_1 \cdot x_2 = -0.011 \cdot 2 = -0.022$$
+$$\frac{\partial L}{\partial w_3} = \delta_2 \cdot x_1 = 0.014 \cdot 1 = 0.014$$
+$$\frac{\partial L}{\partial w_4} = \delta_2 \cdot x_2 = 0.014 \cdot 2 = 0.028$$</p>
+<h3 id="step-3-update">Step 3 — Update</h3>
+<p>With learning rate $\eta = 0.5$, each weight updates as: $w_i \leftarrow w_i - \eta \cdot \partial L / \partial w_i$.</p>
+<table>
+<thead>
+<tr>
+<th>Weight</th>
+<th>Old</th>
+<th>$\partial L/\partial w$</th>
+<th>New</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$w_1$</td>
+<td>0.5</td>
+<td>-0.011</td>
+<td>0.506</td>
+</tr>
+<tr>
+<td>$w_2$</td>
+<td>0.2</td>
+<td>-0.022</td>
+<td>0.211</td>
+</tr>
+<tr>
+<td>$w_3$</td>
+<td>-0.3</td>
+<td>+0.014</td>
+<td>-0.307</td>
+</tr>
+<tr>
+<td>$w_4$</td>
+<td>0.8</td>
+<td>+0.028</td>
+<td>0.786</td>
+</tr>
+<tr>
+<td>$w_5$</td>
+<td>0.4</td>
+<td>-0.097</td>
+<td>0.448</td>
+</tr>
+<tr>
+<td>$w_6$</td>
+<td>-0.6</td>
+<td>-0.107</td>
+<td>-0.547</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Verification</strong>: redo the forward pass with the new weights. You'll get $\hat{y} \approx 0.477$, closer to 1 than 0.453. Loss has decreased. <strong>This is how neural networks learn</strong>, millions of times over.</p>
+<blockquote>
+<p>Everything you just did in 5 minutes, PyTorch does in microseconds with <code>loss.backward()</code>. But now you know <em>what</em> it's doing.</p>
+</blockquote>
+<h2 id="forward-pass">Forward pass</h2>
+<p>Computes the prediction layer by layer:</p>
+<pre><code class="language-python">import numpy as np
+def relu(x): return np.maximum(0, x)
+def softmax(x):
+    x = x - x.max(axis=-1, keepdims=True)
+    e = np.exp(x)
+    return e / e.sum(axis=-1, keepdims=True)
+
+def forward(X, W1, b1, W2, b2):
+    z1 = X @ W1 + b1
+    h = relu(z1)
+    z2 = h @ W2 + b2
+    return softmax(z2), (z1, h)
+</code></pre>
+<h2 id="backward-pass-the-chain-rule-in-action">Backward pass: the chain rule in action</h2>
+<p>For each layer, compute the gradient of the loss with respect to the weights.</p>
+<p>For a network with cross-entropy loss + softmax (convenient simplifications):</p>
+<p>$$\frac{\partial L}{\partial z_2} = \mathbf{p} - \mathbf{y}$$
+$$\frac{\partial L}{\partial W_2} = \mathbf{h}^T \frac{\partial L}{\partial z_2}, \quad \frac{\partial L}{\partial \mathbf{b}_2} = \frac{\partial L}{\partial z_2}$$
+$$\frac{\partial L}{\partial \mathbf{h}} = \frac{\partial L}{\partial z_2} W_2^T$$
+$$\frac{\partial L}{\partial z_1} = \frac{\partial L}{\partial \mathbf{h}} \odot \mathbb{1}[z_1 &gt; 0]\quad\text{(ReLU derivative)}$$
+$$\frac{\partial L}{\partial W_1} = \mathbf{X}^T \frac{\partial L}{\partial z_1}, \quad \frac{\partial L}{\partial \mathbf{b}_1} = \frac{\partial L}{\partial z_1}$$</p>
+<p>Pattern: every gradient is $\text{input}^T \cdot \text{incoming gradient}$.</p>
+<h2 id="nn-from-scratch-in-numpy">NN from scratch in NumPy</h2>
+<pre><code class="language-python">import numpy as np
+rng = np.random.default_rng(0)
+
+# toy data
+n, d, h, k = 1000, 5, 32, 3
+X = rng.standard_normal((n, d))
+y = rng.integers(0, k, n)
+Y = np.eye(k)[y]                    # one-hot
+
+# weight init (He)
+W1 = rng.standard_normal((d, h)) * np.sqrt(2/d)
+b1 = np.zeros(h)
+W2 = rng.standard_normal((h, k)) * np.sqrt(2/h)
+b2 = np.zeros(k)
+
+lr = 0.01
+for epoch in range(200):
+    # forward
+    z1 = X @ W1 + b1
+    h_ = np.maximum(0, z1)
+    z2 = h_ @ W2 + b2
+    z2 -= z2.max(axis=1, keepdims=True)
+    p = np.exp(z2) / np.exp(z2).sum(axis=1, keepdims=True)
+
+    loss = -np.mean(np.log(p[np.arange(n), y] + 1e-9))
+
+    # backward
+    dz2 = (p - Y) / n
+    dW2 = h_.T @ dz2
+    db2 = dz2.sum(0)
+    dh = dz2 @ W2.T
+    dz1 = dh * (z1 &gt; 0)
+    dW1 = X.T @ dz1
+    db1 = dz1.sum(0)
+
+    # update
+    W1 -= lr*dW1; b1 -= lr*db1
+    W2 -= lr*dW2; b2 -= lr*db2
+
+    if epoch % 20 == 0:
+        print(f&quot;epoch {epoch}: loss={loss:.3f}&quot;)
+</code></pre>
+<p>The beauty of this example: every line has mathematical meaning. When you use PyTorch, these 30 lines will be wrapped by <code>loss.backward()</code>.</p>
+<h2 id="weight-initialization">Weight initialization</h2>
+<table>
+<thead>
+<tr>
+<th>Init</th>
+<th>When</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Zero</td>
+<td>NEVER (symmetry only broken with random)</td>
+</tr>
+<tr>
+<td>Random N(0, 1)</td>
+<td>explodes/vanishes with many layers</td>
+</tr>
+<tr>
+<td><strong>Xavier/Glorot</strong> $\sqrt{1/n_\text{in}}$</td>
+<td>tanh/sigmoid</td>
+</tr>
+<tr>
+<td><strong>He</strong> $\sqrt{2/n_\text{in}}$</td>
+<td>ReLU</td>
+</tr>
+<tr>
+<td>Orthogonal</td>
+<td>RNN</td>
+</tr>
+</tbody>
+</table>
+<p>Wrong initialization → vanishing/exploding gradients → training fails. Sensible defaults are already implemented in PyTorch/Keras.</p>
+<h2 id="regularization-in-deep-learning">Regularization in deep learning</h2>
+<h3 id="dropout">Dropout</h3>
+<p>During training, randomly "turns off" a fraction $p$ of neurons in each layer. Forces the network to be robust.</p>
+<pre><code class="language-python">import torch.nn as nn
+nn.Dropout(p=0.2)
+</code></pre>
+<p>At inference it is automatically disabled.</p>
+<h3 id="batch-normalization">Batch normalization</h3>
+<p>Normalizes the output of each layer (mean 0, std 1) for each mini-batch. Stabilizes training, allows higher learning rates, acts as regularization.</p>
+<pre><code class="language-python">nn.BatchNorm1d(num_features=64)
+</code></pre>
+<p>In Transformers, <strong>Layer Normalization</strong> is used instead.</p>
+<h3 id="weight-decay-l2">Weight decay (L2)</h3>
+<p>Penalty $\lambda |W|^2$ in the loss. In PyTorch: the <code>weight_decay</code> parameter of the optimizer.</p>
+<h3 id="early-stopping">Early stopping</h3>
+<p>Already seen: stop when val loss stops improving.</p>
+<h2 id="loss-functions">Loss functions</h2>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Loss</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Regression</td>
+<td>MSE</td>
+</tr>
+<tr>
+<td>Robust regression</td>
+<td>Huber, MAE</td>
+</tr>
+<tr>
+<td>Binary classification</td>
+<td>BCEWithLogitsLoss (binary cross-entropy + sigmoid)</td>
+</tr>
+<tr>
+<td>Multi-class classification</td>
+<td>CrossEntropyLoss (softmax + neg log lik)</td>
+</tr>
+<tr>
+<td>Embedding/Metric learning</td>
+<td>Triplet, Contrastive</td>
+</tr>
+<tr>
+<td>Image segmentation</td>
+<td>Dice + BCE</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>In PyTorch, <code>CrossEntropyLoss</code> already includes softmax. Pass raw logits, NOT probabilities.</p>
+</blockquote>
+<h2 id="optimizer">Optimizer</h2>
+<p>Modern default: <strong>Adam</strong> or <strong>AdamW</strong>.</p>
+<pre><code class="language-python">import torch.optim as optim
+opt = optim.AdamW(model.parameters(), lr=1e-3, weight_decay=0.01)
+</code></pre>
+<p>SGD + momentum is still valid (and sometimes better for generalization), especially for heavy Computer Vision. Like this:</p>
+<pre><code class="language-python">opt = optim.SGD(model.parameters(), lr=0.01, momentum=0.9, weight_decay=1e-4, nesterov=True)
+</code></pre>
+<h2 id="exercises">Exercises</h2>
+<details>
+<summary>Exercise 1 — XOR with a NN</summary>
+
+XOR is not linearly separable. A NN with 2 hidden units can learn it. Implement:
+
+
+<pre><code class="language-python">import numpy as np
+X = np.array([[0,0],[0,1],[1,0],[1,1]])
+y = np.array([[0],[1],[1],[0]])
+# train a small NN and verify it learns XOR
+</code></pre>
+
+
+What is the minimum number of hidden units? (Answer: 2 with tanh, provable.)
+</details>
+
+<details>
+<summary>Exercise 2 — Implement Adam from scratch</summary>
+
+
+<pre><code class="language-python">import numpy as np
+class Adam:
+    def __init__(self, lr=1e-3, b1=0.9, b2=0.999, eps=1e-8):
+        self.lr, self.b1, self.b2, self.eps = lr, b1, b2, eps
+        self.m = None; self.v = None; self.t = 0
+    def step(self, w, g):
+        if self.m is None:
+            self.m = np.zeros_like(w); self.v = np.zeros_like(w)
+        self.t += 1
+        self.m = self.b1*self.m + (1-self.b1)*g
+        self.v = self.b2*self.v + (1-self.b2)*g*g
+        mh = self.m / (1 - self.b1**self.t)
+        vh = self.v / (1 - self.b2**self.t)
+        return w - self.lr * mh / (np.sqrt(vh) + self.eps)
+</code></pre>
+
+</details>
+
+<details>
+<summary>Exercise 3 — Vanishing gradient with sigmoid</summary>
+
+Train a 10-layer network with sigmoid. Measure the gradient magnitude per layer. You will see an exponential decay towards the first layer.
+
+
+<pre><code class="language-python"># observe gradients after backward on a deep sigmoid network
+# then redo with ReLU. ReLU does NOT vanish.
+</code></pre>
+
+</details>
+
+<details>
+<summary>Exercise 4 — Learning rate influence</summary>
+
+Train the NN from scratch (manual forward+backward) with `lr=1e-1, 1e-2, 1e-3, 1e-4`. Plot the loss. You will see overshoot, oscillations, and slow convergence.
+</details>
+
+<h2 id="key-takeaways">Key takeaways</h2>
+<ul>
+<li>Neuron = logistic regression. NN = stacked neurons.</li>
+<li>Universal approximation: theoretically all-powerful. In practice, difficult.</li>
+<li>ReLU by default. Sigmoid only at binary output.</li>
+<li>He init for ReLU, Xavier for tanh.</li>
+<li>AdamW + weight decay = modern default.</li>
+<li>Dropout + batch norm = standard regularization.</li>
+</ul>
+<p>Next: PyTorch.</p>
+      <nav class="pager">
+<a href="26-hyperparameter-tuning.html" class="prev"><span class="label">← Previous</span><span class="title">Hyperparameter tuning</span></a>
+<a href="28-pytorch.html" class="next"><span class="label">Next →</span><span class="title">PyTorch: from toy model to training loop</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Data Science Zero to Hero</strong> — complete path, in English, from math to deployment.</p><p>Open didactic material. Formulas are here to be understood, not feared. When a concept is unclear, go back: data science is a pyramid, not a tree you skip across.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+</body>
+</html>

@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Purpose-built DB — ElastiCache, MemoryDB, Neptune, DocumentDB, Keyspaces, Timestream, QLDB — AWS Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#232f3e',primaryTextColor:'#ffffff',primaryBorderColor:'#ff9900',lineColor:'#8a99ad',background:'#0c1320'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">λ</div>
+      <div>
+        <div class="brand-title">AWS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">IT</span><a href="../en/pages/25-purpose-built-dbs.html" class="lang-link" title="Switch to English">EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-cos-e-aws-cloud.html" class=""><span class="num">01</span>Cos&#x27;è il cloud e cos&#x27;è AWS</a></li><li class="nav-item"><a href="../pages/02-infrastruttura-globale.html" class=""><span class="num">02</span>Infrastruttura globale: Region, AZ, Edge</a></li><li class="nav-item"><a href="../pages/03-account-root-billing.html" class=""><span class="num">03</span>Account AWS, utente root, billing</a></li><li class="nav-item"><a href="../pages/04-iam-fondamenti.html" class=""><span class="num">04</span>IAM — fondamenti (utenti, gruppi, ruoli, policy)</a></li><li class="nav-item"><a href="../pages/05-iam-avanzato.html" class=""><span class="num">05</span>IAM avanzato: policy condizionali, STS, ABAC</a></li><li class="nav-item"><a href="../pages/06-cli-sdk-iac.html" class=""><span class="num">06</span>CLI, SDK, CloudShell, IaC primer</a></li><li class="nav-item"><a href="../pages/07-pricing-billing.html" class=""><span class="num">07</span>Pricing, billing, free tier, cost tools</a></li><li class="nav-item"><a href="../pages/08-organizations-multi-account.html" class=""><span class="num">08</span>AWS Organizations &amp; strategia multi-account</a></li><li class="nav-item"><a href="../pages/09-vpc-fondamenti.html" class=""><span class="num">09</span>VPC — fondamenti</a></li><li class="nav-item"><a href="../pages/10-vpc-avanzato.html" class=""><span class="num">10</span>VPC avanzato: peering, TGW, PrivateLink, endpoint</a></li><li class="nav-item"><a href="../pages/11-route53-cloudfront.html" class=""><span class="num">11</span>Route 53, CloudFront, Global Accelerator</a></li><li class="nav-item"><a href="../pages/12-hybrid-vpn-directconnect.html" class=""><span class="num">12</span>Hybrid: VPN, Direct Connect, PrivateLink</a></li><li class="nav-item"><a href="../pages/13-ec2-fondamenti.html" class=""><span class="num">13</span>EC2 — fondamenti (istanze, AMI, lifecycle)</a></li><li class="nav-item"><a href="../pages/14-ec2-avanzato-spot-nitro.html" class=""><span class="num">14</span>EC2 avanzato — Spot, Placement Groups, Nitro, hibernation</a></li><li class="nav-item"><a href="../pages/15-asg-elb.html" class=""><span class="num">15</span>Auto Scaling Groups + Elastic Load Balancing</a></li><li class="nav-item"><a href="../pages/16-lambda-deep-dive.html" class=""><span class="num">16</span>Lambda deep dive</a></li><li class="nav-item"><a href="../pages/17-containers-ecs-eks-fargate.html" class=""><span class="num">17</span>Containers: ECS, EKS, Fargate, ECR</a></li><li class="nav-item"><a href="../pages/18-specialty-compute.html" class=""><span class="num">18</span>Specialty compute: Batch, Lightsail, Outposts, Wavelength, Beanstalk</a></li><li class="nav-item"><a href="../pages/19-ebs-efs-fsx.html" class=""><span class="num">19</span>EBS, EFS, FSx, Instance Store</a></li><li class="nav-item"><a href="../pages/20-s3-deep-dive.html" class=""><span class="num">20</span>S3 — deep dive</a></li><li class="nav-item"><a href="../pages/21-archive-snow-gateway-backup.html" class=""><span class="num">21</span>Glacier, Snow, Storage Gateway, DataSync, AWS Backup</a></li><li class="nav-item"><a href="../pages/22-rds.html" class=""><span class="num">22</span>RDS — relational DB managed (engines, Multi-AZ, replicas, Proxy)</a></li><li class="nav-item"><a href="../pages/23-aurora-deep-dive.html" class=""><span class="num">23</span>Aurora deep dive — storage condiviso, Serverless v2, Global Database</a></li><li class="nav-item"><a href="../pages/24-dynamodb-deep-dive.html" class=""><span class="num">24</span>DynamoDB deep dive — partition, GSI, Streams, single-table</a></li><li class="nav-item"><a href="../pages/25-purpose-built-dbs.html" class="active"><span class="num">25</span>Purpose-built DB — ElastiCache, MemoryDB, Neptune, DocumentDB, Keyspaces, Timestream, QLDB</a></li><li class="nav-item"><a href="../pages/26-redshift-data-warehousing.html" class=""><span class="num">26</span>Redshift — data warehousing MPP e zero-ETL</a></li><li class="nav-item"><a href="../pages/27-sqs-sns-eventbridge.html" class=""><span class="num">27</span>SQS, SNS, EventBridge — messaging ed eventi</a></li><li class="nav-item"><a href="../pages/28-step-functions-mq-appflow.html" class=""><span class="num">28</span>Step Functions, MQ, AppFlow — orchestrazione e integrazione</a></li><li class="nav-item"><a href="../pages/29-athena-glue-lakeformation.html" class=""><span class="num">29</span>Athena, Glue, Lake Formation — il data lake AWS</a></li><li class="nav-item"><a href="../pages/30-emr-kinesis-msk.html" class=""><span class="num">30</span>EMR, Kinesis, MSK — big data e streaming</a></li><li class="nav-item"><a href="../pages/31-opensearch-quicksight.html" class=""><span class="num">31</span>OpenSearch e QuickSight — search e BI</a></li><li class="nav-item"><a href="../pages/32-sagemaker-overview.html" class=""><span class="num">32</span>SageMaker — la piattaforma ML end-to-end</a></li><li class="nav-item"><a href="../pages/33-bedrock-ai-services.html" class=""><span class="num">33</span>Bedrock e AI services — GenAI e ML managed</a></li><li class="nav-item"><a href="../pages/34-iac-cloudformation-cdk-terraform.html" class=""><span class="num">34</span>IaC su AWS — CloudFormation, CDK, SAM, Terraform</a></li><li class="nav-item"><a href="../pages/35-ci-cd-pipeline.html" class=""><span class="num">35</span>CI/CD su AWS — CodePipeline, CodeBuild, CodeDeploy, CodeCatalyst</a></li><li class="nav-item"><a href="../pages/36-observability-cloudwatch-xray.html" class=""><span class="num">36</span>Observability — CloudWatch, X-Ray, CloudTrail, Config, SSM</a></li><li class="nav-item"><a href="../pages/37-kms-secrets-acm.html" class=""><span class="num">37</span>Crittografia — KMS, CloudHSM, Secrets Manager, Parameter Store, ACM</a></li><li class="nav-item"><a href="../pages/38-waf-shield-guardduty-inspector.html" class=""><span class="num">38</span>Threat detection — WAF, Shield, GuardDuty, Inspector, Macie, Security Hub</a></li><li class="nav-item"><a href="../pages/39-governance-org-controltower-identitycenter.html" class=""><span class="num">39</span>Governance — Organizations, Control Tower, Identity Center</a></li><li class="nav-item"><a href="../pages/40-migration-mgn-dms-snow.html" class=""><span class="num">40</span>Migration — MGN, DMS, Snow family, Discovery, Migration Hub</a></li><li class="nav-item"><a href="../pages/41-cost-optimization-finops.html" class=""><span class="num">41</span>Cost optimization e FinOps</a></li><li class="nav-item"><a href="../pages/42-well-architected.html" class=""><span class="num">42</span>Well-Architected Framework — 6 pillar, lens, review</a></li><li class="nav-item"><a href="../pages/43-architecture-patterns.html" class=""><span class="num">43</span>Architecture patterns — 3-tier, serverless, event-driven, microservices</a></li><li class="nav-item"><a href="../pages/44-disaster-recovery-multi-region.html" class=""><span class="num">44</span>Disaster Recovery e Multi-Region</a></li><li class="nav-item"><a href="../pages/45-reference-architectures.html" class=""><span class="num">45</span>Reference architectures real-world</a></li><li class="nav-item"><a href="../pages/46-advanced-networking.html" class=""><span class="num">46</span>Advanced networking deep dive</a></li><li class="nav-item"><a href="../pages/47-containers-deep-dive.html" class=""><span class="num">47</span>Containers deep dive — EKS, Karpenter, service mesh</a></li><li class="nav-item"><a href="../pages/48-serverless-patterns.html" class=""><span class="num">48</span>Serverless patterns deep dive</a></li><li class="nav-item"><a href="../pages/49-genai-rag-agents.html" class=""><span class="num">49</span>Generative AI su AWS — RAG e Agents</a></li><li class="nav-item"><a href="../pages/50-certificazioni-aws.html" class=""><span class="num">50</span>Certificazioni AWS — roadmap e study guide</a></li><li class="nav-item"><a href="../pages/51-glossario-az.html" class=""><span class="num">51</span>Glossario A-Z</a></li><li class="nav-item"><a href="../pages/52-cheatsheet.html" class=""><span class="num">52</span>Cheat sheet: servizi, limiti, instance families</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Database</span>
+        <span>Sezione 25 di 52</span>
+        <span class="level-tag level-int">Livello: intermedio</span>
+      </div>
+      <h1>Purpose-built DB — ElastiCache, MemoryDB, Neptune, DocumentDB, Keyspaces, Timestream, QLDB</h1>
+      <p class="summary">Tour dei DB specializzati AWS: cache Redis/Memcached, durability MemoryDB, graph Neptune, MongoDB-compat DocumentDB, Cassandra Keyspaces, time-series Timestream, ledger QLDB (deprecato).</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Database</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>sezioni 22, 24</li></ul>
+  <div class="label">Strumenti / riferimenti</div>
+  <ul class="source-list"><li>AWS CLI</li><li>redis-cli / mongosh / cqlsh</li></ul>
+</div>
+      <p>AWS spinge il principio "<strong>purpose-built database</strong>": invece di forzare Postgres a fare il tuttofare, scegli il DB giusto per ogni workload. Qui copriamo cache, graph, document, wide-column, time-series e ledger.</p>
+<h2 id="1-elasticache-redis">1. ElastiCache Redis</h2>
+<p>Redis managed, single-digit ms in memoria.</p>
+<table>
+<thead>
+<tr>
+<th>Topology</th>
+<th>Pro</th>
+<th>Contro</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Single node</strong></td>
+<td>semplice, cheap</td>
+<td>nessuna HA</td>
+</tr>
+<tr>
+<td><strong>Cluster mode disabled</strong> + 1-5 replica</td>
+<td>failover automatico, read replica</td>
+<td>dataset cap = RAM di 1 node</td>
+</tr>
+<tr>
+<td><strong>Cluster mode enabled</strong> (sharded)</td>
+<td>scala oltre 1 TB, multi-shard</td>
+<td>client complesso, no MULTI cross-shard</td>
+</tr>
+</tbody>
+</table>
+<p>Feature: snapshot S3, AUTH password, encryption in transit (TLS) e at rest (KMS), online cluster resize, <strong>data tiering</strong> (DRAM hot + NVMe cold per ridurre costo).</p>
+<p>Use case classici: session cache, cache di query DB, leaderboard, rate limiting, pub/sub leggero.</p>
+<h2 id="2-elasticache-memcached">2. ElastiCache Memcached</h2>
+<p>Vecchio Memcached managed. <strong>Multi-thread</strong> (sfrutta tutti i core), sharding <strong>client-side</strong> via consistent hashing. <strong>Nessuna persistence</strong>, nessuna replica → un node muore, il suo shard si perde. Niente strutture dati (solo string).</p>
+<p>Quando preferirlo a Redis: cache PURA monolitica dove vuoi sfruttare 32+ core di 1 node senza preoccuparti di persistence. Per tutto il resto, Redis vince.</p>
+<h2 id="3-memorydb-for-redis">3. MemoryDB for Redis</h2>
+<p>Redis-compatible <strong>con durability</strong>. Aggiunge un <strong>multi-AZ transaction log</strong> sotto cui ogni scrittura è committata su 3 AZ <strong>prima</strong> di rispondere. RTO secondi, <strong>zero data loss</strong> a differenza di ElastiCache Redis (dove la replica è async).</p>
+<pre><code class="language-mermaid">flowchart LR
+    App --&gt; Primary[(MemoryDB Primary)]
+    Primary --&gt;|sync write| TLog[(Multi-AZ Transaction Log)]
+    TLog --&gt; R1[(Replica AZ-b)]
+    TLog --&gt; R2[(Replica AZ-c)]
+</code></pre>
+<p>Trade-off: latenza write leggermente più alta di ElastiCache (~ms vs sub-ms). Pricing più alto.</p>
+<p>Use case: quando vuoi un <strong>primary database</strong> in memoria con durability, non solo cache. App low-latency con SLA dati (es. trading book, sessioni critiche).</p>
+<h2 id="4-neptune-graph">4. Neptune (graph)</h2>
+<p>DB graph managed. Supporta <strong>3 query language</strong>:
+- <strong>Gremlin</strong> (property graph, TinkerPop).
+- <strong>openCypher</strong> (compat Neo4j).
+- <strong>SPARQL</strong> (RDF triple store).</p>
+<p>Architettura simile ad Aurora: storage shared 6x3AZ, fino a 15 read replica, failover &lt; 30 s.</p>
+<p>Use case: social graph, fraud detection (cycle/path detection), knowledge graph, recommendation engine, identity resolution.</p>
+<h2 id="5-documentdb-mongodb-compatible">5. DocumentDB (MongoDB-compatible)</h2>
+<p>API MongoDB <strong>4.0 / 5.0</strong> (non 6.0+). Storage layer Aurora-style, separato dal compute. Replica fino a 15.</p>
+<p>Quando ha senso: hai un'app MongoDB legacy e vuoi managed AWS senza Atlas. Quando NON: stai partendo da zero — valuta Aurora Postgres con JSONB, spesso vince per costo e feature.</p>
+<h2 id="6-keyspaces-cassandra-compatible">6. Keyspaces (Cassandra-compatible)</h2>
+<p>Implementazione AWS-managed del protocollo CQL Cassandra. <strong>Serverless</strong> (on-demand) o <strong>provisioned</strong>. Dietro le quinte usa tecnologia DynamoDB, non Cassandra reale → alcune feature mancano (LWT batch limitate), ma è 100% gestito.</p>
+<p>Use case: migrazioni Cassandra esistenti senza gestire cluster. Per nuovi progetti wide-column, DynamoDB è più nativo AWS.</p>
+<h2 id="7-timestream-e-qldb">7. Timestream e QLDB</h2>
+<p><strong>Timestream</strong>: time-series serverless. <strong>Tiering automatico</strong>: dati recenti in <strong>memory store</strong> (query fast), poi spostati a <strong>magnetic store</strong> (cheap, long-term). Query SQL-like con funzioni time-series native (<code>bin</code>, <code>interpolate</code>, <code>derivative</code>).</p>
+<pre><code class="language-sql">SELECT bin(time, 1h) AS hour,
+       avg(temperature) AS avg_temp
+FROM &quot;iot&quot;.&quot;sensors&quot;
+WHERE sensor_id = 's-42'
+  AND time &gt; ago(7d)
+GROUP BY bin(time, 1h)
+ORDER BY hour;
+</code></pre>
+<p>Use case: telemetria IoT, metriche app custom, monitoring industriale.</p>
+<p><strong>QLDB</strong> (Quantum Ledger Database): DB ledger immutable con journal append-only e cryptographic verification (proof tramite hash chain). <strong>In deprecation: end-of-support luglio 2025</strong>. AWS suggerisce migrazione a <strong>Aurora Postgres con audit logging</strong> (<code>pgaudit</code>) + hash chain custom in application layer per chi serve.</p>
+<p>Use case storico: registri finanziari, supply chain, audit trail tamper-evident.</p>
+<h2 id="8-tabella-decisionale-esercizio">8. Tabella decisionale + esercizio</h2>
+<table>
+<thead>
+<tr>
+<th>Workload</th>
+<th>Servizio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cache hot DB queries</td>
+<td><strong>ElastiCache Redis</strong> cluster mode disabled</td>
+</tr>
+<tr>
+<td>Cache pura monolitica multi-core</td>
+<td><strong>ElastiCache Memcached</strong></td>
+</tr>
+<tr>
+<td>In-memory primary con durability</td>
+<td><strong>MemoryDB</strong></td>
+</tr>
+<tr>
+<td>Social graph, fraud rings</td>
+<td><strong>Neptune</strong></td>
+</tr>
+<tr>
+<td>Migrazione MongoDB legacy</td>
+<td><strong>DocumentDB</strong></td>
+</tr>
+<tr>
+<td>Migrazione Cassandra legacy</td>
+<td><strong>Keyspaces</strong></td>
+</tr>
+<tr>
+<td>Telemetria IoT 100k punti/sec</td>
+<td><strong>Timestream</strong></td>
+</tr>
+<tr>
+<td>Audit ledger tamper-evident</td>
+<td>Aurora Postgres + pgaudit (QLDB deprecato)</td>
+</tr>
+<tr>
+<td>OLAP in-memory su MySQL</td>
+<td><strong>HeatWave on RDS MySQL</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Nota: <strong>HeatWave on RDS MySQL</strong> è un acceleratore analitico in-memory: stessa istanza RDS MySQL può servire query OLTP (storage tradizionale) e OLAP (HeatWave) senza ETL verso Redshift.</p>
+<details>
+<summary>App fintech: session token critici (perdere uno = utente sloggato, no big deal) + saldi conto in tempo reale (perdere = disastro). Stesso DB?</summary>
+
+No, due servizi diversi.
+
+- **Session token**: ElastiCache Redis cluster mode disabled + 1 replica. Failover automatico, se la replica perde l'ultima scrittura sync async fallita l'utente fa login. Costo basso.
+- **Saldi conto real-time**: **MemoryDB**. Write committed multi-AZ via transaction log prima del ACK. Zero data loss. Latenza sub-ms in lettura. Costa di più ma rispetta lo SLA.
+
+Anti-pattern: usare ElastiCache Redis come "source of truth" per dati che non sopporti perdere. Async replica = finestra di data loss.
+</details>
+
+<details>
+<summary>Sistema antifrode bancario: vuoi rilevare ring di 5+ conti che si scambiano bonifici in cerchio entro 24h. Quale DB?</summary>
+
+**Neptune** (graph).
+
+Modello: nodes = `Account`, edges = `Transfer { amount, ts }`.
+
+Gremlin query "trova cicli di lunghezza 3-7 con flusso totale > 10k€ in 24h":
+
+
+<pre><code class="language-gremlin">g.V().hasLabel('Account').
+  repeat(outE('Transfer').has('ts', gt(yesterday)).inV().simplePath()).
+    times(7).emit().
+  filter(__.path().count(local).is(gt(3))).
+  filter(__.path().unfold().hasLabel('Account').
+         is(eq(__.start())))   // cycle close
+</code></pre>
+
+
+Su Postgres servirebbero CTE ricorsive lente. Su DynamoDB sarebbe full-scan. Neptune nasce per questo: cycle/path detection in O(edges visitati) con indici grafici.
+
+Alternative: Amazon Neptune ML può fare embedding + anomaly detection su pattern complessi.
+</details>
+
+<blockquote>
+<p><strong>Riassunto</strong>: ElastiCache Redis per cache HA, Memcached per cache pura multi-core, MemoryDB quando serve durability in-memory; Neptune per graph (Gremlin/openCypher/SPARQL); DocumentDB per MongoDB legacy, Keyspaces per Cassandra legacy; Timestream per IoT/metrics; QLDB deprecato 2025 → Aurora Postgres con audit; HeatWave per OLAP in-place su RDS MySQL.</p>
+</blockquote>
+      <nav class="pager">
+<a href="24-dynamodb-deep-dive.html" class="prev"><span class="label">← Precedente</span><span class="title">DynamoDB deep dive — partition, GSI, Streams, single-table</span></a>
+<a href="26-redshift-data-warehousing.html" class="next"><span class="label">Successivo →</span><span class="title">Redshift — data warehousing MPP e zero-ETL</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>AWS Zero to Hero</strong> — percorso completo, in italiano, dalle primitive all'architettura avanzata.</p><p>Materiale didattico aperto. Nessuna sponsorizzazione, nessun affiliate link, nessuna affiliazione con AWS. Quando un concetto è oscuro, torna indietro: AWS è una piramide di primitive, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

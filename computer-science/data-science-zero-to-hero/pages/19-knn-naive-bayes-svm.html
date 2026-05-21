@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KNN, Naive Bayes, SVM — Data Science Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#3a4a7a',primaryTextColor:'#e8eef0',primaryBorderColor:'#5a6aa0',lineColor:'#8a9499',background:'#11171a'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">Σ</div>
+      <div>
+        <div class="brand-title">DATA SCIENCE</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">🇮🇹 IT</span><a href="../en/pages/19-knn-naive-bayes-svm.html" class="lang-link" title="Switch to English">🇬🇧 EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-cos-e-data-science.html" class=""><span class="num">01</span>Cos&#x27;è la data science (e cosa non è)</a></li><li class="nav-item"><a href="../pages/02-python-per-data-science.html" class=""><span class="num">02</span>Python per data science: setup professionale</a></li><li class="nav-item"><a href="../pages/02b-matematica-essenziale.html" class=""><span class="num">02b</span>Matematica del liceo che ti serve davvero</a></li><li class="nav-item"><a href="../pages/03-algebra-lineare.html" class=""><span class="num">03</span>Algebra lineare per data scientist</a></li><li class="nav-item"><a href="../pages/04-calcolo-ottimizzazione.html" class=""><span class="num">04</span>Calcolo, gradiente e ottimizzazione</a></li><li class="nav-item"><a href="../pages/05-probabilita.html" class=""><span class="num">05</span>Probabilità: la lingua dell&#x27;incertezza</a></li><li class="nav-item"><a href="../pages/06-statistica-descrittiva.html" class=""><span class="num">06</span>Statistica descrittiva</a></li><li class="nav-item"><a href="../pages/07-statistica-inferenziale.html" class=""><span class="num">07</span>Statistica inferenziale e test di ipotesi</a></li><li class="nav-item"><a href="../pages/08-distribuzioni.html" class=""><span class="num">08</span>Distribuzioni di probabilità che incontrerai</a></li><li class="nav-item"><a href="../pages/09-numpy.html" class=""><span class="num">09</span>NumPy: pensare in array</a></li><li class="nav-item"><a href="../pages/10-pandas.html" class=""><span class="num">10</span>Pandas: il coltellino svizzero</a></li><li class="nav-item"><a href="../pages/11-sql.html" class=""><span class="num">11</span>SQL per data scientist</a></li><li class="nav-item"><a href="../pages/12-visualizzazione.html" class=""><span class="num">12</span>Visualizzazione: matplotlib, seaborn, plotly</a></li><li class="nav-item"><a href="../pages/13-data-wrangling.html" class=""><span class="num">13</span>Pulizia e data wrangling</a></li><li class="nav-item"><a href="../pages/14-feature-engineering.html" class=""><span class="num">14</span>Feature engineering</a></li><li class="nav-item"><a href="../pages/15-eda.html" class=""><span class="num">15</span>EDA: Exploratory Data Analysis</a></li><li class="nav-item"><a href="../pages/16-ml-fondamenti.html" class=""><span class="num">16</span>ML: fondamenti — bias, varianza, validazione</a></li><li class="nav-item"><a href="../pages/17-regressione-lineare.html" class=""><span class="num">17</span>Regressione lineare e regolarizzazione</a></li><li class="nav-item"><a href="../pages/18-regressione-logistica.html" class=""><span class="num">18</span>Regressione logistica e classificazione</a></li><li class="nav-item"><a href="../pages/19-knn-naive-bayes-svm.html" class="active"><span class="num">19</span>KNN, Naive Bayes, SVM</a></li><li class="nav-item"><a href="../pages/20-alberi-decisionali.html" class=""><span class="num">20</span>Alberi decisionali</a></li><li class="nav-item"><a href="../pages/21-random-forest-boosting.html" class=""><span class="num">21</span>Random Forest, Gradient Boosting, XGBoost</a></li><li class="nav-item"><a href="../pages/22-clustering.html" class=""><span class="num">22</span>Clustering: K-Means, DBSCAN, GMM, gerarchico</a></li><li class="nav-item"><a href="../pages/23-pca-tsne-umap.html" class=""><span class="num">23</span>Riduzione dimensionale: PCA, t-SNE, UMAP</a></li><li class="nav-item"><a href="../pages/24-metriche-validazione.html" class=""><span class="num">24</span>Metriche, cross-validation, leakage</a></li><li class="nav-item"><a href="../pages/25-sbilanciamento-classi.html" class=""><span class="num">25</span>Sbilanciamento di classi</a></li><li class="nav-item"><a href="../pages/26-hyperparameter-tuning.html" class=""><span class="num">26</span>Hyperparameter tuning</a></li><li class="nav-item"><a href="../pages/27-reti-neurali.html" class=""><span class="num">27</span>Reti neurali: dalle basi al backprop</a></li><li class="nav-item"><a href="../pages/28-pytorch.html" class=""><span class="num">28</span>PyTorch: dal toy model al training loop</a></li><li class="nav-item"><a href="../pages/29-cnn.html" class=""><span class="num">29</span>CNN per computer vision</a></li><li class="nav-item"><a href="../pages/30-rnn-lstm.html" class=""><span class="num">30</span>RNN, LSTM, GRU per sequenze</a></li><li class="nav-item"><a href="../pages/31-transformer.html" class=""><span class="num">31</span>Transformer e attention</a></li><li class="nav-item"><a href="../pages/32-nlp-llm.html" class=""><span class="num">32</span>NLP: dal text mining ai LLM</a></li><li class="nav-item"><a href="../pages/33-time-series.html" class=""><span class="num">33</span>Time series e forecasting</a></li><li class="nav-item"><a href="../pages/34-mlops.html" class=""><span class="num">34</span>MLOps: deployment, monitoring, drift</a></li><li class="nav-item"><a href="../pages/35-bayesian-causal.html" class=""><span class="num">35</span>Inferenza bayesiana e causale</a></li><li class="nav-item"><a href="../pages/36-capstone-carriera.html" class=""><span class="num">36</span>Capstone, portfolio, carriera</a></li><li class="nav-item"><a href="../pages/37-glossario.html" class=""><span class="num">37</span>Glossario A-Z</a></li><li class="nav-item"><a href="../pages/38-formulario.html" class=""><span class="num">38</span>Formulario: tutte le formule del percorso</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Machine Learning</span>
+        <span>Sezione 20 di 39</span>
+        <span class="level-tag level-int">Livello: intermedio</span>
+      </div>
+      <h1>KNN, Naive Bayes, SVM</h1>
+      <p class="summary">Tre famiglie &#x27;classiche&#x27; che ancora vincono in scenari specifici. Quando e perché usarle.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Machine Learning</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>[[ml-fondamenti]]</li></ul>
+  <div class="label">Strumenti</div>
+  <ul class="source-list"><li>scikit-learn</li></ul>
+</div>
+      <h2 id="k-nearest-neighbors">K-Nearest Neighbors</h2>
+<h3 id="idea">Idea</h3>
+<blockquote>
+<p>Per predire $y$ di un nuovo punto $x$, guarda i $k$ punti più vicini nel training set e fai una "media" (regressione) o "voto" (classificazione).</p>
+</blockquote>
+<p>Nessun "training" vero: il modello è il dataset stesso. Inferenza costosa ($O(n)$ per ogni query in versione naive), ottimizzata con strutture dati: <strong>KD-Tree</strong> ($d \leq 20$), <strong>Ball Tree</strong>, <strong>HNSW</strong> o <strong>FAISS</strong> per high-dim.</p>
+<h3 id="pseudocodice">Pseudocodice</h3>
+<pre><code class="language-python">def knn_predict(x_query, X_train, y_train, k=5):
+    d = ((X_train - x_query)**2).sum(axis=1)   # distanze euclidee quadrate
+    nn = np.argsort(d)[:k]
+    return np.bincount(y_train[nn]).argmax()   # voto maggioranza
+</code></pre>
+<h3 id="iperparametri">Iperparametri</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Effetto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$k$ piccolo (1, 3)</td>
+<td>flessibile, basso bias, alta varianza</td>
+</tr>
+<tr>
+<td>$k$ grande (50+)</td>
+<td>smooth, alto bias, bassa varianza</td>
+</tr>
+<tr>
+<td><strong>Distanza</strong></td>
+<td>euclidea (default), Manhattan, coseno per testi</td>
+</tr>
+<tr>
+<td><strong>Pesi</strong></td>
+<td>uniformi o ponderati per distanza inversa</td>
+</tr>
+</tbody>
+</table>
+<h3 id="quando-usarlo">Quando usarlo</h3>
+<ul>
+<li>Dataset piccolo–medio ($n &lt; 10^5$).</li>
+<li>Pochi feature ($d &lt; 20$, altrimenti <strong>curse of dimensionality</strong>).</li>
+<li>Confini decisionali complessi, non lineari.</li>
+</ul>
+<h3 id="quando-non-usarlo">Quando NON usarlo</h3>
+<ul>
+<li>$d$ grande: in alte dimensioni le distanze "collassano" (tutti i punti sono simili).</li>
+<li>Inferenza in tempo reale su dati grossi.</li>
+<li>Feature di scala diversa (sempre scalare!).</li>
+</ul>
+<h3 id="esempio">Esempio</h3>
+<pre><code class="language-python">from sklearn.neighbors import KNeighborsClassifier
+from sklearn.preprocessing import StandardScaler
+sc = StandardScaler().fit(X_tr)
+knn = KNeighborsClassifier(n_neighbors=5, weights='distance').fit(sc.transform(X_tr), y_tr)
+</code></pre>
+<blockquote>
+<p>KNN per regressione: <code>KNeighborsRegressor</code>. Predice la media dei k vicini.</p>
+</blockquote>
+<h2 id="naive-bayes">Naive Bayes</h2>
+<h3 id="idea_1">Idea</h3>
+<p>Applica Bayes assumendo <strong>indipendenza condizionale</strong> delle feature, dato il target:</p>
+<p>$$P(y | x_1, \dots, x_p) \propto P(y) \prod_{j=1}^p P(x_j | y)$$</p>
+<p>L'assunzione è quasi sempre <strong>falsa</strong>, da cui "naive". Ma in pratica funziona benissimo per molti task, specialmente NLP.</p>
+<h3 id="varianti">Varianti</h3>
+<table>
+<thead>
+<tr>
+<th>Versione</th>
+<th>Per quali feature</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>GaussianNB</strong></td>
+<td>continue, ~ normali per classe</td>
+</tr>
+<tr>
+<td><strong>MultinomialNB</strong></td>
+<td>conteggi (es: word count)</td>
+</tr>
+<tr>
+<td><strong>BernoulliNB</strong></td>
+<td>binarie (es: parola presente/no)</td>
+</tr>
+<tr>
+<td><strong>ComplementNB</strong></td>
+<td>come Multinomial, meglio su classi sbilanciate</td>
+</tr>
+</tbody>
+</table>
+<h3 id="esempio-spam-classification">Esempio: spam classification</h3>
+<pre><code class="language-python">from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.pipeline import Pipeline
+
+pipe = Pipeline([
+    ('vec', CountVectorizer(ngram_range=(1,2))),
+    ('nb', MultinomialNB(alpha=0.5)),  # alpha = Laplace smoothing
+])
+pipe.fit(X_train_text, y_train)
+</code></pre>
+<h3 id="smoothing-perche-serve">Smoothing (perché serve)</h3>
+<p>Se una parola non è mai apparsa nella classe "spam" nel training, $P(\text{parola}|\text{spam}) = 0$ → tutta la probabilità diventa zero, inutilizzabile.</p>
+<p><strong>Laplace smoothing</strong>: aggiungi una pseudo-conta $\alpha$ a tutti:</p>
+<p>$$P(x_j | y) = \frac{\text{count}(x_j, y) + \alpha}{\text{count}(y) + \alpha V}$$</p>
+<h3 id="quando-usare-naive-bayes">Quando usare Naive Bayes</h3>
+<ul>
+<li>Baseline rapidissimo per testi (1 minuto, AUC ~0.9 spesso).</li>
+<li>Pochissimi dati (NB regge bene poco).</li>
+<li>Inferenza ultra-veloce richiesta.</li>
+<li>Feature naturalmente indipendenti (raro).</li>
+</ul>
+<h2 id="support-vector-machines-svm">Support Vector Machines (SVM)</h2>
+<h3 id="idea-massimizzare-il-margine">Idea: massimizzare il margine</h3>
+<p>Trova l'iperpiano che <strong>separa due classi con il margine più largo possibile</strong>.</p>
+<div class="chart"><svg viewBox="0 0 360 200" xmlns="http://www.w3.org/2000/svg">
+<line x1="60" y1="170" x2="320" y2="40" stroke="#7aa2ff" stroke-width="2.5"/>
+<line x1="60" y1="190" x2="320" y2="60" stroke="#7aa2ff" stroke-dasharray="4,4" stroke-width="1.5"/>
+<line x1="60" y1="150" x2="320" y2="20" stroke="#7aa2ff" stroke-dasharray="4,4" stroke-width="1.5"/>
+<circle cx="100" cy="160" r="6" fill="#ffb347"/>
+<circle cx="130" cy="180" r="6" fill="#ffb347"/>
+<circle cx="170" cy="135" r="6" fill="#ffb347" stroke="#fff" stroke-width="2"/>
+<circle cx="220" cy="60" r="6" fill="#5ee2c4"/>
+<circle cx="260" cy="40" r="6" fill="#5ee2c4"/>
+<circle cx="200" cy="80" r="6" fill="#5ee2c4" stroke="#fff" stroke-width="2"/>
+<text x="60" y="195" fill="#8b949e" font-size="11">classe -</text>
+<text x="260" y="20" fill="#8b949e" font-size="11">classe +</text>
+<text x="135" y="115" fill="#7aa2ff" font-size="11">margine</text>
+</svg><div class="chart-caption">SVM lineare: massimizza la "strada" tra le classi. I punti sulla strada sono i "support vectors".</div></div>
+
+<p>Matematicamente: minimizza $|\mathbf{w}|^2$ soggetto a $y_i (\mathbf{w}^T \mathbf{x}_i + b) \geq 1$.</p>
+<p>Nella forma <strong>soft margin</strong> (per dati non perfettamente separabili):</p>
+<p>$$\min_{w,b} \frac{1}{2}|w|^2 + C \sum_i \xi_i \quad \text{s.t. } y_i(w^T x_i + b) \geq 1 - \xi_i, \xi_i \geq 0$$</p>
+<p>$C$ controlla il tradeoff: $C$ alto = punisce molto gli errori (rischio overfit), $C$ basso = più tollerante.</p>
+<h3 id="hinge-loss">Hinge loss</h3>
+<p>La loss SVM equivalente:</p>
+<p>$$L = \max(0, 1 - y_i (w^T x_i + b))$$</p>
+<p>(con $y \in {-1, +1}$.) "Zero se classifico bene con margine ≥ 1, altrimenti pago la distanza dal margine."</p>
+<h3 id="kernel-trick">Kernel trick</h3>
+<p>Per dati non linearmente separabili, mappa in uno spazio a più dimensioni dove lo sono. Il "trucco" è non calcolare esplicitamente la mappa $\phi(x)$, ma usare un <strong>kernel</strong> $K(x, x') = \phi(x)^T \phi(x')$:</p>
+<table>
+<thead>
+<tr>
+<th>Kernel</th>
+<th>$K(x, x')$</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Lineare</td>
+<td>$x^T x'$</td>
+<td>dati linearmente separabili</td>
+</tr>
+<tr>
+<td>Polinomiale</td>
+<td>$(x^T x' + c)^d$</td>
+<td>interazioni</td>
+</tr>
+<tr>
+<td>RBF (Gaussiano)</td>
+<td>$\exp(-\gamma |x - x'|^2)$</td>
+<td>default, flessibile</td>
+</tr>
+<tr>
+<td>Sigmoide</td>
+<td>$\tanh(\gamma x^T x' + c)$</td>
+<td>raro</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-python">from sklearn.svm import SVC
+SVC(kernel='rbf', C=1.0, gamma='scale').fit(X_tr_s, y_tr)
+</code></pre>
+<h3 id="iperparametri_1">Iperparametri</h3>
+<ul>
+<li><strong>C</strong>: regolarizzazione (inverso). Tipico: <code>np.logspace(-2, 2, 10)</code>.</li>
+<li><strong>gamma</strong> (RBF): larghezza del kernel. <code>'scale' = 1/(n_features * X.var())</code>, default sensato.</li>
+</ul>
+<h3 id="quando-usare-svm">Quando usare SVM</h3>
+<ul>
+<li>Dataset <strong>medio</strong> ($n &lt; 10^5$ — SVM scala male con $n$, complessità $\sim O(n^2)$).</li>
+<li>$p &gt; n$ (più feature che esempi): SVM regge bene.</li>
+<li>Confini decisionali complessi ma con margine "leggibile".</li>
+<li>NLP con TF-IDF + Linear SVM è un baseline classico, ancora competitivo.</li>
+</ul>
+<h3 id="quando-non-usare-svm">Quando NON usare SVM</h3>
+<ul>
+<li>Dataset enorme ($n &gt; 10^6$).</li>
+<li>Servono probabilità calibrate (SVM non le dà naturalmente, vanno calibrate con Platt).</li>
+<li>Vuoi interpretabilità (lineare OK, RBF no).</li>
+</ul>
+<h2 id="comparazione">Comparazione</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>KNN</th>
+<th>Naive Bayes</th>
+<th>SVM (RBF)</th>
+<th>Logistic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Training</td>
+<td>istantaneo</td>
+<td>velocissimo</td>
+<td>$O(n^2)$</td>
+<td>$O(n p)$</td>
+</tr>
+<tr>
+<td>Inference</td>
+<td>$O(n)$ naive</td>
+<td>$O(p)$</td>
+<td>$O(p \cdot n_{SV})$</td>
+<td>$O(p)$</td>
+</tr>
+<tr>
+<td>Multi-classe</td>
+<td>nativo</td>
+<td>nativo</td>
+<td>OvR/OvO</td>
+<td>softmax</td>
+</tr>
+<tr>
+<td>Probabilità</td>
+<td>tramite vicini</td>
+<td>sì</td>
+<td>calibrate manuali</td>
+<td>sì</td>
+</tr>
+<tr>
+<td>Scaling feature</td>
+<td>obbligatorio</td>
+<td>spesso no</td>
+<td>obbligatorio</td>
+<td>consigliato</td>
+</tr>
+<tr>
+<td>Tabular</td>
+<td>OK ma marginale</td>
+<td>base testi</td>
+<td>ok ma data-hungry</td>
+<td>gold standard</td>
+</tr>
+</tbody>
+</table>
+<h2 id="esercizi">Esercizi</h2>
+<details>
+<summary>Esercizio 1 — KNN sul dataset Iris</summary>
+
+
+<pre><code class="language-python">from sklearn.datasets import load_iris
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.model_selection import cross_val_score
+import matplotlib.pyplot as plt
+
+X, y = load_iris(return_X_y=True)
+acc = [cross_val_score(KNeighborsClassifier(k), X, y, cv=5).mean() for k in range(1, 30)]
+plt.plot(range(1, 30), acc); plt.xlabel('k'); plt.ylabel('CV accuracy')
+</code></pre>
+
+
+Il sweet spot tipico è $k=5-15$. Con $k=1$ overfitti, con $k=100$ underfitti.
+</details>
+
+<details>
+<summary>Esercizio 2 — Spam con MultinomialNB</summary>
+
+
+<pre><code class="language-python">import pandas as pd
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.model_selection import train_test_split
+# usa un dataset spam (ad esempio sms spam)
+# semplificato:
+data = pd.DataFrame({
+    'text': ['win prize free!!','hello come tomorrow','free win money click','meeting at 3pm',
+             'cheap meds discount','let\'s grab lunch'],
+    'label':[1,0,1,0,1,0]
+})
+X_tr, X_te, y_tr, y_te = train_test_split(data.text, data.label, test_size=0.3, random_state=0)
+pipe = make_pipeline = ...   # come sopra
+</code></pre>
+
+
+Anche con 6 esempi NB impara qualcosa. Su dataset SMS reale (~5500 esempi) raggiunge ~98% accuracy in 1 secondo.
+</details>
+
+<details>
+<summary>Esercizio 3 — SVM con grid search</summary>
+
+
+<pre><code class="language-python">from sklearn.svm import SVC
+from sklearn.model_selection import GridSearchCV
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import Pipeline
+
+pipe = Pipeline([('sc', StandardScaler()), ('svm', SVC())])
+grid = {
+    'svm__C': [0.01, 0.1, 1, 10],
+    'svm__gamma': [0.01, 0.1, 1, 'scale'],
+    'svm__kernel': ['rbf'],
+}
+gs = GridSearchCV(pipe, grid, cv=5, scoring='roc_auc', n_jobs=-1)
+gs.fit(X, y)
+print(gs.best_params_, gs.best_score_)
+</code></pre>
+
+</details>
+
+<details>
+<summary>Esercizio 4 — Confronto sui 4 modelli</summary>
+
+Su `load_breast_cancer`, confronta KNN, NB, SVM, Logistic. Confronta accuracy, AUC, tempo di training, tempo di inference.
+
+
+<pre><code class="language-python">import time
+from sklearn.datasets import load_breast_cancer
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import GaussianNB
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.svm import SVC
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, roc_auc_score
+
+X, y = load_breast_cancer(return_X_y=True)
+X_tr, X_te, y_tr, y_te = train_test_split(X, y, stratify=y, random_state=0)
+sc = StandardScaler().fit(X_tr); X_tr_s = sc.transform(X_tr); X_te_s = sc.transform(X_te)
+
+models = {
+    'NB': GaussianNB(),
+    'KNN': KNeighborsClassifier(7),
+    'SVM': SVC(probability=True),
+    'Logistic': LogisticRegression(max_iter=2000),
+}
+for name, m in models.items():
+    t = time.perf_counter()
+    m.fit(X_tr_s, y_tr)
+    t_fit = time.perf_counter() - t
+    t = time.perf_counter()
+    proba = m.predict_proba(X_te_s)[:, 1]
+    t_pred = time.perf_counter() - t
+    print(f&quot;{name:8s} fit={t_fit:.3f}s pred={t_pred:.4f}s &quot;
+          f&quot;AUC={roc_auc_score(y_te, proba):.3f}&quot;)
+</code></pre>
+
+</details>
+
+<h2 id="cosa-portarti-via">Cosa portarti via</h2>
+<ul>
+<li>KNN: zero training, esemplare-based, soffre alta dimensionalità.</li>
+<li>Naive Bayes: assunzione "ingenua" che funziona, base per testi, NLP storica.</li>
+<li>SVM: massimizza margine, kernel trick per non-linearità, scala male.</li>
+<li>Logistic resta in genere il default per tabulari con feature ingegnerizzate.</li>
+</ul>
+<p>Prossimo: alberi decisionali.</p>
+      <nav class="pager">
+<a href="18-regressione-logistica.html" class="prev"><span class="label">← Precedente</span><span class="title">Regressione logistica e classificazione</span></a>
+<a href="20-alberi-decisionali.html" class="next"><span class="label">Successivo →</span><span class="title">Alberi decisionali</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Data Science Zero to Hero</strong> — percorso completo, in italiano, dalla matematica al deployment.</p><p>Materiale didattico aperto. Le formule sono lì per essere capite, non temute. Quando un concetto è oscuro, torna indietro: la data science è una piramide, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>OOP I — Classes, objects, constructors, this, packages, visibility — Java + Spring Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">☕</div>
+      <div>
+        <div class="brand-title">JAVA · SPRING</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/04-oop-classi-oggetti.html" class="lang-link" title="Passa all'italiano"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="10" height="20" fill="#009246"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ce2b37"/></svg> IT</a><span class="lang-active" title="English"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="30" height="20" fill="#012169"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#fff" stroke-width="3"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#c8102e" stroke-width="1.5"/><path d="M15,0 v20 M0,10 h30" stroke="#fff" stroke-width="5"/><path d="M15,0 v20 M0,10 h30" stroke="#c8102e" stroke-width="3"/></svg> EN</span></div>
+  </div>
+  <div class="search-wrap">
+    <div class="search-row">
+      <div class="search-inputwrap">
+        <span class="search-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"/>
+            <line x1="20" y1="20" x2="16.65" y2="16.65"/>
+          </svg>
+        </span>
+        <input class="search-input" id="search-input" type="text" placeholder="search... (press /)" autocomplete="off" aria-label="Search">
+        <button class="search-clear" id="search-clear" type="button" aria-label="Clear" title="Clear">&times;</button>
+      </div>
+      <button class="search-btn" id="search-btn" type="button" aria-label="SEARCH" title="SEARCH">SEARCH</button>
+    </div>
+    <div class="search-hits" id="search-hits" role="listbox"></div>
+  </div>
+  <div class="sidebar-nav">
+    <nav class="nav-section">
+      <div class="nav-section-title">Path</div>
+      <ul class="nav-list">
+        <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+        <li class="nav-item"><a href="../pages/00-path-and-mindset.html" class=""><span class="num">00</span>The path and the right mindset</a></li><li class="nav-item"><a href="../pages/01-java-introduction.html" class=""><span class="num">01</span>Java: what it really is, JVM/JRE/JDK, first program</a></li><li class="nav-item"><a href="../pages/02-basic-syntax.html" class=""><span class="num">02</span>Basic syntax: types, variables, operators, control flow</a></li><li class="nav-item"><a href="../pages/03-strings-arrays-io.html" class=""><span class="num">03</span>Strings, arrays, console I/O</a></li><li class="nav-item"><a href="../pages/04-oop-classes-objects.html" class="active"><span class="num">04</span>OOP I — Classes, objects, constructors, this, packages, visibility</a></li><li class="nav-item"><a href="../pages/05-oop-inheritance-polymorphism.html" class=""><span class="num">05</span>OOP II — Inheritance, polymorphism, interfaces, abstract classes</a></li><li class="nav-item"><a href="../pages/06-equals-hashcode-immutability.html" class=""><span class="num">06</span>OOP III — equals, hashCode, toString, immutability, record</a></li><li class="nav-item"><a href="../pages/07-exceptions.html" class=""><span class="num">07</span>Exceptions: checked vs unchecked, try-with-resources, custom</a></li><li class="nav-item"><a href="../pages/08-generics.html" class=""><span class="num">08</span>Generics: parametric types, PECS, type erasure, wildcards</a></li><li class="nav-item"><a href="../pages/09-collections.html" class=""><span class="num">09</span>Collections: List, Set, Map, Queue, complexity, choosing the right structure</a></li><li class="nav-item"><a href="../pages/10-stream-lambda-optional.html" class=""><span class="num">10</span>Stream API, lambdas, functional interfaces, Optional</a></li><li class="nav-item"><a href="../pages/11-io-nio.html" class=""><span class="num">11</span>I/O and NIO.2: File, Path, channels, buffers</a></li><li class="nav-item"><a href="../pages/12-concurrency-thread.html" class=""><span class="num">12</span>Concurrency I — Threads, synchronization, volatile, JMM</a></li><li class="nav-item"><a href="../pages/13-executor-future-completablefuture.html" class=""><span class="num">13</span>Concurrency II — ExecutorService, Future, CompletableFuture</a></li><li class="nav-item"><a href="../pages/14-concurrency-juc.html" class=""><span class="num">14</span>Concurrency III — java.util.concurrent: locks, atomics, concurrent collections</a></li><li class="nav-item"><a href="../pages/15-jvm-internals.html" class=""><span class="num">15</span>JVM internals: classloader, bytecode, runtime data areas, JIT</a></li><li class="nav-item"><a href="../pages/16-memory-gc.html" class=""><span class="num">16</span>Memory and garbage collection: G1, ZGC, Shenandoah</a></li><li class="nav-item"><a href="../pages/17-profiling-jfr.html" class=""><span class="num">17</span>Profiling: JFR, async-profiler, jstack, heap dump, jcmd</a></li><li class="nav-item"><a href="../pages/18-modern-java.html" class=""><span class="num">18</span>Modern Java: from 8 to 21 — key features</a></li><li class="nav-item"><a href="../pages/19-jdbc.html" class=""><span class="num">19</span>JDBC: connection, PreparedStatement, transactions, isolation levels</a></li><li class="nav-item"><a href="../pages/20-jpa-hibernate.html" class=""><span class="num">20</span>JPA / Hibernate: entities, relationships, lazy/eager, N+1, cache</a></li><li class="nav-item"><a href="../pages/21-essential-sql.html" class=""><span class="num">21</span>Essential SQL for the Java developer</a></li><li class="nav-item"><a href="../pages/22-spring-intro-ioc-di.html" class=""><span class="num">22</span>Spring intro: IoC, DI, ApplicationContext, BeanFactory</a></li><li class="nav-item"><a href="../pages/23-spring-beans-lifecycle.html" class=""><span class="num">23</span>Beans: scopes, lifecycle, BeanPostProcessor, FactoryBean</a></li><li class="nav-item"><a href="../pages/24-spring-configuration.html" class=""><span class="num">24</span>Configuration: Java config, @ComponentScan, profiles, conditionals, properties</a></li><li class="nav-item"><a href="../pages/25-spring-aop-transactional.html" class=""><span class="num">25</span>AOP, proxies, @Transactional: what really happens</a></li><li class="nav-item"><a href="../pages/26-spring-boot.html" class=""><span class="num">26</span>Spring Boot: auto-configuration, starters, Actuator</a></li><li class="nav-item"><a href="../pages/27-spring-data-jpa.html" class=""><span class="num">27</span>Spring Data JPA: Repository, derived queries, pagination, Specification</a></li><li class="nav-item"><a href="../pages/28-spring-mvc-rest.html" class=""><span class="num">28</span>Spring MVC: DispatcherServlet, controllers, REST endpoints</a></li><li class="nav-item"><a href="../pages/29-rest-openapi-hateoas.html" class=""><span class="num">29</span>REST: best practices, OpenAPI/Swagger, HATEOAS, versioning</a></li><li class="nav-item"><a href="../pages/30-spring-webflux.html" class=""><span class="num">30</span>Spring WebFlux + Reactor: Mono, Flux, reactive programming</a></li><li class="nav-item"><a href="../pages/31-spring-security.html" class=""><span class="num">31</span>Spring Security: filter chain, authentication, authorization, JWT, OAuth2</a></li><li class="nav-item"><a href="../pages/32-spring-cloud.html" class=""><span class="num">32</span>Spring Cloud: Config Server, Discovery, Gateway, Resilience4j</a></li><li class="nav-item"><a href="../pages/33-testing.html" class=""><span class="num">33</span>Testing: JUnit 5, Mockito, MockMvc, Testcontainers</a></li><li class="nav-item"><a href="../pages/34-spring-batch-intro.html" class=""><span class="num">34</span>Spring Batch intro: domain model, Job, Step, first batch</a></li><li class="nav-item"><a href="../pages/35-spring-batch-jobrepository.html" class=""><span class="num">35</span>JobRepository, JobLauncher, metadata schema</a></li><li class="nav-item"><a href="../pages/36-spring-batch-chunk-skip-retry.html" class=""><span class="num">36</span>Chunk processing: commit interval, skip, retry, fault tolerance</a></li><li class="nav-item"><a href="../pages/37-spring-batch-tasklet-flow.html" class=""><span class="num">37</span>Tasklet vs Chunk; flow control: decisions, splits, conditionals</a></li><li class="nav-item"><a href="../pages/38-spring-batch-itemreader.html" class=""><span class="num">38</span>ItemReader: flat file, XML/JSON, JDBC cursor/paging, JPA, multi-resource</a></li><li class="nav-item"><a href="../pages/39-spring-batch-itemwriter.html" class=""><span class="num">39</span>ItemWriter: file, JDBC, JPA, composite, classifier, batch insert</a></li><li class="nav-item"><a href="../pages/40-spring-batch-scaling-partitioning.html" class=""><span class="num">40</span>Scaling: multi-threaded step, partitioning, remote chunking/partitioning</a></li><li class="nav-item"><a href="../pages/41-spring-batch-listeners-restart-k8s.html" class=""><span class="num">41</span>Listeners, restart, monitoring, Spring Boot and Kubernetes integration</a></li><li class="nav-item"><a href="../pages/42-design-patterns.html" class=""><span class="num">42</span>Design patterns in Java/Spring: GoF + DDD-lite</a></li><li class="nav-item"><a href="../pages/43-performance-observability.html" class=""><span class="num">43</span>Production-grade performance tuning and observability</a></li><li class="nav-item"><a href="../pages/44-synthesis-exercises.html" class=""><span class="num">44</span>50 cumulative exercises: from syntax to Spring Batch</a></li><li class="nav-item"><a href="../pages/45-final-project-etl.html" class=""><span class="num">45</span>Final guided project: nightly bank ETL</a></li>
+      </ul>
+    </nav>
+  </div>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Java Foundations</span>
+        <span>Section 4 of 45</span>
+        <span class="level-tag level-beg">Level: beginner</span>
+      </div>
+      <h1>OOP I — Classes, objects, constructors, this, packages, visibility</h1>
+      <p class="summary">Class as a template, object as an instance. Fields and methods, constructors (default, parameterized, overloaded). this. static vs instance. Visibility: public, protected, package-private, private. Packages and code organization.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Java Foundations</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>Section 3</li></ul>
+  <div class="label">Tools</div>
+  <ul class="source-list"><li>JDK 21</li></ul>
+</div>
+      <h2 id="a-class-is-the-template-an-object-is-what-the-template-produces">A class is the template, an object is what the template produces</h2>
+<p>A <strong>class</strong> describes <em>how something is made</em>: which data it has (fields) and what it can do (methods). An <strong>object</strong> is a specific instance of the class, with its own values.</p>
+<pre><code class="language-java">public class Person {
+    String name;
+    int age;
+
+    void greet() {
+        System.out.println(&quot;Hi, I'm &quot; + name + &quot; and I'm &quot; + age);
+    }
+}
+</code></pre>
+<pre><code class="language-java">Person p1 = new Person();   // creates a Person object on the heap
+p1.name = &quot;Anna&quot;;
+p1.age = 30;
+p1.greet();                  // &quot;Hi, I'm Anna and I'm 30&quot;
+
+Person p2 = new Person();   // second, independent object
+p2.name = &quot;Beppe&quot;;
+p2.age = 45;
+p2.greet();
+</code></pre>
+<p><code>p1</code> and <code>p2</code> are <strong>two objects</strong> from the same "template".</p>
+<h2 id="constructors">Constructors</h2>
+<p>The <strong>constructor</strong> initializes the object. Java provides a default parameter-less one if you don't declare any.</p>
+<pre><code class="language-java">public class Person {
+    String name;
+    int age;
+
+    // parameterized constructor
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+}
+</code></pre>
+<pre><code class="language-java">Person p = new Person(&quot;Anna&quot;, 30);
+</code></pre>
+<blockquote>
+<p>As soon as you declare <strong>any</strong> constructor, the default disappears. If you also want a no-arg one, declare it explicitly.</p>
+</blockquote>
+<h3 id="this"><code>this</code></h3>
+<p>Inside a method or constructor, <code>this</code> is a reference to the current object. It's needed when a parameter <strong>shadows</strong> a field (<code>this.name = name</code>):</p>
+<pre><code class="language-java">public Person(String name, int age) {
+    this.name = name;   // this.name = the field; name = the parameter
+    this.age = age;
+}
+</code></pre>
+<p><code>this()</code> calls another constructor in the same class:</p>
+<pre><code class="language-java">public class Person {
+    String name;
+    int age;
+
+    public Person() {
+        this(&quot;anonymous&quot;, 0);   // calls the other constructor
+    }
+
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+}
+</code></pre>
+<p><code>this(...)</code> must be the <strong>first statement</strong> of the constructor.</p>
+<h3 id="constructor-overloading">Constructor overloading</h3>
+<p>You can have multiple constructors with <strong>different signatures</strong> (number/type of parameters):</p>
+<pre><code class="language-java">public class Point {
+    double x, y;
+
+    public Point() { this(0, 0); }
+    public Point(double x, double y) { this.x = x; this.y = y; }
+    public Point(Point other) { this(other.x, other.y); }  // copy constructor
+}
+</code></pre>
+<h2 id="fields-and-methods">Fields and methods</h2>
+<pre><code class="language-java">public class BankAccount {
+    private String iban;
+    private double balance;
+
+    public BankAccount(String iban, double initial) {
+        this.iban = iban;
+        this.balance = initial;
+    }
+
+    public void deposit(double amount) {
+        if (amount &lt;= 0) throw new IllegalArgumentException(&quot;non-positive amount&quot;);
+        balance += amount;
+    }
+
+    public void withdraw(double amount) {
+        if (amount &gt; balance) throw new IllegalStateException(&quot;insufficient funds&quot;);
+        balance -= amount;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+}
+</code></pre>
+<h3 id="getters-and-setters">Getters and setters</h3>
+<p>Convention: <code>private</code> fields, access via <code>getX()</code> / <code>setX(...)</code> methods. This way you control what goes in/out.</p>
+<pre><code class="language-java">public class Person {
+    private String name;
+    private int age;
+
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+
+    public int getAge() { return age; }
+    public void setAge(int age) {
+        if (age &lt; 0) throw new IllegalArgumentException(&quot;age &lt; 0&quot;);
+        this.age = age;
+    }
+}
+</code></pre>
+<blockquote>
+<p>A setter isn't always needed. If a field must never change after construction, leave just a getter (or <strong>don't</strong> offer one at all). We'll see <code>record</code> (Java 14+) that does this for free.</p>
+</blockquote>
+<h2 id="static-belongs-to-the-class-not-the-instance"><code>static</code>: belongs to the class, not the instance</h2>
+<p>A <code>static</code> field or method exists <strong>once per class</strong>, not once per object.</p>
+<pre><code class="language-java">public class Counter {
+    private static int instances = 0;   // shared
+
+    private int id;
+
+    public Counter() {
+        instances++;
+        this.id = instances;
+    }
+
+    public static int howMany() { return instances; }
+    public int getId() { return id; }
+}
+</code></pre>
+<pre><code class="language-java">new Counter(); new Counter(); new Counter();
+System.out.println(Counter.howMany());   // 3
+</code></pre>
+<p>Classic use case: <strong>utility classes</strong> with only static methods (e.g. <code>java.lang.Math</code>, <code>java.util.Arrays</code>).</p>
+<h3 id="static-initializers">Static initializers</h3>
+<pre><code class="language-java">public class Config {
+    static final Map&lt;String, String&gt; MAP;
+
+    static {
+        MAP = new HashMap&lt;&gt;();
+        MAP.put(&quot;env&quot;, &quot;prod&quot;);
+        MAP.put(&quot;region&quot;, &quot;eu-south&quot;);
+    }
+}
+</code></pre>
+<p>The <code>static { ... }</code> block runs <strong>once</strong> when the class is loaded.</p>
+<h2 id="visibility-access-modifiers">Visibility (access modifiers)</h2>
+<table>
+<thead>
+<tr>
+<th>Modifier</th>
+<th>Visible from...</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>public</code></td>
+<td>Everywhere</td>
+</tr>
+<tr>
+<td><code>protected</code></td>
+<td>Same package + subclasses (anywhere)</td>
+</tr>
+<tr>
+<td>(none) = "package-private"</td>
+<td>Same package only</td>
+</tr>
+<tr>
+<td><code>private</code></td>
+<td>Only within the same class</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-java">public class Sample {
+    public    int pub;       // anyone
+    protected int prot;      // subclasses and package
+              int pkg;       // package only
+    private   int priv;      // only inside Sample
+}
+</code></pre>
+<p><strong>Practical rule</strong>: <code>private</code> fields, <code>public</code> methods when part of the class contract. Expose the minimum.</p>
+<h2 id="packages">Packages</h2>
+<p>A <strong>package</strong> is a hierarchical namespace. All classes are organized into packages:</p>
+<pre><code>src/main/java/
+└── it/
+    └── zth/
+        └── bank/
+            ├── BankAccount.java     // package it.zth.bank
+            ├── Customer.java
+            └── transactions/
+                └── Transfer.java     // package it.zth.bank.transactions
+</code></pre>
+<p>Each file must declare its package as the <strong>first statement</strong>:</p>
+<pre><code class="language-java">package it.zth.bank;
+</code></pre>
+<h3 id="imports">Imports</h3>
+<pre><code class="language-java">import java.util.List;
+import java.util.ArrayList;
+import java.util.*;           // everything in java.util (discouraged in serious projects)
+import static java.lang.Math.PI;  // static import
+</code></pre>
+<p><code>java.lang</code> classes (String, Integer, System, ...) are auto-imported.</p>
+<h2 id="what-happens-at-new">What happens at <code>new</code>?</h2>
+<div class="mermaid">
+sequenceDiagram
+    participant C as Code
+    participant JVM as JVM
+    participant H as Heap
+    participant CON as Constructor
+
+    C->>JVM: new Person("Anna", 30)
+    JVM->>H: allocate memory for Person
+    H-->>JVM: object address
+    JVM->>JVM: initialize fields to defaults (0, false, null)
+    JVM->>CON: call Person(String, int)
+    CON->>CON: this.name = "Anna"; this.age = 30
+    CON-->>JVM: object ready
+    JVM-->>C: return reference
+
+</div>
+
+<ol>
+<li>JVM <strong>allocates memory</strong> on the heap.</li>
+<li>Initializes all fields to defaults (<code>0</code>, <code>false</code>, <code>null</code>).</li>
+<li>Calls the constructor.</li>
+<li>Returns the reference.</li>
+</ol>
+<h2 id="full-example-a-mini-system">Full example: a mini system</h2>
+<pre><code class="language-java">package it.zth.shop;
+
+public class Product {
+    private final String code;
+    private final String name;
+    private double price;
+
+    public Product(String code, String name, double price) {
+        if (price &lt; 0) throw new IllegalArgumentException(&quot;price &lt; 0&quot;);
+        this.code = code;
+        this.name = name;
+        this.price = price;
+    }
+
+    public String getCode() { return code; }
+    public String getName() { return name; }
+    public double getPrice() { return price; }
+
+    public void applyDiscount(double percent) {
+        if (percent &lt; 0 || percent &gt; 100)
+            throw new IllegalArgumentException(&quot;invalid percent&quot;);
+        this.price *= (1 - percent / 100.0);
+    }
+
+    @Override
+    public String toString() {
+        return &quot;Product[&quot; + code + &quot; &quot; + name + &quot; &quot; + price + &quot;€]&quot;;
+    }
+}
+</code></pre>
+<p><code>@Override</code> on <code>toString()</code> will make sense as soon as you see inheritance (section 5).</p>
+<pre><code class="language-java">Product p = new Product(&quot;ABC-123&quot;, &quot;Keyboard&quot;, 49.90);
+System.out.println(p);          // Product[ABC-123 Keyboard 49.9€]
+p.applyDiscount(10);
+System.out.println(p);          // Product[ABC-123 Keyboard 44.910...€]
+</code></pre>
+<h2 id="exercises">Exercises</h2>
+<details>
+<summary>Ex 4.1 — `Point2D` class</summary>
+
+Create a `Point2D` class with `double x`, `double y` fields, parameterized constructor, `distance(Point2D other)` method computing Euclidean distance, and `toString()`.
+
+
+<pre><code class="language-java">public class Point2D {
+    private final double x, y;
+
+    public Point2D(double x, double y) { this.x = x; this.y = y; }
+    public double getX() { return x; }
+    public double getY() { return y; }
+
+    public double distance(Point2D other) {
+        double dx = x - other.x;
+        double dy = y - other.y;
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    @Override
+    public String toString() { return &quot;(&quot; + x + &quot;, &quot; + y + &quot;)&quot;; }
+}
+</code></pre>
+
+
+</details>
+
+<details>
+<summary>Ex 4.2 — `BankAccount` with `IllegalStateException`</summary>
+
+Implement `BankAccount` with `deposit`, `withdraw`, `getBalance`. Throw `IllegalArgumentException` for negative amounts, `IllegalStateException` for overdraft.
+
+See the example above. Add a test:
+
+
+<pre><code class="language-java">public static void main(String[] args) {
+    BankAccount c = new BankAccount(&quot;IT60X0000&quot;, 100);
+    c.deposit(50);
+    System.out.println(c.getBalance()); // 150
+    try {
+        c.withdraw(200);
+    } catch (IllegalStateException e) {
+        System.out.println(&quot;KO: &quot; + e.getMessage());
+    }
+}
+</code></pre>
+
+
+</details>
+
+<details>
+<summary>Ex 4.3 — Singleton with `static`</summary>
+
+Create a `Logger` class with a **single instance** obtainable via `Logger.getInstance()`. The constructor must be `private`.
+
+
+<pre><code class="language-java">public class Logger {
+    private static final Logger INSTANCE = new Logger();
+    private Logger() {}
+    public static Logger getInstance() { return INSTANCE; }
+
+    public void info(String msg) {
+        System.out.println(&quot;[INFO] &quot; + msg);
+    }
+}
+
+// usage
+Logger.getInstance().info(&quot;hi&quot;);
+</code></pre>
+
+
+Classic Singleton pattern. In Spring you'll do it with `@Bean` or `@Component` (default singleton scope).
+
+</details>
+
+<details>
+<summary>Ex 4.4 — Constructor chaining</summary>
+
+Create `Rectangle` with two constructors: one takes width and height, the other takes only the side (square). The "side" constructor must call the other via `this(...)`.
+
+
+<pre><code class="language-java">public class Rectangle {
+    private final double width, height;
+
+    public Rectangle(double width, double height) {
+        if (width &lt;= 0 || height &lt;= 0)
+            throw new IllegalArgumentException(&quot;non-positive dimension&quot;);
+        this.width = width;
+        this.height = height;
+    }
+
+    public Rectangle(double side) {
+        this(side, side);
+    }
+
+    public double area() { return width * height; }
+}
+</code></pre>
+
+
+</details>
+
+<details>
+<summary>Ex 4.5 — Static vs instance variables</summary>
+
+How many lines does this program print?
+
+
+<pre><code class="language-java">public class Mystery {
+    static int s = 0;
+    int i = 0;
+
+    public Mystery() { s++; i++; }
+
+    public static void main(String[] args) {
+        Mystery a = new Mystery();
+        Mystery b = new Mystery();
+        Mystery c = new Mystery();
+        System.out.println(a.s + &quot; &quot; + a.i);
+        System.out.println(b.s + &quot; &quot; + b.i);
+        System.out.println(c.s + &quot; &quot; + c.i);
+    }
+}
+</code></pre>
+
+
+Output:
+
+<pre><code>3 1
+3 1
+3 1
+</code></pre>
+
+
+`s` is shared across all instances (`static`): incremented three times. `i` is per instance: each sees it as 1.
+
+</details>
+
+<h2 id="take-aways">Take-aways</h2>
+<ul>
+<li><strong>Class</strong> = template, <strong>object</strong> = instance created with <code>new</code>.</li>
+<li>Constructor = initialization. <code>this(...)</code> calls another constructor in the same class.</li>
+<li><code>this</code> disambiguates field vs parameter.</li>
+<li><code>static</code> belongs to the class, not the instance.</li>
+<li>Visibility: <code>private</code> for internals, <code>public</code> for the contract. Expose the minimum.</li>
+<li>Organize into <strong>packages</strong> (folders) by functional domain.</li>
+</ul>
+<p>Next: inheritance, polymorphism, interfaces.</p>
+      <nav class="pager">
+<a href="03-strings-arrays-io.html" class="prev"><span class="label">← Previous</span><span class="title">Strings, arrays, console I/O</span></a>
+<a href="05-oop-inheritance-polymorphism.html" class="next"><span class="label">Next →</span><span class="title">OOP II — Inheritance, polymorphism, interfaces, abstract classes</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Java + Spring Zero to Hero</strong> — built as a continuous path. Static build from Markdown.</p><p>Open-content educational material. Code under the MIT license; use freely in your own projects.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body, {delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true, background: '#15191e', primaryColor: '#1d2530',
+      primaryTextColor: '#eef1f5', primaryBorderColor: '#f89820',
+      lineColor: '#6db33f', secondaryColor: '#1a1f25', tertiaryColor: '#222a33',
+      mainBkg: '#1d2530', nodeBorder: '#f89820', clusterBkg: '#0f1318',
+      clusterBorder: '#2a3340', titleColor: '#f89820',
+      edgeLabelBackground: '#0f1318', textColor: '#eef1f5',
+      labelTextColor: '#eef1f5', actorBkg: '#1d2530', actorBorder: '#f89820',
+      actorTextColor: '#f89820', actorLineColor: '#6db33f',
+      signalColor: '#eef1f5', signalTextColor: '#eef1f5',
+      labelBoxBkgColor: '#1d2530', labelBoxBorderColor: '#f89820',
+      noteBkgColor: '#fff6a8', noteTextColor: '#0f1318', noteBorderColor: '#fff6a8',
+      activationBkgColor: '#1d2530', activationBorderColor: '#f89820',
+      sequenceNumberColor: '#0f1318'
+    },
+    flowchart: { curve: 'basis', padding: 16 },
+    sequence: { mirrorActors: false, bottomMarginAdj: 10 },
+    fontFamily: 'JetBrains Mono, Cascadia Code, Consolas, monospace'
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Visualizzazione: matplotlib, seaborn, plotly — Data Science Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#3a4a7a',primaryTextColor:'#e8eef0',primaryBorderColor:'#5a6aa0',lineColor:'#8a9499',background:'#11171a'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">Σ</div>
+      <div>
+        <div class="brand-title">DATA SCIENCE</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">🇮🇹 IT</span><a href="../en/pages/12-visualization.html" class="lang-link" title="Switch to English">🇬🇧 EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-cos-e-data-science.html" class=""><span class="num">01</span>Cos&#x27;è la data science (e cosa non è)</a></li><li class="nav-item"><a href="../pages/02-python-per-data-science.html" class=""><span class="num">02</span>Python per data science: setup professionale</a></li><li class="nav-item"><a href="../pages/02b-matematica-essenziale.html" class=""><span class="num">02b</span>Matematica del liceo che ti serve davvero</a></li><li class="nav-item"><a href="../pages/03-algebra-lineare.html" class=""><span class="num">03</span>Algebra lineare per data scientist</a></li><li class="nav-item"><a href="../pages/04-calcolo-ottimizzazione.html" class=""><span class="num">04</span>Calcolo, gradiente e ottimizzazione</a></li><li class="nav-item"><a href="../pages/05-probabilita.html" class=""><span class="num">05</span>Probabilità: la lingua dell&#x27;incertezza</a></li><li class="nav-item"><a href="../pages/06-statistica-descrittiva.html" class=""><span class="num">06</span>Statistica descrittiva</a></li><li class="nav-item"><a href="../pages/07-statistica-inferenziale.html" class=""><span class="num">07</span>Statistica inferenziale e test di ipotesi</a></li><li class="nav-item"><a href="../pages/08-distribuzioni.html" class=""><span class="num">08</span>Distribuzioni di probabilità che incontrerai</a></li><li class="nav-item"><a href="../pages/09-numpy.html" class=""><span class="num">09</span>NumPy: pensare in array</a></li><li class="nav-item"><a href="../pages/10-pandas.html" class=""><span class="num">10</span>Pandas: il coltellino svizzero</a></li><li class="nav-item"><a href="../pages/11-sql.html" class=""><span class="num">11</span>SQL per data scientist</a></li><li class="nav-item"><a href="../pages/12-visualizzazione.html" class="active"><span class="num">12</span>Visualizzazione: matplotlib, seaborn, plotly</a></li><li class="nav-item"><a href="../pages/13-data-wrangling.html" class=""><span class="num">13</span>Pulizia e data wrangling</a></li><li class="nav-item"><a href="../pages/14-feature-engineering.html" class=""><span class="num">14</span>Feature engineering</a></li><li class="nav-item"><a href="../pages/15-eda.html" class=""><span class="num">15</span>EDA: Exploratory Data Analysis</a></li><li class="nav-item"><a href="../pages/16-ml-fondamenti.html" class=""><span class="num">16</span>ML: fondamenti — bias, varianza, validazione</a></li><li class="nav-item"><a href="../pages/17-regressione-lineare.html" class=""><span class="num">17</span>Regressione lineare e regolarizzazione</a></li><li class="nav-item"><a href="../pages/18-regressione-logistica.html" class=""><span class="num">18</span>Regressione logistica e classificazione</a></li><li class="nav-item"><a href="../pages/19-knn-naive-bayes-svm.html" class=""><span class="num">19</span>KNN, Naive Bayes, SVM</a></li><li class="nav-item"><a href="../pages/20-alberi-decisionali.html" class=""><span class="num">20</span>Alberi decisionali</a></li><li class="nav-item"><a href="../pages/21-random-forest-boosting.html" class=""><span class="num">21</span>Random Forest, Gradient Boosting, XGBoost</a></li><li class="nav-item"><a href="../pages/22-clustering.html" class=""><span class="num">22</span>Clustering: K-Means, DBSCAN, GMM, gerarchico</a></li><li class="nav-item"><a href="../pages/23-pca-tsne-umap.html" class=""><span class="num">23</span>Riduzione dimensionale: PCA, t-SNE, UMAP</a></li><li class="nav-item"><a href="../pages/24-metriche-validazione.html" class=""><span class="num">24</span>Metriche, cross-validation, leakage</a></li><li class="nav-item"><a href="../pages/25-sbilanciamento-classi.html" class=""><span class="num">25</span>Sbilanciamento di classi</a></li><li class="nav-item"><a href="../pages/26-hyperparameter-tuning.html" class=""><span class="num">26</span>Hyperparameter tuning</a></li><li class="nav-item"><a href="../pages/27-reti-neurali.html" class=""><span class="num">27</span>Reti neurali: dalle basi al backprop</a></li><li class="nav-item"><a href="../pages/28-pytorch.html" class=""><span class="num">28</span>PyTorch: dal toy model al training loop</a></li><li class="nav-item"><a href="../pages/29-cnn.html" class=""><span class="num">29</span>CNN per computer vision</a></li><li class="nav-item"><a href="../pages/30-rnn-lstm.html" class=""><span class="num">30</span>RNN, LSTM, GRU per sequenze</a></li><li class="nav-item"><a href="../pages/31-transformer.html" class=""><span class="num">31</span>Transformer e attention</a></li><li class="nav-item"><a href="../pages/32-nlp-llm.html" class=""><span class="num">32</span>NLP: dal text mining ai LLM</a></li><li class="nav-item"><a href="../pages/33-time-series.html" class=""><span class="num">33</span>Time series e forecasting</a></li><li class="nav-item"><a href="../pages/34-mlops.html" class=""><span class="num">34</span>MLOps: deployment, monitoring, drift</a></li><li class="nav-item"><a href="../pages/35-bayesian-causal.html" class=""><span class="num">35</span>Inferenza bayesiana e causale</a></li><li class="nav-item"><a href="../pages/36-capstone-carriera.html" class=""><span class="num">36</span>Capstone, portfolio, carriera</a></li><li class="nav-item"><a href="../pages/37-glossario.html" class=""><span class="num">37</span>Glossario A-Z</a></li><li class="nav-item"><a href="../pages/38-formulario.html" class=""><span class="num">38</span>Formulario: tutte le formule del percorso</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Tooling</span>
+        <span>Sezione 13 di 39</span>
+        <span class="level-tag level-int">Livello: intermedio</span>
+      </div>
+      <h1>Visualizzazione: matplotlib, seaborn, plotly</h1>
+      <p class="summary">Quale grafico per quale domanda, grammatica dei grafici, anti-pattern. Plottare bene non è cosmesi: è il modo in cui pensi.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Tooling</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>[[pandas]]</li></ul>
+  <div class="label">Strumenti</div>
+  <ul class="source-list"><li>matplotlib, seaborn, plotly</li></ul>
+</div>
+      <h2 id="perche-plottare-conta-piu-di-quanto-pensi">Perché plottare conta più di quanto pensi</h2>
+<p>Plottare non è "rendere il report bello". È <strong>come scopri pattern, outlier e bug nei tuoi dati</strong>. Anscombe's quartet (visto nella sezione descrittiva) lo dimostra: stesse statistiche, distribuzioni completamente diverse.</p>
+<blockquote>
+<p>Regola: davanti a un dataset sconosciuto, fai 10 plot prima di scrivere una riga di modello.</p>
+</blockquote>
+<h2 id="quale-grafico-per-quale-domanda">Quale grafico per quale domanda</h2>
+<pre><code class="language-mermaid">flowchart TD
+    Q[Cosa vuoi mostrare?] --&gt; D[Distribuzione&lt;br/&gt;di una variabile]
+    Q --&gt; C[Confronto&lt;br/&gt;tra gruppi]
+    Q --&gt; R[Relazione&lt;br/&gt;tra variabili]
+    Q --&gt; T[Trend&lt;br/&gt;nel tempo]
+    Q --&gt; P[Parte di&lt;br/&gt;un tutto]
+
+    D --&gt; H[Istogramma / KDE&lt;br/&gt;boxplot / violin]
+    C --&gt; B[Bar chart&lt;br/&gt;boxplot multipli]
+    R --&gt; S[Scatter / hexbin&lt;br/&gt;regressione]
+    T --&gt; L[Line chart&lt;br/&gt;area chart]
+    P --&gt; Pie[Stacked bar&lt;br/&gt;treemap · NO pie chart]
+</code></pre>
+<blockquote>
+<p><strong>Pie chart</strong> sono difficili da leggere — l'occhio compara male gli angoli. Usa stacked bar o tabella numerica.</p>
+</blockquote>
+<h2 id="matplotlib-le-basi">Matplotlib: le basi</h2>
+<p>L'object-oriented API è più potente di <code>plt.qualcosa()</code>. Imparala:</p>
+<pre><code class="language-python">import matplotlib.pyplot as plt
+import numpy as np
+
+fig, ax = plt.subplots(figsize=(8, 5))
+x = np.linspace(0, 10, 100)
+ax.plot(x, np.sin(x), label='sin', color='#7aa2ff', linewidth=2)
+ax.plot(x, np.cos(x), label='cos', color='#ffb347', linewidth=2)
+ax.set_xlabel(&quot;x&quot;)
+ax.set_ylabel(&quot;y&quot;)
+ax.set_title(&quot;seni e coseni&quot;)
+ax.legend()
+ax.grid(True, alpha=0.3)
+plt.tight_layout()
+plt.savefig(&quot;plot.png&quot;, dpi=150)
+plt.show()
+</code></pre>
+<h3 id="subplot-grid">Subplot grid</h3>
+<pre><code class="language-python">fig, axes = plt.subplots(2, 3, figsize=(12, 7), sharex=True)
+for i, ax in enumerate(axes.flat):
+    ax.hist(data[:, i], bins=30)
+    ax.set_title(f&quot;feature {i}&quot;)
+plt.tight_layout()
+</code></pre>
+<h3 id="stili">Stili</h3>
+<pre><code class="language-python">plt.style.use('seaborn-v0_8-darkgrid')   # tema gradevole
+plt.style.use('ggplot')
+plt.style.use('fivethirtyeight')
+plt.rcParams['figure.dpi'] = 110          # qualità default
+plt.rcParams['savefig.dpi'] = 150
+</code></pre>
+<h2 id="seaborn-grammatica-statistica">Seaborn: grammatica statistica</h2>
+<p>Costruito su matplotlib, sintassi più alta per grafici statistici:</p>
+<pre><code class="language-python">import seaborn as sns
+tips = sns.load_dataset('tips')
+
+sns.scatterplot(data=tips, x='total_bill', y='tip', hue='time', size='size')
+sns.histplot(tips, x='total_bill', hue='sex', element='step', stat='density')
+sns.boxplot(data=tips, x='day', y='total_bill', hue='smoker')
+sns.violinplot(data=tips, x='day', y='total_bill', inner='quartile')
+sns.regplot(data=tips, x='total_bill', y='tip')
+sns.pairplot(tips, hue='sex')              # matrice di scatter
+sns.heatmap(tips.corr(numeric_only=True), annot=True, cmap='RdBu_r', center=0)
+</code></pre>
+<h3 id="facetgrid-e-relplotdisplotcatplot">FacetGrid e relplot/displot/catplot</h3>
+<p>Per "small multiples":</p>
+<pre><code class="language-python">sns.relplot(
+    data=tips, x='total_bill', y='tip',
+    col='time', row='sex', hue='smoker',
+    height=3.5
+)
+</code></pre>
+<p>Crea una griglia di scatter per ogni combinazione. Il modo migliore per esplorare interazioni.</p>
+<h2 id="plotly-interattivita">Plotly: interattività</h2>
+<p>Quando vuoi tooltip, zoom, e condividere HTML:</p>
+<pre><code class="language-python">import plotly.express as px
+fig = px.scatter(tips, x='total_bill', y='tip', color='time', size='size',
+                 hover_data=['day'], trendline='ols')
+fig.show()
+fig.write_html(&quot;plot.html&quot;)
+</code></pre>
+<pre><code class="language-python">import plotly.graph_objects as go
+fig = go.Figure()
+fig.add_trace(go.Scatter(x=x, y=y, mode='lines+markers', name='sin'))
+fig.update_layout(template='plotly_dark')
+</code></pre>
+<blockquote>
+<p>Plotly è eccellente per dashboard e share. Per pubblicazioni statiche (paper, report PDF), matplotlib è più adatto.</p>
+</blockquote>
+<h2 id="la-grammatica-dei-grafici-leland-wilkinson-1999">La grammatica dei grafici (Leland Wilkinson, 1999)</h2>
+<p>Concetto fondamentale: ogni grafico è la combinazione di:</p>
+<ul>
+<li><strong>Dati</strong> (un DataFrame)</li>
+<li><strong>Mapping estetici</strong> (x, y, colore, dimensione, forma)</li>
+<li><strong>Geometrie</strong> (punti, linee, barre)</li>
+<li><strong>Statistica</strong> (identità, conteggio, media, regressione)</li>
+<li><strong>Scale</strong> (lineare, log, categoriale)</li>
+<li><strong>Faceting</strong> (small multiples)</li>
+<li><strong>Coordinate</strong> (cartesiane, polari)</li>
+</ul>
+<p>In R, <strong>ggplot2</strong> lo incarna esplicitamente. In Python, <strong>plotnine</strong> ne è un porting fedele:</p>
+<pre><code class="language-python">from plotnine import *
+(
+    ggplot(tips, aes(x='total_bill', y='tip', color='time'))
+    + geom_point(alpha=0.6)
+    + geom_smooth(method='lm')
+    + facet_wrap('~day')
+    + theme_minimal()
+)
+</code></pre>
+<h2 id="best-practice-e-anti-pattern">Best practice (e anti-pattern)</h2>
+<h3 id="buone-abitudini">Buone abitudini</h3>
+<ul>
+<li><strong>Titolo e label sempre presenti</strong>. Anche per uso interno.</li>
+<li><strong>Unità di misura</strong> in label: "Sales (€)" non "Sales".</li>
+<li><strong>Annotazioni</strong> per outlier o trend importanti.</li>
+<li><strong>Colori semantici</strong>: rosso = pericolo, verde = ok. Non l'inverso.</li>
+<li><strong>Daltonismo</strong>: usa palette consapevoli (<code>viridis</code>, <code>cividis</code>, <code>colorblind</code>).</li>
+</ul>
+<h3 id="anti-pattern">Anti-pattern</h3>
+<table>
+<thead>
+<tr>
+<th>❌</th>
+<th>✅</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Asse Y troncato che esagera differenze</td>
+<td>inizia da 0 quando ha senso</td>
+</tr>
+<tr>
+<td>Pie chart con 8 fette</td>
+<td>bar chart ordinato</td>
+</tr>
+<tr>
+<td>3D bar/pie chart</td>
+<td>2D, sempre</td>
+</tr>
+<tr>
+<td>Doppi assi Y</td>
+<td>due plot affiancati</td>
+</tr>
+<tr>
+<td>Colori a caso</td>
+<td>palette coerente</td>
+</tr>
+<tr>
+<td>Legenda copre dati</td>
+<td>sposta o reduce</td>
+</tr>
+<tr>
+<td>Grafico denso senza testo</td>
+<td>un grafico = una idea</td>
+</tr>
+</tbody>
+</table>
+<h2 id="visualizzazioni-per-ml-specifiche">Visualizzazioni per ML specifiche</h2>
+<h3 id="distribuzioni-e-overlay">Distribuzioni e overlay</h3>
+<p>Confrontare distribuzioni di train/test, o feature per classe:</p>
+<pre><code class="language-python">sns.histplot(data=df, x='age', hue='target', element='step', stat='density', common_norm=False)
+</code></pre>
+<h3 id="confusion-matrix">Confusion matrix</h3>
+<pre><code class="language-python">from sklearn.metrics import ConfusionMatrixDisplay
+ConfusionMatrixDisplay.from_predictions(y_true, y_pred, normalize='true')
+</code></pre>
+<h3 id="roc-e-pr-curve">ROC e PR curve</h3>
+<pre><code class="language-python">from sklearn.metrics import RocCurveDisplay, PrecisionRecallDisplay
+RocCurveDisplay.from_estimator(model, X_test, y_test)
+PrecisionRecallDisplay.from_estimator(model, X_test, y_test)
+</code></pre>
+<h3 id="learning-curve">Learning curve</h3>
+<pre><code class="language-python">from sklearn.model_selection import LearningCurveDisplay
+LearningCurveDisplay.from_estimator(model, X, y, train_sizes=np.linspace(0.1, 1, 10))
+</code></pre>
+<h3 id="feature-importance-shap">Feature importance / SHAP</h3>
+<pre><code class="language-python">import shap
+explainer = shap.TreeExplainer(model)
+shap_values = explainer.shap_values(X_sample)
+shap.summary_plot(shap_values, X_sample)   # beeswarm plot
+</code></pre>
+<h2 id="salvataggio-per-cosa-lo-usi">Salvataggio: per cosa lo usi?</h2>
+<table>
+<thead>
+<tr>
+<th>Uso</th>
+<th>Formato</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pubblicazione</td>
+<td>PDF o SVG</td>
+<td>vettoriale, scala bene</td>
+</tr>
+<tr>
+<td>Web statico</td>
+<td>PNG (dpi=150)</td>
+<td>universale</td>
+</tr>
+<tr>
+<td>Dashboard</td>
+<td>HTML (plotly)</td>
+<td>interattivo</td>
+</tr>
+<tr>
+<td>Slide</td>
+<td>PNG con sfondo trasparente</td>
+<td><code>transparent=True</code></td>
+</tr>
+<tr>
+<td>Print</td>
+<td>PDF a 300 dpi</td>
+<td>richiesto dagli editori</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-python">fig.savefig(&quot;plot.pdf&quot;, bbox_inches='tight')
+fig.savefig(&quot;plot.png&quot;, dpi=150, bbox_inches='tight', transparent=True)
+</code></pre>
+<h2 id="esercizi">Esercizi</h2>
+<details>
+<summary>Esercizio 1 — Iris pairplot</summary>
+
+
+<pre><code class="language-python">import seaborn as sns
+iris = sns.load_dataset('iris')
+sns.pairplot(iris, hue='species', diag_kind='kde')
+</code></pre>
+
+
+Quali coppie di feature separano meglio le specie? Suggerimento: petal_length vs petal_width.
+</details>
+
+<details>
+<summary>Esercizio 2 — Boxplot con outlier annotati</summary>
+
+
+<pre><code class="language-python">import seaborn as sns, matplotlib.pyplot as plt
+tips = sns.load_dataset('tips')
+fig, ax = plt.subplots(figsize=(8,5))
+sns.boxplot(data=tips, x='day', y='total_bill', ax=ax)
+# annota gli outlier
+import numpy as np
+for day in tips.day.unique():
+    sub = tips[tips.day == day].total_bill
+    q1, q3 = sub.quantile([.25,.75])
+    iqr = q3 - q1
+    out = sub[(sub &gt; q3+1.5*iqr) | (sub &lt; q1-1.5*iqr)]
+    for v in out:
+        ax.annotate(f&quot;€{v}&quot;, xy=(list(tips.day.unique()).index(day), v), fontsize=8)
+plt.show()
+</code></pre>
+
+</details>
+
+<details>
+<summary>Esercizio 3 — Heatmap calendario</summary>
+
+Per dati giornalieri, una "github contributions heatmap":
+
+
+<pre><code class="language-python">import pandas as pd, numpy as np, seaborn as sns, matplotlib.pyplot as plt
+rng = np.random.default_rng(0)
+dates = pd.date_range('2025-01-01', '2025-12-31')
+values = rng.poisson(3, len(dates))
+df = pd.DataFrame({'date': dates, 'v': values})
+df['week'] = df.date.dt.isocalendar().week
+df['dow']  = df.date.dt.dayofweek
+
+pivot = df.pivot_table(index='dow', columns='week', values='v', fill_value=0)
+fig, ax = plt.subplots(figsize=(16, 3))
+sns.heatmap(pivot, cmap='Greens', cbar=False, ax=ax)
+ax.set_yticklabels(['Lun','Mar','Mer','Gio','Ven','Sab','Dom'], rotation=0)
+plt.show()
+</code></pre>
+
+</details>
+
+<details>
+<summary>Esercizio 4 — Spot the outlier</summary>
+
+Plotta uno scatter e identifica visivamente gli outlier:
+
+
+<pre><code class="language-python">import numpy as np, matplotlib.pyplot as plt
+rng = np.random.default_rng(0)
+n = 200
+x = rng.normal(0, 1, n)
+y = 2*x + rng.normal(0, 0.5, n)
+y[::40] = rng.normal(8, 1, n//40)   # outlier ogni 40 punti
+
+fig, ax = plt.subplots(figsize=(7,5))
+ax.scatter(x, y, alpha=0.6)
+mask = np.abs(y - (2*x)) &gt; 4
+ax.scatter(x[mask], y[mask], color='red', edgecolor='k', s=80, label='outlier')
+ax.legend()
+plt.show()
+</code></pre>
+
+</details>
+
+<h2 id="cosa-portarti-via">Cosa portarti via</h2>
+<ul>
+<li>Distribuzione, confronto, relazione, trend, parte di tutto: 5 famiglie di grafici.</li>
+<li>Mai pie chart, mai 3D, mai assi truccati.</li>
+<li>Seaborn per esplorazione veloce, matplotlib per controllo fine, plotly per interattività.</li>
+<li>Salvataggi in vettoriale per pubblicazione, PNG per il web.</li>
+<li>Plotta 10 volte prima di modellare 1 volta.</li>
+</ul>
+<p>Prossimo: pulizia e wrangling dei dati — la parte 50% del lavoro reale.</p>
+      <nav class="pager">
+<a href="11-sql.html" class="prev"><span class="label">← Precedente</span><span class="title">SQL per data scientist</span></a>
+<a href="13-data-wrangling.html" class="next"><span class="label">Successivo →</span><span class="title">Pulizia e data wrangling</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Data Science Zero to Hero</strong> — percorso completo, in italiano, dalla matematica al deployment.</p><p>Materiale didattico aperto. Le formule sono lì per essere capite, non temute. Quando un concetto è oscuro, torna indietro: la data science è una piramide, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

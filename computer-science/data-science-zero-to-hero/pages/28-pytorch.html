@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PyTorch: dal toy model al training loop — Data Science Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#3a4a7a',primaryTextColor:'#e8eef0',primaryBorderColor:'#5a6aa0',lineColor:'#8a9499',background:'#11171a'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">Σ</div>
+      <div>
+        <div class="brand-title">DATA SCIENCE</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">🇮🇹 IT</span><a href="../en/pages/28-pytorch.html" class="lang-link" title="Switch to English">🇬🇧 EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-cos-e-data-science.html" class=""><span class="num">01</span>Cos&#x27;è la data science (e cosa non è)</a></li><li class="nav-item"><a href="../pages/02-python-per-data-science.html" class=""><span class="num">02</span>Python per data science: setup professionale</a></li><li class="nav-item"><a href="../pages/02b-matematica-essenziale.html" class=""><span class="num">02b</span>Matematica del liceo che ti serve davvero</a></li><li class="nav-item"><a href="../pages/03-algebra-lineare.html" class=""><span class="num">03</span>Algebra lineare per data scientist</a></li><li class="nav-item"><a href="../pages/04-calcolo-ottimizzazione.html" class=""><span class="num">04</span>Calcolo, gradiente e ottimizzazione</a></li><li class="nav-item"><a href="../pages/05-probabilita.html" class=""><span class="num">05</span>Probabilità: la lingua dell&#x27;incertezza</a></li><li class="nav-item"><a href="../pages/06-statistica-descrittiva.html" class=""><span class="num">06</span>Statistica descrittiva</a></li><li class="nav-item"><a href="../pages/07-statistica-inferenziale.html" class=""><span class="num">07</span>Statistica inferenziale e test di ipotesi</a></li><li class="nav-item"><a href="../pages/08-distribuzioni.html" class=""><span class="num">08</span>Distribuzioni di probabilità che incontrerai</a></li><li class="nav-item"><a href="../pages/09-numpy.html" class=""><span class="num">09</span>NumPy: pensare in array</a></li><li class="nav-item"><a href="../pages/10-pandas.html" class=""><span class="num">10</span>Pandas: il coltellino svizzero</a></li><li class="nav-item"><a href="../pages/11-sql.html" class=""><span class="num">11</span>SQL per data scientist</a></li><li class="nav-item"><a href="../pages/12-visualizzazione.html" class=""><span class="num">12</span>Visualizzazione: matplotlib, seaborn, plotly</a></li><li class="nav-item"><a href="../pages/13-data-wrangling.html" class=""><span class="num">13</span>Pulizia e data wrangling</a></li><li class="nav-item"><a href="../pages/14-feature-engineering.html" class=""><span class="num">14</span>Feature engineering</a></li><li class="nav-item"><a href="../pages/15-eda.html" class=""><span class="num">15</span>EDA: Exploratory Data Analysis</a></li><li class="nav-item"><a href="../pages/16-ml-fondamenti.html" class=""><span class="num">16</span>ML: fondamenti — bias, varianza, validazione</a></li><li class="nav-item"><a href="../pages/17-regressione-lineare.html" class=""><span class="num">17</span>Regressione lineare e regolarizzazione</a></li><li class="nav-item"><a href="../pages/18-regressione-logistica.html" class=""><span class="num">18</span>Regressione logistica e classificazione</a></li><li class="nav-item"><a href="../pages/19-knn-naive-bayes-svm.html" class=""><span class="num">19</span>KNN, Naive Bayes, SVM</a></li><li class="nav-item"><a href="../pages/20-alberi-decisionali.html" class=""><span class="num">20</span>Alberi decisionali</a></li><li class="nav-item"><a href="../pages/21-random-forest-boosting.html" class=""><span class="num">21</span>Random Forest, Gradient Boosting, XGBoost</a></li><li class="nav-item"><a href="../pages/22-clustering.html" class=""><span class="num">22</span>Clustering: K-Means, DBSCAN, GMM, gerarchico</a></li><li class="nav-item"><a href="../pages/23-pca-tsne-umap.html" class=""><span class="num">23</span>Riduzione dimensionale: PCA, t-SNE, UMAP</a></li><li class="nav-item"><a href="../pages/24-metriche-validazione.html" class=""><span class="num">24</span>Metriche, cross-validation, leakage</a></li><li class="nav-item"><a href="../pages/25-sbilanciamento-classi.html" class=""><span class="num">25</span>Sbilanciamento di classi</a></li><li class="nav-item"><a href="../pages/26-hyperparameter-tuning.html" class=""><span class="num">26</span>Hyperparameter tuning</a></li><li class="nav-item"><a href="../pages/27-reti-neurali.html" class=""><span class="num">27</span>Reti neurali: dalle basi al backprop</a></li><li class="nav-item"><a href="../pages/28-pytorch.html" class="active"><span class="num">28</span>PyTorch: dal toy model al training loop</a></li><li class="nav-item"><a href="../pages/29-cnn.html" class=""><span class="num">29</span>CNN per computer vision</a></li><li class="nav-item"><a href="../pages/30-rnn-lstm.html" class=""><span class="num">30</span>RNN, LSTM, GRU per sequenze</a></li><li class="nav-item"><a href="../pages/31-transformer.html" class=""><span class="num">31</span>Transformer e attention</a></li><li class="nav-item"><a href="../pages/32-nlp-llm.html" class=""><span class="num">32</span>NLP: dal text mining ai LLM</a></li><li class="nav-item"><a href="../pages/33-time-series.html" class=""><span class="num">33</span>Time series e forecasting</a></li><li class="nav-item"><a href="../pages/34-mlops.html" class=""><span class="num">34</span>MLOps: deployment, monitoring, drift</a></li><li class="nav-item"><a href="../pages/35-bayesian-causal.html" class=""><span class="num">35</span>Inferenza bayesiana e causale</a></li><li class="nav-item"><a href="../pages/36-capstone-carriera.html" class=""><span class="num">36</span>Capstone, portfolio, carriera</a></li><li class="nav-item"><a href="../pages/37-glossario.html" class=""><span class="num">37</span>Glossario A-Z</a></li><li class="nav-item"><a href="../pages/38-formulario.html" class=""><span class="num">38</span>Formulario: tutte le formule del percorso</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Deep Learning</span>
+        <span>Sezione 29 di 39</span>
+        <span class="level-tag level-adv">Livello: avanzato</span>
+      </div>
+      <h1>PyTorch: dal toy model al training loop</h1>
+      <p class="summary">Tensor, autograd, nn.Module, DataLoader, training loop, mixed precision, GPU. Il framework che oggi domina la ricerca e produzione.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Deep Learning</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>[[reti-neurali]]</li></ul>
+  <div class="label">Strumenti</div>
+  <ul class="source-list"><li>torch 2.x</li></ul>
+</div>
+      <h2 id="perche-pytorch">Perché PyTorch</h2>
+<p>Nel 2026, PyTorch è il framework dominante per ricerca (NeurIPS, ICML) e produzione (Meta, Tesla, OpenAI usano PyTorch). Sintassi Pythonica, autograd dinamico, ecosistema (Lightning, HuggingFace, torchvision).</p>
+<p>TensorFlow esiste ancora ma è in fase calante. JAX cresce nei laboratori ma è di nicchia.</p>
+<pre><code class="language-bash">pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+# (versione CUDA, controlla pytorch.org per il tuo sistema)
+</code></pre>
+<h2 id="tensor-numpy-con-superpoteri">Tensor: NumPy con superpoteri</h2>
+<pre><code class="language-python">import torch
+
+x = torch.tensor([1.0, 2.0, 3.0])
+x.dtype          # torch.float32
+x.shape          # torch.Size([3])
+x.device         # cpu
+
+# da numpy, e ritorno
+import numpy as np
+a = np.array([[1,2],[3,4]])
+t = torch.from_numpy(a)
+t.numpy()
+
+# operazioni come numpy
+x + x; x * x; x @ x
+torch.exp(x); torch.log(x); torch.sigmoid(x)
+</code></pre>
+<h3 id="gpu">GPU</h3>
+<pre><code class="language-python">device = 'cuda' if torch.cuda.is_available() else 'cpu'
+x = x.to(device)
+# o
+x = torch.randn(1000, 1000, device='cuda')
+</code></pre>
+<blockquote>
+<p>Su Mac M1+ usa <code>device='mps'</code> (Apple GPU acceleration).</p>
+</blockquote>
+<h2 id="autograd-differenziazione-automatica">Autograd: differenziazione automatica</h2>
+<p>Ogni tensor ha un flag <code>requires_grad</code>. Se True, PyTorch costruisce un <strong>grafo computazionale</strong> che permette di calcolare i gradienti via chain rule:</p>
+<pre><code class="language-python">x = torch.tensor(2.0, requires_grad=True)
+y = x**3 + 2*x
+y.backward()
+print(x.grad)        # dy/dx in x=2: 3*4 + 2 = 14
+</code></pre>
+<p>Per gradiente vettoriale:</p>
+<pre><code class="language-python">x = torch.randn(5, requires_grad=True)
+y = (x**2).sum()
+y.backward()
+print(x.grad)        # 2x
+</code></pre>
+<h2 id="nnmodule-il-building-block">nn.Module: il building block</h2>
+<pre><code class="language-python">import torch.nn as nn
+import torch.nn.functional as F
+
+class MLP(nn.Module):
+    def __init__(self, in_dim=784, hidden=128, n_classes=10):
+        super().__init__()
+        self.fc1 = nn.Linear(in_dim, hidden)
+        self.fc2 = nn.Linear(hidden, hidden)
+        self.fc3 = nn.Linear(hidden, n_classes)
+        self.dropout = nn.Dropout(0.2)
+
+    def forward(self, x):
+        x = F.relu(self.fc1(x))
+        x = self.dropout(x)
+        x = F.relu(self.fc2(x))
+        return self.fc3(x)               # logits, NO softmax
+
+model = MLP()
+print(model)
+print(sum(p.numel() for p in model.parameters()))   # # parametri
+</code></pre>
+<blockquote>
+<p>Convenzione: <code>forward()</code> ritorna <strong>logit</strong> (output lineare), non probabilità. <code>CrossEntropyLoss</code> applica softmax internamente.</p>
+</blockquote>
+<h2 id="dataset-e-dataloader">Dataset e DataLoader</h2>
+<pre><code class="language-python">from torch.utils.data import Dataset, DataLoader
+
+class MyDataset(Dataset):
+    def __init__(self, X, y):
+        self.X = torch.as_tensor(X, dtype=torch.float32)
+        self.y = torch.as_tensor(y, dtype=torch.long)
+    def __len__(self):
+        return len(self.X)
+    def __getitem__(self, idx):
+        return self.X[idx], self.y[idx]
+
+ds = MyDataset(X, y)
+loader = DataLoader(ds, batch_size=64, shuffle=True, num_workers=4, pin_memory=True)
+</code></pre>
+<p>Per dati standard, <code>torchvision.datasets</code> ne offre già di pronti (MNIST, CIFAR, ImageNet).</p>
+<h2 id="training-loop-completo">Training loop completo</h2>
+<pre><code class="language-python">import torch, torch.nn as nn
+from torch.optim import AdamW
+from torch.utils.data import DataLoader
+
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
+
+model = MLP().to(device)
+opt = AdamW(model.parameters(), lr=1e-3, weight_decay=1e-2)
+loss_fn = nn.CrossEntropyLoss()
+
+# scheduler (opzionale ma utile)
+from torch.optim.lr_scheduler import CosineAnnealingLR
+scheduler = CosineAnnealingLR(opt, T_max=10)
+
+for epoch in range(10):
+    model.train()
+    for xb, yb in train_loader:
+        xb, yb = xb.to(device), yb.to(device)
+        opt.zero_grad()                  # reset gradienti
+        logits = model(xb)               # forward
+        loss = loss_fn(logits, yb)
+        loss.backward()                  # backprop
+        opt.step()                       # update
+    scheduler.step()
+
+    # validation
+    model.eval()
+    correct = total = 0
+    with torch.no_grad():
+        for xb, yb in val_loader:
+            xb, yb = xb.to(device), yb.to(device)
+            pred = model(xb).argmax(dim=1)
+            correct += (pred == yb).sum().item()
+            total += yb.size(0)
+    print(f&quot;epoch {epoch+1}: val acc = {correct/total:.3f}&quot;)
+</code></pre>
+<p>Cose IMPORTANTI:</p>
+<ul>
+<li><strong><code>opt.zero_grad()</code> PRIMA del backward</strong>. Altrimenti i gradienti si accumulano.</li>
+<li><strong><code>model.train()</code></strong> abilita dropout e batchnorm in modalità train; <strong><code>model.eval()</code></strong> li disabilita.</li>
+<li><strong><code>torch.no_grad()</code></strong> nel validation: niente grafo, meno memoria.</li>
+</ul>
+<h2 id="mixed-precision-fp16">Mixed precision (FP16)</h2>
+<p>Per modelli grandi, FP16 riduce memoria 2× e accelera su GPU recenti:</p>
+<pre><code class="language-python">from torch.cuda.amp import autocast, GradScaler
+scaler = GradScaler()
+
+for xb, yb in loader:
+    xb, yb = xb.to(device), yb.to(device)
+    opt.zero_grad()
+    with autocast():
+        logits = model(xb)
+        loss = loss_fn(logits, yb)
+    scaler.scale(loss).backward()
+    scaler.step(opt)
+    scaler.update()
+</code></pre>
+<h2 id="salvare-e-caricare">Salvare e caricare</h2>
+<pre><code class="language-python"># salva
+torch.save(model.state_dict(), 'model.pt')
+
+# carica
+model = MLP()                            # ricrea architettura
+model.load_state_dict(torch.load('model.pt'))
+model.eval()
+</code></pre>
+<blockquote>
+<p>Salva <code>state_dict()</code>, non il modello intero. Più portabile.</p>
+</blockquote>
+<h2 id="pytorch-lightning-il-template">PyTorch Lightning: il template</h2>
+<p>Per progetti seri, <strong>PyTorch Lightning</strong> rimuove il boilerplate:</p>
+<pre><code class="language-python">import pytorch_lightning as L
+
+class LitModel(L.LightningModule):
+    def __init__(self):
+        super().__init__()
+        self.model = MLP()
+        self.loss = nn.CrossEntropyLoss()
+
+    def training_step(self, batch, idx):
+        x, y = batch
+        out = self.model(x)
+        loss = self.loss(out, y)
+        self.log('train_loss', loss)
+        return loss
+
+    def validation_step(self, batch, idx):
+        x, y = batch
+        out = self.model(x)
+        loss = self.loss(out, y)
+        acc = (out.argmax(1) == y).float().mean()
+        self.log_dict({'val_loss': loss, 'val_acc': acc}, prog_bar=True)
+
+    def configure_optimizers(self):
+        return torch.optim.AdamW(self.parameters(), lr=1e-3)
+
+trainer = L.Trainer(max_epochs=10, accelerator='auto')
+trainer.fit(LitModel(), train_loader, val_loader)
+</code></pre>
+<p>Gestisce automaticamente: GPU, distributed training, checkpoint, logging, mixed precision.</p>
+<h2 id="debug-tricks-utili">Debug: tricks utili</h2>
+<h3 id="stampa-shape">Stampa shape</h3>
+<pre><code class="language-python">class Debug(nn.Module):
+    def __init__(self, name=&quot;&quot;): super().__init__(); self.name = name
+    def forward(self, x):
+        print(f&quot;{self.name}: {tuple(x.shape)}&quot;)
+        return x
+
+# insert tra i layer per vedere dove cambia
+</code></pre>
+<h3 id="stampa-gradienti">Stampa gradienti</h3>
+<pre><code class="language-python">for name, p in model.named_parameters():
+    if p.grad is not None:
+        print(f&quot;{name}: ||grad|| = {p.grad.norm():.4f}&quot;)
+</code></pre>
+<p>Se vedi norme enormi → exploding, ridimensiona (<code>torch.nn.utils.clip_grad_norm_</code>). Se vedi norme zero → vanishing, cambia attivazione o init.</p>
+<h3 id="overfit-un-singolo-batch">Overfit un singolo batch</h3>
+<p>Pratica sacrosanta per validare il training loop:</p>
+<pre><code class="language-python"># pesca un singolo batch
+x, y = next(iter(train_loader))
+model = MLP()
+opt = AdamW(model.parameters(), lr=1e-3)
+loss_fn = nn.CrossEntropyLoss()
+for _ in range(200):
+    opt.zero_grad()
+    loss = loss_fn(model(x), y)
+    loss.backward()
+    opt.step()
+print(loss.item())   # deve scendere ~ 0
+</code></pre>
+<p>Se non riesci a overfittare un singolo batch, c'è un bug. Tipico: y non è long, x non è float, gradient non scorre.</p>
+<h2 id="esercizi">Esercizi</h2>
+<details>
+<summary>Esercizio 1 — MNIST in 30 righe</summary>
+
+
+<pre><code class="language-python">import torch, torch.nn as nn
+from torch.utils.data import DataLoader
+from torchvision import datasets, transforms
+
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
+
+tr = datasets.MNIST('.', train=True, download=True,
+                    transform=transforms.ToTensor())
+te = datasets.MNIST('.', train=False, transform=transforms.ToTensor())
+trl = DataLoader(tr, batch_size=128, shuffle=True)
+tel = DataLoader(te, batch_size=512)
+
+model = nn.Sequential(
+    nn.Flatten(), nn.Linear(28*28, 128), nn.ReLU(),
+    nn.Dropout(0.2), nn.Linear(128, 10)
+).to(device)
+opt = torch.optim.AdamW(model.parameters(), lr=1e-3)
+loss_fn = nn.CrossEntropyLoss()
+
+for e in range(5):
+    model.train()
+    for x, y in trl:
+        x, y = x.to(device), y.to(device)
+        opt.zero_grad()
+        loss = loss_fn(model(x), y); loss.backward(); opt.step()
+    model.eval()
+    with torch.no_grad():
+        c = sum((model(x.to(device)).argmax(1) == y.to(device)).sum().item()
+                for x, y in tel)
+    print(f&quot;epoch {e+1}: test acc {c/len(te):.3f}&quot;)
+</code></pre>
+
+
+Test accuracy ~97% in 5 epoche. 30 righe.
+</details>
+
+<details>
+<summary>Esercizio 2 — Implementa MSE da zero usando autograd</summary>
+
+
+<pre><code class="language-python">import torch
+x = torch.randn(100, 3)
+true_w = torch.tensor([1.5, -2.0, 0.5])
+y = x @ true_w + torch.randn(100)*0.1
+
+w = torch.zeros(3, requires_grad=True)
+lr = 0.05
+for _ in range(200):
+    pred = x @ w
+    loss = ((pred - y)**2).mean()
+    loss.backward()
+    with torch.no_grad():
+        w -= lr * w.grad
+        w.grad.zero_()
+print(w)   # ~ [1.5, -2.0, 0.5]
+</code></pre>
+
+</details>
+
+<details>
+<summary>Esercizio 3 — Modello che si rifiuta di overfit</summary>
+
+Prendi un singolo batch di 8 immagini MNIST. Allena un MLP per 500 step. La loss DEVE scendere vicino a zero. Se non scende: c'è un bug. Spesso: `requires_grad=False`, learning rate sbagliato, log/softmax conflict.
+</details>
+
+<details>
+<summary>Esercizio 4 — Salvataggio + ripresa training</summary>
+
+Allena per 3 epoche, salva, ricarica, continua per altre 3. Verifica continuità della loss.
+
+
+<pre><code class="language-python">ckpt = {
+    'model': model.state_dict(),
+    'opt': opt.state_dict(),
+    'epoch': epoch,
+}
+torch.save(ckpt, 'ckpt.pt')
+
+# poi
+ckpt = torch.load('ckpt.pt')
+model.load_state_dict(ckpt['model'])
+opt.load_state_dict(ckpt['opt'])
+</code></pre>
+
+</details>
+
+<h2 id="cosa-portarti-via">Cosa portarti via</h2>
+<ul>
+<li>Tensor = NumPy + autograd + GPU.</li>
+<li><code>nn.Module</code> per il modello, <code>forward()</code> ritorna logit.</li>
+<li>Training loop: zero_grad → forward → loss → backward → step.</li>
+<li><code>model.train()</code> / <code>model.eval()</code> cruciali (dropout, batchnorm).</li>
+<li>Overfit un singolo batch come smoke test.</li>
+<li>Lightning per progetti seri, riduce il boilerplate.</li>
+</ul>
+<p>Prossimo: CNN per computer vision.</p>
+      <nav class="pager">
+<a href="27-reti-neurali.html" class="prev"><span class="label">← Precedente</span><span class="title">Reti neurali: dalle basi al backprop</span></a>
+<a href="29-cnn.html" class="next"><span class="label">Successivo →</span><span class="title">CNN per computer vision</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Data Science Zero to Hero</strong> — percorso completo, in italiano, dalla matematica al deployment.</p><p>Materiale didattico aperto. Le formule sono lì per essere capite, non temute. Quando un concetto è oscuro, torna indietro: la data science è una piramide, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

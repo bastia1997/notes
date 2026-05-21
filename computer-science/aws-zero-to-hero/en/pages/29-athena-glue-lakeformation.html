@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Athena, Glue, Lake Formation — the AWS data lake — AWS Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#232f3e',primaryTextColor:'#ffffff',primaryBorderColor:'#ff9900',lineColor:'#8a99ad',background:'#0c1320'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">λ</div>
+      <div>
+        <div class="brand-title">AWS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/29-athena-glue-lakeformation.html" class="lang-link" title="Passa all'italiano">IT</a><span class="lang-active" title="English">EN</span></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="search... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-what-is-cloud-and-aws.html" class=""><span class="num">01</span>What the cloud is, and what AWS is</a></li><li class="nav-item"><a href="../pages/02-global-infrastructure.html" class=""><span class="num">02</span>Global infrastructure: Regions, AZs, Edge</a></li><li class="nav-item"><a href="../pages/03-account-root-billing.html" class=""><span class="num">03</span>AWS account, root user, billing</a></li><li class="nav-item"><a href="../pages/04-iam-fundamentals.html" class=""><span class="num">04</span>IAM — fundamentals (users, groups, roles, policies)</a></li><li class="nav-item"><a href="../pages/05-iam-advanced.html" class=""><span class="num">05</span>IAM advanced: conditional policies, STS, ABAC</a></li><li class="nav-item"><a href="../pages/06-cli-sdk-iac.html" class=""><span class="num">06</span>CLI, SDK, CloudShell, IaC primer</a></li><li class="nav-item"><a href="../pages/07-pricing-billing.html" class=""><span class="num">07</span>Pricing, billing, free tier, cost tools</a></li><li class="nav-item"><a href="../pages/08-organizations-multi-account.html" class=""><span class="num">08</span>AWS Organizations &amp; multi-account strategy</a></li><li class="nav-item"><a href="../pages/09-vpc-fundamentals.html" class=""><span class="num">09</span>VPC — fundamentals</a></li><li class="nav-item"><a href="../pages/10-vpc-advanced.html" class=""><span class="num">10</span>VPC advanced: peering, TGW, PrivateLink, endpoints</a></li><li class="nav-item"><a href="../pages/11-route53-cloudfront.html" class=""><span class="num">11</span>Route 53, CloudFront, Global Accelerator</a></li><li class="nav-item"><a href="../pages/12-hybrid-vpn-directconnect.html" class=""><span class="num">12</span>Hybrid: VPN, Direct Connect, PrivateLink</a></li><li class="nav-item"><a href="../pages/13-ec2-fundamentals.html" class=""><span class="num">13</span>EC2 — fundamentals (instances, AMIs, lifecycle)</a></li><li class="nav-item"><a href="../pages/14-ec2-advanced-spot-nitro.html" class=""><span class="num">14</span>EC2 advanced — Spot, Placement Groups, Nitro, hibernation</a></li><li class="nav-item"><a href="../pages/15-asg-elb.html" class=""><span class="num">15</span>Auto Scaling Groups + Elastic Load Balancing</a></li><li class="nav-item"><a href="../pages/16-lambda-deep-dive.html" class=""><span class="num">16</span>Lambda deep dive</a></li><li class="nav-item"><a href="../pages/17-containers-ecs-eks-fargate.html" class=""><span class="num">17</span>Containers: ECS, EKS, Fargate, ECR</a></li><li class="nav-item"><a href="../pages/18-specialty-compute.html" class=""><span class="num">18</span>Specialty compute: Batch, Lightsail, Outposts, Wavelength, Beanstalk</a></li><li class="nav-item"><a href="../pages/19-ebs-efs-fsx.html" class=""><span class="num">19</span>EBS, EFS, FSx, Instance Store</a></li><li class="nav-item"><a href="../pages/20-s3-deep-dive.html" class=""><span class="num">20</span>S3 — deep dive</a></li><li class="nav-item"><a href="../pages/21-archive-snow-gateway-backup.html" class=""><span class="num">21</span>Glacier, Snow, Storage Gateway, DataSync, AWS Backup</a></li><li class="nav-item"><a href="../pages/22-rds.html" class=""><span class="num">22</span>RDS — managed relational DBs (engines, Multi-AZ, replicas, Proxy)</a></li><li class="nav-item"><a href="../pages/23-aurora-deep-dive.html" class=""><span class="num">23</span>Aurora deep dive — shared storage, Serverless v2, Global Database</a></li><li class="nav-item"><a href="../pages/24-dynamodb-deep-dive.html" class=""><span class="num">24</span>DynamoDB deep dive — partitions, GSI, Streams, single-table</a></li><li class="nav-item"><a href="../pages/25-purpose-built-dbs.html" class=""><span class="num">25</span>Purpose-built DBs — ElastiCache, MemoryDB, Neptune, DocumentDB, Keyspaces, Timestream, QLDB</a></li><li class="nav-item"><a href="../pages/26-redshift-data-warehousing.html" class=""><span class="num">26</span>Redshift — MPP data warehousing and zero-ETL</a></li><li class="nav-item"><a href="../pages/27-sqs-sns-eventbridge.html" class=""><span class="num">27</span>SQS, SNS, EventBridge — messaging and events</a></li><li class="nav-item"><a href="../pages/28-step-functions-mq-appflow.html" class=""><span class="num">28</span>Step Functions, MQ, AppFlow — orchestration and integration</a></li><li class="nav-item"><a href="../pages/29-athena-glue-lakeformation.html" class="active"><span class="num">29</span>Athena, Glue, Lake Formation — the AWS data lake</a></li><li class="nav-item"><a href="../pages/30-emr-kinesis-msk.html" class=""><span class="num">30</span>EMR, Kinesis, MSK — big data and streaming</a></li><li class="nav-item"><a href="../pages/31-opensearch-quicksight.html" class=""><span class="num">31</span>OpenSearch and QuickSight — search and BI</a></li><li class="nav-item"><a href="../pages/32-sagemaker-overview.html" class=""><span class="num">32</span>SageMaker — the end-to-end ML platform</a></li><li class="nav-item"><a href="../pages/33-bedrock-ai-services.html" class=""><span class="num">33</span>Bedrock and AI services — managed GenAI and ML</a></li><li class="nav-item"><a href="../pages/34-iac-cloudformation-cdk-terraform.html" class=""><span class="num">34</span>IaC on AWS — CloudFormation, CDK, SAM, Terraform</a></li><li class="nav-item"><a href="../pages/35-ci-cd-pipeline.html" class=""><span class="num">35</span>CI/CD on AWS — CodePipeline, CodeBuild, CodeDeploy, CodeCatalyst</a></li><li class="nav-item"><a href="../pages/36-observability-cloudwatch-xray.html" class=""><span class="num">36</span>Observability — CloudWatch, X-Ray, CloudTrail, Config, SSM</a></li><li class="nav-item"><a href="../pages/37-kms-secrets-acm.html" class=""><span class="num">37</span>Encryption — KMS, CloudHSM, Secrets Manager, Parameter Store, ACM</a></li><li class="nav-item"><a href="../pages/38-waf-shield-guardduty-inspector.html" class=""><span class="num">38</span>Threat detection — WAF, Shield, GuardDuty, Inspector, Macie, Security Hub</a></li><li class="nav-item"><a href="../pages/39-governance-org-controltower-identitycenter.html" class=""><span class="num">39</span>Governance — Organizations, Control Tower, Identity Center</a></li><li class="nav-item"><a href="../pages/40-migration-mgn-dms-snow.html" class=""><span class="num">40</span>Migration — MGN, DMS, Snow family, Discovery, Migration Hub</a></li><li class="nav-item"><a href="../pages/41-cost-optimization-finops.html" class=""><span class="num">41</span>Cost optimization and FinOps</a></li><li class="nav-item"><a href="../pages/42-well-architected.html" class=""><span class="num">42</span>Well-Architected Framework — 6 pillars, lenses, review</a></li><li class="nav-item"><a href="../pages/43-architecture-patterns.html" class=""><span class="num">43</span>Architecture patterns — 3-tier, serverless, event-driven, microservices</a></li><li class="nav-item"><a href="../pages/44-disaster-recovery-multi-region.html" class=""><span class="num">44</span>Disaster Recovery and Multi-Region</a></li><li class="nav-item"><a href="../pages/45-reference-architectures.html" class=""><span class="num">45</span>Real-world reference architectures</a></li><li class="nav-item"><a href="../pages/46-advanced-networking.html" class=""><span class="num">46</span>Advanced networking deep dive</a></li><li class="nav-item"><a href="../pages/47-containers-deep-dive.html" class=""><span class="num">47</span>Containers deep dive — EKS, Karpenter, service mesh</a></li><li class="nav-item"><a href="../pages/48-serverless-patterns.html" class=""><span class="num">48</span>Serverless patterns deep dive</a></li><li class="nav-item"><a href="../pages/49-genai-rag-agents.html" class=""><span class="num">49</span>Generative AI on AWS — RAG and Agents</a></li><li class="nav-item"><a href="../pages/50-aws-certifications.html" class=""><span class="num">50</span>AWS Certifications — roadmap and study guide</a></li><li class="nav-item"><a href="../pages/51-glossary-az.html" class=""><span class="num">51</span>Glossary A-Z</a></li><li class="nav-item"><a href="../pages/52-cheatsheet.html" class=""><span class="num">52</span>Cheat sheet: services, limits, instance families</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Analytics</span>
+        <span>Section 29 of 52</span>
+        <span class="level-tag level-int">Level: intermediate</span>
+      </div>
+      <h1>Athena, Glue, Lake Formation — the AWS data lake</h1>
+      <p class="summary">Serverless SQL over S3 with Athena, catalog and ETL with Glue, fine-grained security with Lake Formation. Bronze/silver/gold architecture.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Analytics</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>section 20</li><li>section 22</li></ul>
+  <div class="label">Tools / references</div>
+  <ul class="source-list"><li>Athena SQL</li><li>Glue Crawler</li><li>Lake Formation</li></ul>
+</div>
+      <p>A <strong>data lake</strong> is "all your raw data in S3 + a catalog + a SQL engine". AWS delivers this with three services that compose: <strong>Glue</strong> (catalog + ETL), <strong>Athena</strong> (query), <strong>Lake Formation</strong> (security). Together they replace many classical data warehouses when data is semi-structured and query patterns irregular.</p>
+<h2 id="1-medallion-architecture-bronzesilvergold">1. Medallion architecture (bronze/silver/gold)</h2>
+<pre><code class="language-mermaid">flowchart LR
+  Sources[App logs, CDC, IoT] --&gt; Bronze[(S3 bronze&lt;br&gt;raw JSON/CSV)]
+  Bronze --&gt;|Glue ETL| Silver[(S3 silver&lt;br&gt;clean Parquet)]
+  Silver --&gt;|Glue ETL| Gold[(S3 gold&lt;br&gt;aggregated Parquet)]
+  Gold --&gt; Athena[Athena SQL]
+  Gold --&gt; QS[QuickSight]
+  Silver --&gt; SM[SageMaker]
+  GC[Glue Catalog] -.metadata.-&gt; Athena
+  LF[Lake Formation] -.policy.-&gt; Athena
+</code></pre>
+<p>Rule: <strong>immutable bronze</strong> (always rollback-able), <strong>silver normalized partitioned Parquet</strong>, <strong>gold consumption-optimized</strong> (BI, ML feature store).</p>
+<h2 id="2-athena-serverless-sql-on-s3">2. Athena — serverless SQL on S3</h2>
+<p>Athena is <strong>managed Trino</strong> (formerly Presto). Key points:</p>
+<ul>
+<li><strong>Pricing</strong>: $5 per <strong>scanned</strong> TB after compression. A poorly partitioned query can cost €€€.</li>
+<li><strong>Partition pruning</strong>: <code>WHERE dt='2026-05-21'</code> on a partitioned table reads only that partition.</li>
+<li><strong>Columnar formats</strong> (Parquet/ORC): read only requested columns. <strong>~100x cheaper</strong> than JSON/CSV.</li>
+<li><strong>CTAS</strong> (<code>CREATE TABLE AS SELECT</code>): materializes results to S3 in optimized format.</li>
+<li><strong>Federated query</strong>: also reads from RDS, DynamoDB, Redshift, on-prem (Lambda connectors).</li>
+<li><strong>Athena for Spark</strong>: serverless PySpark notebooks, catalog integration.</li>
+<li><strong>Query Result Reuse</strong>: caches results up to 7 days → identical query = $0.</li>
+</ul>
+<h3 id="example">Example</h3>
+<pre><code class="language-sql">-- External table over S3 Parquet partitioned by day
+CREATE EXTERNAL TABLE orders (
+  order_id string, user_id bigint, amount decimal(10,2)
+)
+PARTITIONED BY (dt string)
+STORED AS PARQUET
+LOCATION 's3://lake-silver/orders/';
+
+MSCK REPAIR TABLE orders;  -- registers existing partitions
+
+-- Query with partition pruning: scans ~50 MB instead of 50 GB
+SELECT user_id, SUM(amount)
+FROM orders
+WHERE dt BETWEEN '2026-05-01' AND '2026-05-21'
+GROUP BY user_id;
+</code></pre>
+<h2 id="3-glue-data-catalog-etl">3. Glue — Data Catalog + ETL</h2>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Data Catalog</strong></td>
+<td>Managed Hive Metastore; shared by Athena, EMR, Redshift Spectrum, SageMaker</td>
+</tr>
+<tr>
+<td><strong>Crawler</strong></td>
+<td>Scans S3/JDBC and infers schema + partitions → populates the catalog</td>
+</tr>
+<tr>
+<td><strong>Glue ETL</strong></td>
+<td>Managed Spark or Python Shell jobs, pay-per-DPU-second</td>
+</tr>
+<tr>
+<td><strong>Glue Studio</strong></td>
+<td>Visual drag-and-drop UI generating PySpark code</td>
+</tr>
+<tr>
+<td><strong>DataBrew</strong></td>
+<td>No-code prep (250+ transformations), for analysts</td>
+</tr>
+<tr>
+<td><strong>Glue Streaming</strong></td>
+<td>Continuous jobs over Kinesis/MSK sources</td>
+</tr>
+<tr>
+<td><strong>Job Bookmark</strong></td>
+<td>Incremental state: only processes new files since last run</td>
+</tr>
+</tbody>
+</table>
+<p>Common trap: <strong>crawlers cost money</strong> if run every 5 minutes on large buckets. Often better to <strong>register partitions manually</strong> (<code>ALTER TABLE ADD PARTITION</code>) from the ETL job that just produced them.</p>
+<h2 id="4-lake-formation-fine-grained-security">4. Lake Formation — fine-grained security</h2>
+<p>Without Lake Formation, S3+Glue access control is "bucket or nothing". With LF you can grant:</p>
+<ul>
+<li><strong>Database / Table / Column level</strong>: hide sensitive columns.</li>
+<li><strong>Row-level filter</strong>: WHERE clause injected automatically (e.g. each user sees only their country's records).</li>
+<li><strong>Cell-level masking</strong>: hash or redact at read time.</li>
+<li><strong>LF-Tags</strong>: tag resources (<code>sensitivity=pii</code>) and grant permissions by tag.</li>
+<li><strong>Cross-account data sharing</strong>: data mesh pattern — producer shares a database, consumers "link" it in their own account.</li>
+</ul>
+<p>LF integrates transparently with Athena, Redshift Spectrum, EMR, Glue, QuickSight, SageMaker.</p>
+<h2 id="5-costs-the-most-expensive-mistake">5. Costs: the most expensive mistake</h2>
+<p>10 TB bucket of gzip JSON logs. A <code>SELECT *</code> without WHERE costs <strong>$50</strong>. Same data in <strong>Parquet + Snappy + partitioned by day</strong>, same selective query costs <strong>$0.05</strong>. 1000x difference. Lesson: <strong>never query JSON/CSV with Athena for recurring analytics</strong>. Convert to Parquet with Glue once.</p>
+<h2 id="6-open-table-formats-iceberg-hudi-delta">6. Open Table Formats: Iceberg, Hudi, Delta</h2>
+<p>Athena, Glue and EMR natively support <strong>Apache Iceberg</strong>, <strong>Hudi</strong>, <strong>Delta Lake</strong>. They add ACID, time travel, schema evolution, upsert over S3 without rewriting whole partitions. Iceberg is the AWS-recommended default since 2024.</p>
+<h2 id="7-adoption-pattern">7. Adoption pattern</h2>
+<ol>
+<li><strong>Logs in S3 + Glue Crawler + Athena</strong>: already a basic data lake, zero cost at rest.</li>
+<li><strong>Add Glue ETL</strong> for bronze → silver partitioned Parquet.</li>
+<li><strong>Lake Formation</strong> when multiple teams or sensitive data arrive.</li>
+<li><strong>Iceberg</strong> when updates/deletes (GDPR) or CDC pipelines are needed.</li>
+</ol>
+<h2 id="8-exercise">8. Exercise</h2>
+<details>
+<summary>You have 5 TB of JSON logs in S3 and Athena costs $250/month. What do you do?</summary>
+
+Two actions: (1) **Glue ETL** converting logs to **Snappy Parquet partitioned by `dt`**; reduces size ~5-10x and enables partition pruning. (2) Force queries to always include `WHERE dt=...`. Typical result: from $250 to $5-15/month. Bonus: enable **Query Result Reuse** for recurring dashboards.
+</details>
+
+<details>
+<summary>Grant access to "orders" to 30 analysts, but `customer_email` must be hidden for 25 of them. How?</summary>
+
+**Lake Formation column-level grant**: create two IAM groups (analyst, analyst-pii). Grant `SELECT` on all columns except `customer_email` to analyst, full `SELECT` to analyst-pii. Athena applies the filter automatically. Without LF you'd build two views and manage S3 grants manually — doesn't scale.
+</details>
+
+<blockquote>
+<p><strong>Summary</strong>: Athena = serverless SQL over S3 ($5/scanned-TB), Glue = catalog + Spark ETL + crawler, Lake Formation = fine-grained security (column/row/cell). Bronze/silver/gold architecture in partitioned Parquet is the reference pattern; Iceberg for ACID and CDC.</p>
+</blockquote>
+      <nav class="pager">
+<a href="28-step-functions-mq-appflow.html" class="prev"><span class="label">← Previous</span><span class="title">Step Functions, MQ, AppFlow — orchestration and integration</span></a>
+<a href="30-emr-kinesis-msk.html" class="next"><span class="label">Next →</span><span class="title">EMR, Kinesis, MSK — big data and streaming</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>AWS Zero to Hero</strong> — complete path, in English, from primitives to advanced architecture.</p><p>Open educational material. No sponsorships, no affiliate links, no affiliation with AWS. When a concept is unclear, go back: AWS is a pyramid of primitives, not a tree you skip across.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+</body>
+</html>

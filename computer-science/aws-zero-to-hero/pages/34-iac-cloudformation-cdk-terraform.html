@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IaC su AWS — CloudFormation, CDK, SAM, Terraform — AWS Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#232f3e',primaryTextColor:'#ffffff',primaryBorderColor:'#ff9900',lineColor:'#8a99ad',background:'#0c1320'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">λ</div>
+      <div>
+        <div class="brand-title">AWS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">IT</span><a href="../en/pages/34-iac-cloudformation-cdk-terraform.html" class="lang-link" title="Switch to English">EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-cos-e-aws-cloud.html" class=""><span class="num">01</span>Cos&#x27;è il cloud e cos&#x27;è AWS</a></li><li class="nav-item"><a href="../pages/02-infrastruttura-globale.html" class=""><span class="num">02</span>Infrastruttura globale: Region, AZ, Edge</a></li><li class="nav-item"><a href="../pages/03-account-root-billing.html" class=""><span class="num">03</span>Account AWS, utente root, billing</a></li><li class="nav-item"><a href="../pages/04-iam-fondamenti.html" class=""><span class="num">04</span>IAM — fondamenti (utenti, gruppi, ruoli, policy)</a></li><li class="nav-item"><a href="../pages/05-iam-avanzato.html" class=""><span class="num">05</span>IAM avanzato: policy condizionali, STS, ABAC</a></li><li class="nav-item"><a href="../pages/06-cli-sdk-iac.html" class=""><span class="num">06</span>CLI, SDK, CloudShell, IaC primer</a></li><li class="nav-item"><a href="../pages/07-pricing-billing.html" class=""><span class="num">07</span>Pricing, billing, free tier, cost tools</a></li><li class="nav-item"><a href="../pages/08-organizations-multi-account.html" class=""><span class="num">08</span>AWS Organizations &amp; strategia multi-account</a></li><li class="nav-item"><a href="../pages/09-vpc-fondamenti.html" class=""><span class="num">09</span>VPC — fondamenti</a></li><li class="nav-item"><a href="../pages/10-vpc-avanzato.html" class=""><span class="num">10</span>VPC avanzato: peering, TGW, PrivateLink, endpoint</a></li><li class="nav-item"><a href="../pages/11-route53-cloudfront.html" class=""><span class="num">11</span>Route 53, CloudFront, Global Accelerator</a></li><li class="nav-item"><a href="../pages/12-hybrid-vpn-directconnect.html" class=""><span class="num">12</span>Hybrid: VPN, Direct Connect, PrivateLink</a></li><li class="nav-item"><a href="../pages/13-ec2-fondamenti.html" class=""><span class="num">13</span>EC2 — fondamenti (istanze, AMI, lifecycle)</a></li><li class="nav-item"><a href="../pages/14-ec2-avanzato-spot-nitro.html" class=""><span class="num">14</span>EC2 avanzato — Spot, Placement Groups, Nitro, hibernation</a></li><li class="nav-item"><a href="../pages/15-asg-elb.html" class=""><span class="num">15</span>Auto Scaling Groups + Elastic Load Balancing</a></li><li class="nav-item"><a href="../pages/16-lambda-deep-dive.html" class=""><span class="num">16</span>Lambda deep dive</a></li><li class="nav-item"><a href="../pages/17-containers-ecs-eks-fargate.html" class=""><span class="num">17</span>Containers: ECS, EKS, Fargate, ECR</a></li><li class="nav-item"><a href="../pages/18-specialty-compute.html" class=""><span class="num">18</span>Specialty compute: Batch, Lightsail, Outposts, Wavelength, Beanstalk</a></li><li class="nav-item"><a href="../pages/19-ebs-efs-fsx.html" class=""><span class="num">19</span>EBS, EFS, FSx, Instance Store</a></li><li class="nav-item"><a href="../pages/20-s3-deep-dive.html" class=""><span class="num">20</span>S3 — deep dive</a></li><li class="nav-item"><a href="../pages/21-archive-snow-gateway-backup.html" class=""><span class="num">21</span>Glacier, Snow, Storage Gateway, DataSync, AWS Backup</a></li><li class="nav-item"><a href="../pages/22-rds.html" class=""><span class="num">22</span>RDS — relational DB managed (engines, Multi-AZ, replicas, Proxy)</a></li><li class="nav-item"><a href="../pages/23-aurora-deep-dive.html" class=""><span class="num">23</span>Aurora deep dive — storage condiviso, Serverless v2, Global Database</a></li><li class="nav-item"><a href="../pages/24-dynamodb-deep-dive.html" class=""><span class="num">24</span>DynamoDB deep dive — partition, GSI, Streams, single-table</a></li><li class="nav-item"><a href="../pages/25-purpose-built-dbs.html" class=""><span class="num">25</span>Purpose-built DB — ElastiCache, MemoryDB, Neptune, DocumentDB, Keyspaces, Timestream, QLDB</a></li><li class="nav-item"><a href="../pages/26-redshift-data-warehousing.html" class=""><span class="num">26</span>Redshift — data warehousing MPP e zero-ETL</a></li><li class="nav-item"><a href="../pages/27-sqs-sns-eventbridge.html" class=""><span class="num">27</span>SQS, SNS, EventBridge — messaging ed eventi</a></li><li class="nav-item"><a href="../pages/28-step-functions-mq-appflow.html" class=""><span class="num">28</span>Step Functions, MQ, AppFlow — orchestrazione e integrazione</a></li><li class="nav-item"><a href="../pages/29-athena-glue-lakeformation.html" class=""><span class="num">29</span>Athena, Glue, Lake Formation — il data lake AWS</a></li><li class="nav-item"><a href="../pages/30-emr-kinesis-msk.html" class=""><span class="num">30</span>EMR, Kinesis, MSK — big data e streaming</a></li><li class="nav-item"><a href="../pages/31-opensearch-quicksight.html" class=""><span class="num">31</span>OpenSearch e QuickSight — search e BI</a></li><li class="nav-item"><a href="../pages/32-sagemaker-overview.html" class=""><span class="num">32</span>SageMaker — la piattaforma ML end-to-end</a></li><li class="nav-item"><a href="../pages/33-bedrock-ai-services.html" class=""><span class="num">33</span>Bedrock e AI services — GenAI e ML managed</a></li><li class="nav-item"><a href="../pages/34-iac-cloudformation-cdk-terraform.html" class="active"><span class="num">34</span>IaC su AWS — CloudFormation, CDK, SAM, Terraform</a></li><li class="nav-item"><a href="../pages/35-ci-cd-pipeline.html" class=""><span class="num">35</span>CI/CD su AWS — CodePipeline, CodeBuild, CodeDeploy, CodeCatalyst</a></li><li class="nav-item"><a href="../pages/36-observability-cloudwatch-xray.html" class=""><span class="num">36</span>Observability — CloudWatch, X-Ray, CloudTrail, Config, SSM</a></li><li class="nav-item"><a href="../pages/37-kms-secrets-acm.html" class=""><span class="num">37</span>Crittografia — KMS, CloudHSM, Secrets Manager, Parameter Store, ACM</a></li><li class="nav-item"><a href="../pages/38-waf-shield-guardduty-inspector.html" class=""><span class="num">38</span>Threat detection — WAF, Shield, GuardDuty, Inspector, Macie, Security Hub</a></li><li class="nav-item"><a href="../pages/39-governance-org-controltower-identitycenter.html" class=""><span class="num">39</span>Governance — Organizations, Control Tower, Identity Center</a></li><li class="nav-item"><a href="../pages/40-migration-mgn-dms-snow.html" class=""><span class="num">40</span>Migration — MGN, DMS, Snow family, Discovery, Migration Hub</a></li><li class="nav-item"><a href="../pages/41-cost-optimization-finops.html" class=""><span class="num">41</span>Cost optimization e FinOps</a></li><li class="nav-item"><a href="../pages/42-well-architected.html" class=""><span class="num">42</span>Well-Architected Framework — 6 pillar, lens, review</a></li><li class="nav-item"><a href="../pages/43-architecture-patterns.html" class=""><span class="num">43</span>Architecture patterns — 3-tier, serverless, event-driven, microservices</a></li><li class="nav-item"><a href="../pages/44-disaster-recovery-multi-region.html" class=""><span class="num">44</span>Disaster Recovery e Multi-Region</a></li><li class="nav-item"><a href="../pages/45-reference-architectures.html" class=""><span class="num">45</span>Reference architectures real-world</a></li><li class="nav-item"><a href="../pages/46-advanced-networking.html" class=""><span class="num">46</span>Advanced networking deep dive</a></li><li class="nav-item"><a href="../pages/47-containers-deep-dive.html" class=""><span class="num">47</span>Containers deep dive — EKS, Karpenter, service mesh</a></li><li class="nav-item"><a href="../pages/48-serverless-patterns.html" class=""><span class="num">48</span>Serverless patterns deep dive</a></li><li class="nav-item"><a href="../pages/49-genai-rag-agents.html" class=""><span class="num">49</span>Generative AI su AWS — RAG e Agents</a></li><li class="nav-item"><a href="../pages/50-certificazioni-aws.html" class=""><span class="num">50</span>Certificazioni AWS — roadmap e study guide</a></li><li class="nav-item"><a href="../pages/51-glossario-az.html" class=""><span class="num">51</span>Glossario A-Z</a></li><li class="nav-item"><a href="../pages/52-cheatsheet.html" class=""><span class="num">52</span>Cheat sheet: servizi, limiti, instance families</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">DevOps</span>
+        <span>Sezione 34 di 52</span>
+        <span class="level-tag level-int">Livello: intermedio</span>
+      </div>
+      <h1>IaC su AWS — CloudFormation, CDK, SAM, Terraform</h1>
+      <p class="summary">Quattro modi di descrivere infrastruttura come codice su AWS: confronto, idiomi, gotcha (drift, stati remoti, capabilities).</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>DevOps</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>sezione 6</li></ul>
+  <div class="label">Strumenti / riferimenti</div>
+  <ul class="source-list"><li>AWS CLI</li><li>AWS CDK</li><li>Terraform</li><li>SAM CLI</li></ul>
+</div>
+      <p>L'infrastruttura cliccata a mano è il debito tecnico più costoso che esista: nessuno ricorda perché quel security group ha la porta 1521 aperta, e il giorno della certificazione SOC2 paghi caro. L'IaC è la cura: ogni risorsa nasce da un file di testo versionato in git, riproducibile, revisionabile in PR. Su AWS hai quattro opzioni mainstream — vediamo quando scegliere quale.</p>
+<h2 id="1-cloudformation-cfn-il-fondamento">1. CloudFormation (CFN) — il fondamento</h2>
+<p>Servizio nativo AWS: template YAML/JSON che descrivono uno <strong>stack</strong> (un insieme di risorse gestite insieme). CFN tiene lo stato per te (nessun state file da gestire) e fa rollback automatico in caso di errore.</p>
+<pre><code class="language-yaml">AWSTemplateFormatVersion: '2010-09-09'
+Parameters:
+  EnvName:
+    Type: String
+    AllowedValues: [dev, prod]
+Resources:
+  Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub &quot;myapp-${EnvName}-${AWS::AccountId}&quot;
+      VersioningConfiguration:
+        Status: Enabled
+Outputs:
+  BucketArn:
+    Value: !GetAtt Bucket.Arn
+    Export:
+      Name: !Sub &quot;${EnvName}-bucket-arn&quot;
+</code></pre>
+<p>Concetti chiave: <strong>Change Set</strong> (preview del diff prima di apply), <strong>Nested Stack</strong> (modularità), <strong>StackSet</strong> (deploy multi-account/multi-region da un management account), <strong>Transform</strong> (es. <code>AWS::Serverless</code> per SAM, <code>AWS::Include</code>), <strong>Custom Resource</strong> (Lambda che gestisce risorse non native), <strong>Drift Detection</strong> (rileva modifiche fuori da CFN).</p>
+<h2 id="2-capabilities-termination-protection-drift">2. Capabilities, Termination Protection, Drift</h2>
+<p>Per creare risorse IAM serve <code>--capabilities CAPABILITY_IAM</code> o <code>CAPABILITY_NAMED_IAM</code>; per macro/SAM serve <code>CAPABILITY_AUTO_EXPAND</code>. Senza queste, CFN rifiuta — è un consenso esplicito che la pipeline può creare permessi.</p>
+<table>
+<thead>
+<tr>
+<th>Concetto</th>
+<th>Cosa fa</th>
+<th>Quando importante</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Change Set</td>
+<td>Preview del diff</td>
+<td>PR review prima di apply prod</td>
+</tr>
+<tr>
+<td>Termination Protection</td>
+<td>Blocca delete dello stack</td>
+<td>Stack prod root</td>
+</tr>
+<tr>
+<td>Drift Detection</td>
+<td>Confronta CFN vs reale</td>
+<td>Audit periodico</td>
+</tr>
+<tr>
+<td>DeletionPolicy: Retain</td>
+<td>Tiene la risorsa se lo stack muore</td>
+<td>DB, bucket dati</td>
+</tr>
+<tr>
+<td>UpdateReplacePolicy: Snapshot</td>
+<td>Snapshot prima di replace</td>
+<td>RDS</td>
+</tr>
+</tbody>
+</table>
+<h2 id="3-aws-cdk-codice-vero">3. AWS CDK — codice vero</h2>
+<p>CDK è un wrapper in TypeScript/Python/Java/.NET/Go che <strong>sintetizza</strong> template CloudFormation. Il vantaggio: hai costrutti tipizzati, riusabili, con default sani.</p>
+<p>Tre livelli:
+- <strong>L1</strong> (<code>CfnBucket</code>): 1:1 con CFN, raw.
+- <strong>L2</strong> (<code>s3.Bucket</code>): astrazione idiomatica con metodi come <code>.grantRead(role)</code>.
+- <strong>L3 / Pattern</strong> (<code>ApplicationLoadBalancedFargateService</code>): pattern completi multi-risorsa.</p>
+<pre><code class="language-typescript">const bucket = new s3.Bucket(this, 'Data', {
+  encryption: s3.BucketEncryption.S3_MANAGED,
+  blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
+  removalPolicy: RemovalPolicy.RETAIN,
+});
+bucket.grantRead(lambdaFn);  // genera IAM policy minima
+</code></pre>
+<p>Flusso: <code>cdk bootstrap</code> (una tantum per account/region — crea bucket asset + ruoli), <code>cdk synth</code> (genera CFN), <code>cdk diff</code>, <code>cdk deploy</code>. Hot-swap per Lambda/StepFn salta CFN per iterazioni dev (mai in prod!).</p>
+<h2 id="4-sam-serverless-specializzato">4. SAM — serverless specializzato</h2>
+<p>Serverless Application Model è una <strong>transform</strong> CFN focalizzata su Lambda/API GW/DynamoDB/StepFn. Sintassi più compatta di CFN puro.</p>
+<pre><code class="language-yaml">Transform: AWS::Serverless-2016-10-31
+Resources:
+  HelloFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: python3.12
+      Handler: app.lambda_handler
+      CodeUri: ./src
+      Events:
+        Api:
+          Type: HttpApi
+          Properties: { Path: /hello, Method: GET }
+</code></pre>
+<p><code>sam build &amp;&amp; sam local invoke HelloFn</code> esegue la Lambda in container localmente. <code>sam local start-api</code> espone l'API GW su <code>localhost:3000</code>. <code>sam deploy --guided</code> per la prima volta.</p>
+<h2 id="5-terraform-on-aws">5. Terraform on AWS</h2>
+<p>Terraform (HashiCorp / IBM dal 2024) è multi-cloud, con <code>provider "aws"</code> ricchissimo. HCL come linguaggio.</p>
+<pre><code class="language-hcl">terraform {
+  backend &quot;s3&quot; {
+    bucket         = &quot;tfstate-myorg&quot;
+    key            = &quot;prod/network.tfstate&quot;
+    region         = &quot;eu-west-1&quot;
+    dynamodb_table = &quot;tfstate-lock&quot;
+    encrypt        = true
+  }
+}
+
+resource &quot;aws_s3_bucket&quot; &quot;data&quot; {
+  bucket = &quot;myapp-${var.env}-${data.aws_caller_identity.current.account_id}&quot;
+}
+</code></pre>
+<p>State remoto su <strong>S3 + DynamoDB</strong> (lock per evitare apply concorrenti) è lo standard. <strong>Workspace</strong> per separare env (ma molti preferiscono cartelle separate per chiarezza). <strong>Module</strong> = unità riusabile (input variables, output, risorse).</p>
+<h2 id="6-confronto-e-quando-scegliere">6. Confronto e quando scegliere</h2>
+<table>
+<thead>
+<tr>
+<th>Dimensione</th>
+<th>CFN</th>
+<th>CDK</th>
+<th>SAM</th>
+<th>Terraform</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Linguaggio</td>
+<td>YAML/JSON</td>
+<td>TS/Py/Java/...</td>
+<td>YAML</td>
+<td>HCL</td>
+</tr>
+<tr>
+<td>State</td>
+<td>gestito AWS</td>
+<td>gestito AWS (via CFN)</td>
+<td>gestito AWS</td>
+<td>tu (S3+DDB)</td>
+</tr>
+<tr>
+<td>Multi-cloud</td>
+<td>no</td>
+<td>no</td>
+<td>no</td>
+<td>sì</td>
+</tr>
+<tr>
+<td>Rollback auto</td>
+<td>sì</td>
+<td>sì</td>
+<td>sì</td>
+<td>no (manuale)</td>
+</tr>
+<tr>
+<td>Curva</td>
+<td>media</td>
+<td>alta (codice vero)</td>
+<td>bassa per serverless</td>
+<td>media</td>
+</tr>
+<tr>
+<td>Community moduli</td>
+<td>media</td>
+<td>crescente</td>
+<td>piccola</td>
+<td>enorme</td>
+</tr>
+</tbody>
+</table>
+<p>Scelta tipica: <strong>CDK</strong> se il team scrive già TypeScript/Python; <strong>Terraform</strong> se sei multi-cloud o vuoi grosso ecosistema modulare; <strong>CFN puro</strong> se vuoi zero dipendenze; <strong>SAM</strong> per pure-serverless quick.</p>
+<h2 id="7-best-practice-trasversali">7. Best practice trasversali</h2>
+<ul>
+<li><strong>Mai secret inline</strong>: usa Secrets Manager / Parameter Store con <code>Dynamic Reference</code> (<code>{{resolve:secretsmanager:...}}</code>).</li>
+<li><strong>Parametrizza per env</strong> (dev/stage/prod), non duplicare template.</li>
+<li><strong>Tag</strong> sistematici (CostCenter, Owner, Env) via default tag policy o <code>stack.tags.setTag()</code>.</li>
+<li><strong>PR review obbligatoria</strong> sul diff (<code>cdk diff</code> / <code>terraform plan</code> / change set).</li>
+<li><strong>State backup</strong>: S3 versioning su tfstate, abilita Drift Detection periodica.</li>
+<li><strong>Pipeline che applica</strong>, non <code>terraform apply</code> dalla laptop: niente credenziali admin sul portatile.</li>
+</ul>
+<h2 id="8-esercizio">8. Esercizio</h2>
+<details>
+<summary>Team Python con 30 Lambda dietro API GW: quale IaC?</summary>
+
+**SAM** per la sua sintassi compatta + `sam local` test, oppure **CDK in Python** se vogliono anche infrastruttura non-serverless (es. RDS, VPC) nello stesso repo. SAM genera CFN sotto: integrabile con CDK al bisogno (`SamHttpApi` construct). Eviterei Terraform: per un mondo 100% serverless AWS aggiunge complessità (state file) senza beneficio.
+</details>
+
+<details>
+<summary>L'engineer ha modificato a mano un security group fuori da CFN. Cosa succede al prossimo deploy?</summary>
+
+CFN **non sa** del drift finché non lanci esplicitamente `aws cloudformation detect-stack-drift`. Al prossimo update CFN userà come baseline il *suo* stato (l'ultimo template) — può **sovrascrivere** la modifica manuale o, peggio, lasciarla se la proprietà non è toccata dal nuovo template (drift silenzioso). Best practice: drift detection in pipeline notturna, alert su drift, "no manual changes" policy via SCP che blocca `*` IAM in prod.
+</details>
+
+<blockquote>
+<p><strong>Riassunto</strong>: CFN nativo con change set/StackSet/drift; CDK = codice tipizzato che sintetizza CFN; SAM = transform CFN per serverless con CLI di test locale; Terraform multi-cloud con state remoto S3+DDB; mai secret inline, sempre PR su diff, deploy da pipeline non da laptop.</p>
+</blockquote>
+      <nav class="pager">
+<a href="33-bedrock-ai-services.html" class="prev"><span class="label">← Precedente</span><span class="title">Bedrock e AI services — GenAI e ML managed</span></a>
+<a href="35-ci-cd-pipeline.html" class="next"><span class="label">Successivo →</span><span class="title">CI/CD su AWS — CodePipeline, CodeBuild, CodeDeploy, CodeCatalyst</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>AWS Zero to Hero</strong> — percorso completo, in italiano, dalle primitive all'architettura avanzata.</p><p>Materiale didattico aperto. Nessuna sponsorizzazione, nessun affiliate link, nessuna affiliazione con AWS. Quando un concetto è oscuro, torna indietro: AWS è una piramide di primitive, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

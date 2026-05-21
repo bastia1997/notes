@@ -1,0 +1,666 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>x86-64 and ARM64 Assembly from zero — Cybersec Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">&gt;_</div>
+      <div>
+        <div class="brand-title">CYBERSEC</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/01b-assembly-zero.html" class="lang-link" title="Passa all'italiano"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="10" height="20" fill="#009246"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ce2b37"/></svg> IT</a><span class="lang-active" title="English"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="30" height="20" fill="#012169"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#fff" stroke-width="3"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#c8102e" stroke-width="1.5"/><path d="M15,0 v20 M0,10 h30" stroke="#fff" stroke-width="5"/><path d="M15,0 v20 M0,10 h30" stroke="#c8102e" stroke-width="3"/></svg> EN</span></div>
+  </div>
+  <div class="search-wrap">
+    <div class="search-row">
+      <div class="search-inputwrap">
+        <span class="search-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"/>
+            <line x1="20" y1="20" x2="16.65" y2="16.65"/>
+          </svg>
+        </span>
+        <input class="search-input" id="search-input" type="text" placeholder="search... (press /)" autocomplete="off" aria-label="Search">
+        <button class="search-clear" id="search-clear" type="button" aria-label="Clear" title="Clear">&times;</button>
+      </div>
+      <button class="search-btn" id="search-btn" type="button" aria-label="SEARCH" title="SEARCH">SEARCH</button>
+    </div>
+    <div class="search-hits" id="search-hits" role="listbox"></div>
+  </div>
+  <div class="sidebar-nav">
+    <nav class="nav-section">
+      <div class="nav-section-title">Path</div>
+      <ul class="nav-list">
+        <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+        <li class="nav-item"><a href="../pages/00-path-and-mindset.html" class=""><span class="num">00</span>Path, mindset, ethics and law</a></li><li class="nav-item"><a href="../pages/00b-math-and-cs.html" class=""><span class="num">00b</span>Math and computation theory (the bare minimum, integrated)</a></li><li class="nav-item"><a href="../pages/01-cs-fundamentals.html" class=""><span class="num">01</span>Computer science fundamentals for security</a></li><li class="nav-item"><a href="../pages/01b-assembly-from-zero.html" class="active"><span class="num">01b</span>x86-64 and ARM64 Assembly from zero</a></li><li class="nav-item"><a href="../pages/02-essential-linux.html" class=""><span class="num">02</span>Essential Linux for security</a></li><li class="nav-item"><a href="../pages/02b-regex-automata.html" class=""><span class="num">02b</span>Regex, automata, and parsers for security</a></li><li class="nav-item"><a href="../pages/03-networking-tcp-ip.html" class=""><span class="num">03</span>Networking: from cables to TCP/IP</a></li><li class="nav-item"><a href="../pages/04-http-tls.html" class=""><span class="num">04</span>HTTP, HTTPS and TLS in depth</a></li><li class="nav-item"><a href="../pages/05-cryptography.html" class=""><span class="num">05</span>Cryptography: theory and practice</a></li><li class="nav-item"><a href="../pages/05b-crypto-worked-examples.html" class=""><span class="num">05b</span>Cryptography — step-by-step worked examples</a></li><li class="nav-item"><a href="../pages/06-os-internals.html" class=""><span class="num">06</span>OS internals: Linux and Windows in depth</a></li><li class="nav-item"><a href="../pages/07-programming-for-security.html" class=""><span class="num">07</span>Programming for security: Python, C, Go</a></li><li class="nav-item"><a href="../pages/08-osint-recon.html" class=""><span class="num">08</span>OSINT and reconnaissance</a></li><li class="nav-item"><a href="../pages/09-scanning-enumeration.html" class=""><span class="num">09</span>Scanning, enumeration and fingerprinting</a></li><li class="nav-item"><a href="../pages/10-owasp-top10.html" class=""><span class="num">10</span>OWASP Top 10 and beyond — basic web vulnerabilities</a></li><li class="nav-item"><a href="../pages/10b-walkthrough-byte-by-byte.html" class=""><span class="num">10b</span>Byte-by-byte walkthrough: SQLi, XSS, SSRF, IDOR</a></li><li class="nav-item"><a href="../pages/11-advanced-web.html" class=""><span class="num">11</span>Advanced web hacking</a></li><li class="nav-item"><a href="../pages/12-network-attacks.html" class=""><span class="num">12</span>Network attacks: MITM, spoofing, pivoting</a></li><li class="nav-item"><a href="../pages/13-active-directory.html" class=""><span class="num">13</span>Active Directory hacking</a></li><li class="nav-item"><a href="../pages/14-exploit-development.html" class=""><span class="num">14</span>Exploit development: from buffer overflow to ROP</a></li><li class="nav-item"><a href="../pages/14b-bof-to-shell-complete.html" class=""><span class="num">14b</span>BoF → shell: a complete exploit from zero</a></li><li class="nav-item"><a href="../pages/15-reverse-engineering.html" class=""><span class="num">15</span>Reverse engineering</a></li><li class="nav-item"><a href="../pages/16-malware-analysis.html" class=""><span class="num">16</span>Malware: taxonomy and analysis</a></li><li class="nav-item"><a href="../pages/17-mobile-security.html" class=""><span class="num">17</span>Mobile security: Android and iOS</a></li><li class="nav-item"><a href="../pages/18-cloud-security.html" class=""><span class="num">18</span>Cloud security: AWS, Azure, GCP</a></li><li class="nav-item"><a href="../pages/19-container-kubernetes.html" class=""><span class="num">19</span>Containers and Kubernetes</a></li><li class="nav-item"><a href="../pages/20-wireless-radio.html" class=""><span class="num">20</span>Wireless and radio: WiFi, BT, SDR</a></li><li class="nav-item"><a href="../pages/21-hardware-firmware.html" class=""><span class="num">21</span>Hardware and firmware hacking</a></li><li class="nav-item"><a href="../pages/22-forensics-dfir.html" class=""><span class="num">22</span>Forensics and DFIR</a></li><li class="nav-item"><a href="../pages/23-blue-team-soc.html" class=""><span class="num">23</span>Blue team: SOC, SIEM, EDR, hunting</a></li><li class="nav-item"><a href="../pages/24-threat-intelligence.html" class=""><span class="num">24</span>Threat intelligence</a></li><li class="nav-item"><a href="../pages/25-grc-regulations.html" class=""><span class="num">25</span>GRC, regulations, and standards</a></li><li class="nav-item"><a href="../pages/26-red-team.html" class=""><span class="num">26</span>Red team and adversary emulation</a></li><li class="nav-item"><a href="../pages/27-ai-ml-security.html" class=""><span class="num">27</span>AI / ML security</a></li><li class="nav-item"><a href="../pages/28-capstone-roadmap.html" class=""><span class="num">28</span>Capstone: CTF roadmap, home lab, certifications</a></li><li class="nav-item"><a href="../pages/29-master-cheatsheet.html" class=""><span class="num">29</span>Master cheatsheet</a></li><li class="nav-item"><a href="../pages/30-extended-glossary.html" class=""><span class="num">30</span>Extended glossary (250+ terms)</a></li><li class="nav-item"><a href="../pages/31-it-eu-regulations.html" class=""><span class="num">31</span>IT/EU regulatory references in detail</a></li>
+      </ul>
+    </nav>
+  </div>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Prerequisites</span>
+        <span>Section 2 of 36</span>
+        <span class="level-tag level-beg">Level: beginner</span>
+      </div>
+      <h1>x86-64 and ARM64 Assembly from zero</h1>
+      <p class="summary">Assembly for someone who has never seen it before. What the CPU does instruction by instruction. Registers, stack, calling convention, layout of a program in memory, with diagrams and step-by-step traces. Everything you need for reverse engineering and exploit dev.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Prerequisites</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>Section 01 (memory, processes)</li><li>Section 00b (binary, hex)</li></ul>
+  <div class="label">Tools</div>
+  <ul class="source-list"><li>gcc, objdump, gdb (+ pwndbg/gef)</li><li>Compiler Explorer (godbolt.org) for quick experiments</li></ul>
+</div>
+      <blockquote>
+<p>Everything the CPU does is execute assembly instructions. High-level languages (C, Python, Rust) get <em>compiled or interpreted</em> down to machine instructions. Understanding assembly = understanding what is REALLY happening. Without it, you don't see what reverse engineers and exploit devs see.</p>
+</blockquote>
+<h2 id="the-basic-model">The basic model</h2>
+<p>A CPU in 30 seconds:
+- It has <strong>registers</strong>: small ultra-fast memories inside the CPU.
+- It executes instructions in sequence, each one <strong>modifies registers or memory</strong>.
+- There is a special register, <code>RIP</code> (instruction pointer), that says "what is the next instruction".
+- The <code>jmp</code> instruction changes <code>RIP</code> → jump. <code>call</code> saves <code>RIP</code> and jumps. <code>ret</code> restores <code>RIP</code>.</p>
+<pre><code>  [   CPU   ]                              [    RAM    ]
+  ┌─────────┐                              ┌───────────┐
+  │ RAX  =? │   fetch instruction          │ 0x4000:   │
+  │ RBX  =? │  ◄───────────────────────────┤ mov rax,5 │
+  │ RCX  =? │                              │ 0x4007:   │
+  │ ...     │   executes, updates RAX=5    │ add rax,3 │
+  │ RIP  +→ │                              │ 0x400e:   │
+  └─────────┘   then fetch the next...     │ ret       │
+                                           └───────────┘
+</code></pre>
+<h2 id="the-x86-64-registers-system-v-linuxmacos">The x86-64 registers (System V — Linux/macOS)</h2>
+<p>The <strong>x86-64</strong> architecture (also called AMD64, EM64T, x64) has <strong>16 general-purpose 64-bit registers</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>64-bit</th>
+<th>32-bit</th>
+<th>16-bit</th>
+<th>8-bit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RAX</td>
+<td>EAX</td>
+<td>AX</td>
+<td>AL</td>
+</tr>
+<tr>
+<td>RBX</td>
+<td>EBX</td>
+<td>BX</td>
+<td>BL</td>
+</tr>
+<tr>
+<td>RCX</td>
+<td>ECX</td>
+<td>CX</td>
+<td>CL</td>
+</tr>
+<tr>
+<td>RDX</td>
+<td>EDX</td>
+<td>DX</td>
+<td>DL</td>
+</tr>
+<tr>
+<td>RSI</td>
+<td>ESI</td>
+<td>SI</td>
+<td>SIL</td>
+</tr>
+<tr>
+<td>RDI</td>
+<td>EDI</td>
+<td>DI</td>
+<td>DIL</td>
+</tr>
+<tr>
+<td>RBP</td>
+<td>EBP</td>
+<td>BP</td>
+<td>BPL</td>
+</tr>
+<tr>
+<td>RSP</td>
+<td>ESP</td>
+<td>SP</td>
+<td>SPL</td>
+</tr>
+<tr>
+<td>R8 – R15</td>
+<td>R8D – R15D</td>
+<td>R8W – R15W</td>
+<td>R8B – R15B</td>
+</tr>
+</tbody>
+</table>
+<p>Plus special registers:
+- <strong>RIP</strong> — instruction pointer.
+- <strong>RFLAGS</strong> — flags (ZF zero, CF carry, SF sign, OF overflow, ...).</p>
+<pre><code>       64-bit RAX
+   ┌──────────────────────────────────────────┐
+   │  R63...R32     R31...R16   R15...R8 R7..R0 │
+   └──────────────────────────────────────────┘
+                    └──────────EAX──────────────┘
+                                └─────AX────────┘
+                                       └──AH─┴─AL─┘
+</code></pre>
+<p>Writing to <code>EAX</code> <strong>zeroes</strong> the upper part of <code>RAX</code> (it's a quirk of the ISA — useful to remember).</p>
+<h3 id="role-conventions-system-v-x86-64">Role conventions (System V x86-64)</h3>
+<p>Even though "general-purpose", by convention each one has a role:</p>
+<table>
+<thead>
+<tr>
+<th>Register</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RAX</td>
+<td>accumulator, <strong>function return value</strong></td>
+</tr>
+<tr>
+<td>RDI</td>
+<td><strong>1st argument</strong></td>
+</tr>
+<tr>
+<td>RSI</td>
+<td><strong>2nd argument</strong></td>
+</tr>
+<tr>
+<td>RDX</td>
+<td><strong>3rd argument</strong></td>
+</tr>
+<tr>
+<td>RCX</td>
+<td><strong>4th argument</strong></td>
+</tr>
+<tr>
+<td>R8</td>
+<td><strong>5th argument</strong></td>
+</tr>
+<tr>
+<td>R9</td>
+<td><strong>6th argument</strong></td>
+</tr>
+<tr>
+<td>RBP</td>
+<td>base pointer (frame)</td>
+</tr>
+<tr>
+<td>RSP</td>
+<td><strong>stack pointer</strong></td>
+</tr>
+<tr>
+<td>RBX, R12-R15</td>
+<td>callee-saved (the called function must preserve them)</td>
+</tr>
+<tr>
+<td>RAX, RCX, RDX, RSI, RDI, R8-R11</td>
+<td>caller-saved (the function can clobber them)</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Microsoft x64</strong> ABI (Windows) uses <strong>RCX, RDX, R8, R9</strong> for the first 4 arguments + 32 bytes of "shadow space" on the stack. Different! If you reverse Windows binaries, pay attention.</p>
+</blockquote>
+<h2 id="syntax-intel-vs-att">Syntax: Intel vs AT&amp;T</h2>
+<p>Two notations exist:</p>
+<pre><code class="language-asm">; Intel (more readable, default on Windows and in pwntools)
+mov rax, 5
+add rax, rbx
+
+# AT&amp;T (default on Linux objdump, gdb)
+movq $5, %rax
+addq %rbx, %rax
+</code></pre>
+<p><strong>Differences:</strong>
+- Intel: <code>mov dst, src</code> (source on the right).
+- AT&amp;T: <code>mov src, dst</code> (the opposite!), <code>$</code> for immediates, <code>%</code> for registers, <code>q/l/w/b</code> suffix for size.</p>
+<p>In this guide <strong>I use Intel</strong>. In gdb: <code>set disassembly-flavor intel</code>.</p>
+<h2 id="the-instructions-you-will-see-all-the-time">The instructions you will see all the time</h2>
+<h3 id="movement-and-arithmetic">Movement and arithmetic</h3>
+<pre><code class="language-asm">mov rax, rbx            ; rax = rbx
+mov rax, 0x1234         ; rax = 0x1234 (immediate)
+mov rax, [rbx]          ; rax = memory at address rbx (dereference)
+mov [rbx], rax          ; memory[rbx] = rax
+mov rax, [rbx + 8]      ; rax = memory[rbx+8] (offset)
+mov rax, [rbx + rcx*4]  ; indexed (rbx base, rcx*4 offset)
+
+lea rax, [rbx + 8]      ; rax = rbx + 8 (Load Effective Address; arithmetic without memory!)
+
+add rax, rbx            ; rax += rbx
+sub rax, 10
+imul rax, rbx           ; rax *= rbx (signed)
+inc rax / dec rax       ; ++ / --
+neg rax                 ; rax = -rax
+
+xor rax, rax            ; rax = 0 (idiom)
+and rax, 0xff           ; mask low byte
+or  rax, 1
+shl rax, 4              ; rax &lt;&lt;= 4 (multiply by 16)
+shr rax, 4              ; rax &gt;&gt;= 4 (integer divide by 16)
+not rax                 ; bitwise complement
+</code></pre>
+<h3 id="comparison-and-jumps">Comparison and jumps</h3>
+<pre><code class="language-asm">cmp rax, 10             ; sets flags based on rax - 10 (without modifying rax)
+test rax, rax           ; sets flags based on rax &amp; rax (efficient zero test)
+
+je   label              ; jump if equal       (ZF = 1)
+jne  label              ; jump if not equal   (ZF = 0)
+jg   label              ; jump if greater (signed)
+jl   label              ; jump if less (signed)
+ja   label              ; jump if above (unsigned)
+jb   label              ; jump if below (unsigned)
+jz   label              ; jump if zero
+jnz  label              ; jump if not zero
+jmp  label              ; unconditional jump
+</code></pre>
+<h3 id="stack-push-pop-call-ret">Stack: push, pop, call, ret</h3>
+<pre><code class="language-asm">push rax                ; rsp -= 8; [rsp] = rax
+pop rax                 ; rax = [rsp]; rsp += 8
+call funct              ; push RIP_next; jmp funct
+ret                     ; rax_ret = [rsp]; rsp += 8; jmp rax_ret
+</code></pre>
+<p><strong>The stack grows toward LOW addresses</strong> (on x86). <code>push</code> decrements <code>RSP</code>, <code>pop</code> increments it.</p>
+<pre><code>            high addresses
+       ┌──────────────────┐
+       │   ...old...      │
+       │                  │
+       │   value A        │ ← before the push
+       ├──────────────────┤
+       │   value B        │ ← after &quot;push B&quot;, RSP points here
+       │                  │
+       │                  │
+       └──────────────────┘
+            low addresses
+</code></pre>
+<h3 id="syscall">syscall</h3>
+<p><code>syscall</code> asks the kernel to do something. Linux x86-64 convention:
+- <code>RAX</code> = syscall number.
+- <code>RDI, RSI, RDX, R10, R8, R9</code> = arguments (note: R10, not RCX, for syscalls).
+- Return value in <code>RAX</code>.</p>
+<pre><code class="language-asm">; write(1, &quot;hello\n&quot;, 6)
+mov rax, 1            ; sys_write
+mov rdi, 1            ; fd 1 = stdout
+mov rsi, msg          ; buffer
+mov rdx, 6            ; count
+syscall
+
+; exit(0)
+mov rax, 60           ; sys_exit
+xor rdi, rdi
+syscall
+</code></pre>
+<p>Syscall list: <code>/usr/include/asm/unistd_64.h</code> or <code>man syscalls</code>.</p>
+<h2 id="hello-world-in-pure-assembly">"Hello, world!" in pure assembly</h2>
+<pre><code class="language-asm">; hello.asm
+section .data
+msg:    db &quot;Hello, asm!&quot;, 0x0a
+mlen:   equ $ - msg
+
+section .text
+global _start
+_start:
+    mov rax, 1
+    mov rdi, 1
+    mov rsi, msg
+    mov rdx, mlen
+    syscall
+
+    mov rax, 60
+    xor rdi, rdi
+    syscall
+</code></pre>
+<p>Build and run:</p>
+<pre><code class="language-bash">nasm -felf64 hello.asm -o hello.o
+ld hello.o -o hello
+./hello
+# Hello, asm!
+</code></pre>
+<p><strong>12 instructions, 0 libraries, real output.</strong> This is what shellcodes do.</p>
+<h2 id="the-prologue-and-epilogue-of-a-function">The prologue and epilogue of a function</h2>
+<p>When a C function is called, the compiler typically generates:</p>
+<pre><code class="language-asm">funct:
+    push rbp            ; save the caller's base pointer
+    mov  rbp, rsp       ; new frame: rbp = rsp
+    sub  rsp, 32        ; allocate 32 bytes for local variables
+
+    ; ... function body ...
+
+    leave               ; mov rsp, rbp ; pop rbp   (tears down the frame)
+    ret                 ; pop and jmp to the return address
+</code></pre>
+<p>Let's visualize the stack during execution:</p>
+<pre><code>       high addresses
+   ┌──────────────────┐
+   │   arg7 (if &gt;6)   │
+   │   ...            │
+   ├──────────────────┤
+   │ return address   │  ← saved RIP (left by &quot;call&quot;)
+   ├──────────────────┤
+   │ saved RBP        │  ← caller's saved RBP
+   ├──────────────────┤  ← RBP now points here
+   │ local var 1      │
+   │ local var 2      │
+   │ ...              │  ← RSP grows downward
+   └──────────────────┘
+       low addresses
+</code></pre>
+<p>When a <strong>buffer overflow</strong> writes past <code>local var</code>, it first overwrites <code>saved RBP</code>, then <code>return address</code>. <strong>Overwriting the return address = controlling where the CPU will go on <code>ret</code></strong>. This is the basis of every binary exploit.</p>
+<h2 id="complete-example-tracing-a-function-from-c-asm">Complete example: tracing a function from C → asm</h2>
+<pre><code class="language-c">// add.c
+int add(int a, int b) {
+    return a + b;
+}
+int main(void) {
+    int r = add(3, 4);
+    return r;
+}
+</code></pre>
+<p>Compile with <code>gcc -O0 -S add.c -masm=intel</code> (<code>-S</code> produces a <code>.s</code> file with asm). Output (simplified):</p>
+<pre><code class="language-asm">add:
+    push rbp
+    mov  rbp, rsp
+    mov  DWORD PTR [rbp-4], edi    ; save a (1st arg, EDI)
+    mov  DWORD PTR [rbp-8], esi    ; save b (2nd arg, ESI)
+    mov  edx, DWORD PTR [rbp-4]
+    mov  eax, DWORD PTR [rbp-8]
+    add  eax, edx                  ; EAX = b + a
+    pop  rbp
+    ret                            ; return value in EAX
+
+main:
+    push rbp
+    mov  rbp, rsp
+    sub  rsp, 16
+    mov  esi, 4                    ; 2nd arg
+    mov  edi, 3                    ; 1st arg
+    call add
+    mov  DWORD PTR [rbp-4], eax    ; r = ret value
+    mov  eax, DWORD PTR [rbp-4]
+    leave
+    ret
+</code></pre>
+<p><strong>Read it one line at a time.</strong> See how <code>int</code> is 4 bytes → use of <code>EAX</code>/<code>EDX</code>/<code>EDI</code>/<code>ESI</code> (the low half of the 64-bit registers). Compact, elegant.</p>
+<h2 id="example-a-buffer-overflow-in-asm">Example: a buffer overflow in asm</h2>
+<pre><code class="language-c">// vuln.c
+#include &lt;string.h&gt;
+#include &lt;stdio.h&gt;
+void greet(char *name) {
+    char buf[8];
+    strcpy(buf, name);
+    printf(&quot;hi %s\n&quot;, buf);
+}
+int main(int argc, char **argv) {
+    if (argc &gt; 1) greet(argv[1]);
+    return 0;
+}
+</code></pre>
+<p>Stack frame of <code>greet</code> after the prologue:</p>
+<pre><code>       high addresses
+   ┌──────────────────┐
+   │ return address   │  rbp+8
+   ├──────────────────┤
+   │ saved RBP        │  rbp
+   ├──────────────────┤
+   │ buf[7]           │  rbp-1
+   │ buf[6]           │  rbp-2
+   │ ...              │
+   │ buf[0]           │  rbp-8     ← rsp (and start of buf)
+   └──────────────────┘
+       low addresses
+</code></pre>
+<p>If <code>strcpy</code> copies 30 bytes:
+- bytes 0-7  → <code>buf</code>.
+- bytes 8-15 → overwrite <code>saved RBP</code>.
+- bytes 16-23 → overwrite <code>return address</code>. <strong>RIP control.</strong></p>
+<p>At bytes 16-23 you put the address where you want the CPU to jump. <strong>Game on.</strong> (Full details in section 14b.)</p>
+<h2 id="endianness-witness-the-chaos">Endianness — witness the chaos</h2>
+<p>On x86 systems (little-endian), memory is laid out "low byte first". This means the value <code>0x1234567890ABCDEF</code> in RAM is written as:</p>
+<pre><code>addresses → 0x00   0x01   0x02   0x03   0x04   0x05   0x06   0x07
+bytes:       EF     CD     AB     90     78     56     34     12
+</code></pre>
+<p>The <strong>EF</strong>, least significant byte, is at the <strong>low</strong> address. When you write an exploit, you <strong>must</strong> reverse the bytes of an address to put it in a buffer:</p>
+<pre><code class="language-python"># If you want the CPU to see 0x4006a0 as the next RIP:
+payload += b&quot;\xa0\x06\x40\x00\x00\x00\x00\x00&quot;
+# or
+from struct import pack
+payload += pack(&quot;&lt;Q&quot;, 0x4006a0)   # &lt; = little-endian, Q = 8-byte unsigned
+</code></pre>
+<h2 id="arm64-aarch64-what-you-need-to-know-at-a-basic-level">ARM64 (AArch64) — what you need to know at a basic level</h2>
+<p>On mobile (iOS/Android), many cloud servers (ARM Graviton), Raspberry, M1/M2/M3 Macs: <strong>ARM64</strong>. Different philosophy (<strong>RISC</strong> instead of CISC).</p>
+<p><strong>Registers:</strong>
+- <code>X0</code>–<code>X30</code> general-purpose 64-bit, <code>W0</code>–<code>W30</code> 32-bit version (low half).
+- <code>XZR</code> (zero register, always 0).
+- <code>SP</code> stack pointer, <code>PC</code> program counter.
+- <code>X30</code> = "Link Register" (LR), where <code>ret</code> returns to (analogous to the return address saved on the stack in x86 — but on ARM it's in a register, saved on the stack only if the function calls other functions).</p>
+<p><strong>Calling convention:</strong>
+- <code>X0</code>–<code>X7</code> for the first 8 arguments.
+- <code>X0</code> return value.
+- <code>X29</code> frame pointer.</p>
+<p><strong>RISC instructions</strong> (fixed 4 bytes, orthogonal semantics):</p>
+<pre><code class="language-asm">mov   x0, #5
+add   x0, x1, x2          ; x0 = x1 + x2
+sub   x0, x1, #3
+ldr   x0, [x1]            ; load
+ldr   x0, [x1, #8]        ; load with offset
+str   x0, [x1]            ; store
+ldp   x29, x30, [sp]      ; load PAIR (loads 2 registers from sp and sp+8 with one instruction!)
+stp   x29, x30, [sp, #-16]!   ; store pair, pre-decrement (push)
+b     label               ; branch
+bl    funct               ; branch-and-link (call, saves PC+4 into X30)
+ret                       ; jump to X30
+cbz   x0, label           ; compare-and-branch-if-zero
+</code></pre>
+<p>Typical prologue:</p>
+<pre><code class="language-asm">funct:
+    stp x29, x30, [sp, #-16]!   ; push fp + lr
+    mov x29, sp
+    ; ... body ...
+    ldp x29, x30, [sp], #16     ; pop fp + lr
+    ret
+</code></pre>
+<p>Instructions have safer-by-default semantics (bounded offsets), and modern ARM has <strong>PAC</strong> (Pointer Authentication Code) which signs pointers → BoF exploits on recent iOS are significantly harder.</p>
+<h2 id="tools-how-to-read-and-write-asm">Tools: how to read and write asm</h2>
+<h3 id="compiler-explorer-godboltorg">Compiler Explorer (godbolt.org)</h3>
+<p><strong>A must-have.</strong> Write C, see assembly. Change flags (<code>-O0</code>, <code>-O2</code>, <code>-fstack-protector</code>), compare GCC/clang/MSVC. Lightning-fast learning lab.</p>
+<h3 id="objdump">objdump</h3>
+<pre><code class="language-bash">gcc -c -O0 prog.c -o prog.o
+objdump -d -M intel prog.o      # disasm Intel
+objdump -d -M intel prog.o | less
+</code></pre>
+<h3 id="gdb-pwndbg">gdb + pwndbg</h3>
+<pre><code class="language-bash">gdb ./prog
+(gdb) set disassembly-flavor intel
+(gdb) layout asm
+(gdb) layout regs
+(gdb) break main
+(gdb) run
+(gdb) stepi          # step one asm instruction
+(gdb) info registers
+(gdb) x/16wx $rsp    # examine 16 hex words starting at $rsp
+(gdb) x/s 0x402004   # examine as string
+(gdb) disas funct    # disasm a function
+</code></pre>
+<p>The <code>pwndbg</code> plugin (<code>apt install pwndbg</code> or git) makes gdb usable as a pwn tool.</p>
+<h3 id="nasm-assembler">NASM (assembler)</h3>
+<pre><code class="language-bash">nasm -felf64 file.asm -o file.o
+ld file.o -o file
+</code></pre>
+<h2 id="step-by-step-traced-examples">Step-by-step traced examples</h2>
+<h3 id="example-1-addition-in-a-register">Example 1: addition in a register</h3>
+<pre><code class="language-asm">mov rax, 5            ; ① RAX = 5
+mov rbx, 3            ; ② RBX = 3
+add rax, rbx          ; ③ RAX = RAX + RBX = 8
+</code></pre>
+<p>State after each step:</p>
+<pre><code>            RAX        RBX
+start:      ?          ?
+after ①:    5          ?
+after ②:    5          3
+after ③:    8          3
+</code></pre>
+<h3 id="example-2-loop-counting">Example 2: loop counting</h3>
+<pre><code class="language-asm">        mov rcx, 10         ; counter
+loop:
+        sub rcx, 1
+        jnz loop            ; if RCX != 0, go back to loop
+</code></pre>
+<p><code>rcx</code> starts at 10, you decrement, you jump until it's 0. Loop of 10 iterations.</p>
+<h3 id="example-3-reading-a-byte-from-a-pointer">Example 3: reading a byte from a pointer</h3>
+<p>C:</p>
+<pre><code class="language-c">char c = *p;
+</code></pre>
+<p>Asm (assuming <code>p</code> in RDI):</p>
+<pre><code class="language-asm">mov al, byte ptr [rdi]    ; AL = byte at address RDI
+</code></pre>
+<h3 id="example-4-array-indexing">Example 4: array indexing</h3>
+<p>C:</p>
+<pre><code class="language-c">int x = arr[i];
+</code></pre>
+<p>Asm (assuming <code>arr</code> in RDI, <code>i</code> in RSI; int = 4 bytes):</p>
+<pre><code class="language-asm">mov eax, dword ptr [rdi + rsi*4]    ; EAX = arr[i]
+</code></pre>
+<p>The <code>[base + index*scale + disp]</code> addressing mode is extremely powerful and avoids intermediate instructions.</p>
+<h2 id="exercises">Exercises</h2>
+<h3 id="ex-1b1-read-this-function">Ex 1b.1 — Read this function</h3>
+<p>What does it do?</p>
+<pre><code class="language-asm">funct:
+    push rbp
+    mov  rbp, rsp
+    mov  eax, edi
+    imul eax, edi
+    pop  rbp
+    ret
+</code></pre>
+<details><summary>Solution</summary>
+
+It squares the first argument. `EAX = EDI * EDI`. Equivalent to `int square(int x) { return x*x; }`.
+
+</details>
+
+<h3 id="ex-1b2-write-it-by-hand">Ex 1b.2 — Write it by hand</h3>
+<p>Write assembly that computes the maximum of <code>RDI</code> and <code>RSI</code>, returns it in <code>RAX</code>.</p>
+<details><summary>Solution</summary>
+
+
+<pre><code class="language-asm">max:
+    mov rax, rdi
+    cmp rdi, rsi
+    jge done
+    mov rax, rsi
+done:
+    ret
+</code></pre>
+
+
+</details>
+
+<h3 id="ex-1b3-godbolt-experiment">Ex 1b.3 — Godbolt experiment</h3>
+<p>On <a href="https://godbolt.org">godbolt.org</a>, compile the following C with GCC <code>-O0</code> and <code>-O3</code>:</p>
+<pre><code class="language-c">int sum(int *arr, int n) {
+    int s = 0;
+    for (int i = 0; i &lt; n; i++) s += arr[i];
+    return s;
+}
+</code></pre>
+<p>Compare the outputs. Does <code>-O3</code> vectorize (use XMM/YMM registers)? How much shorter/more efficient is it?</p>
+<h3 id="ex-1b4-stack-trace">Ex 1b.4 — Stack trace</h3>
+<p>For the following C code, draw the stack frame of <code>greet</code> right after the prologue:</p>
+<pre><code class="language-c">void greet(int a, int b) {
+    char buf[24];
+    int local = a + b;
+}
+</code></pre>
+<details><summary>Hint</summary>
+
+`a` arrives in EDI, `b` in ESI. The compiler often saves a at `[rbp-4]`, b at `[rbp-8]` (or in registers if optimized). `buf[24]` takes 24 aligned bytes. `local` 4 bytes. RSP drops enough to align to 16 bytes (required by the ABI).
+
+</details>
+
+<h3 id="ex-1b5-minimal-execvebinsh-shellcode">Ex 1b.5 — Minimal execve("/bin/sh") shellcode</h3>
+<p>Look up on shell-storm.org an <code>execve("/bin/sh", NULL, NULL)</code> x86-64 Linux shellcode. Read it. Identify:
+- How the "/bin/sh" string is placed in memory (push, mov).
+- Which syscall number <code>execve</code> is (= 59).
+- Why <code>xor reg, reg</code> is used instead of <code>mov reg, 0</code> (no null byte → useful for overflow via strcpy, which stops on \0).</p>
+<h3 id="ex-1b6-gdb-as-a-teaching-tool">Ex 1b.6 — gdb as a teaching tool</h3>
+<p>Compile and gdb-step through this:</p>
+<pre><code class="language-c">// stepme.c
+int main(void) {
+    int a = 5, b = 3;
+    int c = a + b;
+    return c;
+}
+</code></pre>
+<p><code>gcc -O0 -g stepme.c -o stepme</code>. In gdb: <code>start</code>, <code>layout asm</code>, <code>stepi</code> until you return. For each instruction, write down what changes.</p>
+<h2 id="key-concepts">Key concepts</h2>
+<ol>
+<li><strong>CPU = registers + memory + RIP</strong>. Everything else is abstraction.</li>
+<li><strong>Stack frame</strong>: prologue <code>push rbp; mov rbp,rsp; sub rsp,N</code>. Epilogue <code>leave; ret</code>.</li>
+<li><strong>Return address on the stack</strong> = the breaking point for buffer overflows.</li>
+<li><strong>SysV calling convention</strong>: RDI, RSI, RDX, RCX, R8, R9 + RAX for return. Windows is different.</li>
+<li><strong>Little-endian</strong> x86: low byte first.</li>
+<li><strong>ARM64</strong> = RISC, link register X30, PAC on mobile.</li>
+<li><strong>Godbolt + gdb intel + pwndbg</strong> = perfect learning setup.</li>
+</ol>
+<p>Now you can tackle reverse (15) and exploit dev (14, 14b) without hitting the "but what does <code>mov</code> mean" wall.</p>
+      <nav class="pager">
+<a href="01-cs-fundamentals.html" class="prev"><span class="label">← Previous</span><span class="title">Computer science fundamentals for security</span></a>
+<a href="02-essential-linux.html" class="next"><span class="label">Next →</span><span class="title">Essential Linux for security</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Cybersec Zero to Hero</strong> — built as a continuous path. Static build from Markdown.</p><p>Educational material. Everything you learn here is to be used only on systems you own, in labs, in authorized bug-bounty programs, or under signed pentest contracts. <strong>Don't break the law.</strong></p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true, background: '#131a1e', primaryColor: '#1d262b',
+      primaryTextColor: '#e8eef0', primaryBorderColor: '#00ff9c',
+      lineColor: '#00e6ff', secondaryColor: '#11171a', tertiaryColor: '#161d21',
+      mainBkg: '#1d262b', nodeBorder: '#00ff9c', clusterBkg: '#0b0f10',
+      clusterBorder: '#243035', titleColor: '#00ff9c',
+      edgeLabelBackground: '#0b0f10', textColor: '#e8eef0',
+      labelTextColor: '#e8eef0', actorBkg: '#1d262b', actorBorder: '#00ff9c',
+      actorTextColor: '#00ff9c', actorLineColor: '#00e6ff',
+      signalColor: '#e8eef0', signalTextColor: '#e8eef0',
+      labelBoxBkgColor: '#1d262b', labelBoxBorderColor: '#00ff9c',
+      noteBkgColor: '#ffe066', noteTextColor: '#0b0f10', noteBorderColor: '#ffe066',
+      activationBkgColor: '#1d262b', activationBorderColor: '#00ff9c',
+      sequenceNumberColor: '#0b0f10'
+    },
+    flowchart: { curve: 'basis', padding: 16 },
+    sequence: { mirrorActors: false, bottomMarginAdj: 10 },
+    fontFamily: 'JetBrains Mono, Cascadia Code, Consolas, monospace'
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cost optimization and FinOps — AWS Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#232f3e',primaryTextColor:'#ffffff',primaryBorderColor:'#ff9900',lineColor:'#8a99ad',background:'#0c1320'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">λ</div>
+      <div>
+        <div class="brand-title">AWS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/41-cost-optimization-finops.html" class="lang-link" title="Passa all'italiano">IT</a><span class="lang-active" title="English">EN</span></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="search... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-what-is-cloud-and-aws.html" class=""><span class="num">01</span>What the cloud is, and what AWS is</a></li><li class="nav-item"><a href="../pages/02-global-infrastructure.html" class=""><span class="num">02</span>Global infrastructure: Regions, AZs, Edge</a></li><li class="nav-item"><a href="../pages/03-account-root-billing.html" class=""><span class="num">03</span>AWS account, root user, billing</a></li><li class="nav-item"><a href="../pages/04-iam-fundamentals.html" class=""><span class="num">04</span>IAM — fundamentals (users, groups, roles, policies)</a></li><li class="nav-item"><a href="../pages/05-iam-advanced.html" class=""><span class="num">05</span>IAM advanced: conditional policies, STS, ABAC</a></li><li class="nav-item"><a href="../pages/06-cli-sdk-iac.html" class=""><span class="num">06</span>CLI, SDK, CloudShell, IaC primer</a></li><li class="nav-item"><a href="../pages/07-pricing-billing.html" class=""><span class="num">07</span>Pricing, billing, free tier, cost tools</a></li><li class="nav-item"><a href="../pages/08-organizations-multi-account.html" class=""><span class="num">08</span>AWS Organizations &amp; multi-account strategy</a></li><li class="nav-item"><a href="../pages/09-vpc-fundamentals.html" class=""><span class="num">09</span>VPC — fundamentals</a></li><li class="nav-item"><a href="../pages/10-vpc-advanced.html" class=""><span class="num">10</span>VPC advanced: peering, TGW, PrivateLink, endpoints</a></li><li class="nav-item"><a href="../pages/11-route53-cloudfront.html" class=""><span class="num">11</span>Route 53, CloudFront, Global Accelerator</a></li><li class="nav-item"><a href="../pages/12-hybrid-vpn-directconnect.html" class=""><span class="num">12</span>Hybrid: VPN, Direct Connect, PrivateLink</a></li><li class="nav-item"><a href="../pages/13-ec2-fundamentals.html" class=""><span class="num">13</span>EC2 — fundamentals (instances, AMIs, lifecycle)</a></li><li class="nav-item"><a href="../pages/14-ec2-advanced-spot-nitro.html" class=""><span class="num">14</span>EC2 advanced — Spot, Placement Groups, Nitro, hibernation</a></li><li class="nav-item"><a href="../pages/15-asg-elb.html" class=""><span class="num">15</span>Auto Scaling Groups + Elastic Load Balancing</a></li><li class="nav-item"><a href="../pages/16-lambda-deep-dive.html" class=""><span class="num">16</span>Lambda deep dive</a></li><li class="nav-item"><a href="../pages/17-containers-ecs-eks-fargate.html" class=""><span class="num">17</span>Containers: ECS, EKS, Fargate, ECR</a></li><li class="nav-item"><a href="../pages/18-specialty-compute.html" class=""><span class="num">18</span>Specialty compute: Batch, Lightsail, Outposts, Wavelength, Beanstalk</a></li><li class="nav-item"><a href="../pages/19-ebs-efs-fsx.html" class=""><span class="num">19</span>EBS, EFS, FSx, Instance Store</a></li><li class="nav-item"><a href="../pages/20-s3-deep-dive.html" class=""><span class="num">20</span>S3 — deep dive</a></li><li class="nav-item"><a href="../pages/21-archive-snow-gateway-backup.html" class=""><span class="num">21</span>Glacier, Snow, Storage Gateway, DataSync, AWS Backup</a></li><li class="nav-item"><a href="../pages/22-rds.html" class=""><span class="num">22</span>RDS — managed relational DBs (engines, Multi-AZ, replicas, Proxy)</a></li><li class="nav-item"><a href="../pages/23-aurora-deep-dive.html" class=""><span class="num">23</span>Aurora deep dive — shared storage, Serverless v2, Global Database</a></li><li class="nav-item"><a href="../pages/24-dynamodb-deep-dive.html" class=""><span class="num">24</span>DynamoDB deep dive — partitions, GSI, Streams, single-table</a></li><li class="nav-item"><a href="../pages/25-purpose-built-dbs.html" class=""><span class="num">25</span>Purpose-built DBs — ElastiCache, MemoryDB, Neptune, DocumentDB, Keyspaces, Timestream, QLDB</a></li><li class="nav-item"><a href="../pages/26-redshift-data-warehousing.html" class=""><span class="num">26</span>Redshift — MPP data warehousing and zero-ETL</a></li><li class="nav-item"><a href="../pages/27-sqs-sns-eventbridge.html" class=""><span class="num">27</span>SQS, SNS, EventBridge — messaging and events</a></li><li class="nav-item"><a href="../pages/28-step-functions-mq-appflow.html" class=""><span class="num">28</span>Step Functions, MQ, AppFlow — orchestration and integration</a></li><li class="nav-item"><a href="../pages/29-athena-glue-lakeformation.html" class=""><span class="num">29</span>Athena, Glue, Lake Formation — the AWS data lake</a></li><li class="nav-item"><a href="../pages/30-emr-kinesis-msk.html" class=""><span class="num">30</span>EMR, Kinesis, MSK — big data and streaming</a></li><li class="nav-item"><a href="../pages/31-opensearch-quicksight.html" class=""><span class="num">31</span>OpenSearch and QuickSight — search and BI</a></li><li class="nav-item"><a href="../pages/32-sagemaker-overview.html" class=""><span class="num">32</span>SageMaker — the end-to-end ML platform</a></li><li class="nav-item"><a href="../pages/33-bedrock-ai-services.html" class=""><span class="num">33</span>Bedrock and AI services — managed GenAI and ML</a></li><li class="nav-item"><a href="../pages/34-iac-cloudformation-cdk-terraform.html" class=""><span class="num">34</span>IaC on AWS — CloudFormation, CDK, SAM, Terraform</a></li><li class="nav-item"><a href="../pages/35-ci-cd-pipeline.html" class=""><span class="num">35</span>CI/CD on AWS — CodePipeline, CodeBuild, CodeDeploy, CodeCatalyst</a></li><li class="nav-item"><a href="../pages/36-observability-cloudwatch-xray.html" class=""><span class="num">36</span>Observability — CloudWatch, X-Ray, CloudTrail, Config, SSM</a></li><li class="nav-item"><a href="../pages/37-kms-secrets-acm.html" class=""><span class="num">37</span>Encryption — KMS, CloudHSM, Secrets Manager, Parameter Store, ACM</a></li><li class="nav-item"><a href="../pages/38-waf-shield-guardduty-inspector.html" class=""><span class="num">38</span>Threat detection — WAF, Shield, GuardDuty, Inspector, Macie, Security Hub</a></li><li class="nav-item"><a href="../pages/39-governance-org-controltower-identitycenter.html" class=""><span class="num">39</span>Governance — Organizations, Control Tower, Identity Center</a></li><li class="nav-item"><a href="../pages/40-migration-mgn-dms-snow.html" class=""><span class="num">40</span>Migration — MGN, DMS, Snow family, Discovery, Migration Hub</a></li><li class="nav-item"><a href="../pages/41-cost-optimization-finops.html" class="active"><span class="num">41</span>Cost optimization and FinOps</a></li><li class="nav-item"><a href="../pages/42-well-architected.html" class=""><span class="num">42</span>Well-Architected Framework — 6 pillars, lenses, review</a></li><li class="nav-item"><a href="../pages/43-architecture-patterns.html" class=""><span class="num">43</span>Architecture patterns — 3-tier, serverless, event-driven, microservices</a></li><li class="nav-item"><a href="../pages/44-disaster-recovery-multi-region.html" class=""><span class="num">44</span>Disaster Recovery and Multi-Region</a></li><li class="nav-item"><a href="../pages/45-reference-architectures.html" class=""><span class="num">45</span>Real-world reference architectures</a></li><li class="nav-item"><a href="../pages/46-advanced-networking.html" class=""><span class="num">46</span>Advanced networking deep dive</a></li><li class="nav-item"><a href="../pages/47-containers-deep-dive.html" class=""><span class="num">47</span>Containers deep dive — EKS, Karpenter, service mesh</a></li><li class="nav-item"><a href="../pages/48-serverless-patterns.html" class=""><span class="num">48</span>Serverless patterns deep dive</a></li><li class="nav-item"><a href="../pages/49-genai-rag-agents.html" class=""><span class="num">49</span>Generative AI on AWS — RAG and Agents</a></li><li class="nav-item"><a href="../pages/50-aws-certifications.html" class=""><span class="num">50</span>AWS Certifications — roadmap and study guide</a></li><li class="nav-item"><a href="../pages/51-glossary-az.html" class=""><span class="num">51</span>Glossary A-Z</a></li><li class="nav-item"><a href="../pages/52-cheatsheet.html" class=""><span class="num">52</span>Cheat sheet: services, limits, instance families</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">FinOps</span>
+        <span>Section 41 of 52</span>
+        <span class="level-tag level-adv">Level: advanced</span>
+      </div>
+      <h1>Cost optimization and FinOps</h1>
+      <p class="summary">Cut the bill without cutting features: Cost Explorer, Compute Optimizer, RI/SP, Spot, NAT/idle IP elimination, log retention, BU showback.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>FinOps</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>sections 7, 8</li></ul>
+  <div class="label">Tools / references</div>
+  <ul class="source-list"><li>Cost Explorer</li><li>Compute Optimizer</li><li>Trusted Advisor</li><li>Savings Plans</li><li>CUR + Athena</li></ul>
+</div>
+      <p>"The bill grows faster than revenue" is the sentence that kicks off every FinOps project. The good news: on average 25-35% of AWS spend is optimizable without touching app features. The bad news: nobody optimizes on their own — you need a process (FinOps), not just a tool. Let's see both.</p>
+<h2 id="1-finops-in-3-phases">1. FinOps in 3 phases</h2>
+<pre><code class="language-mermaid">flowchart LR
+  I[Inform: see and attribute cost] --&gt; O[Optimize: rightsize + commitment + waste]
+  O --&gt; P[Operate: culture, KPI, continuous automation]
+  P --&gt; I
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Questions</th>
+<th>Tools</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Inform</strong></td>
+<td>How much do we spend? Where? Who?</td>
+<td>Cost Explorer, CUR, Tags, Budget</td>
+</tr>
+<tr>
+<td><strong>Optimize</strong></td>
+<td>Can we spend less?</td>
+<td>Compute Optimizer, RI/SP, Spot, Trusted Advisor</td>
+</tr>
+<tr>
+<td><strong>Operate</strong></td>
+<td>How do we stay optimized?</td>
+<td>Anomaly Detection, automation, monthly KPIs</td>
+</tr>
+</tbody>
+</table>
+<h2 id="2-inform-cost-explorer-cur-budget">2. Inform — Cost Explorer, CUR, Budget</h2>
+<p><strong>Cost Explorer</strong>: UI to explore cost by service/region/tag/account/usage type, with 12-month forecast. Daily granularity, 13-month retention (38 with history).</p>
+<p><strong>Cost and Usage Report (CUR)</strong>: granular line-by-usage dataset, exported to S3 in Parquet. Query with <strong>Athena</strong> or load into QuickSight for custom dashboards.</p>
+<pre><code class="language-sql">SELECT line_item_product_code,
+       SUM(line_item_blended_cost) AS cost
+FROM cur_table
+WHERE year='2026' AND month='5'
+  AND line_item_user_type='Usage'
+GROUP BY 1
+ORDER BY 2 DESC
+LIMIT 20;
+</code></pre>
+<p><strong>Budget</strong>: alerting on thresholds ($ or %), and <strong>Budget Actions</strong> that can <em>block IAM</em> or stop EC2 when exceeded (e.g. dev account capped at $500).</p>
+<p><strong>Cost Anomaly Detection</strong>: ML spotting unexpected spikes by service/tag → SNS notification.</p>
+<h2 id="3-optimize-1-rightsizing">3. Optimize 1 — Rightsizing</h2>
+<p><strong>Compute Optimizer</strong> analyses utilization (CPU/RAM/network/IOPS) and recommends:
+- <strong>EC2</strong>: downsize (m5.xlarge → m5.large) or generation upgrade (m5 → m7g Graviton).
+- <strong>ASG</strong>: family balancing.
+- <strong>EBS</strong>: gp2 → gp3 (cheaper at same IOPS).
+- <strong>Lambda</strong>: optimal memory (more RAM = more CPU = sometimes cheaper because finishes faster).
+- <strong>RDS/Aurora</strong>: instance class.</p>
+<p>Historic quick win: <strong>gp2 → gp3</strong> is ~20% cheaper at equivalent perf, one command or <code>aws ec2 modify-volume</code>.</p>
+<h2 id="4-optimize-2-reserved-instances-and-savings-plans">4. Optimize 2 — Reserved Instances and Savings Plans</h2>
+<p>For "always-on" workloads, prepay 1 or 3 years for 30-72% discount.</p>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Covers</th>
+<th>Flexibility</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>EC2 Reserved Instance (standard)</strong></td>
+<td>EC2 of specific family/region</td>
+<td>low (only AZ/size in family)</td>
+</tr>
+<tr>
+<td><strong>EC2 Reserved Instance (convertible)</strong></td>
+<td>swappable EC2</td>
+<td>medium, smaller discount</td>
+</tr>
+<tr>
+<td><strong>RDS/ElastiCache/Redshift/OpenSearch RI</strong></td>
+<td>that service</td>
+<td>low</td>
+</tr>
+<tr>
+<td><strong>Compute Savings Plan</strong></td>
+<td>EC2 + Fargate + Lambda, any region/family</td>
+<td><strong>high</strong></td>
+</tr>
+<tr>
+<td><strong>EC2 Instance Savings Plan</strong></td>
+<td>EC2 family + region</td>
+<td>medium, bigger discount</td>
+</tr>
+<tr>
+<td><strong>SageMaker Savings Plan</strong></td>
+<td>SageMaker</td>
+<td>low</td>
+</tr>
+</tbody>
+</table>
+<p>Commitment in <strong>$/hour</strong> (e.g. "I spend $3.20/h for 3 years"); coverage auto-applies to running instances. <strong>Recommendations</strong> in Cost Explorer (7/30/60-day lookback). Payment: All Upfront (max discount) / Partial Upfront / No Upfront.</p>
+<p>Rule of thumb: cover 70-80% of baseline with SP, leave peak/dev on on-demand.</p>
+<h2 id="5-optimize-3-spot">5. Optimize 3 — Spot</h2>
+<p>Already covered in sec. 14: -90% off on-demand, can be reclaimed with 2-min notice. For tolerant workloads (batch, CI, ML training, stateless web behind ASG): <strong>Spot Fleet</strong> with <strong>capacity-optimized</strong> allocation = lowest interruption probability.</p>
+<h2 id="6-optimize-4-waste-elimination">6. Optimize 4 — Waste elimination</h2>
+<p>Most frequent line items I've zeroed out in audits:</p>
+<table>
+<thead>
+<tr>
+<th>Waste</th>
+<th>Typical cost</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>NAT Gateway</strong> for S3/DynamoDB traffic</td>
+<td>$0.045/GB processed + $32/mo</td>
+<td><strong>VPC Gateway Endpoint</strong> (free!)</td>
+</tr>
+<tr>
+<td><strong>NAT Gateway</strong> for other AWS APIs</td>
+<td>$0.045/GB</td>
+<td><strong>Interface Endpoint</strong> ($7.50/mo vs traffic)</td>
+</tr>
+<tr>
+<td><strong>Orphan EBS snapshots</strong></td>
+<td>$0.05/GB-mo</td>
+<td>Lifecycle policy + cleanup script</td>
+</tr>
+<tr>
+<td><strong>Detached EBS volumes</strong></td>
+<td>$0.08/GB-mo gp3</td>
+<td>tag + alert + auto delete after 7d</td>
+</tr>
+<tr>
+<td><strong>Unassociated Elastic IPs</strong></td>
+<td>$3.6/mo each</td>
+<td>release</td>
+</tr>
+<tr>
+<td><strong>Infinite CloudWatch Logs retention</strong></td>
+<td>$0.03/GB-mo</td>
+<td>set 30/90-day retention</td>
+</tr>
+<tr>
+<td><strong>Idle RDS / ELB / ECS tasks</strong></td>
+<td>typical $50-500/mo each</td>
+<td>Trusted Advisor + shutdown</td>
+</tr>
+<tr>
+<td><strong>S3 versioning without lifecycle</strong></td>
+<td>eternal duplicates</td>
+<td>lifecycle "noncurrent → IA → expire 90d"</td>
+</tr>
+<tr>
+<td><strong>Dev/staging 24/7</strong></td>
+<td>168h/week</td>
+<td><strong>AWS Instance Scheduler</strong> off 19:00-7:00 + weekend = -70%</td>
+</tr>
+</tbody>
+</table>
+<h2 id="7-storage-tier-optimization">7. Storage tier optimization</h2>
+<ul>
+<li><strong>S3 Intelligent-Tiering</strong>: AWS auto-shuffles objects between tiers (Frequent → Infrequent → Archive Instant → Archive → Deep Archive) based on access pattern. $0.0025/1k objects monitor fee, but wins for heterogeneous data.</li>
+<li><strong>S3 Storage Lens</strong>: org-wide dashboard on 28+ storage metrics, recommendations.</li>
+<li><strong>Aurora I/O Optimized</strong>: for I/O-heavy workloads you pay more compute but 0 I/O — break-even ~25% IO/total.</li>
+<li><strong>RDS Reserved Instance</strong> + <strong>Multi-AZ</strong> seriously evaluated: Multi-AZ doubles cost, goes on real prod, not dev.</li>
+</ul>
+<h2 id="8-tags-allocation-showbackchargeback">8. Tags, allocation, showback/chargeback</h2>
+<p>Without tags, every cost discussion stalls at "we don't know who". Strategy:</p>
+<ol>
+<li><strong>Mandatory tags</strong> defined in <strong>Tag Policy</strong> + enforced in IaC (CDK Aspects or Terraform default_tags). Examples: <code>CostCenter</code>, <code>Owner</code>, <code>Env</code>, <code>Project</code>.</li>
+<li><strong>Cost Allocation Tags</strong> enabled in Billing Console (within 24h appear as Cost Explorer dimension).</li>
+<li><strong>Tag Editor</strong> to bulk-tag/fix existing resources.</li>
+<li><strong>Showback</strong> = monthly report to each BU "here's what you spent". <strong>Chargeback</strong> = BU actually pays the central IT. Use CUR + Athena/QuickSight.</li>
+</ol>
+<h2 id="9-exercise">9. Exercise</h2>
+<details>
+<summary>Prod account at $80k/month, must cut 25% in 3 months. Where to start?</summary>
+
+Methodical approach:
+1. **Week 1**: download CUR, classify by service. Top 3 are usually: EC2 (40%), RDS (15%), Data Transfer/NAT (10%).
+2. **Week 2 quick wins**:
+   - **S3/DynamoDB Gateway Endpoint** → -50% NAT cost = ~$2k/month.
+   - **gp2 → gp3**: all volumes → -20% EBS = ~$1.5k/month.
+   - **Log retention** policy → -50% CW Logs.
+   - **Cleanup**: orphan snapshots, unused EIPs, detached volumes → ~$500/month.
+3. **Week 3-4**: Compute Optimizer → rightsize 20% of EC2 → -$3k/month.
+4. **Week 5-6**: **Compute Savings Plan** covering 80% baseline → -25% on EC2/Fargate/Lambda = ~$8k/month.
+5. **Week 7-10**: switch off dev/staging off-hours with Instance Scheduler → -$2k/month.
+6. **Week 11-12**: S3 tier review → Intelligent-Tiering on large buckets.
+
+Total: ~$17k/month saved = 21%. To reach 25% also hit Spot-candidate workloads (CI batch) or Lambda memory reduction.
+</details>
+
+<details>
+<summary>A Lambda processes 100M invocations/month from SQS, average 200 ms at 1024 MB. How do you cut cost without code change?</summary>
+
+Two levers:
+1. **Lambda Power Tuning**: open-source tool that tests the same function at 512/1024/2048/3008 MB. Often you find that at 1536 MB it runs in 130 ms instead of 200 ms → cost per invocation **equal or lower** (cost = GB-sec, shorter duration offsets more memory). Test before changing.
+2. **Compute Savings Plan** covers Lambda. With 80M baseline invocations/month at 200 GB-sec each, commit ~$X/h SP → -17% on the total.
+3. Bonus: switch to **arm64 Graviton** (no code change for most runtimes) → -20% price, often even faster.
+</details>
+
+<blockquote>
+<p><strong>Summary</strong>: FinOps in 3 phases (Inform/Optimize/Operate); Cost Explorer + CUR + Budget for visibility; Compute Optimizer + RI/SP (Compute SP is the most flexible) + Spot to reduce; waste elimination (NAT → Gateway Endpoint, orphan EBS, log retention, dev off-hours) is the biggest quick win; tags + allocation + showback for culture; realistic target 20-35% cut with zero feature degradation.</p>
+</blockquote>
+      <nav class="pager">
+<a href="40-migration-mgn-dms-snow.html" class="prev"><span class="label">← Previous</span><span class="title">Migration — MGN, DMS, Snow family, Discovery, Migration Hub</span></a>
+<a href="42-well-architected.html" class="next"><span class="label">Next →</span><span class="title">Well-Architected Framework — 6 pillars, lenses, review</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>AWS Zero to Hero</strong> — complete path, in English, from primitives to advanced architecture.</p><p>Open educational material. No sponsorships, no affiliate links, no affiliation with AWS. When a concept is unclear, go back: AWS is a pyramid of primitives, not a tree you skip across.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+</body>
+</html>

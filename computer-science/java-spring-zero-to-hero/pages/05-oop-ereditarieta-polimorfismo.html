@@ -1,0 +1,548 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>OOP II — Ereditarietà, polimorfismo, interfacce, classi astratte — Java + Spring Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">☕</div>
+      <div>
+        <div class="brand-title">JAVA · SPRING</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="10" height="20" fill="#009246"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ce2b37"/></svg> IT</span><a href="../en/pages/05-oop-inheritance-polymorphism.html" class="lang-link" title="Switch to English"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="30" height="20" fill="#012169"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#fff" stroke-width="3"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#c8102e" stroke-width="1.5"/><path d="M15,0 v20 M0,10 h30" stroke="#fff" stroke-width="5"/><path d="M15,0 v20 M0,10 h30" stroke="#c8102e" stroke-width="3"/></svg> EN</a></div>
+  </div>
+  <div class="search-wrap">
+    <div class="search-row">
+      <div class="search-inputwrap">
+        <span class="search-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"/>
+            <line x1="20" y1="20" x2="16.65" y2="16.65"/>
+          </svg>
+        </span>
+        <input class="search-input" id="search-input" type="text" placeholder="cerca... (premi /)" autocomplete="off" aria-label="Search">
+        <button class="search-clear" id="search-clear" type="button" aria-label="Clear" title="Clear">&times;</button>
+      </div>
+      <button class="search-btn" id="search-btn" type="button" aria-label="CERCA" title="CERCA">CERCA</button>
+    </div>
+    <div class="search-hits" id="search-hits" role="listbox"></div>
+  </div>
+  <div class="sidebar-nav">
+    <nav class="nav-section">
+      <div class="nav-section-title">Percorso</div>
+      <ul class="nav-list">
+        <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+        <li class="nav-item"><a href="../pages/00-percorso-e-mindset.html" class=""><span class="num">00</span>Il percorso e la giusta mentalità</a></li><li class="nav-item"><a href="../pages/01-introduzione-java.html" class=""><span class="num">01</span>Java: cos&#x27;è davvero, JVM/JRE/JDK, primo programma</a></li><li class="nav-item"><a href="../pages/02-sintassi-base.html" class=""><span class="num">02</span>Sintassi di base: tipi, variabili, operatori, controllo di flusso</a></li><li class="nav-item"><a href="../pages/03-stringhe-array-io.html" class=""><span class="num">03</span>Stringhe, array, I/O da console</a></li><li class="nav-item"><a href="../pages/04-oop-classi-oggetti.html" class=""><span class="num">04</span>OOP I — Classi, oggetti, costruttori, this, package, visibilità</a></li><li class="nav-item"><a href="../pages/05-oop-ereditarieta-polimorfismo.html" class="active"><span class="num">05</span>OOP II — Ereditarietà, polimorfismo, interfacce, classi astratte</a></li><li class="nav-item"><a href="../pages/06-equals-hashcode-immutabilita.html" class=""><span class="num">06</span>OOP III — equals, hashCode, toString, immutabilità, record</a></li><li class="nav-item"><a href="../pages/07-eccezioni.html" class=""><span class="num">07</span>Eccezioni: checked vs unchecked, try-with-resources, custom</a></li><li class="nav-item"><a href="../pages/08-generics.html" class=""><span class="num">08</span>Generics: tipi parametrici, PECS, type erasure, wildcards</a></li><li class="nav-item"><a href="../pages/09-collections.html" class=""><span class="num">09</span>Collections: List, Set, Map, Queue, complessità, scelta della struttura</a></li><li class="nav-item"><a href="../pages/10-stream-lambda-optional.html" class=""><span class="num">10</span>Stream API, lambda, functional interfaces, Optional</a></li><li class="nav-item"><a href="../pages/11-io-nio.html" class=""><span class="num">11</span>I/O e NIO.2: File, Path, channels, buffer</a></li><li class="nav-item"><a href="../pages/12-concurrency-thread.html" class=""><span class="num">12</span>Concurrency I — Thread, sincronizzazione, volatile, Java Memory Model</a></li><li class="nav-item"><a href="../pages/13-executor-future-completablefuture.html" class=""><span class="num">13</span>Concurrency II — ExecutorService, Future, CompletableFuture</a></li><li class="nav-item"><a href="../pages/14-concurrency-jucconcurrent.html" class=""><span class="num">14</span>Concurrency III — java.util.concurrent: locks, atomics, concurrent collections</a></li><li class="nav-item"><a href="../pages/15-jvm-internals.html" class=""><span class="num">15</span>JVM internals: classloader, bytecode, runtime data areas, JIT</a></li><li class="nav-item"><a href="../pages/16-memoria-gc.html" class=""><span class="num">16</span>Memoria e garbage collection: G1, ZGC, Shenandoah</a></li><li class="nav-item"><a href="../pages/17-profiling-jfr.html" class=""><span class="num">17</span>Profiling: JFR, async-profiler, jstack, heap dump, jcmd</a></li><li class="nav-item"><a href="../pages/18-java-moderno.html" class=""><span class="num">18</span>Java moderno: dal 8 al 21 — features chiave</a></li><li class="nav-item"><a href="../pages/19-jdbc.html" class=""><span class="num">19</span>JDBC: connessione, PreparedStatement, transazioni, isolation levels</a></li><li class="nav-item"><a href="../pages/20-jpa-hibernate.html" class=""><span class="num">20</span>JPA / Hibernate: entità, relazioni, lazy/eager, N+1, cache</a></li><li class="nav-item"><a href="../pages/21-sql-essenziale.html" class=""><span class="num">21</span>SQL essenziale per chi sviluppa in Java</a></li><li class="nav-item"><a href="../pages/22-spring-intro-ioc-di.html" class=""><span class="num">22</span>Spring intro: IoC, DI, ApplicationContext, BeanFactory</a></li><li class="nav-item"><a href="../pages/23-spring-beans-lifecycle.html" class=""><span class="num">23</span>Bean: scopes, lifecycle, BeanPostProcessor, FactoryBean</a></li><li class="nav-item"><a href="../pages/24-spring-configurazione.html" class=""><span class="num">24</span>Configurazione: Java config, @ComponentScan, profili, conditionals, properties</a></li><li class="nav-item"><a href="../pages/25-spring-aop-transactional.html" class=""><span class="num">25</span>AOP, proxy, @Transactional: cosa accade davvero</a></li><li class="nav-item"><a href="../pages/26-spring-boot.html" class=""><span class="num">26</span>Spring Boot: auto-configuration, starters, Actuator</a></li><li class="nav-item"><a href="../pages/27-spring-data-jpa.html" class=""><span class="num">27</span>Spring Data JPA: Repository, derived queries, paginazione, Specification</a></li><li class="nav-item"><a href="../pages/28-spring-mvc-rest.html" class=""><span class="num">28</span>Spring MVC: DispatcherServlet, controller, REST endpoint</a></li><li class="nav-item"><a href="../pages/29-rest-openapi-hateoas.html" class=""><span class="num">29</span>REST: best practice, OpenAPI/Swagger, HATEOAS, versionamento</a></li><li class="nav-item"><a href="../pages/30-spring-webflux.html" class=""><span class="num">30</span>Spring WebFlux + Reactor: Mono, Flux, programmazione reattiva</a></li><li class="nav-item"><a href="../pages/31-spring-security.html" class=""><span class="num">31</span>Spring Security: filter chain, autenticazione, autorizzazione, JWT, OAuth2</a></li><li class="nav-item"><a href="../pages/32-spring-cloud.html" class=""><span class="num">32</span>Spring Cloud: Config Server, Discovery, Gateway, Resilience4j</a></li><li class="nav-item"><a href="../pages/33-testing.html" class=""><span class="num">33</span>Testing: JUnit 5, Mockito, MockMvc, Testcontainers</a></li><li class="nav-item"><a href="../pages/34-spring-batch-intro.html" class=""><span class="num">34</span>Spring Batch intro: domain model, Job, Step, primo batch</a></li><li class="nav-item"><a href="../pages/35-spring-batch-jobrepository.html" class=""><span class="num">35</span>JobRepository, JobLauncher, schema dei metadati</a></li><li class="nav-item"><a href="../pages/36-spring-batch-chunk-skip-retry.html" class=""><span class="num">36</span>Chunk processing: commit interval, skip, retry, fault tolerance</a></li><li class="nav-item"><a href="../pages/37-spring-batch-tasklet-flow.html" class=""><span class="num">37</span>Tasklet vs Chunk; flow control: decisioni, split, conditional</a></li><li class="nav-item"><a href="../pages/38-spring-batch-itemreader.html" class=""><span class="num">38</span>ItemReader: flat file, XML/JSON, JDBC cursor/paging, JPA, multi-resource</a></li><li class="nav-item"><a href="../pages/39-spring-batch-itemwriter.html" class=""><span class="num">39</span>ItemWriter: file, JDBC, JPA, composite, classifier, batch insert</a></li><li class="nav-item"><a href="../pages/40-spring-batch-scaling-partitioning.html" class=""><span class="num">40</span>Scaling: multi-threaded step, partitioning, remote chunking/partitioning</a></li><li class="nav-item"><a href="../pages/41-spring-batch-listeners-restart-k8s.html" class=""><span class="num">41</span>Listeners, restart, monitoring, integrazione con Spring Boot e Kubernetes</a></li><li class="nav-item"><a href="../pages/42-design-patterns.html" class=""><span class="num">42</span>Design pattern in Java/Spring: GoF + DDD-lite</a></li><li class="nav-item"><a href="../pages/43-performance-observability.html" class=""><span class="num">43</span>Performance tuning e observability production-grade</a></li><li class="nav-item"><a href="../pages/44-esercizi-sintesi.html" class=""><span class="num">44</span>50 esercizi cumulativi: dalla sintassi a Spring Batch</a></li><li class="nav-item"><a href="../pages/45-progetto-finale-etl.html" class=""><span class="num">45</span>Progetto finale guidato: ETL bancario notturno</a></li>
+      </ul>
+    </nav>
+  </div>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Java Foundations</span>
+        <span>Sezione 5 di 45</span>
+        <span class="level-tag level-beg">Livello: principiante</span>
+      </div>
+      <h1>OOP II — Ereditarietà, polimorfismo, interfacce, classi astratte</h1>
+      <p class="summary">Ereditarietà con extends, super, override. Polimorfismo dinamico. Interfacce (con metodi default e statici dal Java 8), classi astratte, quando usare quale. Diamond problem evitato. sealed classes.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Java Foundations</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>Sezione 4</li></ul>
+  <div class="label">Strumenti</div>
+  <ul class="source-list"><li>JDK 21</li></ul>
+</div>
+      <h2 id="ereditarieta-estende">Ereditarietà: "estende"</h2>
+<p>Una classe può <strong>ereditare</strong> da un'altra: prende campi e metodi non-private e può aggiungerne o ridefinirne.</p>
+<pre><code class="language-java">public class Animale {
+    protected String nome;
+
+    public Animale(String nome) { this.nome = nome; }
+
+    public void mangia() {
+        System.out.println(nome + &quot; sta mangiando&quot;);
+    }
+}
+
+public class Cane extends Animale {
+    private String razza;
+
+    public Cane(String nome, String razza) {
+        super(nome);             // chiama il costruttore di Animale
+        this.razza = razza;
+    }
+
+    public void abbaia() {
+        System.out.println(nome + &quot; abbaia: Woof!&quot;);
+    }
+}
+</code></pre>
+<pre><code class="language-java">Cane c = new Cane(&quot;Rex&quot;, &quot;Labrador&quot;);
+c.mangia();   // ereditato da Animale: &quot;Rex sta mangiando&quot;
+c.abbaia();   // metodo proprio di Cane
+</code></pre>
+<ul>
+<li><code>extends</code> indica l'eredità. <strong>Java è single-inheritance</strong>: una classe ha al massimo <em>una</em> superclasse.</li>
+<li><code>super(...)</code> chiama il costruttore della superclasse. Deve essere la <strong>prima istruzione</strong> del costruttore figlio.</li>
+<li>Se non chiami <code>super(...)</code>, Java aggiunge <code>super()</code> automaticamente. Se la superclasse non ha costruttore senza parametri, devi chiamarne uno esplicitamente.</li>
+</ul>
+<h3 id="super-per-accedere-ai-metodi-della-superclasse"><code>super</code> per accedere ai metodi della superclasse</h3>
+<pre><code class="language-java">public class Cane extends Animale {
+    @Override
+    public void mangia() {
+        super.mangia();           // chiama Animale.mangia()
+        System.out.println(&quot;...e poi scodinzola&quot;);
+    }
+}
+</code></pre>
+<h2 id="object-il-padre-di-tutti"><code>Object</code>: il padre di tutti</h2>
+<p>Tutte le classi ereditano implicitamente da <code>java.lang.Object</code>. Da qui arrivano questi metodi (che spesso vorrai ridefinire):</p>
+<ul>
+<li><code>equals(Object)</code> — uguaglianza logica</li>
+<li><code>hashCode()</code> — hash per <code>HashMap</code>/<code>HashSet</code></li>
+<li><code>toString()</code> — rappresentazione testuale</li>
+<li><code>getClass()</code> — tipo runtime</li>
+<li><code>clone()</code>, <code>finalize()</code> — vecchi, evitali</li>
+</ul>
+<p>Approfondiamo nella prossima sezione.</p>
+<h2 id="override-e-polimorfismo-dinamico">Override e polimorfismo dinamico</h2>
+<p><strong>Override</strong> = ridefinire un metodo della superclasse mantenendone la firma:</p>
+<pre><code class="language-java">public class Animale {
+    public String verso() { return &quot;...&quot;; }
+}
+public class Cane extends Animale {
+    @Override
+    public String verso() { return &quot;Woof!&quot;; }
+}
+public class Gatto extends Animale {
+    @Override
+    public String verso() { return &quot;Miao&quot;; }
+}
+</code></pre>
+<pre><code class="language-java">Animale[] zoo = { new Cane(&quot;Rex&quot;, &quot;Lab&quot;), new Gatto(&quot;Bea&quot;) };
+for (Animale a : zoo) {
+    System.out.println(a.verso());
+}
+// stampa: Woof!  Miao
+</code></pre>
+<p>Anche se la variabile <code>a</code> ha tipo <code>Animale</code>, viene chiamato il <code>verso()</code> <strong>della classe reale dell'oggetto</strong>. Questo è il <strong>dispatch dinamico</strong> (o "late binding"): il metodo viene risolto a runtime in base al tipo effettivo. È il cuore del polimorfismo.</p>
+<blockquote>
+<p><strong><code>@Override</code></strong> non è obbligatoria ma fortemente raccomandata: il compilatore controlla che tu stia veramente sovrascrivendo. Se sbagli la firma (es. <code>verso(int x)</code> invece di <code>verso()</code>), il compilatore ti avvisa.</p>
+</blockquote>
+<h3 id="regole-delloverride">Regole dell'override</h3>
+<table>
+<thead>
+<tr>
+<th>Aspetto</th>
+<th>Vincolo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nome metodo</td>
+<td>Identico</td>
+</tr>
+<tr>
+<td>Parametri</td>
+<td>Identici</td>
+</tr>
+<tr>
+<td>Tipo di ritorno</td>
+<td>Stesso o <strong>sottotipo</strong> (covariant return)</td>
+</tr>
+<tr>
+<td>Visibilità</td>
+<td>Stessa o <strong>più permissiva</strong> (<code>protected</code> ⟶ <code>public</code> ok; <code>public</code> ⟶ <code>protected</code> no)</td>
+</tr>
+<tr>
+<td>Eccezioni checked</td>
+<td>Stesse o <strong>sottotipi</strong> o nessuna</td>
+</tr>
+</tbody>
+</table>
+<h2 id="casting-di-riferimenti">Casting di riferimenti</h2>
+<pre><code class="language-java">Animale a = new Cane(&quot;Rex&quot;, &quot;Lab&quot;);   // upcast, sempre sicuro
+Cane c = (Cane) a;                     // downcast, va verificato
+c.abbaia();
+</code></pre>
+<p>Se l'oggetto non è davvero un <code>Cane</code>, ottieni <code>ClassCastException</code>. Controlla prima con <code>instanceof</code>:</p>
+<pre><code class="language-java">if (a instanceof Cane c) {     // pattern matching for instanceof (Java 16+)
+    c.abbaia();
+}
+</code></pre>
+<p>Sotto Java 16+ puoi anche scrivere così con il <em>pattern binding</em>, evitando il cast esplicito.</p>
+<h2 id="classi-astratte">Classi astratte</h2>
+<p>Una classe <strong>astratta</strong> non può essere istanziata: serve da base per le sottoclassi. Può contenere metodi astratti (senza corpo) e/o metodi concreti.</p>
+<pre><code class="language-java">public abstract class Forma {
+    public abstract double area();   // i sottoclassi DEVONO implementare
+
+    public void stampa() {            // metodo concreto, condiviso
+        System.out.println(&quot;Area: &quot; + area());
+    }
+}
+
+public class Cerchio extends Forma {
+    private double raggio;
+    public Cerchio(double r) { this.raggio = r; }
+    @Override
+    public double area() { return Math.PI * raggio * raggio; }
+}
+</code></pre>
+<pre><code class="language-java">Forma f = new Forma(...);    // ERRORE compilazione
+Forma f = new Cerchio(5);    // OK
+f.stampa();                   // &quot;Area: 78.539...&quot;
+</code></pre>
+<p>Quando usi una classe astratta? Quando hai uno <strong>scheletro</strong> comune con dettagli che variano per sottoclasse.</p>
+<h2 id="interfacce">Interfacce</h2>
+<p>Un'<strong>interfaccia</strong> è un contratto: dichiara <em>cosa</em> sa fare un tipo, senza l'<em>implementazione</em> (in origine).</p>
+<pre><code class="language-java">public interface Volabile {
+    void decolla();
+    void atterra();
+}
+
+public class Aereo implements Volabile {
+    @Override public void decolla() { System.out.println(&quot;Roll-out, V1, rotate, decollo&quot;); }
+    @Override public void atterra() { System.out.println(&quot;Final approach, touchdown&quot;); }
+}
+
+public class Uccello implements Volabile {
+    @Override public void decolla() { System.out.println(&quot;Plof plof&quot;); }
+    @Override public void atterra() { System.out.println(&quot;Pioto sul ramo&quot;); }
+}
+</code></pre>
+<p>Una classe può <strong>implementare più interfacce</strong> (mentre può estendere una sola classe):</p>
+<pre><code class="language-java">public class Anfibio implements Volabile, Nuotante, Camminante { ... }
+</code></pre>
+<h3 id="metodi-default-java-8">Metodi <code>default</code> (Java 8+)</h3>
+<p>Dal Java 8, le interfacce possono avere metodi con implementazione di default:</p>
+<pre><code class="language-java">public interface Saluto {
+    String saluto();
+
+    default String salutoConPunto() {
+        return saluto() + &quot;!&quot;;   // implementazione di default
+    }
+}
+</code></pre>
+<p>Le classi che implementano <code>Saluto</code> ottengono <code>salutoConPunto()</code> gratis, e possono comunque sovrascriverlo.</p>
+<h3 id="metodi-static-nelle-interfacce">Metodi <code>static</code> nelle interfacce</h3>
+<pre><code class="language-java">public interface MathUtils {
+    static double quadrato(double x) { return x * x; }
+}
+// uso:
+double q = MathUtils.quadrato(3);  // 9
+</code></pre>
+<h3 id="costanti-nelle-interfacce">Costanti nelle interfacce</h3>
+<p>Tutti i campi in un'interfaccia sono implicitamente <code>public static final</code>:</p>
+<pre><code class="language-java">public interface Costanti {
+    int MAX_RETRY = 3;   // automaticamente public static final
+}
+</code></pre>
+<h3 id="diamond-problem-evitato">Diamond problem evitato</h3>
+<p>In Java non puoi ereditare da due classi, ma puoi implementare due interfacce con lo stesso metodo <code>default</code>. Se conflittono, <strong>devi</strong> risolverle manualmente:</p>
+<pre><code class="language-java">interface A { default String saluta() { return &quot;ciao da A&quot;; } }
+interface B { default String saluta() { return &quot;ciao da B&quot;; } }
+
+class C implements A, B {
+    @Override
+    public String saluta() {
+        return A.super.saluta();   // o B.super.saluta(), o tutta nuova logica
+    }
+}
+</code></pre>
+<h2 id="classe-astratta-vs-interfaccia-quando-usare-quale">Classe astratta vs interfaccia: quando usare quale?</h2>
+<table>
+<thead>
+<tr>
+<th>Caratteristica</th>
+<th>Classe astratta</th>
+<th>Interfaccia</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Stato (campi non-final)</td>
+<td>Sì</td>
+<td>No (solo costanti)</td>
+</tr>
+<tr>
+<td>Costruttori</td>
+<td>Sì</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Ereditarietà multipla</td>
+<td>No (una sola superclasse)</td>
+<td>Sì (più interfacce)</td>
+</tr>
+<tr>
+<td>Metodi <code>default</code></td>
+<td>Sempre concreti o astratti</td>
+<td>Default dal Java 8</td>
+</tr>
+<tr>
+<td>Quando usare</td>
+<td>Quando condividi <strong>stato</strong> e logica comune</td>
+<td>Quando definisci un <strong>contratto</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Regola pratica</strong>: parti da un'interfaccia. Se ti accorgi che serve condividere stato/codice, valuta una classe astratta. Spesso entrambe: interfaccia per il contratto, classe astratta come base per le implementazioni standard.</p>
+<pre><code class="language-java">public interface Repository&lt;T&gt; {
+    Optional&lt;T&gt; findById(long id);
+    List&lt;T&gt; findAll();
+    T save(T entity);
+}
+
+public abstract class AbstractRepository&lt;T&gt; implements Repository&lt;T&gt; {
+    protected DataSource ds;
+    public AbstractRepository(DataSource ds) { this.ds = ds; }
+    // implementazioni di base condivise
+}
+</code></pre>
+<p>Spring usa esattamente questo schema dappertutto.</p>
+<h2 id="final-su-classi-e-metodi"><code>final</code> su classi e metodi</h2>
+<ul>
+<li><code>final</code> su una classe: non può essere estesa. (Es. <code>String</code>, <code>Integer</code>).</li>
+<li><code>final</code> su un metodo: non può essere sovrascritto.</li>
+<li><code>final</code> su un campo: vedi sezione 2.</li>
+</ul>
+<pre><code class="language-java">public final class Util { ... }   // non puoi extends Util
+public class Base {
+    public final void critico() {  // sottoclassi NON possono override
+        ...
+    }
+}
+</code></pre>
+<h2 id="sealed-java-17-ereditarieta-controllata"><code>sealed</code> (Java 17+): ereditarietà controllata</h2>
+<pre><code class="language-java">public sealed interface Forma permits Cerchio, Quadrato, Triangolo {}
+
+public final class Cerchio implements Forma { ... }
+public final class Quadrato implements Forma { ... }
+public final class Triangolo implements Forma { ... }
+</code></pre>
+<p><code>Forma</code> può essere implementata <strong>solo</strong> da <code>Cerchio</code>, <code>Quadrato</code>, <code>Triangolo</code>. Utile per il pattern matching esaustivo nello switch (sez. 18).</p>
+<h2 id="esempio-integrato-un-piccolo-sistema-di-pagamenti">Esempio integrato: un piccolo sistema di pagamenti</h2>
+<pre><code class="language-java">public interface Pagamento {
+    void esegui(double importo);
+}
+
+public abstract class PagamentoBase implements Pagamento {
+    protected String id;
+    public PagamentoBase(String id) { this.id = id; }
+
+    @Override
+    public final void esegui(double importo) {  // template method
+        valida(importo);
+        elabora(importo);
+        registra(importo);
+    }
+
+    protected void valida(double importo) {
+        if (importo &lt;= 0) throw new IllegalArgumentException(&quot;importo &lt;= 0&quot;);
+    }
+    protected abstract void elabora(double importo);
+    protected void registra(double importo) {
+        System.out.println(&quot;[&quot; + id + &quot;] registrato &quot; + importo);
+    }
+}
+
+public class CartaCredito extends PagamentoBase {
+    public CartaCredito(String id) { super(id); }
+    @Override
+    protected void elabora(double importo) {
+        System.out.println(&quot;Addebito su carta &quot; + id + &quot;: &quot; + importo);
+    }
+}
+
+public class Bonifico extends PagamentoBase {
+    public Bonifico(String id) { super(id); }
+    @Override
+    protected void elabora(double importo) {
+        System.out.println(&quot;Bonifico SEPA &quot; + id + &quot;: &quot; + importo);
+    }
+}
+</code></pre>
+<p>Questo è il <strong>template method pattern</strong>: l'algoritmo generale è definito una volta (<code>esegui</code>), le variazioni sono in <code>elabora</code>. La parte "uguale" si scrive una volta sola.</p>
+<h2 id="esercizi">Esercizi</h2>
+<details>
+<summary>Es 5.1 — Veicoli</summary>
+
+Crea una classe astratta `Veicolo` con campo `targa`, metodo astratto `nRuote()`, metodo concreto `descrivi()` che usa `nRuote()`. Implementa `Auto` (4 ruote), `Moto` (2), `Camion` (6).
+
+
+<pre><code class="language-java">public abstract class Veicolo {
+    protected String targa;
+    public Veicolo(String t) { this.targa = t; }
+    public abstract int nRuote();
+    public void descrivi() {
+        System.out.println(targa + &quot; ha &quot; + nRuote() + &quot; ruote&quot;);
+    }
+}
+public class Auto extends Veicolo {
+    public Auto(String t) { super(t); }
+    @Override public int nRuote() { return 4; }
+}
+// ... e così via
+</code></pre>
+
+
+</details>
+
+<details>
+<summary>Es 5.2 — Composizione di interfacce</summary>
+
+Crea `Pesce` che implementa `Nuotante` (`nuota()`) e `Riproducibile` (`riproduce()`).
+
+
+<pre><code class="language-java">interface Nuotante { void nuota(); }
+interface Riproducibile { void riproduce(); }
+
+public class Pesce implements Nuotante, Riproducibile {
+    public void nuota() { System.out.println(&quot;Glub glub&quot;); }
+    public void riproduce() { System.out.println(&quot;Depongo uova&quot;); }
+}
+</code></pre>
+
+
+</details>
+
+<details>
+<summary>Es 5.3 — Cast e instanceof</summary>
+
+Dato l'array `Veicolo[] flotta = { new Auto("AA-111-BB"), new Moto("XX-222-YY") }`, conta quante sono auto.
+
+
+<pre><code class="language-java">int autoCount = 0;
+for (Veicolo v : flotta) {
+    if (v instanceof Auto) autoCount++;
+}
+</code></pre>
+
+
+Con il pattern matching:
+
+
+<pre><code class="language-java">int autoCount = 0;
+for (Veicolo v : flotta) {
+    if (v instanceof Auto a) {
+        // qui `a` è già castata ad Auto
+        autoCount++;
+    }
+}
+</code></pre>
+
+
+</details>
+
+<details>
+<summary>Es 5.4 — Default conflittuali</summary>
+
+Due interfacce, stesso default, una classe che implementa entrambe. Cosa succede?
+
+
+<pre><code class="language-java">interface A { default String saluta() { return &quot;ciao A&quot;; } }
+interface B { default String saluta() { return &quot;ciao B&quot;; } }
+
+class C implements A, B {
+    // questa classe NON compila finché non ridefinisci saluta()
+}
+</code></pre>
+
+
+Devi sovrascrivere `saluta()` in `C`. Se vuoi delegare a uno dei due:
+
+
+<pre><code class="language-java">class C implements A, B {
+    @Override
+    public String saluta() {
+        return A.super.saluta();
+    }
+}
+</code></pre>
+
+
+</details>
+
+<details>
+<summary>Es 5.5 — Sealed gerarchia</summary>
+
+Crea una gerarchia `sealed` per i tipi di documento di identità: `Documento` ha solo `CartaIdentita`, `Patente`, `Passaporto` come permitted.
+
+
+<pre><code class="language-java">public sealed interface Documento permits CartaIdentita, Patente, Passaporto {
+    String numero();
+}
+public record CartaIdentita(String numero) implements Documento {}
+public record Patente(String numero, String categoria) implements Documento {}
+public record Passaporto(String numero, String paese) implements Documento {}
+</code></pre>
+
+
+</details>
+
+<h2 id="cosa-devi-portarti-via">Cosa devi portarti via</h2>
+<ul>
+<li><strong>Ereditarietà</strong> (extends) per riusare/estendere. Java è single-inheritance.</li>
+<li><strong>Override</strong> = stessa firma, polimorfismo dinamico. Usa sempre <code>@Override</code>.</li>
+<li><code>super</code> chiama costruttore o metodo della superclasse.</li>
+<li><strong>Interfacce</strong> = contratti. Puoi implementarne molte. Metodi <code>default</code> dal Java 8.</li>
+<li><strong>Classi astratte</strong> = base con stato condiviso. <code>abstract</code> impedisce istanziazione.</li>
+<li><code>final</code>, <code>sealed</code> per controllare l'estensibilità.</li>
+<li>Pattern fondamentali: template method, strategy, decorator (li vediamo nella sezione design pattern).</li>
+</ul>
+<p>Prossimo: equals/hashCode, immutabilità, <code>record</code>.</p>
+      <nav class="pager">
+<a href="04-oop-classi-oggetti.html" class="prev"><span class="label">← Precedente</span><span class="title">OOP I — Classi, oggetti, costruttori, this, package, visibilità</span></a>
+<a href="06-equals-hashcode-immutabilita.html" class="next"><span class="label">Successivo →</span><span class="title">OOP III — equals, hashCode, toString, immutabilità, record</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Java + Spring Zero to Hero</strong> — percorso completo da Java base a Spring Batch in produzione.</p><p>Materiale a scopo educativo. Codice sotto licenza MIT; usalo liberamente nei tuoi progetti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body, {delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true, background: '#15191e', primaryColor: '#1d2530',
+      primaryTextColor: '#eef1f5', primaryBorderColor: '#f89820',
+      lineColor: '#6db33f', secondaryColor: '#1a1f25', tertiaryColor: '#222a33',
+      mainBkg: '#1d2530', nodeBorder: '#f89820', clusterBkg: '#0f1318',
+      clusterBorder: '#2a3340', titleColor: '#f89820',
+      edgeLabelBackground: '#0f1318', textColor: '#eef1f5',
+      labelTextColor: '#eef1f5', actorBkg: '#1d2530', actorBorder: '#f89820',
+      actorTextColor: '#f89820', actorLineColor: '#6db33f',
+      signalColor: '#eef1f5', signalTextColor: '#eef1f5',
+      labelBoxBkgColor: '#1d2530', labelBoxBorderColor: '#f89820',
+      noteBkgColor: '#fff6a8', noteTextColor: '#0f1318', noteBorderColor: '#fff6a8',
+      activationBkgColor: '#1d2530', activationBorderColor: '#f89820',
+      sequenceNumberColor: '#0f1318'
+    },
+    flowchart: { curve: 'basis', padding: 16 },
+    sequence: { mirrorActors: false, bottomMarginAdj: 10 },
+    fontFamily: 'JetBrains Mono, Cascadia Code, Consolas, monospace'
+  });
+</script>
+</body>
+</html>

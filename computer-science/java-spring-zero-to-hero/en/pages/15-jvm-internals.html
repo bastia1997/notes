@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>JVM internals: classloader, bytecode, runtime data areas, JIT — Java + Spring Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">☕</div>
+      <div>
+        <div class="brand-title">JAVA · SPRING</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/15-jvm-internals.html" class="lang-link" title="Passa all'italiano"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="10" height="20" fill="#009246"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ce2b37"/></svg> IT</a><span class="lang-active" title="English"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="30" height="20" fill="#012169"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#fff" stroke-width="3"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#c8102e" stroke-width="1.5"/><path d="M15,0 v20 M0,10 h30" stroke="#fff" stroke-width="5"/><path d="M15,0 v20 M0,10 h30" stroke="#c8102e" stroke-width="3"/></svg> EN</span></div>
+  </div>
+  <div class="search-wrap">
+    <div class="search-row">
+      <div class="search-inputwrap">
+        <span class="search-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"/>
+            <line x1="20" y1="20" x2="16.65" y2="16.65"/>
+          </svg>
+        </span>
+        <input class="search-input" id="search-input" type="text" placeholder="search... (press /)" autocomplete="off" aria-label="Search">
+        <button class="search-clear" id="search-clear" type="button" aria-label="Clear" title="Clear">&times;</button>
+      </div>
+      <button class="search-btn" id="search-btn" type="button" aria-label="SEARCH" title="SEARCH">SEARCH</button>
+    </div>
+    <div class="search-hits" id="search-hits" role="listbox"></div>
+  </div>
+  <div class="sidebar-nav">
+    <nav class="nav-section">
+      <div class="nav-section-title">Path</div>
+      <ul class="nav-list">
+        <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+        <li class="nav-item"><a href="../pages/00-path-and-mindset.html" class=""><span class="num">00</span>The path and the right mindset</a></li><li class="nav-item"><a href="../pages/01-java-introduction.html" class=""><span class="num">01</span>Java: what it really is, JVM/JRE/JDK, first program</a></li><li class="nav-item"><a href="../pages/02-basic-syntax.html" class=""><span class="num">02</span>Basic syntax: types, variables, operators, control flow</a></li><li class="nav-item"><a href="../pages/03-strings-arrays-io.html" class=""><span class="num">03</span>Strings, arrays, console I/O</a></li><li class="nav-item"><a href="../pages/04-oop-classes-objects.html" class=""><span class="num">04</span>OOP I — Classes, objects, constructors, this, packages, visibility</a></li><li class="nav-item"><a href="../pages/05-oop-inheritance-polymorphism.html" class=""><span class="num">05</span>OOP II — Inheritance, polymorphism, interfaces, abstract classes</a></li><li class="nav-item"><a href="../pages/06-equals-hashcode-immutability.html" class=""><span class="num">06</span>OOP III — equals, hashCode, toString, immutability, record</a></li><li class="nav-item"><a href="../pages/07-exceptions.html" class=""><span class="num">07</span>Exceptions: checked vs unchecked, try-with-resources, custom</a></li><li class="nav-item"><a href="../pages/08-generics.html" class=""><span class="num">08</span>Generics: parametric types, PECS, type erasure, wildcards</a></li><li class="nav-item"><a href="../pages/09-collections.html" class=""><span class="num">09</span>Collections: List, Set, Map, Queue, complexity, choosing the right structure</a></li><li class="nav-item"><a href="../pages/10-stream-lambda-optional.html" class=""><span class="num">10</span>Stream API, lambdas, functional interfaces, Optional</a></li><li class="nav-item"><a href="../pages/11-io-nio.html" class=""><span class="num">11</span>I/O and NIO.2: File, Path, channels, buffers</a></li><li class="nav-item"><a href="../pages/12-concurrency-thread.html" class=""><span class="num">12</span>Concurrency I — Threads, synchronization, volatile, JMM</a></li><li class="nav-item"><a href="../pages/13-executor-future-completablefuture.html" class=""><span class="num">13</span>Concurrency II — ExecutorService, Future, CompletableFuture</a></li><li class="nav-item"><a href="../pages/14-concurrency-juc.html" class=""><span class="num">14</span>Concurrency III — java.util.concurrent: locks, atomics, concurrent collections</a></li><li class="nav-item"><a href="../pages/15-jvm-internals.html" class="active"><span class="num">15</span>JVM internals: classloader, bytecode, runtime data areas, JIT</a></li><li class="nav-item"><a href="../pages/16-memory-gc.html" class=""><span class="num">16</span>Memory and garbage collection: G1, ZGC, Shenandoah</a></li><li class="nav-item"><a href="../pages/17-profiling-jfr.html" class=""><span class="num">17</span>Profiling: JFR, async-profiler, jstack, heap dump, jcmd</a></li><li class="nav-item"><a href="../pages/18-modern-java.html" class=""><span class="num">18</span>Modern Java: from 8 to 21 — key features</a></li><li class="nav-item"><a href="../pages/19-jdbc.html" class=""><span class="num">19</span>JDBC: connection, PreparedStatement, transactions, isolation levels</a></li><li class="nav-item"><a href="../pages/20-jpa-hibernate.html" class=""><span class="num">20</span>JPA / Hibernate: entities, relationships, lazy/eager, N+1, cache</a></li><li class="nav-item"><a href="../pages/21-essential-sql.html" class=""><span class="num">21</span>Essential SQL for the Java developer</a></li><li class="nav-item"><a href="../pages/22-spring-intro-ioc-di.html" class=""><span class="num">22</span>Spring intro: IoC, DI, ApplicationContext, BeanFactory</a></li><li class="nav-item"><a href="../pages/23-spring-beans-lifecycle.html" class=""><span class="num">23</span>Beans: scopes, lifecycle, BeanPostProcessor, FactoryBean</a></li><li class="nav-item"><a href="../pages/24-spring-configuration.html" class=""><span class="num">24</span>Configuration: Java config, @ComponentScan, profiles, conditionals, properties</a></li><li class="nav-item"><a href="../pages/25-spring-aop-transactional.html" class=""><span class="num">25</span>AOP, proxies, @Transactional: what really happens</a></li><li class="nav-item"><a href="../pages/26-spring-boot.html" class=""><span class="num">26</span>Spring Boot: auto-configuration, starters, Actuator</a></li><li class="nav-item"><a href="../pages/27-spring-data-jpa.html" class=""><span class="num">27</span>Spring Data JPA: Repository, derived queries, pagination, Specification</a></li><li class="nav-item"><a href="../pages/28-spring-mvc-rest.html" class=""><span class="num">28</span>Spring MVC: DispatcherServlet, controllers, REST endpoints</a></li><li class="nav-item"><a href="../pages/29-rest-openapi-hateoas.html" class=""><span class="num">29</span>REST: best practices, OpenAPI/Swagger, HATEOAS, versioning</a></li><li class="nav-item"><a href="../pages/30-spring-webflux.html" class=""><span class="num">30</span>Spring WebFlux + Reactor: Mono, Flux, reactive programming</a></li><li class="nav-item"><a href="../pages/31-spring-security.html" class=""><span class="num">31</span>Spring Security: filter chain, authentication, authorization, JWT, OAuth2</a></li><li class="nav-item"><a href="../pages/32-spring-cloud.html" class=""><span class="num">32</span>Spring Cloud: Config Server, Discovery, Gateway, Resilience4j</a></li><li class="nav-item"><a href="../pages/33-testing.html" class=""><span class="num">33</span>Testing: JUnit 5, Mockito, MockMvc, Testcontainers</a></li><li class="nav-item"><a href="../pages/34-spring-batch-intro.html" class=""><span class="num">34</span>Spring Batch intro: domain model, Job, Step, first batch</a></li><li class="nav-item"><a href="../pages/35-spring-batch-jobrepository.html" class=""><span class="num">35</span>JobRepository, JobLauncher, metadata schema</a></li><li class="nav-item"><a href="../pages/36-spring-batch-chunk-skip-retry.html" class=""><span class="num">36</span>Chunk processing: commit interval, skip, retry, fault tolerance</a></li><li class="nav-item"><a href="../pages/37-spring-batch-tasklet-flow.html" class=""><span class="num">37</span>Tasklet vs Chunk; flow control: decisions, splits, conditionals</a></li><li class="nav-item"><a href="../pages/38-spring-batch-itemreader.html" class=""><span class="num">38</span>ItemReader: flat file, XML/JSON, JDBC cursor/paging, JPA, multi-resource</a></li><li class="nav-item"><a href="../pages/39-spring-batch-itemwriter.html" class=""><span class="num">39</span>ItemWriter: file, JDBC, JPA, composite, classifier, batch insert</a></li><li class="nav-item"><a href="../pages/40-spring-batch-scaling-partitioning.html" class=""><span class="num">40</span>Scaling: multi-threaded step, partitioning, remote chunking/partitioning</a></li><li class="nav-item"><a href="../pages/41-spring-batch-listeners-restart-k8s.html" class=""><span class="num">41</span>Listeners, restart, monitoring, Spring Boot and Kubernetes integration</a></li><li class="nav-item"><a href="../pages/42-design-patterns.html" class=""><span class="num">42</span>Design patterns in Java/Spring: GoF + DDD-lite</a></li><li class="nav-item"><a href="../pages/43-performance-observability.html" class=""><span class="num">43</span>Production-grade performance tuning and observability</a></li><li class="nav-item"><a href="../pages/44-synthesis-exercises.html" class=""><span class="num">44</span>50 cumulative exercises: from syntax to Spring Batch</a></li><li class="nav-item"><a href="../pages/45-final-project-etl.html" class=""><span class="num">45</span>Final guided project: nightly bank ETL</a></li>
+      </ul>
+    </nav>
+  </div>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">JVM Deep</span>
+        <span>Section 15 of 45</span>
+        <span class="level-tag level-adv">Level: advanced</span>
+      </div>
+      <h1>JVM internals: classloader, bytecode, runtime data areas, JIT</h1>
+      <p class="summary">JVM memory areas (heap, stack, metaspace, code cache). Classloaders and parent-first delegation. JIT C1/C2 and tiered compilation. What happens when you run java -jar app.jar.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>JVM Deep</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>Section 14</li></ul>
+  <div class="label">Tools</div>
+  <ul class="source-list"><li>JDK 21</li><li>jcmd, jps, jstat</li></ul>
+</div>
+      <h2 id="jvm-memory-areas">JVM memory areas</h2>
+<div class="mermaid">
+flowchart TB
+    subgraph JVM
+        direction TB
+        subgraph PERTHREAD["Per thread"]
+            STACK[Stack<br/>method frames]
+            PC[PC register]
+            NATIVE[Native stack]
+        end
+        subgraph SHARED["Shared"]
+            HEAP[Heap<br/>objects]
+            META[Metaspace<br/>loaded classes]
+            CODE[Code cache<br/>JIT'd code]
+        end
+    end
+
+</div>
+
+<ul>
+<li><strong>Heap</strong>: all <code>new ...()</code> objects. Split into Young (Eden + Survivors) and Old/Tenured.</li>
+<li><strong>Stack</strong>: a stack of <strong>frames</strong> (one per method call). Holds local variables, operand stack, references. One stack per thread.</li>
+<li><strong>Metaspace</strong>: classes, methods, constants. Replaces the old "PermGen" since Java 8.</li>
+<li><strong>Code Cache</strong>: native code generated by the JIT.</li>
+</ul>
+<h3 id="flow-example">Flow example</h3>
+<pre><code class="language-java">void m(int x) {
+    Person p = new Person(&quot;Anna&quot;, x);
+}
+</code></pre>
+<ul>
+<li><code>x</code> and <code>p</code> are in the thread's <strong>stack frame</strong>.</li>
+<li>The <code>Person</code> object is on the <strong>heap</strong>.</li>
+<li>The <code>Person</code> class is in the <strong>metaspace</strong>.</li>
+</ul>
+<h2 id="classloaders">Classloaders</h2>
+<div class="mermaid">
+flowchart TB
+    BOOT[Bootstrap ClassLoader<br/>java.base, java.lang ...]
+    PLAT[Platform ClassLoader<br/>optional JDK modules]
+    APP[Application ClassLoader<br/>your classpath]
+    CUSTOM[Custom ClassLoader<br/>plugins, hot reload, ...]
+    BOOT --> PLAT --> APP --> CUSTOM
+
+</div>
+
+<p><strong>Parent-first delegation</strong>: before loading a class, each classloader asks its parent. This way JDK classes cannot be redefined by user code.</p>
+<p>Loading operations:
+1. <strong>Loading</strong>: find the <code>.class</code> and create the <code>Class</code> object.
+2. <strong>Linking</strong>: verify bytecode, prepare static fields, resolve symbols.
+3. <strong>Initialization</strong>: run static initializers.</p>
+<p>When? <strong>On first need</strong> (when a class is first used). <code>final</code> primitive constants can be resolved without initializing the class.</p>
+<h3 id="see-who-loaded-what">See who loaded what</h3>
+<pre><code class="language-java">System.out.println(String.class.getClassLoader());     // null (bootstrap)
+System.out.println(MyClass.class.getClassLoader());    // app classloader
+</code></pre>
+<h2 id="bytecode">Bytecode</h2>
+<p>Compile <code>Hello.java</code> and disassemble:</p>
+<pre><code class="language-powershell">javac Hello.java
+javap -c Hello.class
+</code></pre>
+<p>Example:</p>
+<pre><code>0: ldc           #2    // String &quot;Hi&quot;
+2: astore_1
+3: getstatic     #3    // Field java/lang/System.out
+6: aload_1
+7: invokevirtual #4    // Method println
+10: return
+</code></pre>
+<p>Key instructions:
+- <code>aload_N</code>, <code>astore_N</code> — load/store reference at slot N
+- <code>iload_N</code>, <code>istore_N</code> — int
+- <code>getstatic</code>, <code>putstatic</code> — static field access
+- <code>getfield</code>, <code>putfield</code> — instance field access
+- <code>invokevirtual</code> — polymorphic method call
+- <code>invokestatic</code> — static method call
+- <code>invokespecial</code> — constructors, <code>super.method()</code>
+- <code>invokedynamic</code> — runtime resolution (lambdas, modern string concat)
+- <code>invokeinterface</code> — interface call
+- <code>new</code>, <code>dup</code>, <code>anewarray</code> — object/array creation</p>
+<h2 id="stack-frames-and-operand-stack">Stack frames and operand stack</h2>
+<p>Each method has:
+- <strong>Locals</strong>: slot array for local variables (parameters + <code>this</code> included).
+- <strong>Operand stack</strong>: stack for computations; instructions read/write here.</p>
+<pre><code>int z = x + y;
+</code></pre>
+<p>Typical bytecode:</p>
+<pre><code>iload x      // push x to operand stack
+iload y      // push y
+iadd         // pop 2, push x+y
+istore z     // pop into locals[z]
+</code></pre>
+<h2 id="jit-from-bytecode-to-native">JIT: from bytecode to native</h2>
+<p>Modern HotSpot uses <strong>tiered compilation</strong>:</p>
+<ol>
+<li><strong>Interpreter</strong>: runs bytecode slowly.</li>
+<li><strong>C1 (Client)</strong>: compiles to native, quick optimizations.</li>
+<li><strong>C2 (Server)</strong>: deep optimizations (inlining, escape analysis, ...).</li>
+</ol>
+<p>When a method is called often ("hot"), it goes to C2.</p>
+<p>See JIT decisions:</p>
+<pre><code class="language-powershell">java -XX:+PrintCompilation MyApp
+</code></pre>
+<h3 id="jit-optimizations">JIT optimizations</h3>
+<ul>
+<li><strong>Method inlining</strong>: copy method body into caller (no call overhead).</li>
+<li><strong>Escape analysis</strong>: if an object doesn't "escape" the method, allocate on stack (no GC).</li>
+<li><strong>Loop unrolling</strong>: unroll small loops.</li>
+<li><strong>Dead code elimination</strong>.</li>
+<li><strong>Speculative inlining</strong>: assume the most frequent class; if wrong, "deopt".</li>
+</ul>
+<p><code>-XX:+PrintInlining</code> shows inlined methods.</p>
+<h2 id="what-happens-with-java-jar-appjar">What happens with <code>java -jar app.jar</code></h2>
+<div class="mermaid">
+sequenceDiagram
+    participant U as User
+    participant J as java launcher
+    participant CL as ClassLoader
+    participant V as Verifier
+    participant E as Execution Engine
+    participant GC as Garbage Collector
+
+    U->>J: java -jar app.jar
+    J->>CL: find Main-Class in MANIFEST.MF
+    CL->>CL: load required classes
+    CL->>V: verify bytecode
+    V-->>CL: ok
+    CL->>E: invoke main(args)
+    E->>E: interpreter
+    Note over E: hot methods → JIT (C1 → C2)
+    E->>GC: manages heap
+
+</div>
+
+<h2 id="exercises">Exercises</h2>
+<details>
+<summary>Ex 15.1 — Explore with javap</summary>
+
+
+<pre><code class="language-java">public class Calc {
+    public static int add(int a, int b) { return a + b; }
+    public static void main(String[] args) { System.out.println(add(2, 3)); }
+}
+</code></pre>
+
+Compile and run `javap -c -v Calc.class`. Identify `iload_0`, `iload_1`, `iadd`, `ireturn`.
+
+</details>
+
+<details>
+<summary>Ex 15.2 — PrintCompilation</summary>
+
+Write a loop calling a trivial method 100k times. Run with `-XX:+PrintCompilation` and watch when it gets compiled (`n 3 ...` for C1, `n 4 ...` for C2).
+
+</details>
+
+<details>
+<summary>Ex 15.3 — Stack overflow</summary>
+
+
+<pre><code class="language-java">public class SO {
+    static int n = 0;
+    public static void f() { n++; f(); }
+    public static void main(String[] a) {
+        try { f(); } catch (StackOverflowError e) { System.out.println(n); }
+    }
+}
+</code></pre>
+
+
+</details>
+
+<h2 id="take-aways">Take-aways</h2>
+<ul>
+<li>JVM = heap (objects) + per-thread stacks + metaspace (classes) + code cache (JIT).</li>
+<li>Parent-first classloaders. Get this and you understand <code>ClassNotFoundException</code> / <code>NoClassDefFoundError</code> bugs.</li>
+<li>Bytecode is a virtual instruction set. <code>javap -c</code> to read it.</li>
+<li>The JIT compiles hot methods to native via C1/C2. That's why Java is fast.</li>
+</ul>
+<p>Next: memory and garbage collection.</p>
+      <nav class="pager">
+<a href="14-concurrency-juc.html" class="prev"><span class="label">← Previous</span><span class="title">Concurrency III — java.util.concurrent: locks, atomics, concurrent collections</span></a>
+<a href="16-memory-gc.html" class="next"><span class="label">Next →</span><span class="title">Memory and garbage collection: G1, ZGC, Shenandoah</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Java + Spring Zero to Hero</strong> — built as a continuous path. Static build from Markdown.</p><p>Open-content educational material. Code under the MIT license; use freely in your own projects.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body, {delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true, background: '#15191e', primaryColor: '#1d2530',
+      primaryTextColor: '#eef1f5', primaryBorderColor: '#f89820',
+      lineColor: '#6db33f', secondaryColor: '#1a1f25', tertiaryColor: '#222a33',
+      mainBkg: '#1d2530', nodeBorder: '#f89820', clusterBkg: '#0f1318',
+      clusterBorder: '#2a3340', titleColor: '#f89820',
+      edgeLabelBackground: '#0f1318', textColor: '#eef1f5',
+      labelTextColor: '#eef1f5', actorBkg: '#1d2530', actorBorder: '#f89820',
+      actorTextColor: '#f89820', actorLineColor: '#6db33f',
+      signalColor: '#eef1f5', signalTextColor: '#eef1f5',
+      labelBoxBkgColor: '#1d2530', labelBoxBorderColor: '#f89820',
+      noteBkgColor: '#fff6a8', noteTextColor: '#0f1318', noteBorderColor: '#fff6a8',
+      activationBkgColor: '#1d2530', activationBorderColor: '#f89820',
+      sequenceNumberColor: '#0f1318'
+    },
+    flowchart: { curve: 'basis', padding: 16 },
+    sequence: { mirrorActors: false, bottomMarginAdj: 10 },
+    fontFamily: 'JetBrains Mono, Cascadia Code, Consolas, monospace'
+  });
+</script>
+</body>
+</html>

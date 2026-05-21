@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OpenSearch e QuickSight — search e BI — AWS Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#232f3e',primaryTextColor:'#ffffff',primaryBorderColor:'#ff9900',lineColor:'#8a99ad',background:'#0c1320'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">λ</div>
+      <div>
+        <div class="brand-title">AWS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">IT</span><a href="../en/pages/31-opensearch-quicksight.html" class="lang-link" title="Switch to English">EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-cos-e-aws-cloud.html" class=""><span class="num">01</span>Cos&#x27;è il cloud e cos&#x27;è AWS</a></li><li class="nav-item"><a href="../pages/02-infrastruttura-globale.html" class=""><span class="num">02</span>Infrastruttura globale: Region, AZ, Edge</a></li><li class="nav-item"><a href="../pages/03-account-root-billing.html" class=""><span class="num">03</span>Account AWS, utente root, billing</a></li><li class="nav-item"><a href="../pages/04-iam-fondamenti.html" class=""><span class="num">04</span>IAM — fondamenti (utenti, gruppi, ruoli, policy)</a></li><li class="nav-item"><a href="../pages/05-iam-avanzato.html" class=""><span class="num">05</span>IAM avanzato: policy condizionali, STS, ABAC</a></li><li class="nav-item"><a href="../pages/06-cli-sdk-iac.html" class=""><span class="num">06</span>CLI, SDK, CloudShell, IaC primer</a></li><li class="nav-item"><a href="../pages/07-pricing-billing.html" class=""><span class="num">07</span>Pricing, billing, free tier, cost tools</a></li><li class="nav-item"><a href="../pages/08-organizations-multi-account.html" class=""><span class="num">08</span>AWS Organizations &amp; strategia multi-account</a></li><li class="nav-item"><a href="../pages/09-vpc-fondamenti.html" class=""><span class="num">09</span>VPC — fondamenti</a></li><li class="nav-item"><a href="../pages/10-vpc-avanzato.html" class=""><span class="num">10</span>VPC avanzato: peering, TGW, PrivateLink, endpoint</a></li><li class="nav-item"><a href="../pages/11-route53-cloudfront.html" class=""><span class="num">11</span>Route 53, CloudFront, Global Accelerator</a></li><li class="nav-item"><a href="../pages/12-hybrid-vpn-directconnect.html" class=""><span class="num">12</span>Hybrid: VPN, Direct Connect, PrivateLink</a></li><li class="nav-item"><a href="../pages/13-ec2-fondamenti.html" class=""><span class="num">13</span>EC2 — fondamenti (istanze, AMI, lifecycle)</a></li><li class="nav-item"><a href="../pages/14-ec2-avanzato-spot-nitro.html" class=""><span class="num">14</span>EC2 avanzato — Spot, Placement Groups, Nitro, hibernation</a></li><li class="nav-item"><a href="../pages/15-asg-elb.html" class=""><span class="num">15</span>Auto Scaling Groups + Elastic Load Balancing</a></li><li class="nav-item"><a href="../pages/16-lambda-deep-dive.html" class=""><span class="num">16</span>Lambda deep dive</a></li><li class="nav-item"><a href="../pages/17-containers-ecs-eks-fargate.html" class=""><span class="num">17</span>Containers: ECS, EKS, Fargate, ECR</a></li><li class="nav-item"><a href="../pages/18-specialty-compute.html" class=""><span class="num">18</span>Specialty compute: Batch, Lightsail, Outposts, Wavelength, Beanstalk</a></li><li class="nav-item"><a href="../pages/19-ebs-efs-fsx.html" class=""><span class="num">19</span>EBS, EFS, FSx, Instance Store</a></li><li class="nav-item"><a href="../pages/20-s3-deep-dive.html" class=""><span class="num">20</span>S3 — deep dive</a></li><li class="nav-item"><a href="../pages/21-archive-snow-gateway-backup.html" class=""><span class="num">21</span>Glacier, Snow, Storage Gateway, DataSync, AWS Backup</a></li><li class="nav-item"><a href="../pages/22-rds.html" class=""><span class="num">22</span>RDS — relational DB managed (engines, Multi-AZ, replicas, Proxy)</a></li><li class="nav-item"><a href="../pages/23-aurora-deep-dive.html" class=""><span class="num">23</span>Aurora deep dive — storage condiviso, Serverless v2, Global Database</a></li><li class="nav-item"><a href="../pages/24-dynamodb-deep-dive.html" class=""><span class="num">24</span>DynamoDB deep dive — partition, GSI, Streams, single-table</a></li><li class="nav-item"><a href="../pages/25-purpose-built-dbs.html" class=""><span class="num">25</span>Purpose-built DB — ElastiCache, MemoryDB, Neptune, DocumentDB, Keyspaces, Timestream, QLDB</a></li><li class="nav-item"><a href="../pages/26-redshift-data-warehousing.html" class=""><span class="num">26</span>Redshift — data warehousing MPP e zero-ETL</a></li><li class="nav-item"><a href="../pages/27-sqs-sns-eventbridge.html" class=""><span class="num">27</span>SQS, SNS, EventBridge — messaging ed eventi</a></li><li class="nav-item"><a href="../pages/28-step-functions-mq-appflow.html" class=""><span class="num">28</span>Step Functions, MQ, AppFlow — orchestrazione e integrazione</a></li><li class="nav-item"><a href="../pages/29-athena-glue-lakeformation.html" class=""><span class="num">29</span>Athena, Glue, Lake Formation — il data lake AWS</a></li><li class="nav-item"><a href="../pages/30-emr-kinesis-msk.html" class=""><span class="num">30</span>EMR, Kinesis, MSK — big data e streaming</a></li><li class="nav-item"><a href="../pages/31-opensearch-quicksight.html" class="active"><span class="num">31</span>OpenSearch e QuickSight — search e BI</a></li><li class="nav-item"><a href="../pages/32-sagemaker-overview.html" class=""><span class="num">32</span>SageMaker — la piattaforma ML end-to-end</a></li><li class="nav-item"><a href="../pages/33-bedrock-ai-services.html" class=""><span class="num">33</span>Bedrock e AI services — GenAI e ML managed</a></li><li class="nav-item"><a href="../pages/34-iac-cloudformation-cdk-terraform.html" class=""><span class="num">34</span>IaC su AWS — CloudFormation, CDK, SAM, Terraform</a></li><li class="nav-item"><a href="../pages/35-ci-cd-pipeline.html" class=""><span class="num">35</span>CI/CD su AWS — CodePipeline, CodeBuild, CodeDeploy, CodeCatalyst</a></li><li class="nav-item"><a href="../pages/36-observability-cloudwatch-xray.html" class=""><span class="num">36</span>Observability — CloudWatch, X-Ray, CloudTrail, Config, SSM</a></li><li class="nav-item"><a href="../pages/37-kms-secrets-acm.html" class=""><span class="num">37</span>Crittografia — KMS, CloudHSM, Secrets Manager, Parameter Store, ACM</a></li><li class="nav-item"><a href="../pages/38-waf-shield-guardduty-inspector.html" class=""><span class="num">38</span>Threat detection — WAF, Shield, GuardDuty, Inspector, Macie, Security Hub</a></li><li class="nav-item"><a href="../pages/39-governance-org-controltower-identitycenter.html" class=""><span class="num">39</span>Governance — Organizations, Control Tower, Identity Center</a></li><li class="nav-item"><a href="../pages/40-migration-mgn-dms-snow.html" class=""><span class="num">40</span>Migration — MGN, DMS, Snow family, Discovery, Migration Hub</a></li><li class="nav-item"><a href="../pages/41-cost-optimization-finops.html" class=""><span class="num">41</span>Cost optimization e FinOps</a></li><li class="nav-item"><a href="../pages/42-well-architected.html" class=""><span class="num">42</span>Well-Architected Framework — 6 pillar, lens, review</a></li><li class="nav-item"><a href="../pages/43-architecture-patterns.html" class=""><span class="num">43</span>Architecture patterns — 3-tier, serverless, event-driven, microservices</a></li><li class="nav-item"><a href="../pages/44-disaster-recovery-multi-region.html" class=""><span class="num">44</span>Disaster Recovery e Multi-Region</a></li><li class="nav-item"><a href="../pages/45-reference-architectures.html" class=""><span class="num">45</span>Reference architectures real-world</a></li><li class="nav-item"><a href="../pages/46-advanced-networking.html" class=""><span class="num">46</span>Advanced networking deep dive</a></li><li class="nav-item"><a href="../pages/47-containers-deep-dive.html" class=""><span class="num">47</span>Containers deep dive — EKS, Karpenter, service mesh</a></li><li class="nav-item"><a href="../pages/48-serverless-patterns.html" class=""><span class="num">48</span>Serverless patterns deep dive</a></li><li class="nav-item"><a href="../pages/49-genai-rag-agents.html" class=""><span class="num">49</span>Generative AI su AWS — RAG e Agents</a></li><li class="nav-item"><a href="../pages/50-certificazioni-aws.html" class=""><span class="num">50</span>Certificazioni AWS — roadmap e study guide</a></li><li class="nav-item"><a href="../pages/51-glossario-az.html" class=""><span class="num">51</span>Glossario A-Z</a></li><li class="nav-item"><a href="../pages/52-cheatsheet.html" class=""><span class="num">52</span>Cheat sheet: servizi, limiti, instance families</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Analytics</span>
+        <span>Sezione 31 di 52</span>
+        <span class="level-tag level-int">Livello: intermedio</span>
+      </div>
+      <h1>OpenSearch e QuickSight — search e BI</h1>
+      <p class="summary">Search &amp; log analytics con OpenSearch (anche vector per RAG) e business intelligence con QuickSight (SPICE, Q natural language, embedded).</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Analytics</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>sezione 29</li></ul>
+  <div class="label">Strumenti / riferimenti</div>
+  <ul class="source-list"><li>OpenSearch Dashboards</li><li>QuickSight</li></ul>
+</div>
+      <p>Due servizi complementari della famiglia Analytics: <strong>OpenSearch</strong> è il motore di search e log analytics (fork AWS di Elasticsearch), <strong>QuickSight</strong> è la piattaforma di Business Intelligence managed. Insieme coprono "trovare ago in pagliaio" e "presentare cruscotti".</p>
+<h2 id="1-opensearch-service-managed-search">1. OpenSearch Service — managed search</h2>
+<p>Nato come fork open-source di Elasticsearch 7.10 dopo il cambio di licenza Elastic. AWS gestisce installazione, patching, snapshot, scaling.</p>
+<p>Due opzioni di deploy:</p>
+<table>
+<thead>
+<tr>
+<th>Modello</th>
+<th>Quando</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Managed cluster</strong></td>
+<td>controllo totale (instance type, EBS, dedicated master), workload prevedibile</td>
+</tr>
+<tr>
+<td><strong>OpenSearch Serverless</strong></td>
+<td>pay-per-OCU (OpenSearch Compute Unit), workload variabile, niente sizing</td>
+</tr>
+</tbody>
+</table>
+<h3 id="architettura-cluster">Architettura cluster</h3>
+<pre><code class="language-mermaid">flowchart LR
+  Apps --&gt;|bulk index| LB[OpenSearch endpoint]
+  LB --&gt; Data1[Data node 1&lt;br&gt;hot tier - SSD]
+  LB --&gt; Data2[Data node 2&lt;br&gt;hot tier - SSD]
+  LB --&gt; Data3[Data node 3&lt;br&gt;hot tier - SSD]
+  Data1 -.ISM rollover.-&gt; UW[(UltraWarm&lt;br&gt;S3-backed)]
+  UW -.policy.-&gt; Cold[(Cold&lt;br&gt;S3 detached)]
+  Master[Dedicated master x3] -.cluster state.-&gt; Data1
+</code></pre>
+<p>Best practice: <strong>3 dedicated master node</strong> in produzione (evita split-brain), nodi data dispari in <strong>3 AZ</strong>, replica almeno 1.</p>
+<h2 id="2-tiered-storage">2. Tiered storage</h2>
+<ul>
+<li><strong>Hot tier</strong>: SSD locale, query veloci, dati recenti.</li>
+<li><strong>UltraWarm</strong>: indici read-only su S3 + cache locale, ~80% in meno di costo, latenza 10x.</li>
+<li><strong>Cold storage</strong>: dati molto vecchi, montati on-demand, costo minimo.</li>
+<li><strong>Index State Management (ISM)</strong>: policy che fa <strong>rollover</strong> automatico (es. nuovo indice ogni 50 GB) e sposta dopo N giorni in UltraWarm e poi Cold.</li>
+</ul>
+<p>Trappola classica: indici unici giganti (<code>logs-2026</code>) → rebalance lentissimo. Sempre <strong>time-based index pattern</strong> (<code>logs-2026.05.21</code>) con rollover.</p>
+<h2 id="3-use-case-principali">3. Use case principali</h2>
+<ol>
+<li><strong>Log analytics</strong>: CloudWatch Logs / Firehose / Logstash → OpenSearch → Dashboards (sostituto ELK).</li>
+<li><strong>Full-text search applicativo</strong>: catalogo prodotti, ricerca interna, knowledge base.</li>
+<li><strong>Vector search per RAG</strong>: dal 2023 OpenSearch supporta <strong>k-NN engine</strong> (HNSW, IVF). Indicizzi embedding di documenti e cerchi per similarità coseno. Building block per RAG con Bedrock.</li>
+<li><strong>SIEM / security analytics</strong> con il plugin Security Analytics.</li>
+</ol>
+<h3 id="sicurezza">Sicurezza</h3>
+<ul>
+<li><strong>Fine-grained access control</strong> (FGAC): RBAC + filtri document/field level.</li>
+<li><strong>Cognito</strong> o <strong>SAML</strong> per OpenSearch Dashboards (login utenti).</li>
+<li>Cluster sempre in VPC privato.</li>
+</ul>
+<h2 id="4-quicksight-bi-managed">4. QuickSight — BI managed</h2>
+<p>BI cloud-native: dashboard interattive, paginated reports, embedded analytics, <strong>machine learning insight</strong> automatici.</p>
+<table>
+<thead>
+<tr>
+<th>Caratteristica</th>
+<th>Dettaglio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Datasource</strong></td>
+<td>S3, Athena, Redshift, RDS, Aurora, Snowflake, Salesforce, file CSV/Excel, SaaS via JDBC</td>
+</tr>
+<tr>
+<td><strong>SPICE</strong></td>
+<td>In-memory columnar engine (10 GB free per user) per query sub-secondo</td>
+</tr>
+<tr>
+<td><strong>Direct Query</strong></td>
+<td>Esegue ogni volta sul source (per dati real-time)</td>
+</tr>
+<tr>
+<td><strong>Q</strong></td>
+<td>Natural language: "what were sales last quarter by region?" → grafico</td>
+</tr>
+<tr>
+<td><strong>Generative BI con Q</strong></td>
+<td>Genera storie, executive summary, esegue cosa-se</td>
+</tr>
+<tr>
+<td><strong>Embedded</strong></td>
+<td>Iframe sicuro o JS SDK in app tue, RLS dinamico per tenant</td>
+</tr>
+<tr>
+<td><strong>Paginated reports</strong></td>
+<td>Pixel-perfect PDF/Excel pianificati (ex Bursting)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="5-spice-il-segreto-del-prezzo">5. SPICE: il segreto del prezzo</h2>
+<p><strong>SPICE</strong> (Super-fast, Parallel, In-memory Calculation Engine) pre-carica i dati in RAM colonnare compressa. Una dashboard su 100 M righe risponde in &lt; 1 s <strong>e non interroga la fonte ogni volta</strong>. Fondamentale per:
+- limitare costo Athena (1 scan al refresh SPICE, non a ogni view)
+- proteggere il DB transazionale (no query interattive on top)
+- offline-capable (la fonte può essere giù, la dashboard funziona)</p>
+<p>Refresh SPICE: schedulato o incrementale (solo righe nuove). </p>
+<h2 id="6-pricing-modelli">6. Pricing modelli</h2>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Prezzo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Author Pro / Standard</strong></td>
+<td>$24-50/user/mese, crea dashboard</td>
+</tr>
+<tr>
+<td><strong>Reader</strong></td>
+<td>$3/user/mese o <strong>$0.30/session</strong> (capped a $5/user/mese)</td>
+</tr>
+<tr>
+<td><strong>Embedded</strong></td>
+<td>per session API</td>
+</tr>
+<tr>
+<td><strong>Q add-on</strong></td>
+<td>extra per author/reader</td>
+</tr>
+</tbody>
+</table>
+<p>Session pricing è killer per uso saltuario (es. 200 manager che entrano 1x al mese).</p>
+<h2 id="7-quando-scegliere-cosa">7. Quando scegliere cosa</h2>
+<ul>
+<li><strong>OpenSearch</strong>: cerca testo, log, vettori. Non è un BI tool.</li>
+<li><strong>QuickSight</strong>: dashboard e report. Non è un motore di search.</li>
+<li><strong>Athena + QuickSight</strong> è la combo classica "data lake → BI".</li>
+<li><strong>OpenSearch + QuickSight</strong>: QuickSight si collega come datasource per visualizzare aggregati di log.</li>
+</ul>
+<h2 id="8-esercizio">8. Esercizio</h2>
+<details>
+<summary>Logs CloudWatch da 200 microservizi, 500 GB/giorno, retention 90 giorni di ricerca veloce + 1 anno freddo. Architettura OpenSearch?</summary>
+
+**Firehose → OpenSearch Managed** (oppure Serverless se carico variabile). Cluster: 3 dedicated master `m6g.large`, 6 data node `r6g.xlarge` in 3 AZ, replica 1. **ISM policy**: rollover ogni 50 GB o 1 giorno, sposta in **UltraWarm** dopo 30 giorni, **Cold** dopo 90 giorni, **delete** a 365 giorni. Time-based index `logs-YYYY.MM.DD`. Risparmio storage ~70% rispetto a tutto su hot.
+</details>
+
+<details>
+<summary>200 manager guardano dashboard una volta al mese. Author Pro per loro?</summary>
+
+No. **Reader con session pricing** ($0.30/session, capped $5/mese/utente). 200 × $5 = $1000/mese vs 200 × $24 = $4800/mese. Author solo per chi crea/modifica dashboard. Bonus: embedded session se la dashboard vive dentro un portale interno → ancora più economico per uso anonimo aggregato.
+</details>
+
+<blockquote>
+<p><strong>Riassunto</strong>: OpenSearch = search/log/vector managed con tiered storage hot→UltraWarm→Cold e ISM; QuickSight = BI con SPICE in-memory, Q natural language, embedded e session pricing. Combinazione tipica: Athena → QuickSight per BI, Firehose → OpenSearch per log analytics e RAG.</p>
+</blockquote>
+      <nav class="pager">
+<a href="30-emr-kinesis-msk.html" class="prev"><span class="label">← Precedente</span><span class="title">EMR, Kinesis, MSK — big data e streaming</span></a>
+<a href="32-sagemaker-overview.html" class="next"><span class="label">Successivo →</span><span class="title">SageMaker — la piattaforma ML end-to-end</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>AWS Zero to Hero</strong> — percorso completo, in italiano, dalle primitive all'architettura avanzata.</p><p>Materiale didattico aperto. Nessuna sponsorizzazione, nessun affiliate link, nessuna affiliazione con AWS. Quando un concetto è oscuro, torna indietro: AWS è una piramide di primitive, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

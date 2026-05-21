@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>Blue team: SOC, SIEM, EDR, hunting — Cybersec Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">&gt;_</div>
+      <div>
+        <div class="brand-title">CYBERSEC</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/23-blue-team-soc.html" class="lang-link" title="Passa all'italiano"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="10" height="20" fill="#009246"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ce2b37"/></svg> IT</a><span class="lang-active" title="English"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="30" height="20" fill="#012169"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#fff" stroke-width="3"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#c8102e" stroke-width="1.5"/><path d="M15,0 v20 M0,10 h30" stroke="#fff" stroke-width="5"/><path d="M15,0 v20 M0,10 h30" stroke="#c8102e" stroke-width="3"/></svg> EN</span></div>
+  </div>
+  <div class="search-wrap">
+    <div class="search-row">
+      <div class="search-inputwrap">
+        <span class="search-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"/>
+            <line x1="20" y1="20" x2="16.65" y2="16.65"/>
+          </svg>
+        </span>
+        <input class="search-input" id="search-input" type="text" placeholder="search... (press /)" autocomplete="off" aria-label="Search">
+        <button class="search-clear" id="search-clear" type="button" aria-label="Clear" title="Clear">&times;</button>
+      </div>
+      <button class="search-btn" id="search-btn" type="button" aria-label="SEARCH" title="SEARCH">SEARCH</button>
+    </div>
+    <div class="search-hits" id="search-hits" role="listbox"></div>
+  </div>
+  <div class="sidebar-nav">
+    <nav class="nav-section">
+      <div class="nav-section-title">Path</div>
+      <ul class="nav-list">
+        <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+        <li class="nav-item"><a href="../pages/00-path-and-mindset.html" class=""><span class="num">00</span>Path, mindset, ethics and law</a></li><li class="nav-item"><a href="../pages/00b-math-and-cs.html" class=""><span class="num">00b</span>Math and computation theory (the bare minimum, integrated)</a></li><li class="nav-item"><a href="../pages/01-cs-fundamentals.html" class=""><span class="num">01</span>Computer science fundamentals for security</a></li><li class="nav-item"><a href="../pages/01b-assembly-from-zero.html" class=""><span class="num">01b</span>x86-64 and ARM64 Assembly from zero</a></li><li class="nav-item"><a href="../pages/02-essential-linux.html" class=""><span class="num">02</span>Essential Linux for security</a></li><li class="nav-item"><a href="../pages/02b-regex-automata.html" class=""><span class="num">02b</span>Regex, automata, and parsers for security</a></li><li class="nav-item"><a href="../pages/03-networking-tcp-ip.html" class=""><span class="num">03</span>Networking: from cables to TCP/IP</a></li><li class="nav-item"><a href="../pages/04-http-tls.html" class=""><span class="num">04</span>HTTP, HTTPS and TLS in depth</a></li><li class="nav-item"><a href="../pages/05-cryptography.html" class=""><span class="num">05</span>Cryptography: theory and practice</a></li><li class="nav-item"><a href="../pages/05b-crypto-worked-examples.html" class=""><span class="num">05b</span>Cryptography — step-by-step worked examples</a></li><li class="nav-item"><a href="../pages/06-os-internals.html" class=""><span class="num">06</span>OS internals: Linux and Windows in depth</a></li><li class="nav-item"><a href="../pages/07-programming-for-security.html" class=""><span class="num">07</span>Programming for security: Python, C, Go</a></li><li class="nav-item"><a href="../pages/08-osint-recon.html" class=""><span class="num">08</span>OSINT and reconnaissance</a></li><li class="nav-item"><a href="../pages/09-scanning-enumeration.html" class=""><span class="num">09</span>Scanning, enumeration and fingerprinting</a></li><li class="nav-item"><a href="../pages/10-owasp-top10.html" class=""><span class="num">10</span>OWASP Top 10 and beyond — basic web vulnerabilities</a></li><li class="nav-item"><a href="../pages/10b-walkthrough-byte-by-byte.html" class=""><span class="num">10b</span>Byte-by-byte walkthrough: SQLi, XSS, SSRF, IDOR</a></li><li class="nav-item"><a href="../pages/11-advanced-web.html" class=""><span class="num">11</span>Advanced web hacking</a></li><li class="nav-item"><a href="../pages/12-network-attacks.html" class=""><span class="num">12</span>Network attacks: MITM, spoofing, pivoting</a></li><li class="nav-item"><a href="../pages/13-active-directory.html" class=""><span class="num">13</span>Active Directory hacking</a></li><li class="nav-item"><a href="../pages/14-exploit-development.html" class=""><span class="num">14</span>Exploit development: from buffer overflow to ROP</a></li><li class="nav-item"><a href="../pages/14b-bof-to-shell-complete.html" class=""><span class="num">14b</span>BoF → shell: a complete exploit from zero</a></li><li class="nav-item"><a href="../pages/15-reverse-engineering.html" class=""><span class="num">15</span>Reverse engineering</a></li><li class="nav-item"><a href="../pages/16-malware-analysis.html" class=""><span class="num">16</span>Malware: taxonomy and analysis</a></li><li class="nav-item"><a href="../pages/17-mobile-security.html" class=""><span class="num">17</span>Mobile security: Android and iOS</a></li><li class="nav-item"><a href="../pages/18-cloud-security.html" class=""><span class="num">18</span>Cloud security: AWS, Azure, GCP</a></li><li class="nav-item"><a href="../pages/19-container-kubernetes.html" class=""><span class="num">19</span>Containers and Kubernetes</a></li><li class="nav-item"><a href="../pages/20-wireless-radio.html" class=""><span class="num">20</span>Wireless and radio: WiFi, BT, SDR</a></li><li class="nav-item"><a href="../pages/21-hardware-firmware.html" class=""><span class="num">21</span>Hardware and firmware hacking</a></li><li class="nav-item"><a href="../pages/22-forensics-dfir.html" class=""><span class="num">22</span>Forensics and DFIR</a></li><li class="nav-item"><a href="../pages/23-blue-team-soc.html" class="active"><span class="num">23</span>Blue team: SOC, SIEM, EDR, hunting</a></li><li class="nav-item"><a href="../pages/24-threat-intelligence.html" class=""><span class="num">24</span>Threat intelligence</a></li><li class="nav-item"><a href="../pages/25-grc-regulations.html" class=""><span class="num">25</span>GRC, regulations, and standards</a></li><li class="nav-item"><a href="../pages/26-red-team.html" class=""><span class="num">26</span>Red team and adversary emulation</a></li><li class="nav-item"><a href="../pages/27-ai-ml-security.html" class=""><span class="num">27</span>AI / ML security</a></li><li class="nav-item"><a href="../pages/28-capstone-roadmap.html" class=""><span class="num">28</span>Capstone: CTF roadmap, home lab, certifications</a></li><li class="nav-item"><a href="../pages/29-master-cheatsheet.html" class=""><span class="num">29</span>Master cheatsheet</a></li><li class="nav-item"><a href="../pages/30-extended-glossary.html" class=""><span class="num">30</span>Extended glossary (250+ terms)</a></li><li class="nav-item"><a href="../pages/31-it-eu-regulations.html" class=""><span class="num">31</span>IT/EU regulatory references in detail</a></li>
+      </ul>
+    </nav>
+  </div>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Blue team</span>
+        <span>Section 28 of 36</span>
+        <span class="level-tag level-adv">Level: advanced</span>
+      </div>
+      <h1>Blue team: SOC, SIEM, EDR, hunting</h1>
+      <p class="summary">SOC architecture, SIEM (Splunk, Elastic, Sentinel), modern EDR/XDR, threat hunting, MITRE ATT&amp;CK navigator, detection engineering, deception, NDR, UEBA, SOAR. Professional defensive thinking.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Blue team</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>Sections 06, 16, 22</li></ul>
+  <div class="label">Tools</div>
+  <ul class="source-list"><li>ELK / Wazuh / Splunk / Sentinel</li><li>Sysmon, Sigma, Atomic Red Team</li><li>Zeek, Suricata, Snort</li><li>Caldera, Velociraptor</li><li>Chris Long&#x27;s Detection Lab</li></ul>
+</div>
+      <blockquote>
+<p>Defending requires knowing everything attackers know <strong>plus</strong> understanding how to turn that knowledge into sustainable, scalable, low-false-positive detection.</p>
+</blockquote>
+<h2 id="the-architecture-of-a-soc">The architecture of a SOC</h2>
+<div class="mermaid">
+flowchart LR
+    subgraph SRC [Telemetry sources]
+        EP[Endpoint + EDR]
+        SV[Server + EDR]
+        NET[Network + NDR/IDS]
+        CL[Cloud CSPM/SaaS]
+        IAM[IAM Audit]
+        ML[Email gateway]
+        ID[AD / Entra ID]
+    end
+    SIEM[(SIEM<br/>Splunk · Elastic · Sentinel<br/>ingestion + correlation)]
+    SRC --> SIEM
+    SIEM --> A[Alerts]
+    SIEM --> D[Dashboards]
+    SIEM --> R[Detection rules]
+    A --> SOAR[SOAR<br/>automated playbooks]
+    SOAR --> IR[Incident Response<br/>L2/L3 + DFIR]
+    SOAR --> TI[Threat Intel<br/>enrichment]
+    IR --> HUNT[Threat Hunting]
+
+</div>
+
+<ul>
+<li><strong>EDR</strong> (Endpoint Detection and Response): agent on the endpoint that logs events (Sysmon-like) + responds (kill process, isolate). CrowdStrike Falcon, SentinelOne, Microsoft Defender for Endpoint, Cybereason, Sophos.</li>
+<li><strong>NDR</strong> (Network Detection and Response): sniff/Zeek/ML on traffic. ExtraHop, Vectra, Darktrace.</li>
+<li><strong>SIEM</strong> (Security Information and Event Management): aggregates logs, queries, correlates, alerts. Splunk, Elastic Security, Microsoft Sentinel, IBM QRadar, Chronicle.</li>
+<li><strong>XDR</strong>: vendor-specific combination of all the above in a single platform.</li>
+<li><strong>SOAR</strong>: automated response playbooks. Tines, Splunk SOAR, XSOAR.</li>
+</ul>
+<h2 id="soc-tiers">SOC "tiers"</h2>
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Skill</th>
+<th>What they do</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>L1</strong> Analyst</td>
+<td>Junior</td>
+<td>Alert triage, escalation, playbook documentation</td>
+</tr>
+<tr>
+<td><strong>L2</strong> Analyst</td>
+<td>Mid</td>
+<td>Investigation, contextualization, basic hunt</td>
+</tr>
+<tr>
+<td><strong>L3</strong> Analyst</td>
+<td>Senior</td>
+<td>Threat hunting, detection engineering, IR lead</td>
+</tr>
+<tr>
+<td><strong>Detection Engineer</strong></td>
+<td></td>
+<td>Writing SIEM rules, tuning, telemetry</td>
+</tr>
+<tr>
+<td><strong>Threat Intelligence</strong></td>
+<td></td>
+<td>TI / reports / TTP mapping</td>
+</tr>
+<tr>
+<td><strong>SOC Manager</strong></td>
+<td></td>
+<td>management, metrics, business escalation</td>
+</tr>
+</tbody>
+</table>
+<h2 id="siem-101">SIEM 101</h2>
+<p>A SIEM has:
+- <strong>Collectors / Forwarders</strong> (e.g., Splunk Universal Forwarder, Filebeat, Winlogbeat, Logstash agents).
+- <strong>Parsing &amp; Enrichment</strong>: timestamp parsing, GeoIP, threat feeds.
+- <strong>Index/Storage</strong>.
+- <strong>Search language</strong>: SPL (Splunk), KQL (Sentinel/Defender), EQL (Elastic), LogQL (Loki).
+- <strong>Detection rules</strong>: scheduled saved searches → alert.</p>
+<h3 id="spl-example-splunk">SPL example (Splunk)</h3>
+<pre><code class="language-spl">index=windows EventCode=4624 LogonType=3
+| stats count by user, src
+| where count &gt; 50
+</code></pre>
+<p>Logon type 3 (network) &gt; 50 in a time window. Anomaly / lateral movement.</p>
+<h3 id="kql-example-sentineldefender">KQL example (Sentinel/Defender)</h3>
+<pre><code class="language-kql">DeviceProcessEvents
+| where Timestamp &gt; ago(1d)
+| where FileName == &quot;powershell.exe&quot;
+| where ProcessCommandLine has_any (&quot;-EncodedCommand&quot;, &quot;-enc&quot;, &quot;FromBase64&quot;)
+| project Timestamp, DeviceName, AccountName, ProcessCommandLine, InitiatingProcessFileName
+</code></pre>
+<h3 id="eql-example-elastic">EQL example (Elastic)</h3>
+<pre><code class="language-eql">process where process.name == &quot;powershell.exe&quot; and process.command_line : &quot;*EncodedCommand*&quot;
+</code></pre>
+<h2 id="sigma-write-once-deploy-everywhere">Sigma — write once, deploy everywhere</h2>
+<p>Sigma is the neutral YAML format. Convert for your SIEM via <code>sigma convert</code>.</p>
+<pre><code class="language-yaml">title: Suspicious WMIC LOLBin
+id: ...
+status: experimental
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection:
+        Image|endswith: '\wmic.exe'
+        CommandLine|contains|all:
+            - 'process'
+            - 'call create'
+    condition: selection
+level: high
+tags:
+    - attack.execution
+    - attack.t1047
+</code></pre>
+<p>Repo: <a href="https://github.com/SigmaHQ/sigma">SigmaHQ/sigma</a> has thousands of community rules.</p>
+<h2 id="the-telemetry-you-need">The telemetry you need</h2>
+<p><strong>On Windows endpoints:</strong>
+- Sysmon with a decent config (SwiftOnSecurity, Olaf Hartong sysmon-modular).
+- PowerShell ScriptBlock logging (event 4104).
+- Process Command Line auditing (4688 with cmdline).
+- WMI Activity log.
+- Defender event log.</p>
+<p><strong>On Linux endpoints:</strong>
+- auditd or Sysmon for Linux.
+- Falco / Tetragon (eBPF).
+- journald.</p>
+<p><strong>Server / cloud:</strong>
+- Auth / IAM events.
+- DNS queries (Pi-hole, Cloudflare logpush, Azure DNS analytics).
+- Network: Zeek / Suricata IDS / firewall logs.
+- Email: O365 audit log (Mailbox audit), Gmail Workspace events.
+- Identity: Azure AD sign-in logs, Okta, Auth0.</p>
+<h2 id="detection-engineering-in-practice">Detection engineering — in practice</h2>
+<p>The cycle:
+1. <strong>Threat modeling</strong>: which TTPs are relevant for my business? (e.g., ransomware, BEC, supply chain).
+2. <strong>Hunting hypothesis</strong>: "If the attacker did X, I would see Y in log Z".
+3. <strong>Telemetry</strong>: do I have Z? log enabled? sufficient retention?
+4. <strong>Query</strong>: write and test.
+5. <strong>False positive tuning</strong>: no alerts on legitimate activity.
+6. <strong>Alert + playbook</strong>: what does the L1 do when it fires?
+7. <strong>Atomic Red Team</strong>: simulated test to validate detection.
+8. <strong>Document</strong>: MITRE tags, runbook, owner.</p>
+<h3 id="atomic-red-team">Atomic Red Team</h3>
+<p>Suite of "atomic tests" for MITRE ATT&amp;CK techniques. Run a test → does your detection see it?</p>
+<pre><code class="language-powershell">git clone https://github.com/redcanaryco/atomic-red-team
+Import-Module .\invoke-atomicredteam\Invoke-AtomicRedTeam.psd1 -Force
+Invoke-AtomicTest T1059.001 -ShowDetails
+Invoke-AtomicTest T1059.001-1                # runs test 1
+</code></pre>
+<h2 id="threat-hunting">Threat hunting</h2>
+<p>Hunt = proactive search for TTPs that the SIEM isn't alerting on yet.</p>
+<h3 id="hunt-hypotheses-examples">Hunt hypotheses (examples)</h3>
+<ul>
+<li>"Is there a Cobalt Strike beacon disguised as outbound HTTPS?" → look for regular jitter, specific JA3 fingerprints, known URIs.</li>
+<li>"Has anyone done AS-REP roasting in the last 30 days?" → Sysmon event 4768 with RC4 encryption + UF_DONT_REQUIRE_PREAUTH flag.</li>
+<li>"Executions from Word with macros?" → process create cmdline <code>winword.exe</code> → child <code>cmd.exe</code>/<code>powershell.exe</code>.</li>
+<li>"Service account logging in interactively?" → 4624 LogonType=10 (RemoteInteractive) with a service account.</li>
+</ul>
+<h3 id="hunt-techniques">Hunt techniques</h3>
+<ul>
+<li><strong>Stack counting</strong>: aggregates of rare values (e.g., rare parent-child pairs).</li>
+<li><strong>Outliers</strong> (UEBA): user behavior vs baseline.</li>
+<li><strong>Time-series anomaly</strong>: unexpected spikes.</li>
+<li><strong>Threat intel matching</strong>: IOC vs local data.</li>
+<li><strong>Beacon detection</strong>: regular-interval connections.</li>
+</ul>
+<h2 id="deception">Deception</h2>
+<p>Honeypots and honey-tokens: fake objects that should never be touched. When they are → high-confidence alert.</p>
+<ul>
+<li><strong>Canary file</strong> in a strategic location (e.g., <code>passwords.xlsx</code> in a share).</li>
+<li><strong>Canary token</strong> (<a href="https://canarytokens.org">canarytokens.org</a>) free: file/URL/DNS that notify when opened.</li>
+<li><strong>Honeyusers</strong> in AD (with SPNs specifically designed to be Kerberoasted).</li>
+<li><strong>Full honeypots</strong> (T-Pot by DLR — distributing).</li>
+</ul>
+<p>Deception has an extremely high signal-to-noise ratio.</p>
+<h2 id="edr-what-it-really-does">EDR — what it really does</h2>
+<p>Modern EDR:
+1. Kernel-mode or user-mode hooks to intercept events (process create, image load, file write, network).
+2. Telemetry sent upstream to the cloud.
+3. In-cloud detection with ML and rules.
+4. Response: kill, quarantine, isolate, rollback (some have it).</p>
+<p>Red team bypasses:
+- <strong>BYOVD</strong> (signed vulnerable driver to disable EDR).
+- <strong>DLL unhooking</strong> restores a fresh ntdll.
+- <strong>Direct syscalls</strong> to avoid user-mode hooks.
+- <strong>Esoteric process injection</strong> (Process Doppelgänging, Threadless Inject, Phantom Notification).
+- <strong>DKOM</strong>, <strong>kernel token swap</strong>.</p>
+<p>Blue team: EDR is "one" layer. Without Sysmon/audit, total reliance = SPOF.</p>
+<h2 id="soar-automating-response">SOAR — automating response</h2>
+<p>Playbooks:
+- <strong>Phishing alert</strong>: extract email, sandbox links, sandbox attachments, TI lookup, if malicious → quarantine + ban sender + email the user.
+- <strong>Compromised credential alert</strong>: revoke tokens, force password reset, isolate device, notify IT.</p>
+<p>Tools: Tines, XSOAR, Splunk SOAR, Sentinel Logic Apps, Shuffle (open source).</p>
+<h2 id="soc-metrics">SOC metrics</h2>
+<ul>
+<li><strong>MTTD</strong> (Mean Time to Detect).</li>
+<li><strong>MTTR</strong> (Mean Time to Respond).</li>
+<li><strong>Alert volume</strong>, false positive ratio.</li>
+<li><strong>MITRE ATT&amp;CK coverage</strong> (matrix-based reporting).</li>
+<li><strong>Detection efficacy</strong>: rules that caught a true positive / total.</li>
+</ul>
+<p>To keep L1s alive: continuous tuning, focus on quality &gt; quantity.</p>
+<h2 id="exercises">Exercises</h2>
+<h3 id="exercise-231-detection-lab">Exercise 23.1 — Detection Lab</h3>
+<p>Chris Long's <a href="https://github.com/clong/DetectionLab">Detection Lab</a>: pre-configured stack Splunk + Sysmon + GPO Velociraptor + Caldera. Vagrant + VirtualBox or cloud. Local setup.</p>
+<h3 id="exercise-232-sysmon-config-first-detection">Exercise 23.2 — Sysmon config + first detection</h3>
+<p>Install Sysmon with sysmon-modular on a Win10. Launch <code>whoami</code> from <code>cmd.exe</code>. Verify event 1 in Event Viewer. Write an SPL/KQL/EQL query that captures the execution.</p>
+<h3 id="exercise-233-atomic-red-team-detection">Exercise 23.3 — Atomic Red Team + detection</h3>
+<p>Run Atomic test T1059.001-1 (PowerShell base64 decoded). Verify:
+- Does Defender block it? (if yes → disable for the test).
+- Does Sysmon event 1 / 4104 exist?
+- Does your Sigma rule fire?</p>
+<h3 id="exercise-234-sigma-splunk">Exercise 23.4 — Sigma → Splunk</h3>
+<p>Pick a rule from the SigmaHQ repo. Convert with sigma-cli to SPL. Run it in your lab. Result?</p>
+<h3 id="exercise-235-hunt-cobalt-strike-beacon">Exercise 23.5 — Hunt: Cobalt Strike beacon</h3>
+<p>Look up on public resources (DFIR Report) how a CS beacon manifests:
+- Default named pipe <code>\\.\pipe\msagent_*</code>.
+- JARM fingerprint.
+- Default URI pattern.</p>
+<p>Write 1 Sigma/Splunk/KQL query for each.</p>
+<h3 id="exercise-236-canary-token">Exercise 23.6 — Canary token</h3>
+<p>Create a DNS+URL token on canarytokens.org. Place it in a share/file. Wait for someone to open it (or open it yourself from another machine). How long does it take? Does the email arrive?</p>
+<h3 id="exercise-237-tryhackme-cyber-defense-soc-level-1">Exercise 23.7 — TryHackMe Cyber Defense / SOC Level 1</h3>
+<p>TryHackMe has an entire <strong>SOC Level 1</strong> path. Excellent for L1 prep.</p>
+<h3 id="exercise-238-build-a-siem-mini">Exercise 23.8 — Build a SIEM (mini)</h3>
+<p>Install Wazuh (ELK-based, open source) or the ELK stack:
+- Log ingestion from a Linux VM.
+- Index pattern.
+- A simple rule (failed login &gt; N).</p>
+<h3 id="exercise-239-mitre-attck-navigator">Exercise 23.9 — MITRE ATT&amp;CK Navigator</h3>
+<p>Go to <a href="https://mitre-attack.github.io/attack-navigator/">mitre-attack.github.io/attack-navigator</a>. Map your rule coverage (if you have a real set). Which tactic has the biggest gap?</p>
+<h2 id="key-concepts">Key concepts</h2>
+<ol>
+<li><strong>No telemetry, no detection.</strong></li>
+<li><strong>Sysmon + PowerShell ScriptBlock + auditd + EDR + cloud audit</strong> = baseline.</li>
+<li><strong>Sigma</strong> is the common language of detection.</li>
+<li><strong>Atomic Red Team</strong> validates your rules.</li>
+<li><strong>Hunting is hypothesis-driven</strong>, not tool-driven.</li>
+<li><strong>Deception</strong> has exceptional signal:noise.</li>
+<li><strong>MITRE ATT&amp;CK Navigator</strong> gives you the map.</li>
+</ol>
+<p>Next: threat intelligence.</p>
+      <nav class="pager">
+<a href="22-forensics-dfir.html" class="prev"><span class="label">← Previous</span><span class="title">Forensics and DFIR</span></a>
+<a href="24-threat-intelligence.html" class="next"><span class="label">Next →</span><span class="title">Threat intelligence</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Cybersec Zero to Hero</strong> — built as a continuous path. Static build from Markdown.</p><p>Educational material. Everything you learn here is to be used only on systems you own, in labs, in authorized bug-bounty programs, or under signed pentest contracts. <strong>Don't break the law.</strong></p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true, background: '#131a1e', primaryColor: '#1d262b',
+      primaryTextColor: '#e8eef0', primaryBorderColor: '#00ff9c',
+      lineColor: '#00e6ff', secondaryColor: '#11171a', tertiaryColor: '#161d21',
+      mainBkg: '#1d262b', nodeBorder: '#00ff9c', clusterBkg: '#0b0f10',
+      clusterBorder: '#243035', titleColor: '#00ff9c',
+      edgeLabelBackground: '#0b0f10', textColor: '#e8eef0',
+      labelTextColor: '#e8eef0', actorBkg: '#1d262b', actorBorder: '#00ff9c',
+      actorTextColor: '#00ff9c', actorLineColor: '#00e6ff',
+      signalColor: '#e8eef0', signalTextColor: '#e8eef0',
+      labelBoxBkgColor: '#1d262b', labelBoxBorderColor: '#00ff9c',
+      noteBkgColor: '#ffe066', noteTextColor: '#0b0f10', noteBorderColor: '#ffe066',
+      activationBkgColor: '#1d262b', activationBorderColor: '#00ff9c',
+      sequenceNumberColor: '#0b0f10'
+    },
+    flowchart: { curve: 'basis', padding: 16 },
+    sequence: { mirrorActors: false, bottomMarginAdj: 10 },
+    fontFamily: 'JetBrains Mono, Cascadia Code, Consolas, monospace'
+  });
+</script>
+</body>
+</html>

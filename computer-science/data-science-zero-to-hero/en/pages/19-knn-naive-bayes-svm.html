@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KNN, Naive Bayes, SVM — Data Science Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#3a4a7a',primaryTextColor:'#e8eef0',primaryBorderColor:'#5a6aa0',lineColor:'#8a9499',background:'#11171a'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">Σ</div>
+      <div>
+        <div class="brand-title">DATA SCIENCE</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/19-knn-naive-bayes-svm.html" class="lang-link" title="Passa all'italiano">🇮🇹 IT</a><span class="lang-active" title="English">🇬🇧 EN</span></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="search... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-what-is-data-science.html" class=""><span class="num">01</span>What is data science (and what isn&#x27;t)</a></li><li class="nav-item"><a href="../pages/02-python-for-data-science.html" class=""><span class="num">02</span>Python for data science: pro setup</a></li><li class="nav-item"><a href="../pages/02b-math-essentials.html" class=""><span class="num">02b</span>High-school math you actually need</a></li><li class="nav-item"><a href="../pages/03-linear-algebra.html" class=""><span class="num">03</span>Linear algebra for data scientists</a></li><li class="nav-item"><a href="../pages/04-calculus-optimization.html" class=""><span class="num">04</span>Calculus, gradients, and optimization</a></li><li class="nav-item"><a href="../pages/05-probability.html" class=""><span class="num">05</span>Probability: the language of uncertainty</a></li><li class="nav-item"><a href="../pages/06-descriptive-statistics.html" class=""><span class="num">06</span>Descriptive statistics</a></li><li class="nav-item"><a href="../pages/07-inferential-statistics.html" class=""><span class="num">07</span>Inferential statistics and hypothesis testing</a></li><li class="nav-item"><a href="../pages/08-distributions.html" class=""><span class="num">08</span>Probability distributions you&#x27;ll meet</a></li><li class="nav-item"><a href="../pages/09-numpy.html" class=""><span class="num">09</span>NumPy: thinking in arrays</a></li><li class="nav-item"><a href="../pages/10-pandas.html" class=""><span class="num">10</span>Pandas: the swiss army knife</a></li><li class="nav-item"><a href="../pages/11-sql.html" class=""><span class="num">11</span>SQL for data scientists</a></li><li class="nav-item"><a href="../pages/12-visualization.html" class=""><span class="num">12</span>Visualization: matplotlib, seaborn, plotly</a></li><li class="nav-item"><a href="../pages/13-data-wrangling.html" class=""><span class="num">13</span>Cleaning and data wrangling</a></li><li class="nav-item"><a href="../pages/14-feature-engineering.html" class=""><span class="num">14</span>Feature engineering</a></li><li class="nav-item"><a href="../pages/15-eda.html" class=""><span class="num">15</span>EDA: Exploratory Data Analysis</a></li><li class="nav-item"><a href="../pages/16-ml-fundamentals.html" class=""><span class="num">16</span>ML: fundamentals — bias, variance, validation</a></li><li class="nav-item"><a href="../pages/17-linear-regression.html" class=""><span class="num">17</span>Linear regression and regularization</a></li><li class="nav-item"><a href="../pages/18-logistic-regression.html" class=""><span class="num">18</span>Logistic regression and classification</a></li><li class="nav-item"><a href="../pages/19-knn-naive-bayes-svm.html" class="active"><span class="num">19</span>KNN, Naive Bayes, SVM</a></li><li class="nav-item"><a href="../pages/20-decision-trees.html" class=""><span class="num">20</span>Decision trees</a></li><li class="nav-item"><a href="../pages/21-random-forest-boosting.html" class=""><span class="num">21</span>Random Forest, Gradient Boosting, XGBoost</a></li><li class="nav-item"><a href="../pages/22-clustering.html" class=""><span class="num">22</span>Clustering: K-Means, DBSCAN, GMM, hierarchical</a></li><li class="nav-item"><a href="../pages/23-pca-tsne-umap.html" class=""><span class="num">23</span>Dimensionality reduction: PCA, t-SNE, UMAP</a></li><li class="nav-item"><a href="../pages/24-metrics-validation.html" class=""><span class="num">24</span>Metrics, cross-validation, leakage</a></li><li class="nav-item"><a href="../pages/25-class-imbalance.html" class=""><span class="num">25</span>Class imbalance</a></li><li class="nav-item"><a href="../pages/26-hyperparameter-tuning.html" class=""><span class="num">26</span>Hyperparameter tuning</a></li><li class="nav-item"><a href="../pages/27-neural-networks.html" class=""><span class="num">27</span>Neural networks: from fundamentals to backprop</a></li><li class="nav-item"><a href="../pages/28-pytorch.html" class=""><span class="num">28</span>PyTorch: from toy model to training loop</a></li><li class="nav-item"><a href="../pages/29-cnn.html" class=""><span class="num">29</span>CNN for computer vision</a></li><li class="nav-item"><a href="../pages/30-rnn-lstm.html" class=""><span class="num">30</span>RNN, LSTM, GRU for sequences</a></li><li class="nav-item"><a href="../pages/31-transformer.html" class=""><span class="num">31</span>Transformer and attention</a></li><li class="nav-item"><a href="../pages/32-nlp-llm.html" class=""><span class="num">32</span>NLP: from text mining to LLMs</a></li><li class="nav-item"><a href="../pages/33-time-series.html" class=""><span class="num">33</span>Time series and forecasting</a></li><li class="nav-item"><a href="../pages/34-mlops.html" class=""><span class="num">34</span>MLOps: deployment, monitoring, drift</a></li><li class="nav-item"><a href="../pages/35-bayesian-causal.html" class=""><span class="num">35</span>Bayesian and Causal Inference</a></li><li class="nav-item"><a href="../pages/36-capstone-career.html" class=""><span class="num">36</span>Capstone, portfolio, career</a></li><li class="nav-item"><a href="../pages/37-glossary.html" class=""><span class="num">37</span>Glossary A-Z</a></li><li class="nav-item"><a href="../pages/38-formula-sheet.html" class=""><span class="num">38</span>Formula Sheet: all the formulas from the course</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Machine Learning</span>
+        <span>Section 20 of 39</span>
+        <span class="level-tag level-int">Level: intermediate</span>
+      </div>
+      <h1>KNN, Naive Bayes, SVM</h1>
+      <p class="summary">Three &#x27;classic&#x27; families still winning in specific scenarios. When and why.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Machine Learning</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>[[ml-fundamentals]]</li></ul>
+  <div class="label">Tools</div>
+  <ul class="source-list"><li>scikit-learn</li></ul>
+</div>
+      <h2 id="k-nearest-neighbors">K-Nearest Neighbors</h2>
+<h3 id="idea">Idea</h3>
+<blockquote>
+<p>To predict $y$ for a new point $x$, look at the $k$ closest points in the training set and "average" (regression) or "vote" (classification).</p>
+</blockquote>
+<p>No real "training": the model is the dataset itself. Inference is costly ($O(n)$ per query naively), optimized with data structures: <strong>KD-Tree</strong> ($d \leq 20$), <strong>Ball Tree</strong>, <strong>HNSW</strong> or <strong>FAISS</strong> for high-dim.</p>
+<h3 id="pseudocode">Pseudocode</h3>
+<pre><code class="language-python">def knn_predict(x_query, X_train, y_train, k=5):
+    d = ((X_train - x_query)**2).sum(axis=1)   # squared euclidean distances
+    nn = np.argsort(d)[:k]
+    return np.bincount(y_train[nn]).argmax()   # majority vote
+</code></pre>
+<h3 id="hyperparameters">Hyperparameters</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>small $k$ (1, 3)</td>
+<td>flexible, low bias, high variance</td>
+</tr>
+<tr>
+<td>large $k$ (50+)</td>
+<td>smooth, high bias, low variance</td>
+</tr>
+<tr>
+<td><strong>Distance</strong></td>
+<td>euclidean (default), Manhattan, cosine for text</td>
+</tr>
+<tr>
+<td><strong>Weights</strong></td>
+<td>uniform or distance-inverse</td>
+</tr>
+</tbody>
+</table>
+<h3 id="when-to-use">When to use</h3>
+<ul>
+<li>Small–medium dataset ($n &lt; 10^5$).</li>
+<li>Few features ($d &lt; 20$, else <strong>curse of dimensionality</strong>).</li>
+<li>Complex, nonlinear decision boundaries.</li>
+</ul>
+<h3 id="when-not-to-use">When NOT to use</h3>
+<ul>
+<li>Large $d$: in high dimensions distances "collapse" (all points look similar).</li>
+<li>Real-time inference on big data.</li>
+<li>Features on different scales (always scale!).</li>
+</ul>
+<h3 id="example">Example</h3>
+<pre><code class="language-python">from sklearn.neighbors import KNeighborsClassifier
+from sklearn.preprocessing import StandardScaler
+sc = StandardScaler().fit(X_tr)
+knn = KNeighborsClassifier(n_neighbors=5, weights='distance').fit(sc.transform(X_tr), y_tr)
+</code></pre>
+<blockquote>
+<p>KNN for regression: <code>KNeighborsRegressor</code>. Predicts mean of $k$ neighbors.</p>
+</blockquote>
+<h2 id="naive-bayes">Naive Bayes</h2>
+<h3 id="idea_1">Idea</h3>
+<p>Apply Bayes assuming <strong>conditional independence</strong> of features given target:</p>
+<p>$$P(y | x_1, \dots, x_p) \propto P(y) \prod_{j=1}^p P(x_j | y)$$</p>
+<p>The assumption is almost always <strong>false</strong>, hence "naive". But works great in practice for many tasks, especially NLP.</p>
+<h3 id="variants">Variants</h3>
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th>For which features</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>GaussianNB</strong></td>
+<td>continuous, ~normal per class</td>
+</tr>
+<tr>
+<td><strong>MultinomialNB</strong></td>
+<td>counts (e.g., word counts)</td>
+</tr>
+<tr>
+<td><strong>BernoulliNB</strong></td>
+<td>binary (e.g., word present/absent)</td>
+</tr>
+<tr>
+<td><strong>ComplementNB</strong></td>
+<td>like Multinomial, better on imbalanced classes</td>
+</tr>
+</tbody>
+</table>
+<h3 id="example-spam-classification">Example: spam classification</h3>
+<pre><code class="language-python">from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.pipeline import Pipeline
+
+pipe = Pipeline([
+    ('vec', CountVectorizer(ngram_range=(1,2))),
+    ('nb', MultinomialNB(alpha=0.5)),  # alpha = Laplace smoothing
+])
+pipe.fit(X_train_text, y_train)
+</code></pre>
+<h3 id="smoothing-why-needed">Smoothing (why needed)</h3>
+<p>If a word never appeared in the "spam" class in training, $P(\text{word}|\text{spam}) = 0$ → entire probability becomes zero, unusable.</p>
+<p><strong>Laplace smoothing</strong>: add a pseudo-count $\alpha$ to all:</p>
+<p>$$P(x_j | y) = \frac{\text{count}(x_j, y) + \alpha}{\text{count}(y) + \alpha V}$$</p>
+<h3 id="when-to-use-naive-bayes">When to use Naive Bayes</h3>
+<ul>
+<li>Super-fast baseline for text (1 minute, AUC ~0.9 often).</li>
+<li>Very little data (NB handles small well).</li>
+<li>Ultra-fast inference required.</li>
+<li>Naturally independent features (rare).</li>
+</ul>
+<h2 id="support-vector-machines-svm">Support Vector Machines (SVM)</h2>
+<h3 id="idea-maximize-the-margin">Idea: maximize the margin</h3>
+<p>Find the hyperplane that <strong>separates two classes with the widest possible margin</strong>.</p>
+<div class="chart"><svg viewBox="0 0 360 200" xmlns="http://www.w3.org/2000/svg">
+<line x1="60" y1="170" x2="320" y2="40" stroke="#7aa2ff" stroke-width="2.5"/>
+<line x1="60" y1="190" x2="320" y2="60" stroke="#7aa2ff" stroke-dasharray="4,4" stroke-width="1.5"/>
+<line x1="60" y1="150" x2="320" y2="20" stroke="#7aa2ff" stroke-dasharray="4,4" stroke-width="1.5"/>
+<circle cx="100" cy="160" r="6" fill="#ffb347"/>
+<circle cx="130" cy="180" r="6" fill="#ffb347"/>
+<circle cx="170" cy="135" r="6" fill="#ffb347" stroke="#fff" stroke-width="2"/>
+<circle cx="220" cy="60" r="6" fill="#5ee2c4"/>
+<circle cx="260" cy="40" r="6" fill="#5ee2c4"/>
+<circle cx="200" cy="80" r="6" fill="#5ee2c4" stroke="#fff" stroke-width="2"/>
+<text x="60" y="195" fill="#8b949e" font-size="11">class -</text>
+<text x="260" y="20" fill="#8b949e" font-size="11">class +</text>
+<text x="135" y="115" fill="#7aa2ff" font-size="11">margin</text>
+</svg><div class="chart-caption">Linear SVM: maximizes the "road" between classes. Points on the road are "support vectors".</div></div>
+
+<p>Mathematically: minimize $|\mathbf{w}|^2$ subject to $y_i (\mathbf{w}^T \mathbf{x}_i + b) \geq 1$.</p>
+<p>In <strong>soft margin</strong> form (for not perfectly separable data):</p>
+<p>$$\min_{w,b} \frac{1}{2}|w|^2 + C \sum_i \xi_i \quad \text{s.t. } y_i(w^T x_i + b) \geq 1 - \xi_i, \xi_i \geq 0$$</p>
+<p>$C$ controls the trade-off: high $C$ = strongly penalizes errors (overfit risk), low $C$ = more tolerant.</p>
+<h3 id="hinge-loss">Hinge loss</h3>
+<p>The equivalent SVM loss:</p>
+<p>$$L = \max(0, 1 - y_i (w^T x_i + b))$$</p>
+<p>(with $y \in {-1, +1}$.) "Zero if I classify correctly with margin ≥ 1, otherwise pay the distance from the margin."</p>
+<h3 id="kernel-trick">Kernel trick</h3>
+<p>For not-linearly separable data, map to a higher-dimensional space where they are. The "trick" is not computing $\phi(x)$ explicitly, but using a <strong>kernel</strong> $K(x, x') = \phi(x)^T \phi(x')$:</p>
+<table>
+<thead>
+<tr>
+<th>Kernel</th>
+<th>$K(x, x')$</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Linear</td>
+<td>$x^T x'$</td>
+<td>linearly separable</td>
+</tr>
+<tr>
+<td>Polynomial</td>
+<td>$(x^T x' + c)^d$</td>
+<td>interactions</td>
+</tr>
+<tr>
+<td>RBF (Gaussian)</td>
+<td>$\exp(-\gamma |x - x'|^2)$</td>
+<td>default, flexible</td>
+</tr>
+<tr>
+<td>Sigmoid</td>
+<td>$\tanh(\gamma x^T x' + c)$</td>
+<td>rare</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-python">from sklearn.svm import SVC
+SVC(kernel='rbf', C=1.0, gamma='scale').fit(X_tr_s, y_tr)
+</code></pre>
+<h3 id="hyperparameters_1">Hyperparameters</h3>
+<ul>
+<li><strong>C</strong>: regularization (inverse). Typical: <code>np.logspace(-2, 2, 10)</code>.</li>
+<li><strong>gamma</strong> (RBF): kernel width. <code>'scale' = 1/(n_features * X.var())</code>, sensible default.</li>
+</ul>
+<h3 id="when-to-use-svm">When to use SVM</h3>
+<ul>
+<li><strong>Medium</strong> dataset ($n &lt; 10^5$ — SVM scales badly, $\sim O(n^2)$).</li>
+<li>$p &gt; n$ (more features than examples): SVM handles well.</li>
+<li>Complex but "readable margin" decision boundaries.</li>
+<li>NLP with TF-IDF + Linear SVM is a classic baseline, still competitive.</li>
+</ul>
+<h3 id="when-not-to-use-svm">When NOT to use SVM</h3>
+<ul>
+<li>Huge dataset ($n &gt; 10^6$).</li>
+<li>Need calibrated probabilities (SVM doesn't give them naturally, calibrate with Platt).</li>
+<li>Want interpretability (linear OK, RBF no).</li>
+</ul>
+<h2 id="comparison">Comparison</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>KNN</th>
+<th>Naive Bayes</th>
+<th>SVM (RBF)</th>
+<th>Logistic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Training</td>
+<td>instant</td>
+<td>very fast</td>
+<td>$O(n^2)$</td>
+<td>$O(n p)$</td>
+</tr>
+<tr>
+<td>Inference</td>
+<td>$O(n)$ naive</td>
+<td>$O(p)$</td>
+<td>$O(p \cdot n_{SV})$</td>
+<td>$O(p)$</td>
+</tr>
+<tr>
+<td>Multi-class</td>
+<td>native</td>
+<td>native</td>
+<td>OvR/OvO</td>
+<td>softmax</td>
+</tr>
+<tr>
+<td>Probabilities</td>
+<td>via neighbors</td>
+<td>yes</td>
+<td>manual calibration</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>Feature scaling</td>
+<td>mandatory</td>
+<td>often no</td>
+<td>mandatory</td>
+<td>recommended</td>
+</tr>
+<tr>
+<td>Tabular</td>
+<td>OK but marginal</td>
+<td>text basis</td>
+<td>ok but data-hungry</td>
+<td>gold standard</td>
+</tr>
+</tbody>
+</table>
+<h2 id="exercises">Exercises</h2>
+<details>
+<summary>Exercise 1 — KNN on Iris</summary>
+
+
+<pre><code class="language-python">from sklearn.datasets import load_iris
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.model_selection import cross_val_score
+import matplotlib.pyplot as plt
+
+X, y = load_iris(return_X_y=True)
+acc = [cross_val_score(KNeighborsClassifier(k), X, y, cv=5).mean() for k in range(1, 30)]
+plt.plot(range(1, 30), acc); plt.xlabel('k'); plt.ylabel('CV accuracy')
+</code></pre>
+
+
+Typical sweet spot $k=5-15$. With $k=1$ overfit, $k=100$ underfit.
+</details>
+
+<details>
+<summary>Exercise 2 — Spam with MultinomialNB</summary>
+
+
+<pre><code class="language-python">import pandas as pd
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.model_selection import train_test_split
+data = pd.DataFrame({
+    'text': ['win prize free!!','hello come tomorrow','free win money click','meeting at 3pm',
+             'cheap meds discount','let\'s grab lunch'],
+    'label':[1,0,1,0,1,0]
+})
+X_tr, X_te, y_tr, y_te = train_test_split(data.text, data.label, test_size=0.3, random_state=0)
+</code></pre>
+
+
+Even with 6 examples NB learns something. On a real SMS spam dataset (~5500 examples) it reaches ~98% accuracy in 1 second.
+</details>
+
+<details>
+<summary>Exercise 3 — SVM with grid search</summary>
+
+
+<pre><code class="language-python">from sklearn.svm import SVC
+from sklearn.model_selection import GridSearchCV
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import Pipeline
+
+pipe = Pipeline([('sc', StandardScaler()), ('svm', SVC())])
+grid = {
+    'svm__C': [0.01, 0.1, 1, 10],
+    'svm__gamma': [0.01, 0.1, 1, 'scale'],
+    'svm__kernel': ['rbf'],
+}
+gs = GridSearchCV(pipe, grid, cv=5, scoring='roc_auc', n_jobs=-1)
+gs.fit(X, y)
+print(gs.best_params_, gs.best_score_)
+</code></pre>
+
+</details>
+
+<details>
+<summary>Exercise 4 — Compare 4 models</summary>
+
+On `load_breast_cancer`, compare KNN, NB, SVM, Logistic. Compare accuracy, AUC, training time, inference time.
+
+
+<pre><code class="language-python">import time
+from sklearn.datasets import load_breast_cancer
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import GaussianNB
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.svm import SVC
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, roc_auc_score
+
+X, y = load_breast_cancer(return_X_y=True)
+X_tr, X_te, y_tr, y_te = train_test_split(X, y, stratify=y, random_state=0)
+sc = StandardScaler().fit(X_tr); X_tr_s = sc.transform(X_tr); X_te_s = sc.transform(X_te)
+
+models = {
+    'NB': GaussianNB(),
+    'KNN': KNeighborsClassifier(7),
+    'SVM': SVC(probability=True),
+    'Logistic': LogisticRegression(max_iter=2000),
+}
+for name, m in models.items():
+    t = time.perf_counter()
+    m.fit(X_tr_s, y_tr)
+    t_fit = time.perf_counter() - t
+    t = time.perf_counter()
+    proba = m.predict_proba(X_te_s)[:, 1]
+    t_pred = time.perf_counter() - t
+    print(f&quot;{name:8s} fit={t_fit:.3f}s pred={t_pred:.4f}s &quot;
+          f&quot;AUC={roc_auc_score(y_te, proba):.3f}&quot;)
+</code></pre>
+
+</details>
+
+<h2 id="takeaways">Takeaways</h2>
+<ul>
+<li>KNN: zero training, instance-based, suffers in high dim.</li>
+<li>Naive Bayes: "naive" assumption that works, text basis, classic NLP.</li>
+<li>SVM: maximize margin, kernel trick for nonlinearity, scales poorly.</li>
+<li>Logistic usually remains the default for engineered-feature tabular tasks.</li>
+</ul>
+<p>Next: decision trees.</p>
+      <nav class="pager">
+<a href="18-logistic-regression.html" class="prev"><span class="label">← Previous</span><span class="title">Logistic regression and classification</span></a>
+<a href="20-decision-trees.html" class="next"><span class="label">Next →</span><span class="title">Decision trees</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Data Science Zero to Hero</strong> — complete path, in English, from math to deployment.</p><p>Open didactic material. Formulas are here to be understood, not feared. When a concept is unclear, go back: data science is a pyramid, not a tree you skip across.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+</body>
+</html>

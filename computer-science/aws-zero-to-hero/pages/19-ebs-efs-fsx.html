@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EBS, EFS, FSx, Instance Store — AWS Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#232f3e',primaryTextColor:'#ffffff',primaryBorderColor:'#ff9900',lineColor:'#8a99ad',background:'#0c1320'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">λ</div>
+      <div>
+        <div class="brand-title">AWS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">IT</span><a href="../en/pages/19-ebs-efs-fsx.html" class="lang-link" title="Switch to English">EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-cos-e-aws-cloud.html" class=""><span class="num">01</span>Cos&#x27;è il cloud e cos&#x27;è AWS</a></li><li class="nav-item"><a href="../pages/02-infrastruttura-globale.html" class=""><span class="num">02</span>Infrastruttura globale: Region, AZ, Edge</a></li><li class="nav-item"><a href="../pages/03-account-root-billing.html" class=""><span class="num">03</span>Account AWS, utente root, billing</a></li><li class="nav-item"><a href="../pages/04-iam-fondamenti.html" class=""><span class="num">04</span>IAM — fondamenti (utenti, gruppi, ruoli, policy)</a></li><li class="nav-item"><a href="../pages/05-iam-avanzato.html" class=""><span class="num">05</span>IAM avanzato: policy condizionali, STS, ABAC</a></li><li class="nav-item"><a href="../pages/06-cli-sdk-iac.html" class=""><span class="num">06</span>CLI, SDK, CloudShell, IaC primer</a></li><li class="nav-item"><a href="../pages/07-pricing-billing.html" class=""><span class="num">07</span>Pricing, billing, free tier, cost tools</a></li><li class="nav-item"><a href="../pages/08-organizations-multi-account.html" class=""><span class="num">08</span>AWS Organizations &amp; strategia multi-account</a></li><li class="nav-item"><a href="../pages/09-vpc-fondamenti.html" class=""><span class="num">09</span>VPC — fondamenti</a></li><li class="nav-item"><a href="../pages/10-vpc-avanzato.html" class=""><span class="num">10</span>VPC avanzato: peering, TGW, PrivateLink, endpoint</a></li><li class="nav-item"><a href="../pages/11-route53-cloudfront.html" class=""><span class="num">11</span>Route 53, CloudFront, Global Accelerator</a></li><li class="nav-item"><a href="../pages/12-hybrid-vpn-directconnect.html" class=""><span class="num">12</span>Hybrid: VPN, Direct Connect, PrivateLink</a></li><li class="nav-item"><a href="../pages/13-ec2-fondamenti.html" class=""><span class="num">13</span>EC2 — fondamenti (istanze, AMI, lifecycle)</a></li><li class="nav-item"><a href="../pages/14-ec2-avanzato-spot-nitro.html" class=""><span class="num">14</span>EC2 avanzato — Spot, Placement Groups, Nitro, hibernation</a></li><li class="nav-item"><a href="../pages/15-asg-elb.html" class=""><span class="num">15</span>Auto Scaling Groups + Elastic Load Balancing</a></li><li class="nav-item"><a href="../pages/16-lambda-deep-dive.html" class=""><span class="num">16</span>Lambda deep dive</a></li><li class="nav-item"><a href="../pages/17-containers-ecs-eks-fargate.html" class=""><span class="num">17</span>Containers: ECS, EKS, Fargate, ECR</a></li><li class="nav-item"><a href="../pages/18-specialty-compute.html" class=""><span class="num">18</span>Specialty compute: Batch, Lightsail, Outposts, Wavelength, Beanstalk</a></li><li class="nav-item"><a href="../pages/19-ebs-efs-fsx.html" class="active"><span class="num">19</span>EBS, EFS, FSx, Instance Store</a></li><li class="nav-item"><a href="../pages/20-s3-deep-dive.html" class=""><span class="num">20</span>S3 — deep dive</a></li><li class="nav-item"><a href="../pages/21-archive-snow-gateway-backup.html" class=""><span class="num">21</span>Glacier, Snow, Storage Gateway, DataSync, AWS Backup</a></li><li class="nav-item"><a href="../pages/22-rds.html" class=""><span class="num">22</span>RDS — relational DB managed (engines, Multi-AZ, replicas, Proxy)</a></li><li class="nav-item"><a href="../pages/23-aurora-deep-dive.html" class=""><span class="num">23</span>Aurora deep dive — storage condiviso, Serverless v2, Global Database</a></li><li class="nav-item"><a href="../pages/24-dynamodb-deep-dive.html" class=""><span class="num">24</span>DynamoDB deep dive — partition, GSI, Streams, single-table</a></li><li class="nav-item"><a href="../pages/25-purpose-built-dbs.html" class=""><span class="num">25</span>Purpose-built DB — ElastiCache, MemoryDB, Neptune, DocumentDB, Keyspaces, Timestream, QLDB</a></li><li class="nav-item"><a href="../pages/26-redshift-data-warehousing.html" class=""><span class="num">26</span>Redshift — data warehousing MPP e zero-ETL</a></li><li class="nav-item"><a href="../pages/27-sqs-sns-eventbridge.html" class=""><span class="num">27</span>SQS, SNS, EventBridge — messaging ed eventi</a></li><li class="nav-item"><a href="../pages/28-step-functions-mq-appflow.html" class=""><span class="num">28</span>Step Functions, MQ, AppFlow — orchestrazione e integrazione</a></li><li class="nav-item"><a href="../pages/29-athena-glue-lakeformation.html" class=""><span class="num">29</span>Athena, Glue, Lake Formation — il data lake AWS</a></li><li class="nav-item"><a href="../pages/30-emr-kinesis-msk.html" class=""><span class="num">30</span>EMR, Kinesis, MSK — big data e streaming</a></li><li class="nav-item"><a href="../pages/31-opensearch-quicksight.html" class=""><span class="num">31</span>OpenSearch e QuickSight — search e BI</a></li><li class="nav-item"><a href="../pages/32-sagemaker-overview.html" class=""><span class="num">32</span>SageMaker — la piattaforma ML end-to-end</a></li><li class="nav-item"><a href="../pages/33-bedrock-ai-services.html" class=""><span class="num">33</span>Bedrock e AI services — GenAI e ML managed</a></li><li class="nav-item"><a href="../pages/34-iac-cloudformation-cdk-terraform.html" class=""><span class="num">34</span>IaC su AWS — CloudFormation, CDK, SAM, Terraform</a></li><li class="nav-item"><a href="../pages/35-ci-cd-pipeline.html" class=""><span class="num">35</span>CI/CD su AWS — CodePipeline, CodeBuild, CodeDeploy, CodeCatalyst</a></li><li class="nav-item"><a href="../pages/36-observability-cloudwatch-xray.html" class=""><span class="num">36</span>Observability — CloudWatch, X-Ray, CloudTrail, Config, SSM</a></li><li class="nav-item"><a href="../pages/37-kms-secrets-acm.html" class=""><span class="num">37</span>Crittografia — KMS, CloudHSM, Secrets Manager, Parameter Store, ACM</a></li><li class="nav-item"><a href="../pages/38-waf-shield-guardduty-inspector.html" class=""><span class="num">38</span>Threat detection — WAF, Shield, GuardDuty, Inspector, Macie, Security Hub</a></li><li class="nav-item"><a href="../pages/39-governance-org-controltower-identitycenter.html" class=""><span class="num">39</span>Governance — Organizations, Control Tower, Identity Center</a></li><li class="nav-item"><a href="../pages/40-migration-mgn-dms-snow.html" class=""><span class="num">40</span>Migration — MGN, DMS, Snow family, Discovery, Migration Hub</a></li><li class="nav-item"><a href="../pages/41-cost-optimization-finops.html" class=""><span class="num">41</span>Cost optimization e FinOps</a></li><li class="nav-item"><a href="../pages/42-well-architected.html" class=""><span class="num">42</span>Well-Architected Framework — 6 pillar, lens, review</a></li><li class="nav-item"><a href="../pages/43-architecture-patterns.html" class=""><span class="num">43</span>Architecture patterns — 3-tier, serverless, event-driven, microservices</a></li><li class="nav-item"><a href="../pages/44-disaster-recovery-multi-region.html" class=""><span class="num">44</span>Disaster Recovery e Multi-Region</a></li><li class="nav-item"><a href="../pages/45-reference-architectures.html" class=""><span class="num">45</span>Reference architectures real-world</a></li><li class="nav-item"><a href="../pages/46-advanced-networking.html" class=""><span class="num">46</span>Advanced networking deep dive</a></li><li class="nav-item"><a href="../pages/47-containers-deep-dive.html" class=""><span class="num">47</span>Containers deep dive — EKS, Karpenter, service mesh</a></li><li class="nav-item"><a href="../pages/48-serverless-patterns.html" class=""><span class="num">48</span>Serverless patterns deep dive</a></li><li class="nav-item"><a href="../pages/49-genai-rag-agents.html" class=""><span class="num">49</span>Generative AI su AWS — RAG e Agents</a></li><li class="nav-item"><a href="../pages/50-certificazioni-aws.html" class=""><span class="num">50</span>Certificazioni AWS — roadmap e study guide</a></li><li class="nav-item"><a href="../pages/51-glossario-az.html" class=""><span class="num">51</span>Glossario A-Z</a></li><li class="nav-item"><a href="../pages/52-cheatsheet.html" class=""><span class="num">52</span>Cheat sheet: servizi, limiti, instance families</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Storage</span>
+        <span>Sezione 19 di 52</span>
+        <span class="level-tag level-int">Livello: intermedio</span>
+      </div>
+      <h1>EBS, EFS, FSx, Instance Store</h1>
+      <p class="summary">Block storage di rete (EBS), filesystem NFS/SMB managed (EFS, FSx), e dischi NVMe locali (Instance Store): quando usare cosa, performance, costi, snapshot.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Storage</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>sezioni 13, 14</li></ul>
+  <div class="label">Strumenti / riferimenti</div>
+  <ul class="source-list"><li>AWS CLI</li><li>DLM (Data Lifecycle Manager)</li></ul>
+</div>
+      <p>Sotto a EC2 (e a molti altri servizi) c'è una scelta di storage tutt'altro che banale: blocco persistente di rete, filesystem condivisi, NVMe locale effimero. Sbagliare qui significa pagare 5x quello che servirebbe o perdere dati al primo <code>stop</code>.</p>
+<h2 id="1-la-mappa-mentale">1. La mappa mentale</h2>
+<pre><code class="language-mermaid">flowchart LR
+  A[Storage per EC2] --&gt; B[Block]
+  A --&gt; C[File]
+  A --&gt; D[Object]
+  B --&gt; B1[EBS&lt;br/&gt;network, persistente]
+  B --&gt; B2[Instance Store&lt;br/&gt;NVMe locale, volatile]
+  C --&gt; C1[EFS&lt;br/&gt;NFSv4 Linux]
+  C --&gt; C2[FSx&lt;br/&gt;Windows / Lustre / ONTAP / OpenZFS]
+  D --&gt; D1[S3&lt;br/&gt;vedi sez. 20]
+</code></pre>
+<p>Regola spannometrica: single-instance persistente → EBS; condiviso Linux → EFS; condiviso Windows AD → FSx Windows; HPC/ML scratch → FSx Lustre o Instance Store; cache effimera ad altissime IOPS → Instance Store.</p>
+<h2 id="2-ebs-tipi-di-volume">2. EBS — tipi di volume</h2>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Tecnologia</th>
+<th>IOPS max</th>
+<th>Throughput max</th>
+<th>Caso d'uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>gp3</strong></td>
+<td>SSD</td>
+<td>16.000 (default 3.000)</td>
+<td>1.000 MB/s (default 125)</td>
+<td>default moderno, web/app/DB piccoli</td>
+</tr>
+<tr>
+<td><strong>gp2</strong></td>
+<td>SSD</td>
+<td>16.000 (3 IOPS/GB)</td>
+<td>250 MB/s</td>
+<td>legacy, ~20% più caro di gp3 a parità</td>
+</tr>
+<tr>
+<td><strong>io2 Block Express</strong></td>
+<td>SSD NVMe</td>
+<td>256.000 per volume</td>
+<td>4.000 MB/s</td>
+<td>DB mission-critical, SAP HANA</td>
+</tr>
+<tr>
+<td><strong>st1</strong></td>
+<td>HDD</td>
+<td>500</td>
+<td>500 MB/s</td>
+<td>big data sequenziale, log</td>
+</tr>
+<tr>
+<td><strong>sc1</strong></td>
+<td>HDD cold</td>
+<td>250</td>
+<td>250 MB/s</td>
+<td>archive raro</td>
+</tr>
+</tbody>
+</table>
+<p>Punti chiave:
+- <strong>gp3</strong> disaccoppia GB da IOPS/throughput → paghi solo quello che ti serve.
+- <strong>io2 Block Express</strong> supporta <strong>multi-attach</strong> (stesso volume su più EC2 nella stessa AZ) per cluster SAN-like (es. Oracle RAC). Filesystem cluster-aware obbligatorio (GFS2, OCFS2), altrimenti corruzione garantita.
+- Un EBS vive in <strong>una sola AZ</strong>: per cross-AZ devi snapshottare e ricreare.</p>
+<h2 id="3-snapshot-fsr-dlm">3. Snapshot, FSR, DLM</h2>
+<p>Snapshot EBS = backup incrementale su S3 (gestito da AWS, non vedi il bucket). Solo i blocchi cambiati dall'ultimo snapshot vengono salvati, ma puoi cancellare lo snapshot N e mantenere N+1 senza perdere dati (AWS gestisce le dipendenze).</p>
+<pre><code class="language-bash"># snapshot manuale
+aws ec2 create-snapshot --volume-id vol-abc --description &quot;pre-upgrade&quot;
+
+# Fast Snapshot Restore: pre-warm in AZ specifica
+aws ec2 enable-fast-snapshot-restores \
+  --availability-zones eu-west-1a \
+  --source-snapshot-ids snap-xyz
+</code></pre>
+<p><strong>Fast Snapshot Restore (FSR)</strong>: senza FSR il primo accesso a un blocco di un volume creato da snapshot è lento (lazy load da S3). FSR pre-carica e dà performance piene da subito — utile per disaster recovery testato. Costa caro (~$0.75/AZ/h per snapshot).</p>
+<p><strong>DLM (Data Lifecycle Manager)</strong>: schedula snapshot automatici con retention policy. Sostituisce gli script cron e funziona via tag.</p>
+<p>Encryption: KMS at-rest (chiave AWS-managed o CMK), trasparente. Snapshot di volume encrypted → snapshot encrypted. Per condividere snapshot encrypted cross-account devi condividere anche la CMK.</p>
+<h2 id="4-efs-nfs-managed">4. EFS — NFS managed</h2>
+<p>Filesystem NFSv4 condiviso tra centinaia di EC2 (e Lambda, ECS, EKS). Scala a petabyte automaticamente, pay-per-GB.</p>
+<table>
+<thead>
+<tr>
+<th>Modalità</th>
+<th>Quando</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Performance: <strong>General Purpose</strong></td>
+<td>default, latenza più bassa</td>
+</tr>
+<tr>
+<td>Performance: <strong>Max I/O</strong></td>
+<td>&gt;7000 op/s aggregate, leggermente più alta latenza</td>
+</tr>
+<tr>
+<td>Throughput: <strong>Bursting</strong></td>
+<td>scala con la size</td>
+</tr>
+<tr>
+<td>Throughput: <strong>Provisioned</strong></td>
+<td>fissi MB/s indipendente da size</td>
+</tr>
+<tr>
+<td>Throughput: <strong>Elastic</strong></td>
+<td>scala automaticamente fino a 10 GB/s, paghi solo l'uso</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Lifecycle</strong>: file non acceduti per N giorni vanno in <strong>IA</strong> (Infrequent Access, ~92% cheaper) o <strong>Archive</strong> (~50% in più di sconto). Riacceso? Torna automaticamente in Standard se attivi "intelligent tiering".</p>
+<p><strong>Access Points</strong>: viste applicative del filesystem con UID/GID e root directory forzati, ottimi per multi-tenant. <strong>Mount target per AZ</strong>: ne crei uno per ogni AZ, le EC2 montano quello locale (latenza minore + niente cross-AZ data transfer).</p>
+<pre><code class="language-bash">sudo mount -t efs -o tls fs-0123abc:/ /mnt/efs
+</code></pre>
+<h2 id="5-fsx-quattro-file-system-managed">5. FSx — quattro file system managed</h2>
+<table>
+<thead>
+<tr>
+<th>Variante</th>
+<th>Protocollo</th>
+<th>Caso d'uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>FSx for Windows File Server</strong></td>
+<td>SMB</td>
+<td>share Windows con AD integration, ACL native, DFS</td>
+</tr>
+<tr>
+<td><strong>FSx for Lustre</strong></td>
+<td>Lustre POSIX</td>
+<td>HPC, ML training, scratch ad alta banda, link a S3</td>
+</tr>
+<tr>
+<td><strong>FSx for NetApp ONTAP</strong></td>
+<td>NFS+SMB+iSCSI</td>
+<td>lift-and-shift di filer NetApp on-prem, snapshot, dedup</td>
+</tr>
+<tr>
+<td><strong>FSx for OpenZFS</strong></td>
+<td>NFS</td>
+<td>snapshot istantanei, clone, alta compressione</td>
+</tr>
+</tbody>
+</table>
+<p><strong>FSx for Lustre</strong> è speciale: monta un bucket S3 come backing store, lazy-load dei file dal bucket al filesystem, write-back asincrono. Risultato: HPC vede POSIX ma i dati persistono in S3.</p>
+<h2 id="6-instance-store">6. Instance Store</h2>
+<p>NVMe fisicamente attaccato all'host: ~1M IOPS, ~10 GB/s aggregati, latenza sub-millisecondo. Disponibile solo su famiglie <code>i*</code>, <code>d*</code>, <code>h*</code>, <code>m6id</code>, <code>c7gd</code>, ecc.</p>
+<p>Gotcha brutali:
+- <strong>Volatile</strong>: stop, terminate, host failure → dati persi.
+- Non snapshottabile.
+- Non puoi attaccare/staccare a caldo.</p>
+<p>Casi d'uso legittimi: cache locale (Redis cluster con replica altrove), scratch HPC, shuffle Spark, indici ricostruibili (Elasticsearch con replica), database con replica sincrona (Cassandra, Aerospike).</p>
+<h2 id="7-quando-uso-cosa-cheat-sheet">7. Quando uso cosa — cheat sheet</h2>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Scelta</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Root disk EC2</td>
+<td>EBS gp3</td>
+</tr>
+<tr>
+<td>DB OLTP heavy</td>
+<td>io2 Block Express</td>
+</tr>
+<tr>
+<td>Shared content per 20 web server PHP</td>
+<td>EFS</td>
+</tr>
+<tr>
+<td>Share Windows con utenti AD</td>
+<td>FSx for Windows</td>
+</tr>
+<tr>
+<td>Training ML su 50 TB di immagini</td>
+<td>FSx for Lustre + bucket S3</td>
+</tr>
+<tr>
+<td>Cache Redis effimera 800k IOPS</td>
+<td>Instance Store (i4i)</td>
+</tr>
+<tr>
+<td>Log sequenziale tipo Kafka data dir</td>
+<td>st1 (o gp3 grosso)</td>
+</tr>
+<tr>
+<td>Cluster Oracle RAC due nodi</td>
+<td>io2 Block Express multi-attach</td>
+</tr>
+</tbody>
+</table>
+<h2 id="8-esercizio">8. Esercizio</h2>
+<details>
+<summary>Avete 12 EC2 stateless dietro ALB che servono PDF dinamici da template comuni. Quale storage condiviso per i template?</summary>
+
+**EFS Elastic throughput** + lifecycle a IA dopo 30 giorni.
+
+Perché:
+- 12 client Linux → NFS naturale.
+- I template cambiano raramente, accesso prevalentemente read.
+- Elastic throughput evita di provisionare e paga solo l'effettivo (read burst quando deploy).
+- Lifecycle IA per template vecchi che restano linkati ma raramente serviti.
+
+Anti-pattern: copiare i template su EBS di ogni istanza al boot via user-data — diventa un incubo quando aggiorni 100 template e devi ricreare la AMI.
+</details>
+
+<details>
+<summary>DB Postgres single-node con 4 TB e ~30k IOPS sustained. Quale EBS?</summary>
+
+**io2 Block Express** da 4 TB con 30.000 IOPS provisioned.
+
+Conti:
+- gp3 max 16k IOPS → insufficiente.
+- io2 Block Express scala fino a 256k IOPS, latenza sub-ms costante.
+- Snapshot giornalieri via DLM + FSR pre-warm in AZ secondaria per DR rapido.
+- Cifratura con CMK dedicata al workload.
+
+Alternativa "managed": RDS Postgres su io1/io2, ti porta via la gestione di backup/PITR (sezione 23).
+</details>
+
+<blockquote>
+<p><strong>Riassunto</strong>: EBS = block di rete persistente, oggi default gp3, io2 Block Express per i carichi cattivi, snapshot incrementali con DLM + FSR; EFS = NFS multi-istanza con lifecycle a IA/Archive; FSx copre Windows/Lustre/ONTAP/OpenZFS; Instance Store = NVMe locale velocissimo ma volatile. La scelta sbagliata costa o perde dati: pensa prima a persistenza, condivisione, IOPS richieste.</p>
+</blockquote>
+      <nav class="pager">
+<a href="18-specialty-compute.html" class="prev"><span class="label">← Precedente</span><span class="title">Specialty compute: Batch, Lightsail, Outposts, Wavelength, Beanstalk</span></a>
+<a href="20-s3-deep-dive.html" class="next"><span class="label">Successivo →</span><span class="title">S3 — deep dive</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>AWS Zero to Hero</strong> — percorso completo, in italiano, dalle primitive all'architettura avanzata.</p><p>Materiale didattico aperto. Nessuna sponsorizzazione, nessun affiliate link, nessuna affiliazione con AWS. Quando un concetto è oscuro, torna indietro: AWS è una piramide di primitive, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

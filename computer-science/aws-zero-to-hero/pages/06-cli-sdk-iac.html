@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CLI, SDK, CloudShell, IaC primer — AWS Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#232f3e',primaryTextColor:'#ffffff',primaryBorderColor:'#ff9900',lineColor:'#8a99ad',background:'#0c1320'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">λ</div>
+      <div>
+        <div class="brand-title">AWS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">IT</span><a href="../en/pages/06-cli-sdk-iac.html" class="lang-link" title="Switch to English">EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-cos-e-aws-cloud.html" class=""><span class="num">01</span>Cos&#x27;è il cloud e cos&#x27;è AWS</a></li><li class="nav-item"><a href="../pages/02-infrastruttura-globale.html" class=""><span class="num">02</span>Infrastruttura globale: Region, AZ, Edge</a></li><li class="nav-item"><a href="../pages/03-account-root-billing.html" class=""><span class="num">03</span>Account AWS, utente root, billing</a></li><li class="nav-item"><a href="../pages/04-iam-fondamenti.html" class=""><span class="num">04</span>IAM — fondamenti (utenti, gruppi, ruoli, policy)</a></li><li class="nav-item"><a href="../pages/05-iam-avanzato.html" class=""><span class="num">05</span>IAM avanzato: policy condizionali, STS, ABAC</a></li><li class="nav-item"><a href="../pages/06-cli-sdk-iac.html" class="active"><span class="num">06</span>CLI, SDK, CloudShell, IaC primer</a></li><li class="nav-item"><a href="../pages/07-pricing-billing.html" class=""><span class="num">07</span>Pricing, billing, free tier, cost tools</a></li><li class="nav-item"><a href="../pages/08-organizations-multi-account.html" class=""><span class="num">08</span>AWS Organizations &amp; strategia multi-account</a></li><li class="nav-item"><a href="../pages/09-vpc-fondamenti.html" class=""><span class="num">09</span>VPC — fondamenti</a></li><li class="nav-item"><a href="../pages/10-vpc-avanzato.html" class=""><span class="num">10</span>VPC avanzato: peering, TGW, PrivateLink, endpoint</a></li><li class="nav-item"><a href="../pages/11-route53-cloudfront.html" class=""><span class="num">11</span>Route 53, CloudFront, Global Accelerator</a></li><li class="nav-item"><a href="../pages/12-hybrid-vpn-directconnect.html" class=""><span class="num">12</span>Hybrid: VPN, Direct Connect, PrivateLink</a></li><li class="nav-item"><a href="../pages/13-ec2-fondamenti.html" class=""><span class="num">13</span>EC2 — fondamenti (istanze, AMI, lifecycle)</a></li><li class="nav-item"><a href="../pages/14-ec2-avanzato-spot-nitro.html" class=""><span class="num">14</span>EC2 avanzato — Spot, Placement Groups, Nitro, hibernation</a></li><li class="nav-item"><a href="../pages/15-asg-elb.html" class=""><span class="num">15</span>Auto Scaling Groups + Elastic Load Balancing</a></li><li class="nav-item"><a href="../pages/16-lambda-deep-dive.html" class=""><span class="num">16</span>Lambda deep dive</a></li><li class="nav-item"><a href="../pages/17-containers-ecs-eks-fargate.html" class=""><span class="num">17</span>Containers: ECS, EKS, Fargate, ECR</a></li><li class="nav-item"><a href="../pages/18-specialty-compute.html" class=""><span class="num">18</span>Specialty compute: Batch, Lightsail, Outposts, Wavelength, Beanstalk</a></li><li class="nav-item"><a href="../pages/19-ebs-efs-fsx.html" class=""><span class="num">19</span>EBS, EFS, FSx, Instance Store</a></li><li class="nav-item"><a href="../pages/20-s3-deep-dive.html" class=""><span class="num">20</span>S3 — deep dive</a></li><li class="nav-item"><a href="../pages/21-archive-snow-gateway-backup.html" class=""><span class="num">21</span>Glacier, Snow, Storage Gateway, DataSync, AWS Backup</a></li><li class="nav-item"><a href="../pages/22-rds.html" class=""><span class="num">22</span>RDS — relational DB managed (engines, Multi-AZ, replicas, Proxy)</a></li><li class="nav-item"><a href="../pages/23-aurora-deep-dive.html" class=""><span class="num">23</span>Aurora deep dive — storage condiviso, Serverless v2, Global Database</a></li><li class="nav-item"><a href="../pages/24-dynamodb-deep-dive.html" class=""><span class="num">24</span>DynamoDB deep dive — partition, GSI, Streams, single-table</a></li><li class="nav-item"><a href="../pages/25-purpose-built-dbs.html" class=""><span class="num">25</span>Purpose-built DB — ElastiCache, MemoryDB, Neptune, DocumentDB, Keyspaces, Timestream, QLDB</a></li><li class="nav-item"><a href="../pages/26-redshift-data-warehousing.html" class=""><span class="num">26</span>Redshift — data warehousing MPP e zero-ETL</a></li><li class="nav-item"><a href="../pages/27-sqs-sns-eventbridge.html" class=""><span class="num">27</span>SQS, SNS, EventBridge — messaging ed eventi</a></li><li class="nav-item"><a href="../pages/28-step-functions-mq-appflow.html" class=""><span class="num">28</span>Step Functions, MQ, AppFlow — orchestrazione e integrazione</a></li><li class="nav-item"><a href="../pages/29-athena-glue-lakeformation.html" class=""><span class="num">29</span>Athena, Glue, Lake Formation — il data lake AWS</a></li><li class="nav-item"><a href="../pages/30-emr-kinesis-msk.html" class=""><span class="num">30</span>EMR, Kinesis, MSK — big data e streaming</a></li><li class="nav-item"><a href="../pages/31-opensearch-quicksight.html" class=""><span class="num">31</span>OpenSearch e QuickSight — search e BI</a></li><li class="nav-item"><a href="../pages/32-sagemaker-overview.html" class=""><span class="num">32</span>SageMaker — la piattaforma ML end-to-end</a></li><li class="nav-item"><a href="../pages/33-bedrock-ai-services.html" class=""><span class="num">33</span>Bedrock e AI services — GenAI e ML managed</a></li><li class="nav-item"><a href="../pages/34-iac-cloudformation-cdk-terraform.html" class=""><span class="num">34</span>IaC su AWS — CloudFormation, CDK, SAM, Terraform</a></li><li class="nav-item"><a href="../pages/35-ci-cd-pipeline.html" class=""><span class="num">35</span>CI/CD su AWS — CodePipeline, CodeBuild, CodeDeploy, CodeCatalyst</a></li><li class="nav-item"><a href="../pages/36-observability-cloudwatch-xray.html" class=""><span class="num">36</span>Observability — CloudWatch, X-Ray, CloudTrail, Config, SSM</a></li><li class="nav-item"><a href="../pages/37-kms-secrets-acm.html" class=""><span class="num">37</span>Crittografia — KMS, CloudHSM, Secrets Manager, Parameter Store, ACM</a></li><li class="nav-item"><a href="../pages/38-waf-shield-guardduty-inspector.html" class=""><span class="num">38</span>Threat detection — WAF, Shield, GuardDuty, Inspector, Macie, Security Hub</a></li><li class="nav-item"><a href="../pages/39-governance-org-controltower-identitycenter.html" class=""><span class="num">39</span>Governance — Organizations, Control Tower, Identity Center</a></li><li class="nav-item"><a href="../pages/40-migration-mgn-dms-snow.html" class=""><span class="num">40</span>Migration — MGN, DMS, Snow family, Discovery, Migration Hub</a></li><li class="nav-item"><a href="../pages/41-cost-optimization-finops.html" class=""><span class="num">41</span>Cost optimization e FinOps</a></li><li class="nav-item"><a href="../pages/42-well-architected.html" class=""><span class="num">42</span>Well-Architected Framework — 6 pillar, lens, review</a></li><li class="nav-item"><a href="../pages/43-architecture-patterns.html" class=""><span class="num">43</span>Architecture patterns — 3-tier, serverless, event-driven, microservices</a></li><li class="nav-item"><a href="../pages/44-disaster-recovery-multi-region.html" class=""><span class="num">44</span>Disaster Recovery e Multi-Region</a></li><li class="nav-item"><a href="../pages/45-reference-architectures.html" class=""><span class="num">45</span>Reference architectures real-world</a></li><li class="nav-item"><a href="../pages/46-advanced-networking.html" class=""><span class="num">46</span>Advanced networking deep dive</a></li><li class="nav-item"><a href="../pages/47-containers-deep-dive.html" class=""><span class="num">47</span>Containers deep dive — EKS, Karpenter, service mesh</a></li><li class="nav-item"><a href="../pages/48-serverless-patterns.html" class=""><span class="num">48</span>Serverless patterns deep dive</a></li><li class="nav-item"><a href="../pages/49-genai-rag-agents.html" class=""><span class="num">49</span>Generative AI su AWS — RAG e Agents</a></li><li class="nav-item"><a href="../pages/50-certificazioni-aws.html" class=""><span class="num">50</span>Certificazioni AWS — roadmap e study guide</a></li><li class="nav-item"><a href="../pages/51-glossario-az.html" class=""><span class="num">51</span>Glossario A-Z</a></li><li class="nav-item"><a href="../pages/52-cheatsheet.html" class=""><span class="num">52</span>Cheat sheet: servizi, limiti, instance families</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Fondamenti</span>
+        <span>Sezione 6 di 52</span>
+        <span class="level-tag level-beg">Livello: principiante</span>
+      </div>
+      <h1>CLI, SDK, CloudShell, IaC primer</h1>
+      <p class="summary">Console è per esplorare, produzione è in CLI/IaC. AWS CLI v2, SDK Python (boto3) e JS, CloudShell in-browser, e introduzione a CloudFormation/Terraform/CDK.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Fondamenti</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>sezioni 1-5</li></ul>
+  <div class="label">Strumenti / riferimenti</div>
+  <ul class="source-list"><li>AWS CLI v2</li><li>Python 3 + boto3</li><li>Terraform o AWS CDK (opzionali, vedi sezione 34)</li></ul>
+</div>
+      <p>La console web AWS è un buon onboarding tool. Per il resto è una <strong>tastiera lenta</strong>: cliccare 47 volte per creare un VPC con 6 subnet è insostenibile, non riproducibile, non audit-friendly. Tutto in AWS è API: console, CLI, SDK e IaC sono solo client diversi per quelle stesse API.</p>
+<h2 id="1-aws-cli-v2">1. AWS CLI v2</h2>
+<pre><code class="language-bash"># macOS
+brew install awscli
+# Linux
+curl &quot;https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip&quot; -o awscli.zip
+unzip awscli.zip &amp;&amp; sudo ./aws/install
+# Windows
+msiexec.exe /i https://awscli.amazonaws.com/AWSCLIV2.msi
+
+aws --version           # aws-cli/2.x
+aws configure           # interattivo: chiave, segreto, region, output
+aws configure sso       # MIGLIORE: usa IAM Identity Center invece di key statiche
+</code></pre>
+<p>CLI v2 ha:</p>
+<ul>
+<li><strong>SSO integrato</strong> (<code>aws configure sso</code>).</li>
+<li><strong>Auto-prompt</strong> (<code>aws --cli-auto-prompt</code>): wizard interattivo per ogni comando.</li>
+<li><strong>Server-side e client-side pagination</strong> automatica.</li>
+<li><strong>JMESPath query</strong> (<code>--query</code>) per filtrare output.</li>
+</ul>
+<p>Esempi quotidiani:</p>
+<pre><code class="language-bash">aws ec2 describe-instances \
+  --query 'Reservations[].Instances[].{Id:InstanceId,Type:InstanceType,State:State.Name}' \
+  --output table
+
+aws s3 ls
+aws s3 cp ./build/ s3://my-bucket/v1.2/ --recursive --acl bucket-owner-full-control
+
+aws logs tail /aws/lambda/myfunction --follow --since 10m
+</code></pre>
+<h2 id="2-profili-e-credenziali">2. Profili e credenziali</h2>
+<p>Le credenziali stanno in due file:</p>
+<pre><code>~/.aws/credentials       # access key statiche (legacy)
+[default]
+aws_access_key_id = AKIA...
+aws_secret_access_key = ...
+
+~/.aws/config            # profili, region, output, SSO
+[profile prod]
+sso_session = mycorp
+sso_account_id = 111111111111
+sso_role_name = AdminAccess
+region = eu-west-1
+
+[sso-session mycorp]
+sso_start_url = https://mycorp.awsapps.com/start
+sso_region = eu-west-1
+sso_registration_scopes = sso:account:access
+</code></pre>
+<p>Uso:</p>
+<pre><code class="language-bash">aws s3 ls --profile prod
+AWS_PROFILE=prod aws s3 ls
+aws sso login --profile prod   # apre browser, fa login una volta al giorno
+</code></pre>
+<h2 id="3-sdk-boto3-python-e-js">3. SDK: boto3 (Python) e JS</h2>
+<pre><code class="language-python">import boto3
+s3 = boto3.client(&quot;s3&quot;, region_name=&quot;eu-west-1&quot;)
+for obj in s3.get_paginator(&quot;list_objects_v2&quot;).paginate(Bucket=&quot;my-bucket&quot;):
+    for item in obj.get(&quot;Contents&quot;, []):
+        print(item[&quot;Key&quot;], item[&quot;Size&quot;])
+
+# Resource-style (più OO)
+ddb = boto3.resource(&quot;dynamodb&quot;)
+table = ddb.Table(&quot;orders&quot;)
+table.put_item(Item={&quot;order_id&quot;:&quot;o123&quot;,&quot;customer&quot;:&quot;alice&quot;,&quot;total&quot;:99.9})
+</code></pre>
+<p>Pattern critici:</p>
+<ul>
+<li><strong>Niente chiavi hardcoded</strong>: boto3 cerca credenziali nell'ordine env vars → <code>~/.aws/credentials</code> → EC2 instance role → ECS/Lambda task role.</li>
+<li><strong>Pagination obbligatoria</strong>: la maggior parte delle list-API ritorna max 1000 elementi. Usa <code>get_paginator</code>.</li>
+<li><strong>Retry/backoff</strong>: configurabile via <code>botocore.config.Config(retries={"max_attempts":10, "mode":"adaptive"})</code>.</li>
+<li><strong>Errori</strong>: catch <code>botocore.exceptions.ClientError</code>, ispeziona <code>e.response["Error"]["Code"]</code>.</li>
+</ul>
+<h2 id="4-cloudshell">4. CloudShell</h2>
+<p>CloudShell è una shell Linux in-browser con AWS CLI preinstallata, persistent home di 1 GB, credenziali iniettate dalla console (no setup). Aprila dall'icona in alto a destra della console. Utile per:</p>
+<ul>
+<li>Test rapidi senza installare nulla.</li>
+<li>Operazioni da emergenza (dimenticato laptop, devi terminare una EC2).</li>
+<li>Demo / training.</li>
+</ul>
+<p>Limiti: 1 GB persistente, sessione idle scade in 20 min, nessun root sudo (puoi <code>sudo</code> per <code>apt</code> ma non puoi montare device).</p>
+<h2 id="5-iac-perche-e-obbligatorio">5. IaC: perché è obbligatorio</h2>
+<p>Infrastructure as Code = descrivere infrastruttura in file di testo versionati. Tre motivi non negoziabili:</p>
+<ol>
+<li><strong>Riproducibilità</strong>: ricreare l'ambiente in un altro account/Region è un comando.</li>
+<li><strong>Review</strong>: l'infra passa per pull request come il codice.</li>
+<li><strong>Drift detection</strong>: sai se qualcuno ha cliccato qualcosa in console.</li>
+</ol>
+<p>Tre tool principali su AWS:</p>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Linguaggio</th>
+<th>Quando</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>CloudFormation</strong></td>
+<td>YAML/JSON</td>
+<td>nativo AWS, no dipendenze, lento</td>
+</tr>
+<tr>
+<td><strong>AWS CDK</strong></td>
+<td>TypeScript/Python/Go/Java/.NET</td>
+<td>logica di alto livello (loop, condizioni), genera CFN sotto</td>
+</tr>
+<tr>
+<td><strong>Terraform</strong></td>
+<td>HCL</td>
+<td>multi-cloud, gigantesco ecosistema community</td>
+</tr>
+</tbody>
+</table>
+<p>Per chi inizia: CDK è il più produttivo se sei già developer; Terraform se devi fare anche GCP/Azure; CloudFormation se vuoi zero dipendenze.</p>
+<h2 id="6-mini-esempio-cloudformation">6. Mini-esempio CloudFormation</h2>
+<pre><code class="language-yaml">AWSTemplateFormatVersion: &quot;2010-09-09&quot;
+Description: &quot;S3 bucket privato con versioning&quot;
+Parameters:
+  BucketNamePrefix:
+    Type: String
+    Default: my-app
+Resources:
+  Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub &quot;${BucketNamePrefix}-${AWS::AccountId}-${AWS::Region}&quot;
+      VersioningConfiguration:
+        Status: Enabled
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+Outputs:
+  BucketArn:
+    Value: !GetAtt Bucket.Arn
+</code></pre>
+<p>Deploy:</p>
+<pre><code class="language-bash">aws cloudformation deploy \
+  --stack-name my-bucket-stack \
+  --template-file bucket.yaml \
+  --parameter-overrides BucketNamePrefix=acme
+</code></pre>
+<h2 id="7-mini-esempio-terraform">7. Mini-esempio Terraform</h2>
+<pre><code class="language-hcl">terraform {
+  required_providers { aws = { source = &quot;hashicorp/aws&quot;, version = &quot;~&gt; 5.0&quot; } }
+  backend &quot;s3&quot; {
+    bucket = &quot;my-terraform-state&quot;
+    key    = &quot;infra/network.tfstate&quot;
+    region = &quot;eu-west-1&quot;
+  }
+}
+provider &quot;aws&quot; { region = &quot;eu-west-1&quot; }
+
+resource &quot;aws_s3_bucket&quot; &quot;logs&quot; {
+  bucket = &quot;acme-${data.aws_caller_identity.current.account_id}-logs&quot;
+}
+resource &quot;aws_s3_bucket_versioning&quot; &quot;logs&quot; {
+  bucket = aws_s3_bucket.logs.id
+  versioning_configuration { status = &quot;Enabled&quot; }
+}
+data &quot;aws_caller_identity&quot; &quot;current&quot; {}
+</code></pre>
+<pre><code class="language-bash">terraform init
+terraform plan
+terraform apply
+</code></pre>
+<h2 id="8-esercizio">8. Esercizio</h2>
+<details>
+<summary>Devi automatizzare un report giornaliero di tutte le EC2 stoppate da >30 giorni in tutti gli account. Approccio?</summary>
+
+1. **Account hub**: 1 account "operations" con role assumibile in tutti gli account spoke.
+2. **Python (boto3)** in Lambda schedulato da EventBridge cron.
+3. Per ogni account spoke: `sts:AssumeRole`, `ec2:describe-instances` con filter `instance-state-name=stopped`, calcola `LaunchTime`/transitioni di stato (richiede CloudTrail o tag `StoppedAt`).
+4. Aggrega in SNS topic / Slack webhook / S3 + Athena.
+
+Pattern preferito: usare **AWS Config** advanced query, che già normalizza la configurazione cross-account. Una query SQL contro l'aggregator restituisce il report.
+</details>
+
+<details>
+<summary>Hai eseguito un comando con il profilo sbagliato e creato una VPC in produzione. Come previeni la prossima volta?</summary>
+
+- Usa profili con nomi parlanti (`prod-readonly`, `prod-write-mfa`, `dev`) — mai `default` per produzione.
+- Imposta `AWS_PROFILE` nello shell prompt (vedi `aws-vault` o `granted`).
+- `aws-vault exec prod-write --` richiede MFA prima di ogni comando.
+- IAM Identity Center: i token scadono in 1 ora, quindi devi consciously fare `aws sso login --profile prod` prima.
+- SCP che impedisce modifiche in certi orari o senza un tag specifico (es. `RequestTag/Operator`).
+</details>
+
+<blockquote>
+<p><strong>Riassunto</strong>: console solo per esplorare; CLI v2 per automazione (configura sempre via <code>aws configure sso</code>); SDK boto3/JS per scripting; CloudShell per emergenze in browser; IaC obbligatoria in produzione (CDK &gt; Terraform &gt; CloudFormation come ordine di produttività per chi è developer). Profili nominati e MFA proteggono dai disastri "ho usato il profilo sbagliato".</p>
+</blockquote>
+      <nav class="pager">
+<a href="05-iam-avanzato.html" class="prev"><span class="label">← Precedente</span><span class="title">IAM avanzato: policy condizionali, STS, ABAC</span></a>
+<a href="07-pricing-billing.html" class="next"><span class="label">Successivo →</span><span class="title">Pricing, billing, free tier, cost tools</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>AWS Zero to Hero</strong> — percorso completo, in italiano, dalle primitive all'architettura avanzata.</p><p>Materiale didattico aperto. Nessuna sponsorizzazione, nessun affiliate link, nessuna affiliazione con AWS. Quando un concetto è oscuro, torna indietro: AWS è una piramide di primitive, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aurora deep dive — shared storage, Serverless v2, Global Database — AWS Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#232f3e',primaryTextColor:'#ffffff',primaryBorderColor:'#ff9900',lineColor:'#8a99ad',background:'#0c1320'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">λ</div>
+      <div>
+        <div class="brand-title">AWS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/23-aurora-deep-dive.html" class="lang-link" title="Passa all'italiano">IT</a><span class="lang-active" title="English">EN</span></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="search... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-what-is-cloud-and-aws.html" class=""><span class="num">01</span>What the cloud is, and what AWS is</a></li><li class="nav-item"><a href="../pages/02-global-infrastructure.html" class=""><span class="num">02</span>Global infrastructure: Regions, AZs, Edge</a></li><li class="nav-item"><a href="../pages/03-account-root-billing.html" class=""><span class="num">03</span>AWS account, root user, billing</a></li><li class="nav-item"><a href="../pages/04-iam-fundamentals.html" class=""><span class="num">04</span>IAM — fundamentals (users, groups, roles, policies)</a></li><li class="nav-item"><a href="../pages/05-iam-advanced.html" class=""><span class="num">05</span>IAM advanced: conditional policies, STS, ABAC</a></li><li class="nav-item"><a href="../pages/06-cli-sdk-iac.html" class=""><span class="num">06</span>CLI, SDK, CloudShell, IaC primer</a></li><li class="nav-item"><a href="../pages/07-pricing-billing.html" class=""><span class="num">07</span>Pricing, billing, free tier, cost tools</a></li><li class="nav-item"><a href="../pages/08-organizations-multi-account.html" class=""><span class="num">08</span>AWS Organizations &amp; multi-account strategy</a></li><li class="nav-item"><a href="../pages/09-vpc-fundamentals.html" class=""><span class="num">09</span>VPC — fundamentals</a></li><li class="nav-item"><a href="../pages/10-vpc-advanced.html" class=""><span class="num">10</span>VPC advanced: peering, TGW, PrivateLink, endpoints</a></li><li class="nav-item"><a href="../pages/11-route53-cloudfront.html" class=""><span class="num">11</span>Route 53, CloudFront, Global Accelerator</a></li><li class="nav-item"><a href="../pages/12-hybrid-vpn-directconnect.html" class=""><span class="num">12</span>Hybrid: VPN, Direct Connect, PrivateLink</a></li><li class="nav-item"><a href="../pages/13-ec2-fundamentals.html" class=""><span class="num">13</span>EC2 — fundamentals (instances, AMIs, lifecycle)</a></li><li class="nav-item"><a href="../pages/14-ec2-advanced-spot-nitro.html" class=""><span class="num">14</span>EC2 advanced — Spot, Placement Groups, Nitro, hibernation</a></li><li class="nav-item"><a href="../pages/15-asg-elb.html" class=""><span class="num">15</span>Auto Scaling Groups + Elastic Load Balancing</a></li><li class="nav-item"><a href="../pages/16-lambda-deep-dive.html" class=""><span class="num">16</span>Lambda deep dive</a></li><li class="nav-item"><a href="../pages/17-containers-ecs-eks-fargate.html" class=""><span class="num">17</span>Containers: ECS, EKS, Fargate, ECR</a></li><li class="nav-item"><a href="../pages/18-specialty-compute.html" class=""><span class="num">18</span>Specialty compute: Batch, Lightsail, Outposts, Wavelength, Beanstalk</a></li><li class="nav-item"><a href="../pages/19-ebs-efs-fsx.html" class=""><span class="num">19</span>EBS, EFS, FSx, Instance Store</a></li><li class="nav-item"><a href="../pages/20-s3-deep-dive.html" class=""><span class="num">20</span>S3 — deep dive</a></li><li class="nav-item"><a href="../pages/21-archive-snow-gateway-backup.html" class=""><span class="num">21</span>Glacier, Snow, Storage Gateway, DataSync, AWS Backup</a></li><li class="nav-item"><a href="../pages/22-rds.html" class=""><span class="num">22</span>RDS — managed relational DBs (engines, Multi-AZ, replicas, Proxy)</a></li><li class="nav-item"><a href="../pages/23-aurora-deep-dive.html" class="active"><span class="num">23</span>Aurora deep dive — shared storage, Serverless v2, Global Database</a></li><li class="nav-item"><a href="../pages/24-dynamodb-deep-dive.html" class=""><span class="num">24</span>DynamoDB deep dive — partitions, GSI, Streams, single-table</a></li><li class="nav-item"><a href="../pages/25-purpose-built-dbs.html" class=""><span class="num">25</span>Purpose-built DBs — ElastiCache, MemoryDB, Neptune, DocumentDB, Keyspaces, Timestream, QLDB</a></li><li class="nav-item"><a href="../pages/26-redshift-data-warehousing.html" class=""><span class="num">26</span>Redshift — MPP data warehousing and zero-ETL</a></li><li class="nav-item"><a href="../pages/27-sqs-sns-eventbridge.html" class=""><span class="num">27</span>SQS, SNS, EventBridge — messaging and events</a></li><li class="nav-item"><a href="../pages/28-step-functions-mq-appflow.html" class=""><span class="num">28</span>Step Functions, MQ, AppFlow — orchestration and integration</a></li><li class="nav-item"><a href="../pages/29-athena-glue-lakeformation.html" class=""><span class="num">29</span>Athena, Glue, Lake Formation — the AWS data lake</a></li><li class="nav-item"><a href="../pages/30-emr-kinesis-msk.html" class=""><span class="num">30</span>EMR, Kinesis, MSK — big data and streaming</a></li><li class="nav-item"><a href="../pages/31-opensearch-quicksight.html" class=""><span class="num">31</span>OpenSearch and QuickSight — search and BI</a></li><li class="nav-item"><a href="../pages/32-sagemaker-overview.html" class=""><span class="num">32</span>SageMaker — the end-to-end ML platform</a></li><li class="nav-item"><a href="../pages/33-bedrock-ai-services.html" class=""><span class="num">33</span>Bedrock and AI services — managed GenAI and ML</a></li><li class="nav-item"><a href="../pages/34-iac-cloudformation-cdk-terraform.html" class=""><span class="num">34</span>IaC on AWS — CloudFormation, CDK, SAM, Terraform</a></li><li class="nav-item"><a href="../pages/35-ci-cd-pipeline.html" class=""><span class="num">35</span>CI/CD on AWS — CodePipeline, CodeBuild, CodeDeploy, CodeCatalyst</a></li><li class="nav-item"><a href="../pages/36-observability-cloudwatch-xray.html" class=""><span class="num">36</span>Observability — CloudWatch, X-Ray, CloudTrail, Config, SSM</a></li><li class="nav-item"><a href="../pages/37-kms-secrets-acm.html" class=""><span class="num">37</span>Encryption — KMS, CloudHSM, Secrets Manager, Parameter Store, ACM</a></li><li class="nav-item"><a href="../pages/38-waf-shield-guardduty-inspector.html" class=""><span class="num">38</span>Threat detection — WAF, Shield, GuardDuty, Inspector, Macie, Security Hub</a></li><li class="nav-item"><a href="../pages/39-governance-org-controltower-identitycenter.html" class=""><span class="num">39</span>Governance — Organizations, Control Tower, Identity Center</a></li><li class="nav-item"><a href="../pages/40-migration-mgn-dms-snow.html" class=""><span class="num">40</span>Migration — MGN, DMS, Snow family, Discovery, Migration Hub</a></li><li class="nav-item"><a href="../pages/41-cost-optimization-finops.html" class=""><span class="num">41</span>Cost optimization and FinOps</a></li><li class="nav-item"><a href="../pages/42-well-architected.html" class=""><span class="num">42</span>Well-Architected Framework — 6 pillars, lenses, review</a></li><li class="nav-item"><a href="../pages/43-architecture-patterns.html" class=""><span class="num">43</span>Architecture patterns — 3-tier, serverless, event-driven, microservices</a></li><li class="nav-item"><a href="../pages/44-disaster-recovery-multi-region.html" class=""><span class="num">44</span>Disaster Recovery and Multi-Region</a></li><li class="nav-item"><a href="../pages/45-reference-architectures.html" class=""><span class="num">45</span>Real-world reference architectures</a></li><li class="nav-item"><a href="../pages/46-advanced-networking.html" class=""><span class="num">46</span>Advanced networking deep dive</a></li><li class="nav-item"><a href="../pages/47-containers-deep-dive.html" class=""><span class="num">47</span>Containers deep dive — EKS, Karpenter, service mesh</a></li><li class="nav-item"><a href="../pages/48-serverless-patterns.html" class=""><span class="num">48</span>Serverless patterns deep dive</a></li><li class="nav-item"><a href="../pages/49-genai-rag-agents.html" class=""><span class="num">49</span>Generative AI on AWS — RAG and Agents</a></li><li class="nav-item"><a href="../pages/50-aws-certifications.html" class=""><span class="num">50</span>AWS Certifications — roadmap and study guide</a></li><li class="nav-item"><a href="../pages/51-glossary-az.html" class=""><span class="num">51</span>Glossary A-Z</a></li><li class="nav-item"><a href="../pages/52-cheatsheet.html" class=""><span class="num">52</span>Cheat sheet: services, limits, instance families</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Database</span>
+        <span>Section 23 of 52</span>
+        <span class="level-tag level-adv">Level: advanced</span>
+      </div>
+      <h1>Aurora deep dive — shared storage, Serverless v2, Global Database</h1>
+      <p class="summary">AWS&#x27;s cloud-native Postgres/MySQL-compatible engine: distributed 6x3AZ storage, Serverless v2, Global Database, Backtrack, Babelfish, Limitless, I/O Optimized.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Database</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>section 22</li></ul>
+  <div class="label">Tools / references</div>
+  <ul class="source-list"><li>AWS CLI</li><li>psql / mysql client</li></ul>
+</div>
+      <p>Aurora is the "AWS-native" relational DB: it speaks Postgres/MySQL protocol but under the hood ships a <strong>custom distributed storage layer</strong> that rewrites the rules for durability, replication, and scaling. It's the default for serious new OLTP workloads on AWS.</p>
+<h2 id="1-architecture">1. Architecture</h2>
+<pre><code class="language-mermaid">flowchart TB
+    Writer[Writer instance]
+    R1[Reader 1]
+    R2[Reader 2]
+    R3[Reader N ≤ 15]
+    Writer --&gt;|writes via storage API| Storage
+    R1 --&gt;|reads via storage API| Storage
+    R2 --&gt; Storage
+    R3 --&gt; Storage
+    subgraph Storage[Shared storage 10GB segments]
+        AZa[(AZ-a: 2 copies)]
+        AZb[(AZ-b: 2 copies)]
+        AZc[(AZ-c: 2 copies)]
+    end
+</code></pre>
+<p>Key ideas:
+- <strong>Compute and storage decoupled</strong>. Instances are "stateless": they see the same logical volume via storage API.
+- Storage is <strong>distributed in 10GB segments</strong>, <strong>6 copies across 3 AZs</strong> (4-of-6 quorum write, 3-of-6 read). Survives loss of 1 AZ + 1 copy with no data loss.
+- The writer doesn't write files: it ships redo log records to the storage layer, which applies them. No full page writes, no datafile fsync → far less I/O than classic Postgres/MySQL.
+- <strong>Read replicas</strong> read the <em>same</em> storage, not a replicated copy. Typical lag <strong>&lt; 100 ms</strong>, up to <strong>15</strong> replicas per cluster.
+- <strong>~30 s failover</strong>: a replica is promoted to writer on crash, no data re-stream needed because storage is shared.</p>
+<h2 id="2-aurora-postgres-vs-mysql">2. Aurora Postgres vs MySQL</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Aurora Postgres</th>
+<th>Aurora MySQL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Compatible versions</td>
+<td>13-17</td>
+<td>5.7 / 8.0</td>
+</tr>
+<tr>
+<td>Backtrack (in-place rewind)</td>
+<td>no</td>
+<td>yes, up to 72h</td>
+</tr>
+<tr>
+<td>Babelfish (T-SQL)</td>
+<td>yes</td>
+<td>no</td>
+</tr>
+<tr>
+<td>pgvector / extensions</td>
+<td>yes (50+ extensions)</td>
+<td>limited to MySQL plugins</td>
+</tr>
+<tr>
+<td>Parallel Query</td>
+<td>no</td>
+<td>yes</td>
+</tr>
+</tbody>
+</table>
+<p>Aurora Postgres is more feature-rich for greenfield (vector search, JSONB, extensions). Aurora MySQL wins for legacy MySQL migrations and for Backtrack.</p>
+<h2 id="3-aurora-serverless-v2">3. Aurora Serverless v2</h2>
+<p>Capacity measured in <strong>ACU</strong> (Aurora Capacity Units, ~2 GB RAM + proportional CPU/network). You set <strong>min and max ACU</strong> (0.5 → 256). Aurora scales <strong>continuously</strong> (fractional ACU), in milliseconds, without dropping connections. v1 was 10x step-function scaling with cold start; v2 is production-grade.</p>
+<ul>
+<li><strong>Auto-pause</strong> (min ACU = 0): sleeps after idle, first access pays a ~15 s cold start. Dev/sandbox only.</li>
+<li><strong>Cost</strong>: ACU/hour + storage + I/O (unless I/O Optimized).</li>
+<li>Mix: a cluster can have Serverless v2 writer + provisioned readers, or vice versa.</li>
+</ul>
+<p>When to use: bursty/unpredictable traffic, staging environments, multi-tenant SaaS with idle tenants.</p>
+<h2 id="4-global-database">4. Global Database</h2>
+<pre><code class="language-bash">aws rds create-global-cluster \
+  --global-cluster-identifier my-app-global \
+  --source-db-cluster-identifier arn:aws:rds:eu-west-1:111:cluster:primary
+</code></pre>
+<ul>
+<li><strong>1 primary region</strong> (read/write) + up to <strong>5 secondary regions</strong> (read-only).</li>
+<li>Replication via dedicated storage layer, typical lag <strong>&lt; 1 s</strong> cross-region (vs ~10 s with classic read replicas).</li>
+<li><strong>Regional failover</strong> in 1-2 minutes (managed planned failover) or RTO &lt; 1 minute with switchover.</li>
+<li>Use case: multi-region DR, low-latency geo-distributed reads, data-residency compliance.</li>
+</ul>
+<h2 id="5-advanced-features">5. Advanced features</h2>
+<ul>
+<li><strong>Backtrack</strong> (MySQL only): the DB's "ctrl+Z". You set a <code>BacktrackWindow</code> (e.g. 24h) and can rewind in-place to a timestamp without restoring. Saves you from <code>DELETE FROM accounts WHERE 1=1</code>.</li>
+<li><strong>Parallel Query</strong> (MySQL): pushes analytical queries down to the storage layer, which executes in parallel across segments. 10x+ speedup on large scans.</li>
+<li><strong>Aurora Limitless</strong> (Postgres, GA 2024): native managed sharding. A table is transparently partitioned across multiple "shard groups". Built for write-heavy workloads beyond a single writer.</li>
+<li><strong>Babelfish</strong> (Postgres): a listener on port 1433 that speaks T-SQL and TDS, so SQL Server clients connect unchanged. SQL Server migrations without rewriting SPs (within compatibility limits).</li>
+<li><strong>Aurora I/O Optimized</strong>: alternative pricing where you pay more compute (~30%) and storage (~125%) but <strong>zero I/O charge</strong>. Wins when I/O is &gt; 25% of the Aurora bill.</li>
+<li><strong>RDS Data API</strong>: connectionless HTTP API, ideal for Lambda + Aurora Serverless v2 without pooling.</li>
+</ul>
+<h2 id="6-decision-table">6. Decision table</h2>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Pick</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Serious OLTP, high TPS, multi-AZ required</td>
+<td>Aurora provisioned</td>
+</tr>
+<tr>
+<td>Bursty traffic or multi-tenant SaaS</td>
+<td>Aurora Serverless v2</td>
+</tr>
+<tr>
+<td>Global app with users across 3 continents</td>
+<td>Aurora Global Database</td>
+</tr>
+<tr>
+<td>SQL Server migration without a rewrite</td>
+<td>Aurora Postgres + Babelfish</td>
+</tr>
+<tr>
+<td>Write workload beyond 1 writer</td>
+<td>Aurora Limitless (Postgres)</td>
+</tr>
+<tr>
+<td>Oracle / SQL Server engine</td>
+<td>Classic RDS, not Aurora</td>
+</tr>
+</tbody>
+</table>
+<h2 id="7-pricing-and-gotchas">7. Pricing and gotchas</h2>
+<ul>
+<li>Provisioned: <code>db.r6g.large</code> ~ $0.29/h + storage $0.10/GB-month + I/O $0.20 per million (no I/O Optimized).</li>
+<li>Serverless v2: ~ $0.12 per ACU-hour (0.5 ACU = $0.06/h minimum if not auto-paused).</li>
+<li>Cross-region replication for Global Database adds network egress cost.</li>
+</ul>
+<p>Real anti-patterns:
+- <strong>Chronic read replica lag &gt; 100ms</strong>: usually an overloaded writer, not Aurora. Check <code>AuroraReplicaLag</code>.
+- <strong>Connection exhaustion</strong>: Aurora also has <code>max_connections</code> proportional to RAM. In front of Lambda: <strong>RDS Proxy</strong> or <strong>Data API</strong>.
+- <strong>Backup retention 1 day</strong>: default too low, raise to 7-14.</p>
+<h2 id="8-exercise">8. Exercise</h2>
+<details>
+<summary>Multi-tenant SaaS: 200 tenants, 5 active 24/7, 195 with occasional bursts. Aurora provisioned or Serverless v2?</summary>
+
+**Serverless v2** is the natural fit:
+
+- Min ACU 1, max ACU 32 → scales for the 5 active and bursts for the others.
+- No over-provisioning for the "all active at once" worst case (rare).
+- Auto-pause off in prod (cold start is user-visible), but staging can auto-pause.
+- Typical cost: 1-3 ACU baseline average + controlled spikes.
+
+A provisioned `db.r6g.xlarge` would cost ~$430/month flat even at night. Serverless v2 can halve that if load is truly bursty.
+
+Measure with CloudWatch `ServerlessDatabaseCapacity` after 2 weeks and tune min/max.
+</details>
+
+<details>
+<summary>Disaster: at 14:23 a dev ran `UPDATE orders SET status='cancelled'` without a WHERE on Aurora MySQL. What do you do?</summary>
+
+If you enabled **Backtrack** (with `BacktrackWindow` > 1h):
+
+
+<pre><code class="language-bash">aws rds backtrack-db-cluster \
+  --db-cluster-identifier prod-orders \
+  --backtrack-to 2026-05-21T14:20:00Z
+</code></pre>
+
+
+In ~1-2 minutes the cluster rewinds **in-place**, no new instances, no endpoint changes. Writes after 14:23 are lost — that was the point.
+
+If you DON'T have Backtrack (Postgres or MySQL without a window): the only path is PITR → restore into a new cluster → repoint the app or export/import data. Long downtime.
+
+Lesson: for Aurora MySQL prod, **always enable Backtrack** (cheap, lifesaver).
+</details>
+
+<blockquote>
+<p><strong>Summary</strong>: Aurora separates compute from shared 6x3AZ storage; up to 15 replicas with &lt;100ms lag; Serverless v2 scales continuously in ACU; Global Database for DR and &lt;1s geo-reads; Backtrack MySQL only; Babelfish to migrate SQL Server; I/O Optimized when I/O &gt; 25% of the bill.</p>
+</blockquote>
+      <nav class="pager">
+<a href="22-rds.html" class="prev"><span class="label">← Previous</span><span class="title">RDS — managed relational DBs (engines, Multi-AZ, replicas, Proxy)</span></a>
+<a href="24-dynamodb-deep-dive.html" class="next"><span class="label">Next →</span><span class="title">DynamoDB deep dive — partitions, GSI, Streams, single-table</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>AWS Zero to Hero</strong> — complete path, in English, from primitives to advanced architecture.</p><p>Open educational material. No sponsorships, no affiliate links, no affiliation with AWS. When a concept is unclear, go back: AWS is a pyramid of primitives, not a tree you skip across.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+</body>
+</html>

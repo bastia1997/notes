@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CI/CD on AWS — CodePipeline, CodeBuild, CodeDeploy, CodeCatalyst — AWS Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#232f3e',primaryTextColor:'#ffffff',primaryBorderColor:'#ff9900',lineColor:'#8a99ad',background:'#0c1320'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">λ</div>
+      <div>
+        <div class="brand-title">AWS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/35-ci-cd-pipeline.html" class="lang-link" title="Passa all'italiano">IT</a><span class="lang-active" title="English">EN</span></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="search... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-what-is-cloud-and-aws.html" class=""><span class="num">01</span>What the cloud is, and what AWS is</a></li><li class="nav-item"><a href="../pages/02-global-infrastructure.html" class=""><span class="num">02</span>Global infrastructure: Regions, AZs, Edge</a></li><li class="nav-item"><a href="../pages/03-account-root-billing.html" class=""><span class="num">03</span>AWS account, root user, billing</a></li><li class="nav-item"><a href="../pages/04-iam-fundamentals.html" class=""><span class="num">04</span>IAM — fundamentals (users, groups, roles, policies)</a></li><li class="nav-item"><a href="../pages/05-iam-advanced.html" class=""><span class="num">05</span>IAM advanced: conditional policies, STS, ABAC</a></li><li class="nav-item"><a href="../pages/06-cli-sdk-iac.html" class=""><span class="num">06</span>CLI, SDK, CloudShell, IaC primer</a></li><li class="nav-item"><a href="../pages/07-pricing-billing.html" class=""><span class="num">07</span>Pricing, billing, free tier, cost tools</a></li><li class="nav-item"><a href="../pages/08-organizations-multi-account.html" class=""><span class="num">08</span>AWS Organizations &amp; multi-account strategy</a></li><li class="nav-item"><a href="../pages/09-vpc-fundamentals.html" class=""><span class="num">09</span>VPC — fundamentals</a></li><li class="nav-item"><a href="../pages/10-vpc-advanced.html" class=""><span class="num">10</span>VPC advanced: peering, TGW, PrivateLink, endpoints</a></li><li class="nav-item"><a href="../pages/11-route53-cloudfront.html" class=""><span class="num">11</span>Route 53, CloudFront, Global Accelerator</a></li><li class="nav-item"><a href="../pages/12-hybrid-vpn-directconnect.html" class=""><span class="num">12</span>Hybrid: VPN, Direct Connect, PrivateLink</a></li><li class="nav-item"><a href="../pages/13-ec2-fundamentals.html" class=""><span class="num">13</span>EC2 — fundamentals (instances, AMIs, lifecycle)</a></li><li class="nav-item"><a href="../pages/14-ec2-advanced-spot-nitro.html" class=""><span class="num">14</span>EC2 advanced — Spot, Placement Groups, Nitro, hibernation</a></li><li class="nav-item"><a href="../pages/15-asg-elb.html" class=""><span class="num">15</span>Auto Scaling Groups + Elastic Load Balancing</a></li><li class="nav-item"><a href="../pages/16-lambda-deep-dive.html" class=""><span class="num">16</span>Lambda deep dive</a></li><li class="nav-item"><a href="../pages/17-containers-ecs-eks-fargate.html" class=""><span class="num">17</span>Containers: ECS, EKS, Fargate, ECR</a></li><li class="nav-item"><a href="../pages/18-specialty-compute.html" class=""><span class="num">18</span>Specialty compute: Batch, Lightsail, Outposts, Wavelength, Beanstalk</a></li><li class="nav-item"><a href="../pages/19-ebs-efs-fsx.html" class=""><span class="num">19</span>EBS, EFS, FSx, Instance Store</a></li><li class="nav-item"><a href="../pages/20-s3-deep-dive.html" class=""><span class="num">20</span>S3 — deep dive</a></li><li class="nav-item"><a href="../pages/21-archive-snow-gateway-backup.html" class=""><span class="num">21</span>Glacier, Snow, Storage Gateway, DataSync, AWS Backup</a></li><li class="nav-item"><a href="../pages/22-rds.html" class=""><span class="num">22</span>RDS — managed relational DBs (engines, Multi-AZ, replicas, Proxy)</a></li><li class="nav-item"><a href="../pages/23-aurora-deep-dive.html" class=""><span class="num">23</span>Aurora deep dive — shared storage, Serverless v2, Global Database</a></li><li class="nav-item"><a href="../pages/24-dynamodb-deep-dive.html" class=""><span class="num">24</span>DynamoDB deep dive — partitions, GSI, Streams, single-table</a></li><li class="nav-item"><a href="../pages/25-purpose-built-dbs.html" class=""><span class="num">25</span>Purpose-built DBs — ElastiCache, MemoryDB, Neptune, DocumentDB, Keyspaces, Timestream, QLDB</a></li><li class="nav-item"><a href="../pages/26-redshift-data-warehousing.html" class=""><span class="num">26</span>Redshift — MPP data warehousing and zero-ETL</a></li><li class="nav-item"><a href="../pages/27-sqs-sns-eventbridge.html" class=""><span class="num">27</span>SQS, SNS, EventBridge — messaging and events</a></li><li class="nav-item"><a href="../pages/28-step-functions-mq-appflow.html" class=""><span class="num">28</span>Step Functions, MQ, AppFlow — orchestration and integration</a></li><li class="nav-item"><a href="../pages/29-athena-glue-lakeformation.html" class=""><span class="num">29</span>Athena, Glue, Lake Formation — the AWS data lake</a></li><li class="nav-item"><a href="../pages/30-emr-kinesis-msk.html" class=""><span class="num">30</span>EMR, Kinesis, MSK — big data and streaming</a></li><li class="nav-item"><a href="../pages/31-opensearch-quicksight.html" class=""><span class="num">31</span>OpenSearch and QuickSight — search and BI</a></li><li class="nav-item"><a href="../pages/32-sagemaker-overview.html" class=""><span class="num">32</span>SageMaker — the end-to-end ML platform</a></li><li class="nav-item"><a href="../pages/33-bedrock-ai-services.html" class=""><span class="num">33</span>Bedrock and AI services — managed GenAI and ML</a></li><li class="nav-item"><a href="../pages/34-iac-cloudformation-cdk-terraform.html" class=""><span class="num">34</span>IaC on AWS — CloudFormation, CDK, SAM, Terraform</a></li><li class="nav-item"><a href="../pages/35-ci-cd-pipeline.html" class="active"><span class="num">35</span>CI/CD on AWS — CodePipeline, CodeBuild, CodeDeploy, CodeCatalyst</a></li><li class="nav-item"><a href="../pages/36-observability-cloudwatch-xray.html" class=""><span class="num">36</span>Observability — CloudWatch, X-Ray, CloudTrail, Config, SSM</a></li><li class="nav-item"><a href="../pages/37-kms-secrets-acm.html" class=""><span class="num">37</span>Encryption — KMS, CloudHSM, Secrets Manager, Parameter Store, ACM</a></li><li class="nav-item"><a href="../pages/38-waf-shield-guardduty-inspector.html" class=""><span class="num">38</span>Threat detection — WAF, Shield, GuardDuty, Inspector, Macie, Security Hub</a></li><li class="nav-item"><a href="../pages/39-governance-org-controltower-identitycenter.html" class=""><span class="num">39</span>Governance — Organizations, Control Tower, Identity Center</a></li><li class="nav-item"><a href="../pages/40-migration-mgn-dms-snow.html" class=""><span class="num">40</span>Migration — MGN, DMS, Snow family, Discovery, Migration Hub</a></li><li class="nav-item"><a href="../pages/41-cost-optimization-finops.html" class=""><span class="num">41</span>Cost optimization and FinOps</a></li><li class="nav-item"><a href="../pages/42-well-architected.html" class=""><span class="num">42</span>Well-Architected Framework — 6 pillars, lenses, review</a></li><li class="nav-item"><a href="../pages/43-architecture-patterns.html" class=""><span class="num">43</span>Architecture patterns — 3-tier, serverless, event-driven, microservices</a></li><li class="nav-item"><a href="../pages/44-disaster-recovery-multi-region.html" class=""><span class="num">44</span>Disaster Recovery and Multi-Region</a></li><li class="nav-item"><a href="../pages/45-reference-architectures.html" class=""><span class="num">45</span>Real-world reference architectures</a></li><li class="nav-item"><a href="../pages/46-advanced-networking.html" class=""><span class="num">46</span>Advanced networking deep dive</a></li><li class="nav-item"><a href="../pages/47-containers-deep-dive.html" class=""><span class="num">47</span>Containers deep dive — EKS, Karpenter, service mesh</a></li><li class="nav-item"><a href="../pages/48-serverless-patterns.html" class=""><span class="num">48</span>Serverless patterns deep dive</a></li><li class="nav-item"><a href="../pages/49-genai-rag-agents.html" class=""><span class="num">49</span>Generative AI on AWS — RAG and Agents</a></li><li class="nav-item"><a href="../pages/50-aws-certifications.html" class=""><span class="num">50</span>AWS Certifications — roadmap and study guide</a></li><li class="nav-item"><a href="../pages/51-glossary-az.html" class=""><span class="num">51</span>Glossary A-Z</a></li><li class="nav-item"><a href="../pages/52-cheatsheet.html" class=""><span class="num">52</span>Cheat sheet: services, limits, instance families</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">DevOps</span>
+        <span>Section 35 of 52</span>
+        <span class="level-tag level-int">Level: intermediate</span>
+      </div>
+      <h1>CI/CD on AWS — CodePipeline, CodeBuild, CodeDeploy, CodeCatalyst</h1>
+      <p class="summary">AWS-native pipelines for build, test, deploy: stages, blue/green, canary, automatic rollback. GitHub Actions with OIDC as alternative.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>DevOps</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>section 34</li></ul>
+  <div class="label">Tools / references</div>
+  <ul class="source-list"><li>CodePipeline</li><li>CodeBuild</li><li>CodeDeploy</li><li>GitHub Actions</li></ul>
+</div>
+      <p>A CI/CD pipeline turns "push to main" into "in production, safely, with auto-rollback" with no human in the loop. AWS provides a "Code*" family of composable services, but the real 2026 world is bimodal: AWS-native shops use CodePipeline + CodeBuild, GitHub-native shops use Actions with OIDC. Let's see both.</p>
+<h2 id="1-the-code-family-overview">1. The Code* family (overview)</h2>
+<pre><code class="language-mermaid">flowchart LR
+  Src[Source: GitHub/S3/ECR] --&gt; Bld[CodeBuild]
+  Bld --&gt; Art[CodeArtifact / S3]
+  Bld --&gt; Test[Test stage]
+  Test --&gt; App{Manual approval?}
+  App --&gt;|yes| Dep[CodeDeploy]
+  App --&gt;|no| Dep
+  Dep --&gt; Prod[EC2/ECS/Lambda]
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>CodePipeline</strong></td>
+<td>Orchestrator (source/build/test/deploy stages)</td>
+</tr>
+<tr>
+<td><strong>CodeBuild</strong></td>
+<td>Managed compute worker (Linux/Windows, x86/ARM)</td>
+</tr>
+<tr>
+<td><strong>CodeDeploy</strong></td>
+<td>Automated deploy to EC2/ECS/Lambda with hooks</td>
+</tr>
+<tr>
+<td><strong>CodeArtifact</strong></td>
+<td>Private repo for npm/pip/Maven/NuGet/generic</td>
+</tr>
+<tr>
+<td><strong>CodeCommit</strong></td>
+<td>Managed Git — <strong>deprecated Jul 2024</strong>, no new accounts</td>
+</tr>
+<tr>
+<td><strong>CodeCatalyst</strong></td>
+<td>End-to-end "all-in-one" experience (newer)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="2-codepipeline-the-orchestrator">2. CodePipeline — the orchestrator</h2>
+<p>Pipeline = sequence of <strong>stages</strong>; each stage = sequence of <strong>actions</strong>. Triggers: commit (GitHub/Bitbucket webhook), new S3 object, schedule, manual.</p>
+<p>Action types: Source, Build, Test, Deploy, Approval, Invoke (Lambda). <strong>Manual Approval</strong> = pause for a human :thumbsup: (useful pre-prod), notify via SNS.</p>
+<p>Pipeline "V2": parallel actions, variables across stages, concurrent executions per branch.</p>
+<h2 id="3-codebuild-the-worker">3. CodeBuild — the worker</h2>
+<p>Defined by a <code>buildspec.yml</code> in the repo. Runs in a managed container (Amazon Linux, Ubuntu, Windows) or <strong>custom image</strong> (your own from ECR).</p>
+<pre><code class="language-yaml">version: 0.2
+phases:
+  install:
+    runtime-versions: { nodejs: 20 }
+    commands: [ npm ci ]
+  pre_build:
+    commands:
+      - aws ecr get-login-password | docker login --username AWS --password-stdin $ECR
+  build:
+    commands:
+      - npm test
+      - docker build -t $ECR/app:$CODEBUILD_RESOLVED_SOURCE_VERSION .
+      - docker push $ECR/app:$CODEBUILD_RESOLVED_SOURCE_VERSION
+artifacts:
+  files: [ appspec.yml, taskdef.json ]
+cache:
+  paths: [ 'node_modules/**/*' ]
+</code></pre>
+<p>Useful features: <strong>batch build</strong> (matrix like classic CI), <strong>local cache</strong> (S3 or LOCAL Docker layer), <strong>reports</strong> (JUnit, code coverage), <strong>VPC mode</strong> (build inside VPC to reach private RDS).</p>
+<h2 id="4-codedeploy-release-strategies">4. CodeDeploy — release strategies</h2>
+<p>Three supported targets: EC2/on-prem (with agent), Lambda, ECS.</p>
+<table>
+<thead>
+<tr>
+<th>Strategy</th>
+<th>Where</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>In-place</strong></td>
+<td>EC2</td>
+<td>Updates the same servers (rolling)</td>
+</tr>
+<tr>
+<td><strong>Blue/Green</strong></td>
+<td>EC2/ECS/Lambda</td>
+<td>Spins new environment, shifts traffic, kills old</td>
+</tr>
+<tr>
+<td><strong>Canary</strong></td>
+<td>Lambda</td>
+<td>10% for 10 min, then 100% (preset <code>Canary10Percent10Minutes</code>)</td>
+</tr>
+<tr>
+<td><strong>Linear</strong></td>
+<td>Lambda</td>
+<td>E.g. 10% every 10 min</td>
+</tr>
+<tr>
+<td><strong>All-at-once</strong></td>
+<td>Lambda</td>
+<td>Full switch (for dev)</td>
+</tr>
+</tbody>
+</table>
+<p><code>appspec.yml</code> defines <strong>hooks</strong> (<code>BeforeAllowTraffic</code>, <code>AfterAllowTraffic</code>, <code>BeforeInstall</code>...): you can attach a Lambda smoke test. <strong>Automatic</strong> rollback if a CloudWatch alarm trips during the monitor period.</p>
+<h2 id="5-ecs-bluegreen-concretely">5. ECS blue/green concretely</h2>
+<pre><code class="language-mermaid">sequenceDiagram
+  participant CD as CodeDeploy
+  participant ALB
+  participant Blue as Blue TG (v1)
+  participant Green as Green TG (v2)
+  CD-&gt;&gt;Green: Start v2 tasks
+  CD-&gt;&gt;Green: Wait HEALTHY
+  CD-&gt;&gt;ALB: Move listener to Green TG
+  CD-&gt;&gt;CD: Monitor period (alarm?)
+  alt alarm ok
+    CD-&gt;&gt;Blue: Drain &amp; stop
+  else alarm trip
+    CD-&gt;&gt;ALB: Re-route to Blue (rollback)
+  end
+</code></pre>
+<p>Requires a second target group (idle when blue is active). Cost: double compute during monitor period.</p>
+<h2 id="6-codeartifact-and-codecatalyst">6. CodeArtifact and CodeCatalyst</h2>
+<p><strong>CodeArtifact</strong>: private repo for dependencies (<code>npm</code>, <code>pip</code>, <code>mvn</code>, <code>nuget</code>, <code>generic</code>). Perks: upstream cache (public npmjs), IAM policy, no PAT tokens. E.g. <code>aws codeartifact login --tool npm --domain myorg --repository internal</code>.</p>
+<p><strong>CodeCatalyst</strong>: unified 2023+ platform with sources, CI workflows, cloud Dev Environments (Cloud9-like), issue tracker. Meant as "AWS' GitHub" — less adopted than Actions but useful in AWS-only shops.</p>
+<h2 id="7-github-actions-oidc-the-popular-alternative">7. GitHub Actions + OIDC (the popular alternative)</h2>
+<p>Most new projects use <strong>GitHub Actions</strong> and authenticate to AWS via <strong>OIDC</strong> (no long-term keys in the repo):</p>
+<pre><code class="language-yaml">permissions:
+  id-token: write
+  contents: read
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::1234:role/gh-deploy
+          aws-region: eu-west-1
+      - run: aws s3 sync ./dist s3://my-app/
+</code></pre>
+<p>The <code>role/gh-deploy</code> has a trust policy accepting only the GitHub OIDC provider + condition on <code>repo:myorg/myrepo:ref:refs/heads/main</code>. Zero secrets, full audit. Same logic for GitLab, Bitbucket, Buildkite, Circle.</p>
+<h2 id="8-exercise">8. Exercise</h2>
+<details>
+<summary>You must deploy a critical API on ECS Fargate with auto-rollback if p99 spikes. How do you wire the pipeline?</summary>
+
+Setup:
+1. **Source**: GitHub via webhook → CodePipeline (or Actions).
+2. **Build** (CodeBuild): test, build image, push to ECR with `git-sha` tag.
+3. **Deploy** (CodeDeploy Blue/Green on ECS): traffic shift `Canary10Percent5Minutes`.
+4. **CloudWatch Alarm** on `TargetResponseTime` p99 and `5XXError` tied to Green TG.
+5. CodeDeploy "Rollback on alarm" → auto-revert to Blue if alarm fires during monitor period.
+6. SNS topic for Slack/PagerDuty notifications on rollback.
+
+Extra cost: double capacity for ~10-30 min. Worth every cent.
+</details>
+
+<details>
+<summary>You have long-term AWS keys in GitHub Secrets for deploys. Risks and fix?</summary>
+
+**Risks**: keys that never expire, leaked via log/PR/fork, no clean audit of who used them, painful manual rotation. A repo accidentally published exposes the account.
+
+**Fix**: **OIDC federation**. Create an OIDC Identity Provider in IAM pointing at `token.actions.githubusercontent.com`. Create a role with a trust policy requiring `sub: repo:org/repo:ref:refs/heads/main` (tight condition). In Actions, `aws-actions/configure-aws-credentials@v4` exchanges the GitHub token for temporary STS credentials (1 hour). Zero secrets in repo, perfect audit in CloudTrail.
+</details>
+
+<blockquote>
+<p><strong>Summary</strong>: CodePipeline orchestrates source/build/test/deploy stages; CodeBuild runs buildspec; CodeDeploy does ECS/EC2 blue/green and Lambda canary with alarm-based rollback; CodeArtifact = private package repo; CodeCommit deprecated; modern alternative = GitHub Actions with OIDC, zero long-term keys.</p>
+</blockquote>
+      <nav class="pager">
+<a href="34-iac-cloudformation-cdk-terraform.html" class="prev"><span class="label">← Previous</span><span class="title">IaC on AWS — CloudFormation, CDK, SAM, Terraform</span></a>
+<a href="36-observability-cloudwatch-xray.html" class="next"><span class="label">Next →</span><span class="title">Observability — CloudWatch, X-Ray, CloudTrail, Config, SSM</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>AWS Zero to Hero</strong> — complete path, in English, from primitives to advanced architecture.</p><p>Open educational material. No sponsorships, no affiliate links, no affiliation with AWS. When a concept is unclear, go back: AWS is a pyramid of primitives, not a tree you skip across.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+</body>
+</html>

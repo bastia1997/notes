@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bedrock e AI services — GenAI e ML managed — AWS Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#232f3e',primaryTextColor:'#ffffff',primaryBorderColor:'#ff9900',lineColor:'#8a99ad',background:'#0c1320'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">λ</div>
+      <div>
+        <div class="brand-title">AWS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">IT</span><a href="../en/pages/33-bedrock-ai-services.html" class="lang-link" title="Switch to English">EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-cos-e-aws-cloud.html" class=""><span class="num">01</span>Cos&#x27;è il cloud e cos&#x27;è AWS</a></li><li class="nav-item"><a href="../pages/02-infrastruttura-globale.html" class=""><span class="num">02</span>Infrastruttura globale: Region, AZ, Edge</a></li><li class="nav-item"><a href="../pages/03-account-root-billing.html" class=""><span class="num">03</span>Account AWS, utente root, billing</a></li><li class="nav-item"><a href="../pages/04-iam-fondamenti.html" class=""><span class="num">04</span>IAM — fondamenti (utenti, gruppi, ruoli, policy)</a></li><li class="nav-item"><a href="../pages/05-iam-avanzato.html" class=""><span class="num">05</span>IAM avanzato: policy condizionali, STS, ABAC</a></li><li class="nav-item"><a href="../pages/06-cli-sdk-iac.html" class=""><span class="num">06</span>CLI, SDK, CloudShell, IaC primer</a></li><li class="nav-item"><a href="../pages/07-pricing-billing.html" class=""><span class="num">07</span>Pricing, billing, free tier, cost tools</a></li><li class="nav-item"><a href="../pages/08-organizations-multi-account.html" class=""><span class="num">08</span>AWS Organizations &amp; strategia multi-account</a></li><li class="nav-item"><a href="../pages/09-vpc-fondamenti.html" class=""><span class="num">09</span>VPC — fondamenti</a></li><li class="nav-item"><a href="../pages/10-vpc-avanzato.html" class=""><span class="num">10</span>VPC avanzato: peering, TGW, PrivateLink, endpoint</a></li><li class="nav-item"><a href="../pages/11-route53-cloudfront.html" class=""><span class="num">11</span>Route 53, CloudFront, Global Accelerator</a></li><li class="nav-item"><a href="../pages/12-hybrid-vpn-directconnect.html" class=""><span class="num">12</span>Hybrid: VPN, Direct Connect, PrivateLink</a></li><li class="nav-item"><a href="../pages/13-ec2-fondamenti.html" class=""><span class="num">13</span>EC2 — fondamenti (istanze, AMI, lifecycle)</a></li><li class="nav-item"><a href="../pages/14-ec2-avanzato-spot-nitro.html" class=""><span class="num">14</span>EC2 avanzato — Spot, Placement Groups, Nitro, hibernation</a></li><li class="nav-item"><a href="../pages/15-asg-elb.html" class=""><span class="num">15</span>Auto Scaling Groups + Elastic Load Balancing</a></li><li class="nav-item"><a href="../pages/16-lambda-deep-dive.html" class=""><span class="num">16</span>Lambda deep dive</a></li><li class="nav-item"><a href="../pages/17-containers-ecs-eks-fargate.html" class=""><span class="num">17</span>Containers: ECS, EKS, Fargate, ECR</a></li><li class="nav-item"><a href="../pages/18-specialty-compute.html" class=""><span class="num">18</span>Specialty compute: Batch, Lightsail, Outposts, Wavelength, Beanstalk</a></li><li class="nav-item"><a href="../pages/19-ebs-efs-fsx.html" class=""><span class="num">19</span>EBS, EFS, FSx, Instance Store</a></li><li class="nav-item"><a href="../pages/20-s3-deep-dive.html" class=""><span class="num">20</span>S3 — deep dive</a></li><li class="nav-item"><a href="../pages/21-archive-snow-gateway-backup.html" class=""><span class="num">21</span>Glacier, Snow, Storage Gateway, DataSync, AWS Backup</a></li><li class="nav-item"><a href="../pages/22-rds.html" class=""><span class="num">22</span>RDS — relational DB managed (engines, Multi-AZ, replicas, Proxy)</a></li><li class="nav-item"><a href="../pages/23-aurora-deep-dive.html" class=""><span class="num">23</span>Aurora deep dive — storage condiviso, Serverless v2, Global Database</a></li><li class="nav-item"><a href="../pages/24-dynamodb-deep-dive.html" class=""><span class="num">24</span>DynamoDB deep dive — partition, GSI, Streams, single-table</a></li><li class="nav-item"><a href="../pages/25-purpose-built-dbs.html" class=""><span class="num">25</span>Purpose-built DB — ElastiCache, MemoryDB, Neptune, DocumentDB, Keyspaces, Timestream, QLDB</a></li><li class="nav-item"><a href="../pages/26-redshift-data-warehousing.html" class=""><span class="num">26</span>Redshift — data warehousing MPP e zero-ETL</a></li><li class="nav-item"><a href="../pages/27-sqs-sns-eventbridge.html" class=""><span class="num">27</span>SQS, SNS, EventBridge — messaging ed eventi</a></li><li class="nav-item"><a href="../pages/28-step-functions-mq-appflow.html" class=""><span class="num">28</span>Step Functions, MQ, AppFlow — orchestrazione e integrazione</a></li><li class="nav-item"><a href="../pages/29-athena-glue-lakeformation.html" class=""><span class="num">29</span>Athena, Glue, Lake Formation — il data lake AWS</a></li><li class="nav-item"><a href="../pages/30-emr-kinesis-msk.html" class=""><span class="num">30</span>EMR, Kinesis, MSK — big data e streaming</a></li><li class="nav-item"><a href="../pages/31-opensearch-quicksight.html" class=""><span class="num">31</span>OpenSearch e QuickSight — search e BI</a></li><li class="nav-item"><a href="../pages/32-sagemaker-overview.html" class=""><span class="num">32</span>SageMaker — la piattaforma ML end-to-end</a></li><li class="nav-item"><a href="../pages/33-bedrock-ai-services.html" class="active"><span class="num">33</span>Bedrock e AI services — GenAI e ML managed</a></li><li class="nav-item"><a href="../pages/34-iac-cloudformation-cdk-terraform.html" class=""><span class="num">34</span>IaC su AWS — CloudFormation, CDK, SAM, Terraform</a></li><li class="nav-item"><a href="../pages/35-ci-cd-pipeline.html" class=""><span class="num">35</span>CI/CD su AWS — CodePipeline, CodeBuild, CodeDeploy, CodeCatalyst</a></li><li class="nav-item"><a href="../pages/36-observability-cloudwatch-xray.html" class=""><span class="num">36</span>Observability — CloudWatch, X-Ray, CloudTrail, Config, SSM</a></li><li class="nav-item"><a href="../pages/37-kms-secrets-acm.html" class=""><span class="num">37</span>Crittografia — KMS, CloudHSM, Secrets Manager, Parameter Store, ACM</a></li><li class="nav-item"><a href="../pages/38-waf-shield-guardduty-inspector.html" class=""><span class="num">38</span>Threat detection — WAF, Shield, GuardDuty, Inspector, Macie, Security Hub</a></li><li class="nav-item"><a href="../pages/39-governance-org-controltower-identitycenter.html" class=""><span class="num">39</span>Governance — Organizations, Control Tower, Identity Center</a></li><li class="nav-item"><a href="../pages/40-migration-mgn-dms-snow.html" class=""><span class="num">40</span>Migration — MGN, DMS, Snow family, Discovery, Migration Hub</a></li><li class="nav-item"><a href="../pages/41-cost-optimization-finops.html" class=""><span class="num">41</span>Cost optimization e FinOps</a></li><li class="nav-item"><a href="../pages/42-well-architected.html" class=""><span class="num">42</span>Well-Architected Framework — 6 pillar, lens, review</a></li><li class="nav-item"><a href="../pages/43-architecture-patterns.html" class=""><span class="num">43</span>Architecture patterns — 3-tier, serverless, event-driven, microservices</a></li><li class="nav-item"><a href="../pages/44-disaster-recovery-multi-region.html" class=""><span class="num">44</span>Disaster Recovery e Multi-Region</a></li><li class="nav-item"><a href="../pages/45-reference-architectures.html" class=""><span class="num">45</span>Reference architectures real-world</a></li><li class="nav-item"><a href="../pages/46-advanced-networking.html" class=""><span class="num">46</span>Advanced networking deep dive</a></li><li class="nav-item"><a href="../pages/47-containers-deep-dive.html" class=""><span class="num">47</span>Containers deep dive — EKS, Karpenter, service mesh</a></li><li class="nav-item"><a href="../pages/48-serverless-patterns.html" class=""><span class="num">48</span>Serverless patterns deep dive</a></li><li class="nav-item"><a href="../pages/49-genai-rag-agents.html" class=""><span class="num">49</span>Generative AI su AWS — RAG e Agents</a></li><li class="nav-item"><a href="../pages/50-certificazioni-aws.html" class=""><span class="num">50</span>Certificazioni AWS — roadmap e study guide</a></li><li class="nav-item"><a href="../pages/51-glossario-az.html" class=""><span class="num">51</span>Glossario A-Z</a></li><li class="nav-item"><a href="../pages/52-cheatsheet.html" class=""><span class="num">52</span>Cheat sheet: servizi, limiti, instance families</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">ML</span>
+        <span>Sezione 33 di 52</span>
+        <span class="level-tag level-int">Livello: intermedio</span>
+      </div>
+      <h1>Bedrock e AI services — GenAI e ML managed</h1>
+      <p class="summary">Foundation model on-demand con Bedrock (Claude, Llama, Titan, Nova), Knowledge Bases per RAG, Agents, Guardrails; più 15+ AI service ready-made (Rekognition, Comprehend, Textract, Polly, Q...).</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>ML</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>sezione 32</li></ul>
+  <div class="label">Strumenti / riferimenti</div>
+  <ul class="source-list"><li>Bedrock Console</li><li>boto3 bedrock-runtime</li></ul>
+</div>
+      <p>Negli ultimi anni AWS ha aggiunto due livelli sopra SageMaker: <strong>Bedrock</strong> (foundation model GenAI as-a-service) e una famiglia di <strong>AI service managed</strong> (Rekognition, Comprehend, Polly…) che risolvono task specifici senza dover addestrare nulla. Capire quando usare uno, l'altro o SageMaker è la decisione architetturale chiave per ML in AWS.</p>
+<h2 id="1-la-piramide-della-decisione">1. La piramide della decisione</h2>
+<pre><code class="language-mermaid">flowchart TB
+  Task[Task ML/AI] --&gt; Q1{Esiste un AI&lt;br&gt;service managed?}
+  Q1 --&gt;|sì| AI[AI Service&lt;br&gt;es. Rekognition, Textract]
+  Q1 --&gt;|no| Q2{Foundation model&lt;br&gt;generico va bene?}
+  Q2 --&gt;|sì| BR[Amazon Bedrock&lt;br&gt;API on-demand]
+  Q2 --&gt;|no, serve fine-tune&lt;br&gt;profondo o custom| SM[SageMaker custom]
+</code></pre>
+<p>Regola: <strong>alza il livello di astrazione il più possibile</strong>. Custom training su SageMaker è l'ultima opzione, non la prima.</p>
+<h2 id="2-amazon-bedrock-foundation-model-on-demand">2. Amazon Bedrock — foundation model on demand</h2>
+<p>Bedrock espone modelli di diversi fornitori via <strong>una API unica</strong>, senza gestire infrastruttura:</p>
+<table>
+<thead>
+<tr>
+<th>Provider</th>
+<th>Modelli (esempi)</th>
+<th>Forte in</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Anthropic</td>
+<td>Claude (Opus, Sonnet, Haiku)</td>
+<td>reasoning, agent, lungo contesto</td>
+</tr>
+<tr>
+<td>Meta</td>
+<td>Llama 3.x</td>
+<td>open-weight, multilingue</td>
+</tr>
+<tr>
+<td>Mistral</td>
+<td>Mistral Large, Mixtral</td>
+<td>efficienza, multilingua EU</td>
+</tr>
+<tr>
+<td>Cohere</td>
+<td>Command, Embed</td>
+<td>RAG, embedding multilingua</td>
+</tr>
+<tr>
+<td>Amazon</td>
+<td>Titan, <strong>Nova</strong> (Pro, Lite, Micro, Canvas, Reel)</td>
+<td>text, image, video gen</td>
+</tr>
+<tr>
+<td>Stability</td>
+<td>Stable Diffusion XL</td>
+<td>immagini</td>
+</tr>
+<tr>
+<td>AI21</td>
+<td>Jamba</td>
+<td>long context</td>
+</tr>
+</tbody>
+</table>
+<h3 id="modalita-duso">Modalità d'uso</h3>
+<ul>
+<li><strong>On-demand</strong> (pay-per-token): default, niente capacity.</li>
+<li><strong>Provisioned throughput</strong>: capacity riservata per latenza/QPS garantiti.</li>
+<li><strong>Batch inference</strong>: 50% di sconto, async su dataset S3.</li>
+<li><strong>Cross-region inference</strong>: routing automatico tra regioni per resilienza.</li>
+</ul>
+<pre><code class="language-python">import boto3, json
+br = boto3.client(&quot;bedrock-runtime&quot;, region_name=&quot;eu-west-1&quot;)
+resp = br.converse(
+    modelId=&quot;anthropic.claude-sonnet-4-7-v1:0&quot;,
+    messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: [{&quot;text&quot;: &quot;Riassumi: ...&quot;}]}],
+    inferenceConfig={&quot;maxTokens&quot;: 1024, &quot;temperature&quot;: 0.2}
+)
+print(resp[&quot;output&quot;][&quot;message&quot;][&quot;content&quot;][0][&quot;text&quot;])
+</code></pre>
+<h2 id="3-feature-bedrock-che-cambiano-il-design">3. Feature Bedrock che cambiano il design</h2>
+<ul>
+<li><strong>Knowledge Bases</strong>: RAG managed. Punti a bucket S3 / Confluence / SharePoint / web / Salesforce, Bedrock chunka, embedda (vectore store OpenSearch Serverless / Aurora pgvector / Pinecone), serve <code>RetrieveAndGenerate</code>. Eviti di scrivere pipeline RAG a mano.</li>
+<li><strong>Agents</strong>: orchestrazione tool-use, action group con OpenAPI/Lambda, integrazione Knowledge Base, memory di sessione. Sostituisce framework tipo LangChain per molti casi.</li>
+<li><strong>Guardrails</strong>: filtri input/output (PII, topic deny, harmful content, <strong>contextual grounding</strong> per ridurre allucinazioni RAG).</li>
+<li><strong>Bedrock Studio</strong>: ambiente low-code per prototipare agent e chatbot.</li>
+<li><strong>Model Customization</strong>: fine-tuning (LoRA) e <strong>continued pre-training</strong> su tuoi dati.</li>
+<li><strong>Model Distillation</strong>: usa un modello grande come teacher per addestrarne uno piccolo task-specific (90% performance, costo 10x meno).</li>
+<li><strong>Intelligent Prompt Routing</strong>: instrada ogni richiesta al modello "giusto" (cheap vs powerful) in base alla difficoltà stimata.</li>
+<li><strong>Bedrock Marketplace</strong>: catalogo modelli extra (HuggingFace, vendor) deploy in pochi click.</li>
+</ul>
+<h2 id="4-ai-services-managed-task-specifici">4. AI services managed — task specifici</h2>
+<table>
+<thead>
+<tr>
+<th>Servizio</th>
+<th>Cosa fa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Rekognition</strong></td>
+<td>image/video: face, label, moderation, celebrity, custom labels</td>
+</tr>
+<tr>
+<td><strong>Comprehend</strong></td>
+<td>NLP: sentiment, entities, key phrases, language, topic modeling, <strong>Medical</strong> variant</td>
+</tr>
+<tr>
+<td><strong>Translate</strong></td>
+<td>traduzione 75+ lingue, custom terminology</td>
+</tr>
+<tr>
+<td><strong>Polly</strong></td>
+<td>TTS neural / generative, 100+ voci, SSML</td>
+</tr>
+<tr>
+<td><strong>Transcribe</strong></td>
+<td>STT real-time/batch, speaker diarization, <strong>Medical</strong>/<strong>Call Analytics</strong></td>
+</tr>
+<tr>
+<td><strong>Textract</strong></td>
+<td>OCR + estrazione form/tabelle/firme/query (molto più avanti di un OCR)</td>
+</tr>
+<tr>
+<td><strong>Lex</strong></td>
+<td>chatbot conversazionali (stesso engine di Alexa)</td>
+</tr>
+<tr>
+<td><strong>Personalize</strong></td>
+<td>recommender system, real-time</td>
+</tr>
+<tr>
+<td><strong>Forecast</strong></td>
+<td>time series forecasting AutoML</td>
+</tr>
+<tr>
+<td><strong>Fraud Detector</strong></td>
+<td>anti-frode online ML-based</td>
+</tr>
+<tr>
+<td><strong>Kendra</strong></td>
+<td>enterprise search semantica con connectori (alternativa Knowledge Base)</td>
+</tr>
+<tr>
+<td><strong>Lookout for Equipment/Vision/Metrics</strong></td>
+<td>anomaly detection industriale</td>
+</tr>
+<tr>
+<td><strong>HealthLake / Comprehend Medical</strong></td>
+<td>dati clinici FHIR + NLP medico</td>
+</tr>
+</tbody>
+</table>
+<p>E poi i <strong>Q</strong>:
+- <strong>Amazon Q Developer</strong>: assistente AI in IDE (autocomplete, chat, agent, security scan).
+- <strong>Amazon Q Business</strong>: chatbot enterprise sopra i tuoi dati aziendali, con SSO, RBAC, plugin.</p>
+<h2 id="5-quando-bedrock-quando-ai-service-quando-sagemaker">5. Quando Bedrock, quando AI service, quando SageMaker</h2>
+<table>
+<thead>
+<tr>
+<th>Necessità</th>
+<th>Soluzione</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OCR fatture</td>
+<td><strong>Textract</strong> (no LLM serve)</td>
+</tr>
+<tr>
+<td>Trascrizione meeting con speaker</td>
+<td><strong>Transcribe</strong></td>
+</tr>
+<tr>
+<td>Chatbot RAG su Confluence</td>
+<td><strong>Bedrock Knowledge Bases</strong> o <strong>Q Business</strong></td>
+</tr>
+<tr>
+<td>Agent che esegue tool sui tuoi sistemi</td>
+<td><strong>Bedrock Agents</strong></td>
+</tr>
+<tr>
+<td>Recommender e-commerce</td>
+<td><strong>Personalize</strong></td>
+</tr>
+<tr>
+<td>Modello XGBoost custom su tabelle proprietarie</td>
+<td><strong>SageMaker</strong></td>
+</tr>
+<tr>
+<td>Foundation model proprietary fine-tune profondo</td>
+<td><strong>SageMaker</strong> (o Bedrock customization se modello supportato)</td>
+</tr>
+<tr>
+<td>Detection difetti su foto produzione (poche label)</td>
+<td><strong>Rekognition Custom Labels</strong> o <strong>Lookout for Vision</strong></td>
+</tr>
+</tbody>
+</table>
+<h2 id="6-pricing-pattern">6. Pricing pattern</h2>
+<ul>
+<li>AI services: per request/character/minute, niente fisso.</li>
+<li>Bedrock on-demand: per <strong>1k token input/output</strong> (variabile per modello).</li>
+<li>Bedrock provisioned: $ per model-unit-hour, conviene da ~5-10 RPS stabili.</li>
+<li>Knowledge Bases: storage vector store + ingestion + retrieve fee.</li>
+<li>SageMaker: ore istanza GPU/CPU.</li>
+</ul>
+<h2 id="7-gotcha-tipici">7. Gotcha tipici</h2>
+<ul>
+<li>Allucinazioni in RAG: attivare <strong>Guardrails contextual grounding</strong> o re-rank con citation enforce.</li>
+<li>Costo agent fuori controllo: ogni step di tool-use è una nuova call al modello. Limitare <code>maxIterations</code>.</li>
+<li>Latency variabile su on-demand quando la regione è satura → <strong>cross-region inference</strong> o provisioned throughput.</li>
+<li>Non confondere <strong>Q Developer</strong> (gratis fino a un certo uso, IDE-only) con <strong>Q Business</strong> (a pagamento, enterprise app).</li>
+<li>Knowledge Bases con bucket pieni di PDF scansionati: prima passa per <strong>Textract</strong>, altrimenti chunk vuoti.</li>
+</ul>
+<h2 id="8-esercizio">8. Esercizio</h2>
+<details>
+<summary>Devi costruire un chatbot interno che risponda su 50.000 documenti aziendali (PDF, Word, Confluence). Stack?</summary>
+
+Opzione 1 (rapida): **Amazon Q Business** con connector Confluence + S3 (per PDF/Word). SSO via IdC, RBAC mappato sui permessi sorgente, plugin per ticket. Zero codice. Opzione 2 (più controllo): **Bedrock Knowledge Bases** (vector store OpenSearch Serverless o Aurora pgvector) + Bedrock Agents per orchestrazione + Guardrails. Frontend custom. Per PDF scansionati passare prima da **Textract**. SageMaker custom = overkill.
+</details>
+
+<details>
+<summary>App mobile deve trascrivere note vocali (italiano, accenti regionali) e estrarre date/azioni. Soluzione?</summary>
+
+**Transcribe** (italiano + custom vocabulary per termini di dominio) → **Bedrock Claude Sonnet** con prompt strutturato che estrae date, persone, action item in JSON. Output validato con **Guardrails** (PII redaction, niente contenuti sensibili). Per app real-time usare Transcribe streaming. Costo dominato da Transcribe per minuto.
+</details>
+
+<blockquote>
+<p><strong>Riassunto</strong>: piramide AWS AI = AI services managed (specifici) → Bedrock (foundation model + KB + Agents + Guardrails) → SageMaker custom. Bedrock unifica Claude/Llama/Mistral/Titan/Nova via API singola; Knowledge Bases per RAG, Agents per tool-use, Guardrails per sicurezza. Q Developer aiuta il dev, Q Business porta GenAI sui dati aziendali. Sali di astrazione prima di andare custom.</p>
+</blockquote>
+      <nav class="pager">
+<a href="32-sagemaker-overview.html" class="prev"><span class="label">← Precedente</span><span class="title">SageMaker — la piattaforma ML end-to-end</span></a>
+<a href="34-iac-cloudformation-cdk-terraform.html" class="next"><span class="label">Successivo →</span><span class="title">IaC su AWS — CloudFormation, CDK, SAM, Terraform</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>AWS Zero to Hero</strong> — percorso completo, in italiano, dalle primitive all'architettura avanzata.</p><p>Materiale didattico aperto. Nessuna sponsorizzazione, nessun affiliate link, nessuna affiliazione con AWS. Quando un concetto è oscuro, torna indietro: AWS è una piramide di primitive, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

@@ -1,0 +1,589 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PAC vs PIC, ribilanciamento e tax loss harvesting — Educazione Finanziaria Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#3a3a2a',primaryTextColor:'#f4f1e8',primaryBorderColor:'#9b7d34',lineColor:'#9a9685',background:'#181c27'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">€</div>
+      <div>
+        <div class="brand-title">FINANZA</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">IT</span><a href="../en/pages/40-dca-lump-sum-rebalancing.html" class="lang-link" title="Switch to English">EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-cos-e-il-denaro.html" class=""><span class="num">01</span>Cos&#x27;è il denaro (e come è cambiato)</a></li><li class="nav-item"><a href="../pages/02-sistema-finanziario.html" class=""><span class="num">02</span>Il sistema finanziario: come funziona davvero</a></li><li class="nav-item"><a href="../pages/03-banche-centrali.html" class=""><span class="num">03</span>Banche centrali (BCE, FED, BOE, BOJ)</a></li><li class="nav-item"><a href="../pages/04-inflazione.html" class=""><span class="num">04</span>Inflazione, deflazione, potere d&#x27;acquisto</a></li><li class="nav-item"><a href="../pages/05-budget-personale.html" class=""><span class="num">05</span>Budget personale e cash flow</a></li><li class="nav-item"><a href="../pages/06-piramide-finanziaria.html" class=""><span class="num">06</span>Piramide finanziaria e fondo emergenza</a></li><li class="nav-item"><a href="../pages/07-conti-e-pagamenti.html" class=""><span class="num">07</span>Conti correnti, conti deposito, sistemi di pagamento</a></li><li class="nav-item"><a href="../pages/08-credit-score-crif.html" class=""><span class="num">08</span>Credit score, CRIF e identità finanziaria</a></li><li class="nav-item"><a href="../pages/09-tipi-di-banche.html" class=""><span class="num">09</span>Tipologie di banche (e perché le neobank sono diverse)</a></li><li class="nav-item"><a href="../pages/10-bilancio-banca-basilea.html" class=""><span class="num">10</span>Il bilancio di una banca e Basilea III/IV</a></li><li class="nav-item"><a href="../pages/11-mutui.html" class=""><span class="num">11</span>Mutui (fisso, variabile, misto, surroga, INPS)</a></li><li class="nav-item"><a href="../pages/12-prestiti-carte-cessione.html" class=""><span class="num">12</span>Prestiti personali, carte revolving, cessione del quinto</a></li><li class="nav-item"><a href="../pages/13-mercati-finanziari.html" class=""><span class="num">13</span>Mercati finanziari: come funzionano davvero</a></li><li class="nav-item"><a href="../pages/14-azioni.html" class=""><span class="num">14</span>Azioni: cosa compri davvero quando compri un&#x27;azione</a></li><li class="nav-item"><a href="../pages/15-obbligazioni.html" class=""><span class="num">15</span>Obbligazioni: cedola, prezzo, yield, duration</a></li><li class="nav-item"><a href="../pages/16-etf-fondi.html" class=""><span class="num">16</span>ETF, fondi comuni e gestione attiva vs passiva</a></li><li class="nav-item"><a href="../pages/17-asset-allocation-mpt.html" class=""><span class="num">17</span>Asset allocation e teoria moderna del portafoglio (MPT)</a></li><li class="nav-item"><a href="../pages/18-diversificazione-correlazione.html" class=""><span class="num">18</span>Diversificazione, correlazione e rischio non sistematico</a></li><li class="nav-item"><a href="../pages/19-analisi-fondamentale.html" class=""><span class="num">19</span>Analisi fondamentale: DCF, multipli, ratio</a></li><li class="nav-item"><a href="../pages/20-analisi-tecnica.html" class=""><span class="num">20</span>Analisi tecnica (e perché l&#x27;accademia è scettica)</a></li><li class="nav-item"><a href="../pages/21-capm-fama-french.html" class=""><span class="num">21</span>CAPM e modelli multi-fattoriali (Fama-French)</a></li><li class="nav-item"><a href="../pages/22-derivati.html" class=""><span class="num">22</span>Derivati: futures, opzioni, swap, forward</a></li><li class="nav-item"><a href="../pages/23-black-scholes-greche.html" class=""><span class="num">23</span>Black-Scholes e le greche</a></li><li class="nav-item"><a href="../pages/24-var-cvar-risk-management.html" class=""><span class="num">24</span>Risk management quantitativo: VaR e CVaR</a></li><li class="nav-item"><a href="../pages/25-stress-test-scenari.html" class=""><span class="num">25</span>Stress test, scenari estremi, tail risk</a></li><li class="nav-item"><a href="../pages/26-behavioral-finance.html" class=""><span class="num">26</span>Behavioral finance: i bias che ti rovinano gli investimenti</a></li><li class="nav-item"><a href="../pages/27-macroeconomia-investitori.html" class=""><span class="num">27</span>Macroeconomia essenziale per investitori</a></li><li class="nav-item"><a href="../pages/28-tassi-cambio-forex.html" class=""><span class="num">28</span>Tassi di cambio e Forex</a></li><li class="nav-item"><a href="../pages/29-commodities.html" class=""><span class="num">29</span>Commodities: oro, petrolio, metalli, agri</a></li><li class="nav-item"><a href="../pages/30-crisi-finanziarie-storia.html" class=""><span class="num">30</span>Crisi finanziarie nella storia: cosa si ripete</a></li><li class="nav-item"><a href="../pages/31-tassazione-investimenti-italia.html" class=""><span class="num">31</span>Tassazione degli investimenti in Italia (e come è altrove)</a></li><li class="nav-item"><a href="../pages/32-previdenza-pensione-tfr.html" class=""><span class="num">32</span>Previdenza: INPS, pensione di base, fondi pensione, TFR</a></li><li class="nav-item"><a href="../pages/33-assicurazioni.html" class=""><span class="num">33</span>Assicurazioni: cosa serve davvero e cosa è solo commissione</a></li><li class="nav-item"><a href="../pages/34-immobiliare-reit.html" class=""><span class="num">34</span>Immobiliare: comprare, affittare, REIT, mattoncino digitale</a></li><li class="nav-item"><a href="../pages/35-crypto-blockchain-defi.html" class=""><span class="num">35</span>Crypto, Bitcoin, Ethereum, stablecoin, DeFi</a></li><li class="nav-item"><a href="../pages/36-fintech.html" class=""><span class="num">36</span>Fintech: robo-advisor, neobanking, BNPL, embedded finance</a></li><li class="nav-item"><a href="../pages/37-esg-finanza-sostenibile.html" class=""><span class="num">37</span>ESG e finanza sostenibile</a></li><li class="nav-item"><a href="../pages/38-ai-in-finanza.html" class=""><span class="num">38</span>AI nella finanza: ML per trading, robo-advisor, credit scoring, LLM</a></li><li class="nav-item"><a href="../pages/39-costruire-portafoglio.html" class=""><span class="num">39</span>Costruire un portafoglio: lazy, three-fund, all-weather, core-satellite</a></li><li class="nav-item"><a href="../pages/40-pac-pic-ribilanciamento.html" class="active"><span class="num">40</span>PAC vs PIC, ribilanciamento e tax loss harvesting</a></li><li class="nav-item"><a href="../pages/41-fire-indipendenza-finanziaria.html" class=""><span class="num">41</span>FIRE, indipendenza finanziaria e longevity planning</a></li><li class="nav-item"><a href="../pages/42-frodi-errori-comuni.html" class=""><span class="num">42</span>Frodi, truffe, errori comuni: come non perdere tutto</a></li><li class="nav-item"><a href="../pages/43-glossario-az.html" class=""><span class="num">43</span>Glossario A–Z</a></li><li class="nav-item"><a href="../pages/44-formulario.html" class=""><span class="num">44</span>Formulario</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Portafoglio</span>
+        <span>Sezione 40 di 44</span>
+        <span class="level-tag level-int">Livello: intermedio</span>
+      </div>
+      <h1>PAC vs PIC, ribilanciamento e tax loss harvesting</h1>
+      <p class="summary">Investire periodico o in unica soluzione, perché e quando ribilanciare, come compensare minus in Italia. Tutta evidenza e tutta pratica.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Portafoglio</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>Sai cosa è un ETF e quanto ti costa in TER</li><li>Conosci il 26% capital gain tax italiano e il bollo 0.20%</li><li>Hai letto la sezione su costruire un portafoglio</li></ul>
+  <div class="label">Strumenti / riferimenti</div>
+  <ul class="source-list"><li>Excel o Google Sheets per simulazioni di PAC</li><li>Conto su Fineco/Directa/Trade Republic</li><li>Calendario per ribilanci annuali</li></ul>
+</div>
+      <p>Hai i soldi, hai gli ETF scelti, hai l'asset allocation. Mancano tre decisioni operative che pesano più di quanto pensi:</p>
+<ol>
+<li>Metto tutto <strong>subito</strong> (PIC) o <strong>a rate</strong> (PAC)?</li>
+<li>Quando e come <strong>ribilancio</strong>?</li>
+<li>Posso usare le <strong>perdite</strong> per pagare meno tasse?</li>
+</ol>
+<p>Spoiler: ci sono risposte basate su evidenza per tutte e tre, e sono spesso controintuitive.</p>
+<h2 id="1-pac-vs-pic-cosa-dice-levidenza">1. PAC vs PIC: cosa dice l'evidenza</h2>
+<p><strong>PIC</strong> (Piano in Capitale, <em>lump sum</em>): investi tutto subito.</p>
+<p><strong>PAC</strong> (Piano di Accumulo del Capitale, <em>Dollar Cost Averaging — DCA</em>): investi a rate, periodicamente, per un periodo definito (es. 12, 24 o 36 mesi).</p>
+<pre><code class="language-mermaid">flowchart LR
+    S[Hai 24.000€ liquidi] --&gt; A{Strategia?}
+    A --&gt;|PIC| P1[Compra 24.000€ oggi]
+    A --&gt;|PAC 12m| P2[Compra 2.000€ ogni mese per 12 mesi]
+    P1 --&gt; R1[Sei al 100% investito dal mese 1]
+    P2 --&gt; R2[Sei al 50% investito a metà periodo]
+</code></pre>
+<h3 id="lo-studio-vanguard-2012">Lo studio Vanguard 2012</h3>
+<p>Vanguard ha confrontato PIC vs PAC (12 mesi) su tre mercati (US, UK, Australia) per il periodo 1926-2011, su orizzonti decennali, con portafogli 60/40 stock/bond.</p>
+<p><strong>Risultato</strong>: <strong>il PIC batte il PAC nel ~66% dei casi</strong>. In media il PIC produce 2.3% in più sul totale del periodo. Replicato da Vanguard nel 2023 con dati aggiornati: 68% di vittorie del PIC.</p>
+<p>Perché? I mercati salgono nel lungo periodo. Se metti tutto subito sei investito per più tempo. Il PAC, in media, ti tiene metà del capitale in cash che rende poco.</p>
+<table>
+<thead>
+<tr>
+<th>Metrica</th>
+<th>PIC</th>
+<th>PAC 12m</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Rendimento atteso (storico US 60/40)</td>
+<td>8.2%</td>
+<td>7.5%</td>
+</tr>
+<tr>
+<td>Volatilità del valore finale</td>
+<td>maggiore</td>
+<td>minore</td>
+</tr>
+<tr>
+<td>Worst-case (massimo drawdown a 1 anno)</td>
+<td>-38%</td>
+<td>-22%</td>
+</tr>
+<tr>
+<td>Vittoria diretta sull'altro</td>
+<td>66%</td>
+<td>34%</td>
+</tr>
+</tbody>
+</table>
+<h3 id="quando-il-pac-ha-senso-davvero">Quando il PAC ha senso davvero</h3>
+<p>Il PIC perde nel ~34% dei casi. Quando? Quando entri <strong>prima di un crash</strong>. Esempi storici: entri a Feb-2000 (dot-com), Ott-2007 (subprime), Feb-2020 (Covid), Dic-2021 (rate-shock).</p>
+<p>Inoltre il PAC ha tre vantaggi non puramente di rendimento:</p>
+<ol>
+<li><strong>Psicologico</strong>: se entri al 100% e crolla, vendi al peggio. Se entri al 50% e crolla, <strong>compri di più</strong> al ribasso (cost averaging effettivo).</li>
+<li><strong>Comportamentale</strong>: forza la disciplina. Il PIC richiede di prendere una decisione enorme una volta sola; il PAC la automatizza in 12-24 step piccoli.</li>
+<li><strong>Realtà operativa</strong>: la maggior parte delle persone non ha una somma grossa, ha lo stipendio. <strong>Per chi accumula da stipendio il PAC è l'unica opzione</strong>, e l'analisi PIC-vs-PAC nemmeno si pone.</li>
+</ol>
+<h3 id="regola-pratica-decisionale">Regola pratica decisionale</h3>
+<pre><code class="language-mermaid">flowchart TD
+    Q1[Hai una somma 1-shot?] --&gt;|No, accumulo da stipendio| PAC[PAC mensile]
+    Q1 --&gt;|Sì| Q2[I mercati sono vicini ai massimi?]
+    Q2 --&gt;|No, prezzi normali o in correzione| PIC[PIC subito]
+    Q2 --&gt;|Sì, indice vicino all'all-time high| Q3[Quanto stomaco hai?]
+    Q3 --&gt;|Tanto| PIC2[PIC subito]
+    Q3 --&gt;|Poco| PAC2[PAC 6-12 mesi]
+</code></pre>
+<p>"Vicini ai massimi" è un giudizio sporco ma operativo. CAPE di Shiller (cyclically-adjusted P/E) &gt;30 sull'$S\&amp;P$ = mercato costoso (CAPE storico medio 17). Sopra CAPE 30 è ragionevole spalmare. Sotto CAPE 20, PIC.</p>
+<h3 id="math-del-cost-averaging">Math del cost averaging</h3>
+<p>Il PAC compra <strong>meno quote quando prezzo alto e più quote quando prezzo basso</strong>. Il prezzo medio pagato è quindi la <strong>media armonica</strong>, non aritmetica, e la media armonica è <strong>sempre ≤</strong> della media aritmetica (Jensen / disuguaglianza AM-HM).</p>
+<p>Esempio numerico: investi 1.000 € al mese per 3 mesi in un ETF con prezzi (10, 20, 10).</p>
+<table>
+<thead>
+<tr>
+<th>Mese</th>
+<th style="text-align: right;">Prezzo</th>
+<th style="text-align: right;">Quote comprate (1000€ / prezzo)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">100</td>
+</tr>
+<tr>
+<td>2</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">50</td>
+</tr>
+<tr>
+<td>3</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">100</td>
+</tr>
+<tr>
+<td>Totale</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;">250 quote per 3.000€</td>
+</tr>
+</tbody>
+</table>
+<p>Prezzo medio pagato = $3000 / 250 = 12 €$. Prezzo medio aritmetico = $(10+20+10)/3 = 13.33 €$. Risparmio: 1.33 € per quota.</p>
+<p>Questo è il "<em>magic of cost averaging</em>" famoso. In realtà non è magia: se i prezzi salgono monotonicamente, il PAC perde sempre contro il PIC.</p>
+<h2 id="2-ribilanciamento-cosa-e-e-perche-farlo">2. Ribilanciamento: cosa è e perché farlo</h2>
+<p>L'asset allocation si <strong>muove da sola</strong> col tempo. Se parti 60/40 azioni/bond e le azioni fanno +30% mentre i bond +5%, finisci a $\approx 68/32$. Il rischio del portafoglio è salito senza che tu lo abbia deciso.</p>
+<p><strong>Ribilanciare</strong> = riportare i pesi alla target allocation iniziale.</p>
+<h3 id="perche-ribilanciare">Perché ribilanciare</h3>
+<p>Tre ragioni, in ordine di importanza:</p>
+<ol>
+<li><strong>Mantenere il rischio target.</strong> È la ragione principale. Senza ribilancio, dopo 20 anni di bull market potresti essere 90/10 senza saperlo.</li>
+<li><strong>Mean reversion.</strong> Asset class che sono cresciute molto tendono a rendere meno in futuro. Ribilanciare vende "alto" e compra "basso" automaticamente.</li>
+<li><strong>Premio di ribilancio.</strong> Studi empirici (Bouchey-Nemtchinov-Paulsen 2012) trovano un piccolo <em>rebalancing bonus</em> di 0.2-0.5% / anno per portafogli diversificati con asset class decorrelate.</li>
+</ol>
+<h3 id="quando-ribilanciare">Quando ribilanciare</h3>
+<p>Due scuole:</p>
+<p><strong>Calendar rebalancing</strong>: a date fisse (ogni anno, ogni 6 mesi).</p>
+<p><strong>Threshold rebalancing</strong>: quando un asset class supera una banda (es. ±5% rispetto al target).</p>
+<p>Tabella di confronto:</p>
+<table>
+<thead>
+<tr>
+<th>Metodo</th>
+<th>Pro</th>
+<th>Contro</th>
+<th>Frequenza tipica</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Calendar annuale</td>
+<td>semplice, prevedibile</td>
+<td>a volte ribilanci anche se non serve</td>
+<td>1× anno (gennaio)</td>
+</tr>
+<tr>
+<td>Calendar trimestrale</td>
+<td>reattivo</td>
+<td>overtrading + costi/tax</td>
+<td>4× anno</td>
+</tr>
+<tr>
+<td>Threshold ±5%</td>
+<td>tax-efficient (solo se serve)</td>
+<td>richiede monitoraggio</td>
+<td>varia: 0-3× anno</td>
+</tr>
+<tr>
+<td>Misto</td>
+<td>combo</td>
+<td>un po' più complesso</td>
+<td>1× anno + soglia ±10%</td>
+</tr>
+</tbody>
+</table>
+<p>In Italia con tassazione 26% sui gain e bollo, <strong>l'optimum operativo è il misto</strong>: calendar annuale a gennaio + threshold ±10% per shock grossi (es. -30% in un anno).</p>
+<h3 id="esempio-di-ribilancio">Esempio di ribilancio</h3>
+<p>Target 60/40 su portafoglio 100.000 €.</p>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th style="text-align: right;">Azioni</th>
+<th style="text-align: right;">Bond</th>
+<th style="text-align: right;">Tot</th>
+<th style="text-align: right;">Azioni %</th>
+<th style="text-align: right;">Bond %</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Inizio</td>
+<td style="text-align: right;">60.000</td>
+<td style="text-align: right;">40.000</td>
+<td style="text-align: right;">100.000</td>
+<td style="text-align: right;">60%</td>
+<td style="text-align: right;">40%</td>
+</tr>
+<tr>
+<td>Dopo 1 anno (+30% azioni, +2% bond)</td>
+<td style="text-align: right;">78.000</td>
+<td style="text-align: right;">40.800</td>
+<td style="text-align: right;">118.800</td>
+<td style="text-align: right;">65.7%</td>
+<td style="text-align: right;">34.3%</td>
+</tr>
+<tr>
+<td>Ribilancio</td>
+<td style="text-align: right;">-6.720 azioni, +6.720 bond</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr>
+<td>Dopo ribilancio</td>
+<td style="text-align: right;">71.280</td>
+<td style="text-align: right;">47.520</td>
+<td style="text-align: right;">118.800</td>
+<td style="text-align: right;">60%</td>
+<td style="text-align: right;">40%</td>
+</tr>
+</tbody>
+</table>
+<p>Il ribilancio ha venduto azioni "care" e comprato bond "scontati" — esattamente quello che mean reversion suggerisce.</p>
+<h3 id="tax-aware-rebalancing-in-italia">Tax-aware rebalancing in Italia</h3>
+<p>In Italia la vendita di un ETF in plus paga 26% sul guadagno (e perdi anche 0.20% bollo che continuerà a maturare l'anno prossimo). Quindi vendere è costoso. Due strategie tax-friendly:</p>
+<ol>
+<li><strong>Ribilanciamento via flussi nuovi.</strong> Se versi 800 €/mese, allocali secondo il deficit corrente. Esempio: se sei a 65/35 ma vuoi 60/40, versa 100% in bond finché non torni in target. Zero vendite = zero tasse.</li>
+<li><strong>Ribilanciamento asimmetrico (verso UP).</strong> Vendi solo quando un asset class sfora <strong>al rialzo</strong> in modo estremo (es. &gt;+10% sopra target). Per le sforature verso il basso, usa solo flussi nuovi.</li>
+</ol>
+<h3 id="esempio-ribilancio-via-pac">Esempio: ribilancio via PAC</h3>
+<p>Sei al 67/33, vuoi 60/40, hai PAC 1.000 €/mese.</p>
+<p>Deficit bond: target 40% × 118.800 = 47.520 € vs attuali 39.200 → deficit 8.320 €.</p>
+<p>Versa <strong>100% in AGGH per ~8 mesi</strong> finché il bond peso non torna a 40%. Nessuna vendita, nessuna tassa, nessuna minus persa per fungibilità.</p>
+<h2 id="3-tax-loss-harvesting-realizzare-minus-per-compensare">3. Tax loss harvesting: realizzare minus per compensare</h2>
+<p>In Italia il capital gain tax al 26% colpisce le <strong>plusvalenze</strong>, ma le <strong>minusvalenze</strong> realizzate sono <strong>compensabili</strong> entro 4 anni successivi all'anno di realizzo.</p>
+<pre><code class="language-mermaid">flowchart LR
+    A[Vendi ETF X in minus -3.000€] --&gt; B[Minus va in 'zainetto fiscale']
+    B --&gt; C[Hai 4 anni per usarla]
+    C --&gt; D[Realizzi plus +5.000€ su ETF Y]
+    D --&gt; E[Pagi 26% solo su 5000-3000 = 2000€&lt;br/&gt;= 520€ invece di 1300€]
+    E --&gt; F[Risparmio: 780€]
+</code></pre>
+<h3 id="le-2-grandi-gotcha-italiane">Le 2 grandi gotcha italiane</h3>
+<p><strong>Gotcha 1: ETF vs altri strumenti.</strong> In Italia c'è una distinzione storica orrenda tra <strong>redditi da capitale</strong> (cedole obbligazionarie, dividendi, plus su fondi e ETF) e <strong>redditi diversi</strong> (plus su azioni singole, derivati). Le minus rientrano <strong>solo</strong> in redditi diversi.</p>
+<table>
+<thead>
+<tr>
+<th>Strumento</th>
+<th>Plus genera</th>
+<th>Minus genera</th>
+<th>Compensabilità</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ETF</td>
+<td>redditi di capitale</td>
+<td>redditi diversi (minus)</td>
+<td>minus compensa solo redditi diversi futuri</td>
+</tr>
+<tr>
+<td>Azione singola</td>
+<td>redditi diversi</td>
+<td>redditi diversi</td>
+<td>piena compensazione</td>
+</tr>
+<tr>
+<td>Obbligazione</td>
+<td>redditi di capitale (cedole + plus)</td>
+<td>redditi diversi</td>
+<td>minus su bond compensa solo redditi diversi</td>
+</tr>
+<tr>
+<td>Derivato (future, opzione)</td>
+<td>redditi diversi</td>
+<td>redditi diversi</td>
+<td>piena compensazione</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Conseguenza pratica</strong>: se vendi VWCE in plus, la tua minus su un altro ETF venduto in passato <strong>non la puoi usare</strong>. Devi compensare minus solo con redditi diversi futuri (vendita di azioni in plus, future, opzioni).</p>
+<p>Questo è uno dei motivi per cui molti italiani tengono qualche azione singola in portafoglio: per avere uno strumento che genera redditi diversi e poter compensare minus pregresse.</p>
+<p><strong>Gotcha 2: regime amministrato vs dichiarativo.</strong> Su broker italiani (Fineco, Directa) sei in <strong>regime amministrato</strong>: il broker calcola tutto e tiene lo "zainetto fiscale". Su broker esteri (IB, TR, Degiro) sei in <strong>regime dichiarativo</strong>: devi tracciare tutto tu in dichiarazione (quadro RT, RW).</p>
+<h3 id="tax-loss-harvesting-pratico">Tax loss harvesting pratico</h3>
+<p>Strategia: a dicembre, vedi quali ETF sono in perdita. Li vendi e <strong>ricompri uno equivalente ma non identico</strong> (per non incorrere in regole anti-elusione).</p>
+<table>
+<thead>
+<tr>
+<th>ETF venduto in minus</th>
+<th>ETF ricomprato (equivalente)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>VWCE (Vanguard FTSE All-World)</td>
+<td>iShares MSCI ACWI IE00B6R52259 (SSAC)</td>
+</tr>
+<tr>
+<td>SWDA (iShares Core MSCI World)</td>
+<td>Xtrackers MSCI World IE00BJ0KDQ92 (XDWD)</td>
+</tr>
+<tr>
+<td>AGGH</td>
+<td>Xtrackers Global Aggregate Bond LU0942970103</td>
+</tr>
+</tbody>
+</table>
+<p>L'attenzione: deve essere un ETF <strong>diverso</strong> (ISIN diverso) ma con esposizione equivalente. In Italia non c'è una <em>wash sale rule</em> esplicita come negli USA (30 giorni), però la giurisprudenza Cassazione 27063/2007 e seguenti hanno applicato la norma antielusiva quando l'operazione è "puramente artificiosa": riacquistare lo stesso ETF lo stesso giorno è rischioso.</p>
+<p>Buona pratica: aspetta almeno 1 giorno e cambia l'ISIN. Mai cambiare l'esposizione economica.</p>
+<h3 id="esempio-numerico-tlh">Esempio numerico TLH</h3>
+<p>Hai due ETF:</p>
+<ul>
+<li>VWCE comprato a 100€, oggi vale 85€. Quote: 100. Plus latente: -1.500€.</li>
+<li>Apple comprata a 50€, oggi vale 200€. Quote: 50. Plus latente: +7.500€.</li>
+</ul>
+<p>Vuoi liquidare Apple a fine anno (es. per riequilibrio).</p>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Operazioni</th>
+<th style="text-align: right;">Tax</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A: vendi solo Apple</td>
+<td>gain 7500</td>
+<td style="text-align: right;">$7500 \times 26\% = 1.950$</td>
+</tr>
+<tr>
+<td>B: vendi Apple + vendi VWCE (TLH) + ricompri SSAC</td>
+<td>gain 7500, loss 1500 → netto 6000</td>
+<td style="text-align: right;">$6000 \times 26\% = 1.560$</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Risparmio TLH: 390 €.</strong> Hai pagato due commissioni broker (vendita VWCE + acquisto SSAC) = ~2€ × 2 = 4 €. Netto: 386 €.</p>
+<p>Funziona perché Apple genera redditi diversi e quindi la minus dell'ETF è compensabile.</p>
+<h2 id="4-simulazione-20-anni-di-pac-200mese-in-vwce">4. Simulazione 20 anni di PAC: 200€/mese in VWCE</h2>
+<p>Setup:</p>
+<ul>
+<li>Versamento: 200 €/mese (= 2.400 €/anno).</li>
+<li>ETF: VWCE.</li>
+<li>Rendimento medio atteso: 7% / anno (nominale).</li>
+<li>Tasso annuo composto mensile: $0.07 / 12 \approx 0.5833\%$.</li>
+<li>Orizzonte: 20 anni = 240 mesi.</li>
+</ul>
+<p>Formula del montante con versamenti periodici (annuity FV):</p>
+<p>$$FV = R \cdot \frac{(1+i)^n - 1}{i}$$</p>
+<p>dove $R = 200$, $i = 0.005833$, $n = 240$.</p>
+<p>$$FV = 200 \cdot \frac{(1.005833)^{240} - 1}{0.005833} \approx 200 \cdot \frac{4.039 - 1}{0.005833} \approx 200 \cdot 521 \approx 104.180 \, \text{€}$$</p>
+<p>Capitale versato totale: $200 \times 240 = 48.000$ €. Plus lorda: $\approx 56.180$ €.</p>
+<p>Tassazione finale (semplificata):</p>
+<table>
+<thead>
+<tr>
+<th>Voce</th>
+<th style="text-align: right;">Importo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Valore lordo</td>
+<td style="text-align: right;">104.180 €</td>
+</tr>
+<tr>
+<td>Tax 26% su plus 56.180</td>
+<td style="text-align: right;">-14.607 €</td>
+</tr>
+<tr>
+<td>Bollo cumulato (0.20% × ~50k medio × 20 anni)</td>
+<td style="text-align: right;">-2.000 €</td>
+</tr>
+<tr>
+<td>TER cumulato (0.22% × 50k medio × 20 anni)</td>
+<td style="text-align: right;">-2.200 €</td>
+</tr>
+<tr>
+<td><strong>Valore netto</strong></td>
+<td style="text-align: right;"><strong>~85.373 €</strong></td>
+</tr>
+</tbody>
+</table>
+<p>In reale (deflazionato a 2%): $\approx 57.500$ €. Hai messo 48k nominali → 57.5k reali. Hai battuto l'inflazione e portato a casa ~20% di potere d'acquisto in più. Non spettacolare, ma realistico per 200 €/mese.</p>
+<p>Per vedere "il magico" del PAC servono importi maggiori e orizzonti lunghi: stessa simulazione a 500 €/mese per 30 anni → $\approx 612.000$ € lordi, $\approx 470.000$ € netti, $\approx 260.000$ € reali.</p>
+<h2 id="5-drawdown-reali-del-pac-vs-pic-tre-scenari-storici">5. Drawdown reali del PAC vs PIC: tre scenari storici</h2>
+<p>Caso studio veri, calcolati su MSCI World total return.</p>
+<table>
+<thead>
+<tr>
+<th>Periodo</th>
+<th>Tipo</th>
+<th>PIC 24k iniziali</th>
+<th>PAC 1k/mese 24 mesi</th>
+<th>Vincitore</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Gen 1995 - Dic 1996</td>
+<td>Bull market</td>
+<td>+52% → 36.500</td>
+<td>+18% medio → 28.300</td>
+<td>PIC +29%</td>
+</tr>
+<tr>
+<td>Gen 2000 - Dic 2001</td>
+<td>Dot-com crash</td>
+<td>-28% → 17.300</td>
+<td>-8% medio → 22.080</td>
+<td>PAC +28%</td>
+</tr>
+<tr>
+<td>Gen 2008 - Dic 2009</td>
+<td>Crisi finanziaria</td>
+<td>-22% → 18.700</td>
+<td>-1% medio → 23.760</td>
+<td>PAC +27%</td>
+</tr>
+<tr>
+<td>Gen 2020 - Dic 2021</td>
+<td>Covid + recovery</td>
+<td>+35% → 32.400</td>
+<td>+20% medio → 28.800</td>
+<td>PIC +12%</td>
+</tr>
+</tbody>
+</table>
+<p>Cosa vediamo:
+- In bull market chiaro: PIC vince comodamente.
+- In crash + recovery (2000, 2008): PAC riduce il dolore.
+- In crash brevi seguiti da V-shape recovery (2020): PIC vince anche lì, perché chi era investito al 100% si è ripreso prima.</p>
+<p>Statistica del campione: PIC vince in <strong>2/3 dei rolling windows storici</strong>, ma in 1/3 dei casi perde anche grosso. Devi accettare la varianza.</p>
+<h2 id="7-errori-operativi-comuni">7. Errori operativi comuni</h2>
+<ol>
+<li><strong>PAC che si interrompe a metà.</strong> Il PAC funziona se non lo fermi al primo -20%. Statisticamente, le persone che lo fermano a marzo 2020 hanno performato peggio di chi non l'aveva mai iniziato.</li>
+<li><strong>Ribilanciamento ogni mese.</strong> Trade-off costi/tasse vs precisione: 1× anno è quasi sempre meglio.</li>
+<li><strong>TLH automatico senza pensare alla wash sale economica.</strong> Vendere VWCE e ricomprare VWCE il giorno dopo è elusione fiscale.</li>
+<li><strong>Dimenticare lo zainetto in regime dichiarativo.</strong> Su IB le minus le devi tracciare tu, e perderle dopo 4 anni è uno spreco.</li>
+<li><strong>Confondere PAC e cumulo.</strong> PAC = piano programmato. Cumulo = scendi sotto un livello psicologico e compri di più. Il secondo è market timing travestito.</li>
+</ol>
+<h2 id="8-ribilanciamento-misto-esempio-operativo-annuale">8. Ribilanciamento misto: esempio operativo annuale</h2>
+<p>Mettiamo insieme calendar + threshold + flussi nuovi su un portafoglio 60/40 da 80.000 € con PAC 500 €/mese.</p>
+<p>Stato iniziale anno 0: VWCE 48.000 € (60%), AGGH 32.000 € (40%).</p>
+<p><strong>Fine anno 1</strong>: VWCE +25%, AGGH -2%. Saldi: VWCE 60.000 €, AGGH 31.360 €. Totale 91.360 €. Pesi: 65.7% / 34.3%. Sforamento azionario: +5.7%.</p>
+<p>Decisione: sforamento &gt;5% → ribilancia. Tax-aware: usa i 500 €/mese × 12 = 6.000 € versati nell'anno <strong>2</strong> per portare AGGH verso il target invece di vendere VWCE.</p>
+<p>Anno 2: PAC 100% in AGGH per i primi 5-6 mesi.</p>
+<table>
+<thead>
+<tr>
+<th>Mese</th>
+<th style="text-align: right;">Versato</th>
+<th style="text-align: right;">VWCE</th>
+<th style="text-align: right;">AGGH</th>
+<th style="text-align: right;">Peso azionario</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Inizio anno 2</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;">60.000</td>
+<td style="text-align: right;">31.360</td>
+<td style="text-align: right;">65.7%</td>
+</tr>
+<tr>
+<td>Mese 1 (+500 AGGH)</td>
+<td style="text-align: right;">500</td>
+<td style="text-align: right;">60.000</td>
+<td style="text-align: right;">31.860</td>
+<td style="text-align: right;">65.3%</td>
+</tr>
+<tr>
+<td>Mese 3</td>
+<td style="text-align: right;">1.500</td>
+<td style="text-align: right;">60.000</td>
+<td style="text-align: right;">32.860</td>
+<td style="text-align: right;">64.6%</td>
+</tr>
+<tr>
+<td>Mese 6</td>
+<td style="text-align: right;">3.000</td>
+<td style="text-align: right;">60.000</td>
+<td style="text-align: right;">34.360</td>
+<td style="text-align: right;">63.6%</td>
+</tr>
+<tr>
+<td>Mese 12</td>
+<td style="text-align: right;">6.000</td>
+<td style="text-align: right;">60.000</td>
+<td style="text-align: right;">37.360</td>
+<td style="text-align: right;">61.6%</td>
+</tr>
+</tbody>
+</table>
+<p>Dopo 1 anno: 61.6% / 38.4%. Quasi a target senza vendere nulla e senza pagare tasse. Il delta residuo lo prendi col rendimento differenziale (bond che recuperano).</p>
+<h2 id="9-cosa-portare-a-casa">9. Cosa portare a casa</h2>
+<ul>
+<li><strong>PIC batte PAC nel ~66% dei casi.</strong> Ma il PAC riduce rimpianto e funziona psicologicamente.</li>
+<li>Se accumuli da stipendio, il dibattito non esiste: <strong>fai PAC</strong>.</li>
+<li>Ribilancia <strong>una volta l'anno</strong> o quando sfori ±10%, mai più spesso.</li>
+<li>Per minimizzare tasse, <strong>ribilancia via flussi nuovi</strong> prima di vendere.</li>
+<li>Tax loss harvesting in Italia è limitato dalla distinzione <strong>redditi di capitale vs redditi diversi</strong>: le minus su ETF non compensano plus su altri ETF.</li>
+<li>Tieni 1-2 azioni singole o future per avere uno strumento che genera redditi diversi compensabili.</li>
+</ul>
+<details>
+<summary>Esercizio: simula PAC 300€/mese per 25 anni e confronta con PIC</summary>
+
+Caso A: PAC 300 €/mese in VWCE per 25 anni (= 300 mesi). Rendimento medio 7% nominale.
+
+Caso B: hai 90.000 € oggi (= equivalente del totale versato in 25 anni), li metti tutti subito in VWCE. Stesso rendimento atteso.
+
+1. Calcola il **valore lordo finale** in entrambi i casi. (Suggerimento: formula annuity per A, formula composta semplice per B.)
+2. Calcola la **plus lorda** in entrambi i casi.
+3. Applica tax 26% + bollo annuo 0.20% (semplifica con AUM medio).
+4. Confronta i due valori netti.
+5. Discuti: quale è "meglio"? In quale scenario macro il PAC vince?
+
+Soluzione B sketch: $FV_B = 90.000 \times 1.07^{25} \approx 488.000$ € lordi. PAC: $FV_A = 300 \cdot \frac{1.00583^{300}-1}{0.00583} \approx 245.000$ €. B vince 2× perché è investito al 100% subito.
+
+Caveat: B richiede di **avere già** 90k oggi. A richiede solo lo stipendio. La domanda non è "quale fa più soldi" ma "quale è disponibile per te".
+
+</details>
+
+<p>Riepilogando il pratico: PAC mensile su 2 ETF, ribilancio a gennaio via flussi nuovi, TLH a dicembre solo se hai redditi diversi da compensare. Non serve altro per 90% degli investitori.</p>
+      <nav class="pager">
+<a href="39-costruire-portafoglio.html" class="prev"><span class="label">← Precedente</span><span class="title">Costruire un portafoglio: lazy, three-fund, all-weather, core-satellite</span></a>
+<a href="41-fire-indipendenza-finanziaria.html" class="next"><span class="label">Successivo →</span><span class="title">FIRE, indipendenza finanziaria e longevity planning</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Educazione Finanziaria Zero to Hero</strong> — percorso completo, in italiano, dai fondamentali al pricing dei derivati.</p><p>Materiale didattico aperto. Nessuna sponsorizzazione, nessun affiliate link. Quando un concetto è oscuro, torna indietro: la finanza è una piramide, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

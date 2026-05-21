@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>System design — fondamenti — FAANG Prep</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">F</div>
+      <div>
+        <div class="brand-title">FAANG Prep</div>
+        <div class="brand-subtitle">DS&amp;A · System Design</div>
+      </div>
+    </div>
+    <div class="lang-bar">
+      <a class="lang-switcher" href="../en/pages/17-system-design.html" title="English"><span class="flag-icon">🇬🇧</span><span class="flag-label">English</span></a>
+    </div>
+  </div>
+  <div class="search-wrap">
+    <input class="search-input" id="search-input" placeholder="Cerca nei contenuti... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/00-introduzione.html" class=""><span class="num">00</span>Introduzione e come usare questo percorso</a></li><li class="nav-item"><a href="../pages/01-complessita.html" class=""><span class="num">01</span>Complessità computazionale (Big-O)</a></li><li class="nav-item"><a href="../pages/02-array-stringhe.html" class=""><span class="num">02</span>Array e stringhe</a></li><li class="nav-item"><a href="../pages/03-hashmap-set.html" class=""><span class="num">03</span>Hashmap e set</a></li><li class="nav-item"><a href="../pages/04-linked-list.html" class=""><span class="num">04</span>Linked list</a></li><li class="nav-item"><a href="../pages/05-stack-coda.html" class=""><span class="num">05</span>Stack e coda</a></li><li class="nav-item"><a href="../pages/06-alberi.html" class=""><span class="num">06</span>Alberi (binary tree e BST)</a></li><li class="nav-item"><a href="../pages/07-heap.html" class=""><span class="num">07</span>Heap e priority queue</a></li><li class="nav-item"><a href="../pages/08-grafi.html" class=""><span class="num">08</span>Grafi</a></li><li class="nav-item"><a href="../pages/09-trie.html" class=""><span class="num">09</span>Trie (prefix tree)</a></li><li class="nav-item"><a href="../pages/10-ricorsione-backtracking.html" class=""><span class="num">10</span>Ricorsione e backtracking</a></li><li class="nav-item"><a href="../pages/11-sorting-searching.html" class=""><span class="num">11</span>Sorting e searching</a></li><li class="nav-item"><a href="../pages/12-two-pointers-sliding-window.html" class=""><span class="num">12</span>Two pointers e sliding window</a></li><li class="nav-item"><a href="../pages/13-greedy.html" class=""><span class="num">13</span>Greedy</a></li><li class="nav-item"><a href="../pages/14-dp.html" class=""><span class="num">14</span>Dynamic programming</a></li><li class="nav-item"><a href="../pages/15-bit-manipulation.html" class=""><span class="num">15</span>Bit manipulation</a></li><li class="nav-item"><a href="../pages/16-oop-design-patterns.html" class=""><span class="num">16</span>OOP e design patterns</a></li><li class="nav-item"><a href="../pages/17-system-design.html" class="active"><span class="num">17</span>System design — fondamenti</a></li><li class="nav-item"><a href="../pages/18-system-design-esempi.html" class=""><span class="num">18</span>System design — esempi end-to-end</a></li><li class="nav-item"><a href="../pages/19-concorrenza.html" class=""><span class="num">19</span>Concorrenza e parallelismo</a></li><li class="nav-item"><a href="../pages/20-database-sql.html" class=""><span class="num">20</span>Database e SQL</a></li><li class="nav-item"><a href="../pages/21-os-networking.html" class=""><span class="num">21</span>OS e networking</a></li><li class="nav-item"><a href="../pages/22-coding-patterns.html" class=""><span class="num">22</span>I 16 coding patterns dei colloqui</a></li><li class="nav-item"><a href="../pages/23-behavioral-star.html" class=""><span class="num">23</span>Behavioral interview — STAR e Amazon LP</a></li><li class="nav-item"><a href="../pages/24-mock-interviews.html" class=""><span class="num">24</span>Mock interview e strategia in colloquio</a></li><li class="nav-item"><a href="../pages/25-roadmap-90-giorni.html" class=""><span class="num">25</span>Roadmap 90 giorni — piano operativo</a></li><li class="nav-item"><a href="../pages/26-banca-esercizi.html" class=""><span class="num">26</span>Banca esercizi — 200+ problemi FAANG</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">System design</span>
+        <span>Sezione 17 di 26</span>
+      </div>
+      <h1>System design — fondamenti</h1>
+      <p class="summary">Cos&#x27;è un sistema distribuito, perché serve. Building block (LB, cache, DB, sharding, replication) spiegati con analogie. CAP, PACELC.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>System design</div>
+  
+  
+</div>
+      <p>I round di system design (45-60 min, soprattutto per ruoli mid/senior) ti chiedono <em>"design Twitter / WhatsApp / Uber / YouTube"</em>. Non vogliono che TU costruisca davvero quel sistema, ma vogliono vedere <strong>come strutturi un problema ambiguo</strong>, conosci i building block, fai trade-off espliciti.</p>
+<p>Questo capitolo ti dà le fondamenta. Il prossimo (cap. 18) ha gli esempi end-to-end.</p>
+<h2 id="parte-1-cosa-significa-sistema-distribuito">Parte 1 — Cosa significa "sistema distribuito"</h2>
+<h3 id="il-problema-della-scala">Il problema della scala</h3>
+<p>Un singolo server può:</p>
+<ul>
+<li>Servire <strong>migliaia</strong> di richieste al secondo (forse decine).</li>
+<li>Tenere <strong>TB</strong> di dati su disco.</li>
+<li>Gestire <strong>GB</strong> di RAM.</li>
+</ul>
+<p>Va bene per un blog o un piccolo SaaS. Ma:</p>
+<ul>
+<li>Facebook ha <strong>3 miliardi</strong> di utenti.</li>
+<li>Google fa <strong>8 miliardi</strong> di query al giorno.</li>
+<li>Netflix serve <strong>15%</strong> del traffico internet mondiale.</li>
+</ul>
+<p>Un singolo server <strong>non basta</strong>. Serve un sistema <strong>distribuito</strong>: tanti computer (chiamati <strong>nodi</strong>) che lavorano insieme, ognuno facendo una parte.</p>
+<h3 id="le-sfide">Le sfide</h3>
+<p>Distribuire è facile a parole, brutale in pratica:</p>
+<ol>
+<li><strong>Coordinazione</strong>: come fanno i nodi a parlarsi senza creare colli di bottiglia?</li>
+<li><strong>Coerenza</strong>: se aggiorno un dato su un nodo, gli altri lo vedono subito?</li>
+<li><strong>Affidabilità</strong>: se un nodo cade, il sistema sopravvive?</li>
+<li><strong>Latenza</strong>: messaggi tra nodi sono lenti rispetto ad accesso locale (μs vs ns).</li>
+<li><strong>Costo</strong>: 1000 server costano più di 1.</li>
+</ol>
+<p>L'arte del system design è scegliere <strong>trade-off</strong> ragionati.</p>
+<h2 id="parte-2-framework-di-risposta-in-6-step">Parte 2 — Framework di risposta in 6 step</h2>
+<p>In colloquio, sempre seguire questo ordine:</p>
+<h3 id="step-1-requirements-clarification-5-10-min">Step 1 — Requirements clarification (5-10 min)</h3>
+<p><strong>Functional</strong>: cosa fa l'utente? (post tweet, vedere feed, fare ricerca...)</p>
+<p><strong>Non-functional</strong>: scala, latenza, availability, consistency. Numeri concreti:</p>
+<ul>
+<li>DAU (daily active users)?</li>
+<li>QPS (query per second)?</li>
+<li>Latenza target (es. &lt; 200 ms al 99° percentile)?</li>
+<li>Availability target (99.9% = 8 ore down/anno, 99.99% = 50 minuti/anno)?</li>
+</ul>
+<p><strong>Out of scope</strong>: cosa NON tratti (ad es. "skip authentication, skip payment").</p>
+<h3 id="step-2-back-of-envelope-estimation">Step 2 — Back-of-envelope estimation</h3>
+<p>Calcoli rapidi:</p>
+<ul>
+<li>DAU × azioni/utente = QPS medio.</li>
+<li>× peak factor (3-5x) = QPS picco.</li>
+<li>Storage: dati per oggetto × oggetti totali × anni.</li>
+<li>Bandwidth: media payload × QPS.</li>
+</ul>
+<p>Esempio Twitter: 200M DAU × 2 tweet/giorno = 400M tweet/giorno = 4600/sec medio.</p>
+<h3 id="step-3-api-design">Step 3 — API design</h3>
+<p>Quali endpoint? Request/response formats.</p>
+<pre><code>POST /tweet     { text, user_id }
+GET  /feed      { user_id, cursor? }
+POST /follow    { follower, followee }
+</code></pre>
+<h3 id="step-4-data-model">Step 4 — Data model</h3>
+<p>Schema tabelle/documenti. Chiavi, indici.</p>
+<h3 id="step-5-high-level-architecture">Step 5 — High-level architecture</h3>
+<p>Disegna le scatole: client → LB → API → cache → DB → storage. Connessioni e cosa scorre.</p>
+<p>Esempio di template generico:</p>
+<pre><code class="language-mermaid">flowchart LR
+    Client --&gt; CDN
+    CDN --&gt; LB[Load Balancer]
+    LB --&gt; API1[API Server 1]
+    LB --&gt; API2[API Server 2]
+    API1 --&gt; Cache[(Cache&lt;br/&gt;Redis)]
+    API2 --&gt; Cache
+    Cache --&gt; DB[(Primary DB)]
+    DB --&gt; R1[(Read Replica)]
+    DB --&gt; R2[(Read Replica)]
+    API1 --&gt; Q[Message Queue&lt;br/&gt;Kafka]
+    Q --&gt; W[Async Workers]
+    W --&gt; S3[(Object Storage)]
+</code></pre>
+<h3 id="step-6-deep-dive-su-1-2-componenti">Step 6 — Deep dive (su 1-2 componenti)</h3>
+<p>Scegli 1-2 componenti critici e approfondisci: sharding, replication, cache invalidation.</p>
+<p><strong>Errore tipico</strong>: deep dive su tutto. Non hai tempo, e l'intervistatore vuole vedere come <strong>prioritizzi</strong>.</p>
+<h2 id="parte-3-building-blocks-essenziali">Parte 3 — Building blocks essenziali</h2>
+<h3 id="1-load-balancer">1. Load balancer</h3>
+<p>Distribuisce traffico tra server. Analogia: il vigile urbano davanti a un incrocio.</p>
+<p><strong>Algoritmi</strong>:</p>
+<ul>
+<li><strong>Round-robin</strong>: a turno. Semplice.</li>
+<li><strong>Least connections</strong>: a chi ha meno carico.</li>
+<li><strong>IP hash</strong>: client X va sempre allo stesso server (per session stickiness).</li>
+<li><strong>Weighted</strong>: server più potenti ricevono più traffico.</li>
+</ul>
+<p><strong>Layer</strong>:</p>
+<ul>
+<li><strong>L4 (transport)</strong>: vede solo TCP/UDP packet, non payload. Veloce, ma "stupido".</li>
+<li><strong>L7 (application)</strong>: vede HTTP. Può routare in base a path/header.</li>
+</ul>
+<p>Esempi prodotto: HAProxy, NGINX, AWS ELB.</p>
+<h3 id="2-reverse-proxy">2. Reverse proxy</h3>
+<p>Davanti ai server applicativi. Funzioni:</p>
+<ul>
+<li>SSL termination.</li>
+<li>Compressione.</li>
+<li>Cache statica.</li>
+<li>Rate limiting.</li>
+</ul>
+<p>Spesso un LB <strong>è</strong> un reverse proxy (NGINX, HAProxy).</p>
+<h3 id="3-cache">3. Cache</h3>
+<p>Memorizza dati frequenti per evitare di ricalcolarli o leggerli da DB.</p>
+<p><strong>Livelli</strong>:</p>
+<ul>
+<li><strong>Client-side</strong>: browser cache.</li>
+<li><strong>CDN</strong> (Cloudflare, Akamai): cache geograficamente distribuita per asset statici (immagini, video, JS).</li>
+<li><strong>Application cache</strong> (Redis, Memcached): sessioni, query DB.</li>
+<li><strong>Database cache</strong>: query plan, buffer pool.</li>
+</ul>
+<p><strong>Politiche di eviction</strong>: LRU (least recently used), LFU (least frequently), FIFO, TTL.</p>
+<p><strong>Strategy di scrittura</strong>:</p>
+<ul>
+<li><strong>Write-through</strong>: scrivi a cache E DB sincronamente. Consistente ma lento.</li>
+<li><strong>Write-back</strong>: scrivi solo a cache, flush a DB periodicamente. Veloce ma rischi perdita dati.</li>
+<li><strong>Write-around</strong>: bypassi cache in scrittura. Cache popolata su read miss.</li>
+</ul>
+<p><strong>Cache invalidation</strong>: il problema più difficile. Strategie: TTL, esplicita, write-through, versioning.</p>
+<blockquote>
+<p><em>"There are only two hard problems in computer science: cache invalidation and naming things."</em> — Phil Karlton</p>
+</blockquote>
+<h3 id="4-database">4. Database</h3>
+<h4 id="relazionali-rdbms">Relazionali (RDBMS)</h4>
+<p>PostgreSQL, MySQL.</p>
+<p><strong>Caratteristiche</strong>:</p>
+<ul>
+<li><strong>Schema rigido</strong>: tabelle con colonne definite.</li>
+<li><strong>ACID</strong>: transazioni con garanzie forti.</li>
+<li><strong>JOIN</strong>: query complesse tra tabelle.</li>
+<li><strong>SQL</strong> (linguaggio standard).</li>
+</ul>
+<p><strong>Quando usarli</strong>: integrità referenziale, transazioni complesse, query analitiche.</p>
+<h4 id="nosql">NoSQL</h4>
+<p>Famiglie diverse, ognuna ottimizzata per uno scopo:</p>
+<ul>
+<li><strong>Document</strong> (MongoDB, CouchDB): JSON-like, schema flessibile.</li>
+<li><strong>Key-value</strong> (Redis, DynamoDB): lookup O(1) per chiave.</li>
+<li><strong>Wide-column</strong> (Cassandra, HBase): scalabilità orizzontale enorme.</li>
+<li><strong>Graph</strong> (Neo4j): relazioni come prima cittadini.</li>
+<li><strong>Time-series</strong> (InfluxDB, TimescaleDB): dati temporali.</li>
+</ul>
+<p><strong>Quando NoSQL</strong>: scala orizzontale, schema flessibile, query semplici per chiave, write-heavy.</p>
+<h3 id="5-replication">5. Replication</h3>
+<p>Una scrittura → copie su più nodi. Scopo: alta disponibilità e parallelismo in lettura.</p>
+<p><strong>Master-slave (primary-replica)</strong>: scritture sul master, letture distribuite tra repliche.</p>
+<ul>
+<li>Replicazione <strong>sincrona</strong>: scrittura confermata solo dopo che le repliche hanno conferma. Consistente ma lento.</li>
+<li>Replicazione <strong>asincrona</strong>: master conferma subito, repliche aggiornate "presto". Veloce ma eventual consistency.</li>
+</ul>
+<p><strong>Multi-master</strong>: scritture su qualsiasi nodo. Più scalabile ma serve risolvere conflitti.</p>
+<h3 id="6-sharding-partitioning">6. Sharding (partitioning)</h3>
+<p>Dividere i dati su più macchine. Necessario quando un singolo nodo non basta.</p>
+<p><strong>Strategie</strong>:</p>
+<ul>
+<li><strong>Range-based</strong>: range di ID/data. Es. utenti A-M su nodo 1, N-Z su nodo 2. Semplice ma rischio hotspot.</li>
+<li><strong>Hash-based</strong>: hash(key) % numero shard. Distribuzione uniforme, ma no range query.</li>
+<li><strong>Geo-based</strong>: per regione. Riduce latenza utenti.</li>
+<li><strong>Consistent hashing</strong>: minimizza re-shuffling quando aggiungi/rimuovi nodi. Usato in DynamoDB, Cassandra.</li>
+</ul>
+<h3 id="7-message-queue-pub-sub">7. Message queue / Pub-sub</h3>
+<p>Disaccoppia producer e consumer.</p>
+<p><strong>Kafka</strong>: log distribuito ad alta throughput, retention lunga, replay possibile. Streaming.</p>
+<p><strong>RabbitMQ</strong>: code tradizionali, routing flessibile.</p>
+<p><strong>AWS SQS, Google Pub/Sub</strong>: managed.</p>
+<p><strong>Casi d'uso</strong>: async jobs, event-driven, buffering picchi, fan-out.</p>
+<h3 id="8-cdn">8. CDN</h3>
+<p>Cache geograficamente distribuita per asset statici. Riduce latenza utenti remoti, scarica i server origin.</p>
+<h3 id="9-api-gateway">9. API Gateway</h3>
+<p>Punto d'ingresso unico per microservizi: routing, autenticazione, rate limiting, transformations.</p>
+<h3 id="10-object-storage">10. Object storage</h3>
+<p>S3, GCS, Azure Blob. Per file grandi (immagini, video, backup). Non DB.</p>
+<h2 id="parte-4-cap-theorem">Parte 4 — CAP theorem</h2>
+<p>Il teorema più famoso dei sistemi distribuiti. <strong>In presenza di partizione di rete</strong>, puoi scegliere solo 2 su 3:</p>
+<ul>
+<li><strong>C</strong>onsistency: tutti i nodi vedono lo stesso dato simultaneamente.</li>
+<li><strong>A</strong>vailability: ogni richiesta riceve risposta.</li>
+<li><strong>P</strong>artition tolerance: il sistema funziona anche con partizioni di rete.</li>
+</ul>
+<p>In pratica P è "obbligatorio" — le partizioni capitano. Quindi scegli tra:</p>
+<h3 id="cp-consistency-over-availability">CP — Consistency over Availability</h3>
+<p>Quando c'è partizione, <strong>rifiuta</strong> scritture (o letture) per non divergere.</p>
+<p>Esempi: HBase, MongoDB (default), Zookeeper, etcd.</p>
+<h3 id="ap-availability-over-consistency">AP — Availability over Consistency</h3>
+<p>Quando c'è partizione, <strong>accetta</strong> scritture anche se i nodi divergono. Riconcili dopo.</p>
+<p>Esempi: Cassandra, DynamoDB, CouchDB.</p>
+<h3 id="esempio-pratico">Esempio pratico</h3>
+<p>Un carrello e-commerce in 2 datacenter. Partizione tra i due. CP: blocca il carrello (frustrante). AP: lascia l'utente comprare, riconcili dopo (puoi avere "scorta venduta più di quella disponibile").</p>
+<h2 id="parte-5-pacelc">Parte 5 — PACELC</h2>
+<p>Estensione del CAP. In <strong>assenza</strong> di partizione, scegli ancora tra Latency e Consistency:</p>
+<ul>
+<li><strong>PA/EL</strong>: Cassandra, Dynamo. Sempre Availability, e in assenza di P preferisce Latenza.</li>
+<li><strong>PC/EC</strong>: BigTable, HBase. Sempre Consistency.</li>
+<li><strong>PA/EC</strong>: Mongo default. Disponibile in partizione, consistente in assenza.</li>
+</ul>
+<p>In colloquio raramente lo citi, ma sapere che esiste mostra profondità.</p>
+<h2 id="parte-6-tecniche-di-scalabilita">Parte 6 — Tecniche di scalabilità</h2>
+<h3 id="vertical-scaling">Vertical scaling</h3>
+<p>Più CPU/RAM/disk sulla stessa macchina. Semplice ma con un tetto.</p>
+<h3 id="horizontal-scaling">Horizontal scaling</h3>
+<p>Più macchine. Architettura "shared nothing". Richiede LB, sharding, replication. Scala illimitata in teoria.</p>
+<h3 id="caching">Caching</h3>
+<p>Già visto. Riduce carico DB.</p>
+<h3 id="asynchronous-processing">Asynchronous processing</h3>
+<p>Lavori lunghi su queue + worker, non in request-response. L'utente riceve "in processing, ti notifico".</p>
+<h3 id="read-replicas">Read replicas</h3>
+<p>Letture da repliche, scritture sul master. Buon trade-off per workload read-heavy (90% delle app web).</p>
+<h3 id="denormalization">Denormalization</h3>
+<p>Schema NoSQL spesso duplica dati per evitare JOIN. Costa storage e complica scritture, ma velocizza letture.</p>
+<h3 id="indexing">Indexing</h3>
+<p>Strutture (B-tree, hash, inverted index) per query veloci. Costa storage e rallenta write.</p>
+<h2 id="parte-7-back-of-envelope-numbers">Parte 7 — Back-of-envelope numbers</h2>
+<p>Da memorizzare:</p>
+<table>
+<thead>
+<tr>
+<th>Operazione</th>
+<th>Tempo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>L1 cache</td>
+<td>1 ns</td>
+</tr>
+<tr>
+<td>L2 cache</td>
+<td>10 ns</td>
+</tr>
+<tr>
+<td>RAM access</td>
+<td>100 ns</td>
+</tr>
+<tr>
+<td>SSD read</td>
+<td>100 μs</td>
+</tr>
+<tr>
+<td>Network within DC</td>
+<td>500 μs</td>
+</tr>
+<tr>
+<td>HDD seek</td>
+<td>10 ms</td>
+</tr>
+<tr>
+<td>Network NY → London</td>
+<td>100 ms</td>
+</tr>
+<tr>
+<td>Network NY → Sydney</td>
+<td>200 ms</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Quantità</th>
+<th>Numero</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 day</td>
+<td>86 400 sec</td>
+</tr>
+<tr>
+<td>1 year</td>
+<td>31.5M sec</td>
+</tr>
+<tr>
+<td>1 KB</td>
+<td>10³ byte</td>
+</tr>
+<tr>
+<td>1 MB</td>
+<td>10⁶ byte</td>
+</tr>
+<tr>
+<td>1 GB</td>
+<td>10⁹ byte</td>
+</tr>
+</tbody>
+</table>
+<h3 id="esempio-stima">Esempio stima</h3>
+<blockquote>
+<p>Twitter ha 200M DAU. Quanti tweet/giorno? Quanto storage in 5 anni?</p>
+</blockquote>
+<ul>
+<li>200M utenti × 2 tweet/giorno = <strong>400M tweet/giorno</strong>.</li>
+<li>400M / 86 400 ≈ <strong>4 600 tweet/sec</strong>.</li>
+<li>Picco (×3): ~14 000 tweet/sec.</li>
+<li>1 tweet ≈ 300 byte payload + 700 byte meta = <strong>1 KB</strong>.</li>
+<li>400M × 365 × 5 × 1 KB ≈ <strong>700 TB</strong>.</li>
+<li>Bandwidth scrittura: 4600 × 1 KB = 4.6 MB/sec medio.</li>
+</ul>
+<p>Numeri ragionevoli. Mostra la skill.</p>
+<h2 id="parte-8-trade-off-da-menzionare-sempre">Parte 8 — Trade-off da menzionare sempre</h2>
+<ul>
+<li><strong>Latency vs throughput</strong>: minimizzo singola latenza o massimizzo richieste/sec?</li>
+<li><strong>Consistency vs availability</strong> (CAP).</li>
+<li><strong>Storage vs compute</strong>: denormalizzo (più storage, meno compute) o normalizzo (viceversa)?</li>
+<li><strong>Push vs pull</strong>: server spinge dati al client, o client li chiede?</li>
+<li><strong>SQL vs NoSQL</strong>.</li>
+<li><strong>Sync vs async</strong>.</li>
+</ul>
+<p>L'intervistatore ama sentirti dire <em>"questa scelta ottimizza per X, ma trade-off Y. Possiamo cambiare se le priorità sono diverse"</em>.</p>
+<h2 id="parte-9-strategia-in-colloquio">Parte 9 — Strategia in colloquio</h2>
+<h3 id="cosa-fare">Cosa fare</h3>
+<ul>
+<li><strong>Spendi tempo sui requirements</strong>. Vale 1/3 del round.</li>
+<li><strong>Disegna mentre parli</strong>. Box e frecce semplici.</li>
+<li><strong>Numeri</strong>: ogni decisione giustificata da una stima.</li>
+<li><strong>Trade-off espliciti</strong>: ogni componente "preferisce X a Y".</li>
+<li><strong>Deep dive su 1-2 componenti</strong> che l'intervistatore vuole approfondire.</li>
+</ul>
+<h3 id="cosa-non-fare">Cosa NON fare</h3>
+<ul>
+<li><strong>Tirare buzzword senza giustificarli</strong>: "uso Kafka". <em>Perché</em>?</li>
+<li><strong>Disegnare scatole senza spiegare come parlano</strong>.</li>
+<li><strong>Ignorare stime</strong>.</li>
+<li><strong>Andare deep su tutto</strong>.</li>
+</ul>
+<h2 id="parte-10-risorse-per-andare-oltre">Parte 10 — Risorse per andare oltre</h2>
+<ul>
+<li><strong>"Designing Data-Intensive Applications"</strong> (Kleppmann) — bibbia del system design moderno.</li>
+<li><strong>System Design Primer</strong> (donnemartin) su GitHub — gratis.</li>
+<li><strong>ByteByteGo, Hello Interview</strong> (YouTube) — esempi visivi.</li>
+<li><strong>The Morning Paper</strong> (blog di Adrian Colyer) — paper accademici accessibili.</li>
+</ul>
+<h2 id="riassunto">Riassunto</h2>
+<ol>
+<li><strong>Sistema distribuito</strong> = tanti nodi che collaborano. Sfide: coordinazione, coerenza, affidabilità.</li>
+<li><strong>Building blocks</strong>: LB, cache, DB (SQL/NoSQL), replication, sharding, queue, CDN, API gateway, object storage.</li>
+<li><strong>CAP</strong>: in presenza di partizione, scegli C o A. PACELC: anche senza partizione, scegli L o C.</li>
+<li><strong>Scaling</strong>: vertical (limite hardware) vs horizontal (preferito).</li>
+<li><strong>Back-of-envelope</strong>: ~10⁸ op/s, RAM 100 ns, network DC 500 μs, network globale 100 ms.</li>
+<li><strong>Framework risposta</strong>: requirements → stime → API → data model → architettura → deep dive.</li>
+</ol>
+<p>System design è "esperienza" più che "studio". Pratica facendo a voce alta 10+ sistemi (cap. 18).</p>
+      <nav class="pager">
+<a href="16-oop-design-patterns.html" class="prev"><span class="label">← Precedente</span><span class="title">OOP e design patterns</span></a>
+<a href="18-system-design-esempi.html" class="next"><span class="label">Successivo →</span><span class="title">System design — esempi end-to-end</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>FAANG Prep</strong> — percorso completo di preparazione: DS&amp;A, system design, behavioral. Costruito per spaccare ai colloqui di Big Tech.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-index.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true,
+      background: '#161922',
+      primaryColor: '#1d2230',
+      primaryTextColor: '#e6e8ee',
+      primaryBorderColor: '#6cf',
+      lineColor: '#7a8194',
+      secondaryColor: '#262b3a',
+      tertiaryColor: '#0f1117',
+      mainBkg: '#1d2230',
+      secondBkg: '#262b3a',
+      tertiaryBkg: '#161922',
+      nodeBorder: '#6cf',
+      clusterBkg: '#161922',
+      clusterBorder: '#262b3a',
+      titleColor: '#6cf',
+      edgeLabelBackground: '#161922',
+      fontFamily: 'Cascadia Code, monospace'
+    }
+  });
+  document.querySelectorAll('pre > code.language-mermaid').forEach((codeEl) => {
+    const pre = codeEl.parentElement;
+    const div = document.createElement('div');
+    div.className = 'mermaid';
+    div.textContent = codeEl.textContent;
+    pre.replaceWith(div);
+  });
+  mermaid.run();
+</script>
+</body>
+</html>

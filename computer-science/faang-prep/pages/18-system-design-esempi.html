@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>System design — esempi end-to-end — FAANG Prep</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">F</div>
+      <div>
+        <div class="brand-title">FAANG Prep</div>
+        <div class="brand-subtitle">DS&amp;A · System Design</div>
+      </div>
+    </div>
+    <div class="lang-bar">
+      <a class="lang-switcher" href="../en/pages/18-system-design-examples.html" title="English"><span class="flag-icon">🇬🇧</span><span class="flag-label">English</span></a>
+    </div>
+  </div>
+  <div class="search-wrap">
+    <input class="search-input" id="search-input" placeholder="Cerca nei contenuti... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/00-introduzione.html" class=""><span class="num">00</span>Introduzione e come usare questo percorso</a></li><li class="nav-item"><a href="../pages/01-complessita.html" class=""><span class="num">01</span>Complessità computazionale (Big-O)</a></li><li class="nav-item"><a href="../pages/02-array-stringhe.html" class=""><span class="num">02</span>Array e stringhe</a></li><li class="nav-item"><a href="../pages/03-hashmap-set.html" class=""><span class="num">03</span>Hashmap e set</a></li><li class="nav-item"><a href="../pages/04-linked-list.html" class=""><span class="num">04</span>Linked list</a></li><li class="nav-item"><a href="../pages/05-stack-coda.html" class=""><span class="num">05</span>Stack e coda</a></li><li class="nav-item"><a href="../pages/06-alberi.html" class=""><span class="num">06</span>Alberi (binary tree e BST)</a></li><li class="nav-item"><a href="../pages/07-heap.html" class=""><span class="num">07</span>Heap e priority queue</a></li><li class="nav-item"><a href="../pages/08-grafi.html" class=""><span class="num">08</span>Grafi</a></li><li class="nav-item"><a href="../pages/09-trie.html" class=""><span class="num">09</span>Trie (prefix tree)</a></li><li class="nav-item"><a href="../pages/10-ricorsione-backtracking.html" class=""><span class="num">10</span>Ricorsione e backtracking</a></li><li class="nav-item"><a href="../pages/11-sorting-searching.html" class=""><span class="num">11</span>Sorting e searching</a></li><li class="nav-item"><a href="../pages/12-two-pointers-sliding-window.html" class=""><span class="num">12</span>Two pointers e sliding window</a></li><li class="nav-item"><a href="../pages/13-greedy.html" class=""><span class="num">13</span>Greedy</a></li><li class="nav-item"><a href="../pages/14-dp.html" class=""><span class="num">14</span>Dynamic programming</a></li><li class="nav-item"><a href="../pages/15-bit-manipulation.html" class=""><span class="num">15</span>Bit manipulation</a></li><li class="nav-item"><a href="../pages/16-oop-design-patterns.html" class=""><span class="num">16</span>OOP e design patterns</a></li><li class="nav-item"><a href="../pages/17-system-design.html" class=""><span class="num">17</span>System design — fondamenti</a></li><li class="nav-item"><a href="../pages/18-system-design-esempi.html" class="active"><span class="num">18</span>System design — esempi end-to-end</a></li><li class="nav-item"><a href="../pages/19-concorrenza.html" class=""><span class="num">19</span>Concorrenza e parallelismo</a></li><li class="nav-item"><a href="../pages/20-database-sql.html" class=""><span class="num">20</span>Database e SQL</a></li><li class="nav-item"><a href="../pages/21-os-networking.html" class=""><span class="num">21</span>OS e networking</a></li><li class="nav-item"><a href="../pages/22-coding-patterns.html" class=""><span class="num">22</span>I 16 coding patterns dei colloqui</a></li><li class="nav-item"><a href="../pages/23-behavioral-star.html" class=""><span class="num">23</span>Behavioral interview — STAR e Amazon LP</a></li><li class="nav-item"><a href="../pages/24-mock-interviews.html" class=""><span class="num">24</span>Mock interview e strategia in colloquio</a></li><li class="nav-item"><a href="../pages/25-roadmap-90-giorni.html" class=""><span class="num">25</span>Roadmap 90 giorni — piano operativo</a></li><li class="nav-item"><a href="../pages/26-banca-esercizi.html" class=""><span class="num">26</span>Banca esercizi — 200+ problemi FAANG</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">System design</span>
+        <span>Sezione 18 di 26</span>
+      </div>
+      <h1>System design — esempi end-to-end</h1>
+      <p class="summary">7 sistemi tipici progettati passo passo: TinyURL, Twitter, WhatsApp, Uber, Netflix, Instagram, Notification System. Con ragionamento completo.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>System design</div>
+  
+  
+</div>
+      <p>In ogni esempio segui lo stesso schema: <strong>requirements → estimation → API → data model → high-level → deep dive</strong>. Allenati a farli <strong>a voce alta</strong>, con foglio bianco.</p>
+<hr />
+<h2 id="1-design-tinyurl-url-shortener">1. Design TinyURL (URL shortener)</h2>
+<blockquote>
+<p>Servizio tipo bit.ly: trasforma URL lunghi in URL corti, e li espande quando uno li visita.</p>
+</blockquote>
+<h3 id="requirements-clarification">Requirements clarification</h3>
+<p><strong>Functional</strong>:
+- <code>shorten(long_url) → short_url</code>.
+- <code>resolve(short) → 302 redirect to long_url</code>.
+- Custom alias opzionale.
+- Expiration opzionale.</p>
+<p><strong>Non-functional</strong>:
+- Latenza redirect &lt; 100 ms.
+- Availability 99.99%.
+- Short URL non guessable (sicurezza).</p>
+<h3 id="estimation">Estimation</h3>
+<ul>
+<li>100M nuovi URL/mese → ~40/sec scritture. Picco ×5 = 200/sec.</li>
+<li>Lettura/scrittura ratio: 100:1 → 4000/sec letture, 20000/sec picco.</li>
+<li>5 anni × 100M × 12 = 6 miliardi URL totali.</li>
+<li>Per URL: ~500 byte (long_url + metadata) → <strong>3 TB</strong>.</li>
+<li>Cache 80% hit rate → solo 800 letture/sec sul DB.</li>
+</ul>
+<h3 id="api">API</h3>
+<pre><code>POST /shorten
+  body: { url, custom?, ttl? }
+  response: { short }
+
+GET /:short
+  response: 302 Location: &lt;long_url&gt;
+</code></pre>
+<h3 id="data-model">Data model</h3>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Tipo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>short_key (PK)</td>
+<td>varchar(7)</td>
+</tr>
+<tr>
+<td>long_url</td>
+<td>text</td>
+</tr>
+<tr>
+<td>created_at</td>
+<td>timestamp</td>
+</tr>
+<tr>
+<td>expires_at</td>
+<td>timestamp?</td>
+</tr>
+<tr>
+<td>user_id</td>
+<td>uuid?</td>
+</tr>
+</tbody>
+</table>
+<h3 id="generazione-short-key-il-punto-critico">Generazione short key — il punto critico</h3>
+<p>Tre approcci:</p>
+<p><strong>Approccio 1 — Hash MD5/SHA(long_url) → base62</strong>: deterministico, ma collisioni. Devi ri-hashare con suffix.</p>
+<p><strong>Approccio 2 — Random base62 di 7 char</strong>: 62⁷ ≈ 3.5×10¹² combinazioni. Check su DB se già esistente.</p>
+<p><strong>Approccio 3 — Pre-generated keys (preferito)</strong>: un <strong>Key Generation Service</strong> pre-genera un ranger di chiavi disponibili (es. 1 miliardo) e le distribuisce in batch agli API server. Niente collisioni, niente lock condivisi, distribuzione veloce.</p>
+<h3 id="architecture">Architecture</h3>
+<pre><code class="language-mermaid">flowchart LR
+    Client --&gt; DNS --&gt; CDN --&gt; LB[Load Balancer] --&gt; API[API Server]
+    API --&gt; Cache[(Redis Cache)]
+    Cache --&gt; DB[(Key-Value DB&lt;br/&gt;Cassandra/DynamoDB)]
+    API --&gt; KGS[Key Generation&lt;br/&gt;Service]
+    KGS --&gt; DB
+</code></pre>
+<h3 id="deep-dive">Deep dive</h3>
+<p><strong>Hot URL (viral)</strong>: cache layer + replicas DB. CDN può cachare il redirect (Cache-Control).</p>
+<p><strong>Analytics</strong>: ogni redirect → message Kafka → consumer aggrega in batch.</p>
+<p><strong>Expiration</strong>: TTL su Redis (auto-cleanup). Su DB, job notturno cancella expired.</p>
+<p><strong>Custom alias</strong>: check unique nel DB, error 409 se taken.</p>
+<hr />
+<h2 id="2-design-twitter">2. Design Twitter</h2>
+<blockquote>
+<p>Post tweet, follow, vedi timeline degli utenti che segui.</p>
+</blockquote>
+<h3 id="requirements">Requirements</h3>
+<ul>
+<li>Post tweet (≤ 280 char).</li>
+<li>Follow/unfollow.</li>
+<li>Vedi own timeline + feed di chi segui.</li>
+</ul>
+<p><strong>Non-functional</strong>:
+- 300M utenti, 200M DAU.
+- Timeline load &lt; 200 ms.</p>
+<h3 id="estimation_1">Estimation</h3>
+<ul>
+<li>200M DAU × 2 tweet/giorno = <strong>400M tweet/giorno = ~4600/sec</strong>.</li>
+<li>Timeline views: 200M × 5 = 1B/giorno = 12 000/sec.</li>
+<li>Storage tweet: 1KB × 400M × 365 × 5 ≈ <strong>700 TB</strong>.</li>
+<li>Lettura/scrittura ratio: ~250:1. Heavy read.</li>
+</ul>
+<h3 id="architettura-il-pattern-fan-out">Architettura: il pattern fan-out</h3>
+<p><strong>Approccio A — Fan-out on WRITE</strong> (push):
+- Quando posti, inserisci in tutte le "timeline cache" dei tuoi follower.
+- Read O(1): leggi la tua timeline cache.
+- Write costoso: per Lady Gaga (90M follower), 1 post = 90M scritture.</p>
+<p><strong>Approccio B — Fan-out on READ</strong> (pull):
+- Timeline calcolata al volo leggendo recenti tweet di chi segui.
+- Read costoso ma write O(1).</p>
+<p><strong>Approccio C — Hybrid (Twitter usa questo)</strong>:
+- Fan-out on write per <strong>utenti normali</strong> (&lt; 1M follower).
+- Fan-out on read per <strong>celebrities</strong>.
+- Quando un utente apre timeline: leggi precomputed da cache + merge con celebrity timelines on-the-fly.</p>
+<h3 id="components">Components</h3>
+<pre><code class="language-mermaid">flowchart LR
+    Client --&gt; LB[Load Balancer]
+    LB --&gt; TS[Tweet Service]
+    LB --&gt; TL[Timeline Service]
+    LB --&gt; UG[User Graph]
+    LB --&gt; MS[Media Service]
+    TS --&gt; TweetStore[(Tweet Store&lt;br/&gt;Cassandra)]
+    TS --&gt; Q[Kafka Queue&lt;br/&gt;fan-out]
+    Q --&gt; FW[Fan-out Worker]
+    FW --&gt; TLC[(Timeline Cache&lt;br/&gt;Redis)]
+    TL --&gt; TLC
+    TL --&gt; CelebFeed[(Celeb Feed)]
+    UG --&gt; GraphDB[(Redis Sets)]
+    MS --&gt; S3[(S3 + CDN)]
+</code></pre>
+<h3 id="data-model_1">Data model</h3>
+<ul>
+<li><strong>tweets</strong>: id, user_id, text, created_at, media_url? → wide-column (Cassandra).</li>
+<li><strong>followers</strong>: follower_id → set(followee_id) → Redis Set.</li>
+<li><strong>timeline cache</strong>: user_id → list of tweet_id (lunghezza ~800).</li>
+</ul>
+<h3 id="deep-dive_1">Deep dive</h3>
+<p><strong>Trending topics</strong>: count-min sketch streaming su Kafka.</p>
+<p><strong>Search</strong>: Elasticsearch su tweet indexati.</p>
+<p><strong>Push notification</strong>: queue → consumer → APNS/FCM.</p>
+<p><strong>Edge case</strong>: utente segue 5000 celebrities → la pull diventa lenta. Limite di follow + cache aggressiva del celebrity feed.</p>
+<hr />
+<h2 id="3-design-whatsapp-chat">3. Design WhatsApp (Chat)</h2>
+<blockquote>
+<p>Messaggi real-time, gruppi, online status, read receipts, end-to-end encryption.</p>
+</blockquote>
+<h3 id="requirements_1">Requirements</h3>
+<ul>
+<li>1-1 chat e gruppi.</li>
+<li>Consegna affidabile anche se destinatario offline.</li>
+<li>Latenza &lt; 100 ms.</li>
+<li>Encryption end-to-end.</li>
+</ul>
+<h3 id="architettura">Architettura</h3>
+<p>Il pattern centrale: <strong>WebSocket</strong> per connessione persistente.</p>
+<pre><code class="language-mermaid">flowchart LR
+    A[Client A] &lt;--&gt;|WebSocket| EA[Edge Server A]
+    B[Client B] &lt;--&gt;|WebSocket| EB[Edge Server B]
+    EA &lt;--&gt; MR[Message Routing]
+    EB &lt;--&gt; MR
+    MR &lt;--&gt; Inbox[(Inbox DB)]
+    MR &lt;--&gt; Reg[(Redis&lt;br/&gt;user → edge)]
+</code></pre>
+<p><strong>Edge servers</strong>: terminano WebSocket. Stato <code>user_id → server_id</code> in Redis (servono per sapere dove mandare i messaggi).</p>
+<p><strong>Flusso messaggio</strong>:
+1. A invia messaggio via WS al suo edge.
+2. Edge → routing service → cerca dove sta B in Redis.
+3. Se B online → forward al server di B → push a B via WS.
+4. Se B offline → persisti in <strong>inbox queue</strong> di B.
+5. Quando B torna online, edge legge inbox, flusha.</p>
+<h3 id="data-model_2">Data model</h3>
+<ul>
+<li><strong>messages</strong>: id, sender, recipient (user o group), content (encrypted blob), sent_at, status.</li>
+<li><strong>inbox per user</strong>: queue di message_id non ancora consegnati.</li>
+</ul>
+<h3 id="group-chat">Group chat</h3>
+<p>Server fa fan-out manuale: itera membri, invia a ciascuno.</p>
+<h3 id="delivery-guarantees">Delivery guarantees</h3>
+<ul>
+<li>Ack di livello applicativo (non solo TCP). Client conferma ricezione.</li>
+<li>Retry con exponential backoff su fallimenti.</li>
+</ul>
+<h3 id="end-to-end-encryption-signal-protocol">End-to-end encryption (Signal protocol)</h3>
+<p>Client cifra il messaggio con chiave del destinatario (ottenuta tramite key exchange). Server vede solo bytes opachi. Anche se compromesso, server non legge.</p>
+<h3 id="deep-dive_2">Deep dive</h3>
+<ul>
+<li><strong>Online status</strong>: heartbeat da client. "Lazy update" (non in real-time, ma "circa").</li>
+<li><strong>Storage</strong>: WhatsApp cancella messaggi dopo consegna. Solo l'inbox temporanea.</li>
+<li><strong>Sync multi-device</strong>: tutti i device del destinatario riceveranno copia.</li>
+</ul>
+<hr />
+<h2 id="4-design-uber">4. Design Uber</h2>
+<blockquote>
+<p>Rider richiede ride, driver accetta, tracking real-time.</p>
+</blockquote>
+<h3 id="requirements_2">Requirements</h3>
+<ul>
+<li>Rider richiede ride.</li>
+<li>Driver accetta.</li>
+<li>Tracking real-time.</li>
+<li>Pricing dinamico (surge).</li>
+</ul>
+<h3 id="estimation_2">Estimation</h3>
+<ul>
+<li>5M ride/giorno globale = 60/sec medio. Picco ×10 = 600/sec.</li>
+<li>1M driver attivi × 0.25 update posizione/sec = <strong>250 000 location update/sec</strong>.</li>
+</ul>
+<h3 id="architettura_1">Architettura</h3>
+<pre><code class="language-mermaid">flowchart LR
+    App[Driver/Rider App] &lt;--&gt;|WebSocket| Edge[Edge Server]
+    Edge --&gt; LS[Location Service]
+    LS &lt;--&gt; GeoDB[(Geo DB&lt;br/&gt;Quadtree/H3)]
+    Edge --&gt; MS[Matching Service]
+    MS &lt;--&gt; LS
+    MS --&gt; TS[Trip Service]
+    TS &lt;--&gt; TripDB[(Trip DB)]
+    TS --&gt; PS[Pricing Service&lt;br/&gt;surge]
+</code></pre>
+<h3 id="geospatial-indexing-il-punto-critico">Geospatial indexing — il punto critico</h3>
+<p>Voglio rispondere a "trova tutti i driver entro 5 km da P". Due tecniche:</p>
+<p><strong>Quadtree</strong>: divide il mondo in 4 quadranti, ricorsivamente. Cella massima = 500 driver. Query "vicini a P" scende il quadtree.</p>
+<p><strong>Geohash</strong>: encode coordinate in stringa di 6-12 char. 6 char ≈ 1.2 km. Range query → prefix match.</p>
+<p>Uber usa <strong>H3</strong> (esagoni gerarchici di Uber).</p>
+<h3 id="matching">Matching</h3>
+<ol>
+<li>Rider richiede ride a coordinate (lat, lng).</li>
+<li>Geo service query: driver entro raggio.</li>
+<li>Per ognuno, calcola <strong>ETA</strong> (tempo di arrivo) usando road network.</li>
+<li>Scegli driver con ETA minore + qualità driver + load balancing.</li>
+<li>Notifica driver via push.</li>
+</ol>
+<h3 id="real-time-tracking">Real-time tracking</h3>
+<p>Server push posizione driver al rider ogni 2 sec via WS. Frontend interpola tra update per smoothness.</p>
+<h3 id="deep-dive_3">Deep dive</h3>
+<ul>
+<li><strong>Update frequency</strong>: ogni driver invia ogni 4 sec. Server aggrega per ridurre carico DB.</li>
+<li><strong>Pricing surge</strong>: per zona, ratio domanda/offerta. Se &gt; 1.5, surge.</li>
+<li><strong>Resilienza</strong>: matching deve completare in &lt; 5 sec anche con picchi.</li>
+</ul>
+<hr />
+<h2 id="5-design-netflix-video-streaming">5. Design Netflix (video streaming)</h2>
+<h3 id="requirements_3">Requirements</h3>
+<ul>
+<li>Upload, transcode video.</li>
+<li>Browse catalogo.</li>
+<li>Streaming adattivo (4K, 720p, mobile).</li>
+<li>Low buffering globale.</li>
+</ul>
+<h3 id="architettura_2">Architettura</h3>
+<h4 id="pipeline-upload">Pipeline upload</h4>
+<pre><code class="language-mermaid">flowchart LR
+    Upload --&gt; S3[(S3 raw)]
+    S3 --&gt; K[Kafka&lt;br/&gt;trigger]
+    K --&gt; W[Workers&lt;br/&gt;FFmpeg]
+    W --&gt; Q[Multi resolution&lt;br/&gt;HLS/DASH segments]
+    Q --&gt; CDN[(CDN&lt;br/&gt;Open Connect)]
+</code></pre>
+<p><strong>Output transcoding</strong>: manifest HLS/DASH + segmenti video di 10 sec in 5-10 qualità (240p, 360p, 480p, 720p, 1080p, 4K).</p>
+<h4 id="playback">Playback</h4>
+<pre><code>Client → DNS → CDN edge più vicino → manifest → segmenti
+</code></pre>
+<p><strong>ABR (Adaptive Bitrate)</strong>: client misura bandwidth, sceglie qualità per il prossimo segmento. Cambia ad ogni segmento se bandwidth varia.</p>
+<h4 id="cdn-strategy">CDN strategy</h4>
+<p>Netflix ha la propria CDN ("Open Connect"). Appliance dentro i grandi ISP riducono trasporto interurbano. 90% del traffico Netflix serve da Open Connect.</p>
+<h3 id="catalog-search">Catalog &amp; Search</h3>
+<ul>
+<li><strong>Browse</strong>: Elasticsearch su catalogo.</li>
+<li><strong>Recommendation</strong>: ML offline batch (ranking) + real-time signals (clicks, watch time).</li>
+</ul>
+<h3 id="deep-dive_4">Deep dive</h3>
+<ul>
+<li><strong>Resilienza</strong>: Chaos Monkey (Netflix) — uccidono istanze in produzione per testare.</li>
+<li><strong>A/B testing</strong>: ordinamento righe, artwork.</li>
+<li><strong>DRM</strong>: Widevine (Android), FairPlay (Apple), PlayReady (Edge).</li>
+</ul>
+<hr />
+<h2 id="6-design-instagram">6. Design Instagram</h2>
+<blockquote>
+<p>Post foto/video, segui, vedi feed.</p>
+</blockquote>
+<p>Simile a Twitter ma più "image-heavy".</p>
+<h3 id="components_1">Components</h3>
+<ul>
+<li><strong>Upload service</strong>: client → API → upload diretto a S3 con presigned URL → metadata in DB.</li>
+<li><strong>Image processing</strong>: thumbnail, filters, EXIF strip → async pipeline (Kafka + workers).</li>
+<li><strong>Feed service</strong>: simile fan-out hybrid di Twitter.</li>
+<li><strong>CDN</strong>: serve immagini globalmente.</li>
+</ul>
+<h3 id="schema">Schema</h3>
+<pre><code>photos(id, user_id, s3_url, caption, created_at)
+follows(follower_id, followee_id)
+likes(user_id, photo_id, ts)
+</code></pre>
+<h3 id="deep-dive_5">Deep dive</h3>
+<p><strong>Counter di like</strong>: count veloce. Usa contatore atomico in Redis + flush batch a DB.</p>
+<p><strong>Hashtag/explore</strong>: inverted index in Elasticsearch + ranking ML.</p>
+<p><strong>Stories (24h ephemeral)</strong>: storage temporaneo, TTL.</p>
+<hr />
+<h2 id="7-design-notification-system">7. Design Notification System</h2>
+<blockquote>
+<p>Sistema centrale per push mobile, email, SMS, in-app.</p>
+</blockquote>
+<h3 id="requirements_4">Requirements</h3>
+<ul>
+<li>Channel multipli: APNS (iOS), FCM (Android), SMTP, SMS gateway.</li>
+<li>Topics + user preferences.</li>
+<li>Throttling + dedupe.</li>
+</ul>
+<h3 id="architettura_3">Architettura</h3>
+<pre><code class="language-mermaid">flowchart LR
+    ES[Event Source] --&gt; NS[Notification Service]
+    NS --&gt; UP[(User Preferences)]
+    NS --&gt; TD[(Throttling/Dedup&lt;br/&gt;Redis)]
+    NS --&gt; T[Template&lt;br/&gt;Engine]
+    NS --&gt; R[Routing]
+    R --&gt; APNS[APNS&lt;br/&gt;iOS]
+    R --&gt; FCM[FCM&lt;br/&gt;Android]
+    R --&gt; SMTP[SMTP&lt;br/&gt;email]
+    R --&gt; SMS[SMS&lt;br/&gt;Gateway]
+</code></pre>
+<h3 id="componenti">Componenti</h3>
+<ul>
+<li><strong>Topic subscription</strong>: user X sottoscritto a topic Y? Memorizzato in DB.</li>
+<li><strong>Throttling</strong>: rate limit per user/topic in Redis (sliding window).</li>
+<li><strong>Template engine</strong>: rendering server-side con dati dinamici.</li>
+<li><strong>Retry</strong>: exponential backoff su fail (es. APNS down → retry 1s, 2s, 4s...).</li>
+<li><strong>DLQ (dead letter queue)</strong>: dopo N retry, manda in DLQ per investigazione.</li>
+</ul>
+<h3 id="deep-dive_6">Deep dive</h3>
+<p><strong>Idempotency</strong>: stesso event può arrivare 2 volte (consumer fa retry). Idempotency key per dedupe.</p>
+<p><strong>Per-channel optimization</strong>:
+- APNS richiede payload &lt; 4KB.
+- SMS è caro: rate limit aggressivo.
+- Email: pixel tracking per open rate.</p>
+<hr />
+<h2 id="cheatsheet-sistemi-tipici">Cheatsheet: sistemi tipici</h2>
+<table>
+<thead>
+<tr>
+<th>Sistema</th>
+<th>Componenti chiave</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>URL shortener</td>
+<td>hash/base62 + cache + KV DB</td>
+</tr>
+<tr>
+<td>Twitter/Insta</td>
+<td>fan-out hybrid + timeline cache + graph</td>
+</tr>
+<tr>
+<td>WhatsApp</td>
+<td>WebSocket + edge sticky + inbox queue</td>
+</tr>
+<tr>
+<td>Uber</td>
+<td>geohash/quadtree + matching + tracking RT</td>
+</tr>
+<tr>
+<td>Netflix</td>
+<td>CDN + transcoding pipeline + ABR</td>
+</tr>
+<tr>
+<td>Search engine</td>
+<td>crawler + inverted index + ranker (BM25/ML)</td>
+</tr>
+<tr>
+<td>Rate limiter</td>
+<td>token bucket / sliding window in Redis</td>
+</tr>
+<tr>
+<td>Distributed cache</td>
+<td>consistent hashing + replication</td>
+</tr>
+<tr>
+<td>Distributed file system</td>
+<td>metadata service + chunk servers</td>
+</tr>
+</tbody>
+</table>
+<h2 id="errori-killer-in-colloquio">Errori killer in colloquio</h2>
+<ul>
+<li><strong>Saltare i requirements</strong>. 1/3 del round vale.</li>
+<li><strong>Buzzword senza giustificazione</strong> ("uso Kafka"... perché?).</li>
+<li><strong>Scatole senza spiegare come parlano</strong>.</li>
+<li><strong>Ignorare scale &amp; estimation</strong>.</li>
+<li><strong>Deep dive su tutto</strong>. Scegli 1-2 component.</li>
+<li><strong>Pretendere di sapere tutto</strong>. Va benissimo dire <em>"non ho mai progettato X di questa scala, ma il mio ragionamento è..."</em>.</li>
+</ul>
+<h2 id="riassunto">Riassunto</h2>
+<p>Ogni sistema = stesso scheletro: clarify → estimate → API → data model → architettura → deep dive.</p>
+<p>Pratica <strong>a voce alta</strong> con foglio bianco. <strong>10+ sistemi</strong> prima del primo loop senior.</p>
+      <nav class="pager">
+<a href="17-system-design.html" class="prev"><span class="label">← Precedente</span><span class="title">System design — fondamenti</span></a>
+<a href="19-concorrenza.html" class="next"><span class="label">Successivo →</span><span class="title">Concorrenza e parallelismo</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>FAANG Prep</strong> — percorso completo di preparazione: DS&amp;A, system design, behavioral. Costruito per spaccare ai colloqui di Big Tech.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-index.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true,
+      background: '#161922',
+      primaryColor: '#1d2230',
+      primaryTextColor: '#e6e8ee',
+      primaryBorderColor: '#6cf',
+      lineColor: '#7a8194',
+      secondaryColor: '#262b3a',
+      tertiaryColor: '#0f1117',
+      mainBkg: '#1d2230',
+      secondBkg: '#262b3a',
+      tertiaryBkg: '#161922',
+      nodeBorder: '#6cf',
+      clusterBkg: '#161922',
+      clusterBorder: '#262b3a',
+      titleColor: '#6cf',
+      edgeLabelBackground: '#161922',
+      fontFamily: 'Cascadia Code, monospace'
+    }
+  });
+  document.querySelectorAll('pre > code.language-mermaid').forEach((codeEl) => {
+    const pre = codeEl.parentElement;
+    const div = document.createElement('div');
+    div.className = 'mermaid';
+    div.textContent = codeEl.textContent;
+    pre.replaceWith(div);
+  });
+  mermaid.run();
+</script>
+</body>
+</html>

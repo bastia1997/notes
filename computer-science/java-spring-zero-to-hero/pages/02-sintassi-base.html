@@ -1,0 +1,564 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>Sintassi di base: tipi, variabili, operatori, controllo di flusso — Java + Spring Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">☕</div>
+      <div>
+        <div class="brand-title">JAVA · SPRING</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="10" height="20" fill="#009246"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ce2b37"/></svg> IT</span><a href="../en/pages/02-basic-syntax.html" class="lang-link" title="Switch to English"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="30" height="20" fill="#012169"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#fff" stroke-width="3"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#c8102e" stroke-width="1.5"/><path d="M15,0 v20 M0,10 h30" stroke="#fff" stroke-width="5"/><path d="M15,0 v20 M0,10 h30" stroke="#c8102e" stroke-width="3"/></svg> EN</a></div>
+  </div>
+  <div class="search-wrap">
+    <div class="search-row">
+      <div class="search-inputwrap">
+        <span class="search-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"/>
+            <line x1="20" y1="20" x2="16.65" y2="16.65"/>
+          </svg>
+        </span>
+        <input class="search-input" id="search-input" type="text" placeholder="cerca... (premi /)" autocomplete="off" aria-label="Search">
+        <button class="search-clear" id="search-clear" type="button" aria-label="Clear" title="Clear">&times;</button>
+      </div>
+      <button class="search-btn" id="search-btn" type="button" aria-label="CERCA" title="CERCA">CERCA</button>
+    </div>
+    <div class="search-hits" id="search-hits" role="listbox"></div>
+  </div>
+  <div class="sidebar-nav">
+    <nav class="nav-section">
+      <div class="nav-section-title">Percorso</div>
+      <ul class="nav-list">
+        <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+        <li class="nav-item"><a href="../pages/00-percorso-e-mindset.html" class=""><span class="num">00</span>Il percorso e la giusta mentalità</a></li><li class="nav-item"><a href="../pages/01-introduzione-java.html" class=""><span class="num">01</span>Java: cos&#x27;è davvero, JVM/JRE/JDK, primo programma</a></li><li class="nav-item"><a href="../pages/02-sintassi-base.html" class="active"><span class="num">02</span>Sintassi di base: tipi, variabili, operatori, controllo di flusso</a></li><li class="nav-item"><a href="../pages/03-stringhe-array-io.html" class=""><span class="num">03</span>Stringhe, array, I/O da console</a></li><li class="nav-item"><a href="../pages/04-oop-classi-oggetti.html" class=""><span class="num">04</span>OOP I — Classi, oggetti, costruttori, this, package, visibilità</a></li><li class="nav-item"><a href="../pages/05-oop-ereditarieta-polimorfismo.html" class=""><span class="num">05</span>OOP II — Ereditarietà, polimorfismo, interfacce, classi astratte</a></li><li class="nav-item"><a href="../pages/06-equals-hashcode-immutabilita.html" class=""><span class="num">06</span>OOP III — equals, hashCode, toString, immutabilità, record</a></li><li class="nav-item"><a href="../pages/07-eccezioni.html" class=""><span class="num">07</span>Eccezioni: checked vs unchecked, try-with-resources, custom</a></li><li class="nav-item"><a href="../pages/08-generics.html" class=""><span class="num">08</span>Generics: tipi parametrici, PECS, type erasure, wildcards</a></li><li class="nav-item"><a href="../pages/09-collections.html" class=""><span class="num">09</span>Collections: List, Set, Map, Queue, complessità, scelta della struttura</a></li><li class="nav-item"><a href="../pages/10-stream-lambda-optional.html" class=""><span class="num">10</span>Stream API, lambda, functional interfaces, Optional</a></li><li class="nav-item"><a href="../pages/11-io-nio.html" class=""><span class="num">11</span>I/O e NIO.2: File, Path, channels, buffer</a></li><li class="nav-item"><a href="../pages/12-concurrency-thread.html" class=""><span class="num">12</span>Concurrency I — Thread, sincronizzazione, volatile, Java Memory Model</a></li><li class="nav-item"><a href="../pages/13-executor-future-completablefuture.html" class=""><span class="num">13</span>Concurrency II — ExecutorService, Future, CompletableFuture</a></li><li class="nav-item"><a href="../pages/14-concurrency-jucconcurrent.html" class=""><span class="num">14</span>Concurrency III — java.util.concurrent: locks, atomics, concurrent collections</a></li><li class="nav-item"><a href="../pages/15-jvm-internals.html" class=""><span class="num">15</span>JVM internals: classloader, bytecode, runtime data areas, JIT</a></li><li class="nav-item"><a href="../pages/16-memoria-gc.html" class=""><span class="num">16</span>Memoria e garbage collection: G1, ZGC, Shenandoah</a></li><li class="nav-item"><a href="../pages/17-profiling-jfr.html" class=""><span class="num">17</span>Profiling: JFR, async-profiler, jstack, heap dump, jcmd</a></li><li class="nav-item"><a href="../pages/18-java-moderno.html" class=""><span class="num">18</span>Java moderno: dal 8 al 21 — features chiave</a></li><li class="nav-item"><a href="../pages/19-jdbc.html" class=""><span class="num">19</span>JDBC: connessione, PreparedStatement, transazioni, isolation levels</a></li><li class="nav-item"><a href="../pages/20-jpa-hibernate.html" class=""><span class="num">20</span>JPA / Hibernate: entità, relazioni, lazy/eager, N+1, cache</a></li><li class="nav-item"><a href="../pages/21-sql-essenziale.html" class=""><span class="num">21</span>SQL essenziale per chi sviluppa in Java</a></li><li class="nav-item"><a href="../pages/22-spring-intro-ioc-di.html" class=""><span class="num">22</span>Spring intro: IoC, DI, ApplicationContext, BeanFactory</a></li><li class="nav-item"><a href="../pages/23-spring-beans-lifecycle.html" class=""><span class="num">23</span>Bean: scopes, lifecycle, BeanPostProcessor, FactoryBean</a></li><li class="nav-item"><a href="../pages/24-spring-configurazione.html" class=""><span class="num">24</span>Configurazione: Java config, @ComponentScan, profili, conditionals, properties</a></li><li class="nav-item"><a href="../pages/25-spring-aop-transactional.html" class=""><span class="num">25</span>AOP, proxy, @Transactional: cosa accade davvero</a></li><li class="nav-item"><a href="../pages/26-spring-boot.html" class=""><span class="num">26</span>Spring Boot: auto-configuration, starters, Actuator</a></li><li class="nav-item"><a href="../pages/27-spring-data-jpa.html" class=""><span class="num">27</span>Spring Data JPA: Repository, derived queries, paginazione, Specification</a></li><li class="nav-item"><a href="../pages/28-spring-mvc-rest.html" class=""><span class="num">28</span>Spring MVC: DispatcherServlet, controller, REST endpoint</a></li><li class="nav-item"><a href="../pages/29-rest-openapi-hateoas.html" class=""><span class="num">29</span>REST: best practice, OpenAPI/Swagger, HATEOAS, versionamento</a></li><li class="nav-item"><a href="../pages/30-spring-webflux.html" class=""><span class="num">30</span>Spring WebFlux + Reactor: Mono, Flux, programmazione reattiva</a></li><li class="nav-item"><a href="../pages/31-spring-security.html" class=""><span class="num">31</span>Spring Security: filter chain, autenticazione, autorizzazione, JWT, OAuth2</a></li><li class="nav-item"><a href="../pages/32-spring-cloud.html" class=""><span class="num">32</span>Spring Cloud: Config Server, Discovery, Gateway, Resilience4j</a></li><li class="nav-item"><a href="../pages/33-testing.html" class=""><span class="num">33</span>Testing: JUnit 5, Mockito, MockMvc, Testcontainers</a></li><li class="nav-item"><a href="../pages/34-spring-batch-intro.html" class=""><span class="num">34</span>Spring Batch intro: domain model, Job, Step, primo batch</a></li><li class="nav-item"><a href="../pages/35-spring-batch-jobrepository.html" class=""><span class="num">35</span>JobRepository, JobLauncher, schema dei metadati</a></li><li class="nav-item"><a href="../pages/36-spring-batch-chunk-skip-retry.html" class=""><span class="num">36</span>Chunk processing: commit interval, skip, retry, fault tolerance</a></li><li class="nav-item"><a href="../pages/37-spring-batch-tasklet-flow.html" class=""><span class="num">37</span>Tasklet vs Chunk; flow control: decisioni, split, conditional</a></li><li class="nav-item"><a href="../pages/38-spring-batch-itemreader.html" class=""><span class="num">38</span>ItemReader: flat file, XML/JSON, JDBC cursor/paging, JPA, multi-resource</a></li><li class="nav-item"><a href="../pages/39-spring-batch-itemwriter.html" class=""><span class="num">39</span>ItemWriter: file, JDBC, JPA, composite, classifier, batch insert</a></li><li class="nav-item"><a href="../pages/40-spring-batch-scaling-partitioning.html" class=""><span class="num">40</span>Scaling: multi-threaded step, partitioning, remote chunking/partitioning</a></li><li class="nav-item"><a href="../pages/41-spring-batch-listeners-restart-k8s.html" class=""><span class="num">41</span>Listeners, restart, monitoring, integrazione con Spring Boot e Kubernetes</a></li><li class="nav-item"><a href="../pages/42-design-patterns.html" class=""><span class="num">42</span>Design pattern in Java/Spring: GoF + DDD-lite</a></li><li class="nav-item"><a href="../pages/43-performance-observability.html" class=""><span class="num">43</span>Performance tuning e observability production-grade</a></li><li class="nav-item"><a href="../pages/44-esercizi-sintesi.html" class=""><span class="num">44</span>50 esercizi cumulativi: dalla sintassi a Spring Batch</a></li><li class="nav-item"><a href="../pages/45-progetto-finale-etl.html" class=""><span class="num">45</span>Progetto finale guidato: ETL bancario notturno</a></li>
+      </ul>
+    </nav>
+  </div>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Java Foundations</span>
+        <span>Sezione 2 di 45</span>
+        <span class="level-tag level-beg">Livello: principiante</span>
+      </div>
+      <h1>Sintassi di base: tipi, variabili, operatori, controllo di flusso</h1>
+      <p class="summary">Tipi primitivi (int, long, double, boolean, ...) vs riferimenti, ambito di una variabile, cast e promozione, operatori aritmetici e bitwise, if/else, switch espressione, while/do-while/for/for-each, break/continue, sottigliezze (overflow, divisione intera, ==).</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Java Foundations</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>Sezione 1</li></ul>
+  <div class="label">Strumenti</div>
+  <ul class="source-list"><li>JDK 21</li></ul>
+</div>
+      <h2 id="i-tipi-primitivi-8-e-basta">I tipi primitivi: 8 e basta</h2>
+<p>Java ha <strong>8 tipi primitivi</strong>. Vivono fuori dall'heap (sullo stack), non sono oggetti, non hanno metodi. Sono pure "celle di memoria".</p>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Dimensione</th>
+<th>Range</th>
+<th>Default</th>
+<th>Uso tipico</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>boolean</code></td>
+<td>1 bit logico (1 byte JVM)</td>
+<td><code>true</code> / <code>false</code></td>
+<td><code>false</code></td>
+<td>Flag</td>
+</tr>
+<tr>
+<td><code>byte</code></td>
+<td>8 bit</td>
+<td>-128 .. 127</td>
+<td><code>0</code></td>
+<td>Byte di file/protocolli</td>
+</tr>
+<tr>
+<td><code>short</code></td>
+<td>16 bit</td>
+<td>-32768 .. 32767</td>
+<td><code>0</code></td>
+<td>Raro, legacy</td>
+</tr>
+<tr>
+<td><code>char</code></td>
+<td>16 bit unsigned</td>
+<td>0 .. 65535 (UTF-16 code unit)</td>
+<td><code> </code></td>
+<td>Singolo carattere</td>
+</tr>
+<tr>
+<td><code>int</code></td>
+<td>32 bit</td>
+<td>~ ±2.1 miliardi</td>
+<td><code>0</code></td>
+<td>Default per interi</td>
+</tr>
+<tr>
+<td><code>long</code></td>
+<td>64 bit</td>
+<td>~ ±9.2·10¹⁸</td>
+<td><code>0L</code></td>
+<td>Id grandi, timestamp</td>
+</tr>
+<tr>
+<td><code>float</code></td>
+<td>32 bit IEEE 754</td>
+<td>±3.4·10³⁸</td>
+<td><code>0.0f</code></td>
+<td>Raro, grafica</td>
+</tr>
+<tr>
+<td><code>double</code></td>
+<td>64 bit IEEE 754</td>
+<td>±1.8·10³⁰⁸</td>
+<td><code>0.0</code></td>
+<td>Default per decimali</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Regola pratica</strong>: usa <code>int</code> per quasi tutti gli interi e <code>double</code> per quasi tutti i decimali. <code>long</code> se serve davvero (es. timestamp in millis). Mai <code>float</code> se non sai <em>esattamente</em> perché. <strong>Mai</strong> <code>float</code>/<code>double</code> per soldi (vedi più sotto).</p>
+</blockquote>
+<h3 id="suffissi-e-letterali">Suffissi e letterali</h3>
+<pre><code class="language-java">int  a = 100;
+long b = 100L;          // L obbligatoria se eccede int
+long c = 9_999_999_999L; // gli underscore sono leggibili, ignorati
+double pi = 3.14;
+float  pif = 3.14f;     // f obbligatoria
+int hex = 0xFF;          // 255
+int bin = 0b1010_0001;   // 161
+char cc = 'A';           // apici singoli
+char unicode = '€'; // € (euro)
+</code></pre>
+<h3 id="riferimenti-tutto-il-resto">Riferimenti (tutto il resto)</h3>
+<p>Tutto ciò che non è primitivo è un <strong>riferimento</strong> a un oggetto sull'heap.</p>
+<pre><code class="language-java">String  nome = &quot;Mario&quot;;          // riferimento (puntatore) a un oggetto String
+Integer x    = 42;               // boxed Integer, NON primitive int
+int[]   arr  = {1, 2, 3};        // riferimento a un array
+LocalDate d  = LocalDate.now();  // riferimento a LocalDate
+</code></pre>
+<p>I riferimenti possono essere <code>null</code>. I primitivi no.</p>
+<pre><code class="language-java">String s = null;     // ok
+int    n = null;     // NON compila
+</code></pre>
+<h2 id="variabili-dichiarazione-e-scope">Variabili: dichiarazione e scope</h2>
+<pre><code class="language-java">public class ScopeDemo {
+    static int globalCounter = 0;   // campo di classe (static field)
+    int instanceCounter = 0;        // campo di istanza
+
+    public void demo() {
+        int localCounter = 0;       // variabile locale
+        for (int i = 0; i &lt; 5; i++) {
+            int inLoop = i * 2;     // scope: solo dentro il for
+            localCounter += inLoop;
+        }
+        // qui `inLoop` non esiste più
+        System.out.println(localCounter);
+    }
+}
+</code></pre>
+<p>Regola: <strong>una variabile esiste dal punto di dichiarazione alla fine del blocco <code>{ }</code> che la contiene</strong>.</p>
+<h3 id="var-inferenza-di-tipo-java-10"><code>var</code>: inferenza di tipo (Java 10+)</h3>
+<pre><code class="language-java">var name = &quot;Mario&quot;;        // dedotto: String
+var n    = 42;             // dedotto: int
+var list = new ArrayList&lt;String&gt;();  // dedotto: ArrayList&lt;String&gt;
+</code></pre>
+<p>Vincoli:
+- Solo per variabili <strong>locali</strong> con <strong>inizializzazione</strong>.
+- Non per parametri di metodo, campi di classe, return type.
+- <code>var n = null;</code> NON compila (non c'è informazione di tipo).
+- <code>var n;</code> NON compila.</p>
+<blockquote>
+<p><strong>Usa <code>var</code> quando il tipo è ovvio dal valore a destra</strong>. Non per nascondere tipi complessi: chi legge deve capire al volo.</p>
+</blockquote>
+<h3 id="final-la-variabile-non-si-riassegna"><code>final</code>: la variabile non si riassegna</h3>
+<pre><code class="language-java">final int MAX = 10;
+MAX = 11;   // ERRORE di compilazione
+</code></pre>
+<p><code>final</code> non significa "immutabile profondamente":</p>
+<pre><code class="language-java">final List&lt;Integer&gt; nums = new ArrayList&lt;&gt;();
+nums.add(1);  // ok! il riferimento è final, ma l'oggetto è mutabile
+nums = new ArrayList&lt;&gt;();  // ERRORE: stai riassegnando
+</code></pre>
+<p>Per immutabilità vera servono classi immutabili (List.of(), <code>Collections.unmodifiableList</code>, <code>record</code>, vedremo).</p>
+<h2 id="operatori">Operatori</h2>
+<h3 id="aritmetici">Aritmetici</h3>
+<pre><code class="language-java">int a = 17, b = 5;
+System.out.println(a + b);   // 22
+System.out.println(a - b);   // 12
+System.out.println(a * b);   // 85
+System.out.println(a / b);   // 3   &lt;-- divisione INTERA (tronca)
+System.out.println(a % b);   // 2   &lt;-- modulo
+System.out.println((double) a / b);  // 3.4  &lt;-- forzando double
+</code></pre>
+<p><strong>Trappola</strong>: la divisione fra <code>int</code> tronca. <code>(int)(7/2) == 3</code>. Per il decimale devi avere almeno un operando in floating point.</p>
+<h3 id="compound-assignment">Compound assignment</h3>
+<pre><code class="language-java">int x = 10;
+x += 5;   // x = 15
+x -= 2;   // x = 13
+x *= 3;   // x = 39
+x /= 4;   // x = 9
+x %= 5;   // x = 4
+</code></pre>
+<h3 id="incremento">Incremento</h3>
+<pre><code class="language-java">int i = 5;
+int a = i++;  // a = 5, poi i diventa 6 (post-incremento)
+int j = 5;
+int b = ++j;  // j diventa 6, poi b = 6 (pre-incremento)
+</code></pre>
+<h3 id="bitwise">Bitwise</h3>
+<pre><code class="language-java">int x = 0b1100;
+int y = 0b1010;
+System.out.println(Integer.toBinaryString(x &amp; y));  // 1000 (AND)
+System.out.println(Integer.toBinaryString(x | y));  // 1110 (OR)
+System.out.println(Integer.toBinaryString(x ^ y));  // 0110 (XOR)
+System.out.println(Integer.toBinaryString(~x));     // ...11110011 (NOT)
+System.out.println(Integer.toBinaryString(x &lt;&lt; 2)); // 110000 (shift sinistro)
+System.out.println(Integer.toBinaryString(x &gt;&gt; 1)); // 110 (shift destro, conserva segno)
+System.out.println(Integer.toBinaryString(x &gt;&gt;&gt; 1));// 110 (shift destro, riempie con 0)
+</code></pre>
+<h3 id="confronto">Confronto</h3>
+<pre><code class="language-java">a == b   // uguaglianza (per primitivi: valori; per oggetti: STESSO riferimento)
+a != b
+a &lt; b, a &lt;= b, a &gt; b, a &gt;= b
+</code></pre>
+<blockquote>
+<p><strong><code>==</code> tra oggetti confronta i riferimenti, non i contenuti.</strong> Per confrontare contenuti usi <code>.equals()</code>.</p>
+</blockquote>
+<pre><code class="language-java">String s1 = new String(&quot;ciao&quot;);
+String s2 = new String(&quot;ciao&quot;);
+System.out.println(s1 == s2);       // false (riferimenti diversi)
+System.out.println(s1.equals(s2));  // true  (contenuti uguali)
+</code></pre>
+<h3 id="logici">Logici</h3>
+<pre><code class="language-java">a &amp;&amp; b   // AND (short-circuit: se a è false, b non viene valutato)
+a || b   // OR  (short-circuit: se a è true, b non viene valutato)
+!a       // NOT
+</code></pre>
+<p>Lo short-circuit ti salva da <code>NullPointerException</code>:</p>
+<pre><code class="language-java">if (s != null &amp;&amp; s.length() &gt; 0) { ... }  // ok
+if (s.length() &gt; 0 &amp;&amp; s != null) { ... }  // BOOM se s è null
+</code></pre>
+<h3 id="ternario">Ternario</h3>
+<pre><code class="language-java">int x = (a &gt; b) ? a : b;
+String msg = (n == 1) ? &quot;1 item&quot; : n + &quot; items&quot;;
+</code></pre>
+<h2 id="overflow-perche-un-numero-positivo-puo-diventare-negativo">Overflow: perché un numero positivo può diventare negativo</h2>
+<p><code>int</code> ha range -2³¹ .. 2³¹-1 (~ ±2.1 miliardi). Se sfondi, ricicli (<strong>wrap-around silenzioso</strong>):</p>
+<pre><code class="language-java">int big = Integer.MAX_VALUE;     // 2147483647
+System.out.println(big + 1);     // -2147483648   &lt;-- overflow silenzioso!
+</code></pre>
+<p>Java non lancia eccezioni per overflow di interi. È <em>la</em> fonte di bug nei calcoli finanziari mal scritti.</p>
+<p><strong>Soluzioni:</strong>
+1. Usa <code>long</code>. Funziona finché stai sotto 9·10¹⁸.
+2. Usa <code>Math.addExact</code>, <code>Math.multiplyExact</code>, ... che lancia <code>ArithmeticException</code> se va in overflow:
+   <code>java
+   int sum = Math.addExact(big, 1);  // ArithmeticException: integer overflow</code>
+3. Per soldi e calcoli precisi: <strong><code>BigDecimal</code></strong>. Sempre. Vedi sezione 6.</p>
+<h2 id="floating-point-perche-01-02-non-fa-03">Floating point: perché 0.1 + 0.2 non fa 0.3</h2>
+<pre><code class="language-java">System.out.println(0.1 + 0.2);   // 0.30000000000000004
+System.out.println(0.1 + 0.2 == 0.3);  // false
+</code></pre>
+<p><code>double</code> è IEEE 754: non rappresenta esattamente 0.1 in binario (è infinito periodico, come 1/3 in decimale). Non usare <code>double</code> per soldi, mai. Usa <code>BigDecimal</code>:</p>
+<pre><code class="language-java">import java.math.BigDecimal;
+BigDecimal a = new BigDecimal(&quot;0.1&quot;);
+BigDecimal b = new BigDecimal(&quot;0.2&quot;);
+System.out.println(a.add(b));   // 0.3 esatto
+</code></pre>
+<p>Nota: passa <strong>stringhe</strong> al costruttore, non <code>double</code>. <code>new BigDecimal(0.1)</code> è già "rotto" perché 0.1 è già impreciso.</p>
+<h2 id="controllo-di-flusso">Controllo di flusso</h2>
+<h3 id="if-else"><code>if / else</code></h3>
+<pre><code class="language-java">if (saldo &gt; 1000) {
+    livello = &quot;GOLD&quot;;
+} else if (saldo &gt; 100) {
+    livello = &quot;SILVER&quot;;
+} else {
+    livello = &quot;BRONZE&quot;;
+}
+</code></pre>
+<h3 id="switch-classico"><code>switch</code> classico</h3>
+<pre><code class="language-java">String giorno = switch (n) {
+    case 1: yield &quot;Lun&quot;;    // syntax con yield (Java 14+)
+    case 2: yield &quot;Mar&quot;;
+    default: yield &quot;Sconosciuto&quot;;
+};
+</code></pre>
+<h3 id="switch-espressione-freccia-java-14"><code>switch</code> espressione "freccia" (Java 14+)</h3>
+<pre><code class="language-java">String giorno = switch (n) {
+    case 1 -&gt; &quot;Lunedì&quot;;
+    case 2 -&gt; &quot;Martedì&quot;;
+    case 3, 4, 5 -&gt; &quot;Lavorativo&quot;;
+    case 6, 7 -&gt; &quot;Weekend&quot;;
+    default -&gt; &quot;Sconosciuto&quot;;
+};
+</code></pre>
+<blockquote>
+<p>Lo switch "freccia" non ha fall-through: non serve <code>break</code>. Più sicuro.</p>
+</blockquote>
+<h3 id="pattern-matching-nello-switch-java-21">Pattern matching nello switch (Java 21)</h3>
+<pre><code class="language-java">sealed interface Shape permits Circle, Square {}
+record Circle(double r) implements Shape {}
+record Square(double side) implements Shape {}
+
+double area(Shape s) {
+    return switch (s) {
+        case Circle c -&gt; Math.PI * c.r() * c.r();
+        case Square sq -&gt; sq.side() * sq.side();
+    };
+}
+</code></pre>
+<p>Lo vediamo in dettaglio nella Sezione 18.</p>
+<h3 id="while-e-do-while"><code>while</code> e <code>do-while</code></h3>
+<pre><code class="language-java">int i = 0;
+while (i &lt; 5) {
+    System.out.println(i);
+    i++;
+}
+
+int j = 0;
+do {
+    System.out.println(j);
+    j++;
+} while (j &lt; 5);   // viene eseguito almeno una volta
+</code></pre>
+<h3 id="for-classico"><code>for</code> classico</h3>
+<pre><code class="language-java">for (int i = 0; i &lt; 10; i++) {
+    System.out.println(i);
+}
+</code></pre>
+<h3 id="for-each-sintatticamente-for-in"><code>for-each</code> (sintatticamente <code>for-in</code>)</h3>
+<pre><code class="language-java">int[] nums = {1, 2, 3, 4, 5};
+for (int n : nums) {
+    System.out.println(n);
+}
+
+List&lt;String&gt; words = List.of(&quot;ciao&quot;, &quot;mondo&quot;);
+for (String w : words) {
+    System.out.println(w);
+}
+</code></pre>
+<h3 id="break-e-continue"><code>break</code> e <code>continue</code></h3>
+<pre><code class="language-java">for (int i = 0; i &lt; 100; i++) {
+    if (i == 50) break;        // esce dal loop
+    if (i % 2 == 0) continue;  // salta al prossimo i
+    System.out.println(i);     // stampa solo dispari &lt; 50
+}
+</code></pre>
+<h3 id="break-con-label-raro-ma-esiste"><code>break</code> con label (raro, ma esiste)</h3>
+<pre><code class="language-java">outer:
+for (int i = 0; i &lt; 10; i++) {
+    for (int j = 0; j &lt; 10; j++) {
+        if (i * j &gt; 30) break outer;  // esce da ENTRAMBI i loop
+    }
+}
+</code></pre>
+<h2 id="esercizi">Esercizi</h2>
+<details>
+<summary>Es 2.1 — Overflow esplicito</summary>
+
+Scrivi un programma che:
+1. Stampa `Integer.MAX_VALUE`.
+2. Calcola `Integer.MAX_VALUE + 1` e stampa il risultato (vedrai negativo).
+3. Usa `Math.addExact` per fare la stessa somma. Cattura l'eccezione e stampa "overflow".
+
+
+<pre><code class="language-java">public class Overflow {
+    public static void main(String[] args) {
+        int max = Integer.MAX_VALUE;
+        System.out.println(&quot;max = &quot; + max);
+        System.out.println(&quot;max + 1 (silenzioso) = &quot; + (max + 1));
+        try {
+            int r = Math.addExact(max, 1);
+            System.out.println(&quot;r = &quot; + r);
+        } catch (ArithmeticException e) {
+            System.out.println(&quot;overflow detected!&quot;);
+        }
+    }
+}
+</code></pre>
+
+
+</details>
+
+<details>
+<summary>Es 2.2 — Soldi giusti</summary>
+
+Implementa una funzione `aggiungiIva(BigDecimal prezzo, BigDecimal aliquota)` che restituisce il prezzo IVA inclusa. Aliquota in formato `0.22` per il 22%.
+
+
+<pre><code class="language-java">import java.math.BigDecimal;
+import java.math.RoundingMode;
+
+public class Iva {
+    public static BigDecimal aggiungiIva(BigDecimal prezzo, BigDecimal aliquota) {
+        return prezzo.multiply(BigDecimal.ONE.add(aliquota))
+                     .setScale(2, RoundingMode.HALF_UP);
+    }
+
+    public static void main(String[] args) {
+        BigDecimal p = new BigDecimal(&quot;19.99&quot;);
+        BigDecimal iva = new BigDecimal(&quot;0.22&quot;);
+        System.out.println(aggiungiIva(p, iva));  // 24.39
+    }
+}
+</code></pre>
+
+
+Punti chiave: passa stringhe, usa `.multiply` non `*`, usa `setScale` per arrotondare a 2 decimali.
+
+</details>
+
+<details>
+<summary>Es 2.3 — FizzBuzz (il classico)</summary>
+
+Stampa i numeri da 1 a 30. Per i multipli di 3 stampa "Fizz", per i multipli di 5 "Buzz", per i multipli di entrambi "FizzBuzz".
+
+
+<pre><code class="language-java">public class FizzBuzz {
+    public static void main(String[] args) {
+        for (int i = 1; i &lt;= 30; i++) {
+            String out;
+            if (i % 15 == 0) out = &quot;FizzBuzz&quot;;
+            else if (i % 3 == 0) out = &quot;Fizz&quot;;
+            else if (i % 5 == 0) out = &quot;Buzz&quot;;
+            else out = String.valueOf(i);
+            System.out.println(out);
+        }
+    }
+}
+</code></pre>
+
+
+Versione "moderna" con switch (Java 21):
+
+
+<pre><code class="language-java">String out = switch (0) {
+    case int z when i % 15 == 0 -&gt; &quot;FizzBuzz&quot;;  // non funziona così — vedi esercizio avanzato
+    // ...
+};
+</code></pre>
+
+
+Lo switch su int+guard arriverà nella sezione 18.
+
+</details>
+
+<details>
+<summary>Es 2.4 — `==` vs `.equals()`</summary>
+
+Indovina l'output:
+
+
+<pre><code class="language-java">String a = &quot;ciao&quot;;
+String b = &quot;ciao&quot;;
+String c = new String(&quot;ciao&quot;);
+
+System.out.println(a == b);
+System.out.println(a == c);
+System.out.println(a.equals(c));
+</code></pre>
+
+
+Risposta:
+
+- `a == b` → **true**. Le stringhe letterali sono "interned": stesso oggetto in memoria.
+- `a == c` → **false**. `new String("...")` crea un nuovo oggetto sull'heap.
+- `a.equals(c)` → **true**. Confronto di contenuto.
+
+Lezione: **per stringhe usa sempre `.equals()`**, mai `==`.
+
+</details>
+
+<details>
+<summary>Es 2.5 — Loop con due indici</summary>
+
+Stampa una matrice 5×5 dove ogni cella contiene `i*j`. Allinea le colonne (usa `%4d` con `printf`).
+
+
+<pre><code class="language-java">public class Matrix {
+    public static void main(String[] args) {
+        for (int i = 1; i &lt;= 5; i++) {
+            for (int j = 1; j &lt;= 5; j++) {
+                System.out.printf(&quot;%4d&quot;, i * j);
+            }
+            System.out.println();
+        }
+    }
+}
+</code></pre>
+
+
+</details>
+
+<h2 id="cosa-devi-portarti-via">Cosa devi portarti via</h2>
+<ul>
+<li>8 primitivi, tutto il resto è riferimento. <code>null</code> solo per riferimenti.</li>
+<li><code>int</code> e <code>double</code> come default. <strong>Mai</strong> <code>double</code> per soldi: usa <code>BigDecimal</code>.</li>
+<li><code>==</code> confronta riferimenti per oggetti. Usa <code>.equals()</code>.</li>
+<li>Overflow di <code>int</code> è silenzioso. Usa <code>Math.addExact</code> o <code>long</code>/<code>BigInteger</code>.</li>
+<li><code>switch</code> espressione "freccia" è quasi sempre meglio del classico.</li>
+<li><code>var</code> solo per locali, quando il tipo è ovvio dal valore.</li>
+</ul>
+<p>Prossimo passo: stringhe, array e I/O da console.</p>
+      <nav class="pager">
+<a href="01-introduzione-java.html" class="prev"><span class="label">← Precedente</span><span class="title">Java: cos&#x27;è davvero, JVM/JRE/JDK, primo programma</span></a>
+<a href="03-stringhe-array-io.html" class="next"><span class="label">Successivo →</span><span class="title">Stringhe, array, I/O da console</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Java + Spring Zero to Hero</strong> — percorso completo da Java base a Spring Batch in produzione.</p><p>Materiale a scopo educativo. Codice sotto licenza MIT; usalo liberamente nei tuoi progetti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body, {delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true, background: '#15191e', primaryColor: '#1d2530',
+      primaryTextColor: '#eef1f5', primaryBorderColor: '#f89820',
+      lineColor: '#6db33f', secondaryColor: '#1a1f25', tertiaryColor: '#222a33',
+      mainBkg: '#1d2530', nodeBorder: '#f89820', clusterBkg: '#0f1318',
+      clusterBorder: '#2a3340', titleColor: '#f89820',
+      edgeLabelBackground: '#0f1318', textColor: '#eef1f5',
+      labelTextColor: '#eef1f5', actorBkg: '#1d2530', actorBorder: '#f89820',
+      actorTextColor: '#f89820', actorLineColor: '#6db33f',
+      signalColor: '#eef1f5', signalTextColor: '#eef1f5',
+      labelBoxBkgColor: '#1d2530', labelBoxBorderColor: '#f89820',
+      noteBkgColor: '#fff6a8', noteTextColor: '#0f1318', noteBorderColor: '#fff6a8',
+      activationBkgColor: '#1d2530', activationBorderColor: '#f89820',
+      sequenceNumberColor: '#0f1318'
+    },
+    flowchart: { curve: 'basis', padding: 16 },
+    sequence: { mirrorActors: false, bottomMarginAdj: 10 },
+    fontFamily: 'JetBrains Mono, Cascadia Code, Consolas, monospace'
+  });
+</script>
+</body>
+</html>

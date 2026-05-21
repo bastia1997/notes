@@ -1,0 +1,594 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>Cryptography: theory and practice — Cybersec Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">&gt;_</div>
+      <div>
+        <div class="brand-title">CYBERSEC</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/05-crittografia.html" class="lang-link" title="Passa all'italiano"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="10" height="20" fill="#009246"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ce2b37"/></svg> IT</a><span class="lang-active" title="English"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="30" height="20" fill="#012169"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#fff" stroke-width="3"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#c8102e" stroke-width="1.5"/><path d="M15,0 v20 M0,10 h30" stroke="#fff" stroke-width="5"/><path d="M15,0 v20 M0,10 h30" stroke="#c8102e" stroke-width="3"/></svg> EN</span></div>
+  </div>
+  <div class="search-wrap">
+    <div class="search-row">
+      <div class="search-inputwrap">
+        <span class="search-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"/>
+            <line x1="20" y1="20" x2="16.65" y2="16.65"/>
+          </svg>
+        </span>
+        <input class="search-input" id="search-input" type="text" placeholder="search... (press /)" autocomplete="off" aria-label="Search">
+        <button class="search-clear" id="search-clear" type="button" aria-label="Clear" title="Clear">&times;</button>
+      </div>
+      <button class="search-btn" id="search-btn" type="button" aria-label="SEARCH" title="SEARCH">SEARCH</button>
+    </div>
+    <div class="search-hits" id="search-hits" role="listbox"></div>
+  </div>
+  <div class="sidebar-nav">
+    <nav class="nav-section">
+      <div class="nav-section-title">Path</div>
+      <ul class="nav-list">
+        <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+        <li class="nav-item"><a href="../pages/00-path-and-mindset.html" class=""><span class="num">00</span>Path, mindset, ethics and law</a></li><li class="nav-item"><a href="../pages/00b-math-and-cs.html" class=""><span class="num">00b</span>Math and computation theory (the bare minimum, integrated)</a></li><li class="nav-item"><a href="../pages/01-cs-fundamentals.html" class=""><span class="num">01</span>Computer science fundamentals for security</a></li><li class="nav-item"><a href="../pages/01b-assembly-from-zero.html" class=""><span class="num">01b</span>x86-64 and ARM64 Assembly from zero</a></li><li class="nav-item"><a href="../pages/02-essential-linux.html" class=""><span class="num">02</span>Essential Linux for security</a></li><li class="nav-item"><a href="../pages/02b-regex-automata.html" class=""><span class="num">02b</span>Regex, automata, and parsers for security</a></li><li class="nav-item"><a href="../pages/03-networking-tcp-ip.html" class=""><span class="num">03</span>Networking: from cables to TCP/IP</a></li><li class="nav-item"><a href="../pages/04-http-tls.html" class=""><span class="num">04</span>HTTP, HTTPS and TLS in depth</a></li><li class="nav-item"><a href="../pages/05-cryptography.html" class="active"><span class="num">05</span>Cryptography: theory and practice</a></li><li class="nav-item"><a href="../pages/05b-crypto-worked-examples.html" class=""><span class="num">05b</span>Cryptography — step-by-step worked examples</a></li><li class="nav-item"><a href="../pages/06-os-internals.html" class=""><span class="num">06</span>OS internals: Linux and Windows in depth</a></li><li class="nav-item"><a href="../pages/07-programming-for-security.html" class=""><span class="num">07</span>Programming for security: Python, C, Go</a></li><li class="nav-item"><a href="../pages/08-osint-recon.html" class=""><span class="num">08</span>OSINT and reconnaissance</a></li><li class="nav-item"><a href="../pages/09-scanning-enumeration.html" class=""><span class="num">09</span>Scanning, enumeration and fingerprinting</a></li><li class="nav-item"><a href="../pages/10-owasp-top10.html" class=""><span class="num">10</span>OWASP Top 10 and beyond — basic web vulnerabilities</a></li><li class="nav-item"><a href="../pages/10b-walkthrough-byte-by-byte.html" class=""><span class="num">10b</span>Byte-by-byte walkthrough: SQLi, XSS, SSRF, IDOR</a></li><li class="nav-item"><a href="../pages/11-advanced-web.html" class=""><span class="num">11</span>Advanced web hacking</a></li><li class="nav-item"><a href="../pages/12-network-attacks.html" class=""><span class="num">12</span>Network attacks: MITM, spoofing, pivoting</a></li><li class="nav-item"><a href="../pages/13-active-directory.html" class=""><span class="num">13</span>Active Directory hacking</a></li><li class="nav-item"><a href="../pages/14-exploit-development.html" class=""><span class="num">14</span>Exploit development: from buffer overflow to ROP</a></li><li class="nav-item"><a href="../pages/14b-bof-to-shell-complete.html" class=""><span class="num">14b</span>BoF → shell: a complete exploit from zero</a></li><li class="nav-item"><a href="../pages/15-reverse-engineering.html" class=""><span class="num">15</span>Reverse engineering</a></li><li class="nav-item"><a href="../pages/16-malware-analysis.html" class=""><span class="num">16</span>Malware: taxonomy and analysis</a></li><li class="nav-item"><a href="../pages/17-mobile-security.html" class=""><span class="num">17</span>Mobile security: Android and iOS</a></li><li class="nav-item"><a href="../pages/18-cloud-security.html" class=""><span class="num">18</span>Cloud security: AWS, Azure, GCP</a></li><li class="nav-item"><a href="../pages/19-container-kubernetes.html" class=""><span class="num">19</span>Containers and Kubernetes</a></li><li class="nav-item"><a href="../pages/20-wireless-radio.html" class=""><span class="num">20</span>Wireless and radio: WiFi, BT, SDR</a></li><li class="nav-item"><a href="../pages/21-hardware-firmware.html" class=""><span class="num">21</span>Hardware and firmware hacking</a></li><li class="nav-item"><a href="../pages/22-forensics-dfir.html" class=""><span class="num">22</span>Forensics and DFIR</a></li><li class="nav-item"><a href="../pages/23-blue-team-soc.html" class=""><span class="num">23</span>Blue team: SOC, SIEM, EDR, hunting</a></li><li class="nav-item"><a href="../pages/24-threat-intelligence.html" class=""><span class="num">24</span>Threat intelligence</a></li><li class="nav-item"><a href="../pages/25-grc-regulations.html" class=""><span class="num">25</span>GRC, regulations, and standards</a></li><li class="nav-item"><a href="../pages/26-red-team.html" class=""><span class="num">26</span>Red team and adversary emulation</a></li><li class="nav-item"><a href="../pages/27-ai-ml-security.html" class=""><span class="num">27</span>AI / ML security</a></li><li class="nav-item"><a href="../pages/28-capstone-roadmap.html" class=""><span class="num">28</span>Capstone: CTF roadmap, home lab, certifications</a></li><li class="nav-item"><a href="../pages/29-master-cheatsheet.html" class=""><span class="num">29</span>Master cheatsheet</a></li><li class="nav-item"><a href="../pages/30-extended-glossary.html" class=""><span class="num">30</span>Extended glossary (250+ terms)</a></li><li class="nav-item"><a href="../pages/31-it-eu-regulations.html" class=""><span class="num">31</span>IT/EU regulatory references in detail</a></li>
+      </ul>
+    </nav>
+  </div>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Cryptography</span>
+        <span>Section 7 of 36</span>
+        <span class="level-tag level-int">Level: intermediate</span>
+      </div>
+      <h1>Cryptography: theory and practice</h1>
+      <p class="summary">Symmetric ciphers (AES, ChaCha20), asymmetric ciphers (RSA, ECC), hashes, MACs, digital signatures, KDFs, random number generators, PKI, password hashing, attacks (padding oracle, length extension, weak RNG).</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Cryptography</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>Section 01 (XOR, bits, endianness)</li><li>Section 04 (TLS)</li></ul>
+  <div class="label">Tools</div>
+  <ul class="source-list"><li>openssl</li><li>Python cryptography / pycryptodome</li><li>hashcat / john</li><li>CyberChef</li></ul>
+</div>
+      <blockquote>
+<p>Golden rule: <strong>don't roll your own crypto</strong>. Cryptography is a discipline where the "obvious" ideas are almost always wrong. Use standard primitives (libsodium, NaCl, the recommended TLS recipe) and well-tested libraries. This chapter is here to help you <em>understand</em> it, not to rewrite it.</p>
+</blockquote>
+<h2 id="what-cryptography-guarantees">What cryptography guarantees</h2>
+<p>Four security properties:</p>
+<ol>
+<li><strong>Confidentiality</strong> — only the intended recipients can read.</li>
+<li><strong>Integrity</strong> — the data has not been modified.</li>
+<li><strong>Authenticity</strong> — you know who sent it.</li>
+<li><strong>Non-repudiation</strong> — the sender cannot deny having sent it.</li>
+</ol>
+<p>Different primitives provide different ones:</p>
+<table>
+<thead>
+<tr>
+<th>Primitive</th>
+<th style="text-align: center;">Confid.</th>
+<th style="text-align: center;">Integrity</th>
+<th style="text-align: center;">Auth.</th>
+<th style="text-align: center;">Non-rep.</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Symmetric cipher only (e.g. AES-CTR)</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">❌</td>
+</tr>
+<tr>
+<td>AEAD (AES-GCM, ChaCha20-Poly1305)</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅ (shared key)</td>
+<td style="text-align: center;">❌</td>
+</tr>
+<tr>
+<td>MAC (HMAC)</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅ (shared key)</td>
+<td style="text-align: center;">❌</td>
+</tr>
+<tr>
+<td>Hash (SHA-256)</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">✅ (on its own)</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">❌</td>
+</tr>
+<tr>
+<td>Digital signature (RSA, ECDSA, Ed25519)</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+</tr>
+<tr>
+<td>Hybrid encryption (RSA-OAEP + AES-GCM)</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">varies</td>
+<td style="text-align: center;">varies</td>
+</tr>
+</tbody>
+</table>
+<h2 id="basic-primitives">Basic primitives</h2>
+<h3 id="symmetric-ciphers">Symmetric ciphers</h3>
+<p>One shared key for both encryption and decryption.</p>
+<h4 id="block-ciphers">Block ciphers</h4>
+<ul>
+<li><strong>AES</strong> (Rijndael) — the standard. 128-bit block size, 128/192/256-bit keys.</li>
+<li>3DES (deprecated).</li>
+<li>Camellia, Serpent, Twofish (alternatives).</li>
+</ul>
+<p>Block ciphers encrypt <em>one block</em> at a time. For longer messages you need <strong>modes</strong>.</p>
+<h4 id="block-cipher-modes-extremely-important">Block cipher modes (extremely important)</h4>
+<table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>Confidentiality</th>
+<th>Integrity</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ECB</strong></td>
+<td>partial</td>
+<td>❌</td>
+<td><strong>Never use.</strong> Patterns are visible (see the Tux penguin).</td>
+</tr>
+<tr>
+<td><strong>CBC</strong></td>
+<td>yes</td>
+<td>❌</td>
+<td>Vulnerable to padding oracle and bit flipping without a MAC. Use with <code>Encrypt-then-MAC</code>.</td>
+</tr>
+<tr>
+<td><strong>CTR</strong></td>
+<td>yes</td>
+<td>❌</td>
+<td>Turns a block cipher into a stream. Nonce reuse = catastrophe.</td>
+</tr>
+<tr>
+<td><strong>GCM</strong> ✅</td>
+<td>yes</td>
+<td>yes (AEAD)</td>
+<td>AES-CTR + GMAC. <strong>Modern standard.</strong> 96-bit nonce, NEVER reuse with the same key.</td>
+</tr>
+<tr>
+<td><strong>CCM</strong></td>
+<td>yes</td>
+<td>yes</td>
+<td>For embedded environments (Bluetooth, ZigBee).</td>
+</tr>
+<tr>
+<td><strong>OCB</strong></td>
+<td>yes</td>
+<td>yes</td>
+<td>Excellent but long patented, now free.</td>
+</tr>
+<tr>
+<td><strong>CBC-MAC, CMAC</strong></td>
+<td>(MAC, not encryption)</td>
+<td>yes</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Padding oracle</strong> (Vaudenay 2002): if a CBC server without a MAC returns different errors for "bad padding" vs "other errors", an attacker can decrypt a block byte-by-byte (256 queries max per byte). The story keeps going: POODLE, BEAST, etc.</p>
+<h4 id="stream-ciphers">Stream ciphers</h4>
+<ul>
+<li><strong>ChaCha20</strong> (Bernstein) — modern, simple, fast in software. Combined with <strong>Poly1305</strong> it gives an AEAD (<code>ChaCha20-Poly1305</code>).</li>
+<li><strong>RC4</strong> — dead, banned in TLS since 2015.</li>
+</ul>
+<h3 id="asymmetric-ciphers-public-key">Asymmetric ciphers (public key)</h3>
+<p>Two keys: one public (encryption, signature verification) and one private (decryption, signing).</p>
+<h4 id="rsa">RSA</h4>
+<ul>
+<li>Security based on the difficulty of factoring large numbers.</li>
+<li>2048-bit keys minimum today, 3072+ recommended, 4096 conservative. Below 2048 = inadequate.</li>
+<li><strong>Uses:</strong></li>
+<li>Encryption: with <strong>RSA-OAEP</strong> padding (never "textbook RSA" or PKCS#1 v1.5 above the application layer).</li>
+<li>Signature: with <strong>RSA-PSS</strong> padding, preferred over PKCS#1 v1.5.</li>
+</ul>
+<blockquote>
+<p><strong>"Textbook" RSA</strong> (no padding) is insecure: deterministic, malleable (E(m1)·E(m2) = E(m1·m2)), vulnerable to chosen-plaintext attacks.</p>
+</blockquote>
+<h4 id="elliptic-curves-ecc">Elliptic curves (ECC)</h4>
+<ul>
+<li>Security based on the discrete logarithm over elliptic curves.</li>
+<li>Much shorter keys than RSA for equivalent security (256-bit ECC ≈ 3072-bit RSA).</li>
+<li>Standard curves: P-256, P-384, P-521 (NIST), Curve25519 (Bernstein, used in TLS, SSH, Signal, Tor).</li>
+<li><strong>Uses:</strong></li>
+<li><strong>ECDH</strong> (Diffie-Hellman) for key exchange.</li>
+<li><strong>ECDSA, EdDSA (Ed25519)</strong> for signatures.</li>
+</ul>
+<p>Ed25519 is the preferred signature scheme today: fast, secure, no RNG dependency during signing (a historical ECDSA issue that allowed the leak of Sony's PlayStation 3 key).</p>
+<h3 id="hashes">Hashes</h3>
+<p>A one-way function: given <code>m</code>, returns <code>h(m)</code> of fixed length. Desired properties:
+- <strong>Pre-image resistant:</strong> hard to find <code>m</code> given <code>h</code>.
+- <strong>Second pre-image:</strong> hard to find <code>m'</code> ≠ <code>m</code> with <code>h(m') = h(m)</code>.
+- <strong>Collision resistant:</strong> hard to find <code>m1, m2</code> with <code>h(m1) = h(m2)</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Hash</th>
+<th>Output</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MD5</td>
+<td>128 bit</td>
+<td><strong>Broken</strong> (collisions in seconds). Use only for non-security checksumming.</td>
+</tr>
+<tr>
+<td>SHA-1</td>
+<td>160 bit</td>
+<td><strong>Broken</strong> (SHAttered 2017). Use only for legacy.</td>
+</tr>
+<tr>
+<td>SHA-256, SHA-512</td>
+<td>256/512 bit</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>SHA-3 (Keccak)</td>
+<td>various</td>
+<td>OK, different design (sponge).</td>
+</tr>
+<tr>
+<td>BLAKE2, BLAKE3</td>
+<td>various</td>
+<td>OK, very fast.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="mac-message-authentication-code">MAC (Message Authentication Code)</h3>
+<p>Confirms integrity + authenticity with a shared key.</p>
+<ul>
+<li><strong>HMAC</strong>: <code>HMAC-SHA-256(key, msg)</code>. A construction that works with any hash. <strong>Standard.</strong></li>
+<li><strong>CMAC, GMAC</strong>: based on a block cipher.</li>
+<li><strong>Poly1305</strong>: modern MAC used with ChaCha20.</li>
+</ul>
+<blockquote>
+<p>Don't confuse <strong>hash</strong> (no key) with <strong>MAC</strong> (with key). A hash alone does <em>not</em> authenticate a message.</p>
+</blockquote>
+<h3 id="kdf-key-derivation-function">KDF (Key Derivation Function)</h3>
+<p>Given a secret (password / pre-master), derive robust cryptographic keys.</p>
+<table>
+<thead>
+<tr>
+<th>KDF</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>HKDF</strong> (HMAC-based)</td>
+<td>Derive multiple keys from a high-entropy secret (TLS 1.3 uses HKDF).</td>
+</tr>
+<tr>
+<td><strong>PBKDF2</strong></td>
+<td>From a password. Slow by design. High iteration count.</td>
+</tr>
+<tr>
+<td><strong>scrypt</strong></td>
+<td>From a password. Memory-hard.</td>
+</tr>
+<tr>
+<td><strong>bcrypt</strong></td>
+<td>From a password. CPU + memory cost.</td>
+</tr>
+<tr>
+<td><strong>Argon2id</strong> ✅</td>
+<td>From a password. <strong>Modern standard</strong> (winner of the Password Hashing Competition 2015).</td>
+</tr>
+</tbody>
+</table>
+<h3 id="rng-random-number-generator">RNG (Random Number Generator)</h3>
+<p>All crypto systems break if the randomness is predictable.</p>
+<ul>
+<li><strong>CSPRNG</strong>: cryptographically secure PRNG. On Linux: <code>/dev/urandom</code> or the <code>getrandom()</code> syscall. On Windows: <code>BCryptGenRandom</code>. In Python: <code>secrets</code>, <strong>not</strong> <code>random</code> (Mersenne Twister, predictable).</li>
+<li><strong>Hardware RNG</strong>: TPM, RDRAND.</li>
+<li><strong>Historical mistakes:</strong></li>
+<li>Debian OpenSSL bug 2008: the SSH key was determined by 32k seeds → mass key disclosure.</li>
+<li>Sony PS3 ECDSA with a constant nonce.</li>
+<li>Java SecureRandom poorly seeded in Android Bitcoin wallets (2013).</li>
+</ul>
+<h2 id="aead-what-to-use-today">AEAD — what to use today</h2>
+<p>To encrypt an arbitrary blob:</p>
+<pre><code class="language-python">from cryptography.hazmat.primitives.ciphers.aead import AESGCM, ChaCha20Poly1305
+import os
+
+key = AESGCM.generate_key(bit_length=256)
+nonce = os.urandom(12)
+aesgcm = AESGCM(key)
+ct = aesgcm.encrypt(nonce, b&quot;messaggio segreto&quot;, associated_data=b&quot;context&quot;)
+pt = aesgcm.decrypt(nonce, ct, b&quot;context&quot;)
+</code></pre>
+<p><strong>GCM nonce rule:</strong> 96 bits, <strong>never</strong> reused with the same key. Counter or secure random. Reuse → recovery of the authentication key and plaintext (see the forbidden-attack).</p>
+<p>For "envelope" encryption: hybrid encryption (asymmetric for the key, symmetric for the payload). E.g. a library like <strong>libsodium</strong> offers <code>crypto_box_seal</code> (ECC + ChaCha20-Poly1305) — convenient.</p>
+<h2 id="digital-signatures">Digital signatures</h2>
+<p>A signature guarantees: integrity, authenticity (who signs), non-repudiation.</p>
+<pre><code class="language-python">from cryptography.hazmat.primitives.asymmetric import ed25519
+priv = ed25519.Ed25519PrivateKey.generate()
+pub = priv.public_key()
+sig = priv.sign(b&quot;messaggio&quot;)
+pub.verify(sig, b&quot;messaggio&quot;)  # raise se non valido
+</code></pre>
+<p>In TLS, in firmware signing, in code signing (Authenticode, GPG, Sigstore), in signed JWTs, in GPG/SSH-signed Git commits.</p>
+<h2 id="pki-and-certificates-summary">PKI and certificates (summary)</h2>
+<p>See section 4. Key points for crypto:
+- A <strong>CA</strong> is an entity that signs certificates. Trust is transitive: if you trust the CA, you trust every cert it signs.
+- A chain: end-entity ← intermediate ← root.
+- A <strong>trust store</strong> (operating systems, browsers) contains "trusted" root CAs by default.
+- <strong>Revocation:</strong> CRL (list) or OCSP (real-time query). OCSP stapling lets the server serve the signed OCSP response.
+- <strong>Web of trust</strong> (PGP) — a decentralized alternative.</p>
+<h2 id="password-hashing-the-top-real-world-scenario">Password hashing — the top real-world scenario</h2>
+<p>Storing passwords on the server: <strong>never</strong> in cleartext, <strong>never</strong> plain SHA-256, <strong>never</strong> MD5/SHA-1.</p>
+<p>Correct scheme:</p>
+<pre><code class="language-text">hash = argon2id(password, salt, params: m=64MB, t=3, p=4)
+salva: hash, salt, params
+</code></pre>
+<ul>
+<li><strong>Salt</strong> is a unique random value for each user → defeats rainbow tables.</li>
+<li><strong>Pepper</strong> (a secret in an HSM/env, not in the DB) is optional → in case of a DB leak without the pepper, the attacker cannot crack.</li>
+<li><strong>Argon2id</strong>, <strong>bcrypt</strong> or <strong>scrypt</strong>. Configured to require ~250ms on the server hardware.</li>
+</ul>
+<pre><code class="language-python">import argon2
+hasher = argon2.PasswordHasher(memory_cost=65536, time_cost=3, parallelism=4)
+encoded = hasher.hash(&quot;password_dell_utente&quot;)
+hasher.verify(encoded, &quot;password_dell_utente&quot;)  # raise se sbagliata
+</code></pre>
+<p>For authentication: constant-time comparison (to avoid timing attacks). <code>argon2.verify</code> does this.</p>
+<h2 id="attacks-and-categories-to-know">Attacks and categories to know</h2>
+<h3 id="1-brute-force-dictionary">1. Brute force / dictionary</h3>
+<p>Guessing passwords / keys by trial. <strong>Defenses:</strong> length, slow KDF, rate limiting, MFA.</p>
+<p>Cracking tools:
+- <strong>hashcat</strong> (GPU-accelerated): <code>hashcat -m 1800 hashes.txt rockyou.txt</code>. <code>-m</code> is the mode (1800 = sha512crypt, 22000 = WPA2, 13100 = Kerberos AS-REP).
+- <strong>John the Ripper</strong>: similar.</p>
+<h3 id="2-side-channel">2. Side channel</h3>
+<p>Crypto breaks <strong>outside</strong> the math:
+- <strong>Timing attacks</strong>: non constant-time <code>memcmp</code> → leaks the key bit by bit.
+- <strong>Cache attacks</strong> (Flush+Reload, Prime+Probe).
+- <strong>Power analysis</strong> (SPA, DPA) — useful on smartcards/embedded.
+- <strong>Electromagnetic</strong> (TEMPEST).
+- <strong>Spectre/Meltdown</strong>: a side-channel branch on modern CPUs (speculative execution).
+- <strong>Acoustic</strong> (Genkin/Shamir 2014, recovering GPG keys from CPU noise).</p>
+<p><strong>Mitigation:</strong> constant-time comparisons (<code>hmac.compare_digest</code> in Python), constant-time implementations of primitives.</p>
+<h3 id="3-padding-oracle">3. Padding oracle</h3>
+<p>Described above. Breaks CBC without a MAC. Tool: <code>padbuster</code>. Famous: POODLE, .NET Web Forms 2010.</p>
+<h3 id="4-length-extension">4. Length extension</h3>
+<p>Merkle–Damgård hashes (MD5, SHA-1, SHA-256) are subject to it: given <code>hash(secret || msg)</code> and the length of <code>secret</code>, you can compute <code>hash(secret || msg || pad || ext)</code> without knowing <code>secret</code>. <strong>Solution:</strong> use HMAC, not <code>hash(secret || msg)</code>. Or SHA-3 (immune).</p>
+<h3 id="5-bit-flipping-on-cbc-without-a-mac">5. Bit flipping on CBC without a MAC</h3>
+<p>Controlled modification of a bit in the ciphertext of block N → flip of the corresponding bit in the plaintext of block N+1. If nobody checks integrity, the attacker modifies messages.</p>
+<h3 id="6-replay">6. Replay</h3>
+<p>Resending an already encrypted/signed message that the attacker intercepts. <strong>Defense:</strong> nonce, timestamp, sequence number, challenge-response.</p>
+<h3 id="7-downgrade">7. Downgrade</h3>
+<p>Forcing the negotiation of a weaker protocol. <strong>Defenses:</strong> TLS 1.3 (removes weak choices), SCSV, supported_versions extension.</p>
+<h3 id="8-math-attacks-on-rsa">8. Math attacks on RSA</h3>
+<ul>
+<li><strong>Common modulus, low exponent, broadcast</strong> (Hastad).</li>
+<li><strong>Wiener attack</strong> (small private exponent).</li>
+<li><strong>Boneh-Durfee.</strong></li>
+<li><strong>Coppersmith</strong> (partial information).</li>
+</ul>
+<p>They live in crypto CTFs; rarely seen in real pentests but worth knowing.</p>
+<h2 id="post-quantum-cryptography-pqc">Post-quantum cryptography (PQC)</h2>
+<p>Quantum computers would break RSA and ECC with Shor. Hashes and symmetric ciphers are "only" halved by Grover (AES-256 stays secure at the "classic AES-128" level).</p>
+<p>NIST has standardized (2024–2025):
+- <strong>ML-KEM</strong> (CRYSTALS-Kyber) for key encapsulation.
+- <strong>ML-DSA</strong> (CRYSTALS-Dilithium) for signatures.
+- <strong>SLH-DSA</strong> (SPHINCS+) for hash-based signatures.</p>
+<p>Already in TLS 1.3 (X25519MLKEM768 hybrid in Chrome 124+). Expect a "hybrid" transition (classic + PQC) for years.</p>
+<h2 id="exercises">Exercises</h2>
+<h3 id="exercise-51-encrypt-and-decrypt-with-openssl">Exercise 5.1 — Encrypt and decrypt with openssl</h3>
+<pre><code class="language-bash">echo &quot;messaggio segreto&quot; &gt; pt.txt
+openssl rand -hex 32 &gt; key.hex
+openssl enc -aes-256-gcm -in pt.txt -out ct.bin -K &quot;$(cat key.hex)&quot; -iv &quot;$(openssl rand -hex 12)&quot; -nopad
+# (in pratica AES-GCM da CLI è scomodo, vedi alternative)
+
+# alternativa più amichevole:
+openssl enc -aes-256-cbc -pbkdf2 -salt -in pt.txt -out ct.bin -pass pass:foobar
+openssl enc -aes-256-cbc -pbkdf2 -d -in ct.bin -out pt2.txt -pass pass:foobar
+</code></pre>
+<p>Discuss: why is CBC without a MAC a bad idea in production?</p>
+<h3 id="exercise-52-implement-hmac-in-python">Exercise 5.2 — Implement HMAC in Python</h3>
+<p>Without using <code>hmac.new</code>, write a function that computes HMAC-SHA-256 from the spec (<a href="https://www.rfc-editor.org/rfc/rfc2104">RFC 2104</a>).</p>
+<details><summary>Solution</summary>
+
+
+<pre><code class="language-python">import hashlib
+
+def hmac_sha256(key: bytes, msg: bytes) -&gt; bytes:
+    block_size = 64
+    if len(key) &gt; block_size:
+        key = hashlib.sha256(key).digest()
+    if len(key) &lt; block_size:
+        key = key + b'\x00' * (block_size - len(key))
+    o_key_pad = bytes(k ^ 0x5c for k in key)
+    i_key_pad = bytes(k ^ 0x36 for k in key)
+    inner = hashlib.sha256(i_key_pad + msg).digest()
+    return hashlib.sha256(o_key_pad + inner).digest()
+
+import hmac
+assert hmac_sha256(b&quot;key&quot;, b&quot;data&quot;) == hmac.new(b&quot;key&quot;, b&quot;data&quot;, &quot;sha256&quot;).digest()
+</code></pre>
+
+
+</details>
+
+<h3 id="exercise-53-crack-passwords-with-hashcat">Exercise 5.3 — Crack passwords with hashcat</h3>
+<ol>
+<li>Generate 5 hashes with bcrypt and 5 with SHA-256 of passwords taken from <code>rockyou.txt</code>.</li>
+<li>Run hashcat. What do you notice about the speed?</li>
+</ol>
+<pre><code class="language-bash"># bcrypt: hashcat -m 3200 hashes_bcrypt.txt rockyou.txt
+# sha256: hashcat -m 1400 hashes_sha256.txt rockyou.txt
+</code></pre>
+<details><summary>Explanation</summary>
+
+SHA-256 does billions of attempts per second on a GPU. bcrypt does a few thousand. That's why bcrypt/argon2/scrypt are mandatory for passwords.
+
+</details>
+
+<h3 id="exercise-54-cryptopals-set-1-and-2">Exercise 5.4 — Cryptopals Set 1 and 2</h3>
+<p><a href="https://cryptopals.com">Cryptopals Crypto Challenges</a> — Matasano. <strong>The best way to learn practical crypto.</strong> Complete Set 1 (basics: XOR, base64, single-byte XOR break, repeating-key XOR break, AES-ECB detection) and Set 2 (CBC bit-flipping, padding oracle).</p>
+<h3 id="exercise-55-padding-oracle-guided-challenge">Exercise 5.5 — Padding oracle (guided challenge)</h3>
+<p>PortSwigger Web Security Academy has free labs on <a href="https://portswigger.net/web-security/authentication">authentication</a> and <a href="https://portswigger.net/web-security/server-side-template-injection">server-side template injection</a>. For padding oracle specifically, also see <a href="https://cryptohack.org">CryptoHack</a> (excellent platform).</p>
+<h3 id="exercise-56-jwt">Exercise 5.6 — JWT</h3>
+<p>A JWT is made of <code>header.payload.signature</code> (base64url). Write a Python decoder that parses a JWT and verifies the HS256 signature.</p>
+<pre><code class="language-python">import base64, json, hmac, hashlib
+
+def b64url_decode(s):
+    s = s + '=' * (-len(s) % 4)
+    return base64.urlsafe_b64decode(s)
+
+def verify_jwt_hs256(token: str, key: bytes) -&gt; bool:
+    h, p, sig = token.split('.')
+    expected = hmac.new(key, f&quot;{h}.{p}&quot;.encode(), hashlib.sha256).digest()
+    return hmac.compare_digest(expected, b64url_decode(sig))
+</code></pre>
+<p>Then study the classic JWT attacks:
+- <strong>alg: none</strong> (server accepts an unsigned token).
+- <strong>HS256 vs RS256 confusion</strong> (server uses the public key as the HMAC key).
+- <strong>kid path traversal</strong>.</p>
+<p>You will see examples in section 11.</p>
+<h3 id="exercise-57-tell-dh-from-ecdh">Exercise 5.7 — Tell DH from ECDH</h3>
+<p>Look up DH and ECDH on Wikipedia. Write a 6-line explanation: what do Alice and Bob exchange? Why does security depend on the discrete logarithm?</p>
+<h3 id="exercise-58-crypto-ctfs">Exercise 5.8 — Crypto CTFs</h3>
+<ul>
+<li><a href="https://cryptohack.org">CryptoHack</a> — <em>the</em> gym for crypto.</li>
+<li><a href="https://picoctf.org">picoCTF</a> Crypto section.</li>
+<li><a href="https://cryptohack.org/courses/elliptic/">Cryptohack: ECC</a> for guided elliptic curves.</li>
+</ul>
+<h3 id="exercise-59-md5-security">Exercise 5.9 — MD5 security</h3>
+<p>Generate two different inputs that produce the same MD5 (a collision). Hint: use sample files or <code>md5collgen</code> (Wang et al.). Discuss: where would it be dangerous to use MD5 for code signing / certificates / commits?</p>
+<h2 id="what-to-use-today-cheat-sheet">"What to use today" cheat sheet</h2>
+<table>
+<thead>
+<tr>
+<th>Purpose</th>
+<th>Modern choice</th>
+<th>Avoid</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Encrypt a file</td>
+<td>AES-256-GCM or XChaCha20-Poly1305</td>
+<td>AES-ECB, AES-CBC without MAC, RC4</td>
+</tr>
+<tr>
+<td>Encrypt in transit</td>
+<td>TLS 1.3 (library)</td>
+<td>rolling your own</td>
+</tr>
+<tr>
+<td>Hash of a document</td>
+<td>SHA-256, SHA-3, BLAKE3</td>
+<td>MD5, SHA-1</td>
+</tr>
+<tr>
+<td>Password storage</td>
+<td>Argon2id, bcrypt, scrypt</td>
+<td>MD5(salt+pwd), SHA-256, PBKDF2 with few iter</td>
+</tr>
+<tr>
+<td>Code signing</td>
+<td>Ed25519 / RSA-PSS 4096</td>
+<td>RSA-PKCS1 v1.5 1024</td>
+</tr>
+<tr>
+<td>Key exchange</td>
+<td>X25519 (TLS) / X25519+MLKEM (PQC hybrid)</td>
+<td>DH 1024, RSA encryption</td>
+</tr>
+<tr>
+<td>Random</td>
+<td><code>os.urandom</code> / <code>secrets</code> / <code>getrandom</code></td>
+<td><code>random</code>, <code>rand()</code>, <code>Math.random()</code> for keys</td>
+</tr>
+<tr>
+<td>JWT</td>
+<td>Ed25519/EdDSA or RS256 (with <code>alg</code> verification)</td>
+<td>HS256 in client-side, "none"</td>
+</tr>
+</tbody>
+</table>
+<h2 id="key-concepts">Key concepts</h2>
+<ol>
+<li>Don't roll your own crypto.</li>
+<li>AEAD (AES-GCM / ChaCha20-Poly1305) for encryption.</li>
+<li>HMAC, not <code>hash(secret||msg)</code>.</li>
+<li>Passwords with Argon2id/bcrypt/scrypt + salt.</li>
+<li>Secure hashes: SHA-256 and beyond; MD5/SHA-1 dead for security.</li>
+<li>Random: CSPRNG, no generic PRNGs.</li>
+<li>PKI and signatures are the way to authenticate in a distributed world.</li>
+<li>Know at least by name: padding oracle, length extension, bit flipping, downgrade, replay, side channel.</li>
+</ol>
+<p>You have the building blocks. Now we move into advanced OS internals and then into the practical weapons.</p>
+      <nav class="pager">
+<a href="04-http-tls.html" class="prev"><span class="label">← Previous</span><span class="title">HTTP, HTTPS and TLS in depth</span></a>
+<a href="05b-crypto-worked-examples.html" class="next"><span class="label">Next →</span><span class="title">Cryptography — step-by-step worked examples</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Cybersec Zero to Hero</strong> — built as a continuous path. Static build from Markdown.</p><p>Educational material. Everything you learn here is to be used only on systems you own, in labs, in authorized bug-bounty programs, or under signed pentest contracts. <strong>Don't break the law.</strong></p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true, background: '#131a1e', primaryColor: '#1d262b',
+      primaryTextColor: '#e8eef0', primaryBorderColor: '#00ff9c',
+      lineColor: '#00e6ff', secondaryColor: '#11171a', tertiaryColor: '#161d21',
+      mainBkg: '#1d262b', nodeBorder: '#00ff9c', clusterBkg: '#0b0f10',
+      clusterBorder: '#243035', titleColor: '#00ff9c',
+      edgeLabelBackground: '#0b0f10', textColor: '#e8eef0',
+      labelTextColor: '#e8eef0', actorBkg: '#1d262b', actorBorder: '#00ff9c',
+      actorTextColor: '#00ff9c', actorLineColor: '#00e6ff',
+      signalColor: '#e8eef0', signalTextColor: '#e8eef0',
+      labelBoxBkgColor: '#1d262b', labelBoxBorderColor: '#00ff9c',
+      noteBkgColor: '#ffe066', noteTextColor: '#0b0f10', noteBorderColor: '#ffe066',
+      activationBkgColor: '#1d262b', activationBorderColor: '#00ff9c',
+      sequenceNumberColor: '#0b0f10'
+    },
+    flowchart: { curve: 'basis', padding: 16 },
+    sequence: { mirrorActors: false, bottomMarginAdj: 10 },
+    fontFamily: 'JetBrains Mono, Cascadia Code, Consolas, monospace'
+  });
+</script>
+</body>
+</html>

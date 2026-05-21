@@ -1,0 +1,432 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>OS internals: Linux e Windows in profondità — Cybersec Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">&gt;_</div>
+      <div>
+        <div class="brand-title">CYBERSEC</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="10" height="20" fill="#009246"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ce2b37"/></svg> IT</span><a href="../en/pages/06-os-internals.html" class="lang-link" title="Switch to English"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="30" height="20" fill="#012169"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#fff" stroke-width="3"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#c8102e" stroke-width="1.5"/><path d="M15,0 v20 M0,10 h30" stroke="#fff" stroke-width="5"/><path d="M15,0 v20 M0,10 h30" stroke="#c8102e" stroke-width="3"/></svg> EN</a></div>
+  </div>
+  <div class="search-wrap">
+    <div class="search-row">
+      <div class="search-inputwrap">
+        <span class="search-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"/>
+            <line x1="20" y1="20" x2="16.65" y2="16.65"/>
+          </svg>
+        </span>
+        <input class="search-input" id="search-input" type="text" placeholder="cerca... (premi /)" autocomplete="off" aria-label="Search">
+        <button class="search-clear" id="search-clear" type="button" aria-label="Clear" title="Clear">&times;</button>
+      </div>
+      <button class="search-btn" id="search-btn" type="button" aria-label="CERCA" title="CERCA">CERCA</button>
+    </div>
+    <div class="search-hits" id="search-hits" role="listbox"></div>
+  </div>
+  <div class="sidebar-nav">
+    <nav class="nav-section">
+      <div class="nav-section-title">Percorso</div>
+      <ul class="nav-list">
+        <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+        <li class="nav-item"><a href="../pages/00-percorso-e-mindset.html" class=""><span class="num">00</span>Percorso, mindset, etica e legge</a></li><li class="nav-item"><a href="../pages/00b-matematica-cs.html" class=""><span class="num">00b</span>Matematica e teoria computazione (il minimo, integrato)</a></li><li class="nav-item"><a href="../pages/01-fondamenti-informatica.html" class=""><span class="num">01</span>Fondamenti di informatica per la security</a></li><li class="nav-item"><a href="../pages/01b-assembly-zero.html" class=""><span class="num">01b</span>Assembly x86-64 e ARM64 da zero</a></li><li class="nav-item"><a href="../pages/02-linux-essenziale.html" class=""><span class="num">02</span>Linux essenziale per la security</a></li><li class="nav-item"><a href="../pages/02b-regex-automi.html" class=""><span class="num">02b</span>Regex, automi e parser per la security</a></li><li class="nav-item"><a href="../pages/03-networking-tcp-ip.html" class=""><span class="num">03</span>Networking: dai cavi a TCP/IP</a></li><li class="nav-item"><a href="../pages/04-http-tls.html" class=""><span class="num">04</span>HTTP, HTTPS e TLS in profondità</a></li><li class="nav-item"><a href="../pages/05-crittografia.html" class=""><span class="num">05</span>Crittografia: teoria e pratica</a></li><li class="nav-item"><a href="../pages/05b-crypto-worked-examples.html" class=""><span class="num">05b</span>Crittografia — esempi numerici passo-passo</a></li><li class="nav-item"><a href="../pages/06-os-internals.html" class="active"><span class="num">06</span>OS internals: Linux e Windows in profondità</a></li><li class="nav-item"><a href="../pages/07-programmazione-security.html" class=""><span class="num">07</span>Programmazione per la security: Python, C, Go</a></li><li class="nav-item"><a href="../pages/08-osint-recon.html" class=""><span class="num">08</span>OSINT e ricognizione</a></li><li class="nav-item"><a href="../pages/09-scanning-enumeration.html" class=""><span class="num">09</span>Scanning, enumeration e fingerprinting</a></li><li class="nav-item"><a href="../pages/10-owasp-top10.html" class=""><span class="num">10</span>OWASP Top 10 e oltre — vulnerabilità web di base</a></li><li class="nav-item"><a href="../pages/10b-walkthrough-byte-per-byte.html" class=""><span class="num">10b</span>Walkthrough byte-per-byte: SQLi, XSS, SSRF, IDOR</a></li><li class="nav-item"><a href="../pages/11-web-avanzato.html" class=""><span class="num">11</span>Web hacking avanzato</a></li><li class="nav-item"><a href="../pages/12-network-attacks.html" class=""><span class="num">12</span>Network attacks: MITM, spoofing, pivoting</a></li><li class="nav-item"><a href="../pages/13-active-directory.html" class=""><span class="num">13</span>Active Directory hacking</a></li><li class="nav-item"><a href="../pages/14-exploit-development.html" class=""><span class="num">14</span>Exploit development: dal buffer overflow a ROP</a></li><li class="nav-item"><a href="../pages/14b-bof-shell-completo.html" class=""><span class="num">14b</span>BoF → shell: exploit completo da zero</a></li><li class="nav-item"><a href="../pages/15-reverse-engineering.html" class=""><span class="num">15</span>Reverse engineering</a></li><li class="nav-item"><a href="../pages/16-malware-analysis.html" class=""><span class="num">16</span>Malware: tassonomia e analisi</a></li><li class="nav-item"><a href="../pages/17-mobile-security.html" class=""><span class="num">17</span>Mobile security: Android e iOS</a></li><li class="nav-item"><a href="../pages/18-cloud-security.html" class=""><span class="num">18</span>Cloud security: AWS, Azure, GCP</a></li><li class="nav-item"><a href="../pages/19-container-kubernetes.html" class=""><span class="num">19</span>Container e Kubernetes</a></li><li class="nav-item"><a href="../pages/20-wireless-radio.html" class=""><span class="num">20</span>Wireless e radio: WiFi, BT, SDR</a></li><li class="nav-item"><a href="../pages/21-hardware-firmware.html" class=""><span class="num">21</span>Hardware e firmware hacking</a></li><li class="nav-item"><a href="../pages/22-forensics-dfir.html" class=""><span class="num">22</span>Forensics e DFIR</a></li><li class="nav-item"><a href="../pages/23-blue-team-soc.html" class=""><span class="num">23</span>Blue team: SOC, SIEM, EDR, hunting</a></li><li class="nav-item"><a href="../pages/24-threat-intelligence.html" class=""><span class="num">24</span>Threat intelligence</a></li><li class="nav-item"><a href="../pages/25-grc-normative.html" class=""><span class="num">25</span>GRC, normative e standard</a></li><li class="nav-item"><a href="../pages/26-red-team.html" class=""><span class="num">26</span>Red team e adversary emulation</a></li><li class="nav-item"><a href="../pages/27-ai-ml-security.html" class=""><span class="num">27</span>AI / ML security</a></li><li class="nav-item"><a href="../pages/28-capstone-roadmap.html" class=""><span class="num">28</span>Capstone: CTF roadmap, home lab, certificazioni</a></li><li class="nav-item"><a href="../pages/29-master-cheatsheet.html" class=""><span class="num">29</span>Master cheatsheet</a></li><li class="nav-item"><a href="../pages/30-glossario-esteso.html" class=""><span class="num">30</span>Glossario esteso (250+ termini)</a></li><li class="nav-item"><a href="../pages/31-normative-it-ue.html" class=""><span class="num">31</span>Riferimenti normativi IT/UE in dettaglio</a></li>
+      </ul>
+    </nav>
+  </div>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Fondamenti</span>
+        <span>Sezione 9 di 36</span>
+        <span class="level-tag level-int">Livello: intermedio</span>
+      </div>
+      <h1>OS internals: Linux e Windows in profondità</h1>
+      <p class="summary">Boot, kernel, syscall, namespaces, capabilities, SELinux/AppArmor su Linux. Su Windows: PE, processi, tokens, SID, ACL, UAC, Mandatory Integrity. Ti serve per privesc, EDR evasion e detection.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Fondamenti</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>Sezione 01 (memoria, processi, syscall)</li><li>Sezione 02 (Linux pratico)</li></ul>
+  <div class="label">Strumenti</div>
+  <ul class="source-list"><li>strace, ltrace, perf, bpftrace</li><li>Process Hacker / Process Explorer (Win)</li><li>Sysinternals (procmon, autoruns)</li><li>Visual Studio / WinDbg</li></ul>
+</div>
+      <h2 id="perche-ti-interessano-gli-internals">Perché ti interessano gli internals</h2>
+<p>Non c'è privesc, persistence, evasion EDR, malware analysis senza capire come l'OS funziona dentro. Questa sezione mette le basi avanzate. Ne userai pezzi in <strong>tutte</strong> le sezioni successive (14 exploit dev, 15 reverse, 16 malware, 22 forensics).</p>
+<h2 id="boot-e-startup-linux">Boot e startup (Linux)</h2>
+<pre><code class="language-text">Power → UEFI/BIOS firmware → bootloader (GRUB/systemd-boot) → kernel (vmlinuz) 
+   → initramfs (driver di base) → root filesystem → /sbin/init (PID 1, oggi systemd)
+   → target multi-user → servizi
+</code></pre>
+<p>Punti dove si annida malware:
+- <strong>UEFI implant</strong> (LoJax, MosaicRegressor) — sopravvive alle reinstallazioni.
+- <strong>Bootloader bootkit</strong> (BlackLotus su UEFI Secure Boot 2023 — bypass Baton Drop).
+- <strong>initramfs modificato</strong>.
+- <strong>systemd unit/timer/service</strong> (sezione 02).
+- <strong>kernel module rootkit</strong> (vedremo dopo).</p>
+<h3 id="misure-difensive-moderne">Misure difensive moderne</h3>
+<ul>
+<li><strong>Secure Boot</strong>: solo bootloader firmati con chiavi nel firmware.</li>
+<li><strong>Measured Boot + TPM</strong>: ogni step misurato (hash), salvato in PCR del TPM. Si possono validare a remoto via attestazione.</li>
+<li><strong>Verified boot</strong> (Android, ChromeOS): catena di trust kernel/system.</li>
+<li><strong>Linux IMA / EVM</strong>: integrità dei file in esecuzione.</li>
+</ul>
+<h2 id="kernel-linux-aree-chiave">Kernel Linux: aree chiave</h2>
+<h3 id="loadable-kernel-modules-lkm">Loadable Kernel Modules (LKM)</h3>
+<p>Il kernel è monolitico ma estendibile con <code>.ko</code>. Caricati con <code>insmod</code>/<code>modprobe</code>.</p>
+<pre><code class="language-bash">lsmod                          # moduli caricati
+modinfo nf_conntrack
+sudo dmesg | tail              # log kernel
+</code></pre>
+<p><strong>Rootkit kernel-mode:</strong> modulo che intercetta syscall, nasconde processi/file, apre backdoor. Famosi: Diamorphine, Reptile, knark. Sintomi di compromissione: differenza tra <code>/proc/*/</code> direct ls vs <code>ps</code>, hidden PIDs, ramo <code>modules</code> modificato.</p>
+<h3 id="ebpf-il-kernel-modulare-senza-modulo">eBPF — il "kernel modulare" senza modulo</h3>
+<p><strong>eBPF</strong> (extended Berkeley Packet Filter) è una "macchina virtuale" che vive <strong>dentro il kernel</strong> e esegue programmi inviati dall'userspace. Il programma è scritto in C ristretto (no loop unbounded, no pointer arithmetic free), compilato in bytecode, <strong>verificato</strong> dal kernel prima dell'esecuzione (no crash, no out-of-bounds, terminazione garantita).</p>
+<p>A cosa serve:
+1. <strong>Observability</strong> — <code>bcc</code>, <code>bpftrace</code>, <code>Pixie</code>: profiler/tracer senza overhead percettibile. Vede ogni syscall, ogni open(), ogni connect().
+2. <strong>Networking</strong> — <strong>XDP</strong> intercetta pacchetti a livello driver di rete (più veloce di iptables). <strong>Cilium</strong> sostituisce kube-proxy.
+3. <strong>Security</strong> — <strong>Falco</strong>, <strong>Tetragon</strong>, <strong>Tracee</strong>: detection runtime in-kernel.</p>
+<h4 id="esempio-trace-di-tutti-gli-openat-con-bpftrace">Esempio: trace di tutti gli <code>openat()</code> con bpftrace</h4>
+<pre><code class="language-bash">sudo bpftrace -e '
+  tracepoint:syscalls:sys_enter_openat {
+    printf(&quot;%s %s\n&quot;, comm, str(args-&gt;filename));
+  }
+'
+</code></pre>
+<p>Output istantaneo per ogni file aperto da qualsiasi processo nel sistema. Zero <code>strace</code>, zero recompile, zero modulo kernel.</p>
+<h4 id="come-sandbox-meglio-dei-kernel-module">Come "sandbox" → meglio dei kernel module</h4>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Kernel module classico (<code>.ko</code>)</th>
+<th>eBPF</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Caricamento</td>
+<td><code>insmod</code> (richiede root + signing)</td>
+<td><code>bpf()</code> syscall (richiede CAP_BPF)</td>
+</tr>
+<tr>
+<td>Sicurezza</td>
+<td>accede a tutto il kernel</td>
+<td>verifier blocca codice unsafe</td>
+</tr>
+<tr>
+<td>Crash kernel possibile?</td>
+<td><strong>sì</strong></td>
+<td><strong>no</strong> (per design)</td>
+</tr>
+<tr>
+<td>Hot reload</td>
+<td>difficile</td>
+<td>banale</td>
+</tr>
+<tr>
+<td>Aggiornamento kernel</td>
+<td>spesso rompe</td>
+<td>ABI stabile</td>
+</tr>
+</tbody>
+</table>
+<h4 id="lato-attaccante-bad-bpf">Lato attaccante / "Bad BPF"</h4>
+<p>Lo strumento è neutrale → si può abusare:
+- <strong>Hide processes / files</strong> intercettando syscall del listing.
+- <strong>Network backdoor</strong>: filtra/triggera su pacchetti specifici.
+- <strong>Tracing reverse</strong>: eBPF può leggere memoria di altri processi (con CAP_BPF/CAP_SYS_ADMIN).
+- <strong>Persistence</strong>: programmi eBPF "auto-attach" tramite cgroup/socket programs.</p>
+<p>Esempio rumoroso: <a href="https://github.com/krisnova/boopkit">boopkit</a>, <a href="https://github.com/h3xduck/TripleCross">TripleCross</a>, <a href="https://github.com/pathtofile/bad-bpf">bad-bpf</a>.</p>
+<p><strong>Detection lato blue team:</strong>
+- <code>bpftool prog show</code> → lista programmi caricati.
+- <code>cat /sys/kernel/debug/tracing/events/</code> → tracepoint attivi.
+- EDR moderni (CrowdStrike, SentinelOne) hanno baseline eBPF "legitimo" vs anomalo.
+- Audit <code>bpf()</code> syscall via auditd.</p>
+<h3 id="lsm-linux-security-modules-mac">LSM (Linux Security Modules) — MAC</h3>
+<p>Discretionary access control (DAC) = i permessi rwx classici. <strong>MAC</strong> (Mandatory Access Control) = il kernel impone regole che neanche l'owner può aggirare.</p>
+<ul>
+<li><strong>SELinux</strong>: politiche per dominio (subject, object, class). Modalità <code>enforcing</code>, <code>permissive</code>, <code>disabled</code>. Si vedono nel context (<code>ls -Z</code>, <code>ps -Z</code>).</li>
+<li><strong>AppArmor</strong>: profili per binario, path-based. Più semplice di SELinux.</li>
+<li><strong>smack, Tomoyo</strong>: meno comuni.</li>
+</ul>
+<p>In pentest, un servizio confinato SELinux può limitare gli exploit anche con RCE. Negli stessi processi è comune trovare <code>setenforce 0</code> come prima azione (audit relativo). Audit log di SELinux: <code>/var/log/audit/audit.log</code>.</p>
+<h3 id="namespace-e-cgroup-riepilogo">Namespace e cgroup (riepilogo)</h3>
+<p>Già accennati: la base dei container. <code>unshare</code>, <code>nsenter</code>, <code>setns()</code>. <code>cgroup v2</code> modello unificato. Le breakout dei container sfruttano:
+- mount/proc errati (<code>/proc/self/exe</code>, <code>/sys/fs/cgroup</code>).
+- capabilities lasciate al container (<code>CAP_SYS_ADMIN</code> = quasi root host).
+- shared kernel: una LPE kernel = host root da container.</p>
+<p>Vedremo nella sezione 19.</p>
+<h3 id="capabilities-granularita-del-root">Capabilities (granularità del root)</h3>
+<p>Su Linux, root tradizionale = onnipotenza. Capabilities suddividono. Esempi:
+- <code>CAP_NET_BIND_SERVICE</code>: bind di porte &lt; 1024 da non-root.
+- <code>CAP_SYS_PTRACE</code>: ptrace di altri processi.
+- <code>CAP_SYS_ADMIN</code>: enorme, "quasi root".
+- <code>CAP_NET_RAW</code>: socket raw (ping, sniffing).
+- <code>CAP_DAC_OVERRIDE</code>: bypass dei permessi DAC.
+- <code>CAP_CHOWN</code>: chown senza essere owner.</p>
+<p>Visibili con <code>getcap</code>, settati con <code>setcap</code>. <code>capsh --print</code> mostra le effettive del processo corrente.</p>
+<h3 id="seccomp">seccomp</h3>
+<p>Restringe le syscall che un processo può fare. Modalità:
+- <code>SECCOMP_MODE_STRICT</code>: solo <code>read</code>, <code>write</code>, <code>exit</code>, <code>sigreturn</code>.
+- <code>SECCOMP_MODE_FILTER</code>: BPF programmi decidono.</p>
+<p>Usato in: Chrome sandbox, Docker, systemd (<code>SystemCallFilter=</code>), runtime moderni.</p>
+<h3 id="linux-audit-auditd">Linux Audit (auditd)</h3>
+<pre><code class="language-bash">auditctl -l
+auditctl -w /etc/passwd -p wa -k passwd_changes
+ausearch -k passwd_changes
+</code></pre>
+<p>Logga eventi syscall a un demone userland. Pesante ma cruciale per detection. Falco e Sysmon-for-Linux sono alternative moderne.</p>
+<h3 id="strumenti-di-analisi">Strumenti di analisi</h3>
+<ul>
+<li><code>strace -fp PID</code> — trace syscall.</li>
+<li><code>ltrace</code> — trace libcall.</li>
+<li><code>perf</code> — profiling kernel + user.</li>
+<li><code>bpftrace 'tracepoint:syscalls:sys_enter_openat { printf("%s %s\n", comm, str(args-&gt;filename)); }'</code> — eBPF one-liner.</li>
+<li><code>dmesg</code>, <code>journalctl -k</code>, <code>journalctl -u service</code>.</li>
+</ul>
+<h2 id="linux-privilege-escalation-come-si-fa">Linux privilege escalation — come si fa</h2>
+<p>Da utente non privilegiato → root. Vie comuni:</p>
+<ol>
+<li><strong>Kernel exploit</strong> — CVE non patchata, modulo bug. Es: DirtyPipe (CVE-2022-0847), DirtyCow (CVE-2016-5195), pwnkit polkit (CVE-2021-4034). Affidabile ma lascia tracce di crash.</li>
+<li><strong>Binari SUID buggy</strong> — GTFOBins. Es: <code>find / -perm -4000</code> → vediamo se <code>vim</code>, <code>nmap</code>, <code>awk</code> con setuid → escape a shell.</li>
+<li><strong>Capability mal data</strong> — <code>getcap -r / 2&gt;/dev/null</code> → es. <code>python3</code> con <code>cap_setuid+ep</code> → privesc.</li>
+<li><strong>Sudo misconfig</strong> — <code>sudo -l</code> mostra cosa puoi fare. Se posso eseguire <code>/usr/bin/less</code> come root → escape a shell con <code>!sh</code>. Se <code>NOPASSWD</code> su comando con wildcard → tipico bypass.</li>
+<li><strong>PATH hijacking</strong> — script root chiama <code>tar</code> senza path assoluto, e l'utente controlla un dir nel PATH che precede <code>/usr/bin</code>. Crea <code>tar</code> malevolo.</li>
+<li><strong>LD_PRELOAD/LD_LIBRARY_PATH</strong> — quando consentito da config (sudoers <code>env_keep</code>), iniezione libreria.</li>
+<li><strong>Cron job vulnerabili</strong> — script root in directory world-writable.</li>
+<li><strong>Servizi locali esposti</strong> (Redis senza auth bindato su 0.0.0.0, Docker socket /var/run/docker.sock leggibile dal tuo gruppo → escape host).</li>
+<li><strong>NFS no_root_squash</strong> + share mount.</li>
+<li><strong>Credenziali in plaintext</strong> in <code>.bash_history</code>, <code>~/.aws/credentials</code>, <code>.git/config</code>, log.</li>
+</ol>
+<p>Tool: <strong>LinPEAS</strong>, <strong>linenum</strong>, <strong>linux-smart-enumeration</strong>, <strong>LinEnum</strong>. Lanci uno, leggi output, segui le piste.</p>
+<h3 id="esercizio-61-privesc-lab">Esercizio 6.1 — Privesc Lab</h3>
+<p>Vai su TryHackMe → "<strong>Linux PrivEsc</strong>" e "<strong>Linux PrivEsc Arena</strong>". Sono guidati, tutti i vettori sopra ci sono.</p>
+<h2 id="windows-internals-overview">Windows internals — overview</h2>
+<p>Modello kernel diverso ma proprietà simili. Punti chiave:</p>
+<h3 id="architettura">Architettura</h3>
+<div class="mermaid">
+flowchart TB
+    subgraph UM [User mode]
+        APP[Applicazione utente]
+        K32[kernel32.dll / api Win32]
+        NTDLL[ntdll.dll<br/>Nt* / Zw* stubs]
+        APP --> K32
+        K32 --> NTDLL
+    end
+    NTDLL -->|syscall| KE[ntoskrnl.exe]
+    subgraph KM [Kernel mode]
+        KE
+        OM[Object Manager]
+        IO[I/O Manager]
+        WIN32K[Win32k.sys<br/>GUI]
+        DRV[Driver Stack]
+        KE --> OM
+        KE --> IO
+        KE --> WIN32K
+        IO --> DRV
+    end
+    DRV --> HW[Hardware]
+
+</div>
+
+<p>Le applicazioni Windows chiamano API Win32 (<code>CreateFileW</code>) che internamente chiamano <code>Nt*</code>/<code>Zw*</code> di <code>ntdll.dll</code>, che fanno la syscall vera. Ogni versione di Windows ha <strong>numeri syscall diversi</strong>: malware che fa "direct syscall" deve risolverli a runtime.</p>
+<h3 id="processi-thread-fibers">Processi, thread, fibers</h3>
+<ul>
+<li><strong>Process</strong> (PID): EPROCESS struct nel kernel. Contiene PEB (Process Environment Block) in user mode.</li>
+<li><strong>Thread</strong> (TID): ETHREAD/TEB.</li>
+<li><strong>Job</strong>: gruppi di processi con quote/limiti.</li>
+<li><strong>Service</strong>: SCM (Service Control Manager) li gestisce.</li>
+</ul>
+<h3 id="token">Token</h3>
+<p>Ogni processo ha un <strong>access token</strong> che rappresenta il security context:
+- <strong>SID</strong> dell'utente.
+- <strong>SID dei gruppi</strong> + flag (enabled, mandatory, ...).
+- <strong>Privilegi</strong> (es. <code>SeDebugPrivilege</code>, <code>SeImpersonatePrivilege</code>, <code>SeBackupPrivilege</code>).
+- <strong>Owner, primary group, default DACL</strong>.
+- <strong>Integrity level</strong> (Low, Medium, High, System).</p>
+<p>Gli attacchi spesso passano da:
+- <strong>Token impersonation / theft</strong>: rubare token di un processo SYSTEM. Tool: <code>incognito</code>, <code>Token Manipulation</code> in Cobalt Strike, Rubeus per Kerberos.
+- <strong>JuicyPotato / RoguePotato / PrintSpoofer</strong>: se hai <code>SeImpersonatePrivilege</code> (default per service account), bypass UAC/privesc da service → SYSTEM.</p>
+<h3 id="integrity-level">Integrity level</h3>
+<p>Vincenza di MAC su Windows. Un processo Low non può scrivere su oggetti High/System. Per default IE/Edge tab girano Low (isolamento sandbox).</p>
+<h3 id="acl-e-dacl">ACL e DACL</h3>
+<p>Ogni oggetto securizzabile (file, registry key, processo, mutex) ha un security descriptor → <strong>DACL</strong> (Discretionary ACL) + <strong>SACL</strong> (audit) + Owner + Group.</p>
+<p>ACE (entries): <code>Allow/Deny</code> + SID + Access Mask (es. <code>GENERIC_READ | DELETE</code>).</p>
+<h3 id="registry">Registry</h3>
+<p>DB gerarchico. Hives:
+- <code>HKLM</code> (HKEY_LOCAL_MACHINE) — config sistema.
+- <code>HKCU</code> (CURRENT_USER) — config utente corrente.
+- <code>HKU</code> — tutti gli utenti.
+- <code>HKCR</code> — Classes (file associations).
+- <code>HKCC</code> — config corrente.</p>
+<p>Chiavi calde per security:
+- <code>HKLM\Software\Microsoft\Windows\CurrentVersion\Run</code> — autorun all'avvio.
+- <code>HKCU\...\Run</code> — per utente.
+- <code>HKLM\System\CurrentControlSet\Services</code> — servizi.
+- <code>HKLM\System\CurrentControlSet\Control\Lsa</code> — config LSA (NTLM, Kerberos).
+- <code>HKLM\Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options</code> — IFEO (debugger, anche per persistence/evasion).</p>
+<h3 id="uac-user-account-control">UAC (User Account Control)</h3>
+<p>Quando un utente Admin esegue qualcosa, gli viene dato un token "filtrato" (Medium IL) per default. Per eseguire ad alta integrità, prompt UAC. <strong>Bypass UAC</strong> sono molti (CMSTPLUA, ICMLuaUtil, fodhelper, eventvwr, sdclt — vedi UACMe). Microsoft non li considera bug security perché UAC è "convenience", non "security boundary".</p>
+<h3 id="mandatory-integrity-riepilogo-e-appcontainer">Mandatory Integrity (riepilogo) e AppContainer</h3>
+<p>AppContainer (UWP/EDGE old) — sandbox più stretto di Low IL. Win32 app moderne possono usare AppContainer manualmente. Windows Sandbox &amp; WDAG sono basati su Hyper-V container.</p>
+<h3 id="windows-defender-asr-wdac-amsi">Windows Defender + ASR + WDAC + AMSI</h3>
+<ul>
+<li><strong>Defender</strong> AV/EDR built-in.</li>
+<li><strong>ASR</strong> (Attack Surface Reduction) regole bloccano comportamenti rischiosi (Office spawning macro, scripts da email, …).</li>
+<li><strong>WDAC / AppLocker</strong>: code integrity policy. Specifica binari/script firmati ammessi.</li>
+<li><strong>AMSI</strong> (Antimalware Scan Interface): script engines (PowerShell, JScript, VBScript, MSHTA, MS Office macro) passano contenuto a AMSI prima di eseguirlo, che lo offre a Defender. <strong>AMSI bypass</strong> è un'arte:</li>
+<li>patch in-memory di <code>AmsiScanBuffer</code>.</li>
+<li>reflection PowerShell sul campo <code>amsiInitFailed</code>.</li>
+<li>hooking di <code>AMSI.dll</code>.</li>
+</ul>
+<h3 id="sysmon-sysinternals">Sysmon (Sysinternals)</h3>
+<p>Driver di logging dettagliato (creazione processi con cmdline+hash, file mod, network, image load, DNS, named pipe, registry, WMI...). Output in Event Log. <strong>Pane quotidiano dei SOC</strong>. La community ha config noti (SwiftOnSecurity, Olaf Hartong) — adattare alle proprie esigenze.</p>
+<h3 id="etw-event-tracing-for-windows">ETW (Event Tracing for Windows)</h3>
+<p>Tracing kernel + user. EDR moderni si attaccano qui (ETW provider). <strong>ETW bypass / patching</strong> è tecnica avanzata.</p>
+<h2 id="windows-privilege-escalation">Windows privilege escalation</h2>
+<p>Come Linux ma con specificità:</p>
+<ol>
+<li><strong>Token privileges</strong> — se hai <code>SeImpersonatePrivilege</code> / <code>SeAssignPrimaryTokenPrivilege</code> → Potato attack → SYSTEM.</li>
+<li><strong>Unquoted Service Path</strong> — servizio path <code>C:\Program Files\My App\bin\app.exe</code> non quoted: se l'attaccante può scrivere <code>C:\Program.exe</code> o <code>C:\Program Files\My.exe</code> → eseguito da SYSTEM all'avvio.</li>
+<li><strong>Weak Service Permissions</strong> — un servizio High-integrity ma chiunque può <code>sc config</code> o sostituire il binary.</li>
+<li><strong>AlwaysInstallElevated</strong> — chiavi registry che permettono MSI install elevati per ogni utente → privesc.</li>
+<li><strong>DLL Hijacking / Sideloading</strong> — applicazione cerca DLL in ordine specifico; se attaccante scrive in dir scrivibile letta prima → load DLL malevole.</li>
+<li><strong>Credenziali</strong> — <code>c:\unattend.xml</code>, GPP cpassword, <code>c:\Windows\Panther\</code>, Credentials Manager, browser, RDP saved.</li>
+<li><strong>Print Nightmare</strong> (CVE-2021-34527), <strong>EFSPotato</strong>, <strong>CertifiedPotato</strong> — exploit pubblici noti.</li>
+<li><strong>AD-related</strong> (sezione 13): tokens cached, Kerberos.</li>
+</ol>
+<p>Tool: <strong>WinPEAS</strong>, <strong>SharpUp</strong>, <strong>PowerUp</strong>, <strong>PrivescCheck</strong>, <strong>Watson</strong> (manca patch?).</p>
+<h2 id="sysinternals-strumenti-che-devi-conoscere">Sysinternals — strumenti che devi conoscere</h2>
+<ul>
+<li><strong>Process Explorer</strong> — task manager pro.</li>
+<li><strong>Process Monitor (procmon)</strong> — log per evento: file/registry/network/process. Filtra. Quando un'app fallisce o un malware fa qualcosa, lo vedi.</li>
+<li><strong>Autoruns</strong> — mostra TUTTI gli autostart (Run keys, services, scheduled tasks, drivers, shell extensions...). Il primo tool aprito su un sistema sospetto.</li>
+<li><strong>TCPView</strong> — connessioni TCP/UDP con processo.</li>
+<li><strong>Handle</strong> — handle aperti.</li>
+<li><strong>PsExec / PsList / PsKill</strong> — remoto admin.</li>
+<li><strong>Sigcheck</strong> — verifica firme digitali.</li>
+<li><strong>Strings</strong> — estrae stringhe da binari.</li>
+<li><strong>WinObj</strong> — esplora Object Manager namespace.</li>
+</ul>
+<p>Tutti su <a href="https://learn.microsoft.com/sysinternals/">docs.microsoft.com/sysinternals</a> o <code>live.sysinternals.com</code>.</p>
+<h2 id="pe-format-cenni">PE format (cenni)</h2>
+<p>Un eseguibile Windows è un PE/COFF: header DOS legacy, PE signature <code>PE\0\0</code>, COFF header, Optional Header (entry point, ImageBase), sections (.text, .data, .rdata, .reloc, .rsrc), import table (IAT — librerie e funzioni importate), export table.</p>
+<p>Le tecniche di reverse e malware analysis (sezione 15) si appoggiano qui. <strong>Strumenti:</strong> <code>dumpbin</code>, <code>pestudio</code>, <code>CFF Explorer</code>, <code>Detect It Easy</code>.</p>
+<h2 id="esercizi">Esercizi</h2>
+<h3 id="esercizio-62-esplora-un-servizio-windows">Esercizio 6.2 — Esplora un servizio Windows</h3>
+<ol>
+<li>Lancia <code>Process Explorer</code> come admin.</li>
+<li>Trova il processo <code>lsass.exe</code>. Quale utente? Integrity? Quali handle ha (named pipes, registry)?</li>
+<li><code>Threads</code> tab — quanti thread? Stack di uno → vedi le funzioni in <code>ntdll</code>/<code>lsasrv</code>.</li>
+<li>Perché LSASS è il target preferito di credenziali (Mimikatz, secretsdump)?</li>
+</ol>
+<details><summary>Suggerimento</summary>
+
+LSASS mantiene in memoria: hash NTLM degli utenti loggati, ticket Kerberos, credenziali DPAPI master key. `Mimikatz sekurlsa::logonpasswords`, `lsadump::dcsync`. Per questo Microsoft introduce **Credential Guard** (Hyper-V isola LSASS in VM Secure Kernel), e Defender protegge LSASS process dumping con ASR rules.
+
+</details>
+
+<h3 id="esercizio-63-procmon-su-processo-sospetto">Esercizio 6.3 — Procmon su processo sospetto</h3>
+<p>Lancia un binario qualsiasi e cattura con Procmon: quante operazioni di file/registry fa in 5 secondi? Filtra per process name. Quanti DLL load?</p>
+<h3 id="esercizio-64-linux-capabilities-privesc">Esercizio 6.4 — Linux capabilities privesc</h3>
+<p>Su una VM dove l'utente ha cap <code>cap_setuid+ep</code> su <code>/usr/bin/python3</code>:</p>
+<pre><code class="language-bash">python3 -c 'import os; os.setuid(0); os.system(&quot;/bin/bash&quot;)'
+</code></pre>
+<p>Spiega. Cosa mitiga? Cosa si dovrebbe mai non fare?</p>
+<details><summary>Soluzione</summary>
+
+`setcap cap_setuid+ep /usr/bin/python3` permette a chiunque esegua `python3` di chiamare `setuid` con UID a piacere. Il binario non controlla chi lo chiami. Privesc immediato a root. **Non si dà mai cap_setuid a un interprete generico.** Le capabilities vanno su binari single-purpose (es. `ping` con `cap_net_raw`).
+
+</details>
+
+<h3 id="esercizio-65-sudo-misconfig">Esercizio 6.5 — Sudo misconfig</h3>
+<p>File <code>/etc/sudoers.d/deploy</code>:</p>
+<pre><code class="language-text">deploy ALL=(root) NOPASSWD: /usr/bin/find /etc/myapp -name *.log -delete
+</code></pre>
+<p>Trova il bypass.</p>
+<details><summary>Soluzione</summary>
+
+- `find` ha `-exec`. L'utente può inserire qualunque `*.log` (wildcard espansa da shell): `sudo find /etc/myapp -name 'anything.log' -delete -exec /bin/bash \;`
+- Oppure: wildcard non quoted nei sudoers permette di iniettare opzioni. Su `sudo find /etc/myapp -name *.log -delete`, l'utente può creare nomi file che diventano flag (es. file chiamato `--exec=...`).
+- GTFOBins su `find`.
+
+Lezione: mai sudo con wildcard. Mai sudo a `find`, `vi`, `less`, `awk` senza ristrizioni. Usa un wrapper esplicito.
+
+</details>
+
+<h3 id="esercizio-66-sysmon-config">Esercizio 6.6 — Sysmon config</h3>
+<p>Scarica <a href="https://github.com/olafhartong/sysmon-modular">sysmon-modular</a> (Olaf Hartong). Installa Sysmon con <code>sysmonconfig.xml</code>. Lancia <code>cmd /c whoami</code>. Apri Event Viewer → Applications and Services → Microsoft → Windows → Sysmon → Operational. Vedi l'evento 1 (Process Create)? Quale parent? Quale image hash?</p>
+<h3 id="esercizio-67-strace-di-unapp">Esercizio 6.7 — Strace di un'app</h3>
+<p><code>strace -f -e trace=openat,read,write,connect,socket curl https://example.com</code>. Spiega le syscall che vedi. Quale syscall apre la connessione TCP?</p>
+<h3 id="esercizio-68-ebpf-observability-one-liner">Esercizio 6.8 — eBPF observability one-liner</h3>
+<pre><code class="language-bash"># Lista syscall fatte da un PID per 10 secondi
+sudo bpftrace -e 'tracepoint:raw_syscalls:sys_enter /pid == 1234/ { @[probe] = count(); } interval:s:10 { exit(); }'
+
+# File aperti in modo write da chiunque
+sudo bpftrace -e 'tracepoint:syscalls:sys_enter_openat /args-&gt;flags &amp; 1/ { printf(&quot;%s %s\n&quot;, comm, str(args-&gt;filename)); }'
+</code></pre>
+<p>Provalo. Spiega cosa fa ciascuno.</p>
+<h2 id="concetti-chiave">Concetti chiave</h2>
+<ol>
+<li><strong>Linux:</strong> kernel monolitico, LKM, eBPF, namespaces, cgroups, capabilities, seccomp, LSM.</li>
+<li><strong>Windows:</strong> processes/threads, tokens, SID, ACL, IL, UAC, registry, services, Sysmon, ETW, AMSI.</li>
+<li><strong>Privesc Linux:</strong> SUID, capability, sudo misconfig, kernel exploit.</li>
+<li><strong>Privesc Windows:</strong> token privileges (Potato), unquoted service path, weak ACL, DLL hijack.</li>
+<li><strong>Detection in-host:</strong> SELinux/AppArmor + auditd + Falco su Linux; Sysmon + ETW + EDR su Windows.</li>
+<li><strong>Memorizza:</strong> Process Explorer, Autoruns, Procmon, strace, bpftrace.</li>
+</ol>
+<p>Le prossime sezioni si appoggiano su questo. Inizia a "vedere" un computer come fatto di processi, token, syscall, mappa di memoria, descrittori. Non più "Word", "Chrome".</p>
+      <nav class="pager">
+<a href="05b-crypto-worked-examples.html" class="prev"><span class="label">← Precedente</span><span class="title">Crittografia — esempi numerici passo-passo</span></a>
+<a href="07-programmazione-security.html" class="next"><span class="label">Successivo →</span><span class="title">Programmazione per la security: Python, C, Go</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Cybersec Zero to Hero</strong> — percorso completo di sicurezza informatica, dall'inizio alla maestria.</p><p>Materiale a scopo educativo. Tutto ciò che impari va usato solo su sistemi che possiedi, in laboratori, in programmi di bug bounty autorizzati o sotto contratto di pentest. <strong>Non rompere la legge.</strong></p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true, background: '#131a1e', primaryColor: '#1d262b',
+      primaryTextColor: '#e8eef0', primaryBorderColor: '#00ff9c',
+      lineColor: '#00e6ff', secondaryColor: '#11171a', tertiaryColor: '#161d21',
+      mainBkg: '#1d262b', nodeBorder: '#00ff9c', clusterBkg: '#0b0f10',
+      clusterBorder: '#243035', titleColor: '#00ff9c',
+      edgeLabelBackground: '#0b0f10', textColor: '#e8eef0',
+      labelTextColor: '#e8eef0', actorBkg: '#1d262b', actorBorder: '#00ff9c',
+      actorTextColor: '#00ff9c', actorLineColor: '#00e6ff',
+      signalColor: '#e8eef0', signalTextColor: '#e8eef0',
+      labelBoxBkgColor: '#1d262b', labelBoxBorderColor: '#00ff9c',
+      noteBkgColor: '#ffe066', noteTextColor: '#0b0f10', noteBorderColor: '#ffe066',
+      activationBkgColor: '#1d262b', activationBorderColor: '#00ff9c',
+      sequenceNumberColor: '#0b0f10'
+    },
+    flowchart: { curve: 'basis', padding: 16 },
+    sequence: { mirrorActors: false, bottomMarginAdj: 10 },
+    fontFamily: 'JetBrains Mono, Cascadia Code, Consolas, monospace'
+  });
+</script>
+</body>
+</html>

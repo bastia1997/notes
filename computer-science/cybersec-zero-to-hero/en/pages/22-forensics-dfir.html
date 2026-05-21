@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>Forensics and DFIR — Cybersec Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">&gt;_</div>
+      <div>
+        <div class="brand-title">CYBERSEC</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/22-forensics-dfir.html" class="lang-link" title="Passa all'italiano"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="10" height="20" fill="#009246"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ce2b37"/></svg> IT</a><span class="lang-active" title="English"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="30" height="20" fill="#012169"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#fff" stroke-width="3"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#c8102e" stroke-width="1.5"/><path d="M15,0 v20 M0,10 h30" stroke="#fff" stroke-width="5"/><path d="M15,0 v20 M0,10 h30" stroke="#c8102e" stroke-width="3"/></svg> EN</span></div>
+  </div>
+  <div class="search-wrap">
+    <div class="search-row">
+      <div class="search-inputwrap">
+        <span class="search-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"/>
+            <line x1="20" y1="20" x2="16.65" y2="16.65"/>
+          </svg>
+        </span>
+        <input class="search-input" id="search-input" type="text" placeholder="search... (press /)" autocomplete="off" aria-label="Search">
+        <button class="search-clear" id="search-clear" type="button" aria-label="Clear" title="Clear">&times;</button>
+      </div>
+      <button class="search-btn" id="search-btn" type="button" aria-label="SEARCH" title="SEARCH">SEARCH</button>
+    </div>
+    <div class="search-hits" id="search-hits" role="listbox"></div>
+  </div>
+  <div class="sidebar-nav">
+    <nav class="nav-section">
+      <div class="nav-section-title">Path</div>
+      <ul class="nav-list">
+        <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+        <li class="nav-item"><a href="../pages/00-path-and-mindset.html" class=""><span class="num">00</span>Path, mindset, ethics and law</a></li><li class="nav-item"><a href="../pages/00b-math-and-cs.html" class=""><span class="num">00b</span>Math and computation theory (the bare minimum, integrated)</a></li><li class="nav-item"><a href="../pages/01-cs-fundamentals.html" class=""><span class="num">01</span>Computer science fundamentals for security</a></li><li class="nav-item"><a href="../pages/01b-assembly-from-zero.html" class=""><span class="num">01b</span>x86-64 and ARM64 Assembly from zero</a></li><li class="nav-item"><a href="../pages/02-essential-linux.html" class=""><span class="num">02</span>Essential Linux for security</a></li><li class="nav-item"><a href="../pages/02b-regex-automata.html" class=""><span class="num">02b</span>Regex, automata, and parsers for security</a></li><li class="nav-item"><a href="../pages/03-networking-tcp-ip.html" class=""><span class="num">03</span>Networking: from cables to TCP/IP</a></li><li class="nav-item"><a href="../pages/04-http-tls.html" class=""><span class="num">04</span>HTTP, HTTPS and TLS in depth</a></li><li class="nav-item"><a href="../pages/05-cryptography.html" class=""><span class="num">05</span>Cryptography: theory and practice</a></li><li class="nav-item"><a href="../pages/05b-crypto-worked-examples.html" class=""><span class="num">05b</span>Cryptography — step-by-step worked examples</a></li><li class="nav-item"><a href="../pages/06-os-internals.html" class=""><span class="num">06</span>OS internals: Linux and Windows in depth</a></li><li class="nav-item"><a href="../pages/07-programming-for-security.html" class=""><span class="num">07</span>Programming for security: Python, C, Go</a></li><li class="nav-item"><a href="../pages/08-osint-recon.html" class=""><span class="num">08</span>OSINT and reconnaissance</a></li><li class="nav-item"><a href="../pages/09-scanning-enumeration.html" class=""><span class="num">09</span>Scanning, enumeration and fingerprinting</a></li><li class="nav-item"><a href="../pages/10-owasp-top10.html" class=""><span class="num">10</span>OWASP Top 10 and beyond — basic web vulnerabilities</a></li><li class="nav-item"><a href="../pages/10b-walkthrough-byte-by-byte.html" class=""><span class="num">10b</span>Byte-by-byte walkthrough: SQLi, XSS, SSRF, IDOR</a></li><li class="nav-item"><a href="../pages/11-advanced-web.html" class=""><span class="num">11</span>Advanced web hacking</a></li><li class="nav-item"><a href="../pages/12-network-attacks.html" class=""><span class="num">12</span>Network attacks: MITM, spoofing, pivoting</a></li><li class="nav-item"><a href="../pages/13-active-directory.html" class=""><span class="num">13</span>Active Directory hacking</a></li><li class="nav-item"><a href="../pages/14-exploit-development.html" class=""><span class="num">14</span>Exploit development: from buffer overflow to ROP</a></li><li class="nav-item"><a href="../pages/14b-bof-to-shell-complete.html" class=""><span class="num">14b</span>BoF → shell: a complete exploit from zero</a></li><li class="nav-item"><a href="../pages/15-reverse-engineering.html" class=""><span class="num">15</span>Reverse engineering</a></li><li class="nav-item"><a href="../pages/16-malware-analysis.html" class=""><span class="num">16</span>Malware: taxonomy and analysis</a></li><li class="nav-item"><a href="../pages/17-mobile-security.html" class=""><span class="num">17</span>Mobile security: Android and iOS</a></li><li class="nav-item"><a href="../pages/18-cloud-security.html" class=""><span class="num">18</span>Cloud security: AWS, Azure, GCP</a></li><li class="nav-item"><a href="../pages/19-container-kubernetes.html" class=""><span class="num">19</span>Containers and Kubernetes</a></li><li class="nav-item"><a href="../pages/20-wireless-radio.html" class=""><span class="num">20</span>Wireless and radio: WiFi, BT, SDR</a></li><li class="nav-item"><a href="../pages/21-hardware-firmware.html" class=""><span class="num">21</span>Hardware and firmware hacking</a></li><li class="nav-item"><a href="../pages/22-forensics-dfir.html" class="active"><span class="num">22</span>Forensics and DFIR</a></li><li class="nav-item"><a href="../pages/23-blue-team-soc.html" class=""><span class="num">23</span>Blue team: SOC, SIEM, EDR, hunting</a></li><li class="nav-item"><a href="../pages/24-threat-intelligence.html" class=""><span class="num">24</span>Threat intelligence</a></li><li class="nav-item"><a href="../pages/25-grc-regulations.html" class=""><span class="num">25</span>GRC, regulations, and standards</a></li><li class="nav-item"><a href="../pages/26-red-team.html" class=""><span class="num">26</span>Red team and adversary emulation</a></li><li class="nav-item"><a href="../pages/27-ai-ml-security.html" class=""><span class="num">27</span>AI / ML security</a></li><li class="nav-item"><a href="../pages/28-capstone-roadmap.html" class=""><span class="num">28</span>Capstone: CTF roadmap, home lab, certifications</a></li><li class="nav-item"><a href="../pages/29-master-cheatsheet.html" class=""><span class="num">29</span>Master cheatsheet</a></li><li class="nav-item"><a href="../pages/30-extended-glossary.html" class=""><span class="num">30</span>Extended glossary (250+ terms)</a></li><li class="nav-item"><a href="../pages/31-it-eu-regulations.html" class=""><span class="num">31</span>IT/EU regulatory references in detail</a></li>
+      </ul>
+    </nav>
+  </div>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Blue team</span>
+        <span>Section 27 of 36</span>
+        <span class="level-tag level-adv">Level: advanced</span>
+      </div>
+      <h1>Forensics and DFIR</h1>
+      <p class="summary">Digital Forensics &amp; Incident Response. Chain of custody, disk imaging, memory forensics with Volatility, timeline analysis with plaso, Windows artifacts (registry, MFT, prefetch, jump list), Linux (auth.log, journal). Complete IR process.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Blue team</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>Sections 06, 16</li></ul>
+  <div class="label">Tools</div>
+  <ul class="source-list"><li>Volatility 3, Rekall (memory)</li><li>Autopsy, FTK Imager, Sleuthkit</li><li>plaso / log2timeline, timesketch</li><li>regripper, KAPE</li><li>Velociraptor (live response remote)</li><li>Wireshark, Zeek (network forensics)</li></ul>
+</div>
+      <blockquote>
+<p><strong>Digital Forensics &amp; Incident Response.</strong> When the attack is in progress or just happened, you are the person who reconstructs what happened, contains the damage, removes the adversary, and writes the report that will end up in a courtroom or a SOC.</p>
+</blockquote>
+<h2 id="the-ir-process-nist-800-61r2">The IR process (NIST 800-61r2)</h2>
+<div class="mermaid">
+flowchart LR
+    P([1. Preparation<br/>playbook · contacts · tools]) --> D([2. Detection &<br/>Analysis<br/>triage · scope])
+    D --> C([3. Containment<br/>Eradication<br/>Recovery])
+    C --> L([4. Post-Incident<br/>lessons learned<br/>fix detection gap])
+    L -.->|feedback| P
+    style D fill:#3a2a00,stroke:#ffe066
+    style C fill:#3a0b0b,stroke:#ff4d4d
+
+</div>
+
+<ol>
+<li><strong>Preparation</strong> — playbook, contacts, tools, authorizations.</li>
+<li><strong>Detection &amp; Analysis</strong> — is the incident really an incident?</li>
+<li><strong>Containment, Eradication, Recovery</strong> — stop, remove, recover.</li>
+<li><strong>Post-Incident Activity</strong> — lessons learned, improvements.</li>
+</ol>
+<p>In parallel: communication (client, legal, regulator), evidence preservation.</p>
+<h2 id="sans-investigative-process-picerl-model">SANS Investigative Process (PICERL model)</h2>
+<p>Preparation → Identification → Containment → Eradication → Recovery → Lessons learned.</p>
+<h2 id="chain-of-custody">Chain of custody</h2>
+<p>Every piece of evidence has:
+- Where it comes from (host, image hash).
+- Who took it and when.
+- Who held it afterwards.
+- What was done to it.</p>
+<p>In corporate IR the rigor is often lower than in a criminal investigation. But if the incident "escalates" to a prosecutor, you <strong>should have</strong> been rigorous from the start.</p>
+<p>Tooling: append-only activity log, photos of the setup, witnesses, signed disk image (SHA-256), evidence stored in a safe/encrypted digital vault.</p>
+<h2 id="acquisition">Acquisition</h2>
+<h3 id="disk-imaging">Disk imaging</h3>
+<ul>
+<li><strong>Bit-stream image</strong> = exact copy of the device (sectors). <code>dd</code>, <code>dcfldd</code>, <code>ewfacquire</code>, <strong>FTK Imager</strong>.</li>
+<li>Hardware <strong>write blocker</strong> to avoid modifying the source.</li>
+</ul>
+<pre><code class="language-bash">sudo dd if=/dev/sda of=evidence.img bs=4M status=progress conv=noerror,sync
+sha256sum evidence.img &gt; evidence.sha256
+
+# alternatives
+ewfacquire /dev/sda             # creates .E01 (EnCase compressed)
+</code></pre>
+<h3 id="memory-dump-live">Memory dump (live)</h3>
+<p>For Windows:
+- <strong>DumpIt</strong> (MoonSols / Comae).
+- <strong>WinPmem</strong> (Velociraptor).
+- <strong>FTK Imager</strong> "Capture Memory".</p>
+<p>Linux:
+- <strong>LiME</strong> (Linux Memory Extractor) — kernel module.
+- <strong>avml</strong> (Microsoft AVML).
+- <code>/proc/kcore</code> has limits.</p>
+<pre><code class="language-bash">sudo insmod lime-$(uname -r).ko &quot;path=/tmp/mem.lime format=lime&quot;
+</code></pre>
+<h3 id="fast-triage-velociraptor-kape">Fast triage (Velociraptor / KAPE)</h3>
+<p>When you need to collect "a lot of things but not everything":
+- <strong>KAPE</strong> (Eric Zimmerman): configurable targets, artifact collections.
+- <strong>Velociraptor</strong>: live response remote, GPL, VQL queries.</p>
+<pre><code class="language-bash"># KAPE — example
+.\kape.exe --tsource C: --target !BasicCollection --tdest C:\evidence
+</code></pre>
+<h2 id="memory-forensics-with-volatility-3">Memory forensics with Volatility 3</h2>
+<p>Volatility 3 (Python 3) analyzes RAM dumps. Auto-detected profile.</p>
+<pre><code class="language-bash">vol -f mem.dmp windows.info
+vol -f mem.dmp windows.pslist
+vol -f mem.dmp windows.pstree
+vol -f mem.dmp windows.psscan          # also &quot;hidden&quot;
+vol -f mem.dmp windows.cmdline
+vol -f mem.dmp windows.netstat
+vol -f mem.dmp windows.netscan
+vol -f mem.dmp windows.malfind         # injected code
+vol -f mem.dmp windows.dlllist --pid 1234
+vol -f mem.dmp windows.handles --pid 1234
+vol -f mem.dmp windows.registry.userassist
+vol -f mem.dmp windows.registry.printkey --key 'Microsoft\Windows\CurrentVersion\Run'
+vol -f mem.dmp windows.dumpfiles --pid 1234
+vol -f mem.dmp windows.svcscan
+vol -f mem.dmp windows.callbacks       # kernel callbacks (rootkit)
+</code></pre>
+<p>Linux:</p>
+<pre><code class="language-bash">vol -f mem.lime linux.pslist
+vol -f mem.lime linux.bash             # cmdline from bash history
+vol -f mem.lime linux.netstat
+vol -f mem.lime linux.lsmod
+vol -f mem.lime linux.malfind
+</code></pre>
+<p><strong>What to look for:</strong> process without a legitimate parent, cmdline with base64/encoded content, outbound network to suspicious IPs, code injection (RWX in the heap of an unexpected process), recently installed services.</p>
+<h2 id="windows-artifacts-must-know">Windows artifacts (must-know)</h2>
+<h3 id="registry-hive">Registry hive</h3>
+<ul>
+<li><code>HKLM\Software</code> → installed apps, settings (auto-mounted).</li>
+<li><code>HKLM\System</code> → services, USB device history.</li>
+<li><code>HKLM\Sam</code> → SAM user database (offline crack with <code>samdump2</code>/<code>secretsdump</code>).</li>
+<li><code>HKU\&lt;SID&gt;</code> → user preferences, MRU.</li>
+</ul>
+<p>Tools: <strong>Registry Explorer</strong> (Zimmerman), <strong>RegRipper</strong> (Carvey), <strong>Volatility windows.registry.*</strong>.</p>
+<p>Hot keys:
+- <code>Software\Microsoft\Windows\CurrentVersion\Run</code> (autostart).
+- <code>Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist</code> (programs executed).
+- <code>System\CurrentControlSet\Services</code> (services, persistence).
+- <code>System\MountedDevices</code>, <code>Enum\USBSTOR</code> (connected USBs).
+- <code>Software\Microsoft\Windows\CurrentVersion\Explorer\TypedPaths</code> (Explorer history).</p>
+<h3 id="file-system">File system</h3>
+<ul>
+<li><strong>$MFT</strong> (NTFS Master File Table): every record = a file. SI/$FILE_NAME timestamps (4 vs 4 → timestomping). Tools: <strong>MFTECmd</strong> (Zimmerman), <code>analyzeMFT.py</code>.</li>
+<li><strong>$LogFile, $UsnJrnl</strong> — change journals.</li>
+<li>*<em>$Recycle.Bin\<SID>*</em> — deleted files: <code>$I</code> (metadata) + <code>$R</code> (content).</li>
+<li><strong>Prefetch</strong> (<code>C:\Windows\Prefetch\*.pf</code>): traces of launched executables (execution history).</li>
+<li><strong>Amcache.hve</strong> (<code>C:\Windows\AppCompat\Programs\Amcache.hve</code>): executed files + SHA-1 hashes.</li>
+<li><strong>ShimCache</strong> (AppCompatCache, inside the SYSTEM hive): executables seen by the OS.</li>
+<li><strong>SRUM</strong> (System Resource Usage Monitor, <code>SRUDB.dat</code>): resource usage per process per user.</li>
+<li><strong>Jump Lists</strong> (<code>%AppData%\Microsoft\Windows\Recent\AutomaticDestinations\</code>).</li>
+<li><strong>LNK files</strong> (Recent, Start Menu, Desktop) — file links with path, timestamps.</li>
+<li><strong>Hibernation file</strong> (<code>hiberfil.sys</code>), <strong>pagefile.sys</strong> — memory.</li>
+</ul>
+<h3 id="event-log">Event Log</h3>
+<p><code>%SystemRoot%\System32\winevt\Logs\*.evtx</code>. Key categories:
+- <strong>Security.evtx</strong>: 4624 (login success), 4625 (login failure), 4634 (logoff), 4672 (privileged login), 4688 (process create with audit on), 4720 (account created), 5140 (file share access).
+- <strong>System.evtx</strong>: services, drivers.
+- <strong>Application.evtx</strong>.
+- <strong>Microsoft-Windows-Sysmon%4Operational.evtx</strong>: Sysmon (see section 06).
+- <strong>Microsoft-Windows-PowerShell%4Operational.evtx</strong>: 4104 (scriptblock logging).
+- <strong>Microsoft-Windows-WMI-Activity%4Operational.evtx</strong>.</p>
+<p>Tools: <strong>EvtxECmd</strong> (Zimmerman) → CSV / SOF-ELK; <strong>Chainsaw</strong> (F-Secure) → event hunting with Sigma rules.</p>
+<h3 id="browser">Browser</h3>
+<ul>
+<li>Chrome / Edge SQLite: <code>History</code>, <code>Cookies</code>, <code>Login Data</code>, <code>Web Data</code> in <code>%LocalAppData%\Google\Chrome\User Data\Default\</code>.</li>
+<li>Firefox: <code>places.sqlite</code>, <code>cookies.sqlite</code>, <code>formhistory.sqlite</code> in <code>%AppData%\Mozilla\Firefox\Profiles\...</code>.</li>
+<li>IE/Edge legacy: <code>WebCacheV01.dat</code> (ESE DB).</li>
+</ul>
+<h2 id="linux-artifacts">Linux artifacts</h2>
+<ul>
+<li><code>/var/log/auth.log</code> (Debian/Ubuntu) / <code>/var/log/secure</code> (RHEL): login/sudo.</li>
+<li><code>/var/log/syslog</code> / <code>/var/log/messages</code>: general.</li>
+<li><code>journalctl</code> (systemd-journald) binary. <code>journalctl -u sshd</code>.</li>
+<li><code>~/.bash_history</code>, <code>~/.zsh_history</code> (watch out for <code>HISTFILE=</code>, <code>unset HISTFILE</code>, history -c).</li>
+<li><code>/var/log/wtmp</code>, <code>utmp</code>, <code>btmp</code>: login/logout. <code>last</code>, <code>lastb</code>.</li>
+<li><code>/etc/crontab</code>, <code>/etc/cron.*</code>, <code>/etc/systemd/system/*.{service,timer}</code>.</li>
+<li><code>/var/log/audit/audit.log</code> (auditd).</li>
+<li><code>~/.ssh/authorized_keys</code> (typical persistence).</li>
+<li><code>/etc/passwd</code>, <code>/etc/shadow</code> (integrity check).</li>
+<li>Inode / mtime / ctime — compare with baseline.</li>
+</ul>
+<h2 id="timeline-analysis-with-plaso-log2timeline">Timeline analysis with plaso / log2timeline</h2>
+<p>Build a <strong>super-timeline</strong> from dozens of sources.</p>
+<pre><code class="language-bash">log2timeline.py --storage_file evidence.plaso /mnt/evidence/C/
+psort.py -o l2tcsv -w timeline.csv evidence.plaso
+# Load into Timesketch (web GUI) for interactive querying
+</code></pre>
+<h2 id="network-forensics">Network forensics</h2>
+<ul>
+<li>Full <strong>PCAP</strong> when available (rolling buffer).</li>
+<li><strong>Zeek</strong> logs (conn.log, http.log, dns.log, ssl.log) — pre-parsed, readable.</li>
+<li><strong>NetFlow / IPFIX</strong> for long-retention visibility.</li>
+<li><strong>Wireshark</strong> for deep analysis.</li>
+</ul>
+<h2 id="anti-forensics">Anti-forensics</h2>
+<ul>
+<li><strong>Timestomping</strong>: changing timestamps. Mismatched $FILE_NAME and $STANDARD_INFO = red flag.</li>
+<li><strong>Wiping</strong>: <code>shred</code>, <code>sdelete</code>, Bitlocker rotation.</li>
+<li><strong>Encryption</strong>: Bitlocker, LUKS (requires key / TPM dump).</li>
+<li><strong>Slack space</strong>: data in unallocated areas.</li>
+<li><strong>Steganography</strong>, <strong>alternate data streams (ADS)</strong> on NTFS (<code>type secret.txt &gt; visible.txt:hidden.txt</code>).</li>
+<li><strong>In-memory only</strong> malware (no disk artifact).</li>
+<li><strong>Log deletion / forced rotation</strong>.</li>
+</ul>
+<p>Modern DFIR fights these with continuous telemetry and centralized logs (the attacker can't delete what is already in a remote SIEM).</p>
+<h2 id="modern-frameworks">Modern frameworks</h2>
+<h3 id="velociraptor">Velociraptor</h3>
+<p>Massive endpoint live response. VQL language. Client on endpoint (binary), central server.</p>
+<pre><code class="language-vql">SELECT * FROM Artifact.Windows.System.PsList()
+SELECT FullPath FROM glob(globs=&quot;C:/Users/**/AppData/Roaming/**/*.exe&quot;)
+</code></pre>
+<p>You will use it in modern corporate IR for <strong>hunt at scale</strong>.</p>
+<h3 id="thehive-cortex-misp">TheHive + Cortex + MISP</h3>
+<ul>
+<li><strong>TheHive</strong>: IR case management.</li>
+<li><strong>Cortex</strong>: analyzers (VT lookup, sandbox, hash analysis) — observable execution.</li>
+<li><strong>MISP</strong>: threat intel sharing (see section 24).</li>
+</ul>
+<h3 id="yara-in-ir">YARA in IR</h3>
+<p>Keep a set of "known malware" YARA rules ready to run on disk images and RAM dumps.</p>
+<h2 id="example-full-ir-workflow">Example: full IR (workflow)</h2>
+<p>Scenario: SIEM alert for "PsExec launched by non-admin user".</p>
+<ol>
+<li><strong>Verify</strong>: is the L1 SOC expected to run this? In a maintenance window? No → escalation.</li>
+<li><strong>Initial triage</strong>: hostname, user, time. From Velociraptor: <code>Generic.System.PsList</code>, <code>Windows.Network.Netstat</code>, <code>Windows.Events.PowerShell</code> for that host.</li>
+<li><strong>Contain</strong>: isolate via EDR network containment.</li>
+<li><strong>Snapshot</strong>: memory dump + KAPE basic collection.</li>
+<li><strong>Identify entry</strong>: backward in time. Last 24h. Process tree, parent.</li>
+<li><strong>Identify spread</strong>: lateral? Look for other hosts with the same TTL/process pattern.</li>
+<li><strong>Identify data theft</strong>: large outbound traffic? File access patterns? VSS shadow copy?</li>
+<li><strong>Eradicate</strong>: remove persistence, force credential reset, patch the vuln entry point.</li>
+<li><strong>Recover</strong>: re-image if necessary, restore from clean backup.</li>
+<li><strong>Lessons</strong>: write a report (executive summary + technical timeline). Update detection rules, playbook.</li>
+</ol>
+<h2 id="exercises">Exercises</h2>
+<h3 id="exercise-221-set-up-a-forensics-workstation">Exercise 22.1 — Set up a forensics workstation</h3>
+<ul>
+<li>A dedicated VM (SIFT Workstation or REMnux for Linux, or Win10 with the tools installed).</li>
+<li>Volatility 3, Autopsy, Sleuthkit, RegRipper, Zimmerman Tools, plaso, KAPE.</li>
+</ul>
+<h3 id="exercise-222-memory-analysis">Exercise 22.2 — Memory analysis</h3>
+<p>Download a training dump (e.g. from <a href="https://dfir.training">DFIR.training</a>, MemLabs, <a href="https://github.com/volatilityfoundation/volatility/wiki/Memory-Samples">Volatility samples</a>). Practice:
+- <code>pslist</code>, <code>pstree</code>.
+- <code>cmdline</code> on suspicious processes.
+- <code>malfind</code> → injected memory.
+- <code>netstat</code>/<code>netscan</code>.</p>
+<h3 id="exercise-223-crack-sam-hashes">Exercise 22.3 — Crack SAM hashes</h3>
+<p>Extract the SAM + SYSTEM hives from a Windows VM (offline, <code>reg save HKLM\SAM sam.hive</code>, <code>reg save HKLM\SYSTEM system.hive</code>). <code>samdump2</code> → hashes. <code>hashcat -m 1000 hashes.txt rockyou.txt</code>.</p>
+<h3 id="exercise-224-timeline-with-plaso">Exercise 22.4 — Timeline with plaso</h3>
+<p>On a Windows dump directory (KAPE collection or mounted disk image):</p>
+<pre><code class="language-bash">log2timeline.py --storage_file out.plaso /mnt/evidence
+psort.py -o l2tcsv out.plaso &gt; timeline.csv
+</code></pre>
+<p>Open in Excel. Look for activity compressed in time, files created in system directories, new autoruns.</p>
+<h3 id="exercise-225-sigma-chainsaw">Exercise 22.5 — Sigma + Chainsaw</h3>
+<p><a href="https://github.com/WithSecureLabs/chainsaw">Chainsaw</a>:</p>
+<pre><code class="language-bash">chainsaw hunt /path/to/evtx --sigma-rules /path/to/sigma --mapping mapping.yml
+</code></pre>
+<p>What comes out?</p>
+<h3 id="exercise-226-ir-style-challenge">Exercise 22.6 — IR-style challenge</h3>
+<ul>
+<li>TryHackMe path "<strong>Cyber Defense</strong>" — many IR + forensics rooms.</li>
+<li><strong>DFIR Madness</strong> (https://dfirmadness.com): complete disk+RAM scenarios with questions.</li>
+<li><strong>CyberDefenders blue.team labs</strong> — excellent.</li>
+</ul>
+<h3 id="exercise-227-memory-ctf">Exercise 22.7 — Memory CTF</h3>
+<p>Download a memory analysis challenge (e.g. <strong>MemLabs</strong> by stuxnet999 — github). Solve them in order.</p>
+<h3 id="exercise-228-velociraptor-lab">Exercise 22.8 — Velociraptor lab</h3>
+<p>Set up a Velociraptor server + client on a VM. Run hunts:
+- Processes with cmdline containing "powershell" + "encode".
+- Files modified in the last 24h under <code>%TEMP%</code>.
+- Registry Run keys.</p>
+<h2 id="key-concepts">Key concepts</h2>
+<ol>
+<li><strong>Acquire before touching</strong>: image RAM and disk.</li>
+<li><strong>Volatility for memory, plaso for disk timeline.</strong></li>
+<li><strong>Windows artifacts to memorize:</strong> registry, MFT, prefetch, amcache, shimcache, jump list, evtx.</li>
+<li><strong>Linux:</strong> auth.log, journal, bash_history (with caution), audit.log, cron.</li>
+<li><strong>Modern anti-forensics</strong> (in-memory, log deletion) is countered with continuous remote telemetry.</li>
+<li><strong>Velociraptor + Sigma + YARA</strong> = modern DFIR stack.</li>
+<li><strong>Chain of custody even in corporate IR</strong>: it could escalate to legal.</li>
+</ol>
+<p>Up next: the SOC and continuous detection.</p>
+      <nav class="pager">
+<a href="21-hardware-firmware.html" class="prev"><span class="label">← Previous</span><span class="title">Hardware and firmware hacking</span></a>
+<a href="23-blue-team-soc.html" class="next"><span class="label">Next →</span><span class="title">Blue team: SOC, SIEM, EDR, hunting</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Cybersec Zero to Hero</strong> — built as a continuous path. Static build from Markdown.</p><p>Educational material. Everything you learn here is to be used only on systems you own, in labs, in authorized bug-bounty programs, or under signed pentest contracts. <strong>Don't break the law.</strong></p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true, background: '#131a1e', primaryColor: '#1d262b',
+      primaryTextColor: '#e8eef0', primaryBorderColor: '#00ff9c',
+      lineColor: '#00e6ff', secondaryColor: '#11171a', tertiaryColor: '#161d21',
+      mainBkg: '#1d262b', nodeBorder: '#00ff9c', clusterBkg: '#0b0f10',
+      clusterBorder: '#243035', titleColor: '#00ff9c',
+      edgeLabelBackground: '#0b0f10', textColor: '#e8eef0',
+      labelTextColor: '#e8eef0', actorBkg: '#1d262b', actorBorder: '#00ff9c',
+      actorTextColor: '#00ff9c', actorLineColor: '#00e6ff',
+      signalColor: '#e8eef0', signalTextColor: '#e8eef0',
+      labelBoxBkgColor: '#1d262b', labelBoxBorderColor: '#00ff9c',
+      noteBkgColor: '#ffe066', noteTextColor: '#0b0f10', noteBorderColor: '#ffe066',
+      activationBkgColor: '#1d262b', activationBorderColor: '#00ff9c',
+      sequenceNumberColor: '#0b0f10'
+    },
+    flowchart: { curve: 'basis', padding: 16 },
+    sequence: { mirrorActors: false, bottomMarginAdj: 10 },
+    fontFamily: 'JetBrains Mono, Cascadia Code, Consolas, monospace'
+  });
+</script>
+</body>
+</html>

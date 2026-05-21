@@ -1,0 +1,430 @@
+---
+title: "Reti neurali: dalle basi al backprop"
+area: "Deep Learning"
+summary: "Neurone, layer, attivazioni, forward/backward pass, perché funzionano. Capirle senza framework, e poi userai PyTorch."
+order: 27
+level: "avanzato"
+prereq:
+  - "[[calcolo-ottimizzazione]]"
+  - "[[regressione-logistica]]"
+tools:
+  - "NumPy, PyTorch"
+---
+
+# Reti neurali: dalle basi al backprop
+
+## Il neurone artificiale
+
+Modello molto semplificato del neurone biologico:
+
+$$y = \phi\left(\sum_j w_j x_j + b\right) = \phi(\mathbf{w}^T \mathbf{x} + b)$$
+
+dove $\phi$ è una **funzione di attivazione** non lineare.
+
+Con $\phi$ = sigmoide, il neurone è esattamente la regressione logistica. La novità delle NN: **stratificare** molti neuroni.
+
+## Multilayer Perceptron (MLP)
+
+```mermaid
+flowchart LR
+    I1((x₁)) --> H1((h₁))
+    I1 --> H2((h₂))
+    I1 --> H3((h₃))
+    I2((x₂)) --> H1
+    I2 --> H2
+    I2 --> H3
+    I3((x₃)) --> H1
+    I3 --> H2
+    I3 --> H3
+    H1 --> O((y))
+    H2 --> O
+    H3 --> O
+```
+
+Formalmente, una rete a 2 layer:
+
+$$\mathbf{h} = \phi(W_1 \mathbf{x} + \mathbf{b}_1)$$
+$$y = W_2 \mathbf{h} + \mathbf{b}_2$$
+
+Con **abbastanza** neuroni nascosti (e attivazioni non lineari), un MLP a 2 layer può approssimare **qualsiasi funzione continua** (teorema di approssimazione universale, Cybenko 1989, Hornik 1991).
+
+> Tradotto: non c'è "limite teorico" all'espressività. La sfida è far convergere il training, evitare overfitting, e scalare.
+
+## Funzioni di attivazione
+
+### Sigmoid e tanh (storiche)
+
+$$\sigma(z) = \frac{1}{1+e^{-z}}, \quad \tanh(z) = \frac{e^z - e^{-z}}{e^z + e^{-z}}$$
+
+Problemi:
+- Saturano: derivata vicina a zero per $|z|$ grande → **vanishing gradient**.
+- Sigmoid non centrata in 0.
+
+### ReLU (modern default)
+
+$$\text{ReLU}(z) = \max(0, z)$$
+
+Vantaggi: derivata 1 per $z > 0$, gradient non vanisce. Sparso (molti zeri).
+Difetto: "dying ReLU" — neuroni stuck a 0 per sempre.
+
+Varianti: **Leaky ReLU** ($\max(\alpha z, z)$), **ELU**, **GELU** (usato nei Transformer).
+
+### Softmax (output multi-classe)
+
+$$\text{softmax}(z)_i = \frac{e^{z_i}}{\sum_j e^{z_j}}$$
+
+Trasforma logit in distribuzione di probabilità su $K$ classi.
+
+<div class="chart"><svg viewBox="0 0 480 160" xmlns="http://www.w3.org/2000/svg">
+<g transform="translate(20,10)">
+  <line x1="0" y1="130" x2="120" y2="130" stroke="#555"/>
+  <line x1="60" y1="20" x2="60" y2="130" stroke="#555"/>
+  <path d="M 0 128 C 40 128 80 22 120 22" fill="none" stroke="#7aa2ff" stroke-width="2"/>
+  <text x="60" y="148" fill="#7aa2ff" font-size="11" text-anchor="middle">sigmoid</text>
+</g>
+<g transform="translate(180,10)">
+  <line x1="0" y1="130" x2="120" y2="130" stroke="#555"/>
+  <line x1="60" y1="20" x2="60" y2="130" stroke="#555"/>
+  <path d="M 0 128 L 60 128 L 120 25" fill="none" stroke="#ffb347" stroke-width="2"/>
+  <text x="60" y="148" fill="#ffb347" font-size="11" text-anchor="middle">ReLU</text>
+</g>
+<g transform="translate(340,10)">
+  <line x1="0" y1="130" x2="120" y2="130" stroke="#555"/>
+  <line x1="60" y1="20" x2="60" y2="130" stroke="#555"/>
+  <path d="M 0 128 C 30 128 50 125 60 120 C 75 110 95 50 120 28" fill="none" stroke="#5ee2c4" stroke-width="2"/>
+  <text x="60" y="148" fill="#5ee2c4" font-size="11" text-anchor="middle">GELU</text>
+</g>
+</svg></div>
+
+## Forward + backward su una NN da 6 pesi (esempio numerico completo)
+
+Prima di scrivere codice, vediamo letteralmente cosa succede a un singolo esempio passato attraverso una rete minuscola. **Una sola lettura attenta vale 10 tutorial.**
+
+Architettura: 2 input → 2 neuroni nascosti (sigmoid) → 1 output (sigmoid). Loss MSE.
+
+<div class="chart"><svg viewBox="0 0 560 280" xmlns="http://www.w3.org/2000/svg">
+<circle cx="60" cy="80" r="25" fill="rgba(122,162,255,0.18)" stroke="#7aa2ff" stroke-width="2"/>
+<text x="60" y="85" fill="#7aa2ff" font-size="13" text-anchor="middle">x₁=1</text>
+<circle cx="60" cy="200" r="25" fill="rgba(122,162,255,0.18)" stroke="#7aa2ff" stroke-width="2"/>
+<text x="60" y="205" fill="#7aa2ff" font-size="13" text-anchor="middle">x₂=2</text>
+
+<circle cx="260" cy="80" r="28" fill="rgba(192,132,252,0.18)" stroke="#c084fc" stroke-width="2"/>
+<text x="260" y="76" fill="#c084fc" font-size="11" text-anchor="middle">h₁</text>
+<text x="260" y="92" fill="#c084fc" font-size="9" text-anchor="middle">σ(z₁)</text>
+<circle cx="260" cy="200" r="28" fill="rgba(192,132,252,0.18)" stroke="#c084fc" stroke-width="2"/>
+<text x="260" y="196" fill="#c084fc" font-size="11" text-anchor="middle">h₂</text>
+<text x="260" y="212" fill="#c084fc" font-size="9" text-anchor="middle">σ(z₂)</text>
+
+<circle cx="460" cy="140" r="30" fill="rgba(255,179,71,0.18)" stroke="#ffb347" stroke-width="2"/>
+<text x="460" y="136" fill="#ffb347" font-size="11" text-anchor="middle">ŷ</text>
+<text x="460" y="152" fill="#ffb347" font-size="9" text-anchor="middle">σ(z₃)</text>
+
+<line x1="85" y1="80" x2="232" y2="80" stroke="#888" stroke-width="1"/>
+<text x="155" y="72" fill="#7aa2ff" font-size="10">w₁=0.5</text>
+<line x1="85" y1="80" x2="232" y2="200" stroke="#888" stroke-width="1"/>
+<text x="155" y="135" fill="#7aa2ff" font-size="10">w₃=-0.3</text>
+<line x1="85" y1="200" x2="232" y2="80" stroke="#888" stroke-width="1"/>
+<text x="155" y="160" fill="#7aa2ff" font-size="10">w₂=0.2</text>
+<line x1="85" y1="200" x2="232" y2="200" stroke="#888" stroke-width="1"/>
+<text x="155" y="218" fill="#7aa2ff" font-size="10">w₄=0.8</text>
+
+<line x1="288" y1="80" x2="432" y2="135" stroke="#888" stroke-width="1"/>
+<text x="350" y="100" fill="#ffb347" font-size="10">w₅=0.4</text>
+<line x1="288" y1="200" x2="432" y2="148" stroke="#888" stroke-width="1"/>
+<text x="350" y="180" fill="#ffb347" font-size="10">w₆=-0.6</text>
+
+<text x="60" y="30" fill="#8b949e" font-size="11" text-anchor="middle">INPUT</text>
+<text x="260" y="30" fill="#8b949e" font-size="11" text-anchor="middle">HIDDEN</text>
+<text x="460" y="40" fill="#8b949e" font-size="11" text-anchor="middle">OUTPUT</text>
+
+<text x="460" y="220" fill="#5ee2c4" font-size="11" text-anchor="middle">target y = 1</text>
+</svg><div class="chart-caption">Rete minuscola con 6 pesi. Niente bias per semplicità. Tutti i valori sono inventati per fare il calcolo a mano.</div></div>
+
+### Step 1 — Forward pass
+
+Calcoliamo gli input pesati ("logit") di ogni neurone nascosto:
+
+$$z_1 = w_1 x_1 + w_2 x_2 = 0.5 \cdot 1 + 0.2 \cdot 2 = 0.9$$
+$$z_2 = w_3 x_1 + w_4 x_2 = -0.3 \cdot 1 + 0.8 \cdot 2 = 1.3$$
+
+Applichiamo la sigmoide $\sigma(z) = 1/(1+e^{-z})$:
+
+$$h_1 = \sigma(0.9) = \frac{1}{1+e^{-0.9}} \approx 0.711$$
+$$h_2 = \sigma(1.3) \approx 0.786$$
+
+Output finale:
+
+$$z_3 = w_5 h_1 + w_6 h_2 = 0.4 \cdot 0.711 + (-0.6) \cdot 0.786 = 0.284 - 0.472 = -0.188$$
+$$\hat{y} = \sigma(-0.188) \approx 0.453$$
+
+Target $y = 1$, predetto $\hat{y} \approx 0.453$. Lontano. Calcoliamo la loss:
+
+$$L = \tfrac{1}{2}(y - \hat{y})^2 = \tfrac{1}{2}(1 - 0.453)^2 \approx 0.150$$
+
+### Step 2 — Backward pass (chain rule applicata)
+
+**Obiettivo**: $\frac{\partial L}{\partial w_i}$ per ogni peso. Lavoriamo a ritroso, layer per layer.
+
+Per la sigmoide vale $\sigma'(z) = \sigma(z)(1-\sigma(z))$.
+
+**Derivata della loss rispetto all'output**:
+$$\frac{\partial L}{\partial \hat{y}} = \hat{y} - y = 0.453 - 1 = -0.547$$
+
+**Derivata di $\hat{y}$ rispetto a $z_3$**:
+$$\frac{\partial \hat{y}}{\partial z_3} = \sigma(z_3)(1-\sigma(z_3)) = 0.453 \cdot 0.547 \approx 0.248$$
+
+Combinando, il "segnale di errore" che torna a $z_3$:
+$$\delta_3 = \frac{\partial L}{\partial z_3} = -0.547 \cdot 0.248 \approx -0.136$$
+
+**Gradiente sui pesi dell'ultimo layer**:
+$$\frac{\partial L}{\partial w_5} = \delta_3 \cdot h_1 = -0.136 \cdot 0.711 \approx -0.097$$
+$$\frac{\partial L}{\partial w_6} = \delta_3 \cdot h_2 = -0.136 \cdot 0.786 \approx -0.107$$
+
+**Indietro al layer nascosto**:
+$$\frac{\partial L}{\partial h_1} = \delta_3 \cdot w_5 = -0.136 \cdot 0.4 = -0.054$$
+$$\frac{\partial L}{\partial h_2} = \delta_3 \cdot w_6 = -0.136 \cdot (-0.6) = 0.082$$
+
+Moltiplica per la derivata della sigmoide locale per ottenere $\delta_1, \delta_2$:
+$$\delta_1 = \frac{\partial L}{\partial z_1} = -0.054 \cdot \sigma(z_1)(1-\sigma(z_1)) = -0.054 \cdot 0.711 \cdot 0.289 \approx -0.011$$
+$$\delta_2 = 0.082 \cdot 0.786 \cdot 0.214 \approx 0.014$$
+
+**Gradiente sui pesi del primo layer**:
+$$\frac{\partial L}{\partial w_1} = \delta_1 \cdot x_1 = -0.011 \cdot 1 = -0.011$$
+$$\frac{\partial L}{\partial w_2} = \delta_1 \cdot x_2 = -0.011 \cdot 2 = -0.022$$
+$$\frac{\partial L}{\partial w_3} = \delta_2 \cdot x_1 = 0.014 \cdot 1 = 0.014$$
+$$\frac{\partial L}{\partial w_4} = \delta_2 \cdot x_2 = 0.014 \cdot 2 = 0.028$$
+
+### Step 3 — Update
+
+Con learning rate $\eta = 0.5$, ogni peso si aggiorna così: $w_i \leftarrow w_i - \eta \cdot \partial L / \partial w_i$.
+
+| Peso | Vecchio | $\partial L/\partial w$ | Nuovo |
+|---|---|---|---|
+| $w_1$ | 0.5 | -0.011 | 0.506 |
+| $w_2$ | 0.2 | -0.022 | 0.211 |
+| $w_3$ | -0.3 | +0.014 | -0.307 |
+| $w_4$ | 0.8 | +0.028 | 0.786 |
+| $w_5$ | 0.4 | -0.097 | 0.448 |
+| $w_6$ | -0.6 | -0.107 | -0.547 |
+
+**Verifica**: rifai il forward con i nuovi pesi. Otterrai $\hat{y} \approx 0.477$, più vicino a 1 di 0.453. Loss scesa. **È così che imparano le reti neurali**, milioni di volte.
+
+> Tutto quello che hai fatto in 5 minuti, PyTorch lo fa in microsecondi con `loss.backward()`. Ma adesso sai *cosa* sta facendo.
+
+## Forward pass
+
+Calcola la predizione layer dopo layer:
+
+```python
+import numpy as np
+def relu(x): return np.maximum(0, x)
+def softmax(x):
+    x = x - x.max(axis=-1, keepdims=True)
+    e = np.exp(x)
+    return e / e.sum(axis=-1, keepdims=True)
+
+def forward(X, W1, b1, W2, b2):
+    z1 = X @ W1 + b1
+    h = relu(z1)
+    z2 = h @ W2 + b2
+    return softmax(z2), (z1, h)
+```
+
+## Backward pass: la chain rule in azione
+
+Per ogni layer, calcola il gradiente della loss rispetto ai pesi.
+
+Per una rete con loss cross-entropy + softmax (semplificazioni a portata):
+
+$$\frac{\partial L}{\partial z_2} = \mathbf{p} - \mathbf{y}$$
+$$\frac{\partial L}{\partial W_2} = \mathbf{h}^T \frac{\partial L}{\partial z_2}, \quad \frac{\partial L}{\partial \mathbf{b}_2} = \frac{\partial L}{\partial z_2}$$
+$$\frac{\partial L}{\partial \mathbf{h}} = \frac{\partial L}{\partial z_2} W_2^T$$
+$$\frac{\partial L}{\partial z_1} = \frac{\partial L}{\partial \mathbf{h}} \odot \mathbb{1}[z_1 > 0]\quad\text{(ReLU derivative)}$$
+$$\frac{\partial L}{\partial W_1} = \mathbf{X}^T \frac{\partial L}{\partial z_1}, \quad \frac{\partial L}{\partial \mathbf{b}_1} = \frac{\partial L}{\partial z_1}$$
+
+Pattern: ogni gradient è $\text{input}^T \cdot \text{gradient incoming}$.
+
+## NN da zero in NumPy
+
+```python
+import numpy as np
+rng = np.random.default_rng(0)
+
+# dati toy
+n, d, h, k = 1000, 5, 32, 3
+X = rng.standard_normal((n, d))
+y = rng.integers(0, k, n)
+Y = np.eye(k)[y]                    # one-hot
+
+# init pesi (He)
+W1 = rng.standard_normal((d, h)) * np.sqrt(2/d)
+b1 = np.zeros(h)
+W2 = rng.standard_normal((h, k)) * np.sqrt(2/h)
+b2 = np.zeros(k)
+
+lr = 0.01
+for epoch in range(200):
+    # forward
+    z1 = X @ W1 + b1
+    h_ = np.maximum(0, z1)
+    z2 = h_ @ W2 + b2
+    z2 -= z2.max(axis=1, keepdims=True)
+    p = np.exp(z2) / np.exp(z2).sum(axis=1, keepdims=True)
+
+    loss = -np.mean(np.log(p[np.arange(n), y] + 1e-9))
+
+    # backward
+    dz2 = (p - Y) / n
+    dW2 = h_.T @ dz2
+    db2 = dz2.sum(0)
+    dh = dz2 @ W2.T
+    dz1 = dh * (z1 > 0)
+    dW1 = X.T @ dz1
+    db1 = dz1.sum(0)
+
+    # update
+    W1 -= lr*dW1; b1 -= lr*db1
+    W2 -= lr*dW2; b2 -= lr*db2
+
+    if epoch % 20 == 0:
+        print(f"epoch {epoch}: loss={loss:.3f}")
+```
+
+Bellezza dell'esempio: ogni linea ha senso matematico. Quando userai PyTorch, queste 30 linee saranno wrappate da `loss.backward()`.
+
+## Inizializzazione dei pesi
+
+| Init | Quando |
+|---|---|
+| Zero | NO MAI (simmetria infranta solo con random) |
+| Random N(0, 1) | esplode/sparisce con tanti layer |
+| **Xavier/Glorot** $\sqrt{1/n_\text{in}}$ | tanh/sigmoid |
+| **He** $\sqrt{2/n_\text{in}}$ | ReLU |
+| Orthogonal | RNN |
+
+Inizializzazione sbagliata → vanishing/exploding gradients → training fallisce. Default ragionevoli sono già implementati in PyTorch/Keras.
+
+## Regolarizzazione nel deep learning
+
+### Dropout
+
+Durante il training, "spegne" casualmente una frazione $p$ dei neuroni in ogni layer. Forza la rete a essere robusta.
+
+```python
+import torch.nn as nn
+nn.Dropout(p=0.2)
+```
+
+A inference è disabilitato automaticamente.
+
+### Batch normalization
+
+Normalizza l'output di ogni layer (media 0, std 1) per ogni mini-batch. Stabilizza il training, permette learning rate più alti, agisce come regolarizzazione.
+
+```python
+nn.BatchNorm1d(num_features=64)
+```
+
+In Transformer si usa **Layer Normalization** invece.
+
+### Weight decay (L2)
+
+Penalizzazione $\lambda \|W\|^2$ nella loss. In PyTorch: parametro `weight_decay` dell'ottimizzatore.
+
+### Early stopping
+
+Già visto: ferma quando val loss non migliora.
+
+## Loss functions
+
+| Task | Loss |
+|---|---|
+| Regressione | MSE |
+| Regressione robusta | Huber, MAE |
+| Classificazione binaria | BCEWithLogitsLoss (binary cross-entropy + sigmoid) |
+| Classificazione multi | CrossEntropyLoss (softmax + neg log lik) |
+| Embedding/Metric learning | Triplet, Contrastive |
+| Image segmentation | Dice + BCE |
+
+> In PyTorch, `CrossEntropyLoss` include già la softmax. Passa logit grezzi, NON probabilità.
+
+## Optimizer
+
+Default odierno: **Adam** o **AdamW**.
+
+```python
+import torch.optim as optim
+opt = optim.AdamW(model.parameters(), lr=1e-3, weight_decay=0.01)
+```
+
+SGD + momentum è ancora valido (e a volte migliore in generalizzazione), specialmente per Computer Vision pesante. Lui:
+
+```python
+opt = optim.SGD(model.parameters(), lr=0.01, momentum=0.9, weight_decay=1e-4, nesterov=True)
+```
+
+## Esercizi
+
+<details>
+<summary>Esercizio 1 — XOR con NN</summary>
+
+XOR non è linearmente separabile. Una NN con 2 hidden units lo impara. Implementa:
+
+```python
+import numpy as np
+X = np.array([[0,0],[0,1],[1,0],[1,1]])
+y = np.array([[0],[1],[1],[0]])
+# allena una piccola NN e verifica che impari XOR
+```
+
+Quante hidden units sono il minimo? (Risposta: 2 con tanh, dimostrabile.)
+</details>
+
+<details>
+<summary>Esercizio 2 — Implementa Adam da zero</summary>
+
+```python
+import numpy as np
+class Adam:
+    def __init__(self, lr=1e-3, b1=0.9, b2=0.999, eps=1e-8):
+        self.lr, self.b1, self.b2, self.eps = lr, b1, b2, eps
+        self.m = None; self.v = None; self.t = 0
+    def step(self, w, g):
+        if self.m is None:
+            self.m = np.zeros_like(w); self.v = np.zeros_like(w)
+        self.t += 1
+        self.m = self.b1*self.m + (1-self.b1)*g
+        self.v = self.b2*self.v + (1-self.b2)*g*g
+        mh = self.m / (1 - self.b1**self.t)
+        vh = self.v / (1 - self.b2**self.t)
+        return w - self.lr * mh / (np.sqrt(vh) + self.eps)
+```
+</details>
+
+<details>
+<summary>Esercizio 3 — Vanishing gradient con sigmoid</summary>
+
+Allena una rete a 10 layer con sigmoid. Misura la magnitudine dei gradienti per layer. Vedrai esponenziale calo verso il primo layer.
+
+```python
+# osserva i gradienti dopo il backward su una rete deep con sigmoid
+# poi rifai con ReLU. ReLU NON vanisce.
+```
+</details>
+
+<details>
+<summary>Esercizio 4 — Influence di learning rate</summary>
+
+Allena la NN da zero (forward+back manuale) con `lr=1e-1, 1e-2, 1e-3, 1e-4`. Plotta la loss. Vedrai overshoot, oscillazioni, convergenza lenta.
+</details>
+
+## Cosa portarti via
+
+- Neurone = regressione logistica. NN = neuroni in stack.
+- Approssimazione universale: in teoria onnipotenti. In pratica difficili.
+- ReLU per default. Sigmoide solo all'output binario.
+- He init per ReLU, Xavier per tanh.
+- AdamW + weight decay = default moderno.
+- Dropout + batch norm = regolarizzazione standard.
+
+Prossimo: PyTorch.

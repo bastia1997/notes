@@ -1,0 +1,517 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>Collections: List, Set, Map, Queue, complessità, scelta della struttura — Java + Spring Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">☕</div>
+      <div>
+        <div class="brand-title">JAVA · SPRING</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="10" height="20" fill="#009246"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ce2b37"/></svg> IT</span><a href="../en/pages/09-collections.html" class="lang-link" title="Switch to English"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="30" height="20" fill="#012169"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#fff" stroke-width="3"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#c8102e" stroke-width="1.5"/><path d="M15,0 v20 M0,10 h30" stroke="#fff" stroke-width="5"/><path d="M15,0 v20 M0,10 h30" stroke="#c8102e" stroke-width="3"/></svg> EN</a></div>
+  </div>
+  <div class="search-wrap">
+    <div class="search-row">
+      <div class="search-inputwrap">
+        <span class="search-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"/>
+            <line x1="20" y1="20" x2="16.65" y2="16.65"/>
+          </svg>
+        </span>
+        <input class="search-input" id="search-input" type="text" placeholder="cerca... (premi /)" autocomplete="off" aria-label="Search">
+        <button class="search-clear" id="search-clear" type="button" aria-label="Clear" title="Clear">&times;</button>
+      </div>
+      <button class="search-btn" id="search-btn" type="button" aria-label="CERCA" title="CERCA">CERCA</button>
+    </div>
+    <div class="search-hits" id="search-hits" role="listbox"></div>
+  </div>
+  <div class="sidebar-nav">
+    <nav class="nav-section">
+      <div class="nav-section-title">Percorso</div>
+      <ul class="nav-list">
+        <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+        <li class="nav-item"><a href="../pages/00-percorso-e-mindset.html" class=""><span class="num">00</span>Il percorso e la giusta mentalità</a></li><li class="nav-item"><a href="../pages/01-introduzione-java.html" class=""><span class="num">01</span>Java: cos&#x27;è davvero, JVM/JRE/JDK, primo programma</a></li><li class="nav-item"><a href="../pages/02-sintassi-base.html" class=""><span class="num">02</span>Sintassi di base: tipi, variabili, operatori, controllo di flusso</a></li><li class="nav-item"><a href="../pages/03-stringhe-array-io.html" class=""><span class="num">03</span>Stringhe, array, I/O da console</a></li><li class="nav-item"><a href="../pages/04-oop-classi-oggetti.html" class=""><span class="num">04</span>OOP I — Classi, oggetti, costruttori, this, package, visibilità</a></li><li class="nav-item"><a href="../pages/05-oop-ereditarieta-polimorfismo.html" class=""><span class="num">05</span>OOP II — Ereditarietà, polimorfismo, interfacce, classi astratte</a></li><li class="nav-item"><a href="../pages/06-equals-hashcode-immutabilita.html" class=""><span class="num">06</span>OOP III — equals, hashCode, toString, immutabilità, record</a></li><li class="nav-item"><a href="../pages/07-eccezioni.html" class=""><span class="num">07</span>Eccezioni: checked vs unchecked, try-with-resources, custom</a></li><li class="nav-item"><a href="../pages/08-generics.html" class=""><span class="num">08</span>Generics: tipi parametrici, PECS, type erasure, wildcards</a></li><li class="nav-item"><a href="../pages/09-collections.html" class="active"><span class="num">09</span>Collections: List, Set, Map, Queue, complessità, scelta della struttura</a></li><li class="nav-item"><a href="../pages/10-stream-lambda-optional.html" class=""><span class="num">10</span>Stream API, lambda, functional interfaces, Optional</a></li><li class="nav-item"><a href="../pages/11-io-nio.html" class=""><span class="num">11</span>I/O e NIO.2: File, Path, channels, buffer</a></li><li class="nav-item"><a href="../pages/12-concurrency-thread.html" class=""><span class="num">12</span>Concurrency I — Thread, sincronizzazione, volatile, Java Memory Model</a></li><li class="nav-item"><a href="../pages/13-executor-future-completablefuture.html" class=""><span class="num">13</span>Concurrency II — ExecutorService, Future, CompletableFuture</a></li><li class="nav-item"><a href="../pages/14-concurrency-jucconcurrent.html" class=""><span class="num">14</span>Concurrency III — java.util.concurrent: locks, atomics, concurrent collections</a></li><li class="nav-item"><a href="../pages/15-jvm-internals.html" class=""><span class="num">15</span>JVM internals: classloader, bytecode, runtime data areas, JIT</a></li><li class="nav-item"><a href="../pages/16-memoria-gc.html" class=""><span class="num">16</span>Memoria e garbage collection: G1, ZGC, Shenandoah</a></li><li class="nav-item"><a href="../pages/17-profiling-jfr.html" class=""><span class="num">17</span>Profiling: JFR, async-profiler, jstack, heap dump, jcmd</a></li><li class="nav-item"><a href="../pages/18-java-moderno.html" class=""><span class="num">18</span>Java moderno: dal 8 al 21 — features chiave</a></li><li class="nav-item"><a href="../pages/19-jdbc.html" class=""><span class="num">19</span>JDBC: connessione, PreparedStatement, transazioni, isolation levels</a></li><li class="nav-item"><a href="../pages/20-jpa-hibernate.html" class=""><span class="num">20</span>JPA / Hibernate: entità, relazioni, lazy/eager, N+1, cache</a></li><li class="nav-item"><a href="../pages/21-sql-essenziale.html" class=""><span class="num">21</span>SQL essenziale per chi sviluppa in Java</a></li><li class="nav-item"><a href="../pages/22-spring-intro-ioc-di.html" class=""><span class="num">22</span>Spring intro: IoC, DI, ApplicationContext, BeanFactory</a></li><li class="nav-item"><a href="../pages/23-spring-beans-lifecycle.html" class=""><span class="num">23</span>Bean: scopes, lifecycle, BeanPostProcessor, FactoryBean</a></li><li class="nav-item"><a href="../pages/24-spring-configurazione.html" class=""><span class="num">24</span>Configurazione: Java config, @ComponentScan, profili, conditionals, properties</a></li><li class="nav-item"><a href="../pages/25-spring-aop-transactional.html" class=""><span class="num">25</span>AOP, proxy, @Transactional: cosa accade davvero</a></li><li class="nav-item"><a href="../pages/26-spring-boot.html" class=""><span class="num">26</span>Spring Boot: auto-configuration, starters, Actuator</a></li><li class="nav-item"><a href="../pages/27-spring-data-jpa.html" class=""><span class="num">27</span>Spring Data JPA: Repository, derived queries, paginazione, Specification</a></li><li class="nav-item"><a href="../pages/28-spring-mvc-rest.html" class=""><span class="num">28</span>Spring MVC: DispatcherServlet, controller, REST endpoint</a></li><li class="nav-item"><a href="../pages/29-rest-openapi-hateoas.html" class=""><span class="num">29</span>REST: best practice, OpenAPI/Swagger, HATEOAS, versionamento</a></li><li class="nav-item"><a href="../pages/30-spring-webflux.html" class=""><span class="num">30</span>Spring WebFlux + Reactor: Mono, Flux, programmazione reattiva</a></li><li class="nav-item"><a href="../pages/31-spring-security.html" class=""><span class="num">31</span>Spring Security: filter chain, autenticazione, autorizzazione, JWT, OAuth2</a></li><li class="nav-item"><a href="../pages/32-spring-cloud.html" class=""><span class="num">32</span>Spring Cloud: Config Server, Discovery, Gateway, Resilience4j</a></li><li class="nav-item"><a href="../pages/33-testing.html" class=""><span class="num">33</span>Testing: JUnit 5, Mockito, MockMvc, Testcontainers</a></li><li class="nav-item"><a href="../pages/34-spring-batch-intro.html" class=""><span class="num">34</span>Spring Batch intro: domain model, Job, Step, primo batch</a></li><li class="nav-item"><a href="../pages/35-spring-batch-jobrepository.html" class=""><span class="num">35</span>JobRepository, JobLauncher, schema dei metadati</a></li><li class="nav-item"><a href="../pages/36-spring-batch-chunk-skip-retry.html" class=""><span class="num">36</span>Chunk processing: commit interval, skip, retry, fault tolerance</a></li><li class="nav-item"><a href="../pages/37-spring-batch-tasklet-flow.html" class=""><span class="num">37</span>Tasklet vs Chunk; flow control: decisioni, split, conditional</a></li><li class="nav-item"><a href="../pages/38-spring-batch-itemreader.html" class=""><span class="num">38</span>ItemReader: flat file, XML/JSON, JDBC cursor/paging, JPA, multi-resource</a></li><li class="nav-item"><a href="../pages/39-spring-batch-itemwriter.html" class=""><span class="num">39</span>ItemWriter: file, JDBC, JPA, composite, classifier, batch insert</a></li><li class="nav-item"><a href="../pages/40-spring-batch-scaling-partitioning.html" class=""><span class="num">40</span>Scaling: multi-threaded step, partitioning, remote chunking/partitioning</a></li><li class="nav-item"><a href="../pages/41-spring-batch-listeners-restart-k8s.html" class=""><span class="num">41</span>Listeners, restart, monitoring, integrazione con Spring Boot e Kubernetes</a></li><li class="nav-item"><a href="../pages/42-design-patterns.html" class=""><span class="num">42</span>Design pattern in Java/Spring: GoF + DDD-lite</a></li><li class="nav-item"><a href="../pages/43-performance-observability.html" class=""><span class="num">43</span>Performance tuning e observability production-grade</a></li><li class="nav-item"><a href="../pages/44-esercizi-sintesi.html" class=""><span class="num">44</span>50 esercizi cumulativi: dalla sintassi a Spring Batch</a></li><li class="nav-item"><a href="../pages/45-progetto-finale-etl.html" class=""><span class="num">45</span>Progetto finale guidato: ETL bancario notturno</a></li>
+      </ul>
+    </nav>
+  </div>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Standard Library</span>
+        <span>Sezione 9 di 45</span>
+        <span class="level-tag level-int">Livello: intermedio</span>
+      </div>
+      <h1>Collections: List, Set, Map, Queue, complessità, scelta della struttura</h1>
+      <p class="summary">Gerarchia java.util: Collection, List, Set, Queue, Map. ArrayList vs LinkedList, HashSet/HashMap vs TreeSet/TreeMap vs LinkedHashSet/Map. Complessità Big-O di ogni operazione. Iteratori e ConcurrentModificationException. Collezioni immutabili.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Standard Library</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>Sezione 8</li></ul>
+  <div class="label">Strumenti</div>
+  <ul class="source-list"><li>JDK 21</li></ul>
+</div>
+      <h2 id="la-gerarchia">La gerarchia</h2>
+<div class="mermaid">
+flowchart TB
+    Iter[Iterable]
+    Coll[Collection]
+    Map[Map]
+    Iter --> Coll
+    Coll --> List
+    Coll --> Set
+    Coll --> Queue
+    List --> ArrayList
+    List --> LinkedList
+    List --> CopyOnWriteArrayList
+    Set --> HashSet
+    Set --> LinkedHashSet
+    Set --> TreeSet
+    Queue --> Deque
+    Queue --> PriorityQueue
+    Deque --> ArrayDeque
+    Deque --> LinkedList
+    Map --> HashMap
+    Map --> LinkedHashMap
+    Map --> TreeMap
+    Map --> ConcurrentHashMap
+
+</div>
+
+<p><code>Map</code> è <strong>fuori</strong> dalla gerarchia <code>Collection</code> (non è una collezione di elementi singoli ma di coppie chiave-valore).</p>
+<h2 id="list-sequenza-ordinata-duplicati-ammessi"><code>List</code>: sequenza ordinata, duplicati ammessi</h2>
+<h3 id="arraylist"><code>ArrayList</code></h3>
+<p>Array dinamico. Veloce per accesso indicizzato, lento per inserimenti in mezzo.</p>
+<pre><code class="language-java">List&lt;String&gt; list = new ArrayList&lt;&gt;();
+list.add(&quot;a&quot;);
+list.add(&quot;b&quot;);
+list.add(1, &quot;c&quot;);        // inserisci a indice 1
+String x = list.get(0);
+list.remove(&quot;a&quot;);
+list.contains(&quot;b&quot;);
+list.size();
+list.isEmpty();
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Operazione</th>
+<th>Complessità</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>get(i)</code>, <code>set(i, x)</code></td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td><code>add(x)</code> in coda</td>
+<td>O(1) ammortizzata</td>
+</tr>
+<tr>
+<td><code>add(i, x)</code> in mezzo</td>
+<td>O(n)</td>
+</tr>
+<tr>
+<td><code>remove(i)</code></td>
+<td>O(n)</td>
+</tr>
+<tr>
+<td><code>contains(x)</code></td>
+<td>O(n)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="linkedlist"><code>LinkedList</code></h3>
+<p>Lista doppiamente concatenata. Veloce in inserimenti in testa/coda, <strong>lenta in get</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Operazione</th>
+<th>Complessità</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>get(i)</code>, <code>set(i, x)</code></td>
+<td><strong>O(n)</strong></td>
+</tr>
+<tr>
+<td><code>add(x)</code> in coda</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td><code>addFirst(x)</code>, <code>removeFirst()</code></td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td><code>contains(x)</code></td>
+<td>O(n)</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Regola pratica</strong>: usa <strong>sempre</strong> <code>ArrayList</code>. <code>LinkedList</code> è quasi mai una buona scelta in pratica — la cache locality di un array supera quasi sempre la "teoria" della lista concatenata. Eccezione: usi pesanti come <code>Deque</code>, ma anche lì <code>ArrayDeque</code> è più veloce.</p>
+</blockquote>
+<h3 id="copyonwritearraylist"><code>CopyOnWriteArrayList</code></h3>
+<p>Thread-safe. Ogni modifica crea una copia interna. Ottimo per "molte letture, poche scritture" (event listeners, configurazione).</p>
+<h2 id="set-nessun-duplicato"><code>Set</code>: nessun duplicato</h2>
+<h3 id="hashset"><code>HashSet</code></h3>
+<p>Backing <code>HashMap</code>. Ordine <strong>indefinito</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Operazione</th>
+<th>Complessità</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>add</code>, <code>remove</code>, <code>contains</code></td>
+<td>O(1) ammortizzata</td>
+</tr>
+</tbody>
+</table>
+<p>Richiede <code>equals</code> e <code>hashCode</code> corretti sugli elementi (vedi sez. 6).</p>
+<h3 id="linkedhashset"><code>LinkedHashSet</code></h3>
+<p>Come <code>HashSet</code> ma mantiene l'<strong>ordine di inserimento</strong>.</p>
+<h3 id="treeset"><code>TreeSet</code></h3>
+<p>Backing rosso-nero (BST bilanciato). Ordinato per <code>Comparable</code> (o <code>Comparator</code>).</p>
+<table>
+<thead>
+<tr>
+<th>Operazione</th>
+<th>Complessità</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>add</code>, <code>remove</code>, <code>contains</code></td>
+<td>O(log n)</td>
+</tr>
+<tr>
+<td><code>first()</code>, <code>last()</code></td>
+<td>O(log n)</td>
+</tr>
+<tr>
+<td><code>headSet(x)</code>, <code>tailSet(x)</code></td>
+<td>O(1) per la vista</td>
+</tr>
+</tbody>
+</table>
+<p>Ti dà operazioni "navigazionali": <code>ceiling</code>, <code>floor</code>, <code>higher</code>, <code>lower</code>.</p>
+<h2 id="map-chiave-valore"><code>Map</code>: chiave → valore</h2>
+<h3 id="hashmap"><code>HashMap</code></h3>
+<p>Backing array di bucket + linked list (poi alberi quando il bucket è troppo pieno, Java 8+).</p>
+<table>
+<thead>
+<tr>
+<th>Operazione</th>
+<th>Complessità</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>put</code>, <code>get</code>, <code>remove</code>, <code>containsKey</code></td>
+<td>O(1) ammortizzata</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-java">Map&lt;String, Integer&gt; m = new HashMap&lt;&gt;();
+m.put(&quot;a&quot;, 1);
+m.put(&quot;b&quot;, 2);
+m.get(&quot;a&quot;);                      // 1
+m.getOrDefault(&quot;z&quot;, 0);          // 0
+m.put(&quot;a&quot;, m.get(&quot;a&quot;) + 1);       // pattern incrementa
+m.merge(&quot;a&quot;, 1, Integer::sum);    // più elegante
+m.putIfAbsent(&quot;c&quot;, 3);
+for (var e : m.entrySet()) {
+    System.out.println(e.getKey() + &quot; = &quot; + e.getValue());
+}
+</code></pre>
+<h3 id="linkedhashmap"><code>LinkedHashMap</code></h3>
+<p>Mantiene ordine di inserimento (o di accesso, se configurato — base per LRU cache).</p>
+<h3 id="treemap"><code>TreeMap</code></h3>
+<p>Ordinata per chiave. Operazioni O(log n).</p>
+<h3 id="concurrenthashmap"><code>ConcurrentHashMap</code></h3>
+<p>Thread-safe, alta concorrenza. La vediamo in concurrency.</p>
+<h2 id="queue-e-deque"><code>Queue</code> e <code>Deque</code></h2>
+<p><code>Queue</code> = coda FIFO. <code>Deque</code> = doppia, opera ai due estremi.</p>
+<pre><code class="language-java">Deque&lt;Integer&gt; stack = new ArrayDeque&lt;&gt;();
+stack.push(1); stack.push(2); stack.push(3);
+stack.pop();      // 3 (LIFO)
+
+Deque&lt;Integer&gt; queue = new ArrayDeque&lt;&gt;();
+queue.offer(1); queue.offer(2); queue.offer(3);
+queue.poll();    // 1 (FIFO)
+</code></pre>
+<h3 id="priorityqueue"><code>PriorityQueue</code></h3>
+<p>Min-heap (per default, il più piccolo prima):</p>
+<pre><code class="language-java">PriorityQueue&lt;Integer&gt; pq = new PriorityQueue&lt;&gt;();
+pq.offer(5); pq.offer(1); pq.offer(3);
+pq.poll();    // 1
+pq.poll();    // 3
+pq.poll();    // 5
+</code></pre>
+<h2 id="tabella-riepilogativa-quando-usare-cosa">Tabella riepilogativa: quando usare cosa</h2>
+<table>
+<thead>
+<tr>
+<th>Esigenza</th>
+<th>Struttura</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Lista ordinata, accesso casuale</td>
+<td><code>ArrayList</code></td>
+</tr>
+<tr>
+<td>Lista, push/pop frequente in testa</td>
+<td><code>ArrayDeque</code></td>
+</tr>
+<tr>
+<td>Insieme unico, no ordine</td>
+<td><code>HashSet</code></td>
+</tr>
+<tr>
+<td>Insieme unico, ordine inserimento</td>
+<td><code>LinkedHashSet</code></td>
+</tr>
+<tr>
+<td>Insieme ordinato per valore</td>
+<td><code>TreeSet</code></td>
+</tr>
+<tr>
+<td>Mappa chiave → valore</td>
+<td><code>HashMap</code></td>
+</tr>
+<tr>
+<td>Mappa ordinata (per chiave)</td>
+<td><code>TreeMap</code></td>
+</tr>
+<tr>
+<td>Mappa con ordine inserimento</td>
+<td><code>LinkedHashMap</code></td>
+</tr>
+<tr>
+<td>Mappa LRU (cache)</td>
+<td><code>LinkedHashMap(accessOrder=true)</code> + override <code>removeEldestEntry</code></td>
+</tr>
+<tr>
+<td>Coda FIFO</td>
+<td><code>ArrayDeque</code> (come <code>Queue</code>)</td>
+</tr>
+<tr>
+<td>Coda con priorità</td>
+<td><code>PriorityQueue</code></td>
+</tr>
+<tr>
+<td>Multithreading lettore-scrittore</td>
+<td><code>ConcurrentHashMap</code>, <code>CopyOnWriteArrayList</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="iteratori-e-concurrentmodificationexception">Iteratori e <code>ConcurrentModificationException</code></h2>
+<pre><code class="language-java">List&lt;String&gt; l = new ArrayList&lt;&gt;(List.of(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;));
+for (String s : l) {
+    if (s.equals(&quot;b&quot;)) l.remove(s);   // ConcurrentModificationException!
+}
+</code></pre>
+<p>L'iteratore "fail-fast" rileva la modifica. Soluzioni:</p>
+<ol>
+<li><strong><code>Iterator.remove()</code></strong>:
+   <code>java
+   var it = l.iterator();
+   while (it.hasNext()) {
+       if (it.next().equals("b")) it.remove();
+   }</code></li>
+<li><strong><code>removeIf</code> (Java 8+)</strong>:
+   <code>java
+   l.removeIf(s -&gt; s.equals("b"));</code></li>
+<li><strong>Copia, itera, rimuovi</strong>:
+   <code>java
+   for (String s : new ArrayList&lt;&gt;(l)) {
+       if (...) l.remove(s);
+   }</code></li>
+</ol>
+<h2 id="collezioni-immutabili">Collezioni immutabili</h2>
+<pre><code class="language-java">List&lt;String&gt; immList = List.of(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;);
+Set&lt;Integer&gt;  immSet  = Set.of(1, 2, 3);
+Map&lt;String,Integer&gt; immMap = Map.of(&quot;a&quot;, 1, &quot;b&quot;, 2);
+
+immList.add(&quot;d&quot;);   // UnsupportedOperationException
+</code></pre>
+<p><code>List.copyOf(other)</code>, <code>Set.copyOf(other)</code>, <code>Map.copyOf(other)</code> creano copie immutabili. <strong>Sempre</strong> preferiscile quando passi collezioni "in lettura sola" — più sicuro e talvolta più efficiente.</p>
+<blockquote>
+<p><strong>Attenzione</strong>: <code>List.of(null)</code> lancia NPE. Le collezioni immutabili <strong>non ammettono null</strong>.</p>
+</blockquote>
+<h2 id="collections-utility-class">Collections utility class</h2>
+<pre><code class="language-java">Collections.sort(list);
+Collections.sort(list, Comparator.reverseOrder());
+Collections.reverse(list);
+Collections.shuffle(list);
+Collections.frequency(list, &quot;x&quot;);
+Collections.min(list);
+Collections.max(list);
+Collections.emptyList();        // List vuota immutabile
+Collections.singletonList(&quot;a&quot;); // List immutabile con 1 elemento
+Collections.unmodifiableList(l);// wrapper read-only di una List mutabile
+</code></pre>
+<h2 id="esercizi">Esercizi</h2>
+<details>
+<summary>Es 9.1 — Conta frequenze</summary>
+
+Conta quante volte appare ogni parola in una lista.
+
+
+<pre><code class="language-java">List&lt;String&gt; parole = List.of(&quot;a&quot;, &quot;b&quot;, &quot;a&quot;, &quot;c&quot;, &quot;a&quot;, &quot;b&quot;);
+Map&lt;String, Integer&gt; count = new HashMap&lt;&gt;();
+for (String p : parole) {
+    count.merge(p, 1, Integer::sum);
+}
+// {a=3, b=2, c=1}
+</code></pre>
+
+
+</details>
+
+<details>
+<summary>Es 9.2 — Top-K più frequenti</summary>
+
+Dato un `Map<String, Integer>` di parole → frequenza, restituisci le top K.
+
+
+<pre><code class="language-java">public static List&lt;String&gt; topK(Map&lt;String, Integer&gt; freq, int k) {
+    return freq.entrySet().stream()
+        .sorted(Map.Entry.&lt;String,Integer&gt;comparingByValue().reversed())
+        .limit(k)
+        .map(Map.Entry::getKey)
+        .toList();
+}
+</code></pre>
+
+
+Vedremo gli stream meglio nella prossima sezione.
+
+</details>
+
+<details>
+<summary>Es 9.3 — LRU cache</summary>
+
+Implementa una semplice LRU cache di capacità N.
+
+
+<pre><code class="language-java">public class LRUCache&lt;K, V&gt; extends LinkedHashMap&lt;K, V&gt; {
+    private final int capacity;
+    public LRUCache(int capacity) {
+        super(capacity, 0.75f, true);  // accessOrder=true
+        this.capacity = capacity;
+    }
+    @Override
+    protected boolean removeEldestEntry(Map.Entry&lt;K, V&gt; eldest) {
+        return size() &gt; capacity;
+    }
+}
+
+LRUCache&lt;String, String&gt; c = new LRUCache&lt;&gt;(2);
+c.put(&quot;a&quot;, &quot;1&quot;);
+c.put(&quot;b&quot;, &quot;2&quot;);
+c.get(&quot;a&quot;);          // rinfresca &quot;a&quot;
+c.put(&quot;c&quot;, &quot;3&quot;);     // &quot;b&quot; viene espulso (più vecchio non acceduto)
+System.out.println(c.keySet());  // [a, c]
+</code></pre>
+
+
+</details>
+
+<details>
+<summary>Es 9.4 — Rimuovi duplicati preservando l'ordine</summary>
+
+
+<pre><code class="language-java">List&lt;Integer&gt; deduped = new ArrayList&lt;&gt;(new LinkedHashSet&lt;&gt;(input));
+// o con stream:
+List&lt;Integer&gt; deduped = input.stream().distinct().toList();
+</code></pre>
+
+
+</details>
+
+<details>
+<summary>Es 9.5 — `ConcurrentModificationException` evitato</summary>
+
+Rimuovi tutti gli elementi che soddisfano un predicato.
+
+
+<pre><code class="language-java">list.removeIf(x -&gt; x % 2 == 0);   // semplice
+</code></pre>
+
+
+</details>
+
+<h2 id="cosa-devi-portarti-via">Cosa devi portarti via</h2>
+<ul>
+<li><strong><code>ArrayList</code></strong> quasi sempre per <code>List</code>. <strong><code>HashMap</code></strong> quasi sempre per <code>Map</code>.</li>
+<li><code>Set</code> quando vuoi unicità. <code>TreeSet</code>/<code>TreeMap</code> per ordine ordinato.</li>
+<li><strong>Conosci la complessità</strong> di ogni operazione: la scelta della struttura cambia performance di 100x.</li>
+<li><code>removeIf</code> invece di iterare e modificare.</li>
+<li>Collezioni immutabili (<code>List.of</code>, ecc.) per parametri "in lettura sola".</li>
+<li><code>Map.merge</code> per pattern "incrementa il contatore".</li>
+</ul>
+<p>Prossimo: Stream API, lambda, functional interfaces, Optional.</p>
+      <nav class="pager">
+<a href="08-generics.html" class="prev"><span class="label">← Precedente</span><span class="title">Generics: tipi parametrici, PECS, type erasure, wildcards</span></a>
+<a href="10-stream-lambda-optional.html" class="next"><span class="label">Successivo →</span><span class="title">Stream API, lambda, functional interfaces, Optional</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Java + Spring Zero to Hero</strong> — percorso completo da Java base a Spring Batch in produzione.</p><p>Materiale a scopo educativo. Codice sotto licenza MIT; usalo liberamente nei tuoi progetti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body, {delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true, background: '#15191e', primaryColor: '#1d2530',
+      primaryTextColor: '#eef1f5', primaryBorderColor: '#f89820',
+      lineColor: '#6db33f', secondaryColor: '#1a1f25', tertiaryColor: '#222a33',
+      mainBkg: '#1d2530', nodeBorder: '#f89820', clusterBkg: '#0f1318',
+      clusterBorder: '#2a3340', titleColor: '#f89820',
+      edgeLabelBackground: '#0f1318', textColor: '#eef1f5',
+      labelTextColor: '#eef1f5', actorBkg: '#1d2530', actorBorder: '#f89820',
+      actorTextColor: '#f89820', actorLineColor: '#6db33f',
+      signalColor: '#eef1f5', signalTextColor: '#eef1f5',
+      labelBoxBkgColor: '#1d2530', labelBoxBorderColor: '#f89820',
+      noteBkgColor: '#fff6a8', noteTextColor: '#0f1318', noteBorderColor: '#fff6a8',
+      activationBkgColor: '#1d2530', activationBorderColor: '#f89820',
+      sequenceNumberColor: '#0f1318'
+    },
+    flowchart: { curve: 'basis', padding: 16 },
+    sequence: { mirrorActors: false, bottomMarginAdj: 10 },
+    fontFamily: 'JetBrains Mono, Cascadia Code, Consolas, monospace'
+  });
+</script>
+</body>
+</html>

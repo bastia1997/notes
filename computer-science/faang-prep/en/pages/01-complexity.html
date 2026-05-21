@@ -1,0 +1,758 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Computational complexity (Big-O) — FAANG Prep</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">F</div>
+      <div>
+        <div class="brand-title">FAANG Prep</div>
+        <div class="brand-subtitle">DS&amp;A · System Design</div>
+      </div>
+    </div>
+    <div class="lang-bar">
+      <a class="lang-switcher" href="../../pages/01-complessita.html" title="Italiano"><span class="flag-icon">🇮🇹</span><span class="flag-label">Italiano</span></a>
+    </div>
+  </div>
+  <div class="search-wrap">
+    <input class="search-input" id="search-input" placeholder="Search content... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/00-introduction.html" class=""><span class="num">00</span>Introduction and how to use this path</a></li><li class="nav-item"><a href="../pages/01-complexity.html" class="active"><span class="num">01</span>Computational complexity (Big-O)</a></li><li class="nav-item"><a href="../pages/02-arrays-strings.html" class=""><span class="num">02</span>Arrays and strings</a></li><li class="nav-item"><a href="../pages/03-hashmap-set.html" class=""><span class="num">03</span>Hashmap and set</a></li><li class="nav-item"><a href="../pages/04-linked-list.html" class=""><span class="num">04</span>Linked list</a></li><li class="nav-item"><a href="../pages/05-stack-queue.html" class=""><span class="num">05</span>Stack and queue</a></li><li class="nav-item"><a href="../pages/06-trees.html" class=""><span class="num">06</span>Trees (binary tree and BST)</a></li><li class="nav-item"><a href="../pages/07-heap.html" class=""><span class="num">07</span>Heap and priority queue</a></li><li class="nav-item"><a href="../pages/08-graphs.html" class=""><span class="num">08</span>Graphs</a></li><li class="nav-item"><a href="../pages/09-trie.html" class=""><span class="num">09</span>Trie (prefix tree)</a></li><li class="nav-item"><a href="../pages/10-recursion-backtracking.html" class=""><span class="num">10</span>Recursion and backtracking</a></li><li class="nav-item"><a href="../pages/11-sorting-searching.html" class=""><span class="num">11</span>Sorting and searching</a></li><li class="nav-item"><a href="../pages/12-two-pointers-sliding-window.html" class=""><span class="num">12</span>Two pointers and sliding window</a></li><li class="nav-item"><a href="../pages/13-greedy.html" class=""><span class="num">13</span>Greedy</a></li><li class="nav-item"><a href="../pages/14-dp.html" class=""><span class="num">14</span>Dynamic programming</a></li><li class="nav-item"><a href="../pages/15-bit-manipulation.html" class=""><span class="num">15</span>Bit manipulation</a></li><li class="nav-item"><a href="../pages/16-oop-design-patterns.html" class=""><span class="num">16</span>OOP and design patterns</a></li><li class="nav-item"><a href="../pages/17-system-design.html" class=""><span class="num">17</span>System design — fundamentals</a></li><li class="nav-item"><a href="../pages/18-system-design-examples.html" class=""><span class="num">18</span>System design — end-to-end examples</a></li><li class="nav-item"><a href="../pages/19-concurrency.html" class=""><span class="num">19</span>Concurrency and parallelism</a></li><li class="nav-item"><a href="../pages/20-database-sql.html" class=""><span class="num">20</span>Database and SQL</a></li><li class="nav-item"><a href="../pages/21-os-networking.html" class=""><span class="num">21</span>OS and networking</a></li><li class="nav-item"><a href="../pages/22-coding-patterns.html" class=""><span class="num">22</span>The 16 interview coding patterns</a></li><li class="nav-item"><a href="../pages/23-behavioral-star.html" class=""><span class="num">23</span>Behavioral interview — STAR and Amazon LP</a></li><li class="nav-item"><a href="../pages/24-mock-interviews.html" class=""><span class="num">24</span>Mock interview and interview strategy</a></li><li class="nav-item"><a href="../pages/25-roadmap-90-days.html" class=""><span class="num">25</span>90-day Roadmap — operational plan</a></li><li class="nav-item"><a href="../pages/26-problem-bank.html" class=""><span class="num">26</span>Problem bank — 200+ FAANG problems</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Fundamentals</span>
+        <span>Section 1 of 26</span>
+      </div>
+      <h1>Computational complexity (Big-O)</h1>
+      <p class="summary">What an algorithm is, why we measure it, how to count. From first intuitions to full Big-O mastery, with visual examples.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Fundamentals</div>
+  
+  
+</div>
+      <p>Before diving in: <strong>this chapter is fundamental</strong>. If you digest it well, all the following chapters will seem easy. If you skip it, you'll navigate blind.</p>
+<p>Let's start from nothing.</p>
+<h2 id="part-1-what-an-algorithm-is-and-why-we-care-how-fast-it-is">Part 1 — What an algorithm is, and why we care how "fast" it is</h2>
+<h3 id="an-algorithm-is-a-recipe">An algorithm is a recipe</h3>
+<p>Think of a recipe to bake a cake: a sequence of instructions that, followed precisely, produces a result. An algorithm is exactly the same, applied to a computer. It's a series of steps that, given an input, produces an output.</p>
+<p>Example (informal): <em>"given a list of numbers, find the largest"</em>.</p>
+<p>Algorithm:
+1. Keep "the champion" in mind. Initially it's the first number.
+2. Go through the remaining numbers one by one.
+3. For each number, if it's larger than the champion, replace the champion with it.
+4. At the end, the champion is the max.</p>
+<p>In Python:</p>
+<pre><code class="language-python">def find_max(arr):
+    champion = arr[0]
+    for x in arr[1:]:
+        if x &gt; champion:
+            champion = x
+    return champion
+</code></pre>
+<h3 id="why-measure-speed">Why measure "speed"?</h3>
+<p>A simple recipe can take 10 minutes or 4 hours. For the afternoon in the kitchen it changes everything. For a computer, the difference between a "fast" and a "slow" algorithm is the difference between:</p>
+<ul>
+<li>Google giving you results in 200 ms vs 3 hours.</li>
+<li>A bank processing a transfer in 1 second vs the next day.</li>
+<li>Netflix making a recommendation in real time vs tomorrow morning.</li>
+</ul>
+<p>In FAANG interviews you'll <strong>always</strong> be asked to declare how fast your solution is. If you can't say it, it's like saying "I baked a cake" without being able to answer "how long did it take?". Immediate bad impression.</p>
+<h3 id="why-we-dont-measure-in-seconds">Why we don't measure in seconds</h3>
+<p>Natural question: "why don't I just run the code and see how many seconds it takes?". Three problems:</p>
+<ol>
+<li><strong>Depends on the machine</strong>. My computer is 10× faster than yours? Is the algorithm better or worse?</li>
+<li><strong>Depends on the input</strong>. Works great with 100 elements, but with 1 million? Do I have to try every possible size?</li>
+<li><strong>Depends on the moment</strong>. Are you running other programs? Is the CPU in throttling?</li>
+</ol>
+<p>So we don't measure in <strong>absolute time</strong> (seconds). We measure in <strong>number of operations</strong> as a function of the input. It's an <strong>abstract</strong> but <strong>universal</strong> measure: it works for any machine, any language, any moment.</p>
+<h2 id="part-2-counting-operations-the-first-intuition">Part 2 — Counting operations: the first intuition</h2>
+<p>Back to <code>find_max</code>. How many operations does it do?</p>
+<ul>
+<li>1 operation to initialize <code>champion = arr[0]</code>.</li>
+<li>For each list element (call <code>n</code> the length), it does <strong>1 comparison</strong> (<code>if x &gt; champion</code>) and <strong>maybe 1 assignment</strong> (<code>champion = x</code>).</li>
+</ul>
+<p>So: about <code>1 + n × 2 = 2n + 1</code> operations.</p>
+<p>If the list has <code>n = 10</code> elements → 21 operations.
+If it has <code>n = 1000</code> → 2001 operations.
+If it has <code>n = 1,000,000</code> → 2,000,001 operations.</p>
+<h3 id="question-is-2n1-fast-or-slow">Question: is 2n+1 "fast" or "slow"?</h3>
+<p>We'll see soon. But first, a key fact: notice that <strong>that "+1" and that "× 2" aren't very important</strong>. That is, if <code>n</code> is huge, the only thing that matters is that it's <strong>proportional to n</strong>. The <code>2</code> in front and the <code>+1</code> change little.</p>
+<p>See for yourself: for <code>n = 1,000,000</code>:</p>
+<ul>
+<li><code>n</code> = 1,000,000</li>
+<li><code>2n + 1</code> = 2,000,001</li>
+<li><code>5n + 100</code> = 5,000,100</li>
+<li><code>100n</code> = 100,000,000</li>
+</ul>
+<p>All these things are <strong>of the same order of magnitude</strong>: they're all "roughly linear". The leading number is a "constant" that doesn't change the general shape of the growth.</p>
+<h3 id="contrast-whats-different-order-of-magnitude">Contrast: what's "different order of magnitude"?</h3>
+<p>Now compare with this algorithm:</p>
+<pre><code class="language-python">def equal_pairs(arr):
+    &quot;&quot;&quot;Returns pairs (i, j) with arr[i] == arr[j], i &lt; j.&quot;&quot;&quot;
+    pairs = []
+    for i in range(len(arr)):
+        for j in range(i+1, len(arr)):
+            if arr[i] == arr[j]:
+                pairs.append((i, j))
+    return pairs
+</code></pre>
+<p>How many operations? Two nested loops. For each <code>i</code>, the inner loop does <code>n - i - 1</code> iterations. Total: <code>(n-1) + (n-2) + ... + 1 + 0 = n(n-1)/2</code> comparisons.</p>
+<p>For <code>n = 1,000,000</code>: <code>n(n-1)/2 ≈ 500 billion</code>. On a machine doing ~10⁸ operations/second: <strong>~5000 seconds = ~1.5 hours</strong>.</p>
+<p>Compare with <code>find_max</code> on <code>n = 1,000,000</code>: 2 million operations → <strong>~20 milliseconds</strong>.</p>
+<p><strong>Same order?</strong> No. One scales <strong>linearly</strong> with <code>n</code>, the other <strong>quadratically</strong>. For <code>n = 10</code> the difference is negligible. For <code>n = 10⁶</code> the difference is 5 orders of magnitude.</p>
+<p>Big-O is exactly this: classifying algorithms by <strong>how they grow as the input grows</strong>.</p>
+<h2 id="part-3-big-o-notation">Part 3 — Big-O notation</h2>
+<p>Big-O writes <code>O(f(n))</code> to say "this algorithm, ignoring constants and small terms, grows like f(n)".</p>
+<ul>
+<li><code>find_max</code>: <code>O(n)</code> — linear.</li>
+<li><code>equal_pairs</code>: <code>O(n²)</code> — quadratic.</li>
+</ul>
+<p>The formal rules are two and very simple:</p>
+<h3 id="rule-1-ignore-multiplicative-constants">Rule 1 — Ignore multiplicative constants</h3>
+<p><code>5n</code> is O(n). <code>1000n</code> is O(n). <code>0.001n</code> is O(n). All <strong>linear</strong>.</p>
+<p><strong>Why?</strong> Because the constant depends on irrelevant details: language, compiler, hardware. What matters is the <strong>shape of growth</strong>, not the precise slope.</p>
+<h3 id="rule-2-ignore-non-dominant-terms">Rule 2 — Ignore non-dominant terms</h3>
+<p><code>n² + 100n + 5000</code> is <code>O(n²)</code>. When <code>n</code> is large, <code>n²</code> dominates everything else.</p>
+<p>Verify: <code>n = 1000</code>. <code>n² = 1,000,000</code>. <code>100n = 100,000</code>. <code>5000 = 5000</code>. The first term is 10× the second and 200× the third. For <code>n = 10⁶</code>, the first is 10000× the second. Yes, we can ignore it.</p>
+<h3 id="so-to-analyze-an-algorithm">So, to analyze an algorithm:</h3>
+<ol>
+<li>Count operations as a function of <code>n</code> (even roughly).</li>
+<li>Keep only the fastest-growing term.</li>
+<li>Throw away constants.</li>
+</ol>
+<h2 id="part-4-complexity-classes-you-must-recognize">Part 4 — Complexity classes you must recognize</h2>
+<p>Here's the "scale" of most common complexities, from fastest to slowest:</p>
+<table>
+<thead>
+<tr>
+<th>Notation</th>
+<th>Name</th>
+<th>Example</th>
+<th>n=10⁶</th>
+<th>time (10⁸ op/s)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>O(1)</code></td>
+<td>constant</td>
+<td><code>arr[i]</code> access</td>
+<td>1</td>
+<td>instant</td>
+</tr>
+<tr>
+<td><code>O(log n)</code></td>
+<td>logarithmic</td>
+<td>binary search</td>
+<td>~20</td>
+<td>instant</td>
+</tr>
+<tr>
+<td><code>O(n)</code></td>
+<td>linear</td>
+<td>single scan</td>
+<td>10⁶</td>
+<td>10 ms</td>
+</tr>
+<tr>
+<td><code>O(n log n)</code></td>
+<td>linearithmic</td>
+<td>merge sort</td>
+<td>~2·10⁷</td>
+<td>0.2 s</td>
+</tr>
+<tr>
+<td><code>O(n²)</code></td>
+<td>quadratic</td>
+<td>nested loop</td>
+<td>10¹²</td>
+<td><strong>3 hours</strong></td>
+</tr>
+<tr>
+<td><code>O(n³)</code></td>
+<td>cubic</td>
+<td>triple loop</td>
+<td>10¹⁸</td>
+<td>impossible</td>
+</tr>
+<tr>
+<td><code>O(2ⁿ)</code></td>
+<td>exponential</td>
+<td>subset enumeration</td>
+<td>explodes</td>
+<td>impossible at n=40</td>
+</tr>
+<tr>
+<td><code>O(n!)</code></td>
+<td>factorial</td>
+<td>all permutations</td>
+<td>explodes</td>
+<td>impossible at n=12</td>
+</tr>
+</tbody>
+</table>
+<h3 id="visualization-important-for-building-intuition">Visualization (important for building intuition)</h3>
+<p>Here are the growth curves of the most common complexities, from fastest to slowest:</p>
+<div style="background:#161922;border:1px solid #262b3a;border-radius:8px;padding:16px;margin:16px 0;overflow-x:auto;">
+<svg viewBox="0 0 700 420" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;display:block;margin:auto;font-family:'Cascadia Code',monospace;font-size:12px;">
+  <defs>
+    <style>
+      .axis { stroke:#7a8194; stroke-width:1.5; fill:none; }
+      .axis-label { fill:#b6bdcc; font-size:13px; }
+      .grid { stroke:#262b3a; stroke-width:1; stroke-dasharray:3,3; }
+      .curve { fill:none; stroke-width:2.5; }
+      .legend { font-size:12px; font-weight:600; }
+    </style>
+  </defs>
+  <line class="grid" x1="60" y1="80"  x2="660" y2="80"/>
+  <line class="grid" x1="60" y1="160" x2="660" y2="160"/>
+  <line class="grid" x1="60" y1="240" x2="660" y2="240"/>
+  <line class="grid" x1="60" y1="320" x2="660" y2="320"/>
+  <line class="axis" x1="60" y1="20" x2="60" y2="380"/>
+  <line class="axis" x1="60" y1="380" x2="680" y2="380"/>
+  <text class="axis-label" x="20" y="30">operations</text>
+  <text class="axis-label" x="640" y="400">n (input)</text>
+  <path class="curve" stroke="#7a8194" d="M 60 370 L 660 370"/>
+  <text class="legend" fill="#7a8194" x="600" y="360">O(1)</text>
+  <path class="curve" stroke="#50fa7b" d="M 60 370 Q 200 345 350 330 T 660 310"/>
+  <text class="legend" fill="#50fa7b" x="600" y="305">O(log n)</text>
+  <path class="curve" stroke="#6cf" d="M 60 370 L 660 220"/>
+  <text class="legend" fill="#6cf" x="600" y="215">O(n)</text>
+  <path class="curve" stroke="#bd93f9" d="M 60 370 Q 250 320 460 220 T 660 130"/>
+  <text class="legend" fill="#bd93f9" x="595" y="125">O(n log n)</text>
+  <path class="curve" stroke="#ffb86c" d="M 60 370 Q 330 320 520 200 T 660 60"/>
+  <text class="legend" fill="#ffb86c" x="615" y="55">O(n²)</text>
+  <path class="curve" stroke="#ff6b6b" d="M 60 370 Q 200 320 280 200 Q 320 80 350 25"/>
+  <text class="legend" fill="#ff6b6b" x="360" y="30">O(2ⁿ)</text>
+  <path class="curve" stroke="#ff79c6" d="M 60 370 Q 130 300 180 180 Q 210 60 230 25"/>
+  <text class="legend" fill="#ff79c6" x="180" y="20">O(n!)</text>
+</svg>
+</div>
+
+<p>Exponential and factorial curves <strong>explode</strong> quickly (red/pink). Quadratic and linearithmic (orange/purple) grow fast. Linear (cyan) is "reasonable". Logarithmic (green) is <strong>nearly flat</strong>. Constant (gray) never changes.</p>
+<h3 id="a-note-on-o1">A note on O(1)</h3>
+<p><code>O(1)</code> means <strong>constant</strong>, i.e. "doesn't depend on n". It doesn't mean "fast", it means "time doesn't change if input grows". An algorithm that always takes exactly 3 seconds is <code>O(1)</code>. Slow but constant.</p>
+<h3 id="a-note-on-olog-n">A note on O(log n)</h3>
+<p>The logarithm is the function "inverse of the exponential". <code>log₂(8) = 3</code> because <code>2³ = 8</code>. <code>log₂(1024) = 10</code> because <code>2¹⁰ = 1024</code>.</p>
+<p>The logarithm grows <strong>very slowly</strong>:</p>
+<ul>
+<li><code>log₂(1) = 0</code></li>
+<li><code>log₂(1,000) ≈ 10</code></li>
+<li><code>log₂(1,000,000) ≈ 20</code></li>
+<li><code>log₂(1,000,000,000) ≈ 30</code></li>
+</ul>
+<p>When you divide the problem <strong>in half at each step</strong>, you need <code>log n</code> steps to get the answer. It's the magic of binary search.</p>
+<h2 id="part-5-how-to-recognize-complexity-by-reading-code">Part 5 — How to recognize complexity by reading code</h2>
+<p>Three practical rules, always to apply.</p>
+<h3 id="rule-a-single-loops-are-on">Rule A — Single loops are O(n)</h3>
+<pre><code class="language-python">for x in arr:    # n iterations
+    do_thing()   # each O(1)
+# Total: O(n)
+</code></pre>
+<h3 id="rule-b-nested-loops-are-on-m">Rule B — Nested loops are O(n × m)</h3>
+<p>If two loops scan independently on the same array:</p>
+<pre><code class="language-python">for i in range(n):
+    for j in range(n):
+        ...
+# O(n × n) = O(n²)
+</code></pre>
+<p>If they're two different arrays:</p>
+<pre><code class="language-python">for x in arr1:    # length n
+    for y in arr2:  # length m
+        ...
+# O(n × m)
+</code></pre>
+<p><strong>Subtle trap</strong>: not always two nested loops are <code>O(n²)</code>. Example:</p>
+<pre><code class="language-python">i, j = 0, n-1
+while i &lt; j:
+    if condition: i += 1
+    else: j -= 1
+</code></pre>
+<p>They look like "two pointers moving". But each iteration consumes <strong>one element</strong> (either advances <code>i</code>, or retreats <code>j</code>). So the total number of iterations is at most <code>n</code>. <strong>This is O(n), not O(n²)</strong>.</p>
+<h3 id="rule-c-halving-olog-n">Rule C — Halving = O(log n)</h3>
+<pre><code class="language-python">while n &gt; 1:
+    n = n // 2  # halves each time
+</code></pre>
+<p>This loop does <code>log₂(n)</code> iterations. If you see "I halve at each step" → <code>log n</code>.</p>
+<h3 id="rule-d-for-recursion-draw-the-tree">Rule D — For recursion, draw the tree</h3>
+<p>See dedicated section below.</p>
+<h2 id="part-6-step-by-step-guided-examples">Part 6 — Step-by-step guided examples</h2>
+<p>Let's practice. Here are various code snippets: try to analyze them <strong>before reading the answer</strong>.</p>
+<h3 id="example-61">Example 6.1</h3>
+<pre><code class="language-python">def f1(arr):
+    s = 0
+    for x in arr:
+        s += x
+    return s
+</code></pre>
+<p>Think... Answer: <strong>O(n)</strong>. One loop, one operation inside.</p>
+<h3 id="example-62">Example 6.2</h3>
+<pre><code class="language-python">def f2(arr):
+    s = 0
+    for x in arr:
+        for y in arr:
+            s += x * y
+    return s
+</code></pre>
+<p>Answer: <strong>O(n²)</strong>. Two nested loops, each O(n).</p>
+<h3 id="example-63">Example 6.3</h3>
+<pre><code class="language-python">def f3(n):
+    i = 1
+    while i &lt; n:
+        print(i)
+        i *= 2
+</code></pre>
+<p>Answer: <strong>O(log n)</strong>. Variable <code>i</code> doubles each step. Takes <code>log₂(n)</code> steps to reach <code>n</code>.</p>
+<h3 id="example-64">Example 6.4</h3>
+<pre><code class="language-python">def f4(arr):
+    for i in range(len(arr)):
+        for j in range(i, len(arr)):
+            print(arr[i], arr[j])
+</code></pre>
+<p>Number of iterations: <code>n + (n-1) + (n-2) + ... + 1 = n(n+1)/2</code>.</p>
+<p>Answer: <strong>O(n²)</strong>. Even if the inner loop isn't "up to n" every time, the sum is quadratic. Constants disappear.</p>
+<h3 id="example-65">Example 6.5</h3>
+<pre><code class="language-python">def f5(arr):
+    sorted_arr = sorted(arr)
+    for x in sorted_arr:
+        print(x)
+</code></pre>
+<p>Answer: <strong>O(n log n)</strong>. <code>sorted</code> is <code>O(n log n)</code>, the loop is <code>O(n)</code>. Sum is <code>O(n log n) + O(n)</code>, which reduces to <code>O(n log n)</code> (dominant term rule).</p>
+<h3 id="example-66">Example 6.6</h3>
+<pre><code class="language-python">def f6(arr):
+    for x in arr:
+        if x in arr:  # WARNING
+            print(x)
+</code></pre>
+<p>Answer: <strong>O(n²)</strong>. The <code>in</code> operator on a <strong>list</strong> is O(n). If <code>arr</code> were a <code>set</code>, it'd be O(1) and total O(n). One of the most common interview traps.</p>
+<h3 id="example-67">Example 6.7</h3>
+<pre><code class="language-python">def f7(s):
+    result = &quot;&quot;
+    for c in s:
+        result += c
+</code></pre>
+<p>Answer: <strong>O(n²)</strong>. <strong>Classic trap question</strong>. String concatenation in Python creates a new string each time, copying previous characters. Iteration <code>i</code>: copies <code>i</code> chars. Sum: <code>1+2+...+n = O(n²)</code>.</p>
+<p>Fix: <code>''.join(char_list)</code> → O(n).</p>
+<h2 id="part-7-recursion-complexity">Part 7 — Recursion complexity</h2>
+<p>For recursive algorithms you can't "count loops". You must think of the <strong>call tree</strong>.</p>
+<p>Example:</p>
+<pre><code class="language-python">def fib(n):
+    if n &lt; 2: return n
+    return fib(n-1) + fib(n-2)
+</code></pre>
+<p>Draw the call tree for <code>fib(4)</code>:</p>
+<pre><code class="language-mermaid">flowchart TD
+    f4[&quot;fib(4)&quot;] --&gt; f3a[&quot;fib(3)&quot;]
+    f4 --&gt; f2a[&quot;fib(2)&quot;]
+    f3a --&gt; f2b[&quot;fib(2)&quot;]
+    f3a --&gt; f1a[&quot;fib(1)&quot;]
+    f2a --&gt; f1b[&quot;fib(1)&quot;]
+    f2a --&gt; f0a[&quot;fib(0)&quot;]
+    f2b --&gt; f1c[&quot;fib(1)&quot;]
+    f2b --&gt; f0b[&quot;fib(0)&quot;]
+</code></pre>
+<p>The tree has depth <code>n</code> and each node has 2 children → total nodes ≈ <code>2ⁿ</code>. <strong><code>O(2ⁿ)</code></strong>. Horribly slow.</p>
+<h3 id="how-its-formalized-recurrences">How it's formalized: recurrences</h3>
+<p>A <strong>recurrence relation</strong> describes <code>T(n)</code> in terms of <code>T</code> of smaller inputs.</p>
+<p>For <code>fib</code>: <code>T(n) = T(n-1) + T(n-2) + O(1)</code> → grows like <code>φⁿ ≈ 2ⁿ</code>.</p>
+<p>For <code>binary_search</code> (see ch. 11): <code>T(n) = T(n/2) + O(1)</code> → <code>O(log n)</code>. Halve at each step.</p>
+<p>For <code>merge_sort</code>: <code>T(n) = 2 T(n/2) + O(n)</code>. The "+O(n)" is the merge. Solution: <code>O(n log n)</code>.</p>
+<h3 id="the-master-theorem-simplified">The "Master theorem" simplified</h3>
+<p>For recurrences of type <code>T(n) = a · T(n/b) + O(nᵈ)</code>:</p>
+<ol>
+<li>Compare <code>log_b(a)</code> with <code>d</code>.</li>
+<li>If <code>log_b(a) &lt; d</code> → <code>O(nᵈ)</code>.</li>
+<li>If <code>log_b(a) = d</code> → <code>O(nᵈ · log n)</code>.</li>
+<li>If <code>log_b(a) &gt; d</code> → <code>O(n^log_b(a))</code>.</li>
+</ol>
+<p>Examples:</p>
+<ul>
+<li><strong>Merge sort</strong>: <code>T(n) = 2T(n/2) + O(n)</code>. <code>a=2, b=2, d=1</code>. <code>log_2(2) = 1 = d</code> → case 3 → <code>O(n log n)</code>. ✓</li>
+<li><strong>Binary search</strong>: <code>T(n) = T(n/2) + O(1)</code>. <code>a=1, b=2, d=0</code>. <code>log_2(1) = 0 = d</code> → case 3 → <code>O(log n)</code>. ✓</li>
+<li><strong>Karatsuba (fast multiplication)</strong>: <code>T(n) = 3T(n/2) + O(n)</code>. <code>log_2(3) ≈ 1.58 &gt; 1 = d</code> → case 4 → <code>O(n^1.58)</code>.</li>
+</ul>
+<p>You don't need to memorize it. You need to recognize that it exists and apply it.</p>
+<h2 id="part-8-space-complexity">Part 8 — Space complexity</h2>
+<p>Not only time. <strong>Space</strong> = how much extra memory the algorithm uses, beyond the input.</p>
+<p>Examples:</p>
+<pre><code class="language-python">def sum_arr(arr):
+    s = 0
+    for x in arr: s += x
+    return s
+</code></pre>
+<p>Space: <strong>O(1)</strong>. Only one variable <code>s</code>, regardless of <code>n</code>.</p>
+<pre><code class="language-python">def doubled(arr):
+    result = []
+    for x in arr: result.append(x * 2)
+    return result
+</code></pre>
+<p>Space: <strong>O(n)</strong>. The <code>result</code> list grows with <code>n</code>.</p>
+<h3 id="recursive-stack">Recursive stack</h3>
+<p>Recursion also consumes memory, because the computer must <strong>remember where to return</strong> after each call. This memory is called <strong>call stack</strong>.</p>
+<pre><code class="language-python">def sum_rec(arr, i=0):
+    if i == len(arr): return 0
+    return arr[i] + sum_rec(arr, i+1)
+</code></pre>
+<p>Time: O(n). <strong>Space: O(n)</strong> — because there are <code>n</code> calls stacked simultaneously.</p>
+<p>In Python the default limit is ~1000 recursive calls. So if <code>n &gt; 1000</code>, the recursion crashes with <code>RecursionError</code>. The iterative version, instead, is O(1) space (beyond input).</p>
+<h2 id="part-9-the-108-rule-of-thumb">Part 9 — The "10⁸ rule of thumb"</h2>
+<p>A modern computer does ~10⁸ (one hundred million) simple operations per second. So:</p>
+<ul>
+<li>Want the program to finish within <strong>1 second</strong>? Total operations must be <strong>≤ ~10⁸</strong>.</li>
+</ul>
+<p>Combining with input size, you can figure out <strong>what complexity you need</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>max n</th>
+<th>expected complexity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10⁸</td>
+<td>O(n) — nothing more</td>
+</tr>
+<tr>
+<td>10⁶</td>
+<td>O(n log n) ok</td>
+</tr>
+<tr>
+<td>10⁴</td>
+<td>O(n²) ok</td>
+</tr>
+<tr>
+<td>500</td>
+<td>O(n³) ok</td>
+</tr>
+<tr>
+<td>20</td>
+<td>O(2ⁿ) ok</td>
+</tr>
+<tr>
+<td>10</td>
+<td>O(n!) ok</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Use it backwards</strong>: when the interviewer says <em>"n can reach 10⁵"</em>, they're telling you <strong>implicitly</strong> that the expected solution is <code>O(n log n)</code> or <code>O(n)</code>. If you propose <code>O(n²)</code>, they'll push you to improve.</p>
+<p>This is a crucial skill: <strong>read the problem, deduce the target complexity, aim for it</strong>.</p>
+<h2 id="part-10-best-case-worst-case-average-case">Part 10 — Best case, worst case, average case</h2>
+<p>Big-O by default refers to the <strong>worst case</strong>. Example:</p>
+<ul>
+<li>Search for an element in an unsorted array. <strong>Worst case</strong>: element is in last position → O(n). <strong>Best case</strong>: in first position → O(1).</li>
+</ul>
+<p>In interview, unless explicitly requested, <strong>always declare worst case</strong>.</p>
+<h3 id="amortized-complexity">Amortized complexity</h3>
+<p>Some data structures have operations that are <strong>occasionally slow</strong> but on average fast.</p>
+<p>Example: <code>list.append(x)</code> in Python. Internally Python keeps an array that <strong>doubles capacity</strong> when full. When this happens, you pay O(n) to copy everything to the new array. But it doubles → happens only <code>log n</code> times.</p>
+<p>On average: O(1) per append. Declared as <strong>O(1) amortized</strong>. In interview: <em>"Append is O(1) amortized — worst case O(n), but total of n appends is O(n)"</em>.</p>
+<h2 id="part-11-python-operations-cheat-sheet">Part 11 — Python operations cheat-sheet</h2>
+<p>To always keep in mind:</p>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Complexity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>list[i]</code>, <code>list[i] = x</code>, <code>len(list)</code></td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td><code>list.append(x)</code>, <code>list.pop()</code></td>
+<td>O(1) amortized</td>
+</tr>
+<tr>
+<td><code>list.insert(0, x)</code>, <code>list.pop(0)</code></td>
+<td><strong>O(n)</strong> — use <code>collections.deque</code>!</td>
+</tr>
+<tr>
+<td><code>list.index(x)</code>, <code>x in list</code></td>
+<td><strong>O(n)</strong></td>
+</tr>
+<tr>
+<td><code>sorted(list)</code>, <code>list.sort()</code></td>
+<td>O(n log n)</td>
+</tr>
+<tr>
+<td><code>dict[k]</code>, <code>dict[k] = v</code>, <code>k in dict</code></td>
+<td>O(1) avg</td>
+</tr>
+<tr>
+<td><code>set</code> add/in/remove</td>
+<td>O(1) avg</td>
+</tr>
+<tr>
+<td><code>collections.deque</code> append/popleft</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td><code>heapq.heappush/heappop</code></td>
+<td>O(log n)</td>
+</tr>
+<tr>
+<td><code>''.join(list_of_str)</code></td>
+<td>O(total chars)</td>
+</tr>
+<tr>
+<td><code>string + string</code> in loop</td>
+<td><strong>O(n²) — avoid!</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="typical-traps">Typical traps</h3>
+<pre><code class="language-python"># BAD: O(n²)
+s = &quot;&quot;
+for c in chars: s += c
+
+# GOOD: O(n)
+s = &quot;&quot;.join(chars)
+</code></pre>
+<pre><code class="language-python"># BAD: O(n²) — pop(0) is O(n)
+while arr:
+    first = arr.pop(0)
+    process(first)
+
+# GOOD: O(n)
+from collections import deque
+arr = deque(arr)
+while arr:
+    first = arr.popleft()
+    process(first)
+</code></pre>
+<pre><code class="language-python"># BAD: O(n²)
+seen = []
+for x in arr:
+    if x in seen: ...   # 'in' on list is O(n)
+    seen.append(x)
+
+# GOOD: O(n)
+seen = set()
+for x in arr:
+    if x in seen: ...   # 'in' on set is O(1)
+    seen.add(x)
+</code></pre>
+<h2 id="part-12-how-to-declare-complexity-in-interview">Part 12 — How to declare complexity in interview</h2>
+<p>At the end of every solution, <strong>before the interviewer asks</strong>, declare:</p>
+<blockquote>
+<p><em>"Time is O(n log n) because I sort the array, then do a linear pass. Space is O(n) because I keep a dict of n elements. Counting the recursion stack, total space is O(n)."</em></p>
+</blockquote>
+<p>If you know your solution is suboptimal, <strong>anticipate it</strong>:</p>
+<blockquote>
+<p><em>"This is the brute force O(n²). I can do better leveraging hashmap, getting to O(n) time at cost of O(n) space. Should I proceed to that?"</em></p>
+</blockquote>
+<p>This demonstrates awareness and mastery — one of the main hire criteria.</p>
+<h2 id="guided-exercises">Guided exercises</h2>
+<h3 id="exercise-11-easy">Exercise 1.1 <span class="problem-tag easy">EASY</span></h3>
+<p>What's the complexity of:</p>
+<pre><code class="language-python">for i in range(n):
+    for j in range(i, n):
+        print(i, j)
+</code></pre>
+<details><summary>Guided reasoning</summary>
+
+Think about total iterations of the inner loop:
+
+- For `i=0`: inner loop does `n` iterations.
+- For `i=1`: does `n-1`.
+- For `i=2`: does `n-2`.
+- ...
+- For `i=n-1`: does `1`.
+
+Sum: `n + (n-1) + ... + 1 = n(n+1)/2`.
+
+Dominant term is `n²/2`. Constants are thrown away.
+
+**Answer: O(n²)**.
+
+Intuition: "double loop where second depends on first, but in a linear way" is almost always `O(n²)`. Even if the iteration matrix is "triangular" instead of "square", the class stays the same.
+</details>
+
+<h3 id="exercise-12-easy">Exercise 1.2 <span class="problem-tag easy">EASY</span></h3>
+<pre><code class="language-python">i = 1
+while i &lt; n:
+    i *= 2
+</code></pre>
+<details><summary>Reasoning</summary>
+
+`i` doubles at each iteration. After `k` iterations, `i = 2^k`. We want to know for which `k` we reach or pass `n`:
+
+`2^k ≥ n` → `k ≥ log₂(n)`.
+
+So `log₂(n)` iterations are needed. **O(log n)**.
+
+Intuition: every time you see "multiply/divide by a constant", think logarithm.
+</details>
+
+<h3 id="exercise-13-medium">Exercise 1.3 <span class="problem-tag medium">MEDIUM</span></h3>
+<pre><code class="language-python">for i in range(n):
+    j = 1
+    while j &lt; n:
+        j *= 2
+</code></pre>
+<details><summary>Reasoning</summary>
+
+Outer loop: O(n). Inner loop: O(log n) (from above).
+
+Nested loops → multiply.
+
+**Answer: O(n log n)**.
+
+This is the complexity of many sorting algorithms (merge sort, heap sort, Python's TimSort).
+</details>
+
+<h3 id="exercise-14-medium">Exercise 1.4 <span class="problem-tag medium">MEDIUM</span></h3>
+<pre><code class="language-python">def f(n):
+    if n &lt;= 1: return
+    f(n-1)
+    f(n-1)
+</code></pre>
+<details><summary>Reasoning</summary>
+
+Draw the call tree. Each node has 2 children, depth `n`. Total nodes: `2^0 + 2^1 + ... + 2^(n-1) = 2^n - 1 ≈ 2^n`.
+
+**Time: O(2ⁿ)**.
+
+**Space: O(n)**. At any moment, the "chain" of active calls has depth at most `n` (a path from top to bottom of the tree), not the entire tree.
+
+Lesson: time and space of recursion **are not equal**. Time is total number of calls, space is max stack depth.
+</details>
+
+<h3 id="exercise-15-medium">Exercise 1.5 <span class="problem-tag medium">MEDIUM</span></h3>
+<p>You have an array of <code>n</code> strings, each at most <code>k</code> characters long. What's the complexity of <code>sorted(arr)</code>?</p>
+<details><summary>Reasoning</summary>
+
+`sorted` does `O(n log n)` comparisons. But each string comparison is not `O(1)`: to compare two `k`-length strings, worst case you look at all chars → `O(k)`.
+
+**Answer: O(n · k · log n)**.
+
+Many candidates say only `O(n log n)` and lose points. **When comparing complex objects, count the comparison cost.**
+</details>
+
+<h3 id="exercise-16-hard">Exercise 1.6 <span class="problem-tag hard">HARD</span></h3>
+<pre><code class="language-python">def f(n):
+    if n &lt;= 1: return 1
+    return f(n//2) + f(n//2) + f(n//2)
+</code></pre>
+<details><summary>Reasoning</summary>
+
+Recurrence: `T(n) = 3 T(n/2) + O(1)`.
+
+Master theorem: `a=3, b=2, d=0`. `log_2(3) ≈ 1.58`. Compare with `d=0` → case 3.
+
+**Answer: O(n^log₂(3)) ≈ O(n^1.58)**.
+
+Strange, right? Not linear, not quadratic, but a fractional power. This is exactly the complexity of Karatsuba for fast multiplication.
+</details>
+
+<h3 id="exercise-17-medium">Exercise 1.7 <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Interviewer says <em>"n can reach 200,000"</em>. Which complexities are acceptable (within 1 second)?</p>
+<details><summary>Reasoning</summary>
+
+Threshold: ~10⁸ total operations.
+
+- `O(n)` → 2·10⁵ operations. ✓
+- `O(n log n)` → ~3.5·10⁶ operations. ✓
+- `O(n √n)` → ~10⁸. ✓ (limit)
+- `O(n²)` → 4·10¹⁰. ✗ (400 seconds)
+
+**The interviewer is telling you the expected solution is O(n log n) or O(n)**. If you propose O(n²), they'll push you to improve.
+
+Knowing how to read constraints is a fundamental skill.
+</details>
+
+<h3 id="exercise-18-medium">Exercise 1.8 <span class="problem-tag medium">MEDIUM</span></h3>
+<pre><code class="language-python">def f(arr):
+    n = len(arr)
+    for i in range(n):
+        for j in range(i+1, n):
+            for k in range(j+1, n):
+                ...
+</code></pre>
+<details><summary>Reasoning</summary>
+
+Three nested loops, each dependent on the previous. The number of iterations is the number of "triplets" `(i, j, k)` with `i < j < k`, which is `C(n, 3) = n(n-1)(n-2)/6`.
+
+Dominant term: `n³/6`. **Answer: O(n³)**.
+
+When you see triple loop, think `O(n³)`. E.g. 3Sum brute force.
+</details>
+
+<h2 id="summary-in-5-points">Summary in 5 points</h2>
+<ol>
+<li><strong>Big-O measures how an algorithm grows as input grows</strong>, ignoring constants and small terms.</li>
+<li><strong>Time and space</strong> are two different metrics, declare both.</li>
+<li><strong>Mnemonic scale</strong>: <code>O(1) &lt; O(log n) &lt; O(n) &lt; O(n log n) &lt; O(n²) &lt; O(2ⁿ) &lt; O(n!)</code>.</li>
+<li><strong>The 10⁸ rule</strong>: ~10⁸ operations/second. Use constraints to deduce target complexity.</li>
+<li><strong>Recursion</strong>: time = total calls (often a tree), space = max stack depth.</li>
+</ol>
+<p>When you've assimilated this chapter, every problem in the following chapters will become <em>"which algorithm gets me from naive complexity to target complexity?"</em>. It's literally the mental framework of the entire interview.</p>
+      <nav class="pager">
+<a href="00-introduction.html" class="prev"><span class="label">← Previous</span><span class="title">Introduction and how to use this path</span></a>
+<a href="02-arrays-strings.html" class="next"><span class="label">Next →</span><span class="title">Arrays and strings</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>FAANG Prep</strong> — complete prep path: DS&amp;A, system design, behavioral. Built to crush Big Tech interviews.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-index.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true,
+      background: '#161922',
+      primaryColor: '#1d2230',
+      primaryTextColor: '#e6e8ee',
+      primaryBorderColor: '#6cf',
+      lineColor: '#7a8194',
+      secondaryColor: '#262b3a',
+      tertiaryColor: '#0f1117',
+      mainBkg: '#1d2230',
+      secondBkg: '#262b3a',
+      tertiaryBkg: '#161922',
+      nodeBorder: '#6cf',
+      clusterBkg: '#161922',
+      clusterBorder: '#262b3a',
+      titleColor: '#6cf',
+      edgeLabelBackground: '#161922',
+      fontFamily: 'Cascadia Code, monospace'
+    }
+  });
+  document.querySelectorAll('pre > code.language-mermaid').forEach((codeEl) => {
+    const pre = codeEl.parentElement;
+    const div = document.createElement('div');
+    div.className = 'mermaid';
+    div.textContent = codeEl.textContent;
+    pre.replaceWith(div);
+  });
+  mermaid.run();
+</script>
+</body>
+</html>

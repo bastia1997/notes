@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>Profiling: JFR, async-profiler, jstack, heap dump, jcmd — Java + Spring Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">☕</div>
+      <div>
+        <div class="brand-title">JAVA · SPRING</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/17-profiling-jfr.html" class="lang-link" title="Passa all'italiano"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="10" height="20" fill="#009246"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ce2b37"/></svg> IT</a><span class="lang-active" title="English"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="30" height="20" fill="#012169"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#fff" stroke-width="3"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#c8102e" stroke-width="1.5"/><path d="M15,0 v20 M0,10 h30" stroke="#fff" stroke-width="5"/><path d="M15,0 v20 M0,10 h30" stroke="#c8102e" stroke-width="3"/></svg> EN</span></div>
+  </div>
+  <div class="search-wrap">
+    <div class="search-row">
+      <div class="search-inputwrap">
+        <span class="search-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"/>
+            <line x1="20" y1="20" x2="16.65" y2="16.65"/>
+          </svg>
+        </span>
+        <input class="search-input" id="search-input" type="text" placeholder="search... (press /)" autocomplete="off" aria-label="Search">
+        <button class="search-clear" id="search-clear" type="button" aria-label="Clear" title="Clear">&times;</button>
+      </div>
+      <button class="search-btn" id="search-btn" type="button" aria-label="SEARCH" title="SEARCH">SEARCH</button>
+    </div>
+    <div class="search-hits" id="search-hits" role="listbox"></div>
+  </div>
+  <div class="sidebar-nav">
+    <nav class="nav-section">
+      <div class="nav-section-title">Path</div>
+      <ul class="nav-list">
+        <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+        <li class="nav-item"><a href="../pages/00-path-and-mindset.html" class=""><span class="num">00</span>The path and the right mindset</a></li><li class="nav-item"><a href="../pages/01-java-introduction.html" class=""><span class="num">01</span>Java: what it really is, JVM/JRE/JDK, first program</a></li><li class="nav-item"><a href="../pages/02-basic-syntax.html" class=""><span class="num">02</span>Basic syntax: types, variables, operators, control flow</a></li><li class="nav-item"><a href="../pages/03-strings-arrays-io.html" class=""><span class="num">03</span>Strings, arrays, console I/O</a></li><li class="nav-item"><a href="../pages/04-oop-classes-objects.html" class=""><span class="num">04</span>OOP I — Classes, objects, constructors, this, packages, visibility</a></li><li class="nav-item"><a href="../pages/05-oop-inheritance-polymorphism.html" class=""><span class="num">05</span>OOP II — Inheritance, polymorphism, interfaces, abstract classes</a></li><li class="nav-item"><a href="../pages/06-equals-hashcode-immutability.html" class=""><span class="num">06</span>OOP III — equals, hashCode, toString, immutability, record</a></li><li class="nav-item"><a href="../pages/07-exceptions.html" class=""><span class="num">07</span>Exceptions: checked vs unchecked, try-with-resources, custom</a></li><li class="nav-item"><a href="../pages/08-generics.html" class=""><span class="num">08</span>Generics: parametric types, PECS, type erasure, wildcards</a></li><li class="nav-item"><a href="../pages/09-collections.html" class=""><span class="num">09</span>Collections: List, Set, Map, Queue, complexity, choosing the right structure</a></li><li class="nav-item"><a href="../pages/10-stream-lambda-optional.html" class=""><span class="num">10</span>Stream API, lambdas, functional interfaces, Optional</a></li><li class="nav-item"><a href="../pages/11-io-nio.html" class=""><span class="num">11</span>I/O and NIO.2: File, Path, channels, buffers</a></li><li class="nav-item"><a href="../pages/12-concurrency-thread.html" class=""><span class="num">12</span>Concurrency I — Threads, synchronization, volatile, JMM</a></li><li class="nav-item"><a href="../pages/13-executor-future-completablefuture.html" class=""><span class="num">13</span>Concurrency II — ExecutorService, Future, CompletableFuture</a></li><li class="nav-item"><a href="../pages/14-concurrency-juc.html" class=""><span class="num">14</span>Concurrency III — java.util.concurrent: locks, atomics, concurrent collections</a></li><li class="nav-item"><a href="../pages/15-jvm-internals.html" class=""><span class="num">15</span>JVM internals: classloader, bytecode, runtime data areas, JIT</a></li><li class="nav-item"><a href="../pages/16-memory-gc.html" class=""><span class="num">16</span>Memory and garbage collection: G1, ZGC, Shenandoah</a></li><li class="nav-item"><a href="../pages/17-profiling-jfr.html" class="active"><span class="num">17</span>Profiling: JFR, async-profiler, jstack, heap dump, jcmd</a></li><li class="nav-item"><a href="../pages/18-modern-java.html" class=""><span class="num">18</span>Modern Java: from 8 to 21 — key features</a></li><li class="nav-item"><a href="../pages/19-jdbc.html" class=""><span class="num">19</span>JDBC: connection, PreparedStatement, transactions, isolation levels</a></li><li class="nav-item"><a href="../pages/20-jpa-hibernate.html" class=""><span class="num">20</span>JPA / Hibernate: entities, relationships, lazy/eager, N+1, cache</a></li><li class="nav-item"><a href="../pages/21-essential-sql.html" class=""><span class="num">21</span>Essential SQL for the Java developer</a></li><li class="nav-item"><a href="../pages/22-spring-intro-ioc-di.html" class=""><span class="num">22</span>Spring intro: IoC, DI, ApplicationContext, BeanFactory</a></li><li class="nav-item"><a href="../pages/23-spring-beans-lifecycle.html" class=""><span class="num">23</span>Beans: scopes, lifecycle, BeanPostProcessor, FactoryBean</a></li><li class="nav-item"><a href="../pages/24-spring-configuration.html" class=""><span class="num">24</span>Configuration: Java config, @ComponentScan, profiles, conditionals, properties</a></li><li class="nav-item"><a href="../pages/25-spring-aop-transactional.html" class=""><span class="num">25</span>AOP, proxies, @Transactional: what really happens</a></li><li class="nav-item"><a href="../pages/26-spring-boot.html" class=""><span class="num">26</span>Spring Boot: auto-configuration, starters, Actuator</a></li><li class="nav-item"><a href="../pages/27-spring-data-jpa.html" class=""><span class="num">27</span>Spring Data JPA: Repository, derived queries, pagination, Specification</a></li><li class="nav-item"><a href="../pages/28-spring-mvc-rest.html" class=""><span class="num">28</span>Spring MVC: DispatcherServlet, controllers, REST endpoints</a></li><li class="nav-item"><a href="../pages/29-rest-openapi-hateoas.html" class=""><span class="num">29</span>REST: best practices, OpenAPI/Swagger, HATEOAS, versioning</a></li><li class="nav-item"><a href="../pages/30-spring-webflux.html" class=""><span class="num">30</span>Spring WebFlux + Reactor: Mono, Flux, reactive programming</a></li><li class="nav-item"><a href="../pages/31-spring-security.html" class=""><span class="num">31</span>Spring Security: filter chain, authentication, authorization, JWT, OAuth2</a></li><li class="nav-item"><a href="../pages/32-spring-cloud.html" class=""><span class="num">32</span>Spring Cloud: Config Server, Discovery, Gateway, Resilience4j</a></li><li class="nav-item"><a href="../pages/33-testing.html" class=""><span class="num">33</span>Testing: JUnit 5, Mockito, MockMvc, Testcontainers</a></li><li class="nav-item"><a href="../pages/34-spring-batch-intro.html" class=""><span class="num">34</span>Spring Batch intro: domain model, Job, Step, first batch</a></li><li class="nav-item"><a href="../pages/35-spring-batch-jobrepository.html" class=""><span class="num">35</span>JobRepository, JobLauncher, metadata schema</a></li><li class="nav-item"><a href="../pages/36-spring-batch-chunk-skip-retry.html" class=""><span class="num">36</span>Chunk processing: commit interval, skip, retry, fault tolerance</a></li><li class="nav-item"><a href="../pages/37-spring-batch-tasklet-flow.html" class=""><span class="num">37</span>Tasklet vs Chunk; flow control: decisions, splits, conditionals</a></li><li class="nav-item"><a href="../pages/38-spring-batch-itemreader.html" class=""><span class="num">38</span>ItemReader: flat file, XML/JSON, JDBC cursor/paging, JPA, multi-resource</a></li><li class="nav-item"><a href="../pages/39-spring-batch-itemwriter.html" class=""><span class="num">39</span>ItemWriter: file, JDBC, JPA, composite, classifier, batch insert</a></li><li class="nav-item"><a href="../pages/40-spring-batch-scaling-partitioning.html" class=""><span class="num">40</span>Scaling: multi-threaded step, partitioning, remote chunking/partitioning</a></li><li class="nav-item"><a href="../pages/41-spring-batch-listeners-restart-k8s.html" class=""><span class="num">41</span>Listeners, restart, monitoring, Spring Boot and Kubernetes integration</a></li><li class="nav-item"><a href="../pages/42-design-patterns.html" class=""><span class="num">42</span>Design patterns in Java/Spring: GoF + DDD-lite</a></li><li class="nav-item"><a href="../pages/43-performance-observability.html" class=""><span class="num">43</span>Production-grade performance tuning and observability</a></li><li class="nav-item"><a href="../pages/44-synthesis-exercises.html" class=""><span class="num">44</span>50 cumulative exercises: from syntax to Spring Batch</a></li><li class="nav-item"><a href="../pages/45-final-project-etl.html" class=""><span class="num">45</span>Final guided project: nightly bank ETL</a></li>
+      </ul>
+    </nav>
+  </div>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">JVM Deep</span>
+        <span>Section 17 of 45</span>
+        <span class="level-tag level-adv">Level: advanced</span>
+      </div>
+      <h1>Profiling: JFR, async-profiler, jstack, heap dump, jcmd</h1>
+      <p class="summary">Java Flight Recorder (JFR) for continuous production profiling. async-profiler for flame graphs. jstack for thread dumps, jmap/jcmd for heap dumps. Typical troubleshooting workflows.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>JVM Deep</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>Section 16</li></ul>
+  <div class="label">Tools</div>
+  <ul class="source-list"><li>JDK 21</li><li>JMC, async-profiler</li><li>Eclipse MAT</li></ul>
+</div>
+      <h2 id="base-toolkit">Base toolkit</h2>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>When</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><code>jps</code></strong></td>
+<td>List running Java processes</td>
+</tr>
+<tr>
+<td><strong><code>jstack</code></strong></td>
+<td>Stack dump (what each thread is doing)</td>
+</tr>
+<tr>
+<td><strong><code>jmap</code></strong> / <strong><code>jcmd ... GC.histogram</code></strong></td>
+<td>Object count per class</td>
+</tr>
+<tr>
+<td><strong><code>jcmd ... GC.heap_dump</code></strong></td>
+<td>Full heap dump (hprof)</td>
+</tr>
+<tr>
+<td><strong><code>jstat</code></strong></td>
+<td>Live GC stats</td>
+</tr>
+<tr>
+<td><strong>JFR (Java Flight Recorder)</strong></td>
+<td>Built-in, low-overhead profiling</td>
+</tr>
+<tr>
+<td><strong>JMC (Java Mission Control)</strong></td>
+<td>UI for JFR files</td>
+</tr>
+<tr>
+<td><strong>VisualVM</strong></td>
+<td>Graphical profiling/monitoring</td>
+</tr>
+<tr>
+<td><strong>async-profiler</strong></td>
+<td>Sampling profiler, great for CPU and allocation flame graphs</td>
+</tr>
+</tbody>
+</table>
+<h2 id="jfr-java-flight-recorder">JFR: Java Flight Recorder</h2>
+<p>JFR records JVM events (alloc, GC, lock, exception, IO, ...) with <strong>&lt;1%</strong> overhead. Designed for production.</p>
+<pre><code class="language-powershell"># start with JFR enabled
+java -XX:StartFlightRecording=duration=60s,filename=app.jfr -jar app.jar
+
+# or enable on running process
+jcmd &lt;pid&gt; JFR.start duration=60s filename=app.jfr
+jcmd &lt;pid&gt; JFR.stop
+</code></pre>
+<p>Open <code>app.jfr</code> with <strong>Java Mission Control</strong> (JMC, free). You'll see:
+- Hot methods (CPU)
+- Allocation hot spots
+- Lock contention
+- GC timeline
+- I/O waits</p>
+<h3 id="custom-events">Custom events</h3>
+<pre><code class="language-java">@Name(&quot;it.zth.OrderProcessed&quot;)
+@Label(&quot;Order processed&quot;)
+@Category(&quot;Business&quot;)
+public class OrderEvent extends Event {
+    @Label(&quot;Order Id&quot;) public long orderId;
+    @Label(&quot;Amount&quot;) public double amount;
+}
+
+OrderEvent e = new OrderEvent();
+e.begin();
+... // logic
+e.orderId = order.id();
+e.amount = order.total();
+e.commit();
+</code></pre>
+<h2 id="async-profiler-flame-graph">async-profiler: flame graph</h2>
+<p><a href="https://github.com/async-profiler/async-profiler">async-profiler</a> uses kernel perf events: minimal overhead, profiles native stacks too (JIT, C libs).</p>
+<pre><code class="language-powershell">asprof start -e cpu &lt;pid&gt;
+asprof stop -f profile.html &lt;pid&gt;
+</code></pre>
+<p>Output: interactive HTML <strong>flame graph</strong>. Bar width = CPU time. Top-down: each bar is a method, callers above.</p>
+<h2 id="thread-dump">Thread dump</h2>
+<pre><code class="language-powershell">jstack &lt;pid&gt; &gt; dump.txt
+jcmd &lt;pid&gt; Thread.print &gt; dump.txt
+</code></pre>
+<p>Look for:
+- <strong>BLOCKED</strong> ⟶ waiting on a lock.
+- <strong>WAITING/TIMED_WAITING</strong> ⟶ waiting on another thread (Object.wait, sleep, condition).
+- <strong>Deadlock</strong> ⟶ <code>jstack</code> flags it explicitly.</p>
+<p>3 dumps 5s apart: threads "stuck" on the same frame are the problem.</p>
+<h2 id="heap-dump">Heap dump</h2>
+<pre><code class="language-powershell">jcmd &lt;pid&gt; GC.heap_dump path/to/heap.hprof
+java -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=./heap.hprof -jar app.jar
+</code></pre>
+<p>Open with <strong>Eclipse MAT</strong>:
+- <strong>Dominator Tree</strong>: who keeps what alive.
+- <strong>Leak Suspects</strong>: automatic report.
+- <strong>Retained Heap</strong>: total space "dominated" by an object.</p>
+<h2 id="troubleshooting-workflows">Troubleshooting workflows</h2>
+<h3 id="app-is-slow">"App is slow"</h3>
+<ol>
+<li><code>jstack</code> ⟶ any blocked threads?</li>
+<li>JFR for 60s ⟶ JMC, Hot methods view.</li>
+<li>async-profiler flame graph ⟶ where is CPU going?</li>
+<li>Database? Query plan, indexes, slow query log.</li>
+</ol>
+<h3 id="app-crashes-with-oom">"App crashes with OOM"</h3>
+<ol>
+<li><code>-XX:+HeapDumpOnOutOfMemoryError</code> (should've been on <em>before</em>).</li>
+<li>MAT ⟶ Leak Suspects.</li>
+<li>Find the growing <code>static</code> collection or cache.</li>
+</ol>
+<h3 id="cpu-spike-to-100">"CPU spike to 100%"</h3>
+<ol>
+<li><code>top -H -p &lt;pid&gt;</code> (Linux) ⟶ find the consuming thread.</li>
+<li>Convert TID to hex, search in <code>jstack</code>.</li>
+<li>You'll see exactly what that thread is doing.</li>
+</ol>
+<h2 id="exercises">Exercises</h2>
+<details>
+<summary>Ex 17.1 — JFR on a real app</summary>
+
+Write an app doing mixed work (CPU + simulated I/O + GC). Run with `-XX:StartFlightRecording=duration=30s,filename=jfr.jfr`. Open in JMC.
+
+</details>
+
+<details>
+<summary>Ex 17.2 — Diagnostic thread dump</summary>
+
+Force a deadlock (Ex 12.3). Run `jstack <pid>`. Find the "Found one Java-level deadlock" block.
+
+</details>
+
+<details>
+<summary>Ex 17.3 — Flame graph</summary>
+
+Install async-profiler. Profile a program with a "slow" method (e.g. naive Fibonacci recursion). Generate the flame graph: see where time goes.
+
+</details>
+
+<h2 id="take-aways">Take-aways</h2>
+<ul>
+<li><strong>JFR + JMC</strong>: continuous low-overhead profiling. Enable in production.</li>
+<li>async-profiler for CPU flame graphs.</li>
+<li><code>jstack</code> for "why is it stuck?".</li>
+<li>Heap dump + Eclipse MAT for OOM and memory leaks.</li>
+<li>Build a diagnosis workflow: data ⟶ hypothesis ⟶ verify.</li>
+</ul>
+<p>Next: modern Java (records, sealed, pattern matching, text blocks, virtual threads, ...).</p>
+      <nav class="pager">
+<a href="16-memory-gc.html" class="prev"><span class="label">← Previous</span><span class="title">Memory and garbage collection: G1, ZGC, Shenandoah</span></a>
+<a href="18-modern-java.html" class="next"><span class="label">Next →</span><span class="title">Modern Java: from 8 to 21 — key features</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Java + Spring Zero to Hero</strong> — built as a continuous path. Static build from Markdown.</p><p>Open-content educational material. Code under the MIT license; use freely in your own projects.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body, {delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true, background: '#15191e', primaryColor: '#1d2530',
+      primaryTextColor: '#eef1f5', primaryBorderColor: '#f89820',
+      lineColor: '#6db33f', secondaryColor: '#1a1f25', tertiaryColor: '#222a33',
+      mainBkg: '#1d2530', nodeBorder: '#f89820', clusterBkg: '#0f1318',
+      clusterBorder: '#2a3340', titleColor: '#f89820',
+      edgeLabelBackground: '#0f1318', textColor: '#eef1f5',
+      labelTextColor: '#eef1f5', actorBkg: '#1d2530', actorBorder: '#f89820',
+      actorTextColor: '#f89820', actorLineColor: '#6db33f',
+      signalColor: '#eef1f5', signalTextColor: '#eef1f5',
+      labelBoxBkgColor: '#1d2530', labelBoxBorderColor: '#f89820',
+      noteBkgColor: '#fff6a8', noteTextColor: '#0f1318', noteBorderColor: '#fff6a8',
+      activationBkgColor: '#1d2530', activationBorderColor: '#f89820',
+      sequenceNumberColor: '#0f1318'
+    },
+    flowchart: { curve: 'basis', padding: 16 },
+    sequence: { mirrorActors: false, bottomMarginAdj: 10 },
+    fontFamily: 'JetBrains Mono, Cascadia Code, Consolas, monospace'
+  });
+</script>
+</body>
+</html>

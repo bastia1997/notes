@@ -1,0 +1,485 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Matematica del liceo che ti serve davvero — Data Science Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#3a4a7a',primaryTextColor:'#e8eef0',primaryBorderColor:'#5a6aa0',lineColor:'#8a9499',background:'#11171a'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">Σ</div>
+      <div>
+        <div class="brand-title">DATA SCIENCE</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">🇮🇹 IT</span><a href="../en/pages/02b-math-essentials.html" class="lang-link" title="Switch to English">🇬🇧 EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-cos-e-data-science.html" class=""><span class="num">01</span>Cos&#x27;è la data science (e cosa non è)</a></li><li class="nav-item"><a href="../pages/02-python-per-data-science.html" class=""><span class="num">02</span>Python per data science: setup professionale</a></li><li class="nav-item"><a href="../pages/02b-matematica-essenziale.html" class="active"><span class="num">02b</span>Matematica del liceo che ti serve davvero</a></li><li class="nav-item"><a href="../pages/03-algebra-lineare.html" class=""><span class="num">03</span>Algebra lineare per data scientist</a></li><li class="nav-item"><a href="../pages/04-calcolo-ottimizzazione.html" class=""><span class="num">04</span>Calcolo, gradiente e ottimizzazione</a></li><li class="nav-item"><a href="../pages/05-probabilita.html" class=""><span class="num">05</span>Probabilità: la lingua dell&#x27;incertezza</a></li><li class="nav-item"><a href="../pages/06-statistica-descrittiva.html" class=""><span class="num">06</span>Statistica descrittiva</a></li><li class="nav-item"><a href="../pages/07-statistica-inferenziale.html" class=""><span class="num">07</span>Statistica inferenziale e test di ipotesi</a></li><li class="nav-item"><a href="../pages/08-distribuzioni.html" class=""><span class="num">08</span>Distribuzioni di probabilità che incontrerai</a></li><li class="nav-item"><a href="../pages/09-numpy.html" class=""><span class="num">09</span>NumPy: pensare in array</a></li><li class="nav-item"><a href="../pages/10-pandas.html" class=""><span class="num">10</span>Pandas: il coltellino svizzero</a></li><li class="nav-item"><a href="../pages/11-sql.html" class=""><span class="num">11</span>SQL per data scientist</a></li><li class="nav-item"><a href="../pages/12-visualizzazione.html" class=""><span class="num">12</span>Visualizzazione: matplotlib, seaborn, plotly</a></li><li class="nav-item"><a href="../pages/13-data-wrangling.html" class=""><span class="num">13</span>Pulizia e data wrangling</a></li><li class="nav-item"><a href="../pages/14-feature-engineering.html" class=""><span class="num">14</span>Feature engineering</a></li><li class="nav-item"><a href="../pages/15-eda.html" class=""><span class="num">15</span>EDA: Exploratory Data Analysis</a></li><li class="nav-item"><a href="../pages/16-ml-fondamenti.html" class=""><span class="num">16</span>ML: fondamenti — bias, varianza, validazione</a></li><li class="nav-item"><a href="../pages/17-regressione-lineare.html" class=""><span class="num">17</span>Regressione lineare e regolarizzazione</a></li><li class="nav-item"><a href="../pages/18-regressione-logistica.html" class=""><span class="num">18</span>Regressione logistica e classificazione</a></li><li class="nav-item"><a href="../pages/19-knn-naive-bayes-svm.html" class=""><span class="num">19</span>KNN, Naive Bayes, SVM</a></li><li class="nav-item"><a href="../pages/20-alberi-decisionali.html" class=""><span class="num">20</span>Alberi decisionali</a></li><li class="nav-item"><a href="../pages/21-random-forest-boosting.html" class=""><span class="num">21</span>Random Forest, Gradient Boosting, XGBoost</a></li><li class="nav-item"><a href="../pages/22-clustering.html" class=""><span class="num">22</span>Clustering: K-Means, DBSCAN, GMM, gerarchico</a></li><li class="nav-item"><a href="../pages/23-pca-tsne-umap.html" class=""><span class="num">23</span>Riduzione dimensionale: PCA, t-SNE, UMAP</a></li><li class="nav-item"><a href="../pages/24-metriche-validazione.html" class=""><span class="num">24</span>Metriche, cross-validation, leakage</a></li><li class="nav-item"><a href="../pages/25-sbilanciamento-classi.html" class=""><span class="num">25</span>Sbilanciamento di classi</a></li><li class="nav-item"><a href="../pages/26-hyperparameter-tuning.html" class=""><span class="num">26</span>Hyperparameter tuning</a></li><li class="nav-item"><a href="../pages/27-reti-neurali.html" class=""><span class="num">27</span>Reti neurali: dalle basi al backprop</a></li><li class="nav-item"><a href="../pages/28-pytorch.html" class=""><span class="num">28</span>PyTorch: dal toy model al training loop</a></li><li class="nav-item"><a href="../pages/29-cnn.html" class=""><span class="num">29</span>CNN per computer vision</a></li><li class="nav-item"><a href="../pages/30-rnn-lstm.html" class=""><span class="num">30</span>RNN, LSTM, GRU per sequenze</a></li><li class="nav-item"><a href="../pages/31-transformer.html" class=""><span class="num">31</span>Transformer e attention</a></li><li class="nav-item"><a href="../pages/32-nlp-llm.html" class=""><span class="num">32</span>NLP: dal text mining ai LLM</a></li><li class="nav-item"><a href="../pages/33-time-series.html" class=""><span class="num">33</span>Time series e forecasting</a></li><li class="nav-item"><a href="../pages/34-mlops.html" class=""><span class="num">34</span>MLOps: deployment, monitoring, drift</a></li><li class="nav-item"><a href="../pages/35-bayesian-causal.html" class=""><span class="num">35</span>Inferenza bayesiana e causale</a></li><li class="nav-item"><a href="../pages/36-capstone-carriera.html" class=""><span class="num">36</span>Capstone, portfolio, carriera</a></li><li class="nav-item"><a href="../pages/37-glossario.html" class=""><span class="num">37</span>Glossario A-Z</a></li><li class="nav-item"><a href="../pages/38-formulario.html" class=""><span class="num">38</span>Formulario: tutte le formule del percorso</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Matematica</span>
+        <span>Sezione 3 di 39</span>
+        <span class="level-tag level-beg">Livello: principiante</span>
+      </div>
+      <h1>Matematica del liceo che ti serve davvero</h1>
+      <p class="summary">Funzioni, esponenziali, logaritmi, sommatorie, derivata intuitiva. Tutto ciò che serve PRIMA di affrontare algebra lineare e calcolo — niente di assunto, niente di saltato.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Matematica</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>saper fare somme e moltiplicazioni</li></ul>
+  <div class="label">Strumenti</div>
+  <ul class="source-list"><li>carta + matita</li></ul>
+</div>
+      <h2 id="perche-esiste-questa-sezione">Perché esiste questa sezione</h2>
+<p>Tutti i corsi di data science assumono che tu ricordi la matematica del liceo. Tu probabilmente non la ricordi (o non l'hai mai capita davvero). Questa sezione <strong>riempie il buco</strong> in 30 minuti di lettura — niente di banale, niente di assunto.</p>
+<p>Se sei già a tuo agio con esponenziali, logaritmi e il concetto di derivata, salta. Se anche solo una di queste tre parole ti mette ansia, leggi.</p>
+<h2 id="1-funzioni-macchinette-che-trasformano">1. Funzioni: macchinette che trasformano</h2>
+<p>Una <strong>funzione</strong> è una "macchinetta": prende un input e restituisce un output, sempre lo stesso per lo stesso input.</p>
+<p>$$f(x) = 2x + 3$$</p>
+<p>Dai $x = 5$, ottieni $f(5) = 13$. Dai $x = 0$, ottieni $f(0) = 3$. Il "3" è l'<strong>intercetta</strong> (dove la retta tocca l'asse Y), il "2" è la <strong>pendenza</strong> (di quanto cresce per ogni unità di x).</p>
+<h3 id="funzioni-che-incontrerai-nel-percorso">Funzioni che incontrerai nel percorso</h3>
+<div class="chart"><svg viewBox="0 0 600 220" xmlns="http://www.w3.org/2000/svg">
+<g transform="translate(20,10)">
+  <text x="60" y="10" fill="#7aa2ff" font-size="11" text-anchor="middle">lineare: y = 2x+1</text>
+  <line x1="10" y1="180" x2="120" y2="180" stroke="#555"/>
+  <line x1="10" y1="20" x2="10" y2="180" stroke="#555"/>
+  <line x1="10" y1="160" x2="120" y2="40" stroke="#7aa2ff" stroke-width="2"/>
+</g>
+<g transform="translate(160,10)">
+  <text x="60" y="10" fill="#ffb347" font-size="11" text-anchor="middle">quadratica: y = x²</text>
+  <line x1="10" y1="180" x2="120" y2="180" stroke="#555"/>
+  <line x1="10" y1="20" x2="10" y2="180" stroke="#555"/>
+  <path d="M 10 30 Q 65 250 120 30" fill="none" stroke="#ffb347" stroke-width="2"/>
+</g>
+<g transform="translate(300,10)">
+  <text x="60" y="10" fill="#c084fc" font-size="11" text-anchor="middle">esponenziale: y = eˣ</text>
+  <line x1="10" y1="180" x2="120" y2="180" stroke="#555"/>
+  <line x1="10" y1="20" x2="10" y2="180" stroke="#555"/>
+  <path d="M 10 175 Q 70 170 90 130 Q 110 60 120 20" fill="none" stroke="#c084fc" stroke-width="2"/>
+</g>
+<g transform="translate(440,10)">
+  <text x="60" y="10" fill="#5ee2c4" font-size="11" text-anchor="middle">logaritmica: y = ln(x)</text>
+  <line x1="10" y1="180" x2="120" y2="180" stroke="#555"/>
+  <line x1="10" y1="20" x2="10" y2="180" stroke="#555"/>
+  <path d="M 12 250 Q 30 110 60 90 Q 90 75 120 65" fill="none" stroke="#5ee2c4" stroke-width="2"/>
+</g>
+</svg><div class="chart-caption">Le 4 funzioni che vedi più spesso in data science. Impara a riconoscerle al volo.</div></div>
+
+<table>
+<thead>
+<tr>
+<th>Funzione</th>
+<th>Forma</th>
+<th>Cresce come</th>
+<th>La incontri in</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Lineare</td>
+<td>$y = ax + b$</td>
+<td>proporzionalmente</td>
+<td>regressione lineare</td>
+</tr>
+<tr>
+<td>Quadratica</td>
+<td>$y = ax^2 + bx + c$</td>
+<td>come parabola</td>
+<td>loss MSE, ottimizzazione</td>
+</tr>
+<tr>
+<td>Esponenziale</td>
+<td>$y = e^x$</td>
+<td>esplosiva</td>
+<td>crescita virale, exp, softmax</td>
+</tr>
+<tr>
+<td>Logaritmica</td>
+<td>$y = \ln x$</td>
+<td>sempre più piano</td>
+<td>log-likelihood, entropia</td>
+</tr>
+<tr>
+<td>Sigmoide</td>
+<td>$y = 1/(1+e^{-x})$</td>
+<td>"S" tra 0 e 1</td>
+<td>regressione logistica, NN</td>
+</tr>
+</tbody>
+</table>
+<h2 id="2-potenze-ed-esponenziali">2. Potenze ed esponenziali</h2>
+<h3 id="le-regole-che-devi-conoscere-a-memoria">Le regole che devi conoscere a memoria</h3>
+<p>$$a^m \cdot a^n = a^{m+n}$$
+$$\frac{a^m}{a^n} = a^{m-n}$$
+$$(a^m)^n = a^{m \cdot n}$$
+$$a^0 = 1 \quad \text{(per } a \neq 0\text{)}$$
+$$a^{-n} = \frac{1}{a^n}$$
+$$a^{1/n} = \sqrt[n]{a}$$</p>
+<p><strong>Esempio</strong>: $2^{10} = 1024$. $2^{-3} = 1/8 = 0.125$. $2^{1/2} = \sqrt{2} \approx 1.414$.</p>
+<h3 id="il-numero-e-di-eulero">Il numero $e$ (di Eulero)</h3>
+<p>$e \approx 2.71828$. Non è una scelta arbitraria: è l'unico numero la cui funzione $e^x$ ha <strong>come derivata se stessa</strong>. Compare ovunque dove c'è crescita "naturale" o decadimento.</p>
+<p>$$e^x = 1 + x + \frac{x^2}{2!} + \frac{x^3}{3!} + \dots$$</p>
+<p>Per $x$ piccolo: $e^x \approx 1 + x$. Per $x = 1$: $e^1 = e$. Per $x \to \infty$: esplode.</p>
+<blockquote>
+<p>Dove lo vedi: softmax, sigmoid, decay del learning rate, distribuzione esponenziale, Gaussian PDF.</p>
+</blockquote>
+<h2 id="3-logaritmi-lesponenziale-allincontrario">3. Logaritmi: l'esponenziale all'incontrario</h2>
+<p>Il <strong>logaritmo in base $b$</strong> di $x$ è il numero $y$ tale che $b^y = x$:</p>
+<p>$$\log_b x = y \iff b^y = x$$</p>
+<p><strong>Esempi</strong>:
+- $\log_{10} 1000 = 3$ (perché $10^3 = 1000$)
+- $\log_2 8 = 3$ (perché $2^3 = 8$)
+- $\log_2 1 = 0$ (perché $2^0 = 1$)</p>
+<h3 id="logaritmo-naturale-ln-x-log_e-x">Logaritmo naturale: $\ln x = \log_e x$</h3>
+<p>Quello che troverai sempre nei paper di ML. <strong>Solo $\ln$, mai "log generico"</strong>.</p>
+<h3 id="le-regole-da-incorniciare">Le regole da incorniciare</h3>
+<p>$$\ln(ab) = \ln a + \ln b$$
+$$\ln(a/b) = \ln a - \ln b$$
+$$\ln(a^k) = k \ln a$$
+$$\ln 1 = 0, \quad \ln e = 1$$</p>
+<h3 id="perche-i-log-appaiono-ovunque-in-ml">Perché i log appaiono ovunque in ML</h3>
+<p><strong>1. Trasformano prodotti in somme.</strong> La verosimiglianza di $n$ campioni indipendenti è un prodotto:</p>
+<p>$$L(\theta) = \prod_{i=1}^n p(x_i|\theta)$$</p>
+<p>Numericamente: con $n=1000$, ogni $p \sim 10^{-3}$, il prodotto va a $10^{-3000}$ → underflow. Prendi il log:</p>
+<p>$$\log L(\theta) = \sum_{i=1}^n \log p(x_i|\theta)$$</p>
+<p>Somme di numeri "umani". Senza overflow.</p>
+<p><strong>2. Compressano scale enormi.</strong> Da 1 a 1 miliardo è invisibile in scala lineare. In log: da 0 a 9, perfettamente visibile.</p>
+<div class="chart"><svg viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg">
+<g transform="translate(20,20)">
+  <text x="120" y="0" fill="#7aa2ff" font-size="11">scala lineare</text>
+  <line x1="10" y1="140" x2="270" y2="140" stroke="#555"/>
+  <circle cx="10" cy="140" r="4" fill="#ffb347"/>
+  <text x="10" y="155" fill="#ffb347" font-size="9" text-anchor="middle">1</text>
+  <circle cx="11" cy="140" r="4" fill="#ffb347"/>
+  <text x="20" y="125" fill="#ffb347" font-size="9">10</text>
+  <circle cx="13" cy="140" r="4" fill="#ffb347"/>
+  <text x="22" y="110" fill="#ffb347" font-size="9">100</text>
+  <circle cx="35" cy="140" r="4" fill="#ffb347"/>
+  <text x="35" y="125" fill="#ffb347" font-size="9" text-anchor="middle">10k</text>
+  <circle cx="270" cy="140" r="4" fill="#ffb347"/>
+  <text x="270" y="125" fill="#ffb347" font-size="9" text-anchor="middle">1M</text>
+</g>
+<g transform="translate(330,20)">
+  <text x="120" y="0" fill="#7aa2ff" font-size="11">scala log</text>
+  <line x1="10" y1="140" x2="270" y2="140" stroke="#555"/>
+  <circle cx="10" cy="140" r="4" fill="#5ee2c4"/>
+  <text x="10" y="155" fill="#5ee2c4" font-size="9" text-anchor="middle">1</text>
+  <circle cx="55" cy="140" r="4" fill="#5ee2c4"/>
+  <text x="55" y="155" fill="#5ee2c4" font-size="9" text-anchor="middle">10</text>
+  <circle cx="100" cy="140" r="4" fill="#5ee2c4"/>
+  <text x="100" y="155" fill="#5ee2c4" font-size="9" text-anchor="middle">100</text>
+  <circle cx="190" cy="140" r="4" fill="#5ee2c4"/>
+  <text x="190" y="155" fill="#5ee2c4" font-size="9" text-anchor="middle">10k</text>
+  <circle cx="270" cy="140" r="4" fill="#5ee2c4"/>
+  <text x="270" y="155" fill="#5ee2c4" font-size="9" text-anchor="middle">1M</text>
+</g>
+</svg><div class="chart-caption">In scala lineare i piccoli numeri scompaiono. In log sono distanziati equamente.</div></div>
+
+<h2 id="4-notazione-sommatorie-e-produttorie">4. Notazione: sommatorie e produttorie</h2>
+<h3 id="sommatoria-sigma">Sommatoria $\Sigma$</h3>
+<p>$$\sum_{i=1}^n a_i = a_1 + a_2 + \dots + a_n$$</p>
+<p><strong>Da memorizzare</strong>:</p>
+<p>$$\sum_{i=1}^n i = \frac{n(n+1)}{2}$$</p>
+<p>$$\sum_{i=1}^n i^2 = \frac{n(n+1)(2n+1)}{6}$$</p>
+<h3 id="produttoria-pi">Produttoria $\Pi$</h3>
+<p>$$\prod_{i=1}^n a_i = a_1 \cdot a_2 \cdots a_n$$</p>
+<h3 id="regole-base">Regole base</h3>
+<p>Costanti escono dalla sommatoria:</p>
+<p>$$\sum_i c \cdot a_i = c \sum_i a_i$$</p>
+<p>Somma di somme:</p>
+<p>$$\sum_i (a_i + b_i) = \sum_i a_i + \sum_i b_i$$</p>
+<p><strong>Esempio concreto</strong>: calcola la media di ${3, 5, 7, 9}$.</p>
+<p>$$\bar{x} = \frac{1}{n} \sum_{i=1}^n x_i = \frac{1}{4}(3+5+7+9) = \frac{24}{4} = 6$$</p>
+<h2 id="5-insiemi-e-probabilita-basi">5. Insiemi e probabilità (basi)</h2>
+<table>
+<thead>
+<tr>
+<th>Simbolo</th>
+<th>Significato</th>
+<th>Esempio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$\in$</td>
+<td>appartiene</td>
+<td>$3 \in {1,2,3}$</td>
+</tr>
+<tr>
+<td>$\subset$</td>
+<td>sottoinsieme</td>
+<td>${1,2} \subset {1,2,3}$</td>
+</tr>
+<tr>
+<td>$\cup$</td>
+<td>unione</td>
+<td>${1,2} \cup {2,3} = {1,2,3}$</td>
+</tr>
+<tr>
+<td>$\cap$</td>
+<td>intersezione</td>
+<td>${1,2} \cap {2,3} = {2}$</td>
+</tr>
+<tr>
+<td>$\emptyset$</td>
+<td>insieme vuoto</td>
+<td>${1,2} \cap {3,4} = \emptyset$</td>
+</tr>
+<tr>
+<td>$A^c$ o $\bar{A}$</td>
+<td>complementare</td>
+<td>tutto ciò che NON è in A</td>
+</tr>
+<tr>
+<td>$|A|$</td>
+<td>cardinalità</td>
+<td>$|{1,2,3}| = 3$</td>
+</tr>
+</tbody>
+</table>
+<h2 id="6-geometria-piano-cartesiano">6. Geometria: piano cartesiano</h2>
+<h3 id="distanza-tra-due-punti">Distanza tra due punti</h3>
+<p>$P_1 = (x_1, y_1)$, $P_2 = (x_2, y_2)$:</p>
+<p>$$d = \sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}$$</p>
+<p>Generalizza in 3D con $z$, e in dimensione qualsiasi (vedi sezione algebra lineare).</p>
+<h3 id="equazione-della-retta">Equazione della retta</h3>
+<p>$$y = mx + q$$</p>
+<ul>
+<li>$m$ = pendenza (positiva = sale, negativa = scende, 0 = orizzontale)</li>
+<li>$q$ = intercetta sull'asse y</li>
+</ul>
+<p><strong>Esempio</strong>: $y = 2x - 3$. Pendenza 2 (per ogni +1 di x, y cresce di 2), passa per $(0, -3)$ e per $(1.5, 0)$.</p>
+<h3 id="equazione-del-cerchio">Equazione del cerchio</h3>
+<p>Cerchio di centro $(a, b)$ e raggio $r$:</p>
+<p>$$(x - a)^2 + (y - b)^2 = r^2$$</p>
+<h2 id="7-derivata-il-concetto-in-3-minuti">7. Derivata: il concetto in 3 minuti</h2>
+<p>La <strong>derivata</strong> di $f(x)$ in $x_0$ è la <strong>pendenza</strong> della retta tangente al grafico di $f$ in $x_0$. Si scrive $f'(x_0)$ o $\frac{df}{dx}\big|_{x_0}$.</p>
+<div class="chart"><svg viewBox="0 0 480 220" xmlns="http://www.w3.org/2000/svg">
+<line x1="40" y1="200" x2="460" y2="200" stroke="#555"/>
+<line x1="40" y1="20" x2="40" y2="200" stroke="#555"/>
+<path d="M 40 200 Q 120 200 200 130 T 460 30" fill="none" stroke="#7aa2ff" stroke-width="2.5"/>
+<line x1="120" y1="190" x2="280" y2="80" stroke="#ffb347" stroke-width="2" stroke-dasharray="5,3"/>
+<circle cx="200" cy="135" r="5" fill="#ffb347"/>
+<text x="210" y="130" fill="#ffb347" font-size="11">x₀, f(x₀)</text>
+<text x="290" y="78" fill="#ffb347" font-size="11">pendenza tangente = f'(x₀)</text>
+<text x="280" y="200" fill="#8b949e" font-size="10">se f' &gt; 0: cresce</text>
+<text x="280" y="215" fill="#8b949e" font-size="10">se f' &lt; 0: scende</text>
+<text x="280" y="230" fill="#8b949e" font-size="10">se f' = 0: estremo (max/min)</text>
+</svg><div class="chart-caption">La derivata è "quanto cresce f vicino a x₀". Geometricamente: pendenza della tangente.</div></div>
+
+<h3 id="le-5-derivate-da-sapere-a-memoria">Le 5 derivate da sapere a memoria</h3>
+<table>
+<thead>
+<tr>
+<th>$f(x)$</th>
+<th>$f'(x)$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$c$ (costante)</td>
+<td>$0$</td>
+</tr>
+<tr>
+<td>$x$</td>
+<td>$1$</td>
+</tr>
+<tr>
+<td>$x^n$</td>
+<td>$n x^{n-1}$</td>
+</tr>
+<tr>
+<td>$e^x$</td>
+<td>$e^x$</td>
+</tr>
+<tr>
+<td>$\ln x$</td>
+<td>$1/x$</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Esempio passo per passo</strong>: $f(x) = 3x^2 + 5x - 1$.</p>
+<p>Derivata termine per termine:
+- $3x^2$ → $3 \cdot 2x = 6x$
+- $5x$ → $5$
+- $-1$ → $0$</p>
+<p>Risultato: $f'(x) = 6x + 5$.</p>
+<p>In $x_0 = 2$: $f'(2) = 17$. La pendenza in quel punto è 17 (ripida verso l'alto).</p>
+<h3 id="perche-ci-interessa">Perché ci interessa</h3>
+<p>Nella sezione "calcolo e ottimizzazione" vedrai che <strong>trovare il minimo di una funzione</strong> (= minimizzare la loss di un modello) significa <strong>trovare dove la derivata è zero</strong>, o muoversi nella direzione opposta del gradiente (la versione vettoriale della derivata).</p>
+<p>Tutto il machine learning moderno è derivate.</p>
+<h2 id="8-algebra-di-base-le-manipolazioni-che-farai-sempre">8. Algebra di base: le manipolazioni che farai sempre</h2>
+<h3 id="risolvere-unequazione-lineare">Risolvere un'equazione lineare</h3>
+<p>$$3x + 5 = 17$$</p>
+<p>Sposta a destra: $3x = 17 - 5 = 12$. Dividi: $x = 4$.</p>
+<h3 id="risolvere-unequazione-quadratica">Risolvere un'equazione quadratica</h3>
+<p>$$ax^2 + bx + c = 0 \implies x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$$</p>
+<p>La formula risolutiva. Memorizzala.</p>
+<p><strong>Esempio</strong>: $x^2 - 5x + 6 = 0$. $a=1, b=-5, c=6$. Delta = $25 - 24 = 1$. $x = (5 \pm 1)/2 = 3$ o $2$.</p>
+<h3 id="manipolare-frazioni">Manipolare frazioni</h3>
+<p>$$\frac{a}{b} + \frac{c}{d} = \frac{ad + bc}{bd}$$
+$$\frac{a}{b} \cdot \frac{c}{d} = \frac{ac}{bd}$$
+$$\frac{a/b}{c/d} = \frac{a}{b} \cdot \frac{d}{c} = \frac{ad}{bc}$$</p>
+<h3 id="sostituzione-di-variabili">Sostituzione di variabili</h3>
+<p>Se $y = e^z$ e ti viene chiesto di scrivere $z$ in funzione di $y$: applica $\ln$ a entrambi i lati. $\ln y = \ln(e^z) = z$. Quindi $z = \ln y$.</p>
+<p>Questa "ginnastica" tornerà mille volte: cambiare variabile per semplificare.</p>
+<h2 id="9-trigonometria-versione-minimale">9. Trigonometria (versione minimale)</h2>
+<p>Ti serve raramente, ma in 2 contesti sì:</p>
+<h3 id="seno-e-coseno">Seno e coseno</h3>
+<p>Per un angolo $\theta$ in un triangolo rettangolo con ipotenusa 1:
+- $\sin\theta$ = lato opposto
+- $\cos\theta$ = lato adiacente</p>
+<p>Proprietà chiave:
+$$\sin^2\theta + \cos^2\theta = 1$$</p>
+<p>In data science li trovi quando:
+- Codifichi ore/giorni come feature cicliche (sez. feature engineering).
+- Studi reti convoluzionali / segnali (Fourier).
+- Vedi rotazioni in spazi vettoriali (PCA, embedding).</p>
+<h3 id="periodicita">Periodicità</h3>
+<p>$\sin$ e $\cos$ si ripetono ogni $2\pi$ (≈ 6.28). $\sin(0) = 0$, $\sin(\pi/2) = 1$, $\sin(\pi) = 0$, $\sin(3\pi/2) = -1$.</p>
+<h2 id="10-cose-che-non-devi-sapere-sorpresa">10. Cose che NON devi sapere (sorpresa)</h2>
+<p>Per evitare la sindrome dell'impostore: per fare data science applicata <strong>NON ti serve</strong>:</p>
+<ul>
+<li>Risolvere integrali a mano (i computer lo fanno).</li>
+<li>Conoscere teoria dei gruppi, anelli, campi.</li>
+<li>Saper dimostrare il teorema di Bolzano-Weierstrass.</li>
+<li>Tutto quanto ti hanno torturato al liceo scientifico nel "preparazione alla maturità".</li>
+</ul>
+<p>Le <strong>idee</strong> ti servono. Le <strong>tecniche di calcolo manuale</strong> quasi mai. Quando ti serve un calcolo simbolico, c'è SymPy o WolframAlpha.</p>
+<h2 id="esercizi">Esercizi</h2>
+<details>
+<summary>Esercizio 1 — Esponenziali a mano</summary>
+
+Calcola:
+1. $2^5 \cdot 2^3$
+2. $(3^2)^4$
+3. $10^{-2}$
+4. $4^{1/2}$
+5. $2^{10}$
+
+**Soluzioni**: 1. $2^8=256$. 2. $3^8 = 6561$. 3. $0.01$. 4. $2$. 5. $1024$.
+</details>
+
+<details>
+<summary>Esercizio 2 — Logaritmi a mano</summary>
+
+Calcola:
+1. $\log_{10} 100$
+2. $\log_2 32$
+3. $\ln e^5$
+4. $\log_2(8 \cdot 4)$ usando $\log(ab) = \log a + \log b$
+5. $\ln(1/e)$
+
+**Soluzioni**: 1. $2$. 2. $5$. 3. $5$. 4. $\log_2 8 + \log_2 4 = 3 + 2 = 5$. 5. $-1$.
+</details>
+
+<details>
+<summary>Esercizio 3 — Derivate a mano</summary>
+
+Deriva:
+1. $f(x) = 7x^3$
+2. $f(x) = x^2 - 4x + 3$
+3. $f(x) = e^x + 5\ln x$
+4. $f(x) = 1/x$ (suggerimento: $1/x = x^{-1}$)
+
+**Soluzioni**: 1. $21x^2$. 2. $2x - 4$. 3. $e^x + 5/x$. 4. $-x^{-2} = -1/x^2$.
+</details>
+
+<details>
+<summary>Esercizio 4 — Equazioni quadratiche</summary>
+
+Risolvi:
+1. $x^2 - 9 = 0$
+2. $2x^2 - 8x + 6 = 0$
+3. $x^2 + x - 6 = 0$
+
+**Soluzioni**: 1. $x = \pm 3$. 2. Divide per 2: $x^2 - 4x + 3 = 0$. Delta=4. $x = (4 \pm 2)/2 = 3$ o $1$. 3. Delta = $1 + 24 = 25$. $x = (-1 \pm 5)/2 = 2$ o $-3$.
+</details>
+
+<details>
+<summary>Esercizio 5 — Sommatorie</summary>
+
+1. Calcola $\sum_{i=1}^5 i$.
+2. Calcola $\sum_{i=1}^4 i^2$.
+3. Riscrivi senza il simbolo: $\sum_{i=1}^3 (2i + 1)$.
+
+**Soluzioni**: 1. $15$. 2. $30$. 3. $3 + 5 + 7 = 15$.
+</details>
+
+<details>
+<summary>Esercizio 6 — Geometria</summary>
+
+Distanza tra $P_1 = (1, 2)$ e $P_2 = (4, 6)$.
+
+**Soluzione**: $\sqrt{(4-1)^2 + (6-2)^2} = \sqrt{9+16} = \sqrt{25} = 5$.
+
+Lo riconoscerai come la "norma L2" in algebra lineare. Stessa formula, nuovo nome.
+</details>
+
+<details>
+<summary>Esercizio 7 — Pendenza di una retta passante per 2 punti</summary>
+
+Trova $m$ e $q$ per la retta passante per $(1, 3)$ e $(4, 9)$.
+
+**Soluzione**: $m = (9-3)/(4-1) = 2$. $q$ dalla prima equazione: $3 = 2 \cdot 1 + q \Rightarrow q = 1$. Retta: $y = 2x + 1$.
+
+Quando addestrerai una regressione lineare con scikit-learn, è esattamente quello che il computer fa — per migliaia di punti contemporaneamente.
+</details>
+
+<h2 id="cosa-portarti-via">Cosa portarti via</h2>
+<ul>
+<li>Funzioni base: lineare, quadratica, esponenziale, logaritmica, sigmoide. Visualizzale.</li>
+<li>$e \approx 2.718$. La sua derivata è se stesso.</li>
+<li>Log = esponenziale rovesciato. Trasforma prodotti in somme. Salvavita numerico.</li>
+<li>Sommatorie e produttorie sono solo notazione compatta.</li>
+<li>Derivata = pendenza tangente. Zero in massimi/minimi.</li>
+<li>Manipolazione algebrica è ginnastica: la fai senza pensarci.</li>
+</ul>
+<p>Ora sei pronto per algebra lineare e calcolo, le 2 sezioni successive.</p>
+      <nav class="pager">
+<a href="02-python-per-data-science.html" class="prev"><span class="label">← Precedente</span><span class="title">Python per data science: setup professionale</span></a>
+<a href="03-algebra-lineare.html" class="next"><span class="label">Successivo →</span><span class="title">Algebra lineare per data scientist</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Data Science Zero to Hero</strong> — percorso completo, in italiano, dalla matematica al deployment.</p><p>Materiale didattico aperto. Le formule sono lì per essere capite, non temute. Quando un concetto è oscuro, torna indietro: la data science è una piramide, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

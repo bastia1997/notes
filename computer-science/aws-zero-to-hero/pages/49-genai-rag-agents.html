@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Generative AI su AWS — RAG e Agents — AWS Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#232f3e',primaryTextColor:'#ffffff',primaryBorderColor:'#ff9900',lineColor:'#8a99ad',background:'#0c1320'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">λ</div>
+      <div>
+        <div class="brand-title">AWS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">IT</span><a href="../en/pages/49-genai-rag-agents.html" class="lang-link" title="Switch to English">EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-cos-e-aws-cloud.html" class=""><span class="num">01</span>Cos&#x27;è il cloud e cos&#x27;è AWS</a></li><li class="nav-item"><a href="../pages/02-infrastruttura-globale.html" class=""><span class="num">02</span>Infrastruttura globale: Region, AZ, Edge</a></li><li class="nav-item"><a href="../pages/03-account-root-billing.html" class=""><span class="num">03</span>Account AWS, utente root, billing</a></li><li class="nav-item"><a href="../pages/04-iam-fondamenti.html" class=""><span class="num">04</span>IAM — fondamenti (utenti, gruppi, ruoli, policy)</a></li><li class="nav-item"><a href="../pages/05-iam-avanzato.html" class=""><span class="num">05</span>IAM avanzato: policy condizionali, STS, ABAC</a></li><li class="nav-item"><a href="../pages/06-cli-sdk-iac.html" class=""><span class="num">06</span>CLI, SDK, CloudShell, IaC primer</a></li><li class="nav-item"><a href="../pages/07-pricing-billing.html" class=""><span class="num">07</span>Pricing, billing, free tier, cost tools</a></li><li class="nav-item"><a href="../pages/08-organizations-multi-account.html" class=""><span class="num">08</span>AWS Organizations &amp; strategia multi-account</a></li><li class="nav-item"><a href="../pages/09-vpc-fondamenti.html" class=""><span class="num">09</span>VPC — fondamenti</a></li><li class="nav-item"><a href="../pages/10-vpc-avanzato.html" class=""><span class="num">10</span>VPC avanzato: peering, TGW, PrivateLink, endpoint</a></li><li class="nav-item"><a href="../pages/11-route53-cloudfront.html" class=""><span class="num">11</span>Route 53, CloudFront, Global Accelerator</a></li><li class="nav-item"><a href="../pages/12-hybrid-vpn-directconnect.html" class=""><span class="num">12</span>Hybrid: VPN, Direct Connect, PrivateLink</a></li><li class="nav-item"><a href="../pages/13-ec2-fondamenti.html" class=""><span class="num">13</span>EC2 — fondamenti (istanze, AMI, lifecycle)</a></li><li class="nav-item"><a href="../pages/14-ec2-avanzato-spot-nitro.html" class=""><span class="num">14</span>EC2 avanzato — Spot, Placement Groups, Nitro, hibernation</a></li><li class="nav-item"><a href="../pages/15-asg-elb.html" class=""><span class="num">15</span>Auto Scaling Groups + Elastic Load Balancing</a></li><li class="nav-item"><a href="../pages/16-lambda-deep-dive.html" class=""><span class="num">16</span>Lambda deep dive</a></li><li class="nav-item"><a href="../pages/17-containers-ecs-eks-fargate.html" class=""><span class="num">17</span>Containers: ECS, EKS, Fargate, ECR</a></li><li class="nav-item"><a href="../pages/18-specialty-compute.html" class=""><span class="num">18</span>Specialty compute: Batch, Lightsail, Outposts, Wavelength, Beanstalk</a></li><li class="nav-item"><a href="../pages/19-ebs-efs-fsx.html" class=""><span class="num">19</span>EBS, EFS, FSx, Instance Store</a></li><li class="nav-item"><a href="../pages/20-s3-deep-dive.html" class=""><span class="num">20</span>S3 — deep dive</a></li><li class="nav-item"><a href="../pages/21-archive-snow-gateway-backup.html" class=""><span class="num">21</span>Glacier, Snow, Storage Gateway, DataSync, AWS Backup</a></li><li class="nav-item"><a href="../pages/22-rds.html" class=""><span class="num">22</span>RDS — relational DB managed (engines, Multi-AZ, replicas, Proxy)</a></li><li class="nav-item"><a href="../pages/23-aurora-deep-dive.html" class=""><span class="num">23</span>Aurora deep dive — storage condiviso, Serverless v2, Global Database</a></li><li class="nav-item"><a href="../pages/24-dynamodb-deep-dive.html" class=""><span class="num">24</span>DynamoDB deep dive — partition, GSI, Streams, single-table</a></li><li class="nav-item"><a href="../pages/25-purpose-built-dbs.html" class=""><span class="num">25</span>Purpose-built DB — ElastiCache, MemoryDB, Neptune, DocumentDB, Keyspaces, Timestream, QLDB</a></li><li class="nav-item"><a href="../pages/26-redshift-data-warehousing.html" class=""><span class="num">26</span>Redshift — data warehousing MPP e zero-ETL</a></li><li class="nav-item"><a href="../pages/27-sqs-sns-eventbridge.html" class=""><span class="num">27</span>SQS, SNS, EventBridge — messaging ed eventi</a></li><li class="nav-item"><a href="../pages/28-step-functions-mq-appflow.html" class=""><span class="num">28</span>Step Functions, MQ, AppFlow — orchestrazione e integrazione</a></li><li class="nav-item"><a href="../pages/29-athena-glue-lakeformation.html" class=""><span class="num">29</span>Athena, Glue, Lake Formation — il data lake AWS</a></li><li class="nav-item"><a href="../pages/30-emr-kinesis-msk.html" class=""><span class="num">30</span>EMR, Kinesis, MSK — big data e streaming</a></li><li class="nav-item"><a href="../pages/31-opensearch-quicksight.html" class=""><span class="num">31</span>OpenSearch e QuickSight — search e BI</a></li><li class="nav-item"><a href="../pages/32-sagemaker-overview.html" class=""><span class="num">32</span>SageMaker — la piattaforma ML end-to-end</a></li><li class="nav-item"><a href="../pages/33-bedrock-ai-services.html" class=""><span class="num">33</span>Bedrock e AI services — GenAI e ML managed</a></li><li class="nav-item"><a href="../pages/34-iac-cloudformation-cdk-terraform.html" class=""><span class="num">34</span>IaC su AWS — CloudFormation, CDK, SAM, Terraform</a></li><li class="nav-item"><a href="../pages/35-ci-cd-pipeline.html" class=""><span class="num">35</span>CI/CD su AWS — CodePipeline, CodeBuild, CodeDeploy, CodeCatalyst</a></li><li class="nav-item"><a href="../pages/36-observability-cloudwatch-xray.html" class=""><span class="num">36</span>Observability — CloudWatch, X-Ray, CloudTrail, Config, SSM</a></li><li class="nav-item"><a href="../pages/37-kms-secrets-acm.html" class=""><span class="num">37</span>Crittografia — KMS, CloudHSM, Secrets Manager, Parameter Store, ACM</a></li><li class="nav-item"><a href="../pages/38-waf-shield-guardduty-inspector.html" class=""><span class="num">38</span>Threat detection — WAF, Shield, GuardDuty, Inspector, Macie, Security Hub</a></li><li class="nav-item"><a href="../pages/39-governance-org-controltower-identitycenter.html" class=""><span class="num">39</span>Governance — Organizations, Control Tower, Identity Center</a></li><li class="nav-item"><a href="../pages/40-migration-mgn-dms-snow.html" class=""><span class="num">40</span>Migration — MGN, DMS, Snow family, Discovery, Migration Hub</a></li><li class="nav-item"><a href="../pages/41-cost-optimization-finops.html" class=""><span class="num">41</span>Cost optimization e FinOps</a></li><li class="nav-item"><a href="../pages/42-well-architected.html" class=""><span class="num">42</span>Well-Architected Framework — 6 pillar, lens, review</a></li><li class="nav-item"><a href="../pages/43-architecture-patterns.html" class=""><span class="num">43</span>Architecture patterns — 3-tier, serverless, event-driven, microservices</a></li><li class="nav-item"><a href="../pages/44-disaster-recovery-multi-region.html" class=""><span class="num">44</span>Disaster Recovery e Multi-Region</a></li><li class="nav-item"><a href="../pages/45-reference-architectures.html" class=""><span class="num">45</span>Reference architectures real-world</a></li><li class="nav-item"><a href="../pages/46-advanced-networking.html" class=""><span class="num">46</span>Advanced networking deep dive</a></li><li class="nav-item"><a href="../pages/47-containers-deep-dive.html" class=""><span class="num">47</span>Containers deep dive — EKS, Karpenter, service mesh</a></li><li class="nav-item"><a href="../pages/48-serverless-patterns.html" class=""><span class="num">48</span>Serverless patterns deep dive</a></li><li class="nav-item"><a href="../pages/49-genai-rag-agents.html" class="active"><span class="num">49</span>Generative AI su AWS — RAG e Agents</a></li><li class="nav-item"><a href="../pages/50-certificazioni-aws.html" class=""><span class="num">50</span>Certificazioni AWS — roadmap e study guide</a></li><li class="nav-item"><a href="../pages/51-glossario-az.html" class=""><span class="num">51</span>Glossario A-Z</a></li><li class="nav-item"><a href="../pages/52-cheatsheet.html" class=""><span class="num">52</span>Cheat sheet: servizi, limiti, instance families</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">ML</span>
+        <span>Sezione 49 di 52</span>
+        <span class="level-tag level-exp">Livello: esperto</span>
+      </div>
+      <h1>Generative AI su AWS — RAG e Agents</h1>
+      <p class="summary">Foundation model selection, prompt engineering, RAG (vector DB, chunking, hybrid search, reranker), Bedrock Agents (action group, memory), Guardrails, evaluation, semantic cache, ReAct, Q Developer/Business.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>ML</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>sezioni 31-33</li></ul>
+  <div class="label">Strumenti / riferimenti</div>
+  <ul class="source-list"><li>Bedrock</li><li>OpenSearch Serverless</li><li>Bedrock Knowledge Bases</li></ul>
+</div>
+      <p>GenAI in produzione non è "chiama un LLM". È un sistema con retrieval, prompt engineering, guardrails, evaluation, cost optimization e agentic patterns. AWS offre <strong>Bedrock</strong> come piattaforma managed multi-model + servizi correlati. Questa sezione copre i pattern di produzione 2026.</p>
+<h2 id="1-foundation-model-selection">1. Foundation model selection</h2>
+<p>Bedrock offre decine di model in API unica:</p>
+<table>
+<thead>
+<tr>
+<th>Model family</th>
+<th>Provider</th>
+<th>Forte in</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Claude</strong> (Sonnet, Opus, Haiku)</td>
+<td>Anthropic</td>
+<td>reasoning, coding, agentic, long context</td>
+</tr>
+<tr>
+<td><strong>Llama 3.x / 4</strong></td>
+<td>Meta</td>
+<td>open weight, customizzazione fine-tuning</td>
+</tr>
+<tr>
+<td><strong>Mistral / Mixtral</strong></td>
+<td>Mistral AI</td>
+<td>european, balance qualità/costo</td>
+</tr>
+<tr>
+<td><strong>Titan / Nova</strong></td>
+<td>Amazon</td>
+<td>embedding, lightweight, embedded in Bedrock</td>
+</tr>
+<tr>
+<td><strong>Cohere Command R+</strong></td>
+<td>Cohere</td>
+<td>enterprise RAG, citation native</td>
+</tr>
+<tr>
+<td><strong>Stable Diffusion / Titan Image</strong></td>
+<td>Stability/Amazon</td>
+<td>image generation</td>
+</tr>
+</tbody>
+</table>
+<p>Trade-off: model "frontier" (Opus, Claude 4.7) qualità top ma costo 10-30x un model leggero (Haiku, Nova Lite). <strong>Model routing</strong>: smista query semplici a model cheap, complesse a Frontier (saving 50-80%).</p>
+<h2 id="2-prompt-engineering-production">2. Prompt engineering production</h2>
+<ul>
+<li><strong>System prompt</strong>: ruolo, vincoli, output format (JSON schema). Riusa tra chiamate.</li>
+<li><strong>Few-shot</strong>: 2-5 esempi nel prompt per task strutturati. Migliora consistency.</li>
+<li><strong>Chain of thought</strong>: chiedi al modello di ragionare step-by-step (<code>&lt;thinking&gt;</code> tags Anthropic). Migliora reasoning, +costo.</li>
+<li><strong>Output schema</strong>: <code>&lt;json&gt;</code> tags o tool use forzato per output strutturato parseable.</li>
+<li><strong>Prompt caching</strong> (Bedrock 2024): cache system prompt + few-shot, paghi 0.1x per i token cachati. Riduzione costo 50-90% per chat lunghi.</li>
+</ul>
+<h2 id="3-rag-architecture-pattern">3. RAG architecture pattern</h2>
+<p><strong>RAG (Retrieval-Augmented Generation)</strong>: invece di addestrare il model sui tuoi dati, recupera context rilevante a runtime e lo inserisci nel prompt.</p>
+<pre><code class="language-mermaid">flowchart LR
+    DOC[Docs PDF/HTML/MD] --&gt; CH[Chunker&lt;br/&gt;500-1500 token]
+    CH --&gt; EMB[Embedding model&lt;br/&gt;Titan/Cohere]
+    EMB --&gt; VDB[(Vector DB&lt;br/&gt;OpenSearch/Aurora/KB)]
+    U[User query] --&gt; QEMB[Embed query]
+    QEMB --&gt; VDB
+    VDB --&gt;|top-k chunk| RR[Reranker&lt;br/&gt;Cohere Rerank]
+    RR --&gt; CTX[Context selezionato]
+    CTX --&gt; LLM[LLM&lt;br/&gt;Claude/Llama]
+    U --&gt; LLM
+    LLM --&gt; ANS[Risposta + citation]
+    GR[Guardrails&lt;br/&gt;filter, grounding] -.-&gt; LLM
+    GR -.-&gt; ANS
+</code></pre>
+<h2 id="4-vector-database-scelta">4. Vector database scelta</h2>
+<table>
+<thead>
+<tr>
+<th>Opzione</th>
+<th>Caratteristica</th>
+<th>Quando</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>OpenSearch Serverless vector</strong></td>
+<td>scaling auto, hybrid BM25+vector nativo</td>
+<td>enterprise, già su OpenSearch</td>
+</tr>
+<tr>
+<td><strong>Aurora PostgreSQL + pgvector</strong></td>
+<td>DB relazionale + vector</td>
+<td>dati ibridi struct+unstruct</td>
+</tr>
+<tr>
+<td><strong>Amazon Kendra</strong></td>
+<td>enterprise search managed, connettori SharePoint/Confluence</td>
+<td>NO embedding manuale</td>
+</tr>
+<tr>
+<td><strong>Bedrock Knowledge Bases</strong></td>
+<td>RAG end-to-end managed (ingest S3 + chunk + embed + retrieve)</td>
+<td>fast POC, semplice</td>
+</tr>
+<tr>
+<td><strong>MemoryDB / DocumentDB / RDS</strong></td>
+<td>vector emergente</td>
+<td>esistente</td>
+</tr>
+<tr>
+<td><strong>Pinecone / Weaviate</strong></td>
+<td>gestiti 3rd party</td>
+<td>feature avanzate non in AWS</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Bedrock Knowledge Bases</strong> (KB) è la scelta più rapida: punta a S3 con i tuoi PDF, KB chunka + embed + indicizza in OpenSearch Serverless automaticamente, espone API <code>Retrieve</code> e <code>RetrieveAndGenerate</code>.</p>
+<h2 id="5-chunking-strategy">5. Chunking strategy</h2>
+<p>Chunking sbagliato = retrieval pessimo:</p>
+<ul>
+<li><strong>Fixed size</strong> (500-1500 token): semplice, può tagliare frasi.</li>
+<li><strong>Semantic</strong> (separator: paragraph, section): preserva struttura.</li>
+<li><strong>Hierarchical</strong>: chunk parent (grande) per context + child (piccolo) per match. Bedrock KB li supporta nativi.</li>
+<li><strong>Overlap</strong>: 10-20% tra chunk per non perdere info al confine.</li>
+</ul>
+<p>Token count: 1500 token ≈ 1000 parole ≈ 1 pagina dense. Per documenti tecnici, hierarchical 1500/300 con overlap 200.</p>
+<h2 id="6-hybrid-search-e-reranker">6. Hybrid search e reranker</h2>
+<p><strong>Hybrid search</strong>: combina <strong>BM25</strong> (keyword matching, alta precision su query letterali) + <strong>vector</strong> (semantic, query parafrasate). OpenSearch lo fa nativo.</p>
+<p><strong>Reranker</strong>: prendi top 50 da retrieval, riordini con un modello più potente (Cohere Rerank, Voyage AI). Top 5-10 va al LLM. Riduce token in context, migliora precision.</p>
+<p><strong>Citation</strong>: chiedi al model di citare chunk usati (es. <code>&lt;source&gt;chunk_id&lt;/source&gt;</code>), mostra all'utente per trust e debugging hallucination.</p>
+<h2 id="7-bedrock-agents">7. Bedrock Agents</h2>
+<p><strong>Bedrock Agents</strong> orchestrano tool use, RAG, e multi-step reasoning automaticamente:</p>
+<ul>
+<li><strong>Action group</strong>: API esposte come tool (OpenAPI schema o function definition); agent decide quando chiamare; backend Lambda esegue.</li>
+<li><strong>Knowledge base attach</strong>: agent può fare retrieve da KB associata.</li>
+<li><strong>Agent memory</strong>: conserva contesto cross-session per session_id (lanciato 2024).</li>
+<li><strong>Multi-agent collaboration</strong> (2024): un agent "supervisor" delega ad agent specialist (es. CustomerAgent, RefundAgent, ShipAgent).</li>
+</ul>
+<pre><code class="language-python">import boto3
+brt = boto3.client('bedrock-agent-runtime')
+response = brt.invoke_agent(
+    agentId='AGENT_ID',
+    agentAliasId='ALIAS',
+    sessionId='user-123-session-456',
+    inputText='Rimborsami ordine 1234',
+    enableTrace=True
+)
+# Agent decide: chiama action group GetOrder → ProcessRefund → reply
+</code></pre>
+<h2 id="8-guardrails">8. Guardrails</h2>
+<p><strong>Bedrock Guardrails</strong> è un layer di policy sopra qualsiasi model:</p>
+<ul>
+<li><strong>Content filters</strong>: blocca categorie (hate, sexual, violence, misconduct) con soglie low/medium/high.</li>
+<li><strong>Denied topics</strong>: testo libero "competitor X products" → blocca.</li>
+<li><strong>Sensitive info filter</strong>: regex/entità (PII, credit card, SSN) → block o redact.</li>
+<li><strong>Word filter</strong>: blacklist parole.</li>
+<li><strong>Contextual grounding check</strong>: verifica che la risposta sia supportata dal context retrieved (anti-hallucination). Score &lt; soglia → fallback message.</li>
+</ul>
+<p>Applicabili a input (user) e output (model). Indipendenti dal model scelto.</p>
+<h2 id="9-evaluation">9. Evaluation</h2>
+<p>Senza valutazione il sistema è una scatola nera che hallucina senza saperlo.</p>
+<table>
+<thead>
+<tr>
+<th>Tecnica</th>
+<th>Cosa misura</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>LLM-as-judge</strong></td>
+<td>LLM giudica risposte vs reference (es. Claude valuta Claude)</td>
+</tr>
+<tr>
+<td><strong>Bedrock Model Evaluation Jobs</strong></td>
+<td>job managed: automatic (truthfulness, robustness) o human review</td>
+</tr>
+<tr>
+<td><strong>RAGAS</strong> (open source)</td>
+<td>metriche RAG: faithfulness, context relevance, answer relevance</td>
+</tr>
+<tr>
+<td><strong>Embedding similarity</strong></td>
+<td>cosine vs gold answer</td>
+</tr>
+<tr>
+<td><strong>A/B test in prod</strong></td>
+<td>thumbs-up/down user + click-through</td>
+</tr>
+</tbody>
+</table>
+<p>Best practice: dataset di <strong>golden questions</strong> (50-200) + run continui in CI/CD. Soglia accettazione per merge PR.</p>
+<h2 id="10-production-patterns">10. Production patterns</h2>
+<ul>
+<li><strong>Semantic cache</strong>: query simili (cosine &gt; 0.95) ritorna cached answer. Cache via ElastiCache + embedding. Saving 30-70% costo + latency.</li>
+<li><strong>Model routing/distillation</strong>: classify query intent, route a model giusto (Haiku per simple, Opus per complex).</li>
+<li><strong>Streaming response</strong>: SSE/WebSocket per typing-effect, riduce latenza percepita.</li>
+<li><strong>Async batch</strong>: per workload non real-time (es. transcribe + summarize 1000 call), Bedrock Batch API costa 50% meno.</li>
+<li><strong>Provisioned throughput</strong>: per workload prevedibile alto-volume, paghi capacity dedicata invece di on-demand.</li>
+</ul>
+<h2 id="11-agentic-patterns">11. Agentic patterns</h2>
+<ul>
+<li><strong>ReAct (Reasoning + Acting)</strong>: think → tool → observation → think → tool... fino a final answer. Default Bedrock Agents.</li>
+<li><strong>Plan-and-Execute</strong>: model genera piano upfront, esegue step (più affidabile per task complessi).</li>
+<li><strong>Reflexion</strong>: model critica la propria risposta e re-tenta.</li>
+<li><strong>Multi-agent debate</strong>: 2+ agent discutono, supervisor consolida.</li>
+</ul>
+<h2 id="12-q-developer-vs-q-business">12. Q Developer vs Q Business</h2>
+<ul>
+<li><strong>Amazon Q Developer</strong>: assistente coding (IDE plugin, CLI), generation, security scan, AWS expertise. ~$19/dev/mese.</li>
+<li><strong>Amazon Q Business</strong>: assistente enterprise per dipendenti, connettori SharePoint/Salesforce/Confluence, no-code app builder. ~$20/user/mese.</li>
+</ul>
+<p>Entrambi sono "managed RAG/Agent" su modelli AWS. Cheap se vuoi adottare GenAI senza costruire stack.</p>
+<h2 id="13-esercizio">13. Esercizio</h2>
+<details>
+<summary>Chatbot HR aziendale su 500 PDF policy. POC in 2 giorni.</summary>
+
+**Bedrock Knowledge Bases**:
+
+1. Carica i 500 PDF su S3 bucket.
+2. Crea KB in console Bedrock, punta al bucket, sceglie embedding Titan Embeddings v2 e Bedrock OpenSearch Serverless vector store (managed end-to-end).
+3. Crea Bedrock Agent con instruction "Sei un assistente HR. Rispondi solo basandoti su policy aziendali. Cita la sezione." Attach KB.
+4. Aggiungi Guardrails: denied topic "competitor information", PII filter (redact employee ID), contextual grounding 0.7.
+5. Frontend Lex/Streamlit/Chainlit chiamando `invoke_agent`.
+
+Tempo: 1-2 giorni POC. Cost: ~$50/mese a basso volume (1k query/giorno). Production hardening (eval, monitoring, semantic cache, custom UI) richiede 2-4 settimane in più.
+</details>
+
+<details>
+<summary>Hai un agent che chiama API ma a volte hallucina parametri. Come fissi?</summary>
+
+1. **Tool definition strict**: schema OpenAPI/JSON con tutti i required, type, enum constraint. Bedrock force il model a strutturare l'output secondo schema (function calling).
+2. **Guardrails contextual grounding**: imposta soglia (es. 0.8). Se il model genera testo non supportato, fallback.
+3. **Few-shot in instruction**: 2-3 esempi di uso corretto del tool nella system instruction dell'agent.
+4. **Validation Lambda**: prima di eseguire l'API check parametri (es. order_id esiste in DDB), se invalido ritorna errore al model che si auto-corregge.
+5. **Eval set**: 50 query con expected tool calls, regression test in CI. Reject merge se accuracy < 90%.
+6. **Switch model**: Claude Sonnet/Opus hanno function-calling più affidabile di model più piccoli; trade-off costo.
+</details>
+
+<blockquote>
+<p><strong>Riassunto</strong>: Bedrock = piattaforma multi-model (Claude, Llama, Mistral, Titan, Cohere) con routing per cost; RAG = chunking + embedding + vector DB + hybrid search + reranker + citation; Bedrock KB managed end-to-end, OpenSearch/Aurora/Kendra alternativi; Bedrock Agents per tool use + memory + multi-agent; Guardrails per content/PII/grounding; eval con LLM-as-judge + RAGAS + golden dataset; production: semantic cache, model routing, streaming, batch, provisioned throughput; ReAct/Plan-Execute/Reflexion agentic; Q Developer/Business managed alternative. Anti-pattern: RAG senza eval, prompt injection senza guardrails.</p>
+</blockquote>
+      <nav class="pager">
+<a href="48-serverless-patterns.html" class="prev"><span class="label">← Precedente</span><span class="title">Serverless patterns deep dive</span></a>
+<a href="50-certificazioni-aws.html" class="next"><span class="label">Successivo →</span><span class="title">Certificazioni AWS — roadmap e study guide</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>AWS Zero to Hero</strong> — percorso completo, in italiano, dalle primitive all'architettura avanzata.</p><p>Materiale didattico aperto. Nessuna sponsorizzazione, nessun affiliate link, nessuna affiliazione con AWS. Quando un concetto è oscuro, torna indietro: AWS è una piramide di primitive, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

@@ -1,0 +1,771 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Linked list — FAANG Prep</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">F</div>
+      <div>
+        <div class="brand-title">FAANG Prep</div>
+        <div class="brand-subtitle">DS&amp;A · System Design</div>
+      </div>
+    </div>
+    <div class="lang-bar">
+      <a class="lang-switcher" href="../en/pages/04-linked-list.html" title="English"><span class="flag-icon">🇬🇧</span><span class="flag-label">English</span></a>
+    </div>
+  </div>
+  <div class="search-wrap">
+    <input class="search-input" id="search-input" placeholder="Cerca nei contenuti... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/00-introduzione.html" class=""><span class="num">00</span>Introduzione e come usare questo percorso</a></li><li class="nav-item"><a href="../pages/01-complessita.html" class=""><span class="num">01</span>Complessità computazionale (Big-O)</a></li><li class="nav-item"><a href="../pages/02-array-stringhe.html" class=""><span class="num">02</span>Array e stringhe</a></li><li class="nav-item"><a href="../pages/03-hashmap-set.html" class=""><span class="num">03</span>Hashmap e set</a></li><li class="nav-item"><a href="../pages/04-linked-list.html" class="active"><span class="num">04</span>Linked list</a></li><li class="nav-item"><a href="../pages/05-stack-coda.html" class=""><span class="num">05</span>Stack e coda</a></li><li class="nav-item"><a href="../pages/06-alberi.html" class=""><span class="num">06</span>Alberi (binary tree e BST)</a></li><li class="nav-item"><a href="../pages/07-heap.html" class=""><span class="num">07</span>Heap e priority queue</a></li><li class="nav-item"><a href="../pages/08-grafi.html" class=""><span class="num">08</span>Grafi</a></li><li class="nav-item"><a href="../pages/09-trie.html" class=""><span class="num">09</span>Trie (prefix tree)</a></li><li class="nav-item"><a href="../pages/10-ricorsione-backtracking.html" class=""><span class="num">10</span>Ricorsione e backtracking</a></li><li class="nav-item"><a href="../pages/11-sorting-searching.html" class=""><span class="num">11</span>Sorting e searching</a></li><li class="nav-item"><a href="../pages/12-two-pointers-sliding-window.html" class=""><span class="num">12</span>Two pointers e sliding window</a></li><li class="nav-item"><a href="../pages/13-greedy.html" class=""><span class="num">13</span>Greedy</a></li><li class="nav-item"><a href="../pages/14-dp.html" class=""><span class="num">14</span>Dynamic programming</a></li><li class="nav-item"><a href="../pages/15-bit-manipulation.html" class=""><span class="num">15</span>Bit manipulation</a></li><li class="nav-item"><a href="../pages/16-oop-design-patterns.html" class=""><span class="num">16</span>OOP e design patterns</a></li><li class="nav-item"><a href="../pages/17-system-design.html" class=""><span class="num">17</span>System design — fondamenti</a></li><li class="nav-item"><a href="../pages/18-system-design-esempi.html" class=""><span class="num">18</span>System design — esempi end-to-end</a></li><li class="nav-item"><a href="../pages/19-concorrenza.html" class=""><span class="num">19</span>Concorrenza e parallelismo</a></li><li class="nav-item"><a href="../pages/20-database-sql.html" class=""><span class="num">20</span>Database e SQL</a></li><li class="nav-item"><a href="../pages/21-os-networking.html" class=""><span class="num">21</span>OS e networking</a></li><li class="nav-item"><a href="../pages/22-coding-patterns.html" class=""><span class="num">22</span>I 16 coding patterns dei colloqui</a></li><li class="nav-item"><a href="../pages/23-behavioral-star.html" class=""><span class="num">23</span>Behavioral interview — STAR e Amazon LP</a></li><li class="nav-item"><a href="../pages/24-mock-interviews.html" class=""><span class="num">24</span>Mock interview e strategia in colloquio</a></li><li class="nav-item"><a href="../pages/25-roadmap-90-giorni.html" class=""><span class="num">25</span>Roadmap 90 giorni — piano operativo</a></li><li class="nav-item"><a href="../pages/26-banca-esercizi.html" class=""><span class="num">26</span>Banca esercizi — 200+ problemi FAANG</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Strutture dati</span>
+        <span>Sezione 4 di 26</span>
+      </div>
+      <h1>Linked list</h1>
+      <p class="summary">Cosa è un puntatore, perché esiste la linked list, reverse spiegato in 3 modi diversi, fast/slow pointers visualizzato.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Strutture dati</div>
+  
+  
+</div>
+      <p>Le linked list sono il pane quotidiano del colloquio. Anche se nella vita reale Python non le usa quasi mai (le <code>list</code> sono dynamic array), in colloquio appaiono nel 30% dei problemi.</p>
+<p>E hanno un superpotere didattico: ti <strong>costringono a ragionare per puntatori</strong>, una skill fondamentale che paga in tantissimi altri contesti.</p>
+<h2 id="parte-1-cosa-e-un-puntatore-davvero">Parte 1 — Cosa è un puntatore, davvero</h2>
+<h3 id="memoria-indirizzi-ripasso">Memoria + indirizzi: ripasso</h3>
+<p>Come visto nel cap. 02, la memoria è un nastro di celle, ognuna con un indirizzo numerico (0, 1, 2, ...).</p>
+<p>Un <strong>puntatore</strong> è semplicemente un numero che rappresenta un indirizzo di memoria. <em>"Il puntatore p vale 1000"</em> significa <em>"p punta alla cella all'indirizzo 1000"</em>.</p>
+<p>In Python non vedi i puntatori come numeri, ma esistono: ogni variabile <strong>non contiene</strong> l'oggetto, ne contiene un riferimento (puntatore implicito).</p>
+<pre><code class="language-python">a = [1, 2, 3]
+b = a   # b punta allo stesso oggetto di a
+b.append(4)
+print(a)   # [1, 2, 3, 4] !! Modifichi tramite b, ma a vede il cambio
+</code></pre>
+<p><code>a</code> e <code>b</code> sono due puntatori alla stessa lista. Modificare la lista da uno la fa "vedere" all'altro.</p>
+<h3 id="una-linked-list-e-una-catena-di-nodi-collegati">Una linked list è una catena di nodi collegati</h3>
+<p>Immagina di voler memorizzare una sequenza di numeri, ma <strong>non in celle contigue di memoria</strong>. Invece, sparpagliate ovunque, e ogni "nodo" sa <strong>dove sta il successivo</strong>.</p>
+<pre><code class="language-mermaid">flowchart LR
+    A[42] --&gt; B[17] --&gt; C[99] --&gt; D[03] --&gt; E((None))
+</code></pre>
+<p>Ogni nodo ha:</p>
+<ul>
+<li><code>val</code>: il valore.</li>
+<li><code>next</code>: un puntatore al nodo successivo (o <code>None</code> se è l'ultimo).</li>
+</ul>
+<p>In Python:</p>
+<pre><code class="language-python">class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+</code></pre>
+<h3 id="doubly-linked-list">Doubly linked list</h3>
+<p>Variante: ogni nodo ha anche <code>prev</code> (puntatore al precedente).</p>
+<pre><code class="language-python">class DListNode:
+    def __init__(self, val=0):
+        self.val = val
+        self.prev = None
+        self.next = None
+</code></pre>
+<p>Visualizzazione:</p>
+<pre><code class="language-mermaid">flowchart LR
+    A[42] &lt;--&gt; B[17] &lt;--&gt; C[99] &lt;--&gt; D[03]
+</code></pre>
+<h2 id="parte-2-perche-esiste-array-vs-linked-list">Parte 2 — Perché esiste? Array vs Linked List</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Array</th>
+<th>Singly LL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Memoria</td>
+<td>contigua</td>
+<td>sparsa, ogni nodo ovunque</td>
+</tr>
+<tr>
+<td>Accesso a <code>i</code>-esimo</td>
+<td><strong>O(1)</strong></td>
+<td>O(n) (devi scorrere)</td>
+</tr>
+<tr>
+<td>Insert/Delete in testa</td>
+<td>O(n) (sposta tutto)</td>
+<td><strong>O(1)</strong></td>
+</tr>
+<tr>
+<td>Insert/Delete in coda</td>
+<td>O(1) ammortizzato</td>
+<td>O(n) o O(1) (con tail ptr)</td>
+</tr>
+<tr>
+<td>Insert/Delete in mezzo (con ptr al precedente)</td>
+<td>O(n) (sposta tutto)</td>
+<td><strong>O(1)</strong></td>
+</tr>
+<tr>
+<td>Cache-friendly</td>
+<td>sì (vicini in indice = vicini in mem)</td>
+<td>no (sparsi ovunque)</td>
+</tr>
+<tr>
+<td>Overhead memoria</td>
+<td>basso</td>
+<td>alto (next ptr per nodo)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="quando-ha-senso-usarle-nella-vita-reale">Quando ha senso usarle nella vita reale?</h3>
+<p>In Python: praticamente mai (<code>list</code> è sufficiente per tutto). In linguaggi sistemi come C++, sì:</p>
+<ul>
+<li>Quando hai <strong>molti insert/delete a metà</strong> e accesso casuale non importa.</li>
+<li>Per implementare strutture come queue, deque, hashmap (chaining), grafi (adjacency list).</li>
+</ul>
+<p><strong>In colloquio, le linked list servono soprattutto come palestra mentale per ragionare per puntatori</strong>.</p>
+<h2 id="parte-3-le-operazioni-fondamentali">Parte 3 — Le operazioni fondamentali</h2>
+<h3 id="31-traverse">3.1 Traverse</h3>
+<p>Stampa o processa tutti i nodi:</p>
+<pre><code class="language-python">cur = head
+while cur:
+    print(cur.val)
+    cur = cur.next
+</code></pre>
+<p>Importante l'idiom <code>while cur:</code> — esce quando <code>cur is None</code> (fine lista).</p>
+<h3 id="32-lunghezza">3.2 Lunghezza</h3>
+<pre><code class="language-python">def length(head):
+    n = 0
+    cur = head
+    while cur:
+        n += 1
+        cur = cur.next
+    return n
+</code></pre>
+<p>O(n).</p>
+<h3 id="33-insert-in-testa">3.3 Insert in testa</h3>
+<pre><code class="language-python">def insert_head(head, val):
+    new_node = ListNode(val)
+    new_node.next = head
+    return new_node   # nuova head
+</code></pre>
+<p>O(1).</p>
+<p><strong>Prima</strong>:</p>
+<pre><code class="language-mermaid">flowchart LR
+    A1[A] --&gt; B1[B] --&gt; C1[C]
+</code></pre>
+<p><strong>Dopo</strong>:</p>
+<pre><code class="language-mermaid">flowchart LR
+    X[X] --&gt; A2[A] --&gt; B2[B] --&gt; C2[C]
+</code></pre>
+<h3 id="34-insert-dopo-un-nodo">3.4 Insert dopo un nodo</h3>
+<pre><code class="language-python">def insert_after(node, val):
+    new_node = ListNode(val)
+    new_node.next = node.next
+    node.next = new_node
+</code></pre>
+<p>O(1). L'ordine è importante! Se inverti le due righe, perdi il riferimento al successivo:</p>
+<pre><code class="language-python"># SBAGLIATO:
+node.next = new_node       # Ora node punta a new_node
+new_node.next = node.next  # Ma node.next ora è new_node stesso → ciclo!
+</code></pre>
+<h3 id="35-delete-dopo-un-nodo">3.5 Delete dopo un nodo</h3>
+<pre><code class="language-python">def delete_after(node):
+    if node.next:
+        node.next = node.next.next
+</code></pre>
+<p>O(1). Il nodo "saltato" verrà raccolto dal garbage collector (in Python).</p>
+<h2 id="parte-4-il-trucco-numero-1-il-dummy-node">Parte 4 — Il trucco numero 1: il dummy node</h2>
+<p>Molti problemi su linked list hanno un caso speciale: <strong>la modifica può coinvolgere la testa</strong>.</p>
+<p>Esempio: "rimuovi tutti i nodi con valore 7". Se la testa stessa è 7, devi cambiare la head. Se anche il secondo è 7, ancora. Bug-prone.</p>
+<p><strong>Soluzione: aggiungi un dummy node "virtuale" prima della testa</strong>.</p>
+<pre><code class="language-python">def delete_value(head, target):
+    dummy = ListNode(0, head)
+    cur = dummy
+    while cur.next:
+        if cur.next.val == target:
+            cur.next = cur.next.next   # skip
+        else:
+            cur = cur.next
+    return dummy.next   # nuova head
+</code></pre>
+<p>Visualizzazione:</p>
+<p><strong>Prima</strong> (rimuovendo i nodi con valore 7):</p>
+<pre><code class="language-mermaid">flowchart LR
+    D1[dummy] --&gt; A1[7] --&gt; B1[1] --&gt; C1[7] --&gt; E1[2] --&gt; F1[7]
+    style A1 stroke:#ff6b6b,stroke-width:2px
+    style C1 stroke:#ff6b6b,stroke-width:2px
+    style F1 stroke:#ff6b6b,stroke-width:2px
+</code></pre>
+<p><strong>Dopo</strong>:</p>
+<pre><code class="language-mermaid">flowchart LR
+    D2[dummy] --&gt; B2[1] --&gt; E2[2]
+</code></pre>
+<p>Nessun caso speciale per la testa: il dummy assorbe la complessità.</p>
+<p><strong>Usa il dummy ogni volta che la testa potrebbe cambiare</strong>.</p>
+<h2 id="parte-5-reverse-di-una-linked-list-spiegato-3-volte">Parte 5 — Reverse di una linked list (spiegato 3 volte)</h2>
+<p>Il problema più chiesto in assoluto su linked list. Devi sapere scriverlo a memoria in 30 secondi.</p>
+<h3 id="versione-1-spiegata-a-parole">Versione 1: spiegata a parole</h3>
+<p>Vogliamo invertire <code>A → B → C → D</code> in <code>D → C → B → A</code>.</p>
+<p>Idea: scorriamo nodo per nodo. Per ognuno, <strong>flippiamo la freccia</strong>.</p>
+<p>Ma c'è un problema: appena flippi <code>A.next</code>, perdi il riferimento a <code>B</code>. Quindi devi <strong>salvare il prossimo prima di flippare</strong>.</p>
+<pre><code class="language-python">def reverse(head):
+    prev = None       # all'inizio, &quot;prima della testa&quot; è None
+    cur = head
+    while cur:
+        nxt = cur.next    # 1. SALVA il prossimo
+        cur.next = prev   # 2. FLIPPA la freccia di cur
+        prev = cur        # 3. AVANZA prev
+        cur = nxt         # 4. AVANZA cur
+    return prev   # nuova testa (l'ultimo cur valido)
+</code></pre>
+<h3 id="versione-2-spiegata-visualmente">Versione 2: spiegata visualmente</h3>
+<p>Trace su <code>A → B → C → D</code>:</p>
+<pre><code>Step 0 (init):
+  prev=None
+  cur=A → B → C → D
+
+Step 1 (iterazione 1):
+  nxt = B   (salva)
+  A.next = None  (flip: ora A non punta più a B, punta a None)
+  prev = A
+  cur = B
+  Stato lista: None ← A   ;   B → C → D
+
+Step 2:
+  nxt = C
+  B.next = A   (flip)
+  prev = B
+  cur = C
+  Stato: None ← A ← B   ;   C → D
+
+Step 3:
+  nxt = D
+  C.next = B
+  prev = C
+  cur = D
+  Stato: None ← A ← B ← C   ;   D
+
+Step 4:
+  nxt = None
+  D.next = C
+  prev = D
+  cur = None
+  Stato: None ← A ← B ← C ← D
+
+Loop esce (cur is None).
+Return prev = D.
+</code></pre>
+<p>Risultato: <code>D → C → B → A → None</code>. ✓</p>
+<h3 id="versione-3-spiegata-ricorsivamente">Versione 3: spiegata ricorsivamente</h3>
+<pre><code class="language-python">def reverse_rec(head):
+    if not head or not head.next:
+        return head   # base: lista vuota o singolo nodo
+
+    new_head = reverse_rec(head.next)   # inverti il resto
+    head.next.next = head               # collega &quot;io&quot; alla fine del resto invertito
+    head.next = None                    # io diventerò l'ultimo
+    return new_head
+</code></pre>
+<p>Trace su <code>A → B → C → D</code>:</p>
+<ul>
+<li><code>reverse_rec(A)</code> chiama <code>reverse_rec(B)</code>.</li>
+<li><code>reverse_rec(B)</code> chiama <code>reverse_rec(C)</code>.</li>
+<li><code>reverse_rec(C)</code> chiama <code>reverse_rec(D)</code>.</li>
+<li><code>reverse_rec(D)</code>: base case, ritorna <code>D</code>. Adesso <code>D.next</code> è ancora <code>None</code> (era già l'ultimo).</li>
+<li>Tornati a <code>reverse_rec(C)</code>: <code>head=C</code>, <code>new_head=D</code>. <code>head.next.next</code> = <code>D.next</code> → lo facciamo puntare a <code>C</code>. Ora <code>D → C</code>. Setta <code>C.next = None</code>. Ritorna <code>D</code>.</li>
+<li>Tornati a <code>reverse_rec(B)</code>: <code>head=B</code>, <code>new_head=D</code>. <code>head.next.next</code> = <code>C.next</code> → lo facciamo puntare a <code>B</code>. Ora <code>D → C → B</code>. Setta <code>B.next = None</code>. Ritorna <code>D</code>.</li>
+<li>Tornati a <code>reverse_rec(A)</code>: similmente, <code>D → C → B → A</code>. Setta <code>A.next = None</code>. Ritorna <code>D</code>.</li>
+</ul>
+<p>O(n) tempo, <strong>O(n) spazio</strong> per lo stack di ricorsione. Per liste lunghe (n &gt; 1000), preferisci la versione iterativa.</p>
+<h3 id="quale-ricordare">Quale ricordare?</h3>
+<p>Tutte e tre. In colloquio scrivi quella iterativa (più semplice, no stack). Se ti chiedono ricorsiva, sai farla.</p>
+<h2 id="parte-6-fast-slow-pointers-floyds-algorithm">Parte 6 — Fast &amp; slow pointers (Floyd's algorithm)</h2>
+<p>Un pattern straordinariamente elegante. Si chiama anche <strong>Tortoise and Hare</strong> (tartaruga e lepre).</p>
+<h3 id="lidea">L'idea</h3>
+<p>Due puntatori partono insieme dalla testa. Uno (slow) avanza di 1 nodo per volta. L'altro (fast) avanza di 2.</p>
+<pre><code>Step 0: slow=A, fast=A
+Step 1: slow=B, fast=C
+Step 2: slow=C, fast=E
+...
+</code></pre>
+<h3 id="uso-1-trovare-il-middle">Uso 1: trovare il middle</h3>
+<p>Quando <code>fast</code> arriva alla fine (o non può più avanzare di 2), <code>slow</code> è esattamente a metà. Una sola passata, O(n).</p>
+<pre><code class="language-python">def find_middle(head):
+    slow = fast = head
+    while fast and fast.next:
+        slow = slow.next
+        fast = fast.next.next
+    return slow
+</code></pre>
+<p>Per lista pari (es. 4 nodi), <code>slow</code> finisce sul <strong>secondo</strong> dei due mediani. Se ti serve il primo, usa <code>while fast.next and fast.next.next</code>.</p>
+<h3 id="uso-2-detection-di-ciclo">Uso 2: detection di ciclo</h3>
+<p>Se la lista ha un ciclo (qualche <code>next</code> torna indietro), fast e slow <strong>si incontreranno</strong>.</p>
+<pre><code class="language-python">def has_cycle(head):
+    slow = fast = head
+    while fast and fast.next:
+        slow = slow.next
+        fast = fast.next.next
+        if slow is fast:
+            return True
+    return False
+</code></pre>
+<p><strong>Perché funziona</strong>? Se c'è un ciclo, una volta entrati nel ciclo entrambi i puntatori vi restano. Fast è "1 in più avanti" ad ogni iterazione (perché fa 2 passi vs 1). Quindi prima o poi raggiunge slow (dietro di un passo intero del ciclo). È come se fast inseguisse slow su una pista circolare.</p>
+<h3 id="uso-3-trovare-linizio-del-ciclo">Uso 3: trovare l'inizio del ciclo</h3>
+<p>Dopo che si sono incontrati:</p>
+<ol>
+<li>Resetta uno dei puntatori alla testa.</li>
+<li>Avanzali entrambi di 1.</li>
+<li>Si incontreranno <strong>all'inizio del ciclo</strong>.</li>
+</ol>
+<pre><code class="language-python">def detect_cycle(head):
+    slow = fast = head
+    while fast and fast.next:
+        slow = slow.next
+        fast = fast.next.next
+        if slow is fast:
+            p = head
+            while p is not slow:
+                p = p.next
+                slow = slow.next
+            return p
+    return None
+</code></pre>
+<p><strong>Perché?</strong> Dimostrazione (algebra):</p>
+<p>Sia <code>a</code> = distanza head → inizio ciclo. <code>b</code> = distanza inizio ciclo → meeting point (in senso del ciclo). <code>c</code> = lunghezza ciclo.</p>
+<p>Quando si incontrano:</p>
+<ul>
+<li>slow ha percorso <code>a + b</code>.</li>
+<li>fast ha percorso <code>a + b + k·c</code> per qualche <code>k</code> ≥ 1 (ha fatto k giri extra del ciclo).</li>
+<li>fast ha velocità 2× slow: <code>a + b + k·c = 2(a + b)</code> → <code>k·c = a + b</code> → <code>a = k·c - b</code>.</li>
+</ul>
+<p>Quindi se partiamo da head e dal meeting point con velocità 1, percorriamo entrambi <code>a</code> passi. Slow arriva a <code>a + b + a = a + (kc - b) + b = a + kc</code> = "inizio ciclo + k giri" = inizio ciclo. Head arriva esattamente all'inizio del ciclo. <strong>Si incontrano lì</strong>. □</p>
+<h2 id="parte-7-pattern-merge-di-due-liste-ordinate">Parte 7 — Pattern: Merge di due liste ordinate</h2>
+<pre><code class="language-python">def merge(a, b):
+    dummy = ListNode()
+    tail = dummy
+    while a and b:
+        if a.val &lt;= b.val:
+            tail.next = a
+            a = a.next
+        else:
+            tail.next = b
+            b = b.next
+        tail = tail.next
+    tail.next = a or b   # attacca i resti
+    return dummy.next
+</code></pre>
+<p>Idea: due puntatori, sempre prendi il minore dei due. Dummy node per gestire la testa elegantemente.</p>
+<h2 id="parte-8-pattern-intersezione-di-due-liste">Parte 8 — Pattern: intersezione di due liste</h2>
+<p>Date due liste che si fondono in qualche punto, trova il nodo di fusione.</p>
+<p><strong>Trucco elegante</strong>: scorri entrambe le liste. Quando un puntatore arriva a <code>None</code>, fallo ripartire dall'altra testa. Si incontreranno nel punto di intersezione (o entrambi a <code>None</code>).</p>
+<pre><code class="language-python">def intersection(a, b):
+    pa, pb = a, b
+    while pa is not pb:
+        pa = pa.next if pa else b
+        pb = pb.next if pb else a
+    return pa
+</code></pre>
+<p>Perché funziona: dopo aver attraversato entrambe le liste, hanno percorso la stessa lunghezza totale (<code>|a| + |b|</code>). Quindi arrivano "in fase" al punto di intersezione.</p>
+<h2 id="parte-9-trappole-comuni">Parte 9 — Trappole comuni</h2>
+<h3 id="trappola-1-dereference-di-none">Trappola 1 — Dereference di None</h3>
+<pre><code class="language-python">while cur:
+    if cur.next.val == target:   # CRASH se cur.next is None
+        ...
+
+# Corretto:
+while cur and cur.next:
+    if cur.next.val == target: ...
+</code></pre>
+<h3 id="trappola-2-salvare-il-next-prima-di-sovrascrivere">Trappola 2 — Salvare il next prima di sovrascrivere</h3>
+<pre><code class="language-python"># SBAGLIATO:
+cur.next = prev   # ora hai perso il riferimento al prossimo!
+
+# Corretto:
+nxt = cur.next    # SALVA prima
+cur.next = prev
+cur = nxt
+</code></pre>
+<h3 id="trappola-3-ciclo-accidentale">Trappola 3 — Ciclo accidentale</h3>
+<p>Se assegni <code>a.next = b</code> quando <code>b</code> punta indirettamente ad <code>a</code>, crei un ciclo. Per debug: stampa la lista limitando a N nodi.</p>
+<pre><code class="language-python">def safe_print(head, max_nodes=50):
+    out = []
+    cur = head
+    while cur and len(out) &lt; max_nodes:
+        out.append(str(cur.val))
+        cur = cur.next
+    return &quot; → &quot;.join(out)
+</code></pre>
+<h3 id="trappola-4-doubly-linked-dimenticare-prev">Trappola 4 — Doubly linked: dimenticare <code>prev</code></h3>
+<p>In doubly linked, ogni operazione richiede di aggiornare sia <code>next</code> che <code>prev</code>. Disattenzione comune:</p>
+<pre><code class="language-python"># Insert new dopo node (doubly linked)
+new.prev = node
+new.next = node.next
+if node.next:
+    node.next.prev = new   # DIMENTICATO SPESSO
+node.next = new
+</code></pre>
+<h3 id="trappola-5-testa-che-cambia">Trappola 5 — Testa che cambia</h3>
+<p>Già detto: usa il <strong>dummy node</strong> per evitare casi speciali.</p>
+<h2 id="esercizi-guidati">Esercizi guidati</h2>
+<h3 id="esercizio-41-reverse-linked-list-easy">Esercizio 4.1 — Reverse Linked List <span class="problem-tag easy">EASY</span></h3>
+<details><summary>Soluzione</summary>
+
+Vedi parte 5. Memorizza la versione iterativa.
+</details>
+
+<h3 id="esercizio-42-merge-two-sorted-lists-easy">Esercizio 4.2 — Merge Two Sorted Lists <span class="problem-tag easy">EASY</span></h3>
+<details><summary>Soluzione</summary>
+
+Vedi parte 7.
+</details>
+
+<h3 id="esercizio-43-linked-list-cycle-easy">Esercizio 4.3 — Linked List Cycle <span class="problem-tag easy">EASY</span></h3>
+<details><summary>Soluzione</summary>
+
+Vedi parte 6 uso 2.
+</details>
+
+<h3 id="esercizio-44-cycle-ii-trova-inizio-ciclo-medium">Esercizio 4.4 — Cycle II (trova inizio ciclo) <span class="problem-tag medium">MEDIUM</span></h3>
+<details><summary>Soluzione</summary>
+
+Vedi parte 6 uso 3 con dimostrazione.
+</details>
+
+<h3 id="esercizio-45-remove-nth-node-from-end-medium">Esercizio 4.5 — Remove Nth Node From End <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Rimuovi l'n-esimo nodo dalla fine, in <strong>una sola passata</strong>.</p>
+<details><summary>Ragionamento</summary>
+
+**Trucco classico**: due puntatori con gap di `n`.
+
+1. `fast` parte dalla head e avanza di `n` nodi.
+2. Poi `slow` parte dalla head, e entrambi avanzano insieme finché `fast` arriva all'ultimo.
+3. A quel punto, `slow` è **proprio prima** dell'n-esimo dalla fine.
+
+
+<pre><code class="language-python">def remove_nth(head, n):
+    dummy = ListNode(0, head)
+    fast = slow = dummy
+    for _ in range(n):
+        fast = fast.next
+    while fast.next:
+        fast = fast.next
+        slow = slow.next
+    slow.next = slow.next.next
+    return dummy.next
+</code></pre>
+
+
+Uso del dummy per gestire "n = lunghezza lista" (cioè rimuovere la testa).
+
+O(n) tempo, O(1) spazio, una sola passata.
+</details>
+
+<h3 id="esercizio-46-palindrome-linked-list-easy">Esercizio 4.6 — Palindrome Linked List <span class="problem-tag easy">EASY</span></h3>
+<p>Verifica se la lista è palindroma. O(n) tempo, <strong>O(1) spazio</strong>.</p>
+<details><summary>Ragionamento</summary>
+
+**Brute force O(n) spazio**: copia in lista Python, controlla palindromo. Ma vogliamo O(1).
+
+**Tecnica**:
+
+1. Trova il middle (fast/slow).
+2. Reverse la seconda metà.
+3. Confronta prima metà e seconda metà (invertita).
+4. (Opzionalmente: ri-reverse per restaurare).
+
+
+<pre><code class="language-python">def is_pal(head):
+    # 1. Trova middle
+    slow = fast = head
+    while fast and fast.next:
+        slow = slow.next
+        fast = fast.next.next
+    # 2. Reverse seconda metà partendo da slow
+    prev = None
+    while slow:
+        nxt = slow.next
+        slow.next = prev
+        prev = slow
+        slow = nxt
+    # 3. Confronta
+    left = head
+    right = prev   # nuova testa della seconda metà invertita
+    while right:
+        if left.val != right.val:
+            return False
+        left = left.next
+        right = right.next
+    return True
+</code></pre>
+
+
+O(n) tempo, O(1) spazio.
+
+**Lezione**: combinare due tecniche base (fast/slow + reverse) risolve problemi che sembrano richiedere strutture extra.
+</details>
+
+<h3 id="esercizio-47-add-two-numbers-medium">Esercizio 4.7 — Add Two Numbers <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Due numeri rappresentati come linked list (cifra meno significativa in testa). Restituisci somma come linked list.</p>
+<details><summary>Soluzione</summary>
+
+
+<pre><code class="language-python">def add_two(a, b):
+    dummy = ListNode()
+    tail = dummy
+    carry = 0
+    while a or b or carry:
+        v = carry + (a.val if a else 0) + (b.val if b else 0)
+        carry, v = divmod(v, 10)
+        tail.next = ListNode(v)
+        tail = tail.next
+        if a: a = a.next
+        if b: b = b.next
+    return dummy.next
+</code></pre>
+
+
+Trace su `342 + 465 = 807` rappresentati come `2→4→3` + `5→6→4`:
+
+
+<pre><code>iter 1: v=2+5+0=7, carry=0. Output: 7
+iter 2: v=4+6+0=10, carry=1, v=0. Output: 7→0
+iter 3: v=3+4+1=8, carry=0. Output: 7→0→8
+fine: 7→0→8  che è 807. ✓
+</code></pre>
+
+
+O(max(n, m)).
+</details>
+
+<h3 id="esercizio-48-copy-list-with-random-pointer-medium">Esercizio 4.8 — Copy List with Random Pointer <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Lista dove ogni nodo ha <code>next</code> e <code>random</code>. Fai deep copy.</p>
+<details><summary>Ragionamento</summary>
+
+**Idea**: per ogni nodo originale, creiamo la sua copia. Ma il `random` punta a un altro nodo originale, e dobbiamo farlo puntare alla copia di quel nodo.
+
+**Soluzione hashmap**: mapping `originale → copia`. Due passate.
+
+
+<pre><code class="language-python">def copy_random(head):
+    if not head: return None
+    m = {}
+    # Passata 1: crea le copie (senza link)
+    cur = head
+    while cur:
+        m[cur] = Node(cur.val)
+        cur = cur.next
+    # Passata 2: collega next e random
+    cur = head
+    while cur:
+        m[cur].next = m.get(cur.next)
+        m[cur].random = m.get(cur.random)
+        cur = cur.next
+    return m[head]
+</code></pre>
+
+
+O(n) tempo, O(n) spazio.
+
+**Versione O(1) spazio**: interleaving (inserisci la copia DOPO ogni originale, poi splitta). Più complessa, ma elegante.
+</details>
+
+<h3 id="esercizio-49-reverse-nodes-in-k-group-hard">Esercizio 4.9 — Reverse Nodes in K-Group <span class="problem-tag hard">HARD</span></h3>
+<p>Reverse ogni gruppo di k nodi. Ultimo gruppo incompleto: lascialo com'è.</p>
+<details><summary>Soluzione</summary>
+
+
+<pre><code class="language-python">def reverse_k_group(head, k):
+    dummy = ListNode(0, head)
+    group_prev = dummy
+    while True:
+        # Cerca il k-esimo nodo dopo group_prev
+        kth = group_prev
+        for _ in range(k):
+            kth = kth.next
+            if not kth:
+                return dummy.next   # gruppo incompleto, fine
+        group_next = kth.next
+        # Reverse [group_prev.next .. kth]
+        prev, cur = group_next, group_prev.next
+        while cur is not group_next:
+            nxt = cur.next
+            cur.next = prev
+            prev = cur
+            cur = nxt
+        # &quot;Ricuci&quot; group_prev → kth, e avanza group_prev
+        tmp = group_prev.next   # diventerà il nuovo &quot;ultimo&quot; del gruppo
+        group_prev.next = kth   # il gruppo è invertito, kth è il primo
+        group_prev = tmp        # avanza per il prossimo gruppo
+</code></pre>
+
+
+Difficile. Devi disegnarlo per capirlo. Esercizio "boss" di linked list.
+</details>
+
+<h3 id="esercizio-410-lru-cache-versione-doubly-linked-list-medium">Esercizio 4.10 — LRU Cache (versione doubly linked list) <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Senza OrderedDict. Hashmap + doubly linked list.</p>
+<details><summary>Soluzione</summary>
+
+
+<pre><code class="language-python">class Node:
+    def __init__(self, k=0, v=0):
+        self.k = k
+        self.v = v
+        self.prev = self.next = None
+
+class LRUCache:
+    def __init__(self, cap):
+        self.cap = cap
+        self.map = {}
+        self.head = Node()   # dummy
+        self.tail = Node()   # dummy
+        self.head.next = self.tail
+        self.tail.prev = self.head
+
+    def _remove(self, n):
+        n.prev.next = n.next
+        n.next.prev = n.prev
+
+    def _add_front(self, n):
+        n.next = self.head.next
+        n.prev = self.head
+        self.head.next.prev = n
+        self.head.next = n
+
+    def get(self, k):
+        if k not in self.map:
+            return -1
+        n = self.map[k]
+        self._remove(n)
+        self._add_front(n)
+        return n.v
+
+    def put(self, k, v):
+        if k in self.map:
+            self._remove(self.map[k])
+        n = Node(k, v)
+        self.map[k] = n
+        self._add_front(n)
+        if len(self.map) &gt; self.cap:
+            lru = self.tail.prev
+            self._remove(lru)
+            del self.map[lru.k]
+</code></pre>
+
+
+Struttura:
+
+
+<pre><code>head ↔ MRU ↔ ... ↔ LRU ↔ tail
+</code></pre>
+
+
+I dummy head/tail eliminano casi speciali "lista vuota" o "rimuovere primo/ultimo".
+
+Tutte le operazioni O(1). Questo è LA domanda più chiesta in colloquio.
+</details>
+
+<h3 id="esercizio-411-sort-list-medium">Esercizio 4.11 — Sort List <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Ordina una linked list in O(n log n).</p>
+<details><summary>Soluzione</summary>
+
+Merge sort.
+
+
+<pre><code class="language-python">def sort_list(head):
+    if not head or not head.next:
+        return head
+    # Split in middle
+    slow, fast = head, head.next
+    while fast and fast.next:
+        slow = slow.next
+        fast = fast.next.next
+    mid = slow.next
+    slow.next = None
+    return merge(sort_list(head), sort_list(mid))
+</code></pre>
+
+
+Merge come visto in parte 7.
+
+O(n log n) tempo. Stack O(log n).
+</details>
+
+<h2 id="riassunto-del-capitolo">Riassunto del capitolo</h2>
+<ol>
+<li><strong>Puntatore = numero che rappresenta un indirizzo</strong>. In Python, le variabili "sono" puntatori a oggetti.</li>
+<li><strong>Linked list = catena di nodi</strong>. Insert/delete in mezzo O(1), accesso a i-esimo O(n).</li>
+<li><strong>Dummy node</strong>: aggiungilo davanti alla head per evitare casi speciali. Sempre.</li>
+<li><strong>Reverse iterativo</strong>: <code>prev/cur/nxt</code>. Memorizzalo.</li>
+<li><strong>Fast &amp; slow pointers</strong>: middle, cycle detection, inizio del ciclo. Pattern killer.</li>
+<li><strong>Pattern hashmap+LL</strong>: LRU cache.</li>
+</ol>
+<p>Sai scrivere reverse in 30 secondi? Sai disegnare fast/slow? Hai padroneggiato il dummy? Allora questo capitolo è fatto. Vai al <a href="05-stack-coda.html">cap. 05 — Stack e coda</a>.</p>
+      <nav class="pager">
+<a href="03-hashmap-set.html" class="prev"><span class="label">← Precedente</span><span class="title">Hashmap e set</span></a>
+<a href="05-stack-coda.html" class="next"><span class="label">Successivo →</span><span class="title">Stack e coda</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>FAANG Prep</strong> — percorso completo di preparazione: DS&amp;A, system design, behavioral. Costruito per spaccare ai colloqui di Big Tech.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-index.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true,
+      background: '#161922',
+      primaryColor: '#1d2230',
+      primaryTextColor: '#e6e8ee',
+      primaryBorderColor: '#6cf',
+      lineColor: '#7a8194',
+      secondaryColor: '#262b3a',
+      tertiaryColor: '#0f1117',
+      mainBkg: '#1d2230',
+      secondBkg: '#262b3a',
+      tertiaryBkg: '#161922',
+      nodeBorder: '#6cf',
+      clusterBkg: '#161922',
+      clusterBorder: '#262b3a',
+      titleColor: '#6cf',
+      edgeLabelBackground: '#161922',
+      fontFamily: 'Cascadia Code, monospace'
+    }
+  });
+  document.querySelectorAll('pre > code.language-mermaid').forEach((codeEl) => {
+    const pre = codeEl.parentElement;
+    const div = document.createElement('div');
+    div.className = 'mermaid';
+    div.textContent = codeEl.textContent;
+    pre.replaceWith(div);
+  });
+  mermaid.run();
+</script>
+</body>
+</html>

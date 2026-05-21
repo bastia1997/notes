@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ML: fondamenti — bias, varianza, validazione — Data Science Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#3a4a7a',primaryTextColor:'#e8eef0',primaryBorderColor:'#5a6aa0',lineColor:'#8a9499',background:'#11171a'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">Σ</div>
+      <div>
+        <div class="brand-title">DATA SCIENCE</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">🇮🇹 IT</span><a href="../en/pages/16-ml-fundamentals.html" class="lang-link" title="Switch to English">🇬🇧 EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-cos-e-data-science.html" class=""><span class="num">01</span>Cos&#x27;è la data science (e cosa non è)</a></li><li class="nav-item"><a href="../pages/02-python-per-data-science.html" class=""><span class="num">02</span>Python per data science: setup professionale</a></li><li class="nav-item"><a href="../pages/02b-matematica-essenziale.html" class=""><span class="num">02b</span>Matematica del liceo che ti serve davvero</a></li><li class="nav-item"><a href="../pages/03-algebra-lineare.html" class=""><span class="num">03</span>Algebra lineare per data scientist</a></li><li class="nav-item"><a href="../pages/04-calcolo-ottimizzazione.html" class=""><span class="num">04</span>Calcolo, gradiente e ottimizzazione</a></li><li class="nav-item"><a href="../pages/05-probabilita.html" class=""><span class="num">05</span>Probabilità: la lingua dell&#x27;incertezza</a></li><li class="nav-item"><a href="../pages/06-statistica-descrittiva.html" class=""><span class="num">06</span>Statistica descrittiva</a></li><li class="nav-item"><a href="../pages/07-statistica-inferenziale.html" class=""><span class="num">07</span>Statistica inferenziale e test di ipotesi</a></li><li class="nav-item"><a href="../pages/08-distribuzioni.html" class=""><span class="num">08</span>Distribuzioni di probabilità che incontrerai</a></li><li class="nav-item"><a href="../pages/09-numpy.html" class=""><span class="num">09</span>NumPy: pensare in array</a></li><li class="nav-item"><a href="../pages/10-pandas.html" class=""><span class="num">10</span>Pandas: il coltellino svizzero</a></li><li class="nav-item"><a href="../pages/11-sql.html" class=""><span class="num">11</span>SQL per data scientist</a></li><li class="nav-item"><a href="../pages/12-visualizzazione.html" class=""><span class="num">12</span>Visualizzazione: matplotlib, seaborn, plotly</a></li><li class="nav-item"><a href="../pages/13-data-wrangling.html" class=""><span class="num">13</span>Pulizia e data wrangling</a></li><li class="nav-item"><a href="../pages/14-feature-engineering.html" class=""><span class="num">14</span>Feature engineering</a></li><li class="nav-item"><a href="../pages/15-eda.html" class=""><span class="num">15</span>EDA: Exploratory Data Analysis</a></li><li class="nav-item"><a href="../pages/16-ml-fondamenti.html" class="active"><span class="num">16</span>ML: fondamenti — bias, varianza, validazione</a></li><li class="nav-item"><a href="../pages/17-regressione-lineare.html" class=""><span class="num">17</span>Regressione lineare e regolarizzazione</a></li><li class="nav-item"><a href="../pages/18-regressione-logistica.html" class=""><span class="num">18</span>Regressione logistica e classificazione</a></li><li class="nav-item"><a href="../pages/19-knn-naive-bayes-svm.html" class=""><span class="num">19</span>KNN, Naive Bayes, SVM</a></li><li class="nav-item"><a href="../pages/20-alberi-decisionali.html" class=""><span class="num">20</span>Alberi decisionali</a></li><li class="nav-item"><a href="../pages/21-random-forest-boosting.html" class=""><span class="num">21</span>Random Forest, Gradient Boosting, XGBoost</a></li><li class="nav-item"><a href="../pages/22-clustering.html" class=""><span class="num">22</span>Clustering: K-Means, DBSCAN, GMM, gerarchico</a></li><li class="nav-item"><a href="../pages/23-pca-tsne-umap.html" class=""><span class="num">23</span>Riduzione dimensionale: PCA, t-SNE, UMAP</a></li><li class="nav-item"><a href="../pages/24-metriche-validazione.html" class=""><span class="num">24</span>Metriche, cross-validation, leakage</a></li><li class="nav-item"><a href="../pages/25-sbilanciamento-classi.html" class=""><span class="num">25</span>Sbilanciamento di classi</a></li><li class="nav-item"><a href="../pages/26-hyperparameter-tuning.html" class=""><span class="num">26</span>Hyperparameter tuning</a></li><li class="nav-item"><a href="../pages/27-reti-neurali.html" class=""><span class="num">27</span>Reti neurali: dalle basi al backprop</a></li><li class="nav-item"><a href="../pages/28-pytorch.html" class=""><span class="num">28</span>PyTorch: dal toy model al training loop</a></li><li class="nav-item"><a href="../pages/29-cnn.html" class=""><span class="num">29</span>CNN per computer vision</a></li><li class="nav-item"><a href="../pages/30-rnn-lstm.html" class=""><span class="num">30</span>RNN, LSTM, GRU per sequenze</a></li><li class="nav-item"><a href="../pages/31-transformer.html" class=""><span class="num">31</span>Transformer e attention</a></li><li class="nav-item"><a href="../pages/32-nlp-llm.html" class=""><span class="num">32</span>NLP: dal text mining ai LLM</a></li><li class="nav-item"><a href="../pages/33-time-series.html" class=""><span class="num">33</span>Time series e forecasting</a></li><li class="nav-item"><a href="../pages/34-mlops.html" class=""><span class="num">34</span>MLOps: deployment, monitoring, drift</a></li><li class="nav-item"><a href="../pages/35-bayesian-causal.html" class=""><span class="num">35</span>Inferenza bayesiana e causale</a></li><li class="nav-item"><a href="../pages/36-capstone-carriera.html" class=""><span class="num">36</span>Capstone, portfolio, carriera</a></li><li class="nav-item"><a href="../pages/37-glossario.html" class=""><span class="num">37</span>Glossario A-Z</a></li><li class="nav-item"><a href="../pages/38-formulario.html" class=""><span class="num">38</span>Formulario: tutte le formule del percorso</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Machine Learning</span>
+        <span>Sezione 17 di 39</span>
+        <span class="level-tag level-int">Livello: intermedio</span>
+      </div>
+      <h1>ML: fondamenti — bias, varianza, validazione</h1>
+      <p class="summary">Cos&#x27;è ML, supervised vs unsupervised, decomposizione bias-variance, overfitting, train/val/test, no free lunch.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Machine Learning</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>[[statistica-inferenziale]]</li><li>[[calcolo-ottimizzazione]]</li></ul>
+  <div class="label">Strumenti</div>
+  <ul class="source-list"><li>scikit-learn</li></ul>
+</div>
+      <h2 id="cose-il-machine-learning">Cos'è il machine learning</h2>
+<p>Definizione operativa: <strong>algoritmi che migliorano le proprie prestazioni su un compito con l'esperienza</strong> (dati).</p>
+<p>Più formalmente (Tom Mitchell, 1997): un programma "impara" da esperienza E rispetto a un compito T misurato da P se le sue prestazioni su T, misurate da P, migliorano con E.</p>
+<pre><code class="language-mermaid">flowchart LR
+    D[Dati] --&gt;|&quot;esperienza&quot;| ML[Algoritmo]
+    ML --&gt;|&quot;compito&quot;| P[Predizione]
+    P --&gt; M[Metrica]
+    M --&gt;|feedback| ML
+</code></pre>
+<h2 id="le-tre-famiglie">Le tre famiglie</h2>
+<h3 id="supervised-learning">Supervised learning</h3>
+<p>I dati hanno <strong>target conosciuti</strong>. Si impara $f: X \to y$.</p>
+<ul>
+<li><strong>Regressione</strong>: $y$ continuo (prezzo casa, temperatura).</li>
+<li><strong>Classificazione</strong>: $y$ discreto (spam/non-spam, gatto/cane/criceto).</li>
+</ul>
+<h3 id="unsupervised-learning">Unsupervised learning</h3>
+<p>Solo $X$. Cerchi <strong>struttura nascosta</strong>.</p>
+<ul>
+<li><strong>Clustering</strong>: raggruppa simili (K-means, DBSCAN).</li>
+<li><strong>Dim reduction</strong>: riduci dimensioni (PCA, t-SNE).</li>
+<li><strong>Density estimation</strong>: stima $p(x)$ (GMM, KDE).</li>
+</ul>
+<h3 id="reinforcement-learning">Reinforcement learning</h3>
+<p>Un agente prende <strong>azioni</strong> in un ambiente, riceve <strong>ricompense</strong>, impara una politica. Diverso dai due sopra: i dati non sono fissi, vengono generati dall'interazione.</p>
+<h2 id="lerrore-bias-varianza-irriducibile">L'errore: bias, varianza, irriducibile</h2>
+<p>Per un modello $\hat{f}$, l'errore atteso su un punto $x$ si decompone:</p>
+<p>$$E[(y - \hat{f}(x))^2] = \underbrace{\text{Bias}^2[\hat{f}(x)]}<em _text_sensibilità="\text{sensibilità" ai="ai" dati="dati">{\text{semplificazione errata}} + \underbrace{\text{Var}[\hat{f}(x)]}</em>$$}} + \underbrace{\sigma^2}_{\text{rumore irriducibile}</p>
+<ul>
+<li><strong>Bias</strong>: errore sistematico. Il modello è troppo semplice per catturare la realtà.</li>
+<li><strong>Varianza</strong>: il modello cambia molto al cambiare del campione di training.</li>
+<li><strong>Errore irriducibile</strong>: rumore intrinseco nei dati, nessun modello lo elimina.</li>
+</ul>
+<div class="chart"><svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+<line x1="40" y1="200" x2="380" y2="200" stroke="#555"/>
+<line x1="40" y1="20" x2="40" y2="200" stroke="#555"/>
+<text x="200" y="218" fill="#8b949e" font-size="11" text-anchor="middle">complessità del modello →</text>
+<text x="20" y="105" fill="#8b949e" font-size="11" transform="rotate(-90 20 105)">errore →</text>
+<path d="M 60 40 C 130 40 230 190 340 190" fill="none" stroke="#7aa2ff" stroke-width="2"/>
+<text x="80" y="35" fill="#7aa2ff" font-size="11">bias²</text>
+<path d="M 60 190 C 130 190 230 40 340 40" fill="none" stroke="#ffb347" stroke-width="2"/>
+<text x="310" y="50" fill="#ffb347" font-size="11">varianza</text>
+<path d="M 60 30 Q 200 110 340 30" fill="none" stroke="#5ee2c4" stroke-width="2.5"/>
+<text x="120" y="60" fill="#5ee2c4" font-size="11">totale</text>
+<circle cx="200" cy="70" r="4" fill="#c084fc"/>
+<text x="208" y="68" fill="#c084fc" font-size="11">sweet spot</text>
+</svg><div class="chart-caption">Bias-variance tradeoff: troppo semplice → bias alto; troppo complesso → varianza alta. Il minimo totale è in mezzo.</div></div>
+
+<h2 id="underfitting-vs-overfitting">Underfitting vs overfitting</h2>
+<pre><code class="language-mermaid">flowchart LR
+    A[Modello&lt;br/&gt;troppo semplice] --&gt;|underfit| B[Errore&lt;br/&gt;train ALTO,&lt;br/&gt;test ALTO]
+    C[Modello&lt;br/&gt;complessità giusta] --&gt;|good fit| D[Errore&lt;br/&gt;train medio,&lt;br/&gt;test medio]
+    E[Modello&lt;br/&gt;troppo complesso] --&gt;|overfit| F[Errore&lt;br/&gt;train BASSO,&lt;br/&gt;test ALTO]
+</code></pre>
+<p><strong>Diagnosi rapida</strong>:</p>
+<ul>
+<li>$E_\text{train}$ alto, $E_\text{val}$ alto, simili → underfit → aumenta capacità (più feature, modello più ricco).</li>
+<li>$E_\text{train}$ basso, $E_\text{val}$ alto → overfit → regolarizza, più dati, modello più semplice.</li>
+<li>$E_\text{train}$ basso, $E_\text{val}$ basso, simili → tutto OK.</li>
+<li>$E_\text{train}$ alto, $E_\text{val}$ basso → bug (dati mischiati? leakage al contrario?).</li>
+</ul>
+<h2 id="trainvaltest-loro-del-workflow">Train/val/test: l'oro del workflow</h2>
+<pre><code class="language-mermaid">flowchart LR
+    D[Dataset] --&gt; TR[Train&lt;br/&gt;~70%]
+    D --&gt; V[Validation&lt;br/&gt;~15%]
+    D --&gt; TE[Test&lt;br/&gt;~15%]
+    TR --&gt; M[Training del modello]
+    V --&gt; H[Tuning hyperparametri]
+    TE --&gt; F[Stima onesta&lt;br/&gt;delle prestazioni]
+</code></pre>
+<p><strong>Regole</strong>:</p>
+<ol>
+<li><strong>Test set toccato UNA SOLA VOLTA</strong>, alla fine, per riportare la metrica finale.</li>
+<li><strong>Validation set</strong> per scegliere hyperparametri.</li>
+<li><strong>Train set</strong> per addestrare i pesi del modello.</li>
+</ol>
+<p>Violare la regola 1 = barare a se stessi. Ogni decisione presa guardando il test set fa "trapelare" il test set nel modello.</p>
+<h3 id="cross-validation">Cross-validation</h3>
+<p>Per dataset piccoli, train/val/test spreca dati. La <strong>k-fold cross-validation</strong>:</p>
+<pre><code class="language-mermaid">flowchart LR
+    F1[Fold 1&lt;br/&gt;val] --- F2[Fold 2&lt;br/&gt;train] --- F3[Fold 3&lt;br/&gt;train] --- F4[Fold 4&lt;br/&gt;train] --- F5[Fold 5&lt;br/&gt;train]
+    G1[Fold 1&lt;br/&gt;train] --- G2[Fold 2&lt;br/&gt;val] --- G3[Fold 3&lt;br/&gt;train] --- G4[Fold 4&lt;br/&gt;train] --- G5[Fold 5&lt;br/&gt;train]
+</code></pre>
+<p>Esegui training 5 volte, ogni volta cambiando il fold di validation. Media le metriche.</p>
+<pre><code class="language-python">from sklearn.model_selection import cross_val_score, KFold
+kf = KFold(n_splits=5, shuffle=True, random_state=0)
+scores = cross_val_score(model, X, y, cv=kf, scoring='roc_auc')
+print(f&quot;AUC: {scores.mean():.3f} ± {scores.std():.3f}&quot;)
+</code></pre>
+<p>Varianti:
+- <strong>StratifiedKFold</strong>: mantiene proporzioni di classe per classificazione.
+- <strong>GroupKFold</strong>: gli stessi user_id stanno sempre nello stesso fold (no leak tra utenti).
+- <strong>TimeSeriesSplit</strong>: solo passato → futuro, mai il contrario.</p>
+<h2 id="no-free-lunch-theorem-wolpert-1996">No free lunch theorem (Wolpert, 1996)</h2>
+<blockquote>
+<p><strong>Mediato su tutti i possibili problemi</strong>, nessun algoritmo è migliore di nessun altro.</p>
+</blockquote>
+<p>Significato: non esiste un "modello migliore in assoluto". Quale modello vince dipende dalla struttura dei dati. Questo è il motivo per cui:</p>
+<ul>
+<li>Provi più modelli.</li>
+<li>I baselines stupidi a volte battono modelli complessi.</li>
+<li>La conoscenza del dominio batte la potenza algoritmica.</li>
+</ul>
+<h2 id="loss-functions-standard">Loss functions standard</h2>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Loss</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Regressione</td>
+<td>MSE — Mean Squared Error</td>
+<td>sensibile a outlier</td>
+</tr>
+<tr>
+<td>Regressione</td>
+<td>MAE — Mean Absolute Error</td>
+<td>robusta</td>
+</tr>
+<tr>
+<td>Regressione</td>
+<td>Huber</td>
+<td>mix MSE/MAE</td>
+</tr>
+<tr>
+<td>Classificazione binaria</td>
+<td>Binary Cross-Entropy / Log Loss</td>
+<td>derivata MLE</td>
+</tr>
+<tr>
+<td>Classificazione multi</td>
+<td>Categorical Cross-Entropy</td>
+<td>softmax + log</td>
+</tr>
+<tr>
+<td>Classificazione</td>
+<td>Hinge</td>
+<td>SVM</td>
+</tr>
+<tr>
+<td>Ranking</td>
+<td>Pairwise / Listwise</td>
+<td>LTR</td>
+</tr>
+</tbody>
+</table>
+<p>Formula MSE:
+$$\text{MSE} = \frac{1}{n} \sum_i (y_i - \hat{y}_i)^2$$</p>
+<p>Formula Log Loss (binaria):
+$$L = -\frac{1}{n} \sum_i [y_i \log \hat{p}_i + (1 - y_i) \log(1 - \hat{p}_i)]$$</p>
+<h2 id="regolarizzazione-anteprima">Regolarizzazione (anteprima)</h2>
+<p>Aggiunge una penalità sul "tamaño" dei coefficienti, a costo di un po' di bias guadagni in varianza:</p>
+<ul>
+<li><strong>L2 (Ridge)</strong>: penalità $\lambda \sum \beta_j^2$. Riduce tutti i coefficienti.</li>
+<li><strong>L1 (Lasso)</strong>: penalità $\lambda \sum |\beta_j|$. Azzera coefficienti irrilevanti.</li>
+<li><strong>Elastic Net</strong>: mix di L1 + L2.</li>
+</ul>
+<p>Vedrai i dettagli nella sezione sulla regressione.</p>
+<h2 id="la-pipeline-mentale-del-data-scientist">La pipeline mentale del data scientist</h2>
+<pre><code class="language-mermaid">flowchart TD
+    A[1. Definisci la metrica&lt;br/&gt;che conta per il business] --&gt; B[2. Costruisci baseline&lt;br/&gt;banale]
+    B --&gt; C[3. Modello semplice&lt;br/&gt;logistica/RF]
+    C --&gt; D[4. Iterazione:&lt;br/&gt;feature, modello, hyperparam]
+    D --&gt; E[5. Valutazione onesta&lt;br/&gt;su test set]
+    E --&gt; F[6. Analisi errori&lt;br/&gt;+ confronto con baseline]
+    F --&gt; D
+    E --&gt; G[7. Deploy]
+</code></pre>
+<p>Il baseline banale (es: "predici sempre la classe maggioritaria") è il punto sotto cui non sei accettabile. Spesso si scopre che il modello "complicato" lo batte solo marginalmente — segnale che il problema è hardware al limite, o che le feature non bastano.</p>
+<h2 id="esercizi">Esercizi</h2>
+<details>
+<summary>Esercizio 1 — Identifica overfitting</summary>
+
+In ognuno dei casi, dì se è underfit, overfit, o OK:
+
+1. Train accuracy 0.95, Val 0.94.
+2. Train 0.99, Val 0.72.
+3. Train 0.65, Val 0.64.
+4. Train 0.70, Val 0.85.
+
+**Risposte**: 1 OK (forse leggero overfit), 2 overfit forte, 3 underfit, 4 sospetto (val > train → leak o split sbilanciato).
+</details>
+
+<details>
+<summary>Esercizio 2 — Baseline banali</summary>
+
+Per ognuno dei problemi:
+
+1. Predire se domani pioverà a Milano.
+2. Stimare il prezzo di una casa.
+3. Identificare frodi su carta di credito (0.1% delle transazioni).
+
+Quale è il baseline più stupido? Quale accuracy/MAE ti aspetti?
+
+**Risposte**:
+
+1. "Sempre 'no pioggia'" → in inverno ~70% accuracy a Milano.
+2. "Sempre il prezzo mediano" → MAE = MAD. Battibile facilmente.
+3. "Sempre 'non frode'" → 99.9% accuracy. **MA**: precision e recall delle frodi = 0. Lezione: accuracy non basta su classi sbilanciate.
+</details>
+
+<details>
+<summary>Esercizio 3 — Cross-validation manuale</summary>
+
+Implementa 5-fold CV da zero:
+
+
+<pre><code class="language-python">import numpy as np
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+from sklearn.datasets import load_iris
+
+X, y = load_iris(return_X_y=True)
+n = len(X)
+rng = np.random.default_rng(0)
+idx = rng.permutation(n)
+folds = np.array_split(idx, 5)
+
+scores = []
+for i in range(5):
+    val = folds[i]
+    tr = np.concatenate(folds[:i] + folds[i+1:])
+    m = LogisticRegression(max_iter=500).fit(X[tr], y[tr])
+    scores.append(accuracy_score(y[val], m.predict(X[val])))
+print(f&quot;{np.mean(scores):.3f} ± {np.std(scores):.3f}&quot;)
+</code></pre>
+
+</details>
+
+<details>
+<summary>Esercizio 4 — Diagnostica bias/variance</summary>
+
+Plotta una **learning curve**: errore train e val al variare della dimensione del training set.
+
+
+<pre><code class="language-python">from sklearn.model_selection import learning_curve
+from sklearn.ensemble import RandomForestClassifier
+import matplotlib.pyplot as plt
+import numpy as np
+
+sizes, train_sc, val_sc = learning_curve(
+    RandomForestClassifier(n_estimators=100, random_state=0),
+    X, y, cv=5, train_sizes=np.linspace(0.1, 1.0, 10), scoring='accuracy'
+)
+plt.plot(sizes, train_sc.mean(axis=1), label='train')
+plt.plot(sizes, val_sc.mean(axis=1), label='val')
+plt.xlabel(&quot;training size&quot;); plt.ylabel(&quot;accuracy&quot;); plt.legend()
+plt.show()
+</code></pre>
+
+
+Interpretazione: se train e val convergono a lo stesso valore basso → bias alto, modello troppo semplice. Se train resta alto e val basso → variance alta, serve regolarizzazione o più dati.
+</details>
+
+<h2 id="cosa-portarti-via">Cosa portarti via</h2>
+<ul>
+<li>Bias-variance tradeoff = il concetto chiave di tutto ML.</li>
+<li>Train/val/test: il test si tocca una volta sola. Sempre.</li>
+<li>Cross-validation per dataset piccoli; sample split per dataset grandi.</li>
+<li>No free lunch: prova più modelli, non innamorarti del tuo.</li>
+<li>Baseline stupidi prima di modelli complessi.</li>
+</ul>
+<p>Prossimo: regressione lineare in dettaglio.</p>
+      <nav class="pager">
+<a href="15-eda.html" class="prev"><span class="label">← Precedente</span><span class="title">EDA: Exploratory Data Analysis</span></a>
+<a href="17-regressione-lineare.html" class="next"><span class="label">Successivo →</span><span class="title">Regressione lineare e regolarizzazione</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Data Science Zero to Hero</strong> — percorso completo, in italiano, dalla matematica al deployment.</p><p>Materiale didattico aperto. Le formule sono lì per essere capite, non temute. Quando un concetto è oscuro, torna indietro: la data science è una piramide, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

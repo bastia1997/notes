@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SQL for data scientists — Data Science Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#3a4a7a',primaryTextColor:'#e8eef0',primaryBorderColor:'#5a6aa0',lineColor:'#8a9499',background:'#11171a'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">Σ</div>
+      <div>
+        <div class="brand-title">DATA SCIENCE</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/11-sql.html" class="lang-link" title="Passa all'italiano">🇮🇹 IT</a><span class="lang-active" title="English">🇬🇧 EN</span></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="search... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-what-is-data-science.html" class=""><span class="num">01</span>What is data science (and what isn&#x27;t)</a></li><li class="nav-item"><a href="../pages/02-python-for-data-science.html" class=""><span class="num">02</span>Python for data science: pro setup</a></li><li class="nav-item"><a href="../pages/02b-math-essentials.html" class=""><span class="num">02b</span>High-school math you actually need</a></li><li class="nav-item"><a href="../pages/03-linear-algebra.html" class=""><span class="num">03</span>Linear algebra for data scientists</a></li><li class="nav-item"><a href="../pages/04-calculus-optimization.html" class=""><span class="num">04</span>Calculus, gradients, and optimization</a></li><li class="nav-item"><a href="../pages/05-probability.html" class=""><span class="num">05</span>Probability: the language of uncertainty</a></li><li class="nav-item"><a href="../pages/06-descriptive-statistics.html" class=""><span class="num">06</span>Descriptive statistics</a></li><li class="nav-item"><a href="../pages/07-inferential-statistics.html" class=""><span class="num">07</span>Inferential statistics and hypothesis testing</a></li><li class="nav-item"><a href="../pages/08-distributions.html" class=""><span class="num">08</span>Probability distributions you&#x27;ll meet</a></li><li class="nav-item"><a href="../pages/09-numpy.html" class=""><span class="num">09</span>NumPy: thinking in arrays</a></li><li class="nav-item"><a href="../pages/10-pandas.html" class=""><span class="num">10</span>Pandas: the swiss army knife</a></li><li class="nav-item"><a href="../pages/11-sql.html" class="active"><span class="num">11</span>SQL for data scientists</a></li><li class="nav-item"><a href="../pages/12-visualization.html" class=""><span class="num">12</span>Visualization: matplotlib, seaborn, plotly</a></li><li class="nav-item"><a href="../pages/13-data-wrangling.html" class=""><span class="num">13</span>Cleaning and data wrangling</a></li><li class="nav-item"><a href="../pages/14-feature-engineering.html" class=""><span class="num">14</span>Feature engineering</a></li><li class="nav-item"><a href="../pages/15-eda.html" class=""><span class="num">15</span>EDA: Exploratory Data Analysis</a></li><li class="nav-item"><a href="../pages/16-ml-fundamentals.html" class=""><span class="num">16</span>ML: fundamentals — bias, variance, validation</a></li><li class="nav-item"><a href="../pages/17-linear-regression.html" class=""><span class="num">17</span>Linear regression and regularization</a></li><li class="nav-item"><a href="../pages/18-logistic-regression.html" class=""><span class="num">18</span>Logistic regression and classification</a></li><li class="nav-item"><a href="../pages/19-knn-naive-bayes-svm.html" class=""><span class="num">19</span>KNN, Naive Bayes, SVM</a></li><li class="nav-item"><a href="../pages/20-decision-trees.html" class=""><span class="num">20</span>Decision trees</a></li><li class="nav-item"><a href="../pages/21-random-forest-boosting.html" class=""><span class="num">21</span>Random Forest, Gradient Boosting, XGBoost</a></li><li class="nav-item"><a href="../pages/22-clustering.html" class=""><span class="num">22</span>Clustering: K-Means, DBSCAN, GMM, hierarchical</a></li><li class="nav-item"><a href="../pages/23-pca-tsne-umap.html" class=""><span class="num">23</span>Dimensionality reduction: PCA, t-SNE, UMAP</a></li><li class="nav-item"><a href="../pages/24-metrics-validation.html" class=""><span class="num">24</span>Metrics, cross-validation, leakage</a></li><li class="nav-item"><a href="../pages/25-class-imbalance.html" class=""><span class="num">25</span>Class imbalance</a></li><li class="nav-item"><a href="../pages/26-hyperparameter-tuning.html" class=""><span class="num">26</span>Hyperparameter tuning</a></li><li class="nav-item"><a href="../pages/27-neural-networks.html" class=""><span class="num">27</span>Neural networks: from fundamentals to backprop</a></li><li class="nav-item"><a href="../pages/28-pytorch.html" class=""><span class="num">28</span>PyTorch: from toy model to training loop</a></li><li class="nav-item"><a href="../pages/29-cnn.html" class=""><span class="num">29</span>CNN for computer vision</a></li><li class="nav-item"><a href="../pages/30-rnn-lstm.html" class=""><span class="num">30</span>RNN, LSTM, GRU for sequences</a></li><li class="nav-item"><a href="../pages/31-transformer.html" class=""><span class="num">31</span>Transformer and attention</a></li><li class="nav-item"><a href="../pages/32-nlp-llm.html" class=""><span class="num">32</span>NLP: from text mining to LLMs</a></li><li class="nav-item"><a href="../pages/33-time-series.html" class=""><span class="num">33</span>Time series and forecasting</a></li><li class="nav-item"><a href="../pages/34-mlops.html" class=""><span class="num">34</span>MLOps: deployment, monitoring, drift</a></li><li class="nav-item"><a href="../pages/35-bayesian-causal.html" class=""><span class="num">35</span>Bayesian and Causal Inference</a></li><li class="nav-item"><a href="../pages/36-capstone-career.html" class=""><span class="num">36</span>Capstone, portfolio, career</a></li><li class="nav-item"><a href="../pages/37-glossary.html" class=""><span class="num">37</span>Glossary A-Z</a></li><li class="nav-item"><a href="../pages/38-formula-sheet.html" class=""><span class="num">38</span>Formula Sheet: all the formulas from the course</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Tooling</span>
+        <span>Section 12 of 39</span>
+        <span class="level-tag level-int">Level: intermediate</span>
+      </div>
+      <h1>SQL for data scientists</h1>
+      <p class="summary">SELECT, JOIN, GROUP BY, window functions, CTE, query optimization. The universal language of company data — you can&#x27;t avoid it.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Tooling</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>concept of a table</li></ul>
+  <div class="label">Tools</div>
+  <ul class="source-list"><li>PostgreSQL / SQLite / DuckDB</li></ul>
+</div>
+      <h2 id="why-learn-it-well">Why learn it well</h2>
+<p>90% of company data lives in relational databases. Even if you'll use pandas or Spark, the first step is always <code>SELECT ... FROM ...</code>. You can't be a good data scientist without writing advanced SQL — at least window functions, CTEs, query plans.</p>
+<blockquote>
+<p><strong>DuckDB</strong> (free, embedded, super-fast on CSV/Parquet files) is the best way to learn SQL in 2026 with no setup. <code>pip install duckdb</code>, then <code>duckdb.sql("SELECT * FROM 'data.csv'")</code>.</p>
+</blockquote>
+<h2 id="syntax-logical-order-differs-from-written-order">Syntax: logical order differs from written order</h2>
+<p>The order you write a query (<code>SELECT</code>, <code>FROM</code>, <code>WHERE</code>, <code>GROUP BY</code>, <code>HAVING</code>, <code>ORDER BY</code>) <strong>is not</strong> the execution order:</p>
+<pre><code class="language-mermaid">flowchart LR
+    F[1.FROM/JOIN] --&gt; W[2.WHERE] --&gt; G[3.GROUP BY] --&gt; H[4.HAVING] --&gt; S[5.SELECT] --&gt; O[6.ORDER BY] --&gt; L[7.LIMIT]
+</code></pre>
+<p>Understanding this saves you from weird bugs. E.g.: <strong>you can't use a SELECT alias in WHERE</strong>, because WHERE runs before SELECT. You must repeat the expression or use a CTE.</p>
+<h2 id="the-5-basic-operations">The 5 basic operations</h2>
+<h3 id="1-filters-and-ordering">1. Filters and ordering</h3>
+<pre><code class="language-sql">SELECT name, age, salary
+FROM employees
+WHERE department = 'Engineering'
+  AND salary &gt; 50000
+ORDER BY salary DESC
+LIMIT 10;
+</code></pre>
+<h3 id="2-aggregations">2. Aggregations</h3>
+<pre><code class="language-sql">SELECT
+    department,
+    COUNT(*) AS n,
+    AVG(salary) AS avg_salary,
+    PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY salary) AS median_salary,
+    MAX(salary) AS max_salary
+FROM employees
+GROUP BY department
+HAVING COUNT(*) &gt; 5
+ORDER BY avg_salary DESC;
+</code></pre>
+<blockquote>
+<p><code>WHERE</code> filters rows before aggregation, <code>HAVING</code> filters after. Mixing them = classic bug.</p>
+</blockquote>
+<h3 id="3-join">3. JOIN</h3>
+<p>The 4 essential types:</p>
+<pre><code class="language-mermaid">flowchart LR
+    A((A)):::a --&gt;|INNER&lt;br/&gt;intersection only| AB
+    A2((A)):::a --&gt;|LEFT&lt;br/&gt;all A| AB2
+    B((B)):::b --&gt;|RIGHT&lt;br/&gt;all B| AB
+    A3((A)):::a --&gt;|FULL&lt;br/&gt;union| AB3
+    classDef a fill:#7aa2ff,color:#000
+    classDef b fill:#ffb347,color:#000
+</code></pre>
+<pre><code class="language-sql">-- INNER JOIN: matches only
+SELECT o.id, o.amount, u.name
+FROM orders o
+INNER JOIN users u ON o.user_id = u.id;
+
+-- LEFT JOIN: all orders, even from deleted users
+SELECT o.id, o.amount, u.name
+FROM orders o
+LEFT JOIN users u ON o.user_id = u.id
+WHERE u.name IS NULL;
+
+-- self join
+SELECT e1.name AS employee, e2.name AS manager
+FROM employees e1
+LEFT JOIN employees e2 ON e1.manager_id = e2.id;
+</code></pre>
+<h3 id="4-cte-common-table-expression">4. CTE (Common Table Expression)</h3>
+<p><code>WITH</code> makes queries readable like functions:</p>
+<pre><code class="language-sql">WITH top_customers AS (
+    SELECT user_id, SUM(amount) AS total
+    FROM orders
+    WHERE order_date &gt;= '2025-01-01'
+    GROUP BY user_id
+    HAVING SUM(amount) &gt; 10000
+),
+top_with_emails AS (
+    SELECT t.user_id, t.total, u.email
+    FROM top_customers t
+    JOIN users u ON t.user_id = u.id
+)
+SELECT * FROM top_with_emails ORDER BY total DESC;
+</code></pre>
+<p>Preferable to nested subqueries. More readable, more optimizable, reusable.</p>
+<h3 id="5-union">5. UNION</h3>
+<pre><code class="language-sql">SELECT id, name FROM users_active
+UNION ALL
+SELECT id, name FROM users_archived;
+</code></pre>
+<p><code>UNION</code> removes duplicates, <code>UNION ALL</code> doesn't (faster).</p>
+<h2 id="window-functions-the-superpower">Window functions: the superpower</h2>
+<p>Compute values <strong>per row</strong> considering a "window" of correlated rows. Without collapsing GROUP BY.</p>
+<pre><code class="language-sql">SELECT
+    user_id,
+    order_date,
+    amount,
+    SUM(amount) OVER (PARTITION BY user_id ORDER BY order_date) AS cum_total,
+    ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY order_date) AS order_num,
+    LAG(amount, 1) OVER (PARTITION BY user_id ORDER BY order_date) AS prev_amount,
+    AVG(amount) OVER (
+        PARTITION BY user_id ORDER BY order_date
+        ROWS BETWEEN 6 PRECEDING AND CURRENT ROW
+    ) AS ma7
+FROM orders;
+</code></pre>
+<h3 id="use-cases">Use cases</h3>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ROW_NUMBER()</code></td>
+<td>unique progressive number</td>
+</tr>
+<tr>
+<td><code>RANK()</code> / <code>DENSE_RANK()</code></td>
+<td>rank with/without ties gaps</td>
+</tr>
+<tr>
+<td><code>LAG(col, n)</code> / <code>LEAD(col, n)</code></td>
+<td>n rows back / forward</td>
+</tr>
+<tr>
+<td><code>FIRST_VALUE() / LAST_VALUE()</code></td>
+<td>first / last in window</td>
+</tr>
+<tr>
+<td><code>NTILE(n)</code></td>
+<td>divide into n equal buckets</td>
+</tr>
+<tr>
+<td><code>SUM / AVG / COUNT OVER (...)</code></td>
+<td>rolling aggregations</td>
+</tr>
+</tbody>
+</table>
+<h3 id="example-top-n-per-group">Example: top N per group</h3>
+<p>"For each department, the top 3 highest-paid employees":</p>
+<pre><code class="language-sql">WITH ranked AS (
+    SELECT
+        name, department, salary,
+        ROW_NUMBER() OVER (
+            PARTITION BY department ORDER BY salary DESC
+        ) AS rn
+    FROM employees
+)
+SELECT name, department, salary
+FROM ranked
+WHERE rn &lt;= 3;
+</code></pre>
+<p>Heavily used pattern. Memorize.</p>
+<h2 id="case-when-sql-if-else">CASE WHEN: SQL if-else</h2>
+<pre><code class="language-sql">SELECT
+    name,
+    age,
+    CASE
+        WHEN age &lt; 18 THEN 'minor'
+        WHEN age &lt; 65 THEN 'adult'
+        ELSE 'senior'
+    END AS age_group
+FROM users;
+</code></pre>
+<p>Combined with aggregation → conditional sum:</p>
+<pre><code class="language-sql">SELECT
+    SUM(CASE WHEN status = 'paid' THEN amount END) AS revenue,
+    SUM(CASE WHEN status = 'refunded' THEN amount END) AS refunds
+FROM orders;
+</code></pre>
+<h2 id="date-and-time">Date and time</h2>
+<p>Syntax varies by DBMS, but concepts are universal.</p>
+<pre><code class="language-sql">-- PostgreSQL / DuckDB
+SELECT
+    DATE_TRUNC('month', order_date) AS month,
+    EXTRACT(DOW FROM order_date) AS day_of_week,
+    order_date + INTERVAL '7 days' AS next_week,
+    AGE(order_date) AS time_since,
+    NOW() AS current_timestamp
+FROM orders;
+</code></pre>
+<pre><code class="language-sql">SELECT
+    DATE_TRUNC('month', order_date) AS month,
+    COUNT(*) AS n,
+    SUM(amount) AS revenue
+FROM orders
+GROUP BY 1
+ORDER BY 1;
+</code></pre>
+<h2 id="performance-understanding-explain">Performance: understanding EXPLAIN</h2>
+<p><code>EXPLAIN ANALYZE</code> shows the execution plan and real times. Things to look for:</p>
+<ul>
+<li><strong>Seq Scan</strong> on large tables without index → suspect.</li>
+<li><strong>Hash Join</strong> vs <strong>Merge Join</strong> vs <strong>Nested Loop</strong> — depend on sizes.</li>
+<li><strong>Index</strong> on filter/join columns.</li>
+<li><code>LIMIT</code> without <code>ORDER BY</code> on big tables — behavior not guaranteed.</li>
+</ul>
+<pre><code class="language-sql">EXPLAIN ANALYZE
+SELECT * FROM orders WHERE user_id = 12345;
+</code></pre>
+<p>Tips:</p>
+<ol>
+<li>Index columns used in <code>WHERE</code> and <code>JOIN</code>. <strong>Never</strong> index everything.</li>
+<li><strong>Avoid SELECT *</strong>: ask only for columns you need.</li>
+<li><strong>Pre-aggregate</strong> before join when possible.</li>
+<li><strong>DISTINCT is often a bug</strong>: you're saying "I created duplicates I don't understand".</li>
+</ol>
+<h2 id="sql-pandas-the-cheat-sheet">SQL ↔ pandas: the cheat sheet</h2>
+<table>
+<thead>
+<tr>
+<th>SQL</th>
+<th>pandas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SELECT * FROM t</code></td>
+<td><code>df</code></td>
+</tr>
+<tr>
+<td><code>SELECT a, b FROM t</code></td>
+<td><code>df[['a','b']]</code></td>
+</tr>
+<tr>
+<td><code>WHERE x &gt; 5</code></td>
+<td><code>df[df.x &gt; 5]</code></td>
+</tr>
+<tr>
+<td><code>GROUP BY g</code></td>
+<td><code>df.groupby('g')</code></td>
+</tr>
+<tr>
+<td><code>JOIN ON k</code></td>
+<td><code>pd.merge(df1, df2, on='k')</code></td>
+</tr>
+<tr>
+<td><code>ORDER BY x DESC</code></td>
+<td><code>df.sort_values('x', ascending=False)</code></td>
+</tr>
+<tr>
+<td><code>LIMIT 10</code></td>
+<td><code>df.head(10)</code></td>
+</tr>
+<tr>
+<td>Window</td>
+<td><code>df.groupby('g').transform()</code> or rolling</td>
+</tr>
+</tbody>
+</table>
+<h2 id="exercises">Exercises</h2>
+<details>
+<summary>Exercise 1 — Top 3 per category</summary>
+
+Given `products(id, category, price)`, query for top 3 most expensive products per category.
+
+
+<pre><code class="language-sql">WITH ranked AS (
+    SELECT *,
+           DENSE_RANK() OVER (PARTITION BY category ORDER BY price DESC) AS r
+    FROM products
+)
+SELECT * FROM ranked WHERE r &lt;= 3;
+</code></pre>
+
+</details>
+
+<details>
+<summary>Exercise 2 — Customer churn</summary>
+
+Find users whose last order was more than 180 days ago.
+
+
+<pre><code class="language-sql">SELECT user_id, MAX(order_date) AS last_order
+FROM orders
+GROUP BY user_id
+HAVING MAX(order_date) &lt; CURRENT_DATE - INTERVAL '180 days';
+</code></pre>
+
+</details>
+
+<details>
+<summary>Exercise 3 — Funnel</summary>
+
+Given `events(user_id, event_type, ts)`, compute visit → signup → purchase conversion.
+
+
+<pre><code class="language-sql">SELECT
+    COUNT(DISTINCT CASE WHEN event_type='view' THEN user_id END) AS step1,
+    COUNT(DISTINCT CASE WHEN event_type='signup' THEN user_id END) AS step2,
+    COUNT(DISTINCT CASE WHEN event_type='purchase' THEN user_id END) AS step3
+FROM events
+WHERE ts &gt;= CURRENT_DATE - INTERVAL '30 days';
+</code></pre>
+
+
+For percentages: `ROUND(100.0 * step2 / NULLIF(step1, 0), 2) AS conv_1_to_2`.
+</details>
+
+<details>
+<summary>Exercise 4 — Day-N retention</summary>
+
+For each user, did they generate an event on day N (for N=1, 7, 30) after signup?
+
+
+<pre><code class="language-sql">WITH signup AS (
+    SELECT user_id, DATE_TRUNC('day', signup_ts) AS d0
+    FROM users
+),
+activity AS (
+    SELECT
+        s.user_id, s.d0,
+        BOOL_OR(DATE_TRUNC('day', e.ts) = s.d0 + INTERVAL '1 day')  AS active_d1,
+        BOOL_OR(DATE_TRUNC('day', e.ts) = s.d0 + INTERVAL '7 days') AS active_d7,
+        BOOL_OR(DATE_TRUNC('day', e.ts) = s.d0 + INTERVAL '30 days') AS active_d30
+    FROM signup s
+    LEFT JOIN events e ON e.user_id = s.user_id
+    GROUP BY s.user_id, s.d0
+)
+SELECT
+    AVG(active_d1::int)  AS retention_d1,
+    AVG(active_d7::int)  AS retention_d7,
+    AVG(active_d30::int) AS retention_d30
+FROM activity;
+</code></pre>
+
+</details>
+
+<details>
+<summary>Exercise 5 — Sessionization</summary>
+
+From `events(user_id, ts)`, define a session as a sequence of events with no gap > 30 minutes. Count sessions per user.
+
+
+<pre><code class="language-sql">WITH ev AS (
+    SELECT
+        user_id, ts,
+        LAG(ts) OVER (PARTITION BY user_id ORDER BY ts) AS prev_ts
+    FROM events
+),
+flagged AS (
+    SELECT
+        user_id, ts,
+        CASE WHEN prev_ts IS NULL OR ts - prev_ts &gt; INTERVAL '30 min' THEN 1 ELSE 0 END AS is_new_session
+    FROM ev
+),
+sessions AS (
+    SELECT
+        user_id, ts,
+        SUM(is_new_session) OVER (PARTITION BY user_id ORDER BY ts) AS session_id
+    FROM flagged
+)
+SELECT user_id, COUNT(DISTINCT session_id) AS n_sessions
+FROM sessions
+GROUP BY user_id;
+</code></pre>
+
+
+Refined pattern: cumulative sum of "start flags" assigns a progressive session ID. Heavily used in analytics.
+</details>
+
+<h2 id="takeaways">Takeaways</h2>
+<ul>
+<li>Window functions: the superpower — can't do real analysis without them.</li>
+<li>CTEs make queries readable.</li>
+<li><code>WHERE</code> before aggregation, <code>HAVING</code> after.</li>
+<li><code>EXPLAIN ANALYZE</code> to understand performance.</li>
+<li>DuckDB = SQL on CSV/Parquet files with no setup. Use it to learn.</li>
+</ul>
+<p>Next: data visualization.</p>
+      <nav class="pager">
+<a href="10-pandas.html" class="prev"><span class="label">← Previous</span><span class="title">Pandas: the swiss army knife</span></a>
+<a href="12-visualization.html" class="next"><span class="label">Next →</span><span class="title">Visualization: matplotlib, seaborn, plotly</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Data Science Zero to Hero</strong> — complete path, in English, from math to deployment.</p><p>Open didactic material. Formulas are here to be understood, not feared. When a concept is unclear, go back: data science is a pyramid, not a tree you skip across.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+</body>
+</html>

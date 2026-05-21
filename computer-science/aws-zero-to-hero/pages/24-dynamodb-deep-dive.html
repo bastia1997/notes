@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DynamoDB deep dive — partition, GSI, Streams, single-table — AWS Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#232f3e',primaryTextColor:'#ffffff',primaryBorderColor:'#ff9900',lineColor:'#8a99ad',background:'#0c1320'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">λ</div>
+      <div>
+        <div class="brand-title">AWS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">IT</span><a href="../en/pages/24-dynamodb-deep-dive.html" class="lang-link" title="Switch to English">EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-cos-e-aws-cloud.html" class=""><span class="num">01</span>Cos&#x27;è il cloud e cos&#x27;è AWS</a></li><li class="nav-item"><a href="../pages/02-infrastruttura-globale.html" class=""><span class="num">02</span>Infrastruttura globale: Region, AZ, Edge</a></li><li class="nav-item"><a href="../pages/03-account-root-billing.html" class=""><span class="num">03</span>Account AWS, utente root, billing</a></li><li class="nav-item"><a href="../pages/04-iam-fondamenti.html" class=""><span class="num">04</span>IAM — fondamenti (utenti, gruppi, ruoli, policy)</a></li><li class="nav-item"><a href="../pages/05-iam-avanzato.html" class=""><span class="num">05</span>IAM avanzato: policy condizionali, STS, ABAC</a></li><li class="nav-item"><a href="../pages/06-cli-sdk-iac.html" class=""><span class="num">06</span>CLI, SDK, CloudShell, IaC primer</a></li><li class="nav-item"><a href="../pages/07-pricing-billing.html" class=""><span class="num">07</span>Pricing, billing, free tier, cost tools</a></li><li class="nav-item"><a href="../pages/08-organizations-multi-account.html" class=""><span class="num">08</span>AWS Organizations &amp; strategia multi-account</a></li><li class="nav-item"><a href="../pages/09-vpc-fondamenti.html" class=""><span class="num">09</span>VPC — fondamenti</a></li><li class="nav-item"><a href="../pages/10-vpc-avanzato.html" class=""><span class="num">10</span>VPC avanzato: peering, TGW, PrivateLink, endpoint</a></li><li class="nav-item"><a href="../pages/11-route53-cloudfront.html" class=""><span class="num">11</span>Route 53, CloudFront, Global Accelerator</a></li><li class="nav-item"><a href="../pages/12-hybrid-vpn-directconnect.html" class=""><span class="num">12</span>Hybrid: VPN, Direct Connect, PrivateLink</a></li><li class="nav-item"><a href="../pages/13-ec2-fondamenti.html" class=""><span class="num">13</span>EC2 — fondamenti (istanze, AMI, lifecycle)</a></li><li class="nav-item"><a href="../pages/14-ec2-avanzato-spot-nitro.html" class=""><span class="num">14</span>EC2 avanzato — Spot, Placement Groups, Nitro, hibernation</a></li><li class="nav-item"><a href="../pages/15-asg-elb.html" class=""><span class="num">15</span>Auto Scaling Groups + Elastic Load Balancing</a></li><li class="nav-item"><a href="../pages/16-lambda-deep-dive.html" class=""><span class="num">16</span>Lambda deep dive</a></li><li class="nav-item"><a href="../pages/17-containers-ecs-eks-fargate.html" class=""><span class="num">17</span>Containers: ECS, EKS, Fargate, ECR</a></li><li class="nav-item"><a href="../pages/18-specialty-compute.html" class=""><span class="num">18</span>Specialty compute: Batch, Lightsail, Outposts, Wavelength, Beanstalk</a></li><li class="nav-item"><a href="../pages/19-ebs-efs-fsx.html" class=""><span class="num">19</span>EBS, EFS, FSx, Instance Store</a></li><li class="nav-item"><a href="../pages/20-s3-deep-dive.html" class=""><span class="num">20</span>S3 — deep dive</a></li><li class="nav-item"><a href="../pages/21-archive-snow-gateway-backup.html" class=""><span class="num">21</span>Glacier, Snow, Storage Gateway, DataSync, AWS Backup</a></li><li class="nav-item"><a href="../pages/22-rds.html" class=""><span class="num">22</span>RDS — relational DB managed (engines, Multi-AZ, replicas, Proxy)</a></li><li class="nav-item"><a href="../pages/23-aurora-deep-dive.html" class=""><span class="num">23</span>Aurora deep dive — storage condiviso, Serverless v2, Global Database</a></li><li class="nav-item"><a href="../pages/24-dynamodb-deep-dive.html" class="active"><span class="num">24</span>DynamoDB deep dive — partition, GSI, Streams, single-table</a></li><li class="nav-item"><a href="../pages/25-purpose-built-dbs.html" class=""><span class="num">25</span>Purpose-built DB — ElastiCache, MemoryDB, Neptune, DocumentDB, Keyspaces, Timestream, QLDB</a></li><li class="nav-item"><a href="../pages/26-redshift-data-warehousing.html" class=""><span class="num">26</span>Redshift — data warehousing MPP e zero-ETL</a></li><li class="nav-item"><a href="../pages/27-sqs-sns-eventbridge.html" class=""><span class="num">27</span>SQS, SNS, EventBridge — messaging ed eventi</a></li><li class="nav-item"><a href="../pages/28-step-functions-mq-appflow.html" class=""><span class="num">28</span>Step Functions, MQ, AppFlow — orchestrazione e integrazione</a></li><li class="nav-item"><a href="../pages/29-athena-glue-lakeformation.html" class=""><span class="num">29</span>Athena, Glue, Lake Formation — il data lake AWS</a></li><li class="nav-item"><a href="../pages/30-emr-kinesis-msk.html" class=""><span class="num">30</span>EMR, Kinesis, MSK — big data e streaming</a></li><li class="nav-item"><a href="../pages/31-opensearch-quicksight.html" class=""><span class="num">31</span>OpenSearch e QuickSight — search e BI</a></li><li class="nav-item"><a href="../pages/32-sagemaker-overview.html" class=""><span class="num">32</span>SageMaker — la piattaforma ML end-to-end</a></li><li class="nav-item"><a href="../pages/33-bedrock-ai-services.html" class=""><span class="num">33</span>Bedrock e AI services — GenAI e ML managed</a></li><li class="nav-item"><a href="../pages/34-iac-cloudformation-cdk-terraform.html" class=""><span class="num">34</span>IaC su AWS — CloudFormation, CDK, SAM, Terraform</a></li><li class="nav-item"><a href="../pages/35-ci-cd-pipeline.html" class=""><span class="num">35</span>CI/CD su AWS — CodePipeline, CodeBuild, CodeDeploy, CodeCatalyst</a></li><li class="nav-item"><a href="../pages/36-observability-cloudwatch-xray.html" class=""><span class="num">36</span>Observability — CloudWatch, X-Ray, CloudTrail, Config, SSM</a></li><li class="nav-item"><a href="../pages/37-kms-secrets-acm.html" class=""><span class="num">37</span>Crittografia — KMS, CloudHSM, Secrets Manager, Parameter Store, ACM</a></li><li class="nav-item"><a href="../pages/38-waf-shield-guardduty-inspector.html" class=""><span class="num">38</span>Threat detection — WAF, Shield, GuardDuty, Inspector, Macie, Security Hub</a></li><li class="nav-item"><a href="../pages/39-governance-org-controltower-identitycenter.html" class=""><span class="num">39</span>Governance — Organizations, Control Tower, Identity Center</a></li><li class="nav-item"><a href="../pages/40-migration-mgn-dms-snow.html" class=""><span class="num">40</span>Migration — MGN, DMS, Snow family, Discovery, Migration Hub</a></li><li class="nav-item"><a href="../pages/41-cost-optimization-finops.html" class=""><span class="num">41</span>Cost optimization e FinOps</a></li><li class="nav-item"><a href="../pages/42-well-architected.html" class=""><span class="num">42</span>Well-Architected Framework — 6 pillar, lens, review</a></li><li class="nav-item"><a href="../pages/43-architecture-patterns.html" class=""><span class="num">43</span>Architecture patterns — 3-tier, serverless, event-driven, microservices</a></li><li class="nav-item"><a href="../pages/44-disaster-recovery-multi-region.html" class=""><span class="num">44</span>Disaster Recovery e Multi-Region</a></li><li class="nav-item"><a href="../pages/45-reference-architectures.html" class=""><span class="num">45</span>Reference architectures real-world</a></li><li class="nav-item"><a href="../pages/46-advanced-networking.html" class=""><span class="num">46</span>Advanced networking deep dive</a></li><li class="nav-item"><a href="../pages/47-containers-deep-dive.html" class=""><span class="num">47</span>Containers deep dive — EKS, Karpenter, service mesh</a></li><li class="nav-item"><a href="../pages/48-serverless-patterns.html" class=""><span class="num">48</span>Serverless patterns deep dive</a></li><li class="nav-item"><a href="../pages/49-genai-rag-agents.html" class=""><span class="num">49</span>Generative AI su AWS — RAG e Agents</a></li><li class="nav-item"><a href="../pages/50-certificazioni-aws.html" class=""><span class="num">50</span>Certificazioni AWS — roadmap e study guide</a></li><li class="nav-item"><a href="../pages/51-glossario-az.html" class=""><span class="num">51</span>Glossario A-Z</a></li><li class="nav-item"><a href="../pages/52-cheatsheet.html" class=""><span class="num">52</span>Cheat sheet: servizi, limiti, instance families</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Database</span>
+        <span>Sezione 24 di 52</span>
+        <span class="level-tag level-adv">Livello: avanzato</span>
+      </div>
+      <h1>DynamoDB deep dive — partition, GSI, Streams, single-table</h1>
+      <p class="summary">NoSQL key-value/document serverless: modello partition+sort key, capacity on-demand vs provisioned, hot partition, single-table design, GSI/LSI, Streams, DAX, Global Tables.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Database</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>sezione 16</li></ul>
+  <div class="label">Strumenti / riferimenti</div>
+  <ul class="source-list"><li>AWS CLI</li><li>NoSQL Workbench</li></ul>
+</div>
+      <p>DynamoDB è il NoSQL serverless di AWS: latenza single-digit ms a qualunque scala, zero server da gestire, modello key-value/document. È un'altra mentalità rispetto al SQL: si modella <strong>per access pattern</strong>, non per entità.</p>
+<h2 id="1-modello-dati">1. Modello dati</h2>
+<p>Ogni <strong>table</strong> ha una <strong>primary key</strong>:
+- <strong>Partition key (PK)</strong> sola: hash key, item univoco per PK.
+- <strong>PK + Sort key (SK)</strong>: composite key, più item con stessa PK ordinati per SK.</p>
+<p>Ogni <strong>item</strong> è un dict con attributi tipizzati (<code>S</code>, <code>N</code>, <code>B</code>, <code>BOOL</code>, <code>L</code>, <code>M</code>, <code>SS</code>, <code>NS</code>, <code>BS</code>). Schema-less oltre la chiave. <strong>Max 400 KB per item</strong>.</p>
+<pre><code class="language-bash">aws dynamodb put-item --table-name Orders --item '{
+  &quot;pk&quot;: {&quot;S&quot;: &quot;USER#42&quot;},
+  &quot;sk&quot;: {&quot;S&quot;: &quot;ORDER#2026-05-21#001&quot;},
+  &quot;amount&quot;: {&quot;N&quot;: &quot;129.90&quot;},
+  &quot;status&quot;: {&quot;S&quot;: &quot;PAID&quot;}
+}'
+</code></pre>
+<p>Operazioni base:
+- <code>GetItem</code> / <code>PutItem</code> / <code>UpdateItem</code> / <code>DeleteItem</code>: O(1), 1 item.
+- <code>Query</code>: tutti gli item con stessa PK, filtrabili per range su SK. Veloce.
+- <code>Scan</code>: legge <strong>tutta la tabella</strong>. Da evitare in produzione.</p>
+<h2 id="2-capacity-on-demand-vs-provisioned">2. Capacity: on-demand vs provisioned</h2>
+<table>
+<thead>
+<tr>
+<th>Modalità</th>
+<th>Quando</th>
+<th>Costo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>On-demand</strong></td>
+<td>traffico imprevedibile, spike, dev</td>
+<td>~$1.25 per milione write, $0.25 per milione read (eventual)</td>
+</tr>
+<tr>
+<td><strong>Provisioned + auto scaling</strong></td>
+<td>traffico prevedibile e steady</td>
+<td>RCU/WCU fissi, ~70% sconto vs on-demand a regime</td>
+</tr>
+</tbody>
+</table>
+<p>Unità:
+- <strong>WCU</strong> (Write Capacity Unit) = 1 scrittura/sec di item ≤ 1 KB (item più grandi consumano più WCU).
+- <strong>RCU</strong> (Read Capacity Unit) = 2 letture eventually-consistent/sec o 1 strongly-consistent, su item ≤ 4 KB.</p>
+<p>Switch on-demand ↔ provisioned: ammesso 1x ogni 24h per tabella.</p>
+<h2 id="3-partition-fisico-e-hot-partition">3. Partition fisico e hot partition</h2>
+<p>DynamoDB distribuisce i dati su <strong>partition fisiche</strong> (storage shard) sulla base dell'hash della PK. Ogni partizione ha un <strong>hard limit</strong>:</p>
+<ul>
+<li><strong>3000 RCU</strong> e <strong>1000 WCU</strong> per partition.</li>
+<li>Se concentri 90% del traffico su una PK, quella partition è "hot" → throttle (<code>ProvisionedThroughputExceededException</code>), anche se la capacity di tabella basta.</li>
+</ul>
+<pre><code class="language-mermaid">flowchart LR
+    Client --&gt; Router[Request router]
+    Router --&gt;|hash pk| P1[Partition 1&lt;br/&gt;3000 RCU max]
+    Router --&gt; P2[Partition 2]
+    Router --&gt; P3[Partition 3]
+    Router --&gt; Pn[Partition N]
+    HOT[Hot key USER#42&lt;br/&gt;tutto su P1!] -.-&gt;|throttled| P1
+</code></pre>
+<p><strong>Anti-pattern reali</strong>:
+- PK = <code>tenant_id</code> con un tenant gigante e 1000 piccoli.
+- PK = <code>event_date</code> con tutti gli eventi di oggi sulla stessa partition.
+- Counter globale con PK fissa.</p>
+<p><strong>Soluzioni</strong>: write sharding (suffix random 0-9 alla PK), bucketing temporale (<code>USER#42#2026-05-21</code>), oppure usare un GSI con PK diversa.</p>
+<h2 id="4-single-table-design">4. Single-table design</h2>
+<p>Pattern dove <strong>tutte le entità</strong> di un'app stanno in <strong>una sola tabella</strong>, distinte da prefissi sulla PK/SK (<code>USER#42</code>, <code>ORDER#2026...</code>, <code>PRODUCT#abc</code>). Vantaggi:</p>
+<ul>
+<li>1 <code>Query</code> su PK = recupero tutte le entità correlate a un'aggregate (utente + suoi ordini + suo carrello).</li>
+<li>Niente JOIN client-side, niente roundtrip.</li>
+</ul>
+<p>Svantaggi: il modello è denso, va disegnato su carta (NoSQL Workbench aiuta) partendo dagli access pattern. Migrazione di schema è un esercizio non banale.</p>
+<h2 id="5-gsi-vs-lsi">5. GSI vs LSI</h2>
+<table>
+<thead>
+<tr>
+<th>Aspetto</th>
+<th>LSI (Local Secondary Index)</th>
+<th>GSI (Global Secondary Index)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PK</td>
+<td>stessa della base table</td>
+<td>qualsiasi attributo</td>
+</tr>
+<tr>
+<td>SK</td>
+<td>diversa</td>
+<td>qualsiasi attributo</td>
+</tr>
+<tr>
+<td>Consistency</td>
+<td>strong consistent possibile</td>
+<td><strong>only eventual</strong></td>
+</tr>
+<tr>
+<td>Capacity</td>
+<td>condivisa con tabella</td>
+<td><strong>separata</strong> (RCU/WCU propri)</td>
+</tr>
+<tr>
+<td>Quando si crea</td>
+<td><strong>solo a creazione tabella</strong></td>
+<td>anytime, fino a 20 per tabella</td>
+</tr>
+<tr>
+<td>Limite numero</td>
+<td>5 per tabella</td>
+<td>20 per tabella</td>
+</tr>
+</tbody>
+</table>
+<p>Regola: <strong>default GSI</strong>. LSI solo se sai dall'inizio che vuoi strong consistency su query alternative.</p>
+<h2 id="6-streams-global-tables-dax-transactions">6. Streams, Global Tables, DAX, transactions</h2>
+<ul>
+<li><strong>Streams</strong>: CDC sulle modifiche. Retention <strong>24h</strong>. Si consuma con Lambda trigger o KCL. Use case: index secondario in OpenSearch, audit log, denormalizzazione, fan-out eventi.</li>
+<li><strong>Global Tables</strong>: tabella replicata <strong>active-active</strong> in N region. Scrivi ovunque, leggi ovunque. Conflict resolution: last-writer-wins (timestamp). Built on Streams.</li>
+<li><strong>DAX</strong> (DynamoDB Accelerator): cache write-through/read-through in memoria, <strong>latency in microsec</strong> (vs ms di Dynamo). Solo client SDK supportati. Cluster con node <code>dax.r5.large</code>+.</li>
+<li><strong>Transactions</strong>: <code>TransactWriteItems</code> e <code>TransactGetItems</code> (fino a 100 item, 4MB totali). Costo <strong>2x</strong> delle ops normali. Garantisce ACID across item/tables.</li>
+<li><strong>TTL</strong>: setti un attributo numerico (epoch sec); Dynamo cancella l'item entro 48h dalla scadenza, <strong>gratis</strong>. Cancellazione apparente subito al <code>GetItem</code> (filtrata).</li>
+<li><strong>Backup PITR</strong>: continuous, 35 giorni indietro, restore in nuova tabella.</li>
+<li><strong>Contributor Insights</strong>: dashboard top-keys e top-keys-throttled.</li>
+</ul>
+<h2 id="7-pricing-tipico">7. Pricing tipico</h2>
+<table>
+<thead>
+<tr>
+<th>Componente</th>
+<th>Costo (eu-west-1, indicativo)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>On-demand write</td>
+<td>$1.25 per milione WRU</td>
+</tr>
+<tr>
+<td>On-demand read eventual</td>
+<td>$0.25 per milione RRU</td>
+</tr>
+<tr>
+<td>Storage</td>
+<td>$0.25 per GB-mese (prima 25 GB free su tier)</td>
+</tr>
+<tr>
+<td>Streams read</td>
+<td>$0.02 per 100k GetRecords</td>
+</tr>
+<tr>
+<td>DAX <code>dax.r5.large</code></td>
+<td>~$0.30/h</td>
+</tr>
+<tr>
+<td>Global Tables</td>
+<td>si paga write-replica WCU per ogni region extra</td>
+</tr>
+</tbody>
+</table>
+<h2 id="8-esercizio">8. Esercizio</h2>
+<details>
+<summary>App IoT logga 50k sensori, 1 sample/sec. Schema Dynamo per query "ultimi 100 sample del sensore X"?</summary>
+
+**Anti-pattern**: PK = `sensorId`, SK = `timestamp`. Sembra ok ma diventa hot: ogni sample finisce nella stessa partition del sensore. Con sensori molto attivi e item piccoli, però, il vero rischio è il **growth illimitato** di una singola PK (Dynamo non lo blocca, ma le partition crescono).
+
+**Pattern raccomandato**: PK = `SENSOR#<id>#<bucket>` dove bucket = `2026-05-21-14` (ora). SK = `timestamp`.
+
+- Query "ultimi 100 sample" → `Query` su PK = `SENSOR#X#2026-05-21-14` con `Limit=100 ScanIndexForward=false`. Se servono più ore, query parallela su 2-3 bucket.
+- Distribuisce le scritture su molte partition (bucket cambia ogni ora).
+- TTL su sample > 30 giorni per costi.
+
+GSI opzionale per query trasversali "tutti i sample con valore > soglia in 1h": PK = `ALERT#<hour-bucket>`, SK = `value#sensorId`.
+</details>
+
+<details>
+<summary>Hai un counter "totale ordini" che riceve 5000 incrementi/sec con PutItem/UpdateItem. Throttling continuo. Cosa fare?</summary>
+
+Classico hot partition: tutti gli `UpdateItem ADD #count :1` finiscono su 1 partition (PK = `COUNTER#orders`), che ha limite 1000 WCU.
+
+**Write sharding**:
+1. PK diventa `COUNTER#orders#<n>` con n in `0..49` (50 shard).
+2. Su scrittura: scegli n casuale, aggiorni `count` del shard.
+3. Su lettura: `BatchGetItem` di tutti i 50 shard e sommi i count.
+
+Distribuisce 5000 scritture su 50 partition (100/s ciascuna, ampiamente sotto limite). Lettura costa 50 RCU.
+
+Alternative:
+- **Aggregare lato app**: buffer in Lambda/SQS, flush batch ogni 5s.
+- **Atomic counter via Streams**: log raw eventi, conta aggregata in altra tabella in async.
+</details>
+
+<blockquote>
+<p><strong>Riassunto</strong>: Dynamo = NoSQL serverless ms-latency; modella per access pattern; PK+SK con limite 3000 RCU/1000 WCU per partition (hot partition trap); GSI &gt; LSI come default; single-table design potente ma da disegnare; Streams 24h per CDC; Global Tables active-active; DAX per microsec; transactions costano 2x.</p>
+</blockquote>
+      <nav class="pager">
+<a href="23-aurora-deep-dive.html" class="prev"><span class="label">← Precedente</span><span class="title">Aurora deep dive — storage condiviso, Serverless v2, Global Database</span></a>
+<a href="25-purpose-built-dbs.html" class="next"><span class="label">Successivo →</span><span class="title">Purpose-built DB — ElastiCache, MemoryDB, Neptune, DocumentDB, Keyspaces, Timestream, QLDB</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>AWS Zero to Hero</strong> — percorso completo, in italiano, dalle primitive all'architettura avanzata.</p><p>Materiale didattico aperto. Nessuna sponsorizzazione, nessun affiliate link, nessuna affiliazione con AWS. Quando un concetto è oscuro, torna indietro: AWS è una piramide di primitive, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

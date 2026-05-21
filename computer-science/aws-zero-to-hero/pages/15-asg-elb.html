@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Auto Scaling Groups + Elastic Load Balancing — AWS Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#232f3e',primaryTextColor:'#ffffff',primaryBorderColor:'#ff9900',lineColor:'#8a99ad',background:'#0c1320'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">λ</div>
+      <div>
+        <div class="brand-title">AWS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">IT</span><a href="../en/pages/15-asg-elb.html" class="lang-link" title="Switch to English">EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-cos-e-aws-cloud.html" class=""><span class="num">01</span>Cos&#x27;è il cloud e cos&#x27;è AWS</a></li><li class="nav-item"><a href="../pages/02-infrastruttura-globale.html" class=""><span class="num">02</span>Infrastruttura globale: Region, AZ, Edge</a></li><li class="nav-item"><a href="../pages/03-account-root-billing.html" class=""><span class="num">03</span>Account AWS, utente root, billing</a></li><li class="nav-item"><a href="../pages/04-iam-fondamenti.html" class=""><span class="num">04</span>IAM — fondamenti (utenti, gruppi, ruoli, policy)</a></li><li class="nav-item"><a href="../pages/05-iam-avanzato.html" class=""><span class="num">05</span>IAM avanzato: policy condizionali, STS, ABAC</a></li><li class="nav-item"><a href="../pages/06-cli-sdk-iac.html" class=""><span class="num">06</span>CLI, SDK, CloudShell, IaC primer</a></li><li class="nav-item"><a href="../pages/07-pricing-billing.html" class=""><span class="num">07</span>Pricing, billing, free tier, cost tools</a></li><li class="nav-item"><a href="../pages/08-organizations-multi-account.html" class=""><span class="num">08</span>AWS Organizations &amp; strategia multi-account</a></li><li class="nav-item"><a href="../pages/09-vpc-fondamenti.html" class=""><span class="num">09</span>VPC — fondamenti</a></li><li class="nav-item"><a href="../pages/10-vpc-avanzato.html" class=""><span class="num">10</span>VPC avanzato: peering, TGW, PrivateLink, endpoint</a></li><li class="nav-item"><a href="../pages/11-route53-cloudfront.html" class=""><span class="num">11</span>Route 53, CloudFront, Global Accelerator</a></li><li class="nav-item"><a href="../pages/12-hybrid-vpn-directconnect.html" class=""><span class="num">12</span>Hybrid: VPN, Direct Connect, PrivateLink</a></li><li class="nav-item"><a href="../pages/13-ec2-fondamenti.html" class=""><span class="num">13</span>EC2 — fondamenti (istanze, AMI, lifecycle)</a></li><li class="nav-item"><a href="../pages/14-ec2-avanzato-spot-nitro.html" class=""><span class="num">14</span>EC2 avanzato — Spot, Placement Groups, Nitro, hibernation</a></li><li class="nav-item"><a href="../pages/15-asg-elb.html" class="active"><span class="num">15</span>Auto Scaling Groups + Elastic Load Balancing</a></li><li class="nav-item"><a href="../pages/16-lambda-deep-dive.html" class=""><span class="num">16</span>Lambda deep dive</a></li><li class="nav-item"><a href="../pages/17-containers-ecs-eks-fargate.html" class=""><span class="num">17</span>Containers: ECS, EKS, Fargate, ECR</a></li><li class="nav-item"><a href="../pages/18-specialty-compute.html" class=""><span class="num">18</span>Specialty compute: Batch, Lightsail, Outposts, Wavelength, Beanstalk</a></li><li class="nav-item"><a href="../pages/19-ebs-efs-fsx.html" class=""><span class="num">19</span>EBS, EFS, FSx, Instance Store</a></li><li class="nav-item"><a href="../pages/20-s3-deep-dive.html" class=""><span class="num">20</span>S3 — deep dive</a></li><li class="nav-item"><a href="../pages/21-archive-snow-gateway-backup.html" class=""><span class="num">21</span>Glacier, Snow, Storage Gateway, DataSync, AWS Backup</a></li><li class="nav-item"><a href="../pages/22-rds.html" class=""><span class="num">22</span>RDS — relational DB managed (engines, Multi-AZ, replicas, Proxy)</a></li><li class="nav-item"><a href="../pages/23-aurora-deep-dive.html" class=""><span class="num">23</span>Aurora deep dive — storage condiviso, Serverless v2, Global Database</a></li><li class="nav-item"><a href="../pages/24-dynamodb-deep-dive.html" class=""><span class="num">24</span>DynamoDB deep dive — partition, GSI, Streams, single-table</a></li><li class="nav-item"><a href="../pages/25-purpose-built-dbs.html" class=""><span class="num">25</span>Purpose-built DB — ElastiCache, MemoryDB, Neptune, DocumentDB, Keyspaces, Timestream, QLDB</a></li><li class="nav-item"><a href="../pages/26-redshift-data-warehousing.html" class=""><span class="num">26</span>Redshift — data warehousing MPP e zero-ETL</a></li><li class="nav-item"><a href="../pages/27-sqs-sns-eventbridge.html" class=""><span class="num">27</span>SQS, SNS, EventBridge — messaging ed eventi</a></li><li class="nav-item"><a href="../pages/28-step-functions-mq-appflow.html" class=""><span class="num">28</span>Step Functions, MQ, AppFlow — orchestrazione e integrazione</a></li><li class="nav-item"><a href="../pages/29-athena-glue-lakeformation.html" class=""><span class="num">29</span>Athena, Glue, Lake Formation — il data lake AWS</a></li><li class="nav-item"><a href="../pages/30-emr-kinesis-msk.html" class=""><span class="num">30</span>EMR, Kinesis, MSK — big data e streaming</a></li><li class="nav-item"><a href="../pages/31-opensearch-quicksight.html" class=""><span class="num">31</span>OpenSearch e QuickSight — search e BI</a></li><li class="nav-item"><a href="../pages/32-sagemaker-overview.html" class=""><span class="num">32</span>SageMaker — la piattaforma ML end-to-end</a></li><li class="nav-item"><a href="../pages/33-bedrock-ai-services.html" class=""><span class="num">33</span>Bedrock e AI services — GenAI e ML managed</a></li><li class="nav-item"><a href="../pages/34-iac-cloudformation-cdk-terraform.html" class=""><span class="num">34</span>IaC su AWS — CloudFormation, CDK, SAM, Terraform</a></li><li class="nav-item"><a href="../pages/35-ci-cd-pipeline.html" class=""><span class="num">35</span>CI/CD su AWS — CodePipeline, CodeBuild, CodeDeploy, CodeCatalyst</a></li><li class="nav-item"><a href="../pages/36-observability-cloudwatch-xray.html" class=""><span class="num">36</span>Observability — CloudWatch, X-Ray, CloudTrail, Config, SSM</a></li><li class="nav-item"><a href="../pages/37-kms-secrets-acm.html" class=""><span class="num">37</span>Crittografia — KMS, CloudHSM, Secrets Manager, Parameter Store, ACM</a></li><li class="nav-item"><a href="../pages/38-waf-shield-guardduty-inspector.html" class=""><span class="num">38</span>Threat detection — WAF, Shield, GuardDuty, Inspector, Macie, Security Hub</a></li><li class="nav-item"><a href="../pages/39-governance-org-controltower-identitycenter.html" class=""><span class="num">39</span>Governance — Organizations, Control Tower, Identity Center</a></li><li class="nav-item"><a href="../pages/40-migration-mgn-dms-snow.html" class=""><span class="num">40</span>Migration — MGN, DMS, Snow family, Discovery, Migration Hub</a></li><li class="nav-item"><a href="../pages/41-cost-optimization-finops.html" class=""><span class="num">41</span>Cost optimization e FinOps</a></li><li class="nav-item"><a href="../pages/42-well-architected.html" class=""><span class="num">42</span>Well-Architected Framework — 6 pillar, lens, review</a></li><li class="nav-item"><a href="../pages/43-architecture-patterns.html" class=""><span class="num">43</span>Architecture patterns — 3-tier, serverless, event-driven, microservices</a></li><li class="nav-item"><a href="../pages/44-disaster-recovery-multi-region.html" class=""><span class="num">44</span>Disaster Recovery e Multi-Region</a></li><li class="nav-item"><a href="../pages/45-reference-architectures.html" class=""><span class="num">45</span>Reference architectures real-world</a></li><li class="nav-item"><a href="../pages/46-advanced-networking.html" class=""><span class="num">46</span>Advanced networking deep dive</a></li><li class="nav-item"><a href="../pages/47-containers-deep-dive.html" class=""><span class="num">47</span>Containers deep dive — EKS, Karpenter, service mesh</a></li><li class="nav-item"><a href="../pages/48-serverless-patterns.html" class=""><span class="num">48</span>Serverless patterns deep dive</a></li><li class="nav-item"><a href="../pages/49-genai-rag-agents.html" class=""><span class="num">49</span>Generative AI su AWS — RAG e Agents</a></li><li class="nav-item"><a href="../pages/50-certificazioni-aws.html" class=""><span class="num">50</span>Certificazioni AWS — roadmap e study guide</a></li><li class="nav-item"><a href="../pages/51-glossario-az.html" class=""><span class="num">51</span>Glossario A-Z</a></li><li class="nav-item"><a href="../pages/52-cheatsheet.html" class=""><span class="num">52</span>Cheat sheet: servizi, limiti, instance families</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Compute</span>
+        <span>Sezione 15 di 52</span>
+        <span class="level-tag level-int">Livello: intermedio</span>
+      </div>
+      <h1>Auto Scaling Groups + Elastic Load Balancing</h1>
+      <p class="summary">Launch Template, ASG (min/max/desired, lifecycle hooks, scaling policy, warm pool), ALB/NLB/GLB, health checks, sticky sessions e cross-zone.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Compute</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>sezioni 13, 14, 9</li></ul>
+  <div class="label">Strumenti / riferimenti</div>
+  <ul class="source-list"><li>AWS CLI</li><li>CloudWatch</li></ul>
+</div>
+      <p>ASG e ELB sono il duo che rende EC2 "elastico": ELB distribuisce il traffico, ASG aggiunge/rimuove istanze in base al carico. Senza queste due, EC2 è solo un'altra VM in cloud.</p>
+<h2 id="1-launch-template">1. Launch Template</h2>
+<p>Il "blueprint" delle istanze (AMI, tipo, SG, user-data, IAM role). Sostituisce la vecchia Launch Configuration. Supporta versioning e mix di tipi (multiple instance types + Spot + On-Demand mix).</p>
+<pre><code class="language-bash">aws ec2 create-launch-template \
+  --launch-template-name web-tpl \
+  --version-description v1 \
+  --launch-template-data '{
+    &quot;ImageId&quot;: &quot;ami-0abcd&quot;,
+    &quot;InstanceType&quot;: &quot;t3.small&quot;,
+    &quot;SecurityGroupIds&quot;: [&quot;sg-xxx&quot;],
+    &quot;IamInstanceProfile&quot;: {&quot;Name&quot;: &quot;web-role&quot;},
+    &quot;UserData&quot;: &quot;'&quot;$(base64 -w0 bootstrap.sh)&quot;'&quot;
+  }'
+</code></pre>
+<h2 id="2-auto-scaling-group">2. Auto Scaling Group</h2>
+<p>Definisce <strong>dove</strong> (subnet/AZ), <strong>quanti</strong> (min/max/desired), <strong>come</strong> (launch template), <strong>cosa monitorare</strong> (health check) e <strong>quando</strong> scalare.</p>
+<pre><code class="language-mermaid">flowchart LR
+  CW[CloudWatch metric] --&gt; SP[Scaling Policy]
+  SP --&gt; ASG
+  ASG --&gt;|launch| LT[Launch Template]
+  LT --&gt; EC2
+  ASG --&gt;|register| TG[Target Group]
+  TG --&gt; ALB
+  ALB --&gt; Users
+</code></pre>
+<p>Parametri chiave:</p>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Significato</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>min/max/desired</code></td>
+<td>bound del numero istanze</td>
+</tr>
+<tr>
+<td><code>health-check-type</code></td>
+<td><code>EC2</code> (status check) o <code>ELB</code> (più affidabile)</td>
+</tr>
+<tr>
+<td><code>health-check-grace-period</code></td>
+<td>secondi prima di considerare health (default 300)</td>
+</tr>
+<tr>
+<td><code>termination-policies</code></td>
+<td><code>OldestInstance</code>, <code>NewestInstance</code>, <code>Default</code>, <code>AllocationStrategy</code></td>
+</tr>
+<tr>
+<td><code>lifecycle-hooks</code></td>
+<td>pausa launch/terminate per setup/teardown custom</td>
+</tr>
+<tr>
+<td><code>warm-pool</code></td>
+<td>istanze pre-inizializzate in stato Stopped, ridotto cold start</td>
+</tr>
+</tbody>
+</table>
+<h3 id="policy-di-scaling">Policy di scaling</h3>
+<table>
+<thead>
+<tr>
+<th>Policy</th>
+<th>Trigger</th>
+<th>Quando</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Target tracking</strong></td>
+<td>mantiene metrica al target (es. CPU 50%)</td>
+<td>default, 80% dei casi</td>
+</tr>
+<tr>
+<td><strong>Step scaling</strong></td>
+<td>aggiunge N istanze se metrica in range</td>
+<td>scaling non-lineare</td>
+</tr>
+<tr>
+<td><strong>Scheduled</strong></td>
+<td>cron-based (es. +10 ogni lunedì 9:00)</td>
+<td>pattern noti</td>
+</tr>
+<tr>
+<td><strong>Predictive</strong></td>
+<td>ML su pattern storici</td>
+<td>traffico stagionale chiaro</td>
+</tr>
+</tbody>
+</table>
+<p>Formula target tracking: il controller calcola $n_{new} = n_{current} \cdot \frac{m_{current}}{m_{target}}$ con dead-band per evitare flapping.</p>
+<h2 id="3-alb-application-load-balancer">3. ALB — Application Load Balancer</h2>
+<p>Layer 7 (HTTP/HTTPS/gRPC). Routing intelligente.</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Dettaglio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Listener rules</td>
+<td>path-based (<code>/api/*</code> -&gt; TG-api), host-based (<code>api.example.com</code>), header, query</td>
+</tr>
+<tr>
+<td>SNI</td>
+<td>certificati multipli sullo stesso listener 443</td>
+</tr>
+<tr>
+<td>Target groups</td>
+<td>EC2/IP/Lambda/ECS</td>
+</tr>
+<tr>
+<td>Health check</td>
+<td>HTTP path + status code expected</td>
+</tr>
+<tr>
+<td>Sticky sessions</td>
+<td>cookie <code>AWSALB</code> (load balancer-generated) o app-managed</td>
+</tr>
+<tr>
+<td>Authentication</td>
+<td>OIDC/Cognito integrato (no codice in app)</td>
+</tr>
+<tr>
+<td>WAF</td>
+<td>integrazione nativa per OWASP rules</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-bash">aws elbv2 create-load-balancer --name web-alb --type application \
+  --subnets subnet-a subnet-b --security-groups sg-alb
+
+aws elbv2 create-target-group --name web-tg --protocol HTTP --port 80 \
+  --vpc-id vpc-xxx --health-check-path /healthz --target-type instance
+</code></pre>
+<h2 id="4-nlb-network-load-balancer">4. NLB — Network Load Balancer</h2>
+<p>Layer 4 (TCP/UDP/TLS). Latenza ultra-bassa (&lt;100ms p99), milioni di RPS, <strong>IP statico per AZ</strong> (utile per whitelisting client).</p>
+<p>Caratteristiche:
+- Preserva l'<strong>IP client</strong> (no X-Forwarded-For necessario).
+- Target type <code>ip</code> per puntare a IP on-prem (con DX/VPN).
+- TLS termination opzionale (altrimenti pass-through).
+- Cross-zone load balancing <strong>disabilitato di default</strong> (evita egress charges, ma può causare hot-spot).</p>
+<h2 id="5-glb-gateway-load-balancer">5. GLB — Gateway Load Balancer</h2>
+<p>Layer 3. Pensato per inserire <strong>firewall di terze parti</strong> (Palo Alto, Fortinet) o IDS/IPS in-line con traffico tramite GENEVE encapsulation. Non lo usi per app web normali; serve per architetture security-centric.</p>
+<h2 id="6-quando-usare-quale">6. Quando usare quale</h2>
+<pre><code class="language-mermaid">flowchart TB
+  Start{Protocollo?} --&gt; HTTP{HTTP/HTTPS/gRPC}
+  Start --&gt; TCPUDP{TCP/UDP raw}
+  Start --&gt; APP{Firewall/IDS}
+  HTTP --&gt; ALB
+  TCPUDP --&gt; Need{IP statico o latenza &lt; 1ms?}
+  Need -- Si --&gt; NLB
+  Need -- No --&gt; ALB
+  APP --&gt; GLB
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Use case</th>
+<th>LB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Web app pubblica</td>
+<td>ALB</td>
+</tr>
+<tr>
+<td>API gRPC</td>
+<td>ALB (supporta gRPC)</td>
+</tr>
+<tr>
+<td>Game server UDP</td>
+<td>NLB</td>
+</tr>
+<tr>
+<td>MQTT/IoT volume alto</td>
+<td>NLB</td>
+</tr>
+<tr>
+<td>Whitelist IP client</td>
+<td>NLB</td>
+</tr>
+<tr>
+<td>Inspection traffico via appliance</td>
+<td>GLB</td>
+</tr>
+<tr>
+<td>WebSocket</td>
+<td>ALB (ok) o NLB</td>
+</tr>
+</tbody>
+</table>
+<h2 id="7-health-checks-sticky-e-cross-zone">7. Health checks, sticky e cross-zone</h2>
+<ul>
+<li><strong>Health checks</strong>: usa endpoint dedicato (<code>/healthz</code>) che verifica solo le dipendenze critiche, NON l'intera app (evita cascading failure).</li>
+<li><strong>Sticky sessions</strong>: solo se l'app richiede affinità (stato in-memory non condiviso). Meglio: stato esterno (ElastiCache, DynamoDB).</li>
+<li><strong>Cross-zone</strong>: ALB sempre on (gratis). NLB off di default — abilitalo per bilanciamento perfetto ma occhio al data transfer inter-AZ.</li>
+</ul>
+<h2 id="8-esercizio">8. Esercizio</h2>
+<details>
+<summary>Web app a 3 layer dietro ALB; quando aggiungere Cognito vs WAF vs sticky?</summary>
+
+- **WAF**: sempre, per protezione OWASP top 10, bot mitigation, rate limit per IP. Integrazione one-click su ALB.
+- **Cognito**: se vuoi gestire auth utente senza scrivere codice di login. ALB redirige a Cognito Hosted UI; se utente autenticato, passa header `x-amzn-oidc-data` (JWT firmato).
+- **Sticky**: solo se l'app è stateful (sessioni in-memory). Soluzione corretta è esternalizzare la sessione in Redis/ElastiCache, così ogni istanza serve qualsiasi richiesta.
+</details>
+
+<details>
+<summary>ASG con 10 istanze, scaling target tracking su CPU 50%, ma si vede "flapping". Cause?</summary>
+
+Possibili cause:
+1. **Health-check-grace-period** troppo basso (l'istanza non finisce il boot in tempo).
+2. Metrica CPU oscilla per via di **GC pause** (JVM) o cron jobs → meglio una metrica composta (RequestCount + CPU).
+3. **Cooldown** breve: ogni scale-out triggera un altro check immediato. Usa `default-cooldown` 300-600s.
+4. Tipo di istanza piccolo, troppo sensibile a singole request pesanti → istanze più grosse riducono variance.
+5. Aggiungi **warm pool** per ridurre il tempo da "launching" a "in service".
+</details>
+
+<blockquote>
+<p><strong>Riassunto</strong>: Launch Template + ASG (min/max/desired, lifecycle hooks, scaling policy target tracking, warm pool) per elasticità; ALB = layer 7 default per web/API/gRPC; NLB = layer 4 per latenza/IP statico/UDP; GLB per inserire appliance security; health-check su endpoint dedicato; sticky solo se necessario; cross-zone trade-off costo vs bilanciamento.</p>
+</blockquote>
+      <nav class="pager">
+<a href="14-ec2-avanzato-spot-nitro.html" class="prev"><span class="label">← Precedente</span><span class="title">EC2 avanzato — Spot, Placement Groups, Nitro, hibernation</span></a>
+<a href="16-lambda-deep-dive.html" class="next"><span class="label">Successivo →</span><span class="title">Lambda deep dive</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>AWS Zero to Hero</strong> — percorso completo, in italiano, dalle primitive all'architettura avanzata.</p><p>Materiale didattico aperto. Nessuna sponsorizzazione, nessun affiliate link, nessuna affiliazione con AWS. Quando un concetto è oscuro, torna indietro: AWS è una piramide di primitive, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

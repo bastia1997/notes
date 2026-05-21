@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>S3 — deep dive — AWS Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#232f3e',primaryTextColor:'#ffffff',primaryBorderColor:'#ff9900',lineColor:'#8a99ad',background:'#0c1320'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">λ</div>
+      <div>
+        <div class="brand-title">AWS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">IT</span><a href="../en/pages/20-s3-deep-dive.html" class="lang-link" title="Switch to English">EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-cos-e-aws-cloud.html" class=""><span class="num">01</span>Cos&#x27;è il cloud e cos&#x27;è AWS</a></li><li class="nav-item"><a href="../pages/02-infrastruttura-globale.html" class=""><span class="num">02</span>Infrastruttura globale: Region, AZ, Edge</a></li><li class="nav-item"><a href="../pages/03-account-root-billing.html" class=""><span class="num">03</span>Account AWS, utente root, billing</a></li><li class="nav-item"><a href="../pages/04-iam-fondamenti.html" class=""><span class="num">04</span>IAM — fondamenti (utenti, gruppi, ruoli, policy)</a></li><li class="nav-item"><a href="../pages/05-iam-avanzato.html" class=""><span class="num">05</span>IAM avanzato: policy condizionali, STS, ABAC</a></li><li class="nav-item"><a href="../pages/06-cli-sdk-iac.html" class=""><span class="num">06</span>CLI, SDK, CloudShell, IaC primer</a></li><li class="nav-item"><a href="../pages/07-pricing-billing.html" class=""><span class="num">07</span>Pricing, billing, free tier, cost tools</a></li><li class="nav-item"><a href="../pages/08-organizations-multi-account.html" class=""><span class="num">08</span>AWS Organizations &amp; strategia multi-account</a></li><li class="nav-item"><a href="../pages/09-vpc-fondamenti.html" class=""><span class="num">09</span>VPC — fondamenti</a></li><li class="nav-item"><a href="../pages/10-vpc-avanzato.html" class=""><span class="num">10</span>VPC avanzato: peering, TGW, PrivateLink, endpoint</a></li><li class="nav-item"><a href="../pages/11-route53-cloudfront.html" class=""><span class="num">11</span>Route 53, CloudFront, Global Accelerator</a></li><li class="nav-item"><a href="../pages/12-hybrid-vpn-directconnect.html" class=""><span class="num">12</span>Hybrid: VPN, Direct Connect, PrivateLink</a></li><li class="nav-item"><a href="../pages/13-ec2-fondamenti.html" class=""><span class="num">13</span>EC2 — fondamenti (istanze, AMI, lifecycle)</a></li><li class="nav-item"><a href="../pages/14-ec2-avanzato-spot-nitro.html" class=""><span class="num">14</span>EC2 avanzato — Spot, Placement Groups, Nitro, hibernation</a></li><li class="nav-item"><a href="../pages/15-asg-elb.html" class=""><span class="num">15</span>Auto Scaling Groups + Elastic Load Balancing</a></li><li class="nav-item"><a href="../pages/16-lambda-deep-dive.html" class=""><span class="num">16</span>Lambda deep dive</a></li><li class="nav-item"><a href="../pages/17-containers-ecs-eks-fargate.html" class=""><span class="num">17</span>Containers: ECS, EKS, Fargate, ECR</a></li><li class="nav-item"><a href="../pages/18-specialty-compute.html" class=""><span class="num">18</span>Specialty compute: Batch, Lightsail, Outposts, Wavelength, Beanstalk</a></li><li class="nav-item"><a href="../pages/19-ebs-efs-fsx.html" class=""><span class="num">19</span>EBS, EFS, FSx, Instance Store</a></li><li class="nav-item"><a href="../pages/20-s3-deep-dive.html" class="active"><span class="num">20</span>S3 — deep dive</a></li><li class="nav-item"><a href="../pages/21-archive-snow-gateway-backup.html" class=""><span class="num">21</span>Glacier, Snow, Storage Gateway, DataSync, AWS Backup</a></li><li class="nav-item"><a href="../pages/22-rds.html" class=""><span class="num">22</span>RDS — relational DB managed (engines, Multi-AZ, replicas, Proxy)</a></li><li class="nav-item"><a href="../pages/23-aurora-deep-dive.html" class=""><span class="num">23</span>Aurora deep dive — storage condiviso, Serverless v2, Global Database</a></li><li class="nav-item"><a href="../pages/24-dynamodb-deep-dive.html" class=""><span class="num">24</span>DynamoDB deep dive — partition, GSI, Streams, single-table</a></li><li class="nav-item"><a href="../pages/25-purpose-built-dbs.html" class=""><span class="num">25</span>Purpose-built DB — ElastiCache, MemoryDB, Neptune, DocumentDB, Keyspaces, Timestream, QLDB</a></li><li class="nav-item"><a href="../pages/26-redshift-data-warehousing.html" class=""><span class="num">26</span>Redshift — data warehousing MPP e zero-ETL</a></li><li class="nav-item"><a href="../pages/27-sqs-sns-eventbridge.html" class=""><span class="num">27</span>SQS, SNS, EventBridge — messaging ed eventi</a></li><li class="nav-item"><a href="../pages/28-step-functions-mq-appflow.html" class=""><span class="num">28</span>Step Functions, MQ, AppFlow — orchestrazione e integrazione</a></li><li class="nav-item"><a href="../pages/29-athena-glue-lakeformation.html" class=""><span class="num">29</span>Athena, Glue, Lake Formation — il data lake AWS</a></li><li class="nav-item"><a href="../pages/30-emr-kinesis-msk.html" class=""><span class="num">30</span>EMR, Kinesis, MSK — big data e streaming</a></li><li class="nav-item"><a href="../pages/31-opensearch-quicksight.html" class=""><span class="num">31</span>OpenSearch e QuickSight — search e BI</a></li><li class="nav-item"><a href="../pages/32-sagemaker-overview.html" class=""><span class="num">32</span>SageMaker — la piattaforma ML end-to-end</a></li><li class="nav-item"><a href="../pages/33-bedrock-ai-services.html" class=""><span class="num">33</span>Bedrock e AI services — GenAI e ML managed</a></li><li class="nav-item"><a href="../pages/34-iac-cloudformation-cdk-terraform.html" class=""><span class="num">34</span>IaC su AWS — CloudFormation, CDK, SAM, Terraform</a></li><li class="nav-item"><a href="../pages/35-ci-cd-pipeline.html" class=""><span class="num">35</span>CI/CD su AWS — CodePipeline, CodeBuild, CodeDeploy, CodeCatalyst</a></li><li class="nav-item"><a href="../pages/36-observability-cloudwatch-xray.html" class=""><span class="num">36</span>Observability — CloudWatch, X-Ray, CloudTrail, Config, SSM</a></li><li class="nav-item"><a href="../pages/37-kms-secrets-acm.html" class=""><span class="num">37</span>Crittografia — KMS, CloudHSM, Secrets Manager, Parameter Store, ACM</a></li><li class="nav-item"><a href="../pages/38-waf-shield-guardduty-inspector.html" class=""><span class="num">38</span>Threat detection — WAF, Shield, GuardDuty, Inspector, Macie, Security Hub</a></li><li class="nav-item"><a href="../pages/39-governance-org-controltower-identitycenter.html" class=""><span class="num">39</span>Governance — Organizations, Control Tower, Identity Center</a></li><li class="nav-item"><a href="../pages/40-migration-mgn-dms-snow.html" class=""><span class="num">40</span>Migration — MGN, DMS, Snow family, Discovery, Migration Hub</a></li><li class="nav-item"><a href="../pages/41-cost-optimization-finops.html" class=""><span class="num">41</span>Cost optimization e FinOps</a></li><li class="nav-item"><a href="../pages/42-well-architected.html" class=""><span class="num">42</span>Well-Architected Framework — 6 pillar, lens, review</a></li><li class="nav-item"><a href="../pages/43-architecture-patterns.html" class=""><span class="num">43</span>Architecture patterns — 3-tier, serverless, event-driven, microservices</a></li><li class="nav-item"><a href="../pages/44-disaster-recovery-multi-region.html" class=""><span class="num">44</span>Disaster Recovery e Multi-Region</a></li><li class="nav-item"><a href="../pages/45-reference-architectures.html" class=""><span class="num">45</span>Reference architectures real-world</a></li><li class="nav-item"><a href="../pages/46-advanced-networking.html" class=""><span class="num">46</span>Advanced networking deep dive</a></li><li class="nav-item"><a href="../pages/47-containers-deep-dive.html" class=""><span class="num">47</span>Containers deep dive — EKS, Karpenter, service mesh</a></li><li class="nav-item"><a href="../pages/48-serverless-patterns.html" class=""><span class="num">48</span>Serverless patterns deep dive</a></li><li class="nav-item"><a href="../pages/49-genai-rag-agents.html" class=""><span class="num">49</span>Generative AI su AWS — RAG e Agents</a></li><li class="nav-item"><a href="../pages/50-certificazioni-aws.html" class=""><span class="num">50</span>Certificazioni AWS — roadmap e study guide</a></li><li class="nav-item"><a href="../pages/51-glossario-az.html" class=""><span class="num">51</span>Glossario A-Z</a></li><li class="nav-item"><a href="../pages/52-cheatsheet.html" class=""><span class="num">52</span>Cheat sheet: servizi, limiti, instance families</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Storage</span>
+        <span>Sezione 20 di 52</span>
+        <span class="level-tag level-int">Livello: intermedio</span>
+      </div>
+      <h1>S3 — deep dive</h1>
+      <p class="summary">Object storage primitives, storage class, lifecycle, versioning, replication, encryption, policy, Object Lock, Pre-signed URL, Access Points, Object Lambda, Storage Lens.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Storage</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>sezioni 4, 5</li></ul>
+  <div class="label">Strumenti / riferimenti</div>
+  <ul class="source-list"><li>AWS CLI</li><li>S3 Storage Lens</li></ul>
+</div>
+      <p>S3 (Simple Storage Service) è il primo servizio AWS (2006) e ancora la <em>spina dorsale</em> di praticamente ogni architettura cloud: data lake, backup, static hosting, log archive, asset CDN-friendly, lake-house Iceberg/Hudi. Sotto la semplicità c'è una superficie funzionale enorme.</p>
+<h2 id="1-primitive">1. Primitive</h2>
+<ul>
+<li><strong>Bucket</strong>: contenitore globalmente univoco (nome unico al mondo), regionale.</li>
+<li><strong>Object</strong>: blob fino a <strong>5 TB</strong> (multipart upload &gt;5 GB obbligatorio, raccomandato &gt;100 MB).</li>
+<li><strong>Key</strong>: stringa fino a 1024 byte, l'illusione delle "cartelle" arriva da <code>/</code> nella key.</li>
+<li><strong>Durabilità</strong>: <strong>11 nove</strong> (99.999999999%) — perdere un oggetto è praticamente leggenda.</li>
+<li><strong>Disponibilità</strong>: 99.99% per Standard (SLA 99.9%).</li>
+<li><strong>Consistenza</strong>: dal dicembre 2020 <strong>strong read-after-write</strong> su tutte le operazioni (prima era eventual su overwrite/delete). Niente più hack di delay artificiali.</li>
+</ul>
+<h2 id="2-storage-class">2. Storage class</h2>
+<table>
+<thead>
+<tr>
+<th>Classe</th>
+<th>Cost storage</th>
+<th>Retrieval</th>
+<th>Min duration</th>
+<th>Tipico</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Standard</strong></td>
+<td>$0.023/GB</td>
+<td>nessuno</td>
+<td>nessuna</td>
+<td>hot data</td>
+</tr>
+<tr>
+<td><strong>Standard-IA</strong></td>
+<td>$0.0125/GB</td>
+<td>$0.01/GB</td>
+<td>30 gg</td>
+<td>backup ricomponibili</td>
+</tr>
+<tr>
+<td><strong>One Zone-IA</strong></td>
+<td>$0.01/GB</td>
+<td>$0.01/GB</td>
+<td>30 gg</td>
+<td>replica ri-creabile, 1 AZ sola</td>
+</tr>
+<tr>
+<td><strong>Intelligent-Tiering</strong></td>
+<td>dinamico</td>
+<td>nessuno</td>
+<td>30 gg</td>
+<td>accesso imprevedibile</td>
+</tr>
+<tr>
+<td><strong>Glacier Instant Retrieval</strong></td>
+<td>$0.004/GB</td>
+<td>$0.03/GB ms</td>
+<td>90 gg</td>
+<td>archive ma accesso istantaneo</td>
+</tr>
+<tr>
+<td><strong>Glacier Flexible Retrieval</strong></td>
+<td>$0.0036/GB</td>
+<td>$0.01-0.10/GB, 1-5 min o 3-5h</td>
+<td>90 gg</td>
+<td>archive con SLA recovery</td>
+</tr>
+<tr>
+<td><strong>Glacier Deep Archive</strong></td>
+<td>$0.00099/GB</td>
+<td>$0.02/GB, 12 h</td>
+<td>180 gg</td>
+<td>"il magazzino", compliance fiscale</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Intelligent-Tiering</strong> è oggi il <em>default raccomandato</em> per workload generici: AWS sposta automaticamente fra tier (Frequent, Infrequent, Archive Instant, Archive, Deep Archive) in base agli accessi, costa solo $0.0025/1000 oggetti di monitoring. Nessuna retrieval fee fra i tier "istantanei".</p>
+<h2 id="3-lifecycle-versioning-mfa-delete">3. Lifecycle, versioning, MFA delete</h2>
+<pre><code class="language-bash">aws s3api put-bucket-lifecycle-configuration --bucket app-logs --lifecycle-configuration '{
+  &quot;Rules&quot;:[{
+    &quot;ID&quot;:&quot;logs-tiering&quot;,
+    &quot;Status&quot;:&quot;Enabled&quot;,
+    &quot;Filter&quot;:{&quot;Prefix&quot;:&quot;raw/&quot;},
+    &quot;Transitions&quot;:[
+      {&quot;Days&quot;:30,&quot;StorageClass&quot;:&quot;STANDARD_IA&quot;},
+      {&quot;Days&quot;:180,&quot;StorageClass&quot;:&quot;GLACIER&quot;}
+    ],
+    &quot;Expiration&quot;:{&quot;Days&quot;:2555},
+    &quot;NoncurrentVersionExpiration&quot;:{&quot;NoncurrentDays&quot;:90}
+  }]
+}'
+</code></pre>
+<p><strong>Versioning</strong>: ogni overwrite/delete crea una nuova versione, la "delete" è un <em>delete marker</em> recuperabile. Indispensabile prima di abilitare Object Lock o Replication. <strong>MFA Delete</strong>: richiede MFA per cancellare versioni, abilitabile solo dal root account via CLI.</p>
+<h2 id="4-replication">4. Replication</h2>
+<ul>
+<li><strong>CRR</strong> (Cross-Region Replication): copia async in region diversa per DR / latenza utenti / compliance dato.</li>
+<li><strong>SRR</strong> (Same-Region Replication): tipicamente per separare prod/log o cambiare account proprietario.</li>
+<li><strong>RTC</strong> (Replication Time Control): SLA 99.99% replica entro <strong>15 minuti</strong>, con metriche CloudWatch.</li>
+</ul>
+<p>Richiede versioning su entrambi i bucket. Non replica oggetti pre-esistenti (devi fare batch replication separato).</p>
+<h2 id="5-encryption">5. Encryption</h2>
+<p>Tutto S3 è cifrato a riposo by default da gennaio 2023 (SSE-S3 di base).</p>
+<table>
+<thead>
+<tr>
+<th>Modalità</th>
+<th>Chi gestisce la chiave</th>
+<th>Audit</th>
+<th>Costo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>SSE-S3</strong></td>
+<td>AWS (AES-256)</td>
+<td>no</td>
+<td>incluso</td>
+</tr>
+<tr>
+<td><strong>SSE-KMS</strong></td>
+<td>KMS CMK</td>
+<td>CloudTrail completo</td>
+<td>KMS API costs</td>
+</tr>
+<tr>
+<td><strong>DSSE-KMS</strong></td>
+<td>KMS, doppia cifratura</td>
+<td>sì</td>
+<td>KMS x2</td>
+</tr>
+<tr>
+<td><strong>SSE-C</strong></td>
+<td>tu fornisci la chiave ad ogni request</td>
+<td>no</td>
+<td>incluso</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Bucket Key</strong>: data-key cached a livello bucket → 99% in meno di chiamate a KMS per workload write-heavy. Quasi sempre da attivare con SSE-KMS.</p>
+<p>In transit: HTTPS-only via bucket policy con <code>aws:SecureTransport=false</code> deny.</p>
+<h2 id="6-policy-acl-block-public-access">6. Policy, ACL, Block Public Access</h2>
+<p>Tre layer di accesso, controintuitivi insieme:</p>
+<ol>
+<li><strong>IAM policy</strong> (su utente/ruolo): "io chi sono e cosa posso?".</li>
+<li><strong>Bucket policy</strong> (su bucket): "questo bucket cosa concede a chi?".</li>
+<li><strong>ACL</strong> (legacy, oggetto/bucket): granularità object-level, oggi sconsigliato.</li>
+</ol>
+<p><strong>Block Public Access</strong> è un interruttore master sopra tutto: se attivo (default dal 2023), anche se policy/ACL danno public, S3 nega. Disabilitalo solo con consapevolezza chirurgica.</p>
+<pre><code class="language-mermaid">flowchart TD
+  R[Request] --&gt; BPA{Block Public Access?}
+  BPA --&gt;|on + public| DENY[403 Deny]
+  BPA --&gt;|off o privato| IP[Valuta IAM + Bucket policy + ACL]
+  IP --&gt;|qualsiasi explicit Deny| DENY
+  IP --&gt;|almeno un Allow e nessun Deny| OK[200 OK]
+  IP --&gt;|nessun Allow| DENY
+</code></pre>
+<h2 id="7-feature-avanzate">7. Feature avanzate</h2>
+<ul>
+<li><strong>Object Lock</strong> (WORM): retention immutabile in modalità <strong>Governance</strong> (override con permesso speciale) o <strong>Compliance</strong> (immutabile anche per root, per regolatori). Richiede versioning.</li>
+<li><strong>Pre-signed URL</strong>: link temporaneo che concede put/get, firmato con le tue credenziali. Pattern classico: upload diretto dal browser senza esporre credenziali.</li>
+<li><strong>S3 Select</strong>: SQL su singolo oggetto CSV/JSON/Parquet, risparmi banda e CPU.</li>
+<li><strong>Access Points</strong>: endpoint con policy dedicata per applicazione/team, evita una bucket policy gigante.</li>
+<li><strong>Multi-Region Access Points</strong>: endpoint globale con failover automatico fra bucket replicati in più region.</li>
+<li><strong>S3 Object Lambda</strong>: trasformi al volo l'oggetto in get (redaction PII, ridimensionamento immagini, format conversion).</li>
+<li><strong>Storage Lens</strong>: dashboard organization-wide su utilizzo, classi, anomalie, raccomandazioni cost.</li>
+<li><strong>Event Notifications</strong>: trigger su PUT/DELETE verso <strong>SQS / SNS / Lambda / EventBridge</strong> (EventBridge è la via moderna, più filtri).</li>
+<li><strong>Transfer Acceleration</strong>: upload via edge CloudFront, utile da continenti lontani.</li>
+<li><strong>Multipart Upload</strong>: parti da 5 MB-5 GB, resume e parallelizzazione. Obbligatorio &gt;5 GB, raccomandato &gt;100 MB. <strong>Ricorda</strong>: gli upload incompleti restano e li paghi — abilita la lifecycle rule "AbortIncompleteMultipartUpload".</li>
+</ul>
+<h2 id="8-esercizio">8. Esercizio</h2>
+<details>
+<summary>Devi servire upload di video utente fino a 10 GB con thumbnail automatiche. Architettura?</summary>
+
+1. **Pre-signed URL** generato da API Gateway+Lambda → browser fa **multipart upload** diretto su S3 (no banda backend).
+2. **Bucket policy** HTTPS-only + Block Public Access on.
+3. **Event Notification** `s3:ObjectCreated:CompleteMultipartUpload` → EventBridge → Lambda di transcodifica/thumbnail (o MediaConvert).
+4. Thumbnail scritte in bucket dedicato con **CloudFront** in front (vedi sez. 11).
+5. Lifecycle rule: video originali → IA dopo 60 gg → Glacier Flexible dopo 180.
+6. Multipart "AbortIncompleteMultipartUpload" a 7 gg per pulire parti orfane.
+</details>
+
+<details>
+<summary>Compliance fiscale: 10 anni di documenti immutabili, accesso raro ma quando serve serve subito.</summary>
+
+- **Versioning** on + **Object Lock Compliance** mode, retention 10 anni.
+- Storage class **Glacier Instant Retrieval**: $0.004/GB con accesso ms (perfetto per "raro ma immediato").
+- **SSE-KMS** con CMK dedicata, key policy che esclude tutti dal `kms:Disable`.
+- **Replication CRR** verso region secondaria con stesso Object Lock (DR).
+- **CloudTrail data events** sul bucket per audit completo.
+
+Anti-pattern: Glacier Deep Archive — costa meno ma 12h di retrieve violano "subito".
+</details>
+
+<blockquote>
+<p><strong>Riassunto</strong>: S3 è object store a 11×9 di durabilità, con classi dal Standard al Deep Archive (gestite via lifecycle o Intelligent-Tiering); versioning + Object Lock per immutabilità; CRR/SRR/RTC per DR; encryption SSE-S3 default, SSE-KMS+Bucket Key per audit/multi-tenant; sicurezza = Block Public Access + bucket policy + IAM; feature avanzate (Access Points, Object Lambda, Storage Lens, event notifications) lo rendono molto più di un "disco infinito".</p>
+</blockquote>
+      <nav class="pager">
+<a href="19-ebs-efs-fsx.html" class="prev"><span class="label">← Precedente</span><span class="title">EBS, EFS, FSx, Instance Store</span></a>
+<a href="21-archive-snow-gateway-backup.html" class="next"><span class="label">Successivo →</span><span class="title">Glacier, Snow, Storage Gateway, DataSync, AWS Backup</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>AWS Zero to Hero</strong> — percorso completo, in italiano, dalle primitive all'architettura avanzata.</p><p>Materiale didattico aperto. Nessuna sponsorizzazione, nessun affiliate link, nessuna affiliazione con AWS. Quando un concetto è oscuro, torna indietro: AWS è una piramide di primitive, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

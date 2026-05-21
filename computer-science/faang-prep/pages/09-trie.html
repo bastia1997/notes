@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trie (prefix tree) — FAANG Prep</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">F</div>
+      <div>
+        <div class="brand-title">FAANG Prep</div>
+        <div class="brand-subtitle">DS&amp;A · System Design</div>
+      </div>
+    </div>
+    <div class="lang-bar">
+      <a class="lang-switcher" href="../en/pages/09-trie.html" title="English"><span class="flag-icon">🇬🇧</span><span class="flag-label">English</span></a>
+    </div>
+  </div>
+  <div class="search-wrap">
+    <input class="search-input" id="search-input" placeholder="Cerca nei contenuti... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/00-introduzione.html" class=""><span class="num">00</span>Introduzione e come usare questo percorso</a></li><li class="nav-item"><a href="../pages/01-complessita.html" class=""><span class="num">01</span>Complessità computazionale (Big-O)</a></li><li class="nav-item"><a href="../pages/02-array-stringhe.html" class=""><span class="num">02</span>Array e stringhe</a></li><li class="nav-item"><a href="../pages/03-hashmap-set.html" class=""><span class="num">03</span>Hashmap e set</a></li><li class="nav-item"><a href="../pages/04-linked-list.html" class=""><span class="num">04</span>Linked list</a></li><li class="nav-item"><a href="../pages/05-stack-coda.html" class=""><span class="num">05</span>Stack e coda</a></li><li class="nav-item"><a href="../pages/06-alberi.html" class=""><span class="num">06</span>Alberi (binary tree e BST)</a></li><li class="nav-item"><a href="../pages/07-heap.html" class=""><span class="num">07</span>Heap e priority queue</a></li><li class="nav-item"><a href="../pages/08-grafi.html" class=""><span class="num">08</span>Grafi</a></li><li class="nav-item"><a href="../pages/09-trie.html" class="active"><span class="num">09</span>Trie (prefix tree)</a></li><li class="nav-item"><a href="../pages/10-ricorsione-backtracking.html" class=""><span class="num">10</span>Ricorsione e backtracking</a></li><li class="nav-item"><a href="../pages/11-sorting-searching.html" class=""><span class="num">11</span>Sorting e searching</a></li><li class="nav-item"><a href="../pages/12-two-pointers-sliding-window.html" class=""><span class="num">12</span>Two pointers e sliding window</a></li><li class="nav-item"><a href="../pages/13-greedy.html" class=""><span class="num">13</span>Greedy</a></li><li class="nav-item"><a href="../pages/14-dp.html" class=""><span class="num">14</span>Dynamic programming</a></li><li class="nav-item"><a href="../pages/15-bit-manipulation.html" class=""><span class="num">15</span>Bit manipulation</a></li><li class="nav-item"><a href="../pages/16-oop-design-patterns.html" class=""><span class="num">16</span>OOP e design patterns</a></li><li class="nav-item"><a href="../pages/17-system-design.html" class=""><span class="num">17</span>System design — fondamenti</a></li><li class="nav-item"><a href="../pages/18-system-design-esempi.html" class=""><span class="num">18</span>System design — esempi end-to-end</a></li><li class="nav-item"><a href="../pages/19-concorrenza.html" class=""><span class="num">19</span>Concorrenza e parallelismo</a></li><li class="nav-item"><a href="../pages/20-database-sql.html" class=""><span class="num">20</span>Database e SQL</a></li><li class="nav-item"><a href="../pages/21-os-networking.html" class=""><span class="num">21</span>OS e networking</a></li><li class="nav-item"><a href="../pages/22-coding-patterns.html" class=""><span class="num">22</span>I 16 coding patterns dei colloqui</a></li><li class="nav-item"><a href="../pages/23-behavioral-star.html" class=""><span class="num">23</span>Behavioral interview — STAR e Amazon LP</a></li><li class="nav-item"><a href="../pages/24-mock-interviews.html" class=""><span class="num">24</span>Mock interview e strategia in colloquio</a></li><li class="nav-item"><a href="../pages/25-roadmap-90-giorni.html" class=""><span class="num">25</span>Roadmap 90 giorni — piano operativo</a></li><li class="nav-item"><a href="../pages/26-banca-esercizi.html" class=""><span class="num">26</span>Banca esercizi — 200+ problemi FAANG</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Strutture dati</span>
+        <span>Sezione 9 di 26</span>
+      </div>
+      <h1>Trie (prefix tree)</h1>
+      <p class="summary">Albero specializzato per ricerca per prefisso. Cos&#x27;è, come si usa per autocomplete, word search II, XOR maximum.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Strutture dati</div>
+  
+  
+</div>
+      <p>Il trie (si pronuncia "try", da "re<strong>TRIE</strong>val") è una struttura ad albero specializzata per <strong>stringhe</strong>. Vince contro le hashmap quando devi cercare per <strong>prefisso</strong>, non per chiave intera.</p>
+<h2 id="parte-1-il-problema-motivante">Parte 1 — Il problema motivante</h2>
+<h3 id="autocomplete">Autocomplete</h3>
+<p>Quando scrivi "ca" su Google, ti appaiono "casa", "calcio", "cane", "caraibi"... Come si fa?</p>
+<p>Hai un dizionario di milioni di parole. Devi, dato un prefisso, restituire <strong>tutte</strong> le parole che lo estendono.</p>
+<p><strong>Hashmap</strong>: scorri tutte le chiavi e controlli <code>startswith(prefix)</code>. O(N × P) dove N = numero parole, P = lunghezza prefisso. Lento.</p>
+<p><strong>Lista ordinata</strong>: binary search del prefisso. Trovi il range, lo scorri. O(P log N + risultati). Funziona ma cresce con la lista.</p>
+<p><strong>Trie</strong>: O(P + risultati). Indipendente da N. Magia.</p>
+<h2 id="parte-2-come-funziona">Parte 2 — Come funziona</h2>
+<h3 id="lidea-condividere-i-prefissi-comuni">L'idea: condividere i prefissi comuni</h3>
+<p>Pensa al dizionario <code>{"cat", "car", "card", "dog"}</code>. Hanno prefissi in comune ("ca", "car"). Un trie sfrutta questa condivisione organizzando le parole come <strong>cammini in un albero</strong>.</p>
+<pre><code class="language-mermaid">flowchart TD
+    root(((root)))
+    root --&gt; c[c]
+    root --&gt; d[d]
+    c --&gt; a[a]
+    d --&gt; o[o]
+    a --&gt; r[r]
+    a --&gt; t[&quot;t ★&quot;]
+    o --&gt; g[&quot;g ★&quot;]
+    r --&gt; rstop[&quot;★&quot;]
+    r --&gt; dn[d]
+    dn --&gt; dnstop[&quot;★&quot;]
+    style t fill:#50fa7b,color:#0a0c12
+    style g fill:#50fa7b,color:#0a0c12
+    style rstop fill:#50fa7b,color:#0a0c12
+    style dnstop fill:#50fa7b,color:#0a0c12
+</code></pre>
+<p>Le ★ verdi indicano <code>is_end = True</code> (terminano una parola valida).</p>
+<p>Ogni nodo rappresenta <strong>un carattere</strong>. Le foglie marcate (con <code>*</code>) terminano una parola. I cammini condividono i prefissi.</p>
+<ul>
+<li>"cat": root → c → a → t*. Cammino di 3 archi.</li>
+<li>"car": root → c → a → r*. Cammino di 3 archi, condivide "ca" con cat.</li>
+<li>"card": root → c → a → r → d*. Estende "car".</li>
+<li>"dog": root → d → o → g*.</li>
+</ul>
+<h3 id="vantaggi">Vantaggi</h3>
+<ul>
+<li><strong>Cerca prefisso</strong>: scendi l'albero seguendo i caratteri del prefisso. Se ti perdi (nodo mancante), il prefisso non esiste.</li>
+<li><strong>Memoria</strong>: parole con prefissi comuni occupano meno spazio totale rispetto a memorizzarle separatamente.</li>
+<li><strong>Enumera tutte le estensioni</strong>: dopo aver navigato fino al nodo del prefisso, fai DFS per raccogliere tutte le parole.</li>
+</ul>
+<h3 id="implementazione">Implementazione</h3>
+<pre><code class="language-python">class TrieNode:
+    def __init__(self):
+        self.children = {}    # char → TrieNode
+        self.is_end = False   # marca fine di parola
+
+class Trie:
+    def __init__(self):
+        self.root = TrieNode()
+
+    def insert(self, word):
+        n = self.root
+        for c in word:
+            if c not in n.children:
+                n.children[c] = TrieNode()
+            n = n.children[c]
+        n.is_end = True
+
+    def search(self, word):
+        n = self._walk(word)
+        return n is not None and n.is_end
+
+    def starts_with(self, prefix):
+        return self._walk(prefix) is not None
+
+    def _walk(self, s):
+        n = self.root
+        for c in s:
+            if c not in n.children:
+                return None
+            n = n.children[c]
+        return n
+</code></pre>
+<h3 id="complessita">Complessità</h3>
+<table>
+<thead>
+<tr>
+<th>Operazione</th>
+<th>Tempo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Insert(word)</td>
+<td>O(L) dove L = lunghezza parola</td>
+</tr>
+<tr>
+<td>Search(word)</td>
+<td>O(L)</td>
+</tr>
+<tr>
+<td>Starts_with(prefix)</td>
+<td>O(P) dove P = lunghezza prefisso</td>
+</tr>
+<tr>
+<td>Spazio totale</td>
+<td>O(somma lunghezze parole)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="parte-3-versione-array-per-alfabeto-fisso">Parte 3 — Versione "array" per alfabeto fisso</h2>
+<p>Se l'alfabeto è piccolo e fisso (es. 26 lettere minuscole), un array di 26 figli è <strong>più veloce</strong> del dict (no hashing overhead).</p>
+<pre><code class="language-python">class TrieNode:
+    __slots__ = ('children', 'is_end')
+    def __init__(self):
+        self.children = [None] * 26
+        self.is_end = False
+
+def insert(root, word):
+    n = root
+    for c in word:
+        i = ord(c) - ord('a')
+        if not n.children[i]:
+            n.children[i] = TrieNode()
+        n = n.children[i]
+    n.is_end = True
+</code></pre>
+<p><code>__slots__</code> riduce memoria evitando il <code>__dict__</code> interno di ogni istanza.</p>
+<h2 id="parte-4-quando-usare-il-trie">Parte 4 — Quando usare il trie</h2>
+<h3 id="casi-doro">Casi d'oro</h3>
+<ol>
+<li><strong>Autocomplete</strong>: dato prefisso, trova suggerimenti.</li>
+<li><strong>Spell check</strong>: la parola esiste? Suggerisci correzioni vicine.</li>
+<li><strong>Word search in griglia</strong> (cap. 08 esercizio): hai una lista di parole da cercare; il trie taglia rami che non possono diventare nessuna parola.</li>
+<li><strong>Longest prefix matching</strong> (IP routing nei router).</li>
+<li><strong>XOR maximum</strong>: trie binario sui bit per trovare max(a XOR b).</li>
+</ol>
+<h3 id="casi-in-cui-non-usarlo">Casi in cui NON usarlo</h3>
+<p>Per cercare <strong>chiavi intere</strong> (no prefisso), hashmap è migliore: O(1) vs O(L). Trie vince solo se sfrutti il prefisso.</p>
+<h2 id="parte-5-pattern-word-search-ii-con-trie">Parte 5 — Pattern: word search II con trie</h2>
+<h3 id="il-problema">Il problema</h3>
+<p>Hai una griglia di lettere e una lista di parole. Trova quali parole compaiono come cammino nella griglia (4-vicini, no riuso di celle).</p>
+<p>Griglia:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>c0</th>
+<th>c1</th>
+<th>c2</th>
+<th>c3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>r0</strong></td>
+<td>o</td>
+<td>a</td>
+<td>a</td>
+<td>n</td>
+</tr>
+<tr>
+<td><strong>r1</strong></td>
+<td>e</td>
+<td>t</td>
+<td>a</td>
+<td>e</td>
+</tr>
+<tr>
+<td><strong>r2</strong></td>
+<td>i</td>
+<td>h</td>
+<td>k</td>
+<td>r</td>
+</tr>
+<tr>
+<td><strong>r3</strong></td>
+<td>i</td>
+<td>f</td>
+<td>l</td>
+<td>v</td>
+</tr>
+</tbody>
+</table>
+<p>Parole da cercare: <code>["oath", "pea", "eat", "rain"]</code>.</p>
+<h3 id="approccio-naive">Approccio naive</h3>
+<p>Per ogni parola, fai DFS dalla griglia. O(W × R × C × 4^L). Lento.</p>
+<h3 id="approccio-con-trie-intelligente">Approccio con trie (intelligente)</h3>
+<ol>
+<li>Costruisci trie con <strong>tutte</strong> le parole.</li>
+<li>DFS dalla griglia, naviga in parallelo nel trie.</li>
+<li>Quando la cella corrente non corrisponde a nessun figlio del nodo corrente del trie → <strong>prune</strong> (esci subito).</li>
+<li>Quando incontri <code>is_end</code> → registra la parola.</li>
+</ol>
+<pre><code class="language-python">class TrieNode:
+    def __init__(self):
+        self.children = {}
+        self.word = None
+
+def find_words(board, words):
+    R, C = len(board), len(board[0])
+    root = TrieNode()
+    # Costruisci trie
+    for w in words:
+        n = root
+        for c in w:
+            n = n.children.setdefault(c, TrieNode())
+        n.word = w
+
+    res = []
+    def dfs(r, c, node):
+        ch = board[r][c]
+        if ch not in node.children:
+            return
+        nxt = node.children[ch]
+        if nxt.word:
+            res.append(nxt.word)
+            nxt.word = None   # evita duplicati
+        board[r][c] = '#'   # marca visited
+        for dr, dc in [(-1,0),(1,0),(0,-1),(0,1)]:
+            nr, nc = r + dr, c + dc
+            if 0 &lt;= nr &lt; R and 0 &lt;= nc &lt; C and board[nr][nc] != '#':
+                dfs(nr, nc, nxt)
+        board[r][c] = ch   # backtrack
+    for r in range(R):
+        for c in range(C):
+            dfs(r, c, root)
+    return res
+</code></pre>
+<p><strong>Trucchi</strong>:</p>
+<ul>
+<li><code>word</code> invece di <code>is_end</code> per recuperare direttamente la parola completa.</li>
+<li><code>nxt.word = None</code> dopo aver trovato: previene duplicati nello stesso run.</li>
+<li><code>board[r][c] = '#'</code> marker temporaneo.</li>
+</ul>
+<p>Velocità: il trie consente di tagliare interi sotto-alberi di esplorazione → speedup drammatico vs naive.</p>
+<h2 id="parte-6-trie-binario-per-xor-maximum">Parte 6 — Trie binario per XOR maximum</h2>
+<p>Dato array di interi, trova <code>max(a XOR b)</code> con <code>a, b ∈ arr</code>.</p>
+<p><strong>Brute force</strong>: O(n²).</p>
+<p><strong>Idea trie binario</strong>: inserisci ogni numero come sequenza di bit (MSB → LSB) in un trie. Per ogni numero, naviga il trie cercando di andare nel ramo opposto a ogni bit (massimizza XOR).</p>
+<pre><code class="language-python">def find_maximum_xor(arr):
+    root = {}
+    # Insert
+    for x in arr:
+        n = root
+        for i in range(31, -1, -1):
+            b = (x &gt;&gt; i) &amp; 1
+            n = n.setdefault(b, {})
+    # Query
+    best = 0
+    for x in arr:
+        n = root
+        cur = 0
+        for i in range(31, -1, -1):
+            b = (x &gt;&gt; i) &amp; 1
+            opp = 1 - b
+            if opp in n:
+                cur |= (1 &lt;&lt; i)
+                n = n[opp]
+            else:
+                n = n[b]
+        best = max(best, cur)
+    return best
+</code></pre>
+<p>O(32 × n) = O(n).</p>
+<p>Trie binario è la generalizzazione del trie a un alfabeto di 2 simboli (0, 1).</p>
+<h2 id="parte-7-esercizi">Parte 7 — Esercizi</h2>
+<h3 id="esercizio-91-implement-trie-medium">Esercizio 9.1 — Implement Trie <span class="problem-tag medium">MEDIUM</span></h3>
+<p><code>insert</code>, <code>search</code>, <code>startsWith</code>.</p>
+<details><summary>Soluzione</summary>
+
+Vedi parte 2.
+</details>
+
+<h3 id="esercizio-92-word-dictionary-con-wildcard-medium">Esercizio 9.2 — Word Dictionary con wildcard <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Search con <code>.</code> come jolly per qualsiasi carattere.</p>
+<details><summary>Ragionamento</summary>
+
+Quando il carattere è `.`, devi provare **tutti** i figli. Ricorsione.
+
+
+<pre><code class="language-python">class WordDictionary:
+    def __init__(self):
+        self.root = TrieNode()
+    def addWord(self, word):
+        n = self.root
+        for c in word:
+            n = n.children.setdefault(c, TrieNode())
+        n.is_end = True
+    def search(self, word):
+        def dfs(n, i):
+            if i == len(word):
+                return n.is_end
+            c = word[i]
+            if c == '.':
+                return any(dfs(child, i + 1) for child in n.children.values())
+            return c in n.children and dfs(n.children[c], i + 1)
+        return dfs(self.root, 0)
+</code></pre>
+
+
+Worst case con tutti `.`: O(26^L). In pratica veloce per dizionari reali.
+</details>
+
+<h3 id="esercizio-93-word-search-ii-hard">Esercizio 9.3 — Word Search II <span class="problem-tag hard">HARD</span></h3>
+<p>Vedi parte 5.</p>
+<h3 id="esercizio-94-longest-word-in-dictionary-medium">Esercizio 9.4 — Longest Word in Dictionary <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Parola più lunga del dizionario che si può costruire una lettera alla volta da altre parole del dizionario.</p>
+<details><summary>Idea</summary>
+
+Costruisci trie. Poi DFS: scendi finché ogni nodo intermedio (eccetto root) è `is_end`. La parola più profonda raggiungibile è la risposta.
+</details>
+
+<h3 id="esercizio-95-replace-words-medium">Esercizio 9.5 — Replace Words <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Lista di radici + frase. Sostituisci ogni parola con la sua radice più corta.</p>
+<details><summary>Soluzione</summary>
+
+
+<pre><code class="language-python">def replace_words(roots, sentence):
+    root = TrieNode()
+    for r in roots:
+        n = root
+        for c in r:
+            n = n.children.setdefault(c, TrieNode())
+        n.is_end = True
+
+    def shortest(word):
+        n = root
+        for i, c in enumerate(word):
+            if c not in n.children: return word
+            n = n.children[c]
+            if n.is_end: return word[:i + 1]
+        return word
+
+    return &quot; &quot;.join(shortest(w) for w in sentence.split())
+</code></pre>
+
+
+O(W × L) dove W = parole della frase, L = max lunghezza.
+</details>
+
+<h3 id="esercizio-96-maximum-xor-of-two-numbers-medium">Esercizio 9.6 — Maximum XOR of Two Numbers <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Vedi parte 6.</p>
+<h2 id="riassunto">Riassunto</h2>
+<ol>
+<li><strong>Trie = albero specializzato per prefissi</strong>. Ogni nodo rappresenta un carattere; cammini = parole.</li>
+<li><strong>Operazioni O(L)</strong> invece di O(N × L) di una lista.</li>
+<li><strong>Quando</strong>: autocomplete, spell check, word search in griglia, XOR puzzle.</li>
+<li><strong>Versione dict</strong> flessibile; versione array (26 figli) più veloce.</li>
+<li><strong>Pattern killer in Word Search II</strong>: trie + DFS con pruning sui rami non promettenti.</li>
+</ol>
+<p>Trie è una struttura "specialista" — non per ogni problema, ma quando serve, brilla.</p>
+      <nav class="pager">
+<a href="08-grafi.html" class="prev"><span class="label">← Precedente</span><span class="title">Grafi</span></a>
+<a href="10-ricorsione-backtracking.html" class="next"><span class="label">Successivo →</span><span class="title">Ricorsione e backtracking</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>FAANG Prep</strong> — percorso completo di preparazione: DS&amp;A, system design, behavioral. Costruito per spaccare ai colloqui di Big Tech.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-index.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true,
+      background: '#161922',
+      primaryColor: '#1d2230',
+      primaryTextColor: '#e6e8ee',
+      primaryBorderColor: '#6cf',
+      lineColor: '#7a8194',
+      secondaryColor: '#262b3a',
+      tertiaryColor: '#0f1117',
+      mainBkg: '#1d2230',
+      secondBkg: '#262b3a',
+      tertiaryBkg: '#161922',
+      nodeBorder: '#6cf',
+      clusterBkg: '#161922',
+      clusterBorder: '#262b3a',
+      titleColor: '#6cf',
+      edgeLabelBackground: '#161922',
+      fontFamily: 'Cascadia Code, monospace'
+    }
+  });
+  document.querySelectorAll('pre > code.language-mermaid').forEach((codeEl) => {
+    const pre = codeEl.parentElement;
+    const div = document.createElement('div');
+    div.className = 'mermaid';
+    div.textContent = codeEl.textContent;
+    pre.replaceWith(div);
+  });
+  mermaid.run();
+</script>
+</body>
+</html>

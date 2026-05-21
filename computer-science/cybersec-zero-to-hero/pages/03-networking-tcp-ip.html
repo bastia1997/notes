@@ -1,0 +1,683 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>Networking: dai cavi a TCP/IP — Cybersec Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">&gt;_</div>
+      <div>
+        <div class="brand-title">CYBERSEC</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="10" height="20" fill="#009246"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ce2b37"/></svg> IT</span><a href="../en/pages/03-networking-tcp-ip.html" class="lang-link" title="Switch to English"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="30" height="20" fill="#012169"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#fff" stroke-width="3"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#c8102e" stroke-width="1.5"/><path d="M15,0 v20 M0,10 h30" stroke="#fff" stroke-width="5"/><path d="M15,0 v20 M0,10 h30" stroke="#c8102e" stroke-width="3"/></svg> EN</a></div>
+  </div>
+  <div class="search-wrap">
+    <div class="search-row">
+      <div class="search-inputwrap">
+        <span class="search-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"/>
+            <line x1="20" y1="20" x2="16.65" y2="16.65"/>
+          </svg>
+        </span>
+        <input class="search-input" id="search-input" type="text" placeholder="cerca... (premi /)" autocomplete="off" aria-label="Search">
+        <button class="search-clear" id="search-clear" type="button" aria-label="Clear" title="Clear">&times;</button>
+      </div>
+      <button class="search-btn" id="search-btn" type="button" aria-label="CERCA" title="CERCA">CERCA</button>
+    </div>
+    <div class="search-hits" id="search-hits" role="listbox"></div>
+  </div>
+  <div class="sidebar-nav">
+    <nav class="nav-section">
+      <div class="nav-section-title">Percorso</div>
+      <ul class="nav-list">
+        <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+        <li class="nav-item"><a href="../pages/00-percorso-e-mindset.html" class=""><span class="num">00</span>Percorso, mindset, etica e legge</a></li><li class="nav-item"><a href="../pages/00b-matematica-cs.html" class=""><span class="num">00b</span>Matematica e teoria computazione (il minimo, integrato)</a></li><li class="nav-item"><a href="../pages/01-fondamenti-informatica.html" class=""><span class="num">01</span>Fondamenti di informatica per la security</a></li><li class="nav-item"><a href="../pages/01b-assembly-zero.html" class=""><span class="num">01b</span>Assembly x86-64 e ARM64 da zero</a></li><li class="nav-item"><a href="../pages/02-linux-essenziale.html" class=""><span class="num">02</span>Linux essenziale per la security</a></li><li class="nav-item"><a href="../pages/02b-regex-automi.html" class=""><span class="num">02b</span>Regex, automi e parser per la security</a></li><li class="nav-item"><a href="../pages/03-networking-tcp-ip.html" class="active"><span class="num">03</span>Networking: dai cavi a TCP/IP</a></li><li class="nav-item"><a href="../pages/04-http-tls.html" class=""><span class="num">04</span>HTTP, HTTPS e TLS in profondità</a></li><li class="nav-item"><a href="../pages/05-crittografia.html" class=""><span class="num">05</span>Crittografia: teoria e pratica</a></li><li class="nav-item"><a href="../pages/05b-crypto-worked-examples.html" class=""><span class="num">05b</span>Crittografia — esempi numerici passo-passo</a></li><li class="nav-item"><a href="../pages/06-os-internals.html" class=""><span class="num">06</span>OS internals: Linux e Windows in profondità</a></li><li class="nav-item"><a href="../pages/07-programmazione-security.html" class=""><span class="num">07</span>Programmazione per la security: Python, C, Go</a></li><li class="nav-item"><a href="../pages/08-osint-recon.html" class=""><span class="num">08</span>OSINT e ricognizione</a></li><li class="nav-item"><a href="../pages/09-scanning-enumeration.html" class=""><span class="num">09</span>Scanning, enumeration e fingerprinting</a></li><li class="nav-item"><a href="../pages/10-owasp-top10.html" class=""><span class="num">10</span>OWASP Top 10 e oltre — vulnerabilità web di base</a></li><li class="nav-item"><a href="../pages/10b-walkthrough-byte-per-byte.html" class=""><span class="num">10b</span>Walkthrough byte-per-byte: SQLi, XSS, SSRF, IDOR</a></li><li class="nav-item"><a href="../pages/11-web-avanzato.html" class=""><span class="num">11</span>Web hacking avanzato</a></li><li class="nav-item"><a href="../pages/12-network-attacks.html" class=""><span class="num">12</span>Network attacks: MITM, spoofing, pivoting</a></li><li class="nav-item"><a href="../pages/13-active-directory.html" class=""><span class="num">13</span>Active Directory hacking</a></li><li class="nav-item"><a href="../pages/14-exploit-development.html" class=""><span class="num">14</span>Exploit development: dal buffer overflow a ROP</a></li><li class="nav-item"><a href="../pages/14b-bof-shell-completo.html" class=""><span class="num">14b</span>BoF → shell: exploit completo da zero</a></li><li class="nav-item"><a href="../pages/15-reverse-engineering.html" class=""><span class="num">15</span>Reverse engineering</a></li><li class="nav-item"><a href="../pages/16-malware-analysis.html" class=""><span class="num">16</span>Malware: tassonomia e analisi</a></li><li class="nav-item"><a href="../pages/17-mobile-security.html" class=""><span class="num">17</span>Mobile security: Android e iOS</a></li><li class="nav-item"><a href="../pages/18-cloud-security.html" class=""><span class="num">18</span>Cloud security: AWS, Azure, GCP</a></li><li class="nav-item"><a href="../pages/19-container-kubernetes.html" class=""><span class="num">19</span>Container e Kubernetes</a></li><li class="nav-item"><a href="../pages/20-wireless-radio.html" class=""><span class="num">20</span>Wireless e radio: WiFi, BT, SDR</a></li><li class="nav-item"><a href="../pages/21-hardware-firmware.html" class=""><span class="num">21</span>Hardware e firmware hacking</a></li><li class="nav-item"><a href="../pages/22-forensics-dfir.html" class=""><span class="num">22</span>Forensics e DFIR</a></li><li class="nav-item"><a href="../pages/23-blue-team-soc.html" class=""><span class="num">23</span>Blue team: SOC, SIEM, EDR, hunting</a></li><li class="nav-item"><a href="../pages/24-threat-intelligence.html" class=""><span class="num">24</span>Threat intelligence</a></li><li class="nav-item"><a href="../pages/25-grc-normative.html" class=""><span class="num">25</span>GRC, normative e standard</a></li><li class="nav-item"><a href="../pages/26-red-team.html" class=""><span class="num">26</span>Red team e adversary emulation</a></li><li class="nav-item"><a href="../pages/27-ai-ml-security.html" class=""><span class="num">27</span>AI / ML security</a></li><li class="nav-item"><a href="../pages/28-capstone-roadmap.html" class=""><span class="num">28</span>Capstone: CTF roadmap, home lab, certificazioni</a></li><li class="nav-item"><a href="../pages/29-master-cheatsheet.html" class=""><span class="num">29</span>Master cheatsheet</a></li><li class="nav-item"><a href="../pages/30-glossario-esteso.html" class=""><span class="num">30</span>Glossario esteso (250+ termini)</a></li><li class="nav-item"><a href="../pages/31-normative-it-ue.html" class=""><span class="num">31</span>Riferimenti normativi IT/UE in dettaglio</a></li>
+      </ul>
+    </nav>
+  </div>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Networking</span>
+        <span>Sezione 5 di 36</span>
+        <span class="level-tag level-beg">Livello: principiante</span>
+      </div>
+      <h1>Networking: dai cavi a TCP/IP</h1>
+      <p class="summary">Modello OSI vs TCP/IP, Ethernet, ARP, IP, ICMP, TCP, UDP, DNS, DHCP, NAT, routing, VLAN. La rete è la materia che il 90% dei security engineer dovrebbe sapere meglio.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Networking</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>Sezione 01, 02</li></ul>
+  <div class="label">Strumenti</div>
+  <ul class="source-list"><li>ip / ifconfig / route</li><li>tcpdump / Wireshark</li><li>dig / nslookup / host</li><li>nmap (intro)</li></ul>
+</div>
+      <h2 id="il-modello-osi-vs-il-modello-tcpip">Il modello OSI vs il modello TCP/IP</h2>
+<table>
+<thead>
+<tr>
+<th>Livello OSI</th>
+<th>Livello TCP/IP</th>
+<th>Esempi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>7 Application</td>
+<td>Application</td>
+<td>HTTP, DNS, SMTP, SSH, FTP</td>
+</tr>
+<tr>
+<td>6 Presentation</td>
+<td>(incluso in Application)</td>
+<td>TLS, ASN.1, JSON</td>
+</tr>
+<tr>
+<td>5 Session</td>
+<td>(incluso)</td>
+<td>RPC, session tokens</td>
+</tr>
+<tr>
+<td>4 Transport</td>
+<td>Transport</td>
+<td>TCP, UDP, QUIC, SCTP</td>
+</tr>
+<tr>
+<td>3 Network</td>
+<td>Internet</td>
+<td>IP (v4/v6), ICMP, IPsec</td>
+</tr>
+<tr>
+<td>2 Data Link</td>
+<td>Link</td>
+<td>Ethernet, Wi-Fi, ARP, MAC</td>
+</tr>
+<tr>
+<td>1 Physical</td>
+<td>Link</td>
+<td>Cavo, fibra, onda radio</td>
+</tr>
+</tbody>
+</table>
+<p>In pratica usiamo il modello TCP/IP a 4 strati. Il modello OSI a 7 è didattico: ti aiuta a ragionare sui ruoli ma nella vita reale "session" e "presentation" raramente si distinguono.</p>
+<p>Concetto chiave: <strong>incapsulamento</strong>. Ogni livello aggiunge un header al payload del livello superiore.</p>
+<div class="mermaid">
+flowchart TB
+    A[HTTP request<br/>GET /api/users] --> B[+ TLS record header<br/>cifratura, MAC]
+    B --> C[+ TCP header<br/>porte src/dst, seq, ack, flag]
+    C --> D[+ IP header<br/>IP src/dst, TTL, proto]
+    D --> E[+ Ethernet header<br/>MAC src/dst, EtherType]
+    E --> F[bit fisici<br/>cavo / fibra / radio]
+    style A fill:#0b3a1a,stroke:#00ff9c
+    style F fill:#3a0b0b,stroke:#ff4d4d
+
+</div>
+
+<p>Tutto il packet sniffing/spoofing/MITM lavora <em>togliendo</em> incapsulamenti per leggere o <em>modificando</em> un header per ingannare.</p>
+<h2 id="livello-2-ethernet-mac-arp">Livello 2: Ethernet, MAC, ARP</h2>
+<h3 id="mac-address">MAC address</h3>
+<p>48 bit, ogni scheda di rete ne ha uno. Convenzione: <code>aa:bb:cc:dd:ee:ff</code>. I primi 3 byte (OUI) identificano il vendor.</p>
+<pre><code class="language-bash">ip link show
+ip link set dev eth0 address 02:00:00:00:00:01    # MAC spoofing
+macchanger -r eth0                                 # random
+</code></pre>
+<h3 id="switch">Switch</h3>
+<p>Funziona a livello 2: vede MAC, costruisce CAM table <code>MAC ↔ porta</code>. Limita il dominio di broadcast del singolo segmento.</p>
+<p><strong>Attacchi switch tipici:</strong>
+- <strong>MAC flooding</strong> (CAM table overflow): satura la CAM con MAC fasulli → lo switch entra in modalità "hub" → ricevi tutto il traffico. Tool: <code>macof</code>.
+- <strong>VLAN hopping</strong> (double tagging / DTP): abusare di trunk per saltare di VLAN.</p>
+<h3 id="arp-address-resolution-protocol">ARP (Address Resolution Protocol)</h3>
+<p>Mappa IP → MAC sulla LAN. Quando vuoi parlare con <code>192.168.1.1</code>, fai broadcast ARP "chi ha 192.168.1.1?". Il proprietario risponde "io, MAC è AA:BB:..".</p>
+<p>ARP è <strong>stateless e senza autenticazione</strong>. Chiunque sulla LAN può rispondere a una request, o spammare ARP reply spontanee (gratuitous ARP). → <strong>ARP spoofing / poisoning</strong>: convinci la vittima che TU sei il gateway, e il gateway che TU sei la vittima. Il traffico passa da te. È il MITM classico in LAN.</p>
+<div class="mermaid">
+sequenceDiagram
+    participant V as Vittima<br/>192.168.1.50
+    participant ATT as Attacker<br/>192.168.1.99
+    participant GW as Gateway<br/>192.168.1.1
+    Note over V,GW: Stato corretto: V conosce GW MAC reale
+    ATT->>V: ARP reply (gratuitous):<br/>"192.168.1.1 sta a MAC_ATT"
+    ATT->>GW: ARP reply (gratuitous):<br/>"192.168.1.50 sta a MAC_ATT"
+    Note over V: V aggiorna ARP cache:<br/>192.168.1.1 → MAC_ATT
+    Note over GW: GW aggiorna ARP cache:<br/>192.168.1.50 → MAC_ATT
+    V->>ATT: traffico per Internet (crede sia GW)
+    ATT->>GW: lo inoltra (con IP forwarding)
+    GW->>ATT: risposta per V
+    ATT->>V: la inoltra
+    Note over ATT: Sniff / modifica / SSL strip
+
+</div>
+
+<p>Tool: <code>arpspoof</code>, <code>bettercap</code>, <code>ettercap</code>.</p>
+<p><strong>Difese:</strong>
+- Static ARP (su host critici).
+- DHCP snooping + Dynamic ARP Inspection (DAI) sugli switch enterprise.
+- 802.1X port-based auth.
+- VLAN segmentation.</p>
+<p>Vediamo lo spoofing in pratica nella sezione 12.</p>
+<h2 id="livello-3-ip">Livello 3: IP</h2>
+<h3 id="ipv4">IPv4</h3>
+<p>32 bit, scritto come 4 ottetti decimali (<code>192.168.1.10</code>). Con la <strong>subnet mask</strong> (es. <code>/24</code> = <code>255.255.255.0</code>) si distinguono network e host.</p>
+<pre><code class="language-text">192.168.1.10/24
+  network: 192.168.1.0
+  broadcast: 192.168.1.255
+  range usabili: 192.168.1.1 - 192.168.1.254
+</code></pre>
+<h4 id="classi-private-rfc-1918-non-instradabili-su-internet">Classi private (RFC 1918) — non instradabili su internet</h4>
+<ul>
+<li><code>10.0.0.0/8</code></li>
+<li><code>172.16.0.0/12</code></li>
+<li><code>192.168.0.0/16</code></li>
+</ul>
+<h4 id="speciali">Speciali</h4>
+<ul>
+<li><code>127.0.0.0/8</code> loopback (<code>127.0.0.1</code> = me stesso)</li>
+<li><code>169.254.0.0/16</code> link-local (APIPA, quando DHCP fallisce)</li>
+<li><code>0.0.0.0</code> "tutte le interfacce" / default route</li>
+<li><code>224.0.0.0/4</code> multicast</li>
+<li><code>255.255.255.255</code> broadcast limitato</li>
+</ul>
+<h3 id="ipv6">IPv6</h3>
+<p>128 bit, 8 gruppi di 4 hex separati da <code>:</code> con compressione. <code>2001:0db8:0000:0000:0000:ff00:0042:8329</code> → <code>2001:db8::ff00:42:8329</code>.</p>
+<ul>
+<li><code>::1/128</code> loopback</li>
+<li><code>fe80::/10</code> link-local (sempre presente)</li>
+<li><code>fc00::/7</code> ULA (private)</li>
+<li><code>2000::/3</code> global unicast (instradabili)</li>
+</ul>
+<p>IPv6 ha autoconfigurazione (SLAAC), niente ARP (lo sostituisce NDP — Neighbor Discovery Protocol), niente NAT (in teoria), niente broadcast (multicast).</p>
+<p><strong>Attenzione security:</strong> molte reti hanno IPv6 abilitato di default ma firewall solo per IPv4 → bypass involontari. Verificare sempre <code>ip -6 ...</code>.</p>
+<h3 id="header-ip-semplificato">Header IP (semplificato)</h3>
+<pre><code class="language-text">0       4       8              16                              31
++-------+-------+--------------+-------------------------------+
+| Ver=4 | IHL   | Type of Serv | Total Length                  |
++-------+-------+--------------+----------+--------------------+
+| Identification               | Flags     | Fragment Offset    |
++-----------------------------+------+-----+--------------------+
+| TTL          | Protocol     | Header Checksum                |
++--------------+--------------+--------------------------------+
+| Source Address (32 bit)                                       |
++---------------------------------------------------------------+
+| Destination Address (32 bit)                                  |
++---------------------------------------------------------------+
+| Options (rare) ... + Padding                                  |
++---------------------------------------------------------------+
+| Payload (TCP/UDP/ICMP/...)                                    |
+</code></pre>
+<p>Campi utili:
+- <strong>TTL</strong> (Time To Live): decrementato di 1 ad ogni hop. Se arriva a 0 → ICMP TTL expired. Base di <strong>traceroute</strong>.
+- <strong>Protocol:</strong> identifica il payload (1=ICMP, 6=TCP, 17=UDP, 47=GRE, 50=ESP, ...).
+- <strong>Flags+Fragment Offset:</strong> frammentazione. Storicamente abusato per IDS evasion (ricostruzione ambigua).</p>
+<h3 id="routing">Routing</h3>
+<p>Il routing è il processo di decidere "su quale interfaccia mandare un pacchetto destinato a quell'IP". Ogni host ha una tabella; in mancanza di rotte specifiche → <strong>default gateway</strong>.</p>
+<pre><code class="language-bash">ip route
+# default via 192.168.1.1 dev wlan0
+# 192.168.1.0/24 dev wlan0 proto kernel scope link src 192.168.1.20
+
+ip route add 10.10.10.0/24 via 192.168.1.254
+</code></pre>
+<h3 id="nat-network-address-translation">NAT (Network Address Translation)</h3>
+<p>La causa per cui hai un IP privato a casa ma navighi su internet. Il router riscrive l'IP sorgente in uscita col proprio IP pubblico, mantiene una tabella (IP+porta interna ↔ IP+porta esterna) e fa il contrario in entrata.</p>
+<p><strong>SNAT</strong> (Source NAT): traduzione in uscita (la cosa che fa il tuo router).
+<strong>DNAT</strong> (Destination NAT): traduzione in entrata (port forwarding).
+<strong>PAT / NAPT:</strong> NAT con porte (Linux iptables masquerade).</p>
+<p>In pentest interno il NAT del target spesso è un ostacolo (non puoi raggiungere host privati direttamente da fuori) e si bypassa con tunnel/pivoting (vedi sezione 12).</p>
+<h3 id="icmp">ICMP</h3>
+<p>Protocollo di controllo IP. Tipi famosi: 8 (echo request = ping), 0 (echo reply), 3 (destination unreachable), 11 (TTL expired, base traceroute), 5 (redirect — usato per attacchi).</p>
+<p><code>ping</code>, <code>traceroute</code>/<code>tracert</code>, <code>mtr</code> usano ICMP (o UDP per traceroute Unix di default — porte 33434+). Su molte reti enterprise ICMP è filtrato in egress: se ping fallisce non significa che l'host sia giù.</p>
+<h2 id="livello-4-tcp-e-udp">Livello 4: TCP e UDP</h2>
+<h3 id="udp">UDP</h3>
+<ul>
+<li>Connectionless, senza handshake.</li>
+<li>Senza garanzia di consegna né ordine.</li>
+<li>Header: porte src/dst, lunghezza, checksum. Punto.</li>
+<li>Veloce, usato per DNS, DHCP, QUIC, VoIP, gaming, syslog, NTP.</li>
+</ul>
+<h3 id="tcp">TCP</h3>
+<ul>
+<li>Connection-oriented, con stati.</li>
+<li>Garantisce consegna in ordine e senza duplicati.</li>
+<li>Three-way handshake:</li>
+</ul>
+<div class="mermaid">
+sequenceDiagram
+    autonumber
+    participant C as Client
+    participant S as Server
+    C->>S: SYN (seq=x)
+    S->>C: SYN-ACK (seq=y, ack=x+1)
+    C->>S: ACK (seq=x+1, ack=y+1)
+    Note over C,S: ESTABLISHED → ora si scambiano dati
+
+</div>
+
+<p>Chiusura:
+- <strong>FIN</strong> + ACK in entrambi i sensi (graceful)
+- <strong>RST</strong> (reset, "abbattere subito")</p>
+<h3 id="header-tcp-rilevante">Header TCP (rilevante)</h3>
+<pre><code class="language-text">src port (16 b) | dst port (16 b)
+sequence number (32 b)
+ack number (32 b)
+data offset | reserved | URG ACK PSH RST SYN FIN | window (16 b)
+checksum (16 b) | urgent ptr (16 b)
+options (TCP MSS, SACK, timestamp, window scale)
+data...
+</code></pre>
+<p><strong>Flag rilevanti:</strong>
+- <strong>SYN</strong>: inizia connessione
+- <strong>ACK</strong>: conferma ricezione
+- <strong>FIN</strong>: chiusura graceful
+- <strong>RST</strong>: chiusura forzata
+- <strong>PSH</strong>: push immediato all'applicazione
+- <strong>URG</strong>: dati urgenti (raramente usato)</p>
+<p><strong>Stato porte (lato server):</strong>
+- <strong>OPEN</strong>: c'è un servizio in listen (risponde con SYN-ACK).
+- <strong>CLOSED</strong>: nessun servizio (risponde con RST).
+- <strong>FILTERED</strong>: il firewall blocca (nessuna risposta, o ICMP unreachable).</p>
+<p><code>nmap</code> distingue questi stati (sezione 9).</p>
+<h3 id="stati-tcp-che-vedrai">Stati TCP che vedrai</h3>
+<div class="mermaid">
+stateDiagram-v2
+    [*] --> CLOSED
+    CLOSED --> LISTEN: bind+listen
+    CLOSED --> SYN_SENT: connect()
+    LISTEN --> SYN_RECV: ricevuto SYN
+    SYN_SENT --> ESTABLISHED: ricevuto SYN-ACK
+    SYN_RECV --> ESTABLISHED: ricevuto ACK
+    ESTABLISHED --> FIN_WAIT_1: close() locale
+    ESTABLISHED --> CLOSE_WAIT: ricevuto FIN
+    FIN_WAIT_1 --> FIN_WAIT_2: ricevuto ACK
+    FIN_WAIT_2 --> TIME_WAIT: ricevuto FIN
+    TIME_WAIT --> CLOSED: timer
+    CLOSE_WAIT --> LAST_ACK: close() locale
+    LAST_ACK --> CLOSED: ricevuto ACK
+
+</div>
+
+<p><code>ss -tan</code> per vederli sul tuo sistema.</p>
+<h3 id="porte-well-known">Porte well-known</h3>
+<table>
+<thead>
+<tr>
+<th>Porta</th>
+<th>TCP/UDP</th>
+<th>Servizio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>20/21</td>
+<td>TCP</td>
+<td>FTP (data/control)</td>
+</tr>
+<tr>
+<td>22</td>
+<td>TCP</td>
+<td>SSH</td>
+</tr>
+<tr>
+<td>23</td>
+<td>TCP</td>
+<td>Telnet (cleartext, evita)</td>
+</tr>
+<tr>
+<td>25</td>
+<td>TCP</td>
+<td>SMTP</td>
+</tr>
+<tr>
+<td>53</td>
+<td>TCP/UDP</td>
+<td>DNS</td>
+</tr>
+<tr>
+<td>67/68</td>
+<td>UDP</td>
+<td>DHCP server/client</td>
+</tr>
+<tr>
+<td>80</td>
+<td>TCP</td>
+<td>HTTP</td>
+</tr>
+<tr>
+<td>88</td>
+<td>TCP/UDP</td>
+<td>Kerberos</td>
+</tr>
+<tr>
+<td>110</td>
+<td>TCP</td>
+<td>POP3</td>
+</tr>
+<tr>
+<td>123</td>
+<td>UDP</td>
+<td>NTP</td>
+</tr>
+<tr>
+<td>135</td>
+<td>TCP</td>
+<td>MS-RPC endpoint mapper</td>
+</tr>
+<tr>
+<td>137-139</td>
+<td>TCP/UDP</td>
+<td>NetBIOS</td>
+</tr>
+<tr>
+<td>143</td>
+<td>TCP</td>
+<td>IMAP</td>
+</tr>
+<tr>
+<td>161/162</td>
+<td>UDP</td>
+<td>SNMP / trap</td>
+</tr>
+<tr>
+<td>389</td>
+<td>TCP/UDP</td>
+<td>LDAP</td>
+</tr>
+<tr>
+<td>443</td>
+<td>TCP</td>
+<td>HTTPS</td>
+</tr>
+<tr>
+<td>445</td>
+<td>TCP</td>
+<td>SMB</td>
+</tr>
+<tr>
+<td>465</td>
+<td>TCP</td>
+<td>SMTPS</td>
+</tr>
+<tr>
+<td>514</td>
+<td>UDP</td>
+<td>syslog</td>
+</tr>
+<tr>
+<td>587</td>
+<td>TCP</td>
+<td>SMTP submission (TLS)</td>
+</tr>
+<tr>
+<td>636</td>
+<td>TCP</td>
+<td>LDAPS</td>
+</tr>
+<tr>
+<td>993</td>
+<td>TCP</td>
+<td>IMAPS</td>
+</tr>
+<tr>
+<td>995</td>
+<td>TCP</td>
+<td>POP3S</td>
+</tr>
+<tr>
+<td>1433/1521/3306/5432/27017</td>
+<td>TCP</td>
+<td>DB (MSSQL/Oracle/MySQL/Postgres/Mongo)</td>
+</tr>
+<tr>
+<td>3389</td>
+<td>TCP</td>
+<td>RDP</td>
+</tr>
+<tr>
+<td>5985/5986</td>
+<td>TCP</td>
+<td>WinRM HTTP/HTTPS</td>
+</tr>
+<tr>
+<td>8080/8443</td>
+<td>TCP</td>
+<td>HTTP/S alternative</td>
+</tr>
+</tbody>
+</table>
+<p>Memorizzare almeno le top 30. Saranno la prima cosa che cerchi su un target.</p>
+<h2 id="dns-i-nomi-del-web">DNS: i nomi del web</h2>
+<p>DNS traduce nomi (<code>www.example.com</code>) in IP. Gerarchia: root → TLD → autoritativo del dominio.</p>
+<p><strong>Tipi di record principali:</strong>
+| Tipo | Cosa fa |
+|---|---|
+| A | nome → IPv4 |
+| AAAA | nome → IPv6 |
+| CNAME | alias verso altro nome |
+| MX | mail server del dominio |
+| TXT | testo libero (SPF, DKIM, verifiche, …) |
+| NS | name server autoritativi |
+| SOA | start of authority |
+| PTR | reverse DNS (IP → nome) |
+| SRV | service location (Kerberos, AD, …) |
+| CAA | quali CA possono emettere cert per il dominio |
+| DS / DNSKEY | DNSSEC |</p>
+<pre><code class="language-bash">dig example.com               # A
+dig +short example.com
+dig MX example.com
+dig @8.8.8.8 example.com      # query a un resolver specifico
+dig ANY example.com           # spesso filtrato
+dig +trace example.com        # query dalla root
+dig -x 8.8.8.8                # reverse
+</code></pre>
+<p><strong>Resolver pubblici:</strong> 1.1.1.1 (Cloudflare), 8.8.8.8 (Google), 9.9.9.9 (Quad9).</p>
+<p><strong>Attacchi DNS:</strong>
+- <strong>DNS spoofing / cache poisoning</strong> (vedi Kaminsky 2008) — iniettare risposte false nel cache di un resolver.
+- <strong>DNS hijacking</strong> (a livello di registrar/account utente).
+- <strong>DNS amplification</strong> — usare resolver aperti per DoS amplificato.
+- <strong>DNS tunneling</strong> — esfiltrare dati incapsulati in query DNS (lento ma spesso passa firewall). Tool: <code>dnscat2</code>, <code>iodine</code>.
+- <strong>NXDOMAIN flood, NSEC walking.</strong></p>
+<p><strong>Difese:</strong> DNSSEC (firma), DoT/DoH (DNS over TLS / over HTTPS), DNS sinkholing per blue team.</p>
+<h2 id="dhcp">DHCP</h2>
+<p>Dynamic Host Configuration Protocol. Discovery automatica di config rete.</p>
+<pre><code class="language-text">Client → DHCPDISCOVER (broadcast)
+Server → DHCPOFFER (offerta: IP X, lease Y, gateway Z, DNS W)
+Client → DHCPREQUEST (accetto)
+Server → DHCPACK
+</code></pre>
+<p>Cleartext, senza auth → un attaccante può:
+- Diventare <strong>rogue DHCP server</strong> e dare ai client gateway/DNS controllati da lui.
+- <strong>DHCP starvation:</strong> esaurire il pool del DHCP server reale e poi diventare il suo sostituto.</p>
+<p>Difese: DHCP snooping su switch.</p>
+<h2 id="wireshark-e-tcpdump">Wireshark e tcpdump</h2>
+<p>I tuoi occhi sulla rete.</p>
+<h3 id="tcpdump">tcpdump</h3>
+<pre><code class="language-bash">sudo tcpdump -i eth0                  # tutto
+sudo tcpdump -i eth0 -nn -v port 80   # solo HTTP, numerico, verbose
+sudo tcpdump -i eth0 host 1.2.3.4
+sudo tcpdump -i eth0 net 192.168.1.0/24
+sudo tcpdump -i eth0 -w capture.pcap  # salva
+sudo tcpdump -r capture.pcap          # leggi
+sudo tcpdump -A 'port 80'             # ASCII payload (HTTP cleartext)
+sudo tcpdump 'tcp[tcpflags] &amp; (tcp-syn) != 0'  # solo SYN
+</code></pre>
+<p>Filtri BPF (Berkeley Packet Filter): <code>host</code>, <code>net</code>, <code>port</code>, <code>tcp</code>, <code>udp</code>, <code>icmp</code>, <code>and</code>, <code>or</code>, <code>not</code>, parentesi.</p>
+<h3 id="wireshark">Wireshark</h3>
+<p>GUI per analisi pcap. Filtri di display diversi da BPF: <code>ip.addr == 1.2.3.4</code>, <code>tcp.port == 443</code>, <code>http.request.method == "POST"</code>, <code>tls.handshake.type == 1</code>, <code>dns.qry.name contains "evil"</code>.</p>
+<p>Funzioni killer:
+- <strong>Follow TCP stream</strong> — ricostruisce la conversazione.
+- <strong>Decrypt TLS</strong> se hai le SSL keys (var d'ambiente <code>SSLKEYLOGFILE</code>).
+- <strong>Statistics → Conversations / I/O Graph / Protocol Hierarchy.</strong>
+- <strong>Expert Info.</strong></p>
+<p>Userai Wireshark in CTF (challenge "Cattura il traffico"), in incident response, in network troubleshooting.</p>
+<h2 id="firewall-e-acl">Firewall e ACL</h2>
+<h3 id="iptables-nftables-linux">iptables / nftables (Linux)</h3>
+<p>iptables è il vecchio motore (sostituito da nftables, syntax <code>nft</code>). Concetto: catene (INPUT, FORWARD, OUTPUT) con regole. Ogni regola: match → target.</p>
+<pre><code class="language-bash"># Drop tutto in input, accetta SSH e già stabilite
+iptables -P INPUT DROP
+iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+iptables -A INPUT -i lo -j ACCEPT
+iptables -A INPUT -p tcp --dport 22 -j ACCEPT
+
+# Forward (per NAT/routing)
+iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+
+# Salvare regole
+iptables-save &gt; /etc/iptables.rules
+</code></pre>
+<p>In sicurezza: <strong>default deny</strong>, esposizione <strong>minima</strong>, log delle drop.</p>
+<h3 id="windows-firewall-ufw-firewalld">Windows Firewall, ufw, firewalld</h3>
+<ul>
+<li><strong>ufw:</strong> wrapper amichevole di iptables (<code>ufw allow 22</code>).</li>
+<li><strong>firewalld:</strong> wrapper su nftables/iptables con zone (public, internal, dmz, ...).</li>
+<li><strong>Windows Defender Firewall:</strong> profili Domain/Private/Public, regole inbound/outbound. Configurabile via PowerShell (<code>New-NetFirewallRule</code>).</li>
+</ul>
+<h2 id="vlan-e-segmentazione">VLAN e segmentazione</h2>
+<p>Una <strong>VLAN</strong> (Virtual LAN) divide logicamente uno switch in domini di broadcast separati (tag 802.1Q nei frame). Permette segmentazione senza più switch fisici.</p>
+<p>In sicurezza la segmentazione è centrale: rete OT staccata dall'IT, server in DMZ, workstation non a contatto diretto con DB. <strong>Zero Trust</strong> porta questo principio all'estremo: nessuna implicita fiducia in base alla posizione di rete.</p>
+<h2 id="esercizi">Esercizi</h2>
+<h3 id="esercizio-31-subnetting-a-mano">Esercizio 3.1 — Subnetting a mano</h3>
+<p>Per ognuno: trova network address, broadcast, range host usabili, numero di host.</p>
+<ol>
+<li><code>10.20.30.40/26</code></li>
+<li><code>192.168.1.130/29</code></li>
+<li><code>172.16.5.0/20</code></li>
+</ol>
+<details><summary>Soluzione</summary>
+
+1. `/26` → 6 bit host → 64 IP, 62 usabili. `10.20.30.0/26` ha 0-63; `40` cade qui. Network `10.20.30.0`, broadcast `10.20.30.63`, host `10.20.30.1`–`10.20.30.62`.
+2. `/29` → 3 bit host → 8 IP, 6 usabili. Subnet contenente `.130`: blocchi `.128`–`.135`. Net `192.168.1.128`, broadcast `.135`, host `.129`–`.134`.
+3. `/20` → 12 bit host → 4096 IP, 4094 usabili. Mask `255.255.240.0`. Subnet contenente `172.16.5.0`: `172.16.0.0`–`172.16.15.255`. Net `172.16.0.0`, bc `172.16.15.255`, host `172.16.0.1`–`172.16.15.254`.
+
+</details>
+
+<h3 id="esercizio-32-cattura-il-tuo-handshake">Esercizio 3.2 — Cattura il tuo handshake</h3>
+<ol>
+<li><code>sudo tcpdump -i any -w handshake.pcap host example.com</code></li>
+<li>In un'altra shell: <code>curl https://example.com</code> (o apri il browser).</li>
+<li>Stoppa, apri con Wireshark.</li>
+<li>Identifica: DNS query, TCP SYN, SYN-ACK, ACK, TLS Client Hello, Server Hello, certificate, application data, FIN.</li>
+</ol>
+<h3 id="esercizio-33-decrittare-https-in-lab">Esercizio 3.3 — Decrittare HTTPS in lab</h3>
+<ol>
+<li>Setta <code>export SSLKEYLOGFILE=~/sslkeys.log</code> prima di lanciare Firefox/Chrome.</li>
+<li>Cattura traffico (<code>tcpdump -w cap.pcap</code>).</li>
+<li>In Wireshark: Edit → Preferences → Protocols → TLS → "(Pre)-Master-Secret log filename" → seleziona il file.</li>
+<li>Ora vedi HTTP in chiaro.</li>
+</ol>
+<p>Cosa dimostra questa procedura sulla sicurezza di TLS? Cosa serve all'attaccante per fare questo lato vittima senza accesso fisico alla macchina?</p>
+<details><summary>Spiegazione</summary>
+
+TLS è sicuro contro chi sniffa la rete senza chiavi. Per decrittare serve la chiave privata del server **oppure** le pre-master keys delle sessioni (cosa che il browser ti regala se chiedi). Senza compromettere uno dei due endpoint, lo sniffing puro non basta. Per questo gli attacchi MITM moderni puntano a:
+- **Sostituire il certificato** (trust store compromesso, Burp/mitmproxy con CA installata).
+- **Downgrade** (SSL strip, TLS downgrade, raro oggi con HSTS).
+- **Compromettere il client** (malware) o il server (leak chiave privata).
+
+</details>
+
+<h3 id="esercizio-34-dns-deep-dive">Esercizio 3.4 — DNS deep dive</h3>
+<ol>
+<li>Trova tutti i record NS di <code>wikipedia.org</code>. Quanti sono?</li>
+<li>Trova l'MX di <code>google.com</code> con priorità.</li>
+<li>Trova SPF (record TXT che inizia con <code>v=spf1</code>) di <code>microsoft.com</code>.</li>
+<li>Cerca CAA di <code>letsencrypt.org</code>. Cosa significa?</li>
+</ol>
+<details><summary>Comandi</summary>
+
+
+<pre><code class="language-bash">dig NS wikipedia.org +short
+dig MX google.com +short
+dig TXT microsoft.com | grep spf
+dig CAA letsencrypt.org +short
+</code></pre>
+
+
+CAA dice quali CA sono autorizzate ad emettere cert per il dominio. È una protezione contro CA fraudolente.
+
+</details>
+
+<h3 id="esercizio-35-mappa-la-tua-rete-domestica">Esercizio 3.5 — Mappa la tua rete domestica</h3>
+<p>Da Kali in lab (o sulla tua rete, con cautela):
+- <code>ip addr</code> e <code>ip route</code> → identifica gateway e subnet.
+- <code>arp -a</code> → host nella tua LAN.
+- <code>nmap -sn 192.168.1.0/24</code> (host discovery, senza port scan).
+- <code>nmap --top-ports 100 -sV 192.168.1.0/24</code> (solo sulla TUA rete).</p>
+<p>Quanti host attivi? Quali servizi? Qualche printer/IoT esposto?</p>
+<h3 id="esercizio-36-tunnel-ssh-dinamico-in-pratica">Esercizio 3.6 — Tunnel SSH dinamico in pratica</h3>
+<ol>
+<li>Su VPS (anche un container locale): <code>ssh -D 1080 user@vps</code>.</li>
+<li>Configura Firefox: Preferences → Network → Manual proxy → SOCKS5 127.0.0.1:1080, e "Proxy DNS when using SOCKS v5".</li>
+<li>Naviga: il tuo IP visto da <code>whatsmyip.com</code> è quello del VPS.</li>
+</ol>
+<p>Come limita un'azienda questa tecnica?</p>
+<details><summary>Spiegazione</summary>
+
+- Egress firewall: SSH outbound bloccato su porte non standard / verso destinazioni non whitelistate.
+- DPI / SSL inspection per riconoscere SSH non autorizzato.
+- ZTNA / forward proxy che richiede auth e bloccano traffico non standard.
+- Restrizioni sui binari (es. AppLocker su Windows impedisce di lanciare `ssh.exe` non firmato).
+
+</details>
+
+<h3 id="esercizio-37-sniffa-http-cleartext">Esercizio 3.7 — Sniffa HTTP cleartext</h3>
+<p>In lab: un client Linux + server con un servizio HTTP non-TLS. Cattura con tcpdump, ricostruisci con Wireshark "Follow TCP Stream". Cosa vedi se l'utente fa login con <code>POST /login</code> body cleartext? Cosa cambia con HTTPS?</p>
+<h2 id="concetti-chiave">Concetti chiave</h2>
+<ol>
+<li><strong>OSI/TCP-IP encapsulation:</strong> comprendere come ogni livello aggiunge header → base di sniffing/spoofing.</li>
+<li><strong>MAC vs IP vs porta:</strong> identità di livello 2/3/4.</li>
+<li><strong>ARP è non autenticato, base del MITM in LAN.</strong></li>
+<li><strong>TCP three-way handshake e stati delle porte:</strong> base di scanning.</li>
+<li><strong>DNS: gerarchia, record, tipi di attacchi.</strong></li>
+<li><strong>NAT crea problemi di raggiungibilità (e per questo serve pivoting in pentest).</strong></li>
+<li><strong>Wireshark/tcpdump + filtri</strong> — strumenti indispensabili.</li>
+</ol>
+<p>Nelle prossime sezioni passiamo allo strato applicativo (HTTP/TLS) e poi al "perché tutto questo è hackabile".</p>
+      <nav class="pager">
+<a href="02b-regex-automi.html" class="prev"><span class="label">← Precedente</span><span class="title">Regex, automi e parser per la security</span></a>
+<a href="04-http-tls.html" class="next"><span class="label">Successivo →</span><span class="title">HTTP, HTTPS e TLS in profondità</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Cybersec Zero to Hero</strong> — percorso completo di sicurezza informatica, dall'inizio alla maestria.</p><p>Materiale a scopo educativo. Tutto ciò che impari va usato solo su sistemi che possiedi, in laboratori, in programmi di bug bounty autorizzati o sotto contratto di pentest. <strong>Non rompere la legge.</strong></p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true, background: '#131a1e', primaryColor: '#1d262b',
+      primaryTextColor: '#e8eef0', primaryBorderColor: '#00ff9c',
+      lineColor: '#00e6ff', secondaryColor: '#11171a', tertiaryColor: '#161d21',
+      mainBkg: '#1d262b', nodeBorder: '#00ff9c', clusterBkg: '#0b0f10',
+      clusterBorder: '#243035', titleColor: '#00ff9c',
+      edgeLabelBackground: '#0b0f10', textColor: '#e8eef0',
+      labelTextColor: '#e8eef0', actorBkg: '#1d262b', actorBorder: '#00ff9c',
+      actorTextColor: '#00ff9c', actorLineColor: '#00e6ff',
+      signalColor: '#e8eef0', signalTextColor: '#e8eef0',
+      labelBoxBkgColor: '#1d262b', labelBoxBorderColor: '#00ff9c',
+      noteBkgColor: '#ffe066', noteTextColor: '#0b0f10', noteBorderColor: '#ffe066',
+      activationBkgColor: '#1d262b', activationBorderColor: '#00ff9c',
+      sequenceNumberColor: '#0b0f10'
+    },
+    flowchart: { curve: 'basis', padding: 16 },
+    sequence: { mirrorActors: false, bottomMarginAdj: 10 },
+    fontFamily: 'JetBrains Mono, Cascadia Code, Consolas, monospace'
+  });
+</script>
+</body>
+</html>

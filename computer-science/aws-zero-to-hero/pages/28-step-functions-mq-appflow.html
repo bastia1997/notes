@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Step Functions, MQ, AppFlow — orchestrazione e integrazione — AWS Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#232f3e',primaryTextColor:'#ffffff',primaryBorderColor:'#ff9900',lineColor:'#8a99ad',background:'#0c1320'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">λ</div>
+      <div>
+        <div class="brand-title">AWS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">IT</span><a href="../en/pages/28-step-functions-mq-appflow.html" class="lang-link" title="Switch to English">EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-cos-e-aws-cloud.html" class=""><span class="num">01</span>Cos&#x27;è il cloud e cos&#x27;è AWS</a></li><li class="nav-item"><a href="../pages/02-infrastruttura-globale.html" class=""><span class="num">02</span>Infrastruttura globale: Region, AZ, Edge</a></li><li class="nav-item"><a href="../pages/03-account-root-billing.html" class=""><span class="num">03</span>Account AWS, utente root, billing</a></li><li class="nav-item"><a href="../pages/04-iam-fondamenti.html" class=""><span class="num">04</span>IAM — fondamenti (utenti, gruppi, ruoli, policy)</a></li><li class="nav-item"><a href="../pages/05-iam-avanzato.html" class=""><span class="num">05</span>IAM avanzato: policy condizionali, STS, ABAC</a></li><li class="nav-item"><a href="../pages/06-cli-sdk-iac.html" class=""><span class="num">06</span>CLI, SDK, CloudShell, IaC primer</a></li><li class="nav-item"><a href="../pages/07-pricing-billing.html" class=""><span class="num">07</span>Pricing, billing, free tier, cost tools</a></li><li class="nav-item"><a href="../pages/08-organizations-multi-account.html" class=""><span class="num">08</span>AWS Organizations &amp; strategia multi-account</a></li><li class="nav-item"><a href="../pages/09-vpc-fondamenti.html" class=""><span class="num">09</span>VPC — fondamenti</a></li><li class="nav-item"><a href="../pages/10-vpc-avanzato.html" class=""><span class="num">10</span>VPC avanzato: peering, TGW, PrivateLink, endpoint</a></li><li class="nav-item"><a href="../pages/11-route53-cloudfront.html" class=""><span class="num">11</span>Route 53, CloudFront, Global Accelerator</a></li><li class="nav-item"><a href="../pages/12-hybrid-vpn-directconnect.html" class=""><span class="num">12</span>Hybrid: VPN, Direct Connect, PrivateLink</a></li><li class="nav-item"><a href="../pages/13-ec2-fondamenti.html" class=""><span class="num">13</span>EC2 — fondamenti (istanze, AMI, lifecycle)</a></li><li class="nav-item"><a href="../pages/14-ec2-avanzato-spot-nitro.html" class=""><span class="num">14</span>EC2 avanzato — Spot, Placement Groups, Nitro, hibernation</a></li><li class="nav-item"><a href="../pages/15-asg-elb.html" class=""><span class="num">15</span>Auto Scaling Groups + Elastic Load Balancing</a></li><li class="nav-item"><a href="../pages/16-lambda-deep-dive.html" class=""><span class="num">16</span>Lambda deep dive</a></li><li class="nav-item"><a href="../pages/17-containers-ecs-eks-fargate.html" class=""><span class="num">17</span>Containers: ECS, EKS, Fargate, ECR</a></li><li class="nav-item"><a href="../pages/18-specialty-compute.html" class=""><span class="num">18</span>Specialty compute: Batch, Lightsail, Outposts, Wavelength, Beanstalk</a></li><li class="nav-item"><a href="../pages/19-ebs-efs-fsx.html" class=""><span class="num">19</span>EBS, EFS, FSx, Instance Store</a></li><li class="nav-item"><a href="../pages/20-s3-deep-dive.html" class=""><span class="num">20</span>S3 — deep dive</a></li><li class="nav-item"><a href="../pages/21-archive-snow-gateway-backup.html" class=""><span class="num">21</span>Glacier, Snow, Storage Gateway, DataSync, AWS Backup</a></li><li class="nav-item"><a href="../pages/22-rds.html" class=""><span class="num">22</span>RDS — relational DB managed (engines, Multi-AZ, replicas, Proxy)</a></li><li class="nav-item"><a href="../pages/23-aurora-deep-dive.html" class=""><span class="num">23</span>Aurora deep dive — storage condiviso, Serverless v2, Global Database</a></li><li class="nav-item"><a href="../pages/24-dynamodb-deep-dive.html" class=""><span class="num">24</span>DynamoDB deep dive — partition, GSI, Streams, single-table</a></li><li class="nav-item"><a href="../pages/25-purpose-built-dbs.html" class=""><span class="num">25</span>Purpose-built DB — ElastiCache, MemoryDB, Neptune, DocumentDB, Keyspaces, Timestream, QLDB</a></li><li class="nav-item"><a href="../pages/26-redshift-data-warehousing.html" class=""><span class="num">26</span>Redshift — data warehousing MPP e zero-ETL</a></li><li class="nav-item"><a href="../pages/27-sqs-sns-eventbridge.html" class=""><span class="num">27</span>SQS, SNS, EventBridge — messaging ed eventi</a></li><li class="nav-item"><a href="../pages/28-step-functions-mq-appflow.html" class="active"><span class="num">28</span>Step Functions, MQ, AppFlow — orchestrazione e integrazione</a></li><li class="nav-item"><a href="../pages/29-athena-glue-lakeformation.html" class=""><span class="num">29</span>Athena, Glue, Lake Formation — il data lake AWS</a></li><li class="nav-item"><a href="../pages/30-emr-kinesis-msk.html" class=""><span class="num">30</span>EMR, Kinesis, MSK — big data e streaming</a></li><li class="nav-item"><a href="../pages/31-opensearch-quicksight.html" class=""><span class="num">31</span>OpenSearch e QuickSight — search e BI</a></li><li class="nav-item"><a href="../pages/32-sagemaker-overview.html" class=""><span class="num">32</span>SageMaker — la piattaforma ML end-to-end</a></li><li class="nav-item"><a href="../pages/33-bedrock-ai-services.html" class=""><span class="num">33</span>Bedrock e AI services — GenAI e ML managed</a></li><li class="nav-item"><a href="../pages/34-iac-cloudformation-cdk-terraform.html" class=""><span class="num">34</span>IaC su AWS — CloudFormation, CDK, SAM, Terraform</a></li><li class="nav-item"><a href="../pages/35-ci-cd-pipeline.html" class=""><span class="num">35</span>CI/CD su AWS — CodePipeline, CodeBuild, CodeDeploy, CodeCatalyst</a></li><li class="nav-item"><a href="../pages/36-observability-cloudwatch-xray.html" class=""><span class="num">36</span>Observability — CloudWatch, X-Ray, CloudTrail, Config, SSM</a></li><li class="nav-item"><a href="../pages/37-kms-secrets-acm.html" class=""><span class="num">37</span>Crittografia — KMS, CloudHSM, Secrets Manager, Parameter Store, ACM</a></li><li class="nav-item"><a href="../pages/38-waf-shield-guardduty-inspector.html" class=""><span class="num">38</span>Threat detection — WAF, Shield, GuardDuty, Inspector, Macie, Security Hub</a></li><li class="nav-item"><a href="../pages/39-governance-org-controltower-identitycenter.html" class=""><span class="num">39</span>Governance — Organizations, Control Tower, Identity Center</a></li><li class="nav-item"><a href="../pages/40-migration-mgn-dms-snow.html" class=""><span class="num">40</span>Migration — MGN, DMS, Snow family, Discovery, Migration Hub</a></li><li class="nav-item"><a href="../pages/41-cost-optimization-finops.html" class=""><span class="num">41</span>Cost optimization e FinOps</a></li><li class="nav-item"><a href="../pages/42-well-architected.html" class=""><span class="num">42</span>Well-Architected Framework — 6 pillar, lens, review</a></li><li class="nav-item"><a href="../pages/43-architecture-patterns.html" class=""><span class="num">43</span>Architecture patterns — 3-tier, serverless, event-driven, microservices</a></li><li class="nav-item"><a href="../pages/44-disaster-recovery-multi-region.html" class=""><span class="num">44</span>Disaster Recovery e Multi-Region</a></li><li class="nav-item"><a href="../pages/45-reference-architectures.html" class=""><span class="num">45</span>Reference architectures real-world</a></li><li class="nav-item"><a href="../pages/46-advanced-networking.html" class=""><span class="num">46</span>Advanced networking deep dive</a></li><li class="nav-item"><a href="../pages/47-containers-deep-dive.html" class=""><span class="num">47</span>Containers deep dive — EKS, Karpenter, service mesh</a></li><li class="nav-item"><a href="../pages/48-serverless-patterns.html" class=""><span class="num">48</span>Serverless patterns deep dive</a></li><li class="nav-item"><a href="../pages/49-genai-rag-agents.html" class=""><span class="num">49</span>Generative AI su AWS — RAG e Agents</a></li><li class="nav-item"><a href="../pages/50-certificazioni-aws.html" class=""><span class="num">50</span>Certificazioni AWS — roadmap e study guide</a></li><li class="nav-item"><a href="../pages/51-glossario-az.html" class=""><span class="num">51</span>Glossario A-Z</a></li><li class="nav-item"><a href="../pages/52-cheatsheet.html" class=""><span class="num">52</span>Cheat sheet: servizi, limiti, instance families</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Integration</span>
+        <span>Sezione 28 di 52</span>
+        <span class="level-tag level-int">Livello: intermedio</span>
+      </div>
+      <h1>Step Functions, MQ, AppFlow — orchestrazione e integrazione</h1>
+      <p class="summary">Workflow as code con Step Functions, broker tradizionali ActiveMQ/RabbitMQ con MQ, e flussi SaaS no-code con AppFlow.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Integration</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>sezione 16</li><li>sezione 27</li></ul>
+  <div class="label">Strumenti / riferimenti</div>
+  <ul class="source-list"><li>Workflow Studio</li><li>ASL (Amazon States Language)</li></ul>
+</div>
+      <p>Tre servizi molto diversi accomunati dal tema "muovere e coordinare dati tra sistemi": <strong>Step Functions</strong> orchestra workflow tra servizi AWS, <strong>MQ</strong> offre broker tradizionali per migrazioni lift-and-shift, <strong>AppFlow</strong> muove dati da/per SaaS senza scrivere codice.</p>
+<h2 id="1-step-functions-workflow-managed">1. Step Functions — workflow managed</h2>
+<p>Una macchina a stati definita in <strong>ASL</strong> (Amazon States Language, JSON). Ogni stato è un <code>Task</code>, <code>Choice</code>, <code>Parallel</code>, <code>Map</code>, <code>Wait</code>, <code>Pass</code>, <code>Succeed</code> o <code>Fail</code>. Step Functions chiama l'integrazione, gestisce retry/catch, persiste lo stato di esecuzione (fino a 1 anno per Standard).</p>
+<table>
+<thead>
+<tr>
+<th>Caratteristica</th>
+<th>Standard</th>
+<th>Express</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Durata max</td>
+<td>1 anno</td>
+<td>5 minuti</td>
+</tr>
+<tr>
+<td>Esecuzioni/sec</td>
+<td>2000 startup, 4000 transition</td>
+<td>100k+</td>
+</tr>
+<tr>
+<td>Prezzo</td>
+<td>$25/M transitions</td>
+<td>$1/M invocations + GB-s</td>
+</tr>
+<tr>
+<td>Audit</td>
+<td>step-by-step in console</td>
+<td>aggregato in CloudWatch Logs</td>
+</tr>
+<tr>
+<td>Use case</td>
+<td>long-running, audit-critical</td>
+<td>high-volume event processing</td>
+</tr>
+</tbody>
+</table>
+<h2 id="2-asl-esempio-minimale">2. ASL — esempio minimale</h2>
+<pre><code class="language-json">{
+  &quot;StartAt&quot;: &quot;Validate&quot;,
+  &quot;States&quot;: {
+    &quot;Validate&quot;: {
+      &quot;Type&quot;: &quot;Task&quot;,
+      &quot;Resource&quot;: &quot;arn:aws:states:::lambda:invoke&quot;,
+      &quot;Parameters&quot;: { &quot;FunctionName&quot;: &quot;validateOrder&quot;, &quot;Payload.$&quot;: &quot;$&quot; },
+      &quot;Retry&quot;: [{ &quot;ErrorEquals&quot;: [&quot;States.TaskFailed&quot;], &quot;MaxAttempts&quot;: 3, &quot;BackoffRate&quot;: 2 }],
+      &quot;Catch&quot;: [{ &quot;ErrorEquals&quot;: [&quot;ValidationError&quot;], &quot;Next&quot;: &quot;Reject&quot; }],
+      &quot;Next&quot;: &quot;Charge&quot;
+    },
+    &quot;Charge&quot;: { &quot;Type&quot;: &quot;Task&quot;, &quot;Resource&quot;: &quot;arn:aws:states:::sqs:sendMessage.waitForTaskToken&quot;, &quot;End&quot;: true },
+    &quot;Reject&quot;: { &quot;Type&quot;: &quot;Fail&quot;, &quot;Error&quot;: &quot;Invalid&quot; }
+  }
+}
+</code></pre>
+<h2 id="3-pattern-di-stato-fondamentali">3. Pattern di stato fondamentali</h2>
+<pre><code class="language-mermaid">flowchart TB
+  Start --&gt; Validate{Choice}
+  Validate --&gt;|valid| Parallel
+  Validate --&gt;|invalid| Fail[Fail]
+  Parallel --&gt; Charge
+  Parallel --&gt; Notify
+  Charge --&gt; Map[Map: per ogni item]
+  Notify --&gt; End
+  Map --&gt; End
+</code></pre>
+<ul>
+<li><strong>Task</strong>: chiama un servizio (Lambda, ECS task, SNS, DynamoDB, Bedrock, …). Step Functions integra <strong>direttamente 220+ servizi AWS</strong> senza Lambda glue.</li>
+<li><strong>Choice</strong>: branching su valori di input.</li>
+<li><strong>Parallel</strong>: brache eseguite contemporaneamente, aggregazione output.</li>
+<li><strong>Map</strong>: itera su un array. Modalità <strong>Inline</strong> (max 40 concorrenti) o <strong>Distributed Map</strong> che scala a <strong>10.000 esecuzioni parallele</strong> processando milioni di item da S3 o JSON inline.</li>
+<li><strong>Wait</strong>: ritardo statico (<code>Seconds</code>) o assoluto (<code>Timestamp</code>).</li>
+<li><strong>waitForTaskToken</strong> (<code>.sync</code> / <code>.waitForTaskToken</code>): pausa il workflow finché un sistema esterno non chiama <code>SendTaskSuccess</code>. Pattern human-approval o long-running async.</li>
+</ul>
+<h2 id="4-error-handling">4. Error handling</h2>
+<p>Niente più try/catch sparso: <code>Retry</code> e <code>Catch</code> sono dichiarativi a livello di stato. Best practice:
+- <code>States.ALL</code> come catch-all finale, ma con specifici prima.
+- Backoff esponenziale (<code>BackoffRate: 2</code>) per non martellare il downstream.
+- Stato dedicato di compensation (saga pattern) per rollback distribuito.</p>
+<h2 id="5-workflow-studio">5. Workflow Studio</h2>
+<p>Editor visuale drag-and-drop dentro la console che genera ASL. Utile per iniziare e per onboarding di chi non conosce JSON. Output è sempre ASL versionabile in git.</p>
+<h2 id="6-amazon-mq-broker-tradizionali">6. Amazon MQ — broker tradizionali</h2>
+<p>MQ è AWS-managed <strong>ActiveMQ Classic / Artemis</strong> e <strong>RabbitMQ</strong>. Esiste per un motivo: migrazioni lift-and-shift da app on-prem che parlano già JMS, AMQP 0-9-1, MQTT, STOMP, OpenWire. Se nasci cloud, <strong>usa SNS+SQS</strong>: meno operazioni, prezzo lineare. MQ ha vantaggi specifici:</p>
+<ul>
+<li><strong>Protocolli legacy</strong>: JMS, AMQP, MQTT, STOMP.</li>
+<li><strong>Topic durable + selector</strong>: richiesti da app vecchie.</li>
+<li><strong>Single-broker dev</strong> o <strong>active/standby</strong> (multi-AZ).</li>
+</ul>
+<p>Trappola: MQ è un broker <strong>gestito ma non serverless</strong>. Paghi l'istanza 24/7. Per workload moderate vanno bene mq.t3.micro; in produzione mq.m5.large in active/standby.</p>
+<h2 id="7-appflow-integrazione-saas-no-code">7. AppFlow — integrazione SaaS no-code</h2>
+<p>Flussi bidirezionali tra <strong>SaaS</strong> (Salesforce, Slack, Marketo, ServiceNow, Zendesk, SAP, Google Analytics…) e <strong>AWS</strong> (S3, Redshift, EventBridge). Console-based: scegli source → destination → mapping campi → schedule/on-demand/event-triggered. Trasformazioni semplici (filter, mask, validate, arithmetic).</p>
+<table>
+<thead>
+<tr>
+<th>Servizio</th>
+<th>Quando</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AppFlow</td>
+<td>"voglio Salesforce Opportunity in S3 ogni ora, senza scrivere codice"</td>
+</tr>
+<tr>
+<td>EventBridge Partner bus</td>
+<td>"voglio reagire in tempo reale a eventi SaaS"</td>
+</tr>
+<tr>
+<td>Glue / Lambda custom</td>
+<td>controllo totale, trasformazioni complesse</td>
+</tr>
+</tbody>
+</table>
+<h2 id="8-esercizio">8. Esercizio</h2>
+<details>
+<summary>Pipeline: 50.000 file CSV in S3, per ognuno chiamare Lambda di validazione e poi caricare in Redshift. Quale primitiva Step Functions?</summary>
+
+**Distributed Map** con source S3. Scansiona il bucket, lancia fino a 10.000 esecuzioni child in parallelo, ognuna chiama la Lambda di validazione e poi un Task Redshift Data API. Aggrega risultati e gestisce retry/error per item. Senza Distributed Map dovresti splittare a mano e fare orchestrazione con SQS+Lambda.
+</details>
+
+<details>
+<summary>App legacy Java EE on-prem usa JMS con ActiveMQ. Migri ad AWS, cosa scegli?</summary>
+
+Fase 1 lift-and-shift: **Amazon MQ for ActiveMQ** in active/standby multi-AZ. L'app non cambia codice (URL del broker punta all'endpoint MQ). Fase 2 (futura): refactor verso SNS+SQS quando il team è pronto. Andare diretti su SQS richiede riscrittura del codice JMS, spesso non vale per app stabili.
+</details>
+
+<blockquote>
+<p><strong>Riassunto</strong>: Step Functions = workflow ASL con 220+ integrazioni dirette, Standard per long-running e Express per high-volume, Distributed Map per fan-out massivo; MQ per migrazioni broker legacy (JMS/AMQP/MQTT); AppFlow per integrazioni SaaS no-code.</p>
+</blockquote>
+      <nav class="pager">
+<a href="27-sqs-sns-eventbridge.html" class="prev"><span class="label">← Precedente</span><span class="title">SQS, SNS, EventBridge — messaging ed eventi</span></a>
+<a href="29-athena-glue-lakeformation.html" class="next"><span class="label">Successivo →</span><span class="title">Athena, Glue, Lake Formation — il data lake AWS</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>AWS Zero to Hero</strong> — percorso completo, in italiano, dalle primitive all'architettura avanzata.</p><p>Materiale didattico aperto. Nessuna sponsorizzazione, nessun affiliate link, nessuna affiliazione con AWS. Quando un concetto è oscuro, torna indietro: AWS è una piramide di primitive, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

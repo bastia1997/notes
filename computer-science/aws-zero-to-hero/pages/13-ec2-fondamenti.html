@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EC2 — fondamenti (istanze, AMI, lifecycle) — AWS Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#232f3e',primaryTextColor:'#ffffff',primaryBorderColor:'#ff9900',lineColor:'#8a99ad',background:'#0c1320'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">λ</div>
+      <div>
+        <div class="brand-title">AWS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">IT</span><a href="../en/pages/13-ec2-fundamentals.html" class="lang-link" title="Switch to English">EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-cos-e-aws-cloud.html" class=""><span class="num">01</span>Cos&#x27;è il cloud e cos&#x27;è AWS</a></li><li class="nav-item"><a href="../pages/02-infrastruttura-globale.html" class=""><span class="num">02</span>Infrastruttura globale: Region, AZ, Edge</a></li><li class="nav-item"><a href="../pages/03-account-root-billing.html" class=""><span class="num">03</span>Account AWS, utente root, billing</a></li><li class="nav-item"><a href="../pages/04-iam-fondamenti.html" class=""><span class="num">04</span>IAM — fondamenti (utenti, gruppi, ruoli, policy)</a></li><li class="nav-item"><a href="../pages/05-iam-avanzato.html" class=""><span class="num">05</span>IAM avanzato: policy condizionali, STS, ABAC</a></li><li class="nav-item"><a href="../pages/06-cli-sdk-iac.html" class=""><span class="num">06</span>CLI, SDK, CloudShell, IaC primer</a></li><li class="nav-item"><a href="../pages/07-pricing-billing.html" class=""><span class="num">07</span>Pricing, billing, free tier, cost tools</a></li><li class="nav-item"><a href="../pages/08-organizations-multi-account.html" class=""><span class="num">08</span>AWS Organizations &amp; strategia multi-account</a></li><li class="nav-item"><a href="../pages/09-vpc-fondamenti.html" class=""><span class="num">09</span>VPC — fondamenti</a></li><li class="nav-item"><a href="../pages/10-vpc-avanzato.html" class=""><span class="num">10</span>VPC avanzato: peering, TGW, PrivateLink, endpoint</a></li><li class="nav-item"><a href="../pages/11-route53-cloudfront.html" class=""><span class="num">11</span>Route 53, CloudFront, Global Accelerator</a></li><li class="nav-item"><a href="../pages/12-hybrid-vpn-directconnect.html" class=""><span class="num">12</span>Hybrid: VPN, Direct Connect, PrivateLink</a></li><li class="nav-item"><a href="../pages/13-ec2-fondamenti.html" class="active"><span class="num">13</span>EC2 — fondamenti (istanze, AMI, lifecycle)</a></li><li class="nav-item"><a href="../pages/14-ec2-avanzato-spot-nitro.html" class=""><span class="num">14</span>EC2 avanzato — Spot, Placement Groups, Nitro, hibernation</a></li><li class="nav-item"><a href="../pages/15-asg-elb.html" class=""><span class="num">15</span>Auto Scaling Groups + Elastic Load Balancing</a></li><li class="nav-item"><a href="../pages/16-lambda-deep-dive.html" class=""><span class="num">16</span>Lambda deep dive</a></li><li class="nav-item"><a href="../pages/17-containers-ecs-eks-fargate.html" class=""><span class="num">17</span>Containers: ECS, EKS, Fargate, ECR</a></li><li class="nav-item"><a href="../pages/18-specialty-compute.html" class=""><span class="num">18</span>Specialty compute: Batch, Lightsail, Outposts, Wavelength, Beanstalk</a></li><li class="nav-item"><a href="../pages/19-ebs-efs-fsx.html" class=""><span class="num">19</span>EBS, EFS, FSx, Instance Store</a></li><li class="nav-item"><a href="../pages/20-s3-deep-dive.html" class=""><span class="num">20</span>S3 — deep dive</a></li><li class="nav-item"><a href="../pages/21-archive-snow-gateway-backup.html" class=""><span class="num">21</span>Glacier, Snow, Storage Gateway, DataSync, AWS Backup</a></li><li class="nav-item"><a href="../pages/22-rds.html" class=""><span class="num">22</span>RDS — relational DB managed (engines, Multi-AZ, replicas, Proxy)</a></li><li class="nav-item"><a href="../pages/23-aurora-deep-dive.html" class=""><span class="num">23</span>Aurora deep dive — storage condiviso, Serverless v2, Global Database</a></li><li class="nav-item"><a href="../pages/24-dynamodb-deep-dive.html" class=""><span class="num">24</span>DynamoDB deep dive — partition, GSI, Streams, single-table</a></li><li class="nav-item"><a href="../pages/25-purpose-built-dbs.html" class=""><span class="num">25</span>Purpose-built DB — ElastiCache, MemoryDB, Neptune, DocumentDB, Keyspaces, Timestream, QLDB</a></li><li class="nav-item"><a href="../pages/26-redshift-data-warehousing.html" class=""><span class="num">26</span>Redshift — data warehousing MPP e zero-ETL</a></li><li class="nav-item"><a href="../pages/27-sqs-sns-eventbridge.html" class=""><span class="num">27</span>SQS, SNS, EventBridge — messaging ed eventi</a></li><li class="nav-item"><a href="../pages/28-step-functions-mq-appflow.html" class=""><span class="num">28</span>Step Functions, MQ, AppFlow — orchestrazione e integrazione</a></li><li class="nav-item"><a href="../pages/29-athena-glue-lakeformation.html" class=""><span class="num">29</span>Athena, Glue, Lake Formation — il data lake AWS</a></li><li class="nav-item"><a href="../pages/30-emr-kinesis-msk.html" class=""><span class="num">30</span>EMR, Kinesis, MSK — big data e streaming</a></li><li class="nav-item"><a href="../pages/31-opensearch-quicksight.html" class=""><span class="num">31</span>OpenSearch e QuickSight — search e BI</a></li><li class="nav-item"><a href="../pages/32-sagemaker-overview.html" class=""><span class="num">32</span>SageMaker — la piattaforma ML end-to-end</a></li><li class="nav-item"><a href="../pages/33-bedrock-ai-services.html" class=""><span class="num">33</span>Bedrock e AI services — GenAI e ML managed</a></li><li class="nav-item"><a href="../pages/34-iac-cloudformation-cdk-terraform.html" class=""><span class="num">34</span>IaC su AWS — CloudFormation, CDK, SAM, Terraform</a></li><li class="nav-item"><a href="../pages/35-ci-cd-pipeline.html" class=""><span class="num">35</span>CI/CD su AWS — CodePipeline, CodeBuild, CodeDeploy, CodeCatalyst</a></li><li class="nav-item"><a href="../pages/36-observability-cloudwatch-xray.html" class=""><span class="num">36</span>Observability — CloudWatch, X-Ray, CloudTrail, Config, SSM</a></li><li class="nav-item"><a href="../pages/37-kms-secrets-acm.html" class=""><span class="num">37</span>Crittografia — KMS, CloudHSM, Secrets Manager, Parameter Store, ACM</a></li><li class="nav-item"><a href="../pages/38-waf-shield-guardduty-inspector.html" class=""><span class="num">38</span>Threat detection — WAF, Shield, GuardDuty, Inspector, Macie, Security Hub</a></li><li class="nav-item"><a href="../pages/39-governance-org-controltower-identitycenter.html" class=""><span class="num">39</span>Governance — Organizations, Control Tower, Identity Center</a></li><li class="nav-item"><a href="../pages/40-migration-mgn-dms-snow.html" class=""><span class="num">40</span>Migration — MGN, DMS, Snow family, Discovery, Migration Hub</a></li><li class="nav-item"><a href="../pages/41-cost-optimization-finops.html" class=""><span class="num">41</span>Cost optimization e FinOps</a></li><li class="nav-item"><a href="../pages/42-well-architected.html" class=""><span class="num">42</span>Well-Architected Framework — 6 pillar, lens, review</a></li><li class="nav-item"><a href="../pages/43-architecture-patterns.html" class=""><span class="num">43</span>Architecture patterns — 3-tier, serverless, event-driven, microservices</a></li><li class="nav-item"><a href="../pages/44-disaster-recovery-multi-region.html" class=""><span class="num">44</span>Disaster Recovery e Multi-Region</a></li><li class="nav-item"><a href="../pages/45-reference-architectures.html" class=""><span class="num">45</span>Reference architectures real-world</a></li><li class="nav-item"><a href="../pages/46-advanced-networking.html" class=""><span class="num">46</span>Advanced networking deep dive</a></li><li class="nav-item"><a href="../pages/47-containers-deep-dive.html" class=""><span class="num">47</span>Containers deep dive — EKS, Karpenter, service mesh</a></li><li class="nav-item"><a href="../pages/48-serverless-patterns.html" class=""><span class="num">48</span>Serverless patterns deep dive</a></li><li class="nav-item"><a href="../pages/49-genai-rag-agents.html" class=""><span class="num">49</span>Generative AI su AWS — RAG e Agents</a></li><li class="nav-item"><a href="../pages/50-certificazioni-aws.html" class=""><span class="num">50</span>Certificazioni AWS — roadmap e study guide</a></li><li class="nav-item"><a href="../pages/51-glossario-az.html" class=""><span class="num">51</span>Glossario A-Z</a></li><li class="nav-item"><a href="../pages/52-cheatsheet.html" class=""><span class="num">52</span>Cheat sheet: servizi, limiti, instance families</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Compute</span>
+        <span>Sezione 13 di 52</span>
+        <span class="level-tag level-beg">Livello: principiante</span>
+      </div>
+      <h1>EC2 — fondamenti (istanze, AMI, lifecycle)</h1>
+      <p class="summary">Macchine virtuali on-demand: famiglie istanze, AMI, user data, EBS root volume, key pair, Instance Connect/SSM, lifecycle (start/stop/terminate).</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Compute</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>sezioni 1, 9</li></ul>
+  <div class="label">Strumenti / riferimenti</div>
+  <ul class="source-list"><li>AWS CLI</li><li>SSM Session Manager</li></ul>
+</div>
+      <p>EC2 (Elastic Compute Cloud) è la "macchina virtuale on-demand" che ha lanciato AWS. Nonostante l'esplosione del serverless e dei container, EC2 resta la primitiva su cui <em>molti</em> altri servizi sono costruiti (ECS/EKS-EC2, EMR, Elastic Beanstalk).</p>
+<h2 id="1-anatomia-di-unistanza">1. Anatomia di un'istanza</h2>
+<p>Quando lanci una EC2, scegli 6 cose:</p>
+<ol>
+<li><strong>AMI</strong> (Amazon Machine Image): template del disco (OS + software preinstallato).</li>
+<li><strong>Instance type</strong>: famiglia + size (es. <code>t3.medium</code>, <code>m7i.xlarge</code>, <code>r6g.2xlarge</code>).</li>
+<li><strong>VPC + subnet</strong>: dove vive (definisce AZ).</li>
+<li><strong>Key pair</strong>: chiave SSH (oggi spesso non serve, usi SSM).</li>
+<li><strong>Security group</strong>: firewall stateful.</li>
+<li><strong>EBS root volume + (opzionali) volumi dati</strong>.</li>
+</ol>
+<pre><code class="language-bash">aws ec2 run-instances \
+  --image-id ami-0abcd1234 \
+  --instance-type t3.micro \
+  --key-name my-key \
+  --subnet-id subnet-xxx \
+  --security-group-ids sg-yyy \
+  --iam-instance-profile Name=AmazonSSMRoleForInstancesQuickSetup \
+  --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=web-1}]' \
+  --user-data file://bootstrap.sh
+</code></pre>
+<h2 id="2-famiglie-di-istanze">2. Famiglie di istanze</h2>
+<p>Naming: <code>&lt;lettera famiglia&gt;&lt;generazione&gt;&lt;attributi&gt;.&lt;size&gt;</code>. Esempi:</p>
+<table>
+<thead>
+<tr>
+<th>Famiglia</th>
+<th>Workload</th>
+<th>Esempi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>T</strong> (burstable)</td>
+<td>dev, web traffic basso/medio, picchi sporadici</td>
+<td>t3, t4g (ARM)</td>
+</tr>
+<tr>
+<td><strong>M</strong> (general)</td>
+<td>bilanciate CPU/RAM, web, app</td>
+<td>m6i, m7g, m7i</td>
+</tr>
+<tr>
+<td><strong>C</strong> (compute)</td>
+<td>CPU-heavy: web ad alto QPS, encoding, gaming</td>
+<td>c7i, c7g</td>
+</tr>
+<tr>
+<td><strong>R</strong> (memory)</td>
+<td>DB, cache, in-memory analytics</td>
+<td>r6i, r7g</td>
+</tr>
+<tr>
+<td><strong>X / u</strong> (extreme memory)</td>
+<td>SAP HANA, in-memory DB</td>
+<td>x2idn, u-9tb1</td>
+</tr>
+<tr>
+<td><strong>I / D / H</strong> (storage)</td>
+<td>NVMe local: NoSQL, big data</td>
+<td>i4i, d3, h1</td>
+</tr>
+<tr>
+<td><strong>P / G / Trn / Inf</strong> (accelerated)</td>
+<td>GPU, ML training (Trn), inference (Inf)</td>
+<td>p5, g6, trn1, inf2</td>
+</tr>
+</tbody>
+</table>
+<p>Lettere generazione: maggior numero = più recente, di solito meglio. <code>g</code> suffix = ARM (Graviton, ~20% più economici).</p>
+<h2 id="3-ami">3. AMI</h2>
+<p>3 tipi:</p>
+<ul>
+<li><strong>AWS-managed</strong> (Amazon Linux 2023, Ubuntu, Windows): aggiornate da AWS.</li>
+<li><strong>AWS Marketplace</strong>: di terze parti (es. CloudHealth, Sophos).</li>
+<li><strong>Custom</strong> (tue): partire da una base + customizzazioni con <strong>Packer</strong> o <strong>EC2 Image Builder</strong>.</li>
+</ul>
+<p>Best practice: AMI immutabile + user-data per config minima + IaC per deploy. Niente "AMI snowflake" build a mano.</p>
+<h2 id="4-user-data-e-cloud-init">4. User data e cloud-init</h2>
+<p>Lo script di bootstrap che viene eseguito <strong>al primo boot</strong>. Bash o cloud-init YAML.</p>
+<pre><code class="language-bash">#!/bin/bash
+dnf update -y
+dnf install -y nginx
+systemctl enable --now nginx
+echo &quot;&lt;h1&gt;Hello $(hostname)&lt;/h1&gt;&quot; &gt; /usr/share/nginx/html/index.html
+</code></pre>
+<h2 id="5-lifecycle">5. Lifecycle</h2>
+<table>
+<thead>
+<tr>
+<th>Stato</th>
+<th>Cosa pagi</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pending</code></td>
+<td>nulla</td>
+<td>transizione</td>
+</tr>
+<tr>
+<td><code>running</code></td>
+<td>EC2 + EBS + IP pubblico se Elastic</td>
+<td>quasi tutto</td>
+</tr>
+<tr>
+<td><code>stopping</code> / <code>stopped</code></td>
+<td>solo EBS storage</td>
+<td>RAM scartata, public IP perso (a meno di Elastic IP)</td>
+</tr>
+<tr>
+<td><code>shutting-down</code> / <code>terminated</code></td>
+<td>nulla</td>
+<td>dati EBS persi se "DeleteOnTermination=true" (default su root)</td>
+</tr>
+<tr>
+<td><code>hibernate</code></td>
+<td>EBS (snapshot della RAM su EBS)</td>
+<td>rapid restart con stato</td>
+</tr>
+</tbody>
+</table>
+<p>Trappola: stop ≠ terminate. Stop preserva l'istanza; terminate la distrugge.</p>
+<h2 id="6-storage-di-unistanza">6. Storage di un'istanza</h2>
+<p>3 tipi:</p>
+<ul>
+<li><strong>EBS</strong> (Elastic Block Store): volume network, persistente, sopravvive a stop/start. Default per root.</li>
+<li><strong>Instance Store</strong>: SSD/NVMe locale, attaccato fisicamente all'host, <strong>distrutto a stop/terminate</strong>. Velocissimo. Solo certi tipi (i, d, h, ecc.).</li>
+<li><strong>EFS / FSx</strong>: filesystem condiviso, montato come NFS.</li>
+</ul>
+<p>Vedi sezione 19 per il dettaglio.</p>
+<h2 id="7-accesso-ssh-vs-ssm">7. Accesso: SSH vs SSM</h2>
+<p><strong>Old way (SSH)</strong>:
+- Key pair RSA/ED25519, port 22 aperta nel SG, IP pubblico o bastion.
+- Rischio: chiavi diffuse, port 22 esposta, audit difficile.</p>
+<p><strong>New way (SSM Session Manager)</strong>:
+- Niente porta 22, niente chiavi, niente IP pubblico.
+- EC2 ha SSM Agent (preinstallato su Amazon Linux) + IAM role <code>AmazonSSMManagedInstanceCore</code>.
+- Connetti via <code>aws ssm start-session --target i-xxx</code> o dalla console.
+- Audit log automatico in CloudTrail e S3 (opzionale).</p>
+<p>Best practice 2026: solo SSM. Non installare chiavi SSH.</p>
+<h2 id="8-esercizio">8. Esercizio</h2>
+<details>
+<summary>Una web app deve gestire 5000 RPS, latenza p99 < 100 ms. Quale famiglia EC2?</summary>
+
+Pensiero strutturato:
+- **CPU bound** (es. encoding immagini al volo): C7i o C7g (Graviton più cheap).
+- **Memory bound** (cache in-process pesante): R7i o R7g.
+- **Bilanciata** (web tradizionale, app server Node/Java): M7i o M7g.
+- **Sviluppo / traffico burstable**: T3/T4g.
+
+Per 5000 RPS con app HTTP standard, **m7g.large** (2 vCPU 8 GB ARM) o **c7g.large** dietro ALB è un buon punto di partenza, poi misuri e fai auto-scale orizzontale.
+</details>
+
+<details>
+<summary>Hai bisogno di salvare 100 GB di dati che sopravvivano al reboot. Quale storage?</summary>
+
+**EBS gp3** (default moderno):
+- ~$0.08/GB-mese (~$8/mese per 100 GB).
+- 3000 IOPS e 125 MB/s di baseline (può essere scalato indipendentemente da GB).
+- Persistente, snapshottabile, snapshotabile cross-region.
+
+NO instance store (distrutto a stop). NO EFS se single-instance (overhead NFS).
+</details>
+
+<blockquote>
+<p><strong>Riassunto</strong>: EC2 = VM virtuale; scegli AMI + tipo (famiglia/gen/size) + subnet + SG + storage; user-data per bootstrap; lifecycle: pending → running → stopped/terminated; storage default EBS gp3 (persistente); accesso via SSM (no SSH); Graviton (ARM) = 20% sconto su molte famiglie.</p>
+</blockquote>
+      <nav class="pager">
+<a href="12-hybrid-vpn-directconnect.html" class="prev"><span class="label">← Precedente</span><span class="title">Hybrid: VPN, Direct Connect, PrivateLink</span></a>
+<a href="14-ec2-avanzato-spot-nitro.html" class="next"><span class="label">Successivo →</span><span class="title">EC2 avanzato — Spot, Placement Groups, Nitro, hibernation</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>AWS Zero to Hero</strong> — percorso completo, in italiano, dalle primitive all'architettura avanzata.</p><p>Materiale didattico aperto. Nessuna sponsorizzazione, nessun affiliate link, nessuna affiliazione con AWS. Quando un concetto è oscuro, torna indietro: AWS è una piramide di primitive, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

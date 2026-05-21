@@ -1,0 +1,512 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>Stream API, lambda, functional interfaces, Optional — Java + Spring Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">☕</div>
+      <div>
+        <div class="brand-title">JAVA · SPRING</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="10" height="20" fill="#009246"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ce2b37"/></svg> IT</span><a href="../en/pages/10-stream-lambda-optional.html" class="lang-link" title="Switch to English"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="30" height="20" fill="#012169"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#fff" stroke-width="3"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#c8102e" stroke-width="1.5"/><path d="M15,0 v20 M0,10 h30" stroke="#fff" stroke-width="5"/><path d="M15,0 v20 M0,10 h30" stroke="#c8102e" stroke-width="3"/></svg> EN</a></div>
+  </div>
+  <div class="search-wrap">
+    <div class="search-row">
+      <div class="search-inputwrap">
+        <span class="search-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"/>
+            <line x1="20" y1="20" x2="16.65" y2="16.65"/>
+          </svg>
+        </span>
+        <input class="search-input" id="search-input" type="text" placeholder="cerca... (premi /)" autocomplete="off" aria-label="Search">
+        <button class="search-clear" id="search-clear" type="button" aria-label="Clear" title="Clear">&times;</button>
+      </div>
+      <button class="search-btn" id="search-btn" type="button" aria-label="CERCA" title="CERCA">CERCA</button>
+    </div>
+    <div class="search-hits" id="search-hits" role="listbox"></div>
+  </div>
+  <div class="sidebar-nav">
+    <nav class="nav-section">
+      <div class="nav-section-title">Percorso</div>
+      <ul class="nav-list">
+        <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+        <li class="nav-item"><a href="../pages/00-percorso-e-mindset.html" class=""><span class="num">00</span>Il percorso e la giusta mentalità</a></li><li class="nav-item"><a href="../pages/01-introduzione-java.html" class=""><span class="num">01</span>Java: cos&#x27;è davvero, JVM/JRE/JDK, primo programma</a></li><li class="nav-item"><a href="../pages/02-sintassi-base.html" class=""><span class="num">02</span>Sintassi di base: tipi, variabili, operatori, controllo di flusso</a></li><li class="nav-item"><a href="../pages/03-stringhe-array-io.html" class=""><span class="num">03</span>Stringhe, array, I/O da console</a></li><li class="nav-item"><a href="../pages/04-oop-classi-oggetti.html" class=""><span class="num">04</span>OOP I — Classi, oggetti, costruttori, this, package, visibilità</a></li><li class="nav-item"><a href="../pages/05-oop-ereditarieta-polimorfismo.html" class=""><span class="num">05</span>OOP II — Ereditarietà, polimorfismo, interfacce, classi astratte</a></li><li class="nav-item"><a href="../pages/06-equals-hashcode-immutabilita.html" class=""><span class="num">06</span>OOP III — equals, hashCode, toString, immutabilità, record</a></li><li class="nav-item"><a href="../pages/07-eccezioni.html" class=""><span class="num">07</span>Eccezioni: checked vs unchecked, try-with-resources, custom</a></li><li class="nav-item"><a href="../pages/08-generics.html" class=""><span class="num">08</span>Generics: tipi parametrici, PECS, type erasure, wildcards</a></li><li class="nav-item"><a href="../pages/09-collections.html" class=""><span class="num">09</span>Collections: List, Set, Map, Queue, complessità, scelta della struttura</a></li><li class="nav-item"><a href="../pages/10-stream-lambda-optional.html" class="active"><span class="num">10</span>Stream API, lambda, functional interfaces, Optional</a></li><li class="nav-item"><a href="../pages/11-io-nio.html" class=""><span class="num">11</span>I/O e NIO.2: File, Path, channels, buffer</a></li><li class="nav-item"><a href="../pages/12-concurrency-thread.html" class=""><span class="num">12</span>Concurrency I — Thread, sincronizzazione, volatile, Java Memory Model</a></li><li class="nav-item"><a href="../pages/13-executor-future-completablefuture.html" class=""><span class="num">13</span>Concurrency II — ExecutorService, Future, CompletableFuture</a></li><li class="nav-item"><a href="../pages/14-concurrency-jucconcurrent.html" class=""><span class="num">14</span>Concurrency III — java.util.concurrent: locks, atomics, concurrent collections</a></li><li class="nav-item"><a href="../pages/15-jvm-internals.html" class=""><span class="num">15</span>JVM internals: classloader, bytecode, runtime data areas, JIT</a></li><li class="nav-item"><a href="../pages/16-memoria-gc.html" class=""><span class="num">16</span>Memoria e garbage collection: G1, ZGC, Shenandoah</a></li><li class="nav-item"><a href="../pages/17-profiling-jfr.html" class=""><span class="num">17</span>Profiling: JFR, async-profiler, jstack, heap dump, jcmd</a></li><li class="nav-item"><a href="../pages/18-java-moderno.html" class=""><span class="num">18</span>Java moderno: dal 8 al 21 — features chiave</a></li><li class="nav-item"><a href="../pages/19-jdbc.html" class=""><span class="num">19</span>JDBC: connessione, PreparedStatement, transazioni, isolation levels</a></li><li class="nav-item"><a href="../pages/20-jpa-hibernate.html" class=""><span class="num">20</span>JPA / Hibernate: entità, relazioni, lazy/eager, N+1, cache</a></li><li class="nav-item"><a href="../pages/21-sql-essenziale.html" class=""><span class="num">21</span>SQL essenziale per chi sviluppa in Java</a></li><li class="nav-item"><a href="../pages/22-spring-intro-ioc-di.html" class=""><span class="num">22</span>Spring intro: IoC, DI, ApplicationContext, BeanFactory</a></li><li class="nav-item"><a href="../pages/23-spring-beans-lifecycle.html" class=""><span class="num">23</span>Bean: scopes, lifecycle, BeanPostProcessor, FactoryBean</a></li><li class="nav-item"><a href="../pages/24-spring-configurazione.html" class=""><span class="num">24</span>Configurazione: Java config, @ComponentScan, profili, conditionals, properties</a></li><li class="nav-item"><a href="../pages/25-spring-aop-transactional.html" class=""><span class="num">25</span>AOP, proxy, @Transactional: cosa accade davvero</a></li><li class="nav-item"><a href="../pages/26-spring-boot.html" class=""><span class="num">26</span>Spring Boot: auto-configuration, starters, Actuator</a></li><li class="nav-item"><a href="../pages/27-spring-data-jpa.html" class=""><span class="num">27</span>Spring Data JPA: Repository, derived queries, paginazione, Specification</a></li><li class="nav-item"><a href="../pages/28-spring-mvc-rest.html" class=""><span class="num">28</span>Spring MVC: DispatcherServlet, controller, REST endpoint</a></li><li class="nav-item"><a href="../pages/29-rest-openapi-hateoas.html" class=""><span class="num">29</span>REST: best practice, OpenAPI/Swagger, HATEOAS, versionamento</a></li><li class="nav-item"><a href="../pages/30-spring-webflux.html" class=""><span class="num">30</span>Spring WebFlux + Reactor: Mono, Flux, programmazione reattiva</a></li><li class="nav-item"><a href="../pages/31-spring-security.html" class=""><span class="num">31</span>Spring Security: filter chain, autenticazione, autorizzazione, JWT, OAuth2</a></li><li class="nav-item"><a href="../pages/32-spring-cloud.html" class=""><span class="num">32</span>Spring Cloud: Config Server, Discovery, Gateway, Resilience4j</a></li><li class="nav-item"><a href="../pages/33-testing.html" class=""><span class="num">33</span>Testing: JUnit 5, Mockito, MockMvc, Testcontainers</a></li><li class="nav-item"><a href="../pages/34-spring-batch-intro.html" class=""><span class="num">34</span>Spring Batch intro: domain model, Job, Step, primo batch</a></li><li class="nav-item"><a href="../pages/35-spring-batch-jobrepository.html" class=""><span class="num">35</span>JobRepository, JobLauncher, schema dei metadati</a></li><li class="nav-item"><a href="../pages/36-spring-batch-chunk-skip-retry.html" class=""><span class="num">36</span>Chunk processing: commit interval, skip, retry, fault tolerance</a></li><li class="nav-item"><a href="../pages/37-spring-batch-tasklet-flow.html" class=""><span class="num">37</span>Tasklet vs Chunk; flow control: decisioni, split, conditional</a></li><li class="nav-item"><a href="../pages/38-spring-batch-itemreader.html" class=""><span class="num">38</span>ItemReader: flat file, XML/JSON, JDBC cursor/paging, JPA, multi-resource</a></li><li class="nav-item"><a href="../pages/39-spring-batch-itemwriter.html" class=""><span class="num">39</span>ItemWriter: file, JDBC, JPA, composite, classifier, batch insert</a></li><li class="nav-item"><a href="../pages/40-spring-batch-scaling-partitioning.html" class=""><span class="num">40</span>Scaling: multi-threaded step, partitioning, remote chunking/partitioning</a></li><li class="nav-item"><a href="../pages/41-spring-batch-listeners-restart-k8s.html" class=""><span class="num">41</span>Listeners, restart, monitoring, integrazione con Spring Boot e Kubernetes</a></li><li class="nav-item"><a href="../pages/42-design-patterns.html" class=""><span class="num">42</span>Design pattern in Java/Spring: GoF + DDD-lite</a></li><li class="nav-item"><a href="../pages/43-performance-observability.html" class=""><span class="num">43</span>Performance tuning e observability production-grade</a></li><li class="nav-item"><a href="../pages/44-esercizi-sintesi.html" class=""><span class="num">44</span>50 esercizi cumulativi: dalla sintassi a Spring Batch</a></li><li class="nav-item"><a href="../pages/45-progetto-finale-etl.html" class=""><span class="num">45</span>Progetto finale guidato: ETL bancario notturno</a></li>
+      </ul>
+    </nav>
+  </div>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Standard Library</span>
+        <span>Sezione 10 di 45</span>
+        <span class="level-tag level-int">Livello: intermedio</span>
+      </div>
+      <h1>Stream API, lambda, functional interfaces, Optional</h1>
+      <p class="summary">Lambda e method reference. Functional interfaces (Function, Predicate, Consumer, Supplier, ...). Stream API: pipeline, intermediate/terminal ops, collectors. Stream paralleli. Optional: alternative a null.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Standard Library</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>Sezione 9</li></ul>
+  <div class="label">Strumenti</div>
+  <ul class="source-list"><li>JDK 21</li></ul>
+</div>
+      <h2 id="lambda-blocco-di-codice-come-valore">Lambda: blocco di codice come valore</h2>
+<p>Una <strong>lambda</strong> è una funzione anonima passata come valore.</p>
+<pre><code class="language-java">Runnable r = () -&gt; System.out.println(&quot;ciao&quot;);
+r.run();   // ciao
+
+Comparator&lt;Integer&gt; c = (a, b) -&gt; Integer.compare(a, b);
+c.compare(2, 3);   // -1
+</code></pre>
+<p>Sintassi:
+- <code>() -&gt; espressione</code>
+- <code>(x) -&gt; espressione</code> o <code>x -&gt; espressione</code>
+- <code>(x, y) -&gt; espressione</code>
+- <code>(x) -&gt; { istruzioni; return ... }</code></p>
+<h3 id="method-reference">Method reference</h3>
+<p>Forma compatta di lambda:</p>
+<pre><code class="language-java">list.forEach(System.out::println);            // (x) -&gt; System.out.println(x)
+list.stream().map(String::toUpperCase);       // (s) -&gt; s.toUpperCase()
+list.stream().sorted(Integer::compare);
+List&lt;Persona&gt; ps = nomi.stream().map(Persona::new).toList();  // costruttore
+</code></pre>
+<p>Tipi:
+- <code>Classe::metodoStatico</code> (<code>Integer::parseInt</code>)
+- <code>oggetto::metodoIstanza</code> (<code>System.out::println</code>)
+- <code>Classe::metodoIstanza</code> (<code>String::length</code> — primo argomento è l'oggetto)
+- <code>Classe::new</code> (costruttore)</p>
+<h2 id="functional-interfaces">Functional interfaces</h2>
+<p>Sono interfacce con <strong>un solo metodo astratto</strong> (SAM). Una lambda implementa la SAM.</p>
+<p>Le più importanti (<code>java.util.function</code>):</p>
+<table>
+<thead>
+<tr>
+<th>Interfaccia</th>
+<th>Firma</th>
+<th>Esempio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Function&lt;T, R&gt;</code></td>
+<td><code>R apply(T)</code></td>
+<td><code>s -&gt; s.length()</code></td>
+</tr>
+<tr>
+<td><code>BiFunction&lt;T, U, R&gt;</code></td>
+<td><code>R apply(T, U)</code></td>
+<td><code>(a, b) -&gt; a + b</code></td>
+</tr>
+<tr>
+<td><code>Predicate&lt;T&gt;</code></td>
+<td><code>boolean test(T)</code></td>
+<td><code>s -&gt; s.isEmpty()</code></td>
+</tr>
+<tr>
+<td><code>Consumer&lt;T&gt;</code></td>
+<td><code>void accept(T)</code></td>
+<td><code>System.out::println</code></td>
+</tr>
+<tr>
+<td><code>BiConsumer&lt;T, U&gt;</code></td>
+<td><code>void accept(T, U)</code></td>
+<td><code>(k, v) -&gt; log(k, v)</code></td>
+</tr>
+<tr>
+<td><code>Supplier&lt;T&gt;</code></td>
+<td><code>T get()</code></td>
+<td><code>() -&gt; new ArrayList&lt;&gt;()</code></td>
+</tr>
+<tr>
+<td><code>UnaryOperator&lt;T&gt;</code></td>
+<td><code>T apply(T)</code></td>
+<td><code>i -&gt; i * 2</code></td>
+</tr>
+<tr>
+<td><code>BinaryOperator&lt;T&gt;</code></td>
+<td><code>T apply(T, T)</code></td>
+<td><code>Integer::sum</code></td>
+</tr>
+<tr>
+<td><code>Runnable</code></td>
+<td><code>void run()</code></td>
+<td><code>() -&gt; doStuff()</code></td>
+</tr>
+<tr>
+<td><code>Callable&lt;V&gt;</code></td>
+<td><code>V call() throws ...</code></td>
+<td><code>() -&gt; result()</code></td>
+</tr>
+</tbody>
+</table>
+<p>Varianti per primitivi: <code>IntFunction</code>, <code>IntPredicate</code>, <code>ToIntFunction</code>, <code>IntUnaryOperator</code>, <code>LongConsumer</code>, ... per evitare boxing.</p>
+<h3 id="esempio-creare-la-tua">Esempio: creare la tua</h3>
+<pre><code class="language-java">@FunctionalInterface
+public interface Validator&lt;T&gt; {
+    boolean valid(T value);
+    default Validator&lt;T&gt; and(Validator&lt;T&gt; other) {
+        return v -&gt; valid(v) &amp;&amp; other.valid(v);
+    }
+}
+
+Validator&lt;String&gt; nonVuota = s -&gt; s != null &amp;&amp; !s.isBlank();
+Validator&lt;String&gt; almeno8 = s -&gt; s.length() &gt;= 8;
+Validator&lt;String&gt; password = nonVuota.and(almeno8);
+</code></pre>
+<p><code>@FunctionalInterface</code> è opzionale ma controlla che ci sia una sola SAM.</p>
+<h2 id="stream-api">Stream API</h2>
+<p>Uno <strong>stream</strong> è una <strong>sequenza pipelinata di elementi</strong>. Non sostituisce le collezioni: è una vista per elaborarle.</p>
+<pre><code class="language-java">List&lt;Persona&gt; persone = ...;
+
+double mediaEtaUomini = persone.stream()
+    .filter(p -&gt; p.getSesso() == M)
+    .mapToInt(Persona::getEta)
+    .average()
+    .orElse(0);
+</code></pre>
+<h3 id="pipeline-sorgente-operazioni-intermedie-terminale">Pipeline = sorgente + operazioni intermedie + terminale</h3>
+<div class="mermaid">
+flowchart LR
+    SRC[Sorgente<br/>List.stream]
+    OP1[filter]
+    OP2[map]
+    OP3[sorted]
+    T[Terminale<br/>collect/toList/count]
+    SRC --> OP1 --> OP2 --> OP3 --> T
+
+</div>
+
+<p>Le operazioni intermedie sono <strong>lazy</strong>: non eseguono nulla finché non chiami un'operazione terminale.</p>
+<h3 id="operazioni-intermedie">Operazioni intermedie</h3>
+<table>
+<thead>
+<tr>
+<th>Op</th>
+<th>Cosa fa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>filter(Predicate)</code></td>
+<td>Tiene gli elementi che soddisfano il predicato</td>
+</tr>
+<tr>
+<td><code>map(Function)</code></td>
+<td>Trasforma ogni elemento</td>
+</tr>
+<tr>
+<td><code>flatMap(Function)</code></td>
+<td>Trasforma e "appiattisce" stream annidati</td>
+</tr>
+<tr>
+<td><code>sorted()</code> / <code>sorted(Comparator)</code></td>
+<td>Ordina</td>
+</tr>
+<tr>
+<td><code>distinct()</code></td>
+<td>Elimina duplicati (usa <code>equals</code>)</td>
+</tr>
+<tr>
+<td><code>limit(n)</code></td>
+<td>Tiene i primi n</td>
+</tr>
+<tr>
+<td><code>skip(n)</code></td>
+<td>Salta i primi n</td>
+</tr>
+<tr>
+<td><code>peek(Consumer)</code></td>
+<td>Side-effect per debug</td>
+</tr>
+<tr>
+<td><code>mapToInt/Long/Double</code></td>
+<td>Specializza in stream primitivi</td>
+</tr>
+</tbody>
+</table>
+<h3 id="operazioni-terminali">Operazioni terminali</h3>
+<table>
+<thead>
+<tr>
+<th>Op</th>
+<th>Cosa restituisce</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>collect(Collector)</code></td>
+<td><code>Collectors.toList()</code>, <code>.toSet()</code>, <code>.toMap(...)</code>, ...</td>
+</tr>
+<tr>
+<td><code>toList()</code> (Java 16+)</td>
+<td>List immutabile</td>
+</tr>
+<tr>
+<td><code>forEach(Consumer)</code></td>
+<td>void</td>
+</tr>
+<tr>
+<td><code>count()</code></td>
+<td>long</td>
+</tr>
+<tr>
+<td><code>min(Cmp)</code>, <code>max(Cmp)</code></td>
+<td><code>Optional&lt;T&gt;</code></td>
+</tr>
+<tr>
+<td><code>findFirst()</code>, <code>findAny()</code></td>
+<td><code>Optional&lt;T&gt;</code></td>
+</tr>
+<tr>
+<td><code>reduce(BinaryOperator)</code></td>
+<td><code>Optional&lt;T&gt;</code> o <code>T</code></td>
+</tr>
+<tr>
+<td><code>anyMatch / allMatch / noneMatch</code></td>
+<td>boolean</td>
+</tr>
+<tr>
+<td><code>sum / average</code> (su <code>IntStream</code>, ecc.)</td>
+<td>numero</td>
+</tr>
+</tbody>
+</table>
+<h3 id="esempi">Esempi</h3>
+<pre><code class="language-java">// Lista di nomi maiuscoli, ordinati alfabeticamente
+List&lt;String&gt; result = persone.stream()
+    .map(Persona::nome)
+    .map(String::toUpperCase)
+    .sorted()
+    .toList();
+
+// Mappa: città → lista di persone
+Map&lt;String, List&lt;Persona&gt;&gt; perCitta = persone.stream()
+    .collect(Collectors.groupingBy(Persona::citta));
+
+// Mappa: città → media età
+Map&lt;String, Double&gt; mediaPerCitta = persone.stream()
+    .collect(Collectors.groupingBy(
+        Persona::citta,
+        Collectors.averagingInt(Persona::eta)
+    ));
+
+// Unisci le città con virgola
+String csv = persone.stream()
+    .map(Persona::citta)
+    .distinct()
+    .sorted()
+    .collect(Collectors.joining(&quot;, &quot;));
+
+// Trova la persona più anziana
+Optional&lt;Persona&gt; piuAnziana = persone.stream()
+    .max(Comparator.comparingInt(Persona::eta));
+
+// Reduce: somma di età
+int totaleEta = persone.stream()
+    .mapToInt(Persona::eta)
+    .sum();
+</code></pre>
+<h3 id="flatmap-stream-di-stream-stream-piatto"><code>flatMap</code>: stream di stream → stream piatto</h3>
+<pre><code class="language-java">List&lt;List&lt;Integer&gt;&gt; nested = List.of(
+    List.of(1, 2, 3),
+    List.of(4, 5),
+    List.of(6, 7, 8)
+);
+List&lt;Integer&gt; piatto = nested.stream()
+    .flatMap(List::stream)
+    .toList();
+// [1, 2, 3, 4, 5, 6, 7, 8]
+</code></pre>
+<h3 id="stream-paralleli">Stream paralleli</h3>
+<pre><code class="language-java">long count = bigList.parallelStream()
+    .filter(predicato)
+    .count();
+</code></pre>
+<p>Usa fork-join pool comune. <strong>Non sempre più veloce</strong>: per operazioni leggere e dataset piccoli, l'overhead di splitting domina. Bench prima di adottare.</p>
+<blockquote>
+<p><strong>Attenzione</strong>: gli stream paralleli condividono il pool comune con tutto il resto dell'app (incluso Spring). Per task lunghi/CPU-intensive, considera un pool dedicato.</p>
+</blockquote>
+<h2 id="trappole-degli-stream">Trappole degli stream</h2>
+<ol>
+<li><strong>Stream consumati una sola volta</strong>:
+   <code>java
+   Stream&lt;X&gt; s = ...;
+   s.count();
+   s.toList();   // IllegalStateException</code></li>
+<li><strong>Side-effects in map/filter</strong>: pessima pratica. <code>peek</code> solo per debug.</li>
+<li><strong>Stato condiviso nei parallel stream</strong>: race condition garantita.</li>
+<li><strong><code>Collectors.toMap</code> con chiavi duplicate</strong>: lancia <code>IllegalStateException</code>. Usa la versione con merger:
+   <code>java
+   .collect(Collectors.toMap(k -&gt; k.id, k -&gt; k, (a, b) -&gt; a));</code></li>
+</ol>
+<h2 id="optionalt-alternativa-a-null"><code>Optional&lt;T&gt;</code>: alternativa a <code>null</code></h2>
+<pre><code class="language-java">Optional&lt;User&gt; u = repo.find(42);
+if (u.isPresent()) {
+    System.out.println(u.get().getName());
+}
+
+// più idiomatico:
+u.ifPresent(user -&gt; System.out.println(user.getName()));
+
+// trasforma
+String name = u.map(User::getName).orElse(&quot;anonimo&quot;);
+
+// se assente, eccezione
+User user = u.orElseThrow(() -&gt; new NotFoundException(&quot;user 42&quot;));
+</code></pre>
+<h3 id="regole-doro">Regole d'oro</h3>
+<ul>
+<li><strong>Non usare <code>Optional</code> come parametro di metodo o campo</strong>. Usalo come <strong>return type</strong> di metodi che potrebbero non trovare il risultato.</li>
+<li>Mai <code>optional.get()</code> senza prima <code>isPresent()</code> (lancia se vuoto). Preferisci <code>orElse</code>, <code>orElseThrow</code>, <code>ifPresent</code>.</li>
+<li>Mai <code>Optional&lt;List&lt;X&gt;&gt;</code>: restituisci <code>List&lt;X&gt;</code> vuota.</li>
+</ul>
+<h2 id="esercizi">Esercizi</h2>
+<details>
+<summary>Es 10.1 — Filtra e trasforma</summary>
+
+Da una `List<Persona>`, ottieni i nomi degli adulti in maiuscolo, ordinati.
+
+
+<pre><code class="language-java">List&lt;String&gt; r = persone.stream()
+    .filter(p -&gt; p.getEta() &gt;= 18)
+    .map(Persona::getNome)
+    .map(String::toUpperCase)
+    .sorted()
+    .toList();
+</code></pre>
+
+
+</details>
+
+<details>
+<summary>Es 10.2 — Group by + count</summary>
+
+Conta quante persone ci sono per ogni città.
+
+
+<pre><code class="language-java">Map&lt;String, Long&gt; count = persone.stream()
+    .collect(Collectors.groupingBy(Persona::citta, Collectors.counting()));
+</code></pre>
+
+
+</details>
+
+<details>
+<summary>Es 10.3 — Stream da file</summary>
+
+Conta le righe non vuote di un file.
+
+
+<pre><code class="language-java">try (Stream&lt;String&gt; lines = Files.lines(Path.of(&quot;data.txt&quot;))) {
+    long n = lines.filter(s -&gt; !s.isBlank()).count();
+    System.out.println(n);
+}
+</code></pre>
+
+
+`Files.lines` ritorna uno stream "lazy" — richiede `try-with-resources`.
+
+</details>
+
+<details>
+<summary>Es 10.4 — Optional chaining</summary>
+
+
+<pre><code class="language-java">public record Order(Optional&lt;Customer&gt; customer) {}
+public record Customer(Optional&lt;Address&gt; address) {}
+public record Address(String city) {}
+
+String city = order
+    .flatMap(Order::customer)
+    .flatMap(Customer::address)
+    .map(Address::city)
+    .orElse(&quot;sconosciuta&quot;);
+</code></pre>
+
+
+`flatMap` per concatenare `Optional`. (`map` con `Optional` darebbe `Optional<Optional<...>>`.)
+
+</details>
+
+<details>
+<summary>Es 10.5 — Custom collector</summary>
+
+Costruisci un collector che concatena le stringhe alternando virgole e punti.
+
+
+<pre><code class="language-java">String result = Stream.of(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;)
+    .collect(Collectors.joining(&quot;, &quot;));
+// &quot;a, b, c, d&quot;
+</code></pre>
+
+
+Vedi `Collectors.joining(", ", "[", "]")` per prefisso/suffisso.
+
+</details>
+
+<h2 id="cosa-devi-portarti-via">Cosa devi portarti via</h2>
+<ul>
+<li><strong>Lambda</strong> = funzione anonima. <strong>Method reference</strong> la rende più compatta.</li>
+<li><strong>Stream</strong>: pipeline lazy, intermedie + terminale.</li>
+<li><code>filter</code>, <code>map</code>, <code>flatMap</code>, <code>collect(groupingBy/toList/joining)</code>, <code>reduce</code>.</li>
+<li><code>Optional</code> solo come <strong>return type</strong> quando il valore può mancare. Mai come campo o parametro.</li>
+<li>Stream paralleli: utili ma da bench. Mai con stato condiviso.</li>
+</ul>
+<p>Prossimo: I/O e NIO.2.</p>
+      <nav class="pager">
+<a href="09-collections.html" class="prev"><span class="label">← Precedente</span><span class="title">Collections: List, Set, Map, Queue, complessità, scelta della struttura</span></a>
+<a href="11-io-nio.html" class="next"><span class="label">Successivo →</span><span class="title">I/O e NIO.2: File, Path, channels, buffer</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Java + Spring Zero to Hero</strong> — percorso completo da Java base a Spring Batch in produzione.</p><p>Materiale a scopo educativo. Codice sotto licenza MIT; usalo liberamente nei tuoi progetti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body, {delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true, background: '#15191e', primaryColor: '#1d2530',
+      primaryTextColor: '#eef1f5', primaryBorderColor: '#f89820',
+      lineColor: '#6db33f', secondaryColor: '#1a1f25', tertiaryColor: '#222a33',
+      mainBkg: '#1d2530', nodeBorder: '#f89820', clusterBkg: '#0f1318',
+      clusterBorder: '#2a3340', titleColor: '#f89820',
+      edgeLabelBackground: '#0f1318', textColor: '#eef1f5',
+      labelTextColor: '#eef1f5', actorBkg: '#1d2530', actorBorder: '#f89820',
+      actorTextColor: '#f89820', actorLineColor: '#6db33f',
+      signalColor: '#eef1f5', signalTextColor: '#eef1f5',
+      labelBoxBkgColor: '#1d2530', labelBoxBorderColor: '#f89820',
+      noteBkgColor: '#fff6a8', noteTextColor: '#0f1318', noteBorderColor: '#fff6a8',
+      activationBkgColor: '#1d2530', activationBorderColor: '#f89820',
+      sequenceNumberColor: '#0f1318'
+    },
+    flowchart: { curve: 'basis', padding: 16 },
+    sequence: { mirrorActors: false, bottomMarginAdj: 10 },
+    fontFamily: 'JetBrains Mono, Cascadia Code, Consolas, monospace'
+  });
+</script>
+</body>
+</html>

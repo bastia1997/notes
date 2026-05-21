@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>Progetto finale guidato: ETL bancario notturno — Java + Spring Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">☕</div>
+      <div>
+        <div class="brand-title">JAVA · SPRING</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="10" height="20" fill="#009246"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ce2b37"/></svg> IT</span><a href="../en/pages/45-final-project-etl.html" class="lang-link" title="Switch to English"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="30" height="20" fill="#012169"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#fff" stroke-width="3"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#c8102e" stroke-width="1.5"/><path d="M15,0 v20 M0,10 h30" stroke="#fff" stroke-width="5"/><path d="M15,0 v20 M0,10 h30" stroke="#c8102e" stroke-width="3"/></svg> EN</a></div>
+  </div>
+  <div class="search-wrap">
+    <div class="search-row">
+      <div class="search-inputwrap">
+        <span class="search-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"/>
+            <line x1="20" y1="20" x2="16.65" y2="16.65"/>
+          </svg>
+        </span>
+        <input class="search-input" id="search-input" type="text" placeholder="cerca... (premi /)" autocomplete="off" aria-label="Search">
+        <button class="search-clear" id="search-clear" type="button" aria-label="Clear" title="Clear">&times;</button>
+      </div>
+      <button class="search-btn" id="search-btn" type="button" aria-label="CERCA" title="CERCA">CERCA</button>
+    </div>
+    <div class="search-hits" id="search-hits" role="listbox"></div>
+  </div>
+  <div class="sidebar-nav">
+    <nav class="nav-section">
+      <div class="nav-section-title">Percorso</div>
+      <ul class="nav-list">
+        <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+        <li class="nav-item"><a href="../pages/00-percorso-e-mindset.html" class=""><span class="num">00</span>Il percorso e la giusta mentalità</a></li><li class="nav-item"><a href="../pages/01-introduzione-java.html" class=""><span class="num">01</span>Java: cos&#x27;è davvero, JVM/JRE/JDK, primo programma</a></li><li class="nav-item"><a href="../pages/02-sintassi-base.html" class=""><span class="num">02</span>Sintassi di base: tipi, variabili, operatori, controllo di flusso</a></li><li class="nav-item"><a href="../pages/03-stringhe-array-io.html" class=""><span class="num">03</span>Stringhe, array, I/O da console</a></li><li class="nav-item"><a href="../pages/04-oop-classi-oggetti.html" class=""><span class="num">04</span>OOP I — Classi, oggetti, costruttori, this, package, visibilità</a></li><li class="nav-item"><a href="../pages/05-oop-ereditarieta-polimorfismo.html" class=""><span class="num">05</span>OOP II — Ereditarietà, polimorfismo, interfacce, classi astratte</a></li><li class="nav-item"><a href="../pages/06-equals-hashcode-immutabilita.html" class=""><span class="num">06</span>OOP III — equals, hashCode, toString, immutabilità, record</a></li><li class="nav-item"><a href="../pages/07-eccezioni.html" class=""><span class="num">07</span>Eccezioni: checked vs unchecked, try-with-resources, custom</a></li><li class="nav-item"><a href="../pages/08-generics.html" class=""><span class="num">08</span>Generics: tipi parametrici, PECS, type erasure, wildcards</a></li><li class="nav-item"><a href="../pages/09-collections.html" class=""><span class="num">09</span>Collections: List, Set, Map, Queue, complessità, scelta della struttura</a></li><li class="nav-item"><a href="../pages/10-stream-lambda-optional.html" class=""><span class="num">10</span>Stream API, lambda, functional interfaces, Optional</a></li><li class="nav-item"><a href="../pages/11-io-nio.html" class=""><span class="num">11</span>I/O e NIO.2: File, Path, channels, buffer</a></li><li class="nav-item"><a href="../pages/12-concurrency-thread.html" class=""><span class="num">12</span>Concurrency I — Thread, sincronizzazione, volatile, Java Memory Model</a></li><li class="nav-item"><a href="../pages/13-executor-future-completablefuture.html" class=""><span class="num">13</span>Concurrency II — ExecutorService, Future, CompletableFuture</a></li><li class="nav-item"><a href="../pages/14-concurrency-jucconcurrent.html" class=""><span class="num">14</span>Concurrency III — java.util.concurrent: locks, atomics, concurrent collections</a></li><li class="nav-item"><a href="../pages/15-jvm-internals.html" class=""><span class="num">15</span>JVM internals: classloader, bytecode, runtime data areas, JIT</a></li><li class="nav-item"><a href="../pages/16-memoria-gc.html" class=""><span class="num">16</span>Memoria e garbage collection: G1, ZGC, Shenandoah</a></li><li class="nav-item"><a href="../pages/17-profiling-jfr.html" class=""><span class="num">17</span>Profiling: JFR, async-profiler, jstack, heap dump, jcmd</a></li><li class="nav-item"><a href="../pages/18-java-moderno.html" class=""><span class="num">18</span>Java moderno: dal 8 al 21 — features chiave</a></li><li class="nav-item"><a href="../pages/19-jdbc.html" class=""><span class="num">19</span>JDBC: connessione, PreparedStatement, transazioni, isolation levels</a></li><li class="nav-item"><a href="../pages/20-jpa-hibernate.html" class=""><span class="num">20</span>JPA / Hibernate: entità, relazioni, lazy/eager, N+1, cache</a></li><li class="nav-item"><a href="../pages/21-sql-essenziale.html" class=""><span class="num">21</span>SQL essenziale per chi sviluppa in Java</a></li><li class="nav-item"><a href="../pages/22-spring-intro-ioc-di.html" class=""><span class="num">22</span>Spring intro: IoC, DI, ApplicationContext, BeanFactory</a></li><li class="nav-item"><a href="../pages/23-spring-beans-lifecycle.html" class=""><span class="num">23</span>Bean: scopes, lifecycle, BeanPostProcessor, FactoryBean</a></li><li class="nav-item"><a href="../pages/24-spring-configurazione.html" class=""><span class="num">24</span>Configurazione: Java config, @ComponentScan, profili, conditionals, properties</a></li><li class="nav-item"><a href="../pages/25-spring-aop-transactional.html" class=""><span class="num">25</span>AOP, proxy, @Transactional: cosa accade davvero</a></li><li class="nav-item"><a href="../pages/26-spring-boot.html" class=""><span class="num">26</span>Spring Boot: auto-configuration, starters, Actuator</a></li><li class="nav-item"><a href="../pages/27-spring-data-jpa.html" class=""><span class="num">27</span>Spring Data JPA: Repository, derived queries, paginazione, Specification</a></li><li class="nav-item"><a href="../pages/28-spring-mvc-rest.html" class=""><span class="num">28</span>Spring MVC: DispatcherServlet, controller, REST endpoint</a></li><li class="nav-item"><a href="../pages/29-rest-openapi-hateoas.html" class=""><span class="num">29</span>REST: best practice, OpenAPI/Swagger, HATEOAS, versionamento</a></li><li class="nav-item"><a href="../pages/30-spring-webflux.html" class=""><span class="num">30</span>Spring WebFlux + Reactor: Mono, Flux, programmazione reattiva</a></li><li class="nav-item"><a href="../pages/31-spring-security.html" class=""><span class="num">31</span>Spring Security: filter chain, autenticazione, autorizzazione, JWT, OAuth2</a></li><li class="nav-item"><a href="../pages/32-spring-cloud.html" class=""><span class="num">32</span>Spring Cloud: Config Server, Discovery, Gateway, Resilience4j</a></li><li class="nav-item"><a href="../pages/33-testing.html" class=""><span class="num">33</span>Testing: JUnit 5, Mockito, MockMvc, Testcontainers</a></li><li class="nav-item"><a href="../pages/34-spring-batch-intro.html" class=""><span class="num">34</span>Spring Batch intro: domain model, Job, Step, primo batch</a></li><li class="nav-item"><a href="../pages/35-spring-batch-jobrepository.html" class=""><span class="num">35</span>JobRepository, JobLauncher, schema dei metadati</a></li><li class="nav-item"><a href="../pages/36-spring-batch-chunk-skip-retry.html" class=""><span class="num">36</span>Chunk processing: commit interval, skip, retry, fault tolerance</a></li><li class="nav-item"><a href="../pages/37-spring-batch-tasklet-flow.html" class=""><span class="num">37</span>Tasklet vs Chunk; flow control: decisioni, split, conditional</a></li><li class="nav-item"><a href="../pages/38-spring-batch-itemreader.html" class=""><span class="num">38</span>ItemReader: flat file, XML/JSON, JDBC cursor/paging, JPA, multi-resource</a></li><li class="nav-item"><a href="../pages/39-spring-batch-itemwriter.html" class=""><span class="num">39</span>ItemWriter: file, JDBC, JPA, composite, classifier, batch insert</a></li><li class="nav-item"><a href="../pages/40-spring-batch-scaling-partitioning.html" class=""><span class="num">40</span>Scaling: multi-threaded step, partitioning, remote chunking/partitioning</a></li><li class="nav-item"><a href="../pages/41-spring-batch-listeners-restart-k8s.html" class=""><span class="num">41</span>Listeners, restart, monitoring, integrazione con Spring Boot e Kubernetes</a></li><li class="nav-item"><a href="../pages/42-design-patterns.html" class=""><span class="num">42</span>Design pattern in Java/Spring: GoF + DDD-lite</a></li><li class="nav-item"><a href="../pages/43-performance-observability.html" class=""><span class="num">43</span>Performance tuning e observability production-grade</a></li><li class="nav-item"><a href="../pages/44-esercizi-sintesi.html" class=""><span class="num">44</span>50 esercizi cumulativi: dalla sintassi a Spring Batch</a></li><li class="nav-item"><a href="../pages/45-progetto-finale-etl.html" class="active"><span class="num">45</span>Progetto finale guidato: ETL bancario notturno</a></li>
+      </ul>
+    </nav>
+  </div>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Esercizi finali</span>
+        <span>Sezione 45 di 45</span>
+        <span class="level-tag level-exp">Livello: esperto</span>
+      </div>
+      <h1>Progetto finale guidato: ETL bancario notturno</h1>
+      <p class="summary">Sviluppa un ETL bancario completo che integra TUTTO il percorso: ingestion da file/API, Spring Batch con partitioning, scrittura su Postgres, REST per monitoring, JWT auth, metriche Prometheus, deploy con Docker, schedulazione, test integrati.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Esercizi finali</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>Tutte le sezioni</li></ul>
+  <div class="label">Strumenti</div>
+  <ul class="source-list"><li>JDK 21</li><li>Spring Boot 3.x</li><li>Postgres</li><li>Docker</li><li>Testcontainers</li></ul>
+</div>
+      <h2 id="lo-scenario">Lo scenario</h2>
+<p>Sei nel team di una banca italiana. Ogni notte arrivano file CSV con le <strong>transazioni del giorno</strong> da 5 filiali. Devi:</p>
+<ol>
+<li>Scaricarli da un endpoint (simulato locale).</li>
+<li>Validarli (campi obbligatori, codici ABI corretti, importi positivi).</li>
+<li>Categorizzarli (entrata/uscita, in base al segno).</li>
+<li>Caricarli su Postgres in tabella <code>transactions</code>.</li>
+<li>Aggiornare un'aggregata <code>daily_summary(branch, date, total_in, total_out)</code>.</li>
+<li>Notificare via Slack se ci sono errori.</li>
+<li>Esporre REST per:
+   - Vedere lo stato dei job (<code>GET /batch/runs</code>).
+   - Lanciare manualmente (<code>POST /batch/run</code>).
+   - Consultare le <code>daily_summary</code> (<code>GET /summary?branch=...&amp;date=...</code>).</li>
+<li>JWT auth sui REST.</li>
+<li>Metriche Prometheus.</li>
+<li>Dockerizza e deploya.</li>
+</ol>
+<h2 id="struttura-del-progetto">Struttura del progetto</h2>
+<pre><code>etl-banca/
+├── pom.xml
+├── docker-compose.yml
+├── src/main/java/it/zth/etl/
+│   ├── EtlApp.java                  # @SpringBootApplication
+│   ├── domain/
+│   │   ├── Transaction.java         # @Entity
+│   │   ├── DailySummary.java        # @Entity
+│   │   └── Branch.java              # enum
+│   ├── batch/
+│   │   ├── BatchConfig.java         # Job + Step config
+│   │   ├── TxReader.java            # custom reader multi-CSV
+│   │   ├── TxProcessor.java         # validation + categorization
+│   │   ├── TxWriter.java            # JdbcBatchItemWriter
+│   │   ├── SummaryStepConfig.java   # aggregation step
+│   │   └── BranchPartitioner.java
+│   ├── repo/
+│   │   ├── TransactionRepository.java
+│   │   └── DailySummaryRepository.java
+│   ├── api/
+│   │   ├── BatchController.java
+│   │   ├── SummaryController.java
+│   │   └── ErrorHandler.java
+│   ├── notify/
+│   │   └── SlackNotifier.java
+│   ├── security/
+│   │   └── SecurityConfig.java
+│   └── ...
+└── src/test/java/...
+</code></pre>
+<h2 id="step-principali">Step principali</h2>
+<h3 id="1-pom">1. Pom</h3>
+<pre><code class="language-xml">&lt;dependencies&gt;
+  &lt;dependency&gt;...spring-boot-starter-batch&lt;/dependency&gt;
+  &lt;dependency&gt;...spring-boot-starter-data-jpa&lt;/dependency&gt;
+  &lt;dependency&gt;...spring-boot-starter-web&lt;/dependency&gt;
+  &lt;dependency&gt;...spring-boot-starter-security&lt;/dependency&gt;
+  &lt;dependency&gt;...spring-boot-starter-oauth2-resource-server&lt;/dependency&gt;
+  &lt;dependency&gt;...spring-boot-starter-actuator&lt;/dependency&gt;
+  &lt;dependency&gt;...spring-boot-starter-validation&lt;/dependency&gt;
+  &lt;dependency&gt;...micrometer-registry-prometheus&lt;/dependency&gt;
+  &lt;dependency&gt;...postgresql&lt;/dependency&gt;
+  &lt;dependency&gt;...springdoc-openapi-starter-webmvc-ui&lt;/dependency&gt;
+  &lt;!-- test --&gt;
+  &lt;dependency&gt;...spring-boot-starter-test&lt;/dependency&gt;
+  &lt;dependency&gt;...spring-batch-test&lt;/dependency&gt;
+  &lt;dependency&gt;...testcontainers (postgresql, junit-jupiter)&lt;/dependency&gt;
+&lt;/dependencies&gt;
+</code></pre>
+<h3 id="2-entita">2. Entità</h3>
+<pre><code class="language-java">@Entity
+@Table(name = &quot;transactions&quot;)
+public class Transaction {
+    @Id @GeneratedValue Long id;
+    @Column(length = 4) String branch;          // &quot;MI01&quot;, &quot;RM02&quot;, ...
+    LocalDate date;
+    String accountFrom;
+    String accountTo;
+    BigDecimal amount;
+    String type;                                 // &quot;IN&quot; o &quot;OUT&quot;
+    @Column(length = 200) String description;
+    Instant createdAt = Instant.now();
+}
+
+@Entity
+@Table(name = &quot;daily_summary&quot;,
+    uniqueConstraints = @UniqueConstraint(columnNames = {&quot;branch&quot;, &quot;date&quot;}))
+public class DailySummary {
+    @Id @GeneratedValue Long id;
+    String branch;
+    LocalDate date;
+    BigDecimal totalIn;
+    BigDecimal totalOut;
+    long count;
+}
+</code></pre>
+<h3 id="3-batch-config-job-step">3. Batch config (Job + Step)</h3>
+<pre><code class="language-java">@Configuration
+public class BatchConfig {
+
+    @Bean
+    public Job nightlyEtlJob(JobRepository jr, Step ingestStep, Step summaryStep,
+                              JobNotifyListener notifier) {
+        return new JobBuilder(&quot;nightlyEtl&quot;, jr)
+            .listener(notifier)
+            .start(ingestStep)
+            .next(summaryStep)
+            .build();
+    }
+
+    @Bean
+    public Step ingestStep(JobRepository jr, PlatformTransactionManager tx,
+                           Step ingestSlaveStep, BranchPartitioner partitioner) {
+        return new StepBuilder(&quot;ingestMaster&quot;, jr)
+            .partitioner(&quot;ingestSlave&quot;, partitioner)
+            .step(ingestSlaveStep)
+            .taskExecutor(new SimpleAsyncTaskExecutor(&quot;part-&quot;))
+            .gridSize(5)
+            .build();
+    }
+
+    @Bean
+    public Step ingestSlaveStep(JobRepository jr, PlatformTransactionManager tx,
+                                 ItemReader&lt;TxRow&gt; reader,
+                                 ItemProcessor&lt;TxRow, Transaction&gt; processor,
+                                 ItemWriter&lt;Transaction&gt; writer) {
+        return new StepBuilder(&quot;ingestSlave&quot;, jr)
+            .&lt;TxRow, Transaction&gt;chunk(500, tx)
+            .reader(reader)
+            .processor(processor)
+            .writer(writer)
+            .faultTolerant()
+            .skipLimit(100)
+            .skip(InvalidTransactionException.class)
+            .listener(skipListener)
+            .build();
+    }
+}
+</code></pre>
+<h3 id="4-partitioner-per-filiale">4. Partitioner per filiale</h3>
+<pre><code class="language-java">@Component
+public class BranchPartitioner implements Partitioner {
+    @Override
+    public Map&lt;String, ExecutionContext&gt; partition(int gridSize) {
+        Map&lt;String, ExecutionContext&gt; m = new HashMap&lt;&gt;();
+        for (String b : List.of(&quot;MI01&quot;, &quot;MI02&quot;, &quot;RM01&quot;, &quot;TO01&quot;, &quot;NA01&quot;)) {
+            ExecutionContext ec = new ExecutionContext();
+            ec.putString(&quot;branch&quot;, b);
+            ec.putString(&quot;file&quot;, &quot;input/tx-&quot; + b + &quot;.csv&quot;);
+            m.put(&quot;p-&quot; + b, ec);
+        }
+        return m;
+    }
+}
+</code></pre>
+<h3 id="5-reader-stepscoped">5. Reader stepscoped</h3>
+<pre><code class="language-java">@Bean
+@StepScope
+public FlatFileItemReader&lt;TxRow&gt; reader(@Value(&quot;#{stepExecutionContext['file']}&quot;) String file) {
+    return new FlatFileItemReaderBuilder&lt;TxRow&gt;()
+        .name(&quot;txReader&quot;)
+        .resource(new FileSystemResource(file))
+        .linesToSkip(1)
+        .delimited().delimiter(&quot;;&quot;)
+        .names(&quot;branch&quot;, &quot;date&quot;, &quot;from&quot;, &quot;to&quot;, &quot;amount&quot;, &quot;description&quot;)
+        .targetType(TxRow.class)
+        .build();
+}
+</code></pre>
+<h3 id="6-processor">6. Processor</h3>
+<pre><code class="language-java">@Component
+public class TxProcessor implements ItemProcessor&lt;TxRow, Transaction&gt; {
+    @Override
+    public Transaction process(TxRow row) {
+        if (row.amount() == null || row.amount().compareTo(BigDecimal.ZERO) == 0) {
+            throw new InvalidTransactionException(&quot;amount nullo o zero&quot;);
+        }
+        if (!row.branch().matches(&quot;^[A-Z]{2}\\d{2}$&quot;)) {
+            throw new InvalidTransactionException(&quot;filiale invalida: &quot; + row.branch());
+        }
+        Transaction t = new Transaction();
+        t.setBranch(row.branch());
+        t.setDate(row.date());
+        t.setAccountFrom(row.from());
+        t.setAccountTo(row.to());
+        t.setAmount(row.amount().abs());
+        t.setType(row.amount().signum() &gt; 0 ? &quot;IN&quot; : &quot;OUT&quot;);
+        t.setDescription(row.description());
+        return t;
+    }
+}
+</code></pre>
+<h3 id="7-writer-jdbc-batch">7. Writer JDBC batch</h3>
+<pre><code class="language-java">@Bean
+public JdbcBatchItemWriter&lt;Transaction&gt; writer(DataSource ds) {
+    return new JdbcBatchItemWriterBuilder&lt;Transaction&gt;()
+        .dataSource(ds)
+        .sql(&quot;&quot;&quot;
+            INSERT INTO transactions(branch, date, account_from, account_to,
+                                       amount, type, description, created_at)
+            VALUES (:branch, :date, :accountFrom, :accountTo, :amount, :type, :description, NOW())
+            &quot;&quot;&quot;)
+        .beanMapped()
+        .build();
+}
+</code></pre>
+<h3 id="8-step-di-aggregazione">8. Step di aggregazione</h3>
+<pre><code class="language-java">@Bean
+public Step summaryStep(JobRepository jr, PlatformTransactionManager tx,
+                         JdbcTemplate jdbc) {
+    return new StepBuilder(&quot;summary&quot;, jr)
+        .tasklet((c, ctx) -&gt; {
+            jdbc.update(&quot;&quot;&quot;
+                INSERT INTO daily_summary(branch, date, total_in, total_out, count)
+                SELECT branch, date,
+                    SUM(CASE WHEN type = 'IN' THEN amount ELSE 0 END),
+                    SUM(CASE WHEN type = 'OUT' THEN amount ELSE 0 END),
+                    COUNT(*)
+                FROM transactions
+                WHERE created_at &gt;= NOW() - INTERVAL '1 hour'
+                GROUP BY branch, date
+                ON CONFLICT (branch, date)
+                DO UPDATE SET total_in = EXCLUDED.total_in,
+                              total_out = EXCLUDED.total_out,
+                              count = EXCLUDED.count;
+                &quot;&quot;&quot;);
+            return RepeatStatus.FINISHED;
+        }, tx)
+        .build();
+}
+</code></pre>
+<h3 id="9-rest-security">9. REST + Security</h3>
+<pre><code class="language-java">@RestController
+@RequestMapping(&quot;/batch&quot;)
+@PreAuthorize(&quot;hasAuthority('SCOPE_batch:admin')&quot;)
+public class BatchController {
+    private final JobLauncher launcher;
+    private final Job nightlyEtlJob;
+    private final JobExplorer jobExplorer;
+
+    @PostMapping(&quot;/run&quot;)
+    public Map&lt;String, Object&gt; run() throws Exception {
+        var p = new JobParametersBuilder()
+            .addLocalDateTime(&quot;ts&quot;, LocalDateTime.now())
+            .toJobParameters();
+        var exec = launcher.run(nightlyEtlJob, p);
+        return Map.of(&quot;id&quot;, exec.getId(), &quot;status&quot;, exec.getStatus());
+    }
+
+    @GetMapping(&quot;/runs&quot;)
+    public List&lt;RunDto&gt; recentRuns() {
+        return jobExplorer.getJobInstances(&quot;nightlyEtl&quot;, 0, 20).stream()
+            .flatMap(ji -&gt; jobExplorer.getJobExecutions(ji).stream())
+            .map(e -&gt; new RunDto(e.getId(), e.getStatus().name(),
+                                 e.getStartTime(), e.getEndTime()))
+            .sorted(Comparator.comparing(RunDto::id).reversed())
+            .toList();
+    }
+}
+
+public record RunDto(Long id, String status, LocalDateTime start, LocalDateTime end) {}
+</code></pre>
+<pre><code class="language-java">@Configuration
+@EnableWebSecurity
+@EnableMethodSecurity
+public class SecurityConfig {
+    @Bean
+    public SecurityFilterChain chain(HttpSecurity http) throws Exception {
+        return http
+            .csrf(c -&gt; c.disable())
+            .authorizeHttpRequests(a -&gt; a
+                .requestMatchers(&quot;/actuator/health&quot;, &quot;/swagger-ui/**&quot;, &quot;/v3/api-docs/**&quot;).permitAll()
+                .anyRequest().authenticated())
+            .oauth2ResourceServer(o -&gt; o.jwt(Customizer.withDefaults()))
+            .build();
+    }
+}
+</code></pre>
+<h3 id="10-schedulazione">10. Schedulazione</h3>
+<pre><code class="language-java">@EnableScheduling
+@Component
+public class Scheduler {
+
+    @Scheduled(cron = &quot;0 0 2 * * *&quot;)
+    public void runNightly() throws Exception {
+        launcher.run(nightlyEtlJob, new JobParametersBuilder()
+            .addLocalDate(&quot;date&quot;, LocalDate.now())
+            .toJobParameters());
+    }
+}
+</code></pre>
+<h3 id="11-notifier">11. Notifier</h3>
+<pre><code class="language-java">@Component
+public class JobNotifyListener implements JobExecutionListener {
+    private final SlackNotifier slack;
+
+    @Override
+    public void afterJob(JobExecution exec) {
+        if (exec.getStatus() != BatchStatus.COMPLETED) {
+            slack.send(&quot;:warning: Job &quot; + exec.getJobInstance().getJobName()
+                + &quot; ended &quot; + exec.getStatus()
+                + &quot; — errors: &quot; + exec.getAllFailureExceptions());
+        }
+    }
+}
+</code></pre>
+<h3 id="12-docker">12. Docker</h3>
+<p><code>Dockerfile</code>:</p>
+<pre><code class="language-dockerfile">FROM eclipse-temurin:21-jre-alpine
+WORKDIR /app
+COPY target/etl-banca.jar app.jar
+EXPOSE 8080
+ENTRYPOINT [&quot;java&quot;,&quot;-Xms512m&quot;,&quot;-Xmx1g&quot;,&quot;-XX:+HeapDumpOnOutOfMemoryError&quot;,&quot;-XX:+ExitOnOutOfMemoryError&quot;,&quot;-jar&quot;,&quot;app.jar&quot;]
+</code></pre>
+<p><code>docker-compose.yml</code>:</p>
+<pre><code class="language-yaml">services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: etl
+      POSTGRES_USER: etl
+      POSTGRES_PASSWORD: etl
+    ports: [&quot;5432:5432&quot;]
+    volumes: [pgdata:/var/lib/postgresql/data]
+
+  prometheus:
+    image: prom/prometheus
+    ports: [&quot;9090:9090&quot;]
+    volumes: [./prometheus.yml:/etc/prometheus/prometheus.yml]
+
+  grafana:
+    image: grafana/grafana
+    ports: [&quot;3000:3000&quot;]
+
+  etl:
+    build: .
+    depends_on: [db]
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/etl
+      SPRING_DATASOURCE_USERNAME: etl
+      SPRING_DATASOURCE_PASSWORD: etl
+    ports: [&quot;8080:8080&quot;]
+
+volumes:
+  pgdata:
+</code></pre>
+<h3 id="13-test-integrati">13. Test integrati</h3>
+<pre><code class="language-java">@SpringBootTest
+@SpringBatchTest
+@Testcontainers
+class NightlyEtlJobTest {
+
+    @Container
+    @ServiceConnection
+    static PostgreSQLContainer&lt;?&gt; postgres = new PostgreSQLContainer&lt;&gt;(&quot;postgres:16&quot;);
+
+    @Autowired JobLauncherTestUtils utils;
+    @Autowired TransactionRepository txRepo;
+
+    @Test
+    void ingest_all_branches() throws Exception {
+        // i CSV di test sono in src/test/resources/input/
+        JobExecution exec = utils.launchJob();
+        assertThat(exec.getStatus()).isEqualTo(BatchStatus.COMPLETED);
+        assertThat(txRepo.count()).isEqualTo(EXPECTED_TOTAL);
+    }
+}
+</code></pre>
+<h2 id="cosa-fare-per-consegnare-il-progetto">Cosa fare per consegnare il progetto</h2>
+<ol>
+<li>Cloni o crei la struttura sopra.</li>
+<li>Setup DB con <code>docker-compose up db</code>.</li>
+<li>Schema iniziale con <strong>Flyway</strong> in <code>src/main/resources/db/migration/V1__init.sql</code>.</li>
+<li>Implementa la logica step by step.</li>
+<li>Testa ogni step da solo (<code>@SpringBatchTest</code>).</li>
+<li>Test integrato end-to-end con Testcontainers.</li>
+<li><code>docker-compose up</code> per girare tutto insieme.</li>
+<li>Apri <code>http://localhost:8080/swagger-ui.html</code> per testare l'API.</li>
+<li>Apri <code>http://localhost:9090</code> per Prometheus, <code>http://localhost:3000</code> per Grafana.</li>
+<li>Configura <code>Scheduler</code> o lancia manualmente da REST.</li>
+</ol>
+<h2 id="estensioni-livello-senior">Estensioni (livello senior)</h2>
+<ul>
+<li><strong>Idempotency</strong>: usa <code>INSERT ... ON CONFLICT</code> su <code>transactions(branch, source_tx_id)</code>.</li>
+<li><strong>Restart-safe</strong>: il job rilanciato non duplica.</li>
+<li><strong>Multi-tenant</strong>: ogni cliente ha le sue tabelle / schema.</li>
+<li><strong>Audit trail</strong>: ogni modifica scrive su <code>audit_log</code>.</li>
+<li><strong>Reconciliation</strong>: confronto giornaliero con file della banca centrale.</li>
+<li><strong>Reactive notifications</strong>: SSE su <code>/runs/{id}/stream</code> per vedere il progresso del job in tempo reale.</li>
+<li><strong>Multi-region</strong>: due cluster K8s, ogni transazione replicata su entrambi.</li>
+</ul>
+<h2 id="cosa-hai-dimostrato-di-saper-fare">Cosa hai dimostrato di saper fare</h2>
+<p>Se sei arrivato qui, hai integrato:</p>
+<ul>
+<li>Java moderno (record, sealed, switch espressione).</li>
+<li>JVM tuning di base.</li>
+<li>JDBC, JPA, indici SQL.</li>
+<li>Spring Core (DI, AOP, transazioni).</li>
+<li>Spring Boot + Actuator.</li>
+<li>Spring Data JPA + Specifications.</li>
+<li>Spring MVC + validation + OpenAPI.</li>
+<li>Spring Security con JWT.</li>
+<li>Spring Batch profondo: partitioning, skip, restart, listener.</li>
+<li>Metriche Micrometer + Prometheus.</li>
+<li>Test integrati con Testcontainers.</li>
+<li>Docker + docker-compose.</li>
+</ul>
+<p>Sei pronto per il ruolo. <strong>Congratulazioni</strong>: hai chiuso il percorso.</p>
+      <nav class="pager">
+<a href="44-esercizi-sintesi.html" class="prev"><span class="label">← Precedente</span><span class="title">50 esercizi cumulativi: dalla sintassi a Spring Batch</span></a>
+<a href="../index.html" class="next"><span class="label">↩ Torna alla home</span><span class="title">Indice generale</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Java + Spring Zero to Hero</strong> — percorso completo da Java base a Spring Batch in produzione.</p><p>Materiale a scopo educativo. Codice sotto licenza MIT; usalo liberamente nei tuoi progetti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body, {delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true, background: '#15191e', primaryColor: '#1d2530',
+      primaryTextColor: '#eef1f5', primaryBorderColor: '#f89820',
+      lineColor: '#6db33f', secondaryColor: '#1a1f25', tertiaryColor: '#222a33',
+      mainBkg: '#1d2530', nodeBorder: '#f89820', clusterBkg: '#0f1318',
+      clusterBorder: '#2a3340', titleColor: '#f89820',
+      edgeLabelBackground: '#0f1318', textColor: '#eef1f5',
+      labelTextColor: '#eef1f5', actorBkg: '#1d2530', actorBorder: '#f89820',
+      actorTextColor: '#f89820', actorLineColor: '#6db33f',
+      signalColor: '#eef1f5', signalTextColor: '#eef1f5',
+      labelBoxBkgColor: '#1d2530', labelBoxBorderColor: '#f89820',
+      noteBkgColor: '#fff6a8', noteTextColor: '#0f1318', noteBorderColor: '#fff6a8',
+      activationBkgColor: '#1d2530', activationBorderColor: '#f89820',
+      sequenceNumberColor: '#0f1318'
+    },
+    flowchart: { curve: 'basis', padding: 16 },
+    sequence: { mirrorActors: false, bottomMarginAdj: 10 },
+    fontFamily: 'JetBrains Mono, Cascadia Code, Consolas, monospace'
+  });
+</script>
+</body>
+</html>

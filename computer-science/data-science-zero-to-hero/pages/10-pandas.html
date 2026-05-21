@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pandas: il coltellino svizzero — Data Science Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#3a4a7a',primaryTextColor:'#e8eef0',primaryBorderColor:'#5a6aa0',lineColor:'#8a9499',background:'#11171a'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">Σ</div>
+      <div>
+        <div class="brand-title">DATA SCIENCE</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">🇮🇹 IT</span><a href="../en/pages/10-pandas.html" class="lang-link" title="Switch to English">🇬🇧 EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-cos-e-data-science.html" class=""><span class="num">01</span>Cos&#x27;è la data science (e cosa non è)</a></li><li class="nav-item"><a href="../pages/02-python-per-data-science.html" class=""><span class="num">02</span>Python per data science: setup professionale</a></li><li class="nav-item"><a href="../pages/02b-matematica-essenziale.html" class=""><span class="num">02b</span>Matematica del liceo che ti serve davvero</a></li><li class="nav-item"><a href="../pages/03-algebra-lineare.html" class=""><span class="num">03</span>Algebra lineare per data scientist</a></li><li class="nav-item"><a href="../pages/04-calcolo-ottimizzazione.html" class=""><span class="num">04</span>Calcolo, gradiente e ottimizzazione</a></li><li class="nav-item"><a href="../pages/05-probabilita.html" class=""><span class="num">05</span>Probabilità: la lingua dell&#x27;incertezza</a></li><li class="nav-item"><a href="../pages/06-statistica-descrittiva.html" class=""><span class="num">06</span>Statistica descrittiva</a></li><li class="nav-item"><a href="../pages/07-statistica-inferenziale.html" class=""><span class="num">07</span>Statistica inferenziale e test di ipotesi</a></li><li class="nav-item"><a href="../pages/08-distribuzioni.html" class=""><span class="num">08</span>Distribuzioni di probabilità che incontrerai</a></li><li class="nav-item"><a href="../pages/09-numpy.html" class=""><span class="num">09</span>NumPy: pensare in array</a></li><li class="nav-item"><a href="../pages/10-pandas.html" class="active"><span class="num">10</span>Pandas: il coltellino svizzero</a></li><li class="nav-item"><a href="../pages/11-sql.html" class=""><span class="num">11</span>SQL per data scientist</a></li><li class="nav-item"><a href="../pages/12-visualizzazione.html" class=""><span class="num">12</span>Visualizzazione: matplotlib, seaborn, plotly</a></li><li class="nav-item"><a href="../pages/13-data-wrangling.html" class=""><span class="num">13</span>Pulizia e data wrangling</a></li><li class="nav-item"><a href="../pages/14-feature-engineering.html" class=""><span class="num">14</span>Feature engineering</a></li><li class="nav-item"><a href="../pages/15-eda.html" class=""><span class="num">15</span>EDA: Exploratory Data Analysis</a></li><li class="nav-item"><a href="../pages/16-ml-fondamenti.html" class=""><span class="num">16</span>ML: fondamenti — bias, varianza, validazione</a></li><li class="nav-item"><a href="../pages/17-regressione-lineare.html" class=""><span class="num">17</span>Regressione lineare e regolarizzazione</a></li><li class="nav-item"><a href="../pages/18-regressione-logistica.html" class=""><span class="num">18</span>Regressione logistica e classificazione</a></li><li class="nav-item"><a href="../pages/19-knn-naive-bayes-svm.html" class=""><span class="num">19</span>KNN, Naive Bayes, SVM</a></li><li class="nav-item"><a href="../pages/20-alberi-decisionali.html" class=""><span class="num">20</span>Alberi decisionali</a></li><li class="nav-item"><a href="../pages/21-random-forest-boosting.html" class=""><span class="num">21</span>Random Forest, Gradient Boosting, XGBoost</a></li><li class="nav-item"><a href="../pages/22-clustering.html" class=""><span class="num">22</span>Clustering: K-Means, DBSCAN, GMM, gerarchico</a></li><li class="nav-item"><a href="../pages/23-pca-tsne-umap.html" class=""><span class="num">23</span>Riduzione dimensionale: PCA, t-SNE, UMAP</a></li><li class="nav-item"><a href="../pages/24-metriche-validazione.html" class=""><span class="num">24</span>Metriche, cross-validation, leakage</a></li><li class="nav-item"><a href="../pages/25-sbilanciamento-classi.html" class=""><span class="num">25</span>Sbilanciamento di classi</a></li><li class="nav-item"><a href="../pages/26-hyperparameter-tuning.html" class=""><span class="num">26</span>Hyperparameter tuning</a></li><li class="nav-item"><a href="../pages/27-reti-neurali.html" class=""><span class="num">27</span>Reti neurali: dalle basi al backprop</a></li><li class="nav-item"><a href="../pages/28-pytorch.html" class=""><span class="num">28</span>PyTorch: dal toy model al training loop</a></li><li class="nav-item"><a href="../pages/29-cnn.html" class=""><span class="num">29</span>CNN per computer vision</a></li><li class="nav-item"><a href="../pages/30-rnn-lstm.html" class=""><span class="num">30</span>RNN, LSTM, GRU per sequenze</a></li><li class="nav-item"><a href="../pages/31-transformer.html" class=""><span class="num">31</span>Transformer e attention</a></li><li class="nav-item"><a href="../pages/32-nlp-llm.html" class=""><span class="num">32</span>NLP: dal text mining ai LLM</a></li><li class="nav-item"><a href="../pages/33-time-series.html" class=""><span class="num">33</span>Time series e forecasting</a></li><li class="nav-item"><a href="../pages/34-mlops.html" class=""><span class="num">34</span>MLOps: deployment, monitoring, drift</a></li><li class="nav-item"><a href="../pages/35-bayesian-causal.html" class=""><span class="num">35</span>Inferenza bayesiana e causale</a></li><li class="nav-item"><a href="../pages/36-capstone-carriera.html" class=""><span class="num">36</span>Capstone, portfolio, carriera</a></li><li class="nav-item"><a href="../pages/37-glossario.html" class=""><span class="num">37</span>Glossario A-Z</a></li><li class="nav-item"><a href="../pages/38-formulario.html" class=""><span class="num">38</span>Formulario: tutte le formule del percorso</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Tooling</span>
+        <span>Sezione 11 di 39</span>
+        <span class="level-tag level-int">Livello: intermedio</span>
+      </div>
+      <h1>Pandas: il coltellino svizzero</h1>
+      <p class="summary">Series, DataFrame, indici, merge, group by, pivot, time series. Gli idiomi pandas che ti distinguono dai tutorial mediocri.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Tooling</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>[[numpy]]</li></ul>
+  <div class="label">Strumenti</div>
+  <ul class="source-list"><li>pandas 2.x</li></ul>
+</div>
+      <h2 id="perche-pandas">Perché pandas</h2>
+<p>Per dati tabellari, pandas è lo standard de facto. Se vieni da Excel, è "Excel su steroidi". Se vieni da SQL, è "SQL ma in memoria, con più espressività". È la libreria su cui passi il 60% delle ore.</p>
+<blockquote>
+<p>Pandas 2.x ha introdotto un backend Arrow opzionale che lo rende drammaticamente più veloce. <code>pd.options.future.infer_string = True</code> e usa <code>dtype="string[pyarrow]"</code> se ti pesa la memoria.</p>
+</blockquote>
+<h2 id="series-e-dataframe">Series e DataFrame</h2>
+<pre><code class="language-python">import pandas as pd
+import numpy as np
+
+# Series = colonna con etichette
+s = pd.Series([10, 20, 30], index=['a', 'b', 'c'], name='temp')
+s['b']         # 20
+s.values       # numpy array
+s.index        # Index(['a','b','c'])
+
+# DataFrame = tabella
+df = pd.DataFrame({
+    'nome': ['Alice', 'Bob', 'Claire'],
+    'eta': [30, 25, 35],
+    'salary': [50000, 60000, 75000],
+})
+df.shape       # (3, 3)
+df.dtypes
+df.info()
+df.describe()
+</code></pre>
+<h2 id="letturascrittura">Lettura/scrittura</h2>
+<pre><code class="language-python">df = pd.read_csv(&quot;data.csv&quot;)
+df = pd.read_csv(&quot;data.csv&quot;, parse_dates=['date'], dtype={'id': 'int32'})
+df = pd.read_parquet(&quot;data.parquet&quot;)    # MOLTO più veloce di CSV
+df = pd.read_excel(&quot;data.xlsx&quot;, sheet_name=0)
+df = pd.read_sql(&quot;SELECT * FROM users&quot;, conn)
+df = pd.read_json(&quot;data.json&quot;)
+
+df.to_parquet(&quot;out.parquet&quot;, compression='snappy')
+df.to_csv(&quot;out.csv&quot;, index=False)
+</code></pre>
+<blockquote>
+<p><strong>Regola d'oro</strong>: per dati &gt; 100 MB usa Parquet o Feather, mai CSV. Più rapido (10-100x), tiene il dtype, comprime bene.</p>
+</blockquote>
+<h2 id="selezione-loc-iloc">Selezione: <code>loc</code>, <code>iloc</code>, <code>[]</code></h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Cosa fa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>df[col]</code></td>
+<td>una colonna (Series)</td>
+</tr>
+<tr>
+<td><code>df[[col1, col2]]</code></td>
+<td>più colonne (DataFrame)</td>
+</tr>
+<tr>
+<td><code>df[bool_mask]</code></td>
+<td>filtra righe</td>
+</tr>
+<tr>
+<td><code>df.loc[righe, colonne]</code></td>
+<td>per <strong>etichetta</strong></td>
+</tr>
+<tr>
+<td><code>df.iloc[i, j]</code></td>
+<td>per <strong>posizione intera</strong></td>
+</tr>
+<tr>
+<td><code>df.at[r, c]</code></td>
+<td>scalare per etichetta (fastest)</td>
+</tr>
+<tr>
+<td><code>df.iat[i, j]</code></td>
+<td>scalare per posizione (fastest)</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-python"># selezioni tipiche
+df[df['eta'] &gt; 30]                          # filter
+df.loc[df['eta'] &gt; 30, ['nome', 'salary']]  # filter + colonne
+df.loc[0:2, 'nome':'eta']                   # slice etichette (inclusivo!)
+df.iloc[0:2, 0:2]                            # slice posizionale (esclusivo!)
+</code></pre>
+<blockquote>
+<p>Attenzione: <code>df.loc[0:2]</code> include 0, 1, <strong>e 2</strong>. <code>df.iloc[0:2]</code> include 0, 1.</p>
+</blockquote>
+<h2 id="le-5-operazioni-che-fai-ogni-giorno">Le 5 operazioni che fai ogni giorno</h2>
+<h3 id="1-filtrare">1. Filtrare</h3>
+<pre><code class="language-python"># multi-condizione
+df[(df.eta &gt; 30) &amp; (df.salary &gt; 60000)]
+df.query(&quot;eta &gt; 30 and salary &gt; 60000&quot;)     # alternativa più leggibile
+
+# isin / between
+df[df.city.isin(['Roma', 'Milano'])]
+df[df.eta.between(25, 40)]
+
+# stringhe
+df[df.nome.str.startswith('A')]
+df[df.email.str.contains('@gmail', na=False)]
+</code></pre>
+<h3 id="2-creare-colonne">2. Creare colonne</h3>
+<pre><code class="language-python">df['salary_eur'] = df['salary'] * 0.92
+df['eta_cat'] = pd.cut(df.eta, bins=[0, 30, 50, 100], labels=['young','mid','old'])
+df['log_salary'] = np.log1p(df.salary)
+
+# assign (per pipeline)
+df = (
+    df
+    .assign(salary_eur=lambda d: d.salary * 0.92)
+    .assign(senior=lambda d: d.eta &gt;= 35)
+)
+</code></pre>
+<blockquote>
+<p>Usare <code>assign</code> con lambda permette di costruire pipeline immutabili. Preferibile a modificare <code>df</code> in-place.</p>
+</blockquote>
+<h3 id="3-group-by">3. Group by</h3>
+<p>L'operazione regina:</p>
+<pre><code class="language-python"># media salary per città
+df.groupby('city')['salary'].mean()
+
+# multi-aggregazione
+df.groupby('city').agg(
+    avg_salary=('salary', 'mean'),
+    n=('id', 'count'),
+    max_eta=('eta', 'max'),
+)
+
+# group by multipli, output multi-index
+df.groupby(['city', 'gender'])['salary'].mean().unstack()
+</code></pre>
+<h3 id="4-merge-join">4. Merge / join</h3>
+<p>Come SQL:</p>
+<pre><code class="language-python">m = pd.merge(orders, users, on='user_id', how='left')
+
+# chiavi con nomi diversi
+m = pd.merge(orders, users, left_on='uid', right_on='id', how='inner')
+
+# tipi: inner, left, right, outer, cross
+</code></pre>
+<p><strong>Concat</strong> è diverso: incolla DataFrame, non fa join.</p>
+<pre><code class="language-python">pd.concat([df1, df2], axis=0)   # stack verticale (più righe)
+pd.concat([df1, df2], axis=1)   # affianca (più colonne)
+</code></pre>
+<h3 id="5-pivot-melt">5. Pivot / melt</h3>
+<pre><code class="language-python"># wide ← long
+wide = df.pivot(index='date', columns='product', values='sales')
+
+# long ← wide
+long = wide.reset_index().melt(id_vars='date', var_name='product', value_name='sales')
+
+# pivot_table con aggregazione
+pt = df.pivot_table(
+    index='city', columns='product',
+    values='sales', aggfunc='sum', fill_value=0
+)
+</code></pre>
+<h2 id="missing-values">Missing values</h2>
+<pre><code class="language-python">df.isna().sum()                # conta NaN per colonna
+df.dropna()                    # rimuove righe con QUALSIASI NaN
+df.dropna(subset=['col'])      # solo se NaN in 'col'
+df.fillna(0)
+df.fillna(df.mean())           # media per colonna
+df.fillna(method='ffill')      # forward fill (utile in time series)
+
+# imputer più seri (sklearn)
+from sklearn.impute import SimpleImputer, KNNImputer
+</code></pre>
+<blockquote>
+<p><strong>Mai</strong> rimuovere righe NaN senza pensare. Spesso il fatto che siano NaN è informativo (un campo non compilato è una scelta). Considera un'ulteriore flag <code>_was_missing</code>.</p>
+</blockquote>
+<h2 id="time-series">Time series</h2>
+<p>Pandas è eccellente con il tempo.</p>
+<pre><code class="language-python">df['date'] = pd.to_datetime(df['date'])
+df.set_index('date', inplace=True)
+
+# resample
+daily = df['value'].resample('D').sum()
+monthly = df['value'].resample('M').mean()
+
+# accessor .dt
+df['date'].dt.year
+df['date'].dt.dayofweek
+df['date'].dt.is_month_end
+
+# shift / diff / rolling
+df['lag1'] = df['value'].shift(1)
+df['delta'] = df['value'].diff()
+df['ma7'] = df['value'].rolling(7).mean()
+df['ema'] = df['value'].ewm(alpha=0.3).mean()
+</code></pre>
+<h2 id="performance-5-regole">Performance: 5 regole</h2>
+<ol>
+<li><strong>Mai <code>iterrows</code> o <code>apply</code> riga-per-riga</strong> se puoi fare in modo vettorizzato. 100-1000× più lento.</li>
+<li><strong>Categorical</strong> per colonne con pochi valori unici → meno RAM, group by più rapido.</li>
+<li><strong>Parquet</strong> invece di CSV.</li>
+<li><strong>Set index</strong> per merge frequenti sulla stessa chiave.</li>
+<li><strong><code>pl.read_csv</code> di Polars</strong> se davvero pandas non basta — sintassi simile, 10x più veloce per molti use case.</li>
+</ol>
+<pre><code class="language-python">df['city'] = df['city'].astype('category')
+df = df.set_index('user_id')
+</code></pre>
+<h2 id="anti-pattern-frequenti">Anti-pattern frequenti</h2>
+<pre><code class="language-python"># MALE
+new_df = pd.DataFrame()
+for i in range(len(df)):
+    new_df = new_df.append(df.iloc[i])    # O(n²)
+
+# BENE: vettorizza, o list + concat
+rows = []
+for ...: rows.append({...})
+new_df = pd.DataFrame(rows)
+</code></pre>
+<pre><code class="language-python"># MALE: SettingWithCopyWarning
+df[df.x &gt; 0]['y'] = 1               # forse modifica, forse no
+
+# BENE
+df.loc[df.x &gt; 0, 'y'] = 1
+</code></pre>
+<pre><code class="language-python"># MALE: chained indexing
+df.loc[df.x &gt; 0]['y'].mean()        # crea copie inutili
+
+# BENE
+df.loc[df.x &gt; 0, 'y'].mean()
+</code></pre>
+<h2 id="method-chaining-la-pipeline-pandas">Method chaining: la pipeline pandas</h2>
+<pre><code class="language-python">result = (
+    pd.read_parquet(&quot;orders.parquet&quot;)
+    .query(&quot;status == 'completed'&quot;)
+    .assign(month=lambda d: d.date.dt.to_period('M'))
+    .groupby(['month', 'category'])
+    .agg(revenue=('amount', 'sum'), n=('id', 'count'))
+    .reset_index()
+    .sort_values('revenue', ascending=False)
+)
+</code></pre>
+<p>Legge come una ricetta. Niente variabili intermedie a confondere.</p>
+<h2 id="esercizi">Esercizi</h2>
+<details>
+<summary>Esercizio 1 — Diamonds, esplorazione</summary>
+
+
+<pre><code class="language-python">import seaborn as sns
+df = sns.load_dataset('diamonds')
+df.info()
+df.describe()
+df.cut.value_counts(normalize=True)
+df.groupby('cut')['price'].agg(['mean','median','count'])
+</code></pre>
+
+
+Domande:
+1. Prezzo medio per quality cut?
+2. Esiste correlazione tra carat e price?
+3. Diamanti con `carat > 2` hanno prezzo medio?
+</details>
+
+<details>
+<summary>Esercizio 2 — Customer lifetime value</summary>
+
+Dato un DataFrame `orders` con `user_id, order_date, amount`, calcola per ogni utente: totale speso, ordine medio, primo ordine, ultimo ordine, recency (giorni dall'ultimo ordine).
+
+
+<pre><code class="language-python">ref_date = orders.order_date.max()
+clv = orders.groupby('user_id').agg(
+    total=('amount', 'sum'),
+    avg=('amount', 'mean'),
+    n=('amount', 'count'),
+    first=('order_date', 'min'),
+    last=('order_date', 'max'),
+)
+clv['recency_days'] = (ref_date - clv.last).dt.days
+</code></pre>
+
+</details>
+
+<details>
+<summary>Esercizio 3 — Cohort analysis</summary>
+
+Per una piattaforma SaaS: di ogni cohort di iscrizione (mese), quanti utenti sono ancora attivi nei mesi successivi?
+
+
+<pre><code class="language-python"># 1. cohort = primo mese
+users['cohort'] = users.signup_date.dt.to_period('M')
+
+# 2. join con events
+e = events.merge(users[['user_id','cohort']], on='user_id')
+e['event_month'] = e.event_date.dt.to_period('M')
+e['months_since'] = (e.event_month - e.cohort).apply(lambda x: x.n)
+
+# 3. pivot
+cohort_table = e.groupby(['cohort','months_since']).user_id.nunique().unstack()
+retention = cohort_table.div(cohort_table.iloc[:, 0], axis=0)
+</code></pre>
+
+
+Visualizza con `sns.heatmap(retention)`. È IL grafico delle metriche prodotto.
+</details>
+
+<details>
+<summary>Esercizio 4 — Rolling features</summary>
+
+Per una colonna `daily_sales` indicizzata per data: calcola media mobile 7 giorni, deviazione standard 30 giorni, valore di ieri, valore di una settimana fa.
+
+
+<pre><code class="language-python">df['ma7']  = df['daily_sales'].rolling(7).mean()
+df['std30'] = df['daily_sales'].rolling(30).std()
+df['lag1'] = df['daily_sales'].shift(1)
+df['lag7'] = df['daily_sales'].shift(7)
+</code></pre>
+
+
+Sono **feature** classiche per modelli di forecasting.
+</details>
+
+<details>
+<summary>Esercizio 5 — Pivot inverso</summary>
+
+Hai una tabella wide:
+
+
+<pre><code>date       prodA  prodB  prodC
+2024-01-01   100    50    20
+2024-01-02    90    60    25
+</code></pre>
+
+
+Trasformala in long:
+
+
+<pre><code class="language-python">df_long = df.melt(id_vars='date', var_name='product', value_name='sales')
+</code></pre>
+
+</details>
+
+<h2 id="cosa-portarti-via">Cosa portarti via</h2>
+<ul>
+<li><code>loc</code> vs <code>iloc</code>: etichetta vs posizione. Mai confondere.</li>
+<li>Vectorize, mai <code>iterrows</code>.</li>
+<li>Parquet &gt; CSV.</li>
+<li>Method chaining = pipeline leggibili.</li>
+<li>Categorical e <code>astype</code> per memoria.</li>
+<li>Polars è il futuro se pandas ti rallenta.</li>
+</ul>
+<p>Prossimo: SQL, perché la maggioranza dei dati sta in database.</p>
+      <nav class="pager">
+<a href="09-numpy.html" class="prev"><span class="label">← Precedente</span><span class="title">NumPy: pensare in array</span></a>
+<a href="11-sql.html" class="next"><span class="label">Successivo →</span><span class="title">SQL per data scientist</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Data Science Zero to Hero</strong> — percorso completo, in italiano, dalla matematica al deployment.</p><p>Materiale didattico aperto. Le formule sono lì per essere capite, non temute. Quando un concetto è oscuro, torna indietro: la data science è una piramide, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

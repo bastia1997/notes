@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Infrastruttura globale: Region, AZ, Edge — AWS Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#232f3e',primaryTextColor:'#ffffff',primaryBorderColor:'#ff9900',lineColor:'#8a99ad',background:'#0c1320'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">λ</div>
+      <div>
+        <div class="brand-title">AWS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">IT</span><a href="../en/pages/02-global-infrastructure.html" class="lang-link" title="Switch to English">EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-cos-e-aws-cloud.html" class=""><span class="num">01</span>Cos&#x27;è il cloud e cos&#x27;è AWS</a></li><li class="nav-item"><a href="../pages/02-infrastruttura-globale.html" class="active"><span class="num">02</span>Infrastruttura globale: Region, AZ, Edge</a></li><li class="nav-item"><a href="../pages/03-account-root-billing.html" class=""><span class="num">03</span>Account AWS, utente root, billing</a></li><li class="nav-item"><a href="../pages/04-iam-fondamenti.html" class=""><span class="num">04</span>IAM — fondamenti (utenti, gruppi, ruoli, policy)</a></li><li class="nav-item"><a href="../pages/05-iam-avanzato.html" class=""><span class="num">05</span>IAM avanzato: policy condizionali, STS, ABAC</a></li><li class="nav-item"><a href="../pages/06-cli-sdk-iac.html" class=""><span class="num">06</span>CLI, SDK, CloudShell, IaC primer</a></li><li class="nav-item"><a href="../pages/07-pricing-billing.html" class=""><span class="num">07</span>Pricing, billing, free tier, cost tools</a></li><li class="nav-item"><a href="../pages/08-organizations-multi-account.html" class=""><span class="num">08</span>AWS Organizations &amp; strategia multi-account</a></li><li class="nav-item"><a href="../pages/09-vpc-fondamenti.html" class=""><span class="num">09</span>VPC — fondamenti</a></li><li class="nav-item"><a href="../pages/10-vpc-avanzato.html" class=""><span class="num">10</span>VPC avanzato: peering, TGW, PrivateLink, endpoint</a></li><li class="nav-item"><a href="../pages/11-route53-cloudfront.html" class=""><span class="num">11</span>Route 53, CloudFront, Global Accelerator</a></li><li class="nav-item"><a href="../pages/12-hybrid-vpn-directconnect.html" class=""><span class="num">12</span>Hybrid: VPN, Direct Connect, PrivateLink</a></li><li class="nav-item"><a href="../pages/13-ec2-fondamenti.html" class=""><span class="num">13</span>EC2 — fondamenti (istanze, AMI, lifecycle)</a></li><li class="nav-item"><a href="../pages/14-ec2-avanzato-spot-nitro.html" class=""><span class="num">14</span>EC2 avanzato — Spot, Placement Groups, Nitro, hibernation</a></li><li class="nav-item"><a href="../pages/15-asg-elb.html" class=""><span class="num">15</span>Auto Scaling Groups + Elastic Load Balancing</a></li><li class="nav-item"><a href="../pages/16-lambda-deep-dive.html" class=""><span class="num">16</span>Lambda deep dive</a></li><li class="nav-item"><a href="../pages/17-containers-ecs-eks-fargate.html" class=""><span class="num">17</span>Containers: ECS, EKS, Fargate, ECR</a></li><li class="nav-item"><a href="../pages/18-specialty-compute.html" class=""><span class="num">18</span>Specialty compute: Batch, Lightsail, Outposts, Wavelength, Beanstalk</a></li><li class="nav-item"><a href="../pages/19-ebs-efs-fsx.html" class=""><span class="num">19</span>EBS, EFS, FSx, Instance Store</a></li><li class="nav-item"><a href="../pages/20-s3-deep-dive.html" class=""><span class="num">20</span>S3 — deep dive</a></li><li class="nav-item"><a href="../pages/21-archive-snow-gateway-backup.html" class=""><span class="num">21</span>Glacier, Snow, Storage Gateway, DataSync, AWS Backup</a></li><li class="nav-item"><a href="../pages/22-rds.html" class=""><span class="num">22</span>RDS — relational DB managed (engines, Multi-AZ, replicas, Proxy)</a></li><li class="nav-item"><a href="../pages/23-aurora-deep-dive.html" class=""><span class="num">23</span>Aurora deep dive — storage condiviso, Serverless v2, Global Database</a></li><li class="nav-item"><a href="../pages/24-dynamodb-deep-dive.html" class=""><span class="num">24</span>DynamoDB deep dive — partition, GSI, Streams, single-table</a></li><li class="nav-item"><a href="../pages/25-purpose-built-dbs.html" class=""><span class="num">25</span>Purpose-built DB — ElastiCache, MemoryDB, Neptune, DocumentDB, Keyspaces, Timestream, QLDB</a></li><li class="nav-item"><a href="../pages/26-redshift-data-warehousing.html" class=""><span class="num">26</span>Redshift — data warehousing MPP e zero-ETL</a></li><li class="nav-item"><a href="../pages/27-sqs-sns-eventbridge.html" class=""><span class="num">27</span>SQS, SNS, EventBridge — messaging ed eventi</a></li><li class="nav-item"><a href="../pages/28-step-functions-mq-appflow.html" class=""><span class="num">28</span>Step Functions, MQ, AppFlow — orchestrazione e integrazione</a></li><li class="nav-item"><a href="../pages/29-athena-glue-lakeformation.html" class=""><span class="num">29</span>Athena, Glue, Lake Formation — il data lake AWS</a></li><li class="nav-item"><a href="../pages/30-emr-kinesis-msk.html" class=""><span class="num">30</span>EMR, Kinesis, MSK — big data e streaming</a></li><li class="nav-item"><a href="../pages/31-opensearch-quicksight.html" class=""><span class="num">31</span>OpenSearch e QuickSight — search e BI</a></li><li class="nav-item"><a href="../pages/32-sagemaker-overview.html" class=""><span class="num">32</span>SageMaker — la piattaforma ML end-to-end</a></li><li class="nav-item"><a href="../pages/33-bedrock-ai-services.html" class=""><span class="num">33</span>Bedrock e AI services — GenAI e ML managed</a></li><li class="nav-item"><a href="../pages/34-iac-cloudformation-cdk-terraform.html" class=""><span class="num">34</span>IaC su AWS — CloudFormation, CDK, SAM, Terraform</a></li><li class="nav-item"><a href="../pages/35-ci-cd-pipeline.html" class=""><span class="num">35</span>CI/CD su AWS — CodePipeline, CodeBuild, CodeDeploy, CodeCatalyst</a></li><li class="nav-item"><a href="../pages/36-observability-cloudwatch-xray.html" class=""><span class="num">36</span>Observability — CloudWatch, X-Ray, CloudTrail, Config, SSM</a></li><li class="nav-item"><a href="../pages/37-kms-secrets-acm.html" class=""><span class="num">37</span>Crittografia — KMS, CloudHSM, Secrets Manager, Parameter Store, ACM</a></li><li class="nav-item"><a href="../pages/38-waf-shield-guardduty-inspector.html" class=""><span class="num">38</span>Threat detection — WAF, Shield, GuardDuty, Inspector, Macie, Security Hub</a></li><li class="nav-item"><a href="../pages/39-governance-org-controltower-identitycenter.html" class=""><span class="num">39</span>Governance — Organizations, Control Tower, Identity Center</a></li><li class="nav-item"><a href="../pages/40-migration-mgn-dms-snow.html" class=""><span class="num">40</span>Migration — MGN, DMS, Snow family, Discovery, Migration Hub</a></li><li class="nav-item"><a href="../pages/41-cost-optimization-finops.html" class=""><span class="num">41</span>Cost optimization e FinOps</a></li><li class="nav-item"><a href="../pages/42-well-architected.html" class=""><span class="num">42</span>Well-Architected Framework — 6 pillar, lens, review</a></li><li class="nav-item"><a href="../pages/43-architecture-patterns.html" class=""><span class="num">43</span>Architecture patterns — 3-tier, serverless, event-driven, microservices</a></li><li class="nav-item"><a href="../pages/44-disaster-recovery-multi-region.html" class=""><span class="num">44</span>Disaster Recovery e Multi-Region</a></li><li class="nav-item"><a href="../pages/45-reference-architectures.html" class=""><span class="num">45</span>Reference architectures real-world</a></li><li class="nav-item"><a href="../pages/46-advanced-networking.html" class=""><span class="num">46</span>Advanced networking deep dive</a></li><li class="nav-item"><a href="../pages/47-containers-deep-dive.html" class=""><span class="num">47</span>Containers deep dive — EKS, Karpenter, service mesh</a></li><li class="nav-item"><a href="../pages/48-serverless-patterns.html" class=""><span class="num">48</span>Serverless patterns deep dive</a></li><li class="nav-item"><a href="../pages/49-genai-rag-agents.html" class=""><span class="num">49</span>Generative AI su AWS — RAG e Agents</a></li><li class="nav-item"><a href="../pages/50-certificazioni-aws.html" class=""><span class="num">50</span>Certificazioni AWS — roadmap e study guide</a></li><li class="nav-item"><a href="../pages/51-glossario-az.html" class=""><span class="num">51</span>Glossario A-Z</a></li><li class="nav-item"><a href="../pages/52-cheatsheet.html" class=""><span class="num">52</span>Cheat sheet: servizi, limiti, instance families</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Fondamenti</span>
+        <span>Sezione 2 di 52</span>
+        <span class="level-tag level-beg">Livello: principiante</span>
+      </div>
+      <h1>Infrastruttura globale: Region, AZ, Edge</h1>
+      <p class="summary">Regioni, Availability Zone, Local Zone, Wavelength, Outposts, Edge location. Capire dove vive un servizio è il prerequisito per parlare di latenza, costi di trasferimento e resilienza.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Fondamenti</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>sezione 1 (cos&#x27;è il cloud)</li></ul>
+  <div class="label">Strumenti / riferimenti</div>
+  <ul class="source-list"><li>AWS Global Infrastructure Map: aws.amazon.com/about-aws/global-infrastructure/</li></ul>
+</div>
+      <p>Quando dici "ho lanciato un'EC2", stai implicitamente dicendo "in una specifica Availability Zone, dentro una specifica Region". Capire la geografia AWS è il prerequisito per parlare di latenza utente, resilienza, costi di trasferimento dati e compliance (GDPR ti dice dove possono stare i dati).</p>
+<h2 id="1-region-lunita-di-isolamento">1. Region: l'unità di isolamento</h2>
+<p>Una <strong>Region</strong> è un'area geografica con un nome (<code>us-east-1</code> = North Virginia, <code>eu-west-1</code> = Ireland, <code>eu-south-1</code> = Milano). Ogni Region è composta da almeno 3 (di solito 3-6) <strong>Availability Zone</strong>, ed è <strong>completamente isolata dalle altre</strong>.</p>
+<p>Caratteristiche fondamentali da memorizzare:</p>
+<ul>
+<li><strong>Dati isolati</strong>: se lanci un bucket S3 in <code>eu-west-1</code>, i suoi oggetti non lasciano mai Irlanda salvo che tu attivi cross-region replication esplicita.</li>
+<li><strong>API isolate</strong>: l'endpoint S3 di Irlanda è <code>s3.eu-west-1.amazonaws.com</code>. Se chiami quello di Tokyo (<code>s3.ap-northeast-1.amazonaws.com</code>) per leggere lo stesso bucket, non lo trovi.</li>
+<li><strong>Servizi non sono tutti ovunque</strong>: nuovi servizi escono prima in <code>us-east-1</code> e si propagano. Verifica sempre con la <a href="https://aws.amazon.com/about-aws/global-infrastructure/regional-product-services/">Region table</a>.</li>
+<li><strong>Pricing varia per Region</strong>: stessa EC2 costa il 10-30% in più a São Paulo che in Virginia (cap-ex regionale, costo elettricità, tasse).</li>
+</ul>
+<p>Al 2026 AWS ha <strong>34+ regioni commerciali</strong> + GovCloud (US) + China (gestita da partner locali per legge). Ne escono 1-3 nuove all'anno.</p>
+<h2 id="2-availability-zone-data-center-fisicamente-separati">2. Availability Zone: data center fisicamente separati</h2>
+<p>Una <strong>AZ</strong> è un cluster di uno o più data center fisicamente distinti, con alimentazione, rete e raffreddamento indipendenti, dentro la stessa Region. Sono collegate tra loro da fibra dedicata a bassa latenza (~1–2 ms) e alta banda. Le AZ sono <strong>identificate da una lettera</strong> (<code>eu-west-1a</code>, <code>eu-west-1b</code>, <code>eu-west-1c</code>).</p>
+<p><strong>Punto sottile</strong>: la lettera <code>a</code> di un account non è la stessa AZ fisica della lettera <code>a</code> di un altro account. AWS randomizza il mapping per bilanciare il carico. Per riferirsi a un'AZ fisica deterministicamente, usa l'<strong>AZ ID</strong> (<code>use1-az1</code>, <code>use1-az2</code>, …) che lo stesso in tutti gli account.</p>
+<pre><code class="language-mermaid">flowchart TB
+    subgraph region[Region eu-west-1 Ireland]
+        subgraph az1[AZ eu-west-1a]
+            dc1[DC #1] --- dc2[DC #2]
+        end
+        subgraph az2[AZ eu-west-1b]
+            dc3[DC #3] --- dc4[DC #4]
+        end
+        subgraph az3[AZ eu-west-1c]
+            dc5[DC #5]
+        end
+        az1 -. fibra dedicata, ~1 ms .- az2
+        az2 -. fibra dedicata, ~1 ms .- az3
+        az1 -. fibra dedicata, ~1 ms .- az3
+    end
+</code></pre>
+<p><strong>Regola d'oro per HA</strong>: distribuisci sempre su <strong>almeno 2 AZ</strong>. Se hai un load balancer ALB con 2 EC2 nella stessa AZ e quella AZ va giù (capitato con <code>us-east-1</code> dicembre 2021), il tuo servizio è offline. Con 1 EC2 per AZ × 2 AZ, sopravvivi.</p>
+<h2 id="3-edge-location-e-pop">3. Edge location e PoP</h2>
+<p>Le <strong>Edge location</strong> sono ~600 mini-data center in 90+ città del mondo (Milano, Roma, Bologna in Italia). Non runnano EC2 generici. Servono <strong>CloudFront</strong> (CDN), <strong>Route 53</strong> (DNS), <strong>Global Accelerator</strong> (anycast networking), <strong>AWS WAF</strong>, <strong>Shield</strong> e <strong>Lambda@Edge / CloudFront Functions</strong> (codice eseguito vicino all'utente).</p>
+<p>Modello mentale: le Region servono per <strong>fare</strong> cose (computare, salvare); le Edge servono per <strong>distribuire</strong> quelle cose all'utente con bassa latenza.</p>
+<h2 id="4-tipologie-speciali">4. Tipologie speciali</h2>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Cosa è</th>
+<th>Quando serve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Local Zone</strong></td>
+<td>AZ "filiali" in città non-Region (Los Angeles, Phoenix, Miami, ecc.)</td>
+<td>bassa latenza per utenti urbani specifici</td>
+</tr>
+<tr>
+<td><strong>Wavelength Zone</strong></td>
+<td>data center <em>dentro</em> la rete di un operatore 5G (Verizon, KDDI, Vodafone)</td>
+<td>app 5G a latenza single-digit ms (AR/VR, gaming)</td>
+</tr>
+<tr>
+<td><strong>Outposts</strong></td>
+<td>rack AWS fisico installato nel tuo data center</td>
+<td>compliance / latenza on-prem ma con API AWS</td>
+</tr>
+<tr>
+<td><strong>Local Gateway</strong></td>
+<td>gateway che esce dal tuo Outposts verso la tua LAN</td>
+<td>hybrid cloud</td>
+</tr>
+<tr>
+<td><strong>AWS Snow Family</strong></td>
+<td>hardware portatile (Snowcone, Snowball, Snowmobile)</td>
+<td>trasferire petabyte offline (es. quando l'upload via internet richiederebbe mesi)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="5-servizi-globali-vs-regionali">5. Servizi globali vs regionali</h2>
+<table>
+<thead>
+<tr>
+<th>Categoria</th>
+<th>Esempi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Globali</strong> (nessuna Region da scegliere)</td>
+<td>IAM, Route 53, CloudFront, WAF (per CloudFront), Organizations, STS (endpoint globale + regionali), Health Dashboard</td>
+</tr>
+<tr>
+<td><strong>Regionali</strong> (vivono in una Region)</td>
+<td>EC2, S3, RDS, Lambda, DynamoDB (può essere Global Tables), VPC, KMS, Secrets Manager</td>
+</tr>
+<tr>
+<td><strong>Per-AZ</strong> (ti scegli l'AZ)</td>
+<td>EBS (un volume vive in 1 AZ), EFS (vive in più AZ ma con mount target per AZ), istanze EC2, subnet di un VPC</td>
+</tr>
+</tbody>
+</table>
+<p>Un errore tipico da junior: creare uno snapshot EBS in <code>eu-west-1a</code> e provare a montarlo da una EC2 in <code>eu-west-1b</code>. Non si può: gli snapshot sono regionali ma i volumi sono per-AZ. Devi <strong>creare un nuovo volume dallo snapshot nella seconda AZ</strong>.</p>
+<h2 id="6-latenza-ordini-di-grandezza">6. Latenza: ordini di grandezza</h2>
+<table>
+<thead>
+<tr>
+<th>Tipo di hop</th>
+<th>Tempo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RAM access</td>
+<td>100 ns</td>
+</tr>
+<tr>
+<td>SSD NVMe locale</td>
+<td>100 µs</td>
+</tr>
+<tr>
+<td>Stesso AZ (server-to-server)</td>
+<td>0.1–0.5 ms</td>
+</tr>
+<tr>
+<td>Cross-AZ (stessa Region)</td>
+<td>1–2 ms</td>
+</tr>
+<tr>
+<td>Cross-Region intra-continente (eu-west-1 → eu-central-1)</td>
+<td>15–30 ms</td>
+</tr>
+<tr>
+<td>Cross-Region intercontinentale (eu-west-1 → ap-northeast-1)</td>
+<td>200–250 ms</td>
+</tr>
+<tr>
+<td>Edge → utente (CloudFront)</td>
+<td>5–40 ms</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Implicazione</strong>: una chat real-time tra utenti su due continenti diversi è limitata dalla velocità della luce, non da AWS. Inseguire latenze sub-50 ms in workload globali richiede Edge logic (CloudFront Functions, Lambda@Edge) o partition by geography.</p>
+<h2 id="7-cosa-scegliere">7. Cosa scegliere</h2>
+<p>Tre criteri:</p>
+<ol>
+<li><strong>Vicinanza utenti</strong>: 70% utenti in Italia? <code>eu-south-1</code> (Milano) o <code>eu-central-1</code> (Frankfurt) o <code>eu-west-1</code> (Ireland). Tutte e tre vanno bene; Milano ha latenza più bassa per Italia ma è regione nuova (servizi a volte ritardatari).</li>
+<li><strong>Compliance</strong>: GDPR esige che certi dati personali stiano in EU. UE = qualsiasi Region EU; Germany sovereignty può richiedere Frankfurt specificamente.</li>
+<li><strong>Costo</strong>: Virginia (<code>us-east-1</code>) è quasi sempre la più economica e ha <strong>tutti</strong> i servizi al day-zero. Per workload non sensibili alla latenza utente (es. batch notturni, AI training) è spesso la scelta giusta.</li>
+</ol>
+<p>Anti-pattern: cominciare in <code>us-east-1</code> "perché tutti i tutorial usano quella" e poi accorgersi che hai utenti italiani e devi migrare tutto. La migrazione cross-region è dolorosa: snapshot, replica, change DNS, sync. Pensa prima.</p>
+<h2 id="8-esercizio">8. Esercizio</h2>
+<details>
+<summary>Hai un'app utente in Italia con DB principale a Milano e disaster recovery. Quale Region per DR?</summary>
+
+**Soluzione.** Per DR vuoi una Region **abbastanza lontana** da non condividere rischio fisico (terremoto, blackout, attacco) ma **non così lontana** da rendere il replication lag insostenibile.
+
+- **Buone scelte**: `eu-west-1` (Ireland) o `eu-central-1` (Frankfurt). Distanza ~1000–1500 km. Latenza RTT ~15–25 ms. Si possono replicare dati con DMS/Aurora Global o cross-region snapshot.
+- **Cattive scelte**: `eu-south-2` (Spagna) se entrambe finiscono nella stessa zona di rischio (es. blackout pan-europeo improbabile ma…), o `us-east-1` (troppo lontana — RTT 80+ ms rallenta tutto).
+- **Costo**: hai costi doppi su tutto ciò che replichi + traffico inter-Region a ~$0.02/GB.
+</details>
+
+<details>
+<summary>Perché AWS sconsiglia di usare la AZ "a" se devi distribuire su 3 AZ?</summary>
+
+**Soluzione.** Non lo sconsiglia. Il punto è: **non assumere che `a` sia la stessa AZ fisica per tutti gli account**. AWS mappa randomicamente le lettere alle AZ fisiche (per bilanciare il carico tra clienti). Se il tuo team ha 3 account (dev, staging, prod) e tutti deployano "su `a, b, c`", potrebbero finire fisicamente nella stessa AZ.
+
+Per riferimenti deterministici, usa l'AZ ID (`use1-az1`) restituito da `aws ec2 describe-availability-zones`.
+</details>
+
+<blockquote>
+<p><strong>Riassunto</strong>: Region = isolamento (dati, API, billing); AZ = data center fisicamente separati dentro una Region; Edge = distribuzione veloce all'utente. Multi-AZ è per HA dentro una Region; multi-Region è per disaster recovery o vicinanza utenti globali. Conoscere dove vive un dato è il primo passo per parlare di latenza, costi e compliance.</p>
+</blockquote>
+      <nav class="pager">
+<a href="01-cos-e-aws-cloud.html" class="prev"><span class="label">← Precedente</span><span class="title">Cos&#x27;è il cloud e cos&#x27;è AWS</span></a>
+<a href="03-account-root-billing.html" class="next"><span class="label">Successivo →</span><span class="title">Account AWS, utente root, billing</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>AWS Zero to Hero</strong> — percorso completo, in italiano, dalle primitive all'architettura avanzata.</p><p>Materiale didattico aperto. Nessuna sponsorizzazione, nessun affiliate link, nessuna affiliazione con AWS. Quando un concetto è oscuro, torna indietro: AWS è una piramide di primitive, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

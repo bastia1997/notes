@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cleaning and data wrangling — Data Science Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#3a4a7a',primaryTextColor:'#e8eef0',primaryBorderColor:'#5a6aa0',lineColor:'#8a9499',background:'#11171a'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">Σ</div>
+      <div>
+        <div class="brand-title">DATA SCIENCE</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/13-data-wrangling.html" class="lang-link" title="Passa all'italiano">🇮🇹 IT</a><span class="lang-active" title="English">🇬🇧 EN</span></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="search... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-what-is-data-science.html" class=""><span class="num">01</span>What is data science (and what isn&#x27;t)</a></li><li class="nav-item"><a href="../pages/02-python-for-data-science.html" class=""><span class="num">02</span>Python for data science: pro setup</a></li><li class="nav-item"><a href="../pages/02b-math-essentials.html" class=""><span class="num">02b</span>High-school math you actually need</a></li><li class="nav-item"><a href="../pages/03-linear-algebra.html" class=""><span class="num">03</span>Linear algebra for data scientists</a></li><li class="nav-item"><a href="../pages/04-calculus-optimization.html" class=""><span class="num">04</span>Calculus, gradients, and optimization</a></li><li class="nav-item"><a href="../pages/05-probability.html" class=""><span class="num">05</span>Probability: the language of uncertainty</a></li><li class="nav-item"><a href="../pages/06-descriptive-statistics.html" class=""><span class="num">06</span>Descriptive statistics</a></li><li class="nav-item"><a href="../pages/07-inferential-statistics.html" class=""><span class="num">07</span>Inferential statistics and hypothesis testing</a></li><li class="nav-item"><a href="../pages/08-distributions.html" class=""><span class="num">08</span>Probability distributions you&#x27;ll meet</a></li><li class="nav-item"><a href="../pages/09-numpy.html" class=""><span class="num">09</span>NumPy: thinking in arrays</a></li><li class="nav-item"><a href="../pages/10-pandas.html" class=""><span class="num">10</span>Pandas: the swiss army knife</a></li><li class="nav-item"><a href="../pages/11-sql.html" class=""><span class="num">11</span>SQL for data scientists</a></li><li class="nav-item"><a href="../pages/12-visualization.html" class=""><span class="num">12</span>Visualization: matplotlib, seaborn, plotly</a></li><li class="nav-item"><a href="../pages/13-data-wrangling.html" class="active"><span class="num">13</span>Cleaning and data wrangling</a></li><li class="nav-item"><a href="../pages/14-feature-engineering.html" class=""><span class="num">14</span>Feature engineering</a></li><li class="nav-item"><a href="../pages/15-eda.html" class=""><span class="num">15</span>EDA: Exploratory Data Analysis</a></li><li class="nav-item"><a href="../pages/16-ml-fundamentals.html" class=""><span class="num">16</span>ML: fundamentals — bias, variance, validation</a></li><li class="nav-item"><a href="../pages/17-linear-regression.html" class=""><span class="num">17</span>Linear regression and regularization</a></li><li class="nav-item"><a href="../pages/18-logistic-regression.html" class=""><span class="num">18</span>Logistic regression and classification</a></li><li class="nav-item"><a href="../pages/19-knn-naive-bayes-svm.html" class=""><span class="num">19</span>KNN, Naive Bayes, SVM</a></li><li class="nav-item"><a href="../pages/20-decision-trees.html" class=""><span class="num">20</span>Decision trees</a></li><li class="nav-item"><a href="../pages/21-random-forest-boosting.html" class=""><span class="num">21</span>Random Forest, Gradient Boosting, XGBoost</a></li><li class="nav-item"><a href="../pages/22-clustering.html" class=""><span class="num">22</span>Clustering: K-Means, DBSCAN, GMM, hierarchical</a></li><li class="nav-item"><a href="../pages/23-pca-tsne-umap.html" class=""><span class="num">23</span>Dimensionality reduction: PCA, t-SNE, UMAP</a></li><li class="nav-item"><a href="../pages/24-metrics-validation.html" class=""><span class="num">24</span>Metrics, cross-validation, leakage</a></li><li class="nav-item"><a href="../pages/25-class-imbalance.html" class=""><span class="num">25</span>Class imbalance</a></li><li class="nav-item"><a href="../pages/26-hyperparameter-tuning.html" class=""><span class="num">26</span>Hyperparameter tuning</a></li><li class="nav-item"><a href="../pages/27-neural-networks.html" class=""><span class="num">27</span>Neural networks: from fundamentals to backprop</a></li><li class="nav-item"><a href="../pages/28-pytorch.html" class=""><span class="num">28</span>PyTorch: from toy model to training loop</a></li><li class="nav-item"><a href="../pages/29-cnn.html" class=""><span class="num">29</span>CNN for computer vision</a></li><li class="nav-item"><a href="../pages/30-rnn-lstm.html" class=""><span class="num">30</span>RNN, LSTM, GRU for sequences</a></li><li class="nav-item"><a href="../pages/31-transformer.html" class=""><span class="num">31</span>Transformer and attention</a></li><li class="nav-item"><a href="../pages/32-nlp-llm.html" class=""><span class="num">32</span>NLP: from text mining to LLMs</a></li><li class="nav-item"><a href="../pages/33-time-series.html" class=""><span class="num">33</span>Time series and forecasting</a></li><li class="nav-item"><a href="../pages/34-mlops.html" class=""><span class="num">34</span>MLOps: deployment, monitoring, drift</a></li><li class="nav-item"><a href="../pages/35-bayesian-causal.html" class=""><span class="num">35</span>Bayesian and Causal Inference</a></li><li class="nav-item"><a href="../pages/36-capstone-career.html" class=""><span class="num">36</span>Capstone, portfolio, career</a></li><li class="nav-item"><a href="../pages/37-glossary.html" class=""><span class="num">37</span>Glossary A-Z</a></li><li class="nav-item"><a href="../pages/38-formula-sheet.html" class=""><span class="num">38</span>Formula Sheet: all the formulas from the course</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Data</span>
+        <span>Section 14 of 39</span>
+        <span class="level-tag level-int">Level: intermediate</span>
+      </div>
+      <h1>Cleaning and data wrangling</h1>
+      <p class="summary">Missing data, duplicates, outliers, date parsing, regex, normalization, categorical encoding. The 50% of work no tutorial talks about.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Data</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>[[pandas]]</li></ul>
+  <div class="label">Tools</div>
+  <ul class="source-list"><li>pandas, regex, dateparser</li></ul>
+</div>
+      <h2 id="the-dirty-secret">The dirty secret</h2>
+<blockquote>
+<p>"Garbage in, garbage out." Everyone quotes. Few practice.</p>
+</blockquote>
+<p>A senior data scientist spends 50% of their time understanding and cleaning data. Not because it's stupid — because real-world data <strong>is dirty</strong>: mixed formats, missing values, typos, encodings, time zones, systems that change over time.</p>
+<h2 id="initial-diagnosis-first-10-minutes">Initial diagnosis (first 10 minutes)</h2>
+<pre><code class="language-python">import pandas as pd
+df = pd.read_csv(&quot;data.csv&quot;)
+
+df.shape
+df.head()
+df.tail()
+df.info()
+df.describe(include='all')
+df.isna().sum().sort_values(ascending=False)
+df.nunique().sort_values()
+df.duplicated().sum()
+
+df.memory_usage(deep=True).sum() / 1e6  # MB
+
+df.hist(figsize=(12, 8))
+</code></pre>
+<p>Things to look out for:</p>
+<ul>
+<li>Columns with <strong>one value</strong> → useless (zero variance).</li>
+<li>Columns with <strong>n distinct values = n rows</strong> → probably IDs or free text.</li>
+<li><strong>Dtype <code>object</code></strong> on columns that look numeric → dirty (decimal commas, currency, %).</li>
+<li><strong>Dates as strings</strong>.</li>
+</ul>
+<h2 id="missing-values-7-strategies">Missing values: 7 strategies</h2>
+<pre><code class="language-mermaid">flowchart TD
+    M[Missing in column X] --&gt; Q1{What fraction?}
+    Q1 --&gt;|&amp;lt; 5%| A[Drop rows&lt;br/&gt;or impute mean/median]
+    Q1 --&gt;|5-30%| B[Model-based impute&lt;br/&gt;or missing flag]
+    Q1 --&gt;|&amp;gt; 30%| C{Is the column&lt;br/&gt;really useful?}
+    C --&gt;|yes| D[Dedicated model&lt;br/&gt;for imputation]
+    C --&gt;|no| E[Drop column]
+    M --&gt; Q2{Pattern&lt;br/&gt;random or not?}
+    Q2 --&gt;|MCAR| F[Simple impute ok]
+    Q2 --&gt;|MAR/MNAR| G[Advanced methods&lt;br/&gt;or model that handles them]
+</code></pre>
+<p>The three missing types (Rubin, 1976):</p>
+<ul>
+<li><strong>MCAR</strong> (Missing Completely At Random): missingness independent of everything. Rare. Mean imputation OK.</li>
+<li><strong>MAR</strong> (Missing At Random): depends on other <strong>observed</strong> variables. Model-based imputation (KNN, MICE) correct.</li>
+<li><strong>MNAR</strong> (Missing Not At Random): depends on <strong>unobserved</strong> variables (e.g., rich people don't report income). Hard, needs domain knowledge.</li>
+</ul>
+<h3 id="code">Code</h3>
+<pre><code class="language-python">df.fillna(0)
+df.fillna(df.median(numeric_only=True))
+df['cat'].fillna('UNKNOWN')
+
+from sklearn.impute import KNNImputer, IterativeImputer
+imputer = KNNImputer(n_neighbors=5)
+X_imp = imputer.fit_transform(X)
+
+df['col_was_missing'] = df['col'].isna().astype(int)
+df['col'] = df['col'].fillna(df['col'].median())
+</code></pre>
+<blockquote>
+<p>Powerful trick: <strong>keep missingness as information</strong>. Create a binary column "originally NaN". Often the most predictive feature.</p>
+</blockquote>
+<h2 id="duplicates">Duplicates</h2>
+<pre><code class="language-python">df.duplicated().sum()
+df = df.drop_duplicates()
+
+df = (
+    df.sort_values('ts', ascending=False)
+      .drop_duplicates(subset=['user_id', 'product_id'], keep='first')
+)
+</code></pre>
+<p>Beware: duplicate IDs often signal a <strong>join bug</strong> or <strong>dirty data</strong>. Don't mask the problem by removing them: investigate.</p>
+<h2 id="date-parsing-universal-pain">Date parsing (universal pain)</h2>
+<pre><code class="language-python">df['date'] = pd.to_datetime(df['date_str'], errors='coerce')  # NaT on parse fail
+df['date'] = pd.to_datetime(df['date_str'], format='%d/%m/%Y')  # much faster
+
+df['ts'] = pd.to_datetime(df['ts'], utc=True)
+df['ts'] = df['ts'].dt.tz_convert('Europe/Rome')
+
+import dateparser
+df['date'] = df['date_str'].apply(dateparser.parse)
+</code></pre>
+<p>Questions to always ask:</p>
+<ul>
+<li>What's the <strong>time zone</strong> of timestamps? UTC, local, naive?</li>
+<li>Do the data cross <strong>DST changes</strong>?</li>
+<li>Are dates <strong>DD/MM</strong> or <strong>MM/DD</strong>? Ambiguity is a landmine.</li>
+</ul>
+<h2 id="dirty-strings">Dirty strings</h2>
+<pre><code class="language-python">s = df['email'].str
+s.lower()
+s.strip()
+s.replace(r'\s+', ' ', regex=True)
+s.contains(r'@\w+\.\w+', regex=True)
+s.extract(r'@(\w+)')
+s.split('@', expand=True)
+s.normalize('NFKD').encode('ascii','ignore').decode('ascii')
+</code></pre>
+<h3 id="string-numeric-cleaning">String numeric cleaning</h3>
+<pre><code class="language-python">df['amount'] = (
+    df['amount']
+    .str.replace('€', '', regex=False)
+    .str.replace('.', '', regex=False)
+    .str.replace(',', '.', regex=False)
+    .astype(float)
+)
+</code></pre>
+<h3 id="categoricals-with-typos">Categoricals with typos</h3>
+<p>Cluster similar entries with <strong>fuzzy matching</strong>:</p>
+<pre><code class="language-python">from rapidfuzz import process, fuzz
+candidates = df['city'].unique()
+match = process.extractOne(&quot;Milno&quot;, candidates, scorer=fuzz.ratio)
+# ('Milano', 91, 5)
+</code></pre>
+<h2 id="categorical-encoding">Categorical encoding</h2>
+<p>Depends on type:</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Method</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Binary (yes/no)</td>
+<td><code>astype(int)</code></td>
+</tr>
+<tr>
+<td>Ordinal (low/mid/high)</td>
+<td>explicit numeric mapping</td>
+</tr>
+<tr>
+<td>Nominal, few values</td>
+<td>one-hot</td>
+</tr>
+<tr>
+<td>Nominal, many values</td>
+<td>target encoding, frequency encoding, embedding</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-python">pd.get_dummies(df, columns=['city', 'category'], drop_first=True)
+
+order = {'low': 0, 'mid': 1, 'high': 2}
+df['level'] = df['level'].map(order)
+
+from category_encoders import TargetEncoder
+te = TargetEncoder()
+X_te = te.fit_transform(X[['city']], y)
+</code></pre>
+<blockquote>
+<p>Target encoding without CV produces <strong>leakage</strong>: the target value bleeds into features. Use <code>KFoldTargetEncoder</code> or pipeline with CV.</p>
+</blockquote>
+<h2 id="normalization-and-scaling">Normalization and scaling</h2>
+<p>When they matter: KNN, SVM, regularized regression, neural networks, PCA. When they don't: trees (Random Forest, XGBoost).</p>
+<table>
+<thead>
+<tr>
+<th>Scaler</th>
+<th>Formula</th>
+<th>Use when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>StandardScaler</strong></td>
+<td>$(x - \mu)/\sigma$</td>
+<td>~normal distributions</td>
+</tr>
+<tr>
+<td><strong>MinMaxScaler</strong></td>
+<td>$(x - \min)/(\max-\min)$</td>
+<td>features in $[0,1]$</td>
+</tr>
+<tr>
+<td><strong>RobustScaler</strong></td>
+<td>$(x - \text{median})/\text{IQR}$</td>
+<td>outliers present</td>
+</tr>
+<tr>
+<td><strong>PowerTransformer</strong></td>
+<td>Box-Cox/Yeo-Johnson</td>
+<td>strong skew, want normality</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-python">from sklearn.preprocessing import StandardScaler, RobustScaler, PowerTransformer
+sc = StandardScaler().fit(X_train)
+X_train = sc.transform(X_train)
+X_test = sc.transform(X_test)
+</code></pre>
+<blockquote>
+<p><strong>Fit only on train</strong>. Transform test with train's parameters. Otherwise: data leakage.</p>
+</blockquote>
+<h2 id="outliers-remove-cap-or-keep">Outliers: remove, cap, or keep?</h2>
+<table>
+<thead>
+<tr>
+<th>Strategy</th>
+<th>When</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Keep</td>
+<td>They're real, important (fraud, rare events)</td>
+</tr>
+<tr>
+<td>Cap at percentile (winsorize)</td>
+<td>Moderate distortion, sensitive model</td>
+</tr>
+<tr>
+<td>Remove</td>
+<td>Sure they're errors (e.g., age = 999)</td>
+</tr>
+<tr>
+<td>Transform (log)</td>
+<td>Natural long tails</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-python">from scipy.stats.mstats import winsorize
+df['amount_w'] = winsorize(df['amount'], limits=[0.01, 0.01])
+
+low, high = df['amount'].quantile([0.01, 0.99])
+df['amount'] = df['amount'].clip(low, high)
+</code></pre>
+<h2 id="stratification-and-balancing-quick-look">Stratification and balancing (quick look)</h2>
+<pre><code class="language-python">df['target'].value_counts(normalize=True)
+
+from sklearn.model_selection import train_test_split
+X_tr, X_te, y_tr, y_te = train_test_split(X, y, stratify=y, test_size=0.2)
+</code></pre>
+<p>Advanced balancing (SMOTE, class weights) in a dedicated section.</p>
+<h2 id="save-the-data-dictionary">Save the "data dictionary"</h2>
+<p>For each column, document:</p>
+<ul>
+<li>Type</li>
+<li>Meaning</li>
+<li>Units</li>
+<li>Expected range</li>
+<li>Missing handling</li>
+<li>Transformations applied</li>
+</ul>
+<p>Simple Markdown or YAML works fine. It's <strong>the</strong> thing that future-you will thank you for in 6 months.</p>
+<h2 id="validation-assert-everything">Validation: assert everything</h2>
+<p>In pipeline scripts, use defensive assertions:</p>
+<pre><code class="language-python">import pandera as pa
+
+schema = pa.DataFrameSchema({
+    &quot;user_id&quot;: pa.Column(int, checks=pa.Check.ge(0)),
+    &quot;email&quot;: pa.Column(str, checks=pa.Check.str_contains(&quot;@&quot;)),
+    &quot;age&quot;: pa.Column(int, checks=pa.Check.in_range(0, 120), nullable=True),
+    &quot;country&quot;: pa.Column(str, checks=pa.Check.isin([&quot;IT&quot;,&quot;FR&quot;,&quot;DE&quot;,&quot;ES&quot;])),
+})
+
+df_clean = schema.validate(df)
+</code></pre>
+<p>Alternative: <strong>great_expectations</strong> (heavier but more integrated).</p>
+<h2 id="exercises">Exercises</h2>
+<details>
+<summary>Exercise 1 — Clean a messy price column</summary>
+
+You have a `price` column with values like `"€ 1.299,99"`, `"€2,500.00"`, `"1500"`, `"N/A"`. Convert to float.
+
+
+<pre><code class="language-python">import pandas as pd, re
+def clean_price(s):
+    if pd.isna(s) or s in ('N/A', '-', ''): return None
+    s = str(s).strip().replace('€','').replace(' ','')
+    if ',' in s and '.' in s:
+        if s.rfind(',') &gt; s.rfind('.'):
+            s = s.replace('.','').replace(',', '.')
+        else:
+            s = s.replace(',','')
+    elif ',' in s:
+        s = s.replace(',','.')
+    try:
+        return float(s)
+    except ValueError:
+        return None
+</code></pre>
+
+</details>
+
+<details>
+<summary>Exercise 2 — KNN imputation</summary>
+
+
+<pre><code class="language-python">import numpy as np
+from sklearn.impute import KNNImputer
+rng = np.random.default_rng(0)
+X = rng.standard_normal((100, 5))
+mask = rng.random(X.shape) &lt; 0.1
+X_miss = X.copy()
+X_miss[mask] = np.nan
+
+imp = KNNImputer(n_neighbors=5)
+X_filled = imp.fit_transform(X_miss)
+print(&quot;MSE imputation:&quot;, ((X_filled - X)**2).mean())
+</code></pre>
+
+</details>
+
+<details>
+<summary>Exercise 3 — Robust z-score anomaly detection</summary>
+
+
+<pre><code class="language-python">import numpy as np
+def robust_outliers(x, k=3.5):
+    med = np.median(x)
+    mad = np.median(np.abs(x - med)) + 1e-9
+    return np.abs((x - med) / (1.4826 * mad)) &gt; k
+
+x = np.concatenate([np.random.randn(1000), [10, -8, 20]])
+print(np.where(robust_outliers(x))[0])
+</code></pre>
+
+</details>
+
+<details>
+<summary>Exercise 4 — Mixed date parsing</summary>
+
+You have a column with: `"2024-01-15"`, `"15/01/2024"`, `"Jan 15, 2024"`, `"2024.01.15"`. Convert to uniform datetime.
+
+
+<pre><code class="language-python">import pandas as pd
+ser = pd.Series([&quot;2024-01-15&quot;,&quot;15/01/2024&quot;,&quot;Jan 15, 2024&quot;,&quot;2024.01.15&quot;])
+parsed = pd.to_datetime(ser, errors='coerce')
+import dateparser
+parsed = parsed.fillna(ser.apply(lambda s: dateparser.parse(s, settings={'DATE_ORDER': 'DMY'})))
+</code></pre>
+
+</details>
+
+<details>
+<summary>Exercise 5 — Pandera validation</summary>
+
+Schema for a user dataset:
+
+
+<pre><code class="language-python">import pandera as pa
+schema = pa.DataFrameSchema({
+    &quot;user_id&quot;:  pa.Column(int, unique=True, checks=pa.Check.gt(0)),
+    &quot;email&quot;:    pa.Column(str, checks=pa.Check.str_matches(r'^[^@]+@[^@]+\.[^@]+$')),
+    &quot;country&quot;:  pa.Column(str, checks=pa.Check.isin([&quot;IT&quot;,&quot;FR&quot;,&quot;DE&quot;,&quot;ES&quot;,&quot;UK&quot;])),
+    &quot;age&quot;:      pa.Column(int, checks=pa.Check.in_range(13, 120), nullable=True),
+})
+</code></pre>
+
+
+Add to test: 1 user with email missing @, 1 with age=-5. Verify pandera rejects correctly.
+</details>
+
+<h2 id="takeaways">Takeaways</h2>
+<ul>
+<li>50% of time: cleaning. Don't skip — that's where the worst bugs come from.</li>
+<li>Missing is informative: add flags.</li>
+<li>Validate schema in production: pandera or great_expectations.</li>
+<li>Fit scaler only on train, never on the full dataset.</li>
+<li>Document the "data dictionary".</li>
+</ul>
+<p>Next: feature engineering, the art that separates mediocre models from good ones.</p>
+      <nav class="pager">
+<a href="12-visualization.html" class="prev"><span class="label">← Previous</span><span class="title">Visualization: matplotlib, seaborn, plotly</span></a>
+<a href="14-feature-engineering.html" class="next"><span class="label">Next →</span><span class="title">Feature engineering</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Data Science Zero to Hero</strong> — complete path, in English, from math to deployment.</p><p>Open didactic material. Formulas are here to be understood, not feared. When a concept is unclear, go back: data science is a pyramid, not a tree you skip across.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+</body>
+</html>

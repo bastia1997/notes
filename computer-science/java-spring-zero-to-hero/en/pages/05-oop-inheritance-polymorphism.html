@@ -1,0 +1,531 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>OOP II — Inheritance, polymorphism, interfaces, abstract classes — Java + Spring Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">☕</div>
+      <div>
+        <div class="brand-title">JAVA · SPRING</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/05-oop-ereditarieta-polimorfismo.html" class="lang-link" title="Passa all'italiano"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="10" height="20" fill="#009246"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ce2b37"/></svg> IT</a><span class="lang-active" title="English"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="30" height="20" fill="#012169"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#fff" stroke-width="3"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#c8102e" stroke-width="1.5"/><path d="M15,0 v20 M0,10 h30" stroke="#fff" stroke-width="5"/><path d="M15,0 v20 M0,10 h30" stroke="#c8102e" stroke-width="3"/></svg> EN</span></div>
+  </div>
+  <div class="search-wrap">
+    <div class="search-row">
+      <div class="search-inputwrap">
+        <span class="search-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"/>
+            <line x1="20" y1="20" x2="16.65" y2="16.65"/>
+          </svg>
+        </span>
+        <input class="search-input" id="search-input" type="text" placeholder="search... (press /)" autocomplete="off" aria-label="Search">
+        <button class="search-clear" id="search-clear" type="button" aria-label="Clear" title="Clear">&times;</button>
+      </div>
+      <button class="search-btn" id="search-btn" type="button" aria-label="SEARCH" title="SEARCH">SEARCH</button>
+    </div>
+    <div class="search-hits" id="search-hits" role="listbox"></div>
+  </div>
+  <div class="sidebar-nav">
+    <nav class="nav-section">
+      <div class="nav-section-title">Path</div>
+      <ul class="nav-list">
+        <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+        <li class="nav-item"><a href="../pages/00-path-and-mindset.html" class=""><span class="num">00</span>The path and the right mindset</a></li><li class="nav-item"><a href="../pages/01-java-introduction.html" class=""><span class="num">01</span>Java: what it really is, JVM/JRE/JDK, first program</a></li><li class="nav-item"><a href="../pages/02-basic-syntax.html" class=""><span class="num">02</span>Basic syntax: types, variables, operators, control flow</a></li><li class="nav-item"><a href="../pages/03-strings-arrays-io.html" class=""><span class="num">03</span>Strings, arrays, console I/O</a></li><li class="nav-item"><a href="../pages/04-oop-classes-objects.html" class=""><span class="num">04</span>OOP I — Classes, objects, constructors, this, packages, visibility</a></li><li class="nav-item"><a href="../pages/05-oop-inheritance-polymorphism.html" class="active"><span class="num">05</span>OOP II — Inheritance, polymorphism, interfaces, abstract classes</a></li><li class="nav-item"><a href="../pages/06-equals-hashcode-immutability.html" class=""><span class="num">06</span>OOP III — equals, hashCode, toString, immutability, record</a></li><li class="nav-item"><a href="../pages/07-exceptions.html" class=""><span class="num">07</span>Exceptions: checked vs unchecked, try-with-resources, custom</a></li><li class="nav-item"><a href="../pages/08-generics.html" class=""><span class="num">08</span>Generics: parametric types, PECS, type erasure, wildcards</a></li><li class="nav-item"><a href="../pages/09-collections.html" class=""><span class="num">09</span>Collections: List, Set, Map, Queue, complexity, choosing the right structure</a></li><li class="nav-item"><a href="../pages/10-stream-lambda-optional.html" class=""><span class="num">10</span>Stream API, lambdas, functional interfaces, Optional</a></li><li class="nav-item"><a href="../pages/11-io-nio.html" class=""><span class="num">11</span>I/O and NIO.2: File, Path, channels, buffers</a></li><li class="nav-item"><a href="../pages/12-concurrency-thread.html" class=""><span class="num">12</span>Concurrency I — Threads, synchronization, volatile, JMM</a></li><li class="nav-item"><a href="../pages/13-executor-future-completablefuture.html" class=""><span class="num">13</span>Concurrency II — ExecutorService, Future, CompletableFuture</a></li><li class="nav-item"><a href="../pages/14-concurrency-juc.html" class=""><span class="num">14</span>Concurrency III — java.util.concurrent: locks, atomics, concurrent collections</a></li><li class="nav-item"><a href="../pages/15-jvm-internals.html" class=""><span class="num">15</span>JVM internals: classloader, bytecode, runtime data areas, JIT</a></li><li class="nav-item"><a href="../pages/16-memory-gc.html" class=""><span class="num">16</span>Memory and garbage collection: G1, ZGC, Shenandoah</a></li><li class="nav-item"><a href="../pages/17-profiling-jfr.html" class=""><span class="num">17</span>Profiling: JFR, async-profiler, jstack, heap dump, jcmd</a></li><li class="nav-item"><a href="../pages/18-modern-java.html" class=""><span class="num">18</span>Modern Java: from 8 to 21 — key features</a></li><li class="nav-item"><a href="../pages/19-jdbc.html" class=""><span class="num">19</span>JDBC: connection, PreparedStatement, transactions, isolation levels</a></li><li class="nav-item"><a href="../pages/20-jpa-hibernate.html" class=""><span class="num">20</span>JPA / Hibernate: entities, relationships, lazy/eager, N+1, cache</a></li><li class="nav-item"><a href="../pages/21-essential-sql.html" class=""><span class="num">21</span>Essential SQL for the Java developer</a></li><li class="nav-item"><a href="../pages/22-spring-intro-ioc-di.html" class=""><span class="num">22</span>Spring intro: IoC, DI, ApplicationContext, BeanFactory</a></li><li class="nav-item"><a href="../pages/23-spring-beans-lifecycle.html" class=""><span class="num">23</span>Beans: scopes, lifecycle, BeanPostProcessor, FactoryBean</a></li><li class="nav-item"><a href="../pages/24-spring-configuration.html" class=""><span class="num">24</span>Configuration: Java config, @ComponentScan, profiles, conditionals, properties</a></li><li class="nav-item"><a href="../pages/25-spring-aop-transactional.html" class=""><span class="num">25</span>AOP, proxies, @Transactional: what really happens</a></li><li class="nav-item"><a href="../pages/26-spring-boot.html" class=""><span class="num">26</span>Spring Boot: auto-configuration, starters, Actuator</a></li><li class="nav-item"><a href="../pages/27-spring-data-jpa.html" class=""><span class="num">27</span>Spring Data JPA: Repository, derived queries, pagination, Specification</a></li><li class="nav-item"><a href="../pages/28-spring-mvc-rest.html" class=""><span class="num">28</span>Spring MVC: DispatcherServlet, controllers, REST endpoints</a></li><li class="nav-item"><a href="../pages/29-rest-openapi-hateoas.html" class=""><span class="num">29</span>REST: best practices, OpenAPI/Swagger, HATEOAS, versioning</a></li><li class="nav-item"><a href="../pages/30-spring-webflux.html" class=""><span class="num">30</span>Spring WebFlux + Reactor: Mono, Flux, reactive programming</a></li><li class="nav-item"><a href="../pages/31-spring-security.html" class=""><span class="num">31</span>Spring Security: filter chain, authentication, authorization, JWT, OAuth2</a></li><li class="nav-item"><a href="../pages/32-spring-cloud.html" class=""><span class="num">32</span>Spring Cloud: Config Server, Discovery, Gateway, Resilience4j</a></li><li class="nav-item"><a href="../pages/33-testing.html" class=""><span class="num">33</span>Testing: JUnit 5, Mockito, MockMvc, Testcontainers</a></li><li class="nav-item"><a href="../pages/34-spring-batch-intro.html" class=""><span class="num">34</span>Spring Batch intro: domain model, Job, Step, first batch</a></li><li class="nav-item"><a href="../pages/35-spring-batch-jobrepository.html" class=""><span class="num">35</span>JobRepository, JobLauncher, metadata schema</a></li><li class="nav-item"><a href="../pages/36-spring-batch-chunk-skip-retry.html" class=""><span class="num">36</span>Chunk processing: commit interval, skip, retry, fault tolerance</a></li><li class="nav-item"><a href="../pages/37-spring-batch-tasklet-flow.html" class=""><span class="num">37</span>Tasklet vs Chunk; flow control: decisions, splits, conditionals</a></li><li class="nav-item"><a href="../pages/38-spring-batch-itemreader.html" class=""><span class="num">38</span>ItemReader: flat file, XML/JSON, JDBC cursor/paging, JPA, multi-resource</a></li><li class="nav-item"><a href="../pages/39-spring-batch-itemwriter.html" class=""><span class="num">39</span>ItemWriter: file, JDBC, JPA, composite, classifier, batch insert</a></li><li class="nav-item"><a href="../pages/40-spring-batch-scaling-partitioning.html" class=""><span class="num">40</span>Scaling: multi-threaded step, partitioning, remote chunking/partitioning</a></li><li class="nav-item"><a href="../pages/41-spring-batch-listeners-restart-k8s.html" class=""><span class="num">41</span>Listeners, restart, monitoring, Spring Boot and Kubernetes integration</a></li><li class="nav-item"><a href="../pages/42-design-patterns.html" class=""><span class="num">42</span>Design patterns in Java/Spring: GoF + DDD-lite</a></li><li class="nav-item"><a href="../pages/43-performance-observability.html" class=""><span class="num">43</span>Production-grade performance tuning and observability</a></li><li class="nav-item"><a href="../pages/44-synthesis-exercises.html" class=""><span class="num">44</span>50 cumulative exercises: from syntax to Spring Batch</a></li><li class="nav-item"><a href="../pages/45-final-project-etl.html" class=""><span class="num">45</span>Final guided project: nightly bank ETL</a></li>
+      </ul>
+    </nav>
+  </div>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Java Foundations</span>
+        <span>Section 5 of 45</span>
+        <span class="level-tag level-beg">Level: beginner</span>
+      </div>
+      <h1>OOP II — Inheritance, polymorphism, interfaces, abstract classes</h1>
+      <p class="summary">Inheritance with extends, super, override. Dynamic polymorphism. Interfaces (with default and static methods since Java 8), abstract classes, when to use which. Diamond problem avoided. sealed classes.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Java Foundations</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>Section 4</li></ul>
+  <div class="label">Tools</div>
+  <ul class="source-list"><li>JDK 21</li></ul>
+</div>
+      <h2 id="inheritance-extends">Inheritance: "extends"</h2>
+<p>A class can <strong>inherit</strong> from another: it gets non-private fields and methods and can add to or redefine them.</p>
+<pre><code class="language-java">public class Animal {
+    protected String name;
+    public Animal(String name) { this.name = name; }
+    public void eat() { System.out.println(name + &quot; is eating&quot;); }
+}
+
+public class Dog extends Animal {
+    private String breed;
+
+    public Dog(String name, String breed) {
+        super(name);
+        this.breed = breed;
+    }
+
+    public void bark() { System.out.println(name + &quot; barks: Woof!&quot;); }
+}
+</code></pre>
+<pre><code class="language-java">Dog d = new Dog(&quot;Rex&quot;, &quot;Labrador&quot;);
+d.eat();    // inherited from Animal
+d.bark();   // Dog's own method
+</code></pre>
+<ul>
+<li><code>extends</code> denotes inheritance. <strong>Java is single-inheritance</strong>: a class has at most <em>one</em> superclass.</li>
+<li><code>super(...)</code> calls the superclass constructor. Must be the <strong>first statement</strong> of the child constructor.</li>
+<li>If you don't call <code>super(...)</code>, Java adds <code>super()</code> automatically. If the superclass has no no-arg constructor, you must call one explicitly.</li>
+</ul>
+<h3 id="super-to-access-superclass-methods"><code>super</code> to access superclass methods</h3>
+<pre><code class="language-java">public class Dog extends Animal {
+    @Override
+    public void eat() {
+        super.eat();
+        System.out.println(&quot;...and wags its tail&quot;);
+    }
+}
+</code></pre>
+<h2 id="object-the-parent-of-all"><code>Object</code>: the parent of all</h2>
+<p>Every class implicitly extends <code>java.lang.Object</code>. From there you get these (often overridden) methods:</p>
+<ul>
+<li><code>equals(Object)</code> — logical equality</li>
+<li><code>hashCode()</code> — hash for <code>HashMap</code>/<code>HashSet</code></li>
+<li><code>toString()</code> — textual representation</li>
+<li><code>getClass()</code> — runtime type</li>
+<li><code>clone()</code>, <code>finalize()</code> — old, avoid</li>
+</ul>
+<p>Covered in the next section.</p>
+<h2 id="override-and-dynamic-polymorphism">Override and dynamic polymorphism</h2>
+<p><strong>Override</strong> = redefine a superclass method keeping the signature:</p>
+<pre><code class="language-java">public class Animal {
+    public String sound() { return &quot;...&quot;; }
+}
+public class Dog extends Animal {
+    @Override public String sound() { return &quot;Woof!&quot;; }
+}
+public class Cat extends Animal {
+    @Override public String sound() { return &quot;Meow&quot;; }
+}
+</code></pre>
+<pre><code class="language-java">Animal[] zoo = { new Dog(&quot;Rex&quot;, &quot;Lab&quot;), new Cat(&quot;Bea&quot;) };
+for (Animal a : zoo) {
+    System.out.println(a.sound());
+}
+// prints: Woof!  Meow
+</code></pre>
+<p>Even though <code>a</code> is declared <code>Animal</code>, the call resolves to <strong>the actual object's class</strong>. This is <strong>dynamic dispatch</strong> (late binding): methods are resolved at runtime based on the actual type. The heart of polymorphism.</p>
+<blockquote>
+<p><strong><code>@Override</code></strong> is not mandatory but strongly recommended: the compiler verifies you're actually overriding. If you mis-spell the signature (e.g. <code>sound(int x)</code> instead of <code>sound()</code>), it warns you.</p>
+</blockquote>
+<h3 id="override-rules">Override rules</h3>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Constraint</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Method name</td>
+<td>Identical</td>
+</tr>
+<tr>
+<td>Parameters</td>
+<td>Identical</td>
+</tr>
+<tr>
+<td>Return type</td>
+<td>Same or <strong>subtype</strong> (covariant return)</td>
+</tr>
+<tr>
+<td>Visibility</td>
+<td>Same or <strong>more permissive</strong> (<code>protected</code> ⟶ <code>public</code> ok; <code>public</code> ⟶ <code>protected</code> not ok)</td>
+</tr>
+<tr>
+<td>Checked exceptions</td>
+<td>Same or <strong>subtypes</strong> or none</td>
+</tr>
+</tbody>
+</table>
+<h2 id="reference-casting">Reference casting</h2>
+<pre><code class="language-java">Animal a = new Dog(&quot;Rex&quot;, &quot;Lab&quot;);   // upcast, always safe
+Dog d = (Dog) a;                     // downcast, must be verified
+d.bark();
+</code></pre>
+<p>If the object is not really a <code>Dog</code>, you get <code>ClassCastException</code>. Check first with <code>instanceof</code>:</p>
+<pre><code class="language-java">if (a instanceof Dog d) {     // pattern matching for instanceof (Java 16+)
+    d.bark();
+}
+</code></pre>
+<p>Under Java 16+ you can use the <em>pattern binding</em> and skip the explicit cast.</p>
+<h2 id="abstract-classes">Abstract classes</h2>
+<p>An <strong>abstract</strong> class cannot be instantiated: it's a base for subclasses. It may have abstract methods (no body) and/or concrete ones.</p>
+<pre><code class="language-java">public abstract class Shape {
+    public abstract double area();
+
+    public void print() {
+        System.out.println(&quot;Area: &quot; + area());
+    }
+}
+
+public class Circle extends Shape {
+    private double radius;
+    public Circle(double r) { this.radius = r; }
+    @Override
+    public double area() { return Math.PI * radius * radius; }
+}
+</code></pre>
+<pre><code class="language-java">Shape s = new Shape(...);    // compile error
+Shape s = new Circle(5);     // ok
+s.print();                    // &quot;Area: 78.539...&quot;
+</code></pre>
+<p>When to use an abstract class? When you have a common <strong>skeleton</strong> with details that vary per subclass.</p>
+<h2 id="interfaces">Interfaces</h2>
+<p>An <strong>interface</strong> is a contract: declares <em>what</em> a type can do, without the <em>implementation</em> (originally).</p>
+<pre><code class="language-java">public interface Flyable {
+    void takeOff();
+    void land();
+}
+
+public class Plane implements Flyable {
+    @Override public void takeOff() { System.out.println(&quot;V1, rotate, climb&quot;); }
+    @Override public void land()    { System.out.println(&quot;Final approach&quot;); }
+}
+</code></pre>
+<p>A class can <strong>implement many interfaces</strong> (while it can extend only one class):</p>
+<pre><code class="language-java">public class Amphibian implements Flyable, Swimmable, Walker { ... }
+</code></pre>
+<h3 id="default-methods-java-8"><code>default</code> methods (Java 8+)</h3>
+<p>Since Java 8, interfaces can have default implementations:</p>
+<pre><code class="language-java">public interface Greeting {
+    String greet();
+
+    default String greetWithBang() {
+        return greet() + &quot;!&quot;;
+    }
+}
+</code></pre>
+<p>Classes implementing <code>Greeting</code> get <code>greetWithBang()</code> for free, can still override.</p>
+<h3 id="static-methods-in-interfaces"><code>static</code> methods in interfaces</h3>
+<pre><code class="language-java">public interface MathUtils {
+    static double square(double x) { return x * x; }
+}
+double q = MathUtils.square(3);  // 9
+</code></pre>
+<h3 id="constants-in-interfaces">Constants in interfaces</h3>
+<p>All fields in an interface are implicitly <code>public static final</code>:</p>
+<pre><code class="language-java">public interface Constants {
+    int MAX_RETRY = 3;   // automatically public static final
+}
+</code></pre>
+<h3 id="diamond-problem-avoided">Diamond problem avoided</h3>
+<p>In Java you can't inherit from two classes, but you can implement two interfaces with the same <code>default</code> method. If they conflict, you <strong>must</strong> resolve manually:</p>
+<pre><code class="language-java">interface A { default String hi() { return &quot;from A&quot;; } }
+interface B { default String hi() { return &quot;from B&quot;; } }
+
+class C implements A, B {
+    @Override
+    public String hi() {
+        return A.super.hi();   // or B.super.hi(), or fresh logic
+    }
+}
+</code></pre>
+<h2 id="abstract-class-vs-interface-which-one">Abstract class vs interface: which one?</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Abstract class</th>
+<th>Interface</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>State (non-final fields)</td>
+<td>Yes</td>
+<td>No (only constants)</td>
+</tr>
+<tr>
+<td>Constructors</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Multiple inheritance</td>
+<td>No (one superclass)</td>
+<td>Yes (many interfaces)</td>
+</tr>
+<tr>
+<td>Methods</td>
+<td>Concrete or abstract</td>
+<td>Default since Java 8</td>
+</tr>
+<tr>
+<td>When to use</td>
+<td>When sharing <strong>state</strong> and common logic</td>
+<td>When defining a <strong>contract</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Practical rule</strong>: start with an interface. If you find yourself sharing state/code, consider an abstract class. Often both: interface for the contract, abstract class as a base for standard implementations.</p>
+<pre><code class="language-java">public interface Repository&lt;T&gt; {
+    Optional&lt;T&gt; findById(long id);
+    List&lt;T&gt; findAll();
+    T save(T entity);
+}
+
+public abstract class AbstractRepository&lt;T&gt; implements Repository&lt;T&gt; {
+    protected DataSource ds;
+    public AbstractRepository(DataSource ds) { this.ds = ds; }
+}
+</code></pre>
+<p>Spring uses exactly this pattern everywhere.</p>
+<h2 id="final-on-classes-and-methods"><code>final</code> on classes and methods</h2>
+<ul>
+<li><code>final</code> on a class: cannot be extended (e.g. <code>String</code>, <code>Integer</code>).</li>
+<li><code>final</code> on a method: cannot be overridden.</li>
+<li><code>final</code> on a field: see section 2.</li>
+</ul>
+<pre><code class="language-java">public final class Util { ... }
+public class Base {
+    public final void critical() {  // subclasses CANNOT override
+        ...
+    }
+}
+</code></pre>
+<h2 id="sealed-java-17-controlled-inheritance"><code>sealed</code> (Java 17+): controlled inheritance</h2>
+<pre><code class="language-java">public sealed interface Shape permits Circle, Square, Triangle {}
+
+public final class Circle implements Shape { ... }
+public final class Square implements Shape { ... }
+public final class Triangle implements Shape { ... }
+</code></pre>
+<p><code>Shape</code> can be implemented <strong>only</strong> by <code>Circle</code>, <code>Square</code>, <code>Triangle</code>. Useful for exhaustive pattern matching (section 18).</p>
+<h2 id="integrated-example-a-tiny-payment-system">Integrated example: a tiny payment system</h2>
+<pre><code class="language-java">public interface Payment {
+    void execute(double amount);
+}
+
+public abstract class BasePayment implements Payment {
+    protected String id;
+    public BasePayment(String id) { this.id = id; }
+
+    @Override
+    public final void execute(double amount) {  // template method
+        validate(amount);
+        process(amount);
+        record(amount);
+    }
+
+    protected void validate(double amount) {
+        if (amount &lt;= 0) throw new IllegalArgumentException(&quot;amount &lt;= 0&quot;);
+    }
+    protected abstract void process(double amount);
+    protected void record(double amount) {
+        System.out.println(&quot;[&quot; + id + &quot;] recorded &quot; + amount);
+    }
+}
+
+public class CreditCard extends BasePayment {
+    public CreditCard(String id) { super(id); }
+    @Override
+    protected void process(double amount) {
+        System.out.println(&quot;Charge card &quot; + id + &quot;: &quot; + amount);
+    }
+}
+
+public class WireTransfer extends BasePayment {
+    public WireTransfer(String id) { super(id); }
+    @Override
+    protected void process(double amount) {
+        System.out.println(&quot;SEPA transfer &quot; + id + &quot;: &quot; + amount);
+    }
+}
+</code></pre>
+<p>This is the <strong>template method pattern</strong>: general algorithm defined once (<code>execute</code>), variations in <code>process</code>. The "same" parts written once.</p>
+<h2 id="exercises">Exercises</h2>
+<details>
+<summary>Ex 5.1 — Vehicles</summary>
+
+Create an abstract class `Vehicle` with field `plate`, abstract `wheels()`, concrete `describe()` that uses `wheels()`. Implement `Car` (4), `Bike` (2), `Truck` (6).
+
+
+<pre><code class="language-java">public abstract class Vehicle {
+    protected String plate;
+    public Vehicle(String p) { this.plate = p; }
+    public abstract int wheels();
+    public void describe() {
+        System.out.println(plate + &quot; has &quot; + wheels() + &quot; wheels&quot;);
+    }
+}
+public class Car extends Vehicle {
+    public Car(String p) { super(p); }
+    @Override public int wheels() { return 4; }
+}
+</code></pre>
+
+
+</details>
+
+<details>
+<summary>Ex 5.2 — Interface composition</summary>
+
+Create `Fish` implementing `Swimmable` (`swim()`) and `Reproducible` (`reproduce()`).
+
+
+<pre><code class="language-java">interface Swimmable { void swim(); }
+interface Reproducible { void reproduce(); }
+
+public class Fish implements Swimmable, Reproducible {
+    public void swim() { System.out.println(&quot;Glub glub&quot;); }
+    public void reproduce() { System.out.println(&quot;Laying eggs&quot;); }
+}
+</code></pre>
+
+
+</details>
+
+<details>
+<summary>Ex 5.3 — Cast and instanceof</summary>
+
+Given `Vehicle[] fleet = { new Car("AA-111-BB"), new Bike("XX-222-YY") }`, count the cars.
+
+
+<pre><code class="language-java">int cars = 0;
+for (Vehicle v : fleet) {
+    if (v instanceof Car) cars++;
+}
+</code></pre>
+
+
+Pattern matching version:
+
+
+<pre><code class="language-java">int cars = 0;
+for (Vehicle v : fleet) {
+    if (v instanceof Car c) {
+        cars++;
+    }
+}
+</code></pre>
+
+
+</details>
+
+<details>
+<summary>Ex 5.4 — Conflicting defaults</summary>
+
+Two interfaces, same default, a class implementing both. What happens?
+
+
+<pre><code class="language-java">interface A { default String hi() { return &quot;A&quot;; } }
+interface B { default String hi() { return &quot;B&quot;; } }
+
+class C implements A, B {
+    // doesn't compile until you override hi()
+}
+</code></pre>
+
+
+You must override `hi()` in `C`. To delegate to one:
+
+
+<pre><code class="language-java">class C implements A, B {
+    @Override
+    public String hi() {
+        return A.super.hi();
+    }
+}
+</code></pre>
+
+
+</details>
+
+<details>
+<summary>Ex 5.5 — Sealed hierarchy</summary>
+
+Create a `sealed` hierarchy for ID document types: `Document` permits only `IdCard`, `DriverLicense`, `Passport`.
+
+
+<pre><code class="language-java">public sealed interface Document permits IdCard, DriverLicense, Passport {
+    String number();
+}
+public record IdCard(String number) implements Document {}
+public record DriverLicense(String number, String category) implements Document {}
+public record Passport(String number, String country) implements Document {}
+</code></pre>
+
+
+</details>
+
+<h2 id="take-aways">Take-aways</h2>
+<ul>
+<li><strong>Inheritance</strong> (extends) to reuse/extend. Java is single-inheritance.</li>
+<li><strong>Override</strong> = same signature, dynamic polymorphism. Always use <code>@Override</code>.</li>
+<li><code>super</code> calls superclass constructor or method.</li>
+<li><strong>Interfaces</strong> = contracts. Implement many. <code>default</code> methods since Java 8.</li>
+<li><strong>Abstract classes</strong> = base with shared state. <code>abstract</code> prevents instantiation.</li>
+<li><code>final</code>, <code>sealed</code> to control extensibility.</li>
+<li>Fundamental patterns: template method, strategy, decorator (see the design patterns section).</li>
+</ul>
+<p>Next: equals/hashCode, immutability, <code>record</code>.</p>
+      <nav class="pager">
+<a href="04-oop-classes-objects.html" class="prev"><span class="label">← Previous</span><span class="title">OOP I — Classes, objects, constructors, this, packages, visibility</span></a>
+<a href="06-equals-hashcode-immutability.html" class="next"><span class="label">Next →</span><span class="title">OOP III — equals, hashCode, toString, immutability, record</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Java + Spring Zero to Hero</strong> — built as a continuous path. Static build from Markdown.</p><p>Open-content educational material. Code under the MIT license; use freely in your own projects.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body, {delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true, background: '#15191e', primaryColor: '#1d2530',
+      primaryTextColor: '#eef1f5', primaryBorderColor: '#f89820',
+      lineColor: '#6db33f', secondaryColor: '#1a1f25', tertiaryColor: '#222a33',
+      mainBkg: '#1d2530', nodeBorder: '#f89820', clusterBkg: '#0f1318',
+      clusterBorder: '#2a3340', titleColor: '#f89820',
+      edgeLabelBackground: '#0f1318', textColor: '#eef1f5',
+      labelTextColor: '#eef1f5', actorBkg: '#1d2530', actorBorder: '#f89820',
+      actorTextColor: '#f89820', actorLineColor: '#6db33f',
+      signalColor: '#eef1f5', signalTextColor: '#eef1f5',
+      labelBoxBkgColor: '#1d2530', labelBoxBorderColor: '#f89820',
+      noteBkgColor: '#fff6a8', noteTextColor: '#0f1318', noteBorderColor: '#fff6a8',
+      activationBkgColor: '#1d2530', activationBorderColor: '#f89820',
+      sequenceNumberColor: '#0f1318'
+    },
+    flowchart: { curve: 'basis', padding: 16 },
+    sequence: { mirrorActors: false, bottomMarginAdj: 10 },
+    fontFamily: 'JetBrains Mono, Cascadia Code, Consolas, monospace'
+  });
+</script>
+</body>
+</html>

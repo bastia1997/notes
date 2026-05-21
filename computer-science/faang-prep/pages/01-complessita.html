@@ -1,0 +1,769 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Complessità computazionale (Big-O) — FAANG Prep</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">F</div>
+      <div>
+        <div class="brand-title">FAANG Prep</div>
+        <div class="brand-subtitle">DS&amp;A · System Design</div>
+      </div>
+    </div>
+    <div class="lang-bar">
+      <a class="lang-switcher" href="../en/pages/01-complexity.html" title="English"><span class="flag-icon">🇬🇧</span><span class="flag-label">English</span></a>
+    </div>
+  </div>
+  <div class="search-wrap">
+    <input class="search-input" id="search-input" placeholder="Cerca nei contenuti... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/00-introduzione.html" class=""><span class="num">00</span>Introduzione e come usare questo percorso</a></li><li class="nav-item"><a href="../pages/01-complessita.html" class="active"><span class="num">01</span>Complessità computazionale (Big-O)</a></li><li class="nav-item"><a href="../pages/02-array-stringhe.html" class=""><span class="num">02</span>Array e stringhe</a></li><li class="nav-item"><a href="../pages/03-hashmap-set.html" class=""><span class="num">03</span>Hashmap e set</a></li><li class="nav-item"><a href="../pages/04-linked-list.html" class=""><span class="num">04</span>Linked list</a></li><li class="nav-item"><a href="../pages/05-stack-coda.html" class=""><span class="num">05</span>Stack e coda</a></li><li class="nav-item"><a href="../pages/06-alberi.html" class=""><span class="num">06</span>Alberi (binary tree e BST)</a></li><li class="nav-item"><a href="../pages/07-heap.html" class=""><span class="num">07</span>Heap e priority queue</a></li><li class="nav-item"><a href="../pages/08-grafi.html" class=""><span class="num">08</span>Grafi</a></li><li class="nav-item"><a href="../pages/09-trie.html" class=""><span class="num">09</span>Trie (prefix tree)</a></li><li class="nav-item"><a href="../pages/10-ricorsione-backtracking.html" class=""><span class="num">10</span>Ricorsione e backtracking</a></li><li class="nav-item"><a href="../pages/11-sorting-searching.html" class=""><span class="num">11</span>Sorting e searching</a></li><li class="nav-item"><a href="../pages/12-two-pointers-sliding-window.html" class=""><span class="num">12</span>Two pointers e sliding window</a></li><li class="nav-item"><a href="../pages/13-greedy.html" class=""><span class="num">13</span>Greedy</a></li><li class="nav-item"><a href="../pages/14-dp.html" class=""><span class="num">14</span>Dynamic programming</a></li><li class="nav-item"><a href="../pages/15-bit-manipulation.html" class=""><span class="num">15</span>Bit manipulation</a></li><li class="nav-item"><a href="../pages/16-oop-design-patterns.html" class=""><span class="num">16</span>OOP e design patterns</a></li><li class="nav-item"><a href="../pages/17-system-design.html" class=""><span class="num">17</span>System design — fondamenti</a></li><li class="nav-item"><a href="../pages/18-system-design-esempi.html" class=""><span class="num">18</span>System design — esempi end-to-end</a></li><li class="nav-item"><a href="../pages/19-concorrenza.html" class=""><span class="num">19</span>Concorrenza e parallelismo</a></li><li class="nav-item"><a href="../pages/20-database-sql.html" class=""><span class="num">20</span>Database e SQL</a></li><li class="nav-item"><a href="../pages/21-os-networking.html" class=""><span class="num">21</span>OS e networking</a></li><li class="nav-item"><a href="../pages/22-coding-patterns.html" class=""><span class="num">22</span>I 16 coding patterns dei colloqui</a></li><li class="nav-item"><a href="../pages/23-behavioral-star.html" class=""><span class="num">23</span>Behavioral interview — STAR e Amazon LP</a></li><li class="nav-item"><a href="../pages/24-mock-interviews.html" class=""><span class="num">24</span>Mock interview e strategia in colloquio</a></li><li class="nav-item"><a href="../pages/25-roadmap-90-giorni.html" class=""><span class="num">25</span>Roadmap 90 giorni — piano operativo</a></li><li class="nav-item"><a href="../pages/26-banca-esercizi.html" class=""><span class="num">26</span>Banca esercizi — 200+ problemi FAANG</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Fondamenti</span>
+        <span>Sezione 1 di 26</span>
+      </div>
+      <h1>Complessità computazionale (Big-O)</h1>
+      <p class="summary">Cos&#x27;è un algoritmo, perché si misura, come si conta. Dalle prime intuizioni alla padronanza completa di Big-O, con esempi visivi.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Fondamenti</div>
+  
+  
+</div>
+      <p>Prima di entrare nel vivo: <strong>questo capitolo è fondamentale</strong>. Se lo digerisci bene, tutti i capitoli seguenti ti sembreranno facili. Se lo salti, navigherai a vista.</p>
+<p>Procediamo dal nulla.</p>
+<h2 id="parte-1-cose-un-algoritmo-e-perche-ci-importa-quanto-e-veloce">Parte 1 — Cos'è un algoritmo, e perché ci importa quanto è "veloce"</h2>
+<h3 id="un-algoritmo-e-una-ricetta">Un algoritmo è una ricetta</h3>
+<p>Pensa a una ricetta per fare una torta: una sequenza di istruzioni che, seguita pedissequamente, porta a un risultato. Un algoritmo è esattamente la stessa cosa, applicata al computer. È una serie di passi che, dato un certo input, produce un output.</p>
+<p>Esempio (informale): <em>"data una lista di numeri, trova il più grande"</em>.</p>
+<p>Algoritmo:
+1. Tieni in mente "il candidato campione". All'inizio è il primo numero della lista.
+2. Vai uno per uno sui restanti numeri.
+3. Per ogni numero, se è più grande del campione, sostituisci il campione con esso.
+4. Alla fine, il campione è il massimo.</p>
+<p>In Python:</p>
+<pre><code class="language-python">def trova_max(arr):
+    campione = arr[0]
+    for x in arr[1:]:
+        if x &gt; campione:
+            campione = x
+    return campione
+</code></pre>
+<h3 id="perche-misurare-la-velocita">Perché misurare la "velocità"?</h3>
+<p>Una ricetta semplice può richiedere 10 minuti o 4 ore. Per il pomeriggio in cucina cambia tutto. Per un computer, la differenza tra un algoritmo "veloce" e uno "lento" è la differenza tra:</p>
+<ul>
+<li>Google che ti dà i risultati in 200 ms vs in 3 ore.</li>
+<li>Una banca che fa un bonifico in 1 secondo vs il giorno dopo.</li>
+<li>Netflix che fa il consiglio in real time vs domani mattina.</li>
+</ul>
+<p>In colloquio FAANG ti chiederanno <strong>sempre</strong> di dichiarare quanto è veloce la tua soluzione. Se non lo sai dire, è come dire "ho cucinato una torta" senza saper rispondere a "quanto tempo ci hai messo?". Brutta figura immediata.</p>
+<h3 id="perche-non-si-misura-in-secondi">Perché non si misura in secondi</h3>
+<p>Domanda naturale: "perché non eseguo il codice e vedo quanti secondi ci mette?". Tre problemi:</p>
+<ol>
+<li><strong>Dipende dalla macchina</strong>. Il mio computer è 10× più veloce del tuo? L'algoritmo è meglio o no?</li>
+<li><strong>Dipende dall'input</strong>. Funziona benissimo con 100 elementi, ma con 1 milione? Devo provare ogni dimensione possibile?</li>
+<li><strong>Dipende dal momento</strong>. Stai eseguendo altri programmi? La CPU è in throttling?</li>
+</ol>
+<p>Quindi non si misura in <strong>tempo assoluto</strong> (secondi). Si misura in <strong>numero di operazioni</strong> in funzione dell'input. È una misura <strong>astratta</strong> ma <strong>universale</strong>: vale per qualsiasi macchina, qualsiasi linguaggio, qualsiasi momento.</p>
+<h2 id="parte-2-contare-le-operazioni-la-prima-intuizione">Parte 2 — Contare le operazioni: la prima intuizione</h2>
+<p>Riprendiamo <code>trova_max</code>. Quante operazioni fa?</p>
+<ul>
+<li>1 operazione per inizializzare <code>campione = arr[0]</code>.</li>
+<li>Per ogni elemento della lista (chiamiamo <code>n</code> la lunghezza), fa <strong>1 confronto</strong> (<code>if x &gt; campione</code>) e <strong>forse 1 assegnamento</strong> (<code>campione = x</code>).</li>
+</ul>
+<p>Quindi: circa <code>1 + n × 2 = 2n + 1</code> operazioni.</p>
+<p>Se la lista ha <code>n = 10</code> elementi → 21 operazioni.
+Se ha <code>n = 1000</code> → 2001 operazioni.
+Se ha <code>n = 1 000 000</code> → 2 000 001 operazioni.</p>
+<h3 id="domanda-2n1-e-veloce-o-lento">Domanda: 2n+1 è "veloce" o "lento"?</h3>
+<p>Ne parliamo subito. Ma prima, un fatto chiave: notiamo che <strong>quel "+1" e quel "× 2" non sono molto importanti</strong>. Cioè, se <code>n</code> è enorme, l'unica cosa che conta è che è <strong>proporzionale a n</strong>. Lo <code>2</code> davanti e lo <code>+1</code> cambiano di poco.</p>
+<p>Vedi tu stesso: per <code>n = 1 000 000</code>:</p>
+<ul>
+<li><code>n</code> = 1 000 000</li>
+<li><code>2n + 1</code> = 2 000 001</li>
+<li><code>5n + 100</code> = 5 000 100</li>
+<li><code>100n</code> = 100 000 000</li>
+</ul>
+<p>Tutte queste cose sono <strong>dello stesso ordine di grandezza</strong>: sono tutte "circa lineari". Il numero davanti è una "costante" che non cambia la forma generale della crescita.</p>
+<h3 id="confronto-cose-diverso-ordine-di-grandezza">Confronto: cos'è "diverso ordine di grandezza"?</h3>
+<p>Ora confronta con questo algoritmo:</p>
+<pre><code class="language-python">def coppie_uguali(arr):
+    &quot;&quot;&quot;Restituisce le coppie (i, j) con arr[i] == arr[j], i &lt; j.&quot;&quot;&quot;
+    coppie = []
+    for i in range(len(arr)):
+        for j in range(i+1, len(arr)):
+            if arr[i] == arr[j]:
+                coppie.append((i, j))
+    return coppie
+</code></pre>
+<p>Quante operazioni fa? Due loop annidati. Per ogni <code>i</code>, il loop interno fa <code>n - i - 1</code> iterazioni. Totale: <code>(n-1) + (n-2) + ... + 1 + 0 = n(n-1)/2</code> confronti.</p>
+<p>Per <code>n = 1 000 000</code>: <code>n(n-1)/2 ≈ 500 miliardi</code>. Su una macchina che fa ~10⁸ operazioni/secondo: <strong>~5000 secondi = ~1 ora e mezza</strong>.</p>
+<p>Confronta con <code>trova_max</code> su <code>n = 1 000 000</code>: 2 milioni di operazioni → <strong>~20 millisecondi</strong>.</p>
+<p><strong>Sono dello stesso ordine?</strong> No. Uno scala <strong>linearmente</strong> con <code>n</code>, l'altro <strong>quadraticamente</strong>. Per <code>n = 10</code> la differenza è trascurabile. Per <code>n = 10⁶</code> la differenza è 5 ordini di grandezza.</p>
+<p>Big-O è esattamente questo: classificare gli algoritmi per <strong>come crescono al crescere dell'input</strong>.</p>
+<h2 id="parte-3-la-notazione-big-o">Parte 3 — La notazione Big-O</h2>
+<p>Big-O scrive <code>O(f(n))</code> per dire "questo algoritmo, ignorando le costanti e i termini piccoli, cresce come f(n)".</p>
+<ul>
+<li><code>trova_max</code>: <code>O(n)</code> — lineare.</li>
+<li><code>coppie_uguali</code>: <code>O(n²)</code> — quadratica.</li>
+</ul>
+<p>Le regole formali sono due e semplicissime:</p>
+<h3 id="regola-1-ignora-le-costanti-moltiplicative">Regola 1 — Ignora le costanti moltiplicative</h3>
+<p><code>5n</code> è O(n). <code>1000n</code> è O(n). <code>0.001n</code> è O(n). Tutto <strong>lineare</strong>.</p>
+<p><strong>Perché?</strong> Perché la costante dipende da dettagli irrilevanti: lingua, compilatore, hardware. Quello che ci interessa è la <strong>forma della crescita</strong>, non la pendenza precisa.</p>
+<h3 id="regola-2-ignora-i-termini-non-dominanti">Regola 2 — Ignora i termini non dominanti</h3>
+<p><code>n² + 100n + 5000</code> è <code>O(n²)</code>. Quando <code>n</code> è grande, <code>n²</code> domina su tutto il resto.</p>
+<p>Verifica: <code>n = 1000</code>. <code>n² = 1 000 000</code>. <code>100n = 100 000</code>. <code>5000 = 5000</code>. Il primo termine è 10× il secondo e 200× il terzo. Per <code>n = 10⁶</code>, il primo è 10000× il secondo. Sì, lo possiamo ignorare.</p>
+<h3 id="quindi-per-analizzare-un-algoritmo">Quindi, per analizzare un algoritmo:</h3>
+<ol>
+<li>Conta le operazioni in funzione di <code>n</code> (anche grossolanamente).</li>
+<li>Tieni solo il termine che cresce più velocemente.</li>
+<li>Butta via le costanti.</li>
+</ol>
+<h2 id="parte-4-le-classi-di-complessita-che-devi-riconoscere">Parte 4 — Le classi di complessità che devi riconoscere</h2>
+<p>Ecco la "scala" delle complessità più comuni, dal più veloce al più lento:</p>
+<table>
+<thead>
+<tr>
+<th>Notazione</th>
+<th>Nome</th>
+<th>Esempio</th>
+<th>n=10⁶</th>
+<th>tempo (10⁸ op/s)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>O(1)</code></td>
+<td>costante</td>
+<td>accesso ad <code>arr[i]</code></td>
+<td>1</td>
+<td>istantaneo</td>
+</tr>
+<tr>
+<td><code>O(log n)</code></td>
+<td>logaritmica</td>
+<td>binary search</td>
+<td>~20</td>
+<td>istantaneo</td>
+</tr>
+<tr>
+<td><code>O(n)</code></td>
+<td>lineare</td>
+<td>scan singolo</td>
+<td>10⁶</td>
+<td>10 ms</td>
+</tr>
+<tr>
+<td><code>O(n log n)</code></td>
+<td>linearitmica</td>
+<td>merge sort</td>
+<td>~2·10⁷</td>
+<td>0.2 s</td>
+</tr>
+<tr>
+<td><code>O(n²)</code></td>
+<td>quadratica</td>
+<td>doppio loop</td>
+<td>10¹²</td>
+<td><strong>3 ore</strong></td>
+</tr>
+<tr>
+<td><code>O(n³)</code></td>
+<td>cubica</td>
+<td>triplo loop</td>
+<td>10¹⁸</td>
+<td>impossibile</td>
+</tr>
+<tr>
+<td><code>O(2ⁿ)</code></td>
+<td>esponenziale</td>
+<td>enumerazione sottoinsiemi</td>
+<td>esplode</td>
+<td>impossibile a n=40</td>
+</tr>
+<tr>
+<td><code>O(n!)</code></td>
+<td>fattoriale</td>
+<td>tutte le permutazioni</td>
+<td>esplode</td>
+<td>impossibile a n=12</td>
+</tr>
+</tbody>
+</table>
+<h3 id="visualizzazione-importante-per-costruire-intuizione">Visualizzazione (importante per costruire intuizione)</h3>
+<p>Ecco le curve di crescita delle complessità più comuni, dal più veloce al più lento:</p>
+<div style="background:#161922;border:1px solid #262b3a;border-radius:8px;padding:16px;margin:16px 0;overflow-x:auto;">
+<svg viewBox="0 0 700 420" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;display:block;margin:auto;font-family:'Cascadia Code',monospace;font-size:12px;">
+  <defs>
+    <style>
+      .axis { stroke:#7a8194; stroke-width:1.5; fill:none; }
+      .axis-label { fill:#b6bdcc; font-size:13px; }
+      .grid { stroke:#262b3a; stroke-width:1; stroke-dasharray:3,3; }
+      .curve { fill:none; stroke-width:2.5; }
+      .legend { font-size:12px; font-weight:600; }
+    </style>
+  </defs>
+  <!-- griglia orizzontale -->
+  <line class="grid" x1="60" y1="80"  x2="660" y2="80"/>
+  <line class="grid" x1="60" y1="160" x2="660" y2="160"/>
+  <line class="grid" x1="60" y1="240" x2="660" y2="240"/>
+  <line class="grid" x1="60" y1="320" x2="660" y2="320"/>
+  <!-- assi -->
+  <line class="axis" x1="60" y1="20" x2="60" y2="380"/>
+  <line class="axis" x1="60" y1="380" x2="680" y2="380"/>
+  <!-- label assi -->
+  <text class="axis-label" x="20" y="30">operazioni</text>
+  <text class="axis-label" x="640" y="400">n (input)</text>
+  <!-- curve. Dominio x: 60..660 (= 0..1). y: 380..20 (=0..max). -->
+  <!-- O(1) costante a y=370 -->
+  <path class="curve" stroke="#7a8194" d="M 60 370 L 660 370"/>
+  <text class="legend" fill="#7a8194" x="600" y="360">O(1)</text>
+  <!-- O(log n) cresce molto poco -->
+  <path class="curve" stroke="#50fa7b" d="M 60 370 Q 200 345 350 330 T 660 310"/>
+  <text class="legend" fill="#50fa7b" x="600" y="305">O(log n)</text>
+  <!-- O(n) lineare -->
+  <path class="curve" stroke="#6cf" d="M 60 370 L 660 220"/>
+  <text class="legend" fill="#6cf" x="600" y="215">O(n)</text>
+  <!-- O(n log n) -->
+  <path class="curve" stroke="#bd93f9" d="M 60 370 Q 250 320 460 220 T 660 130"/>
+  <text class="legend" fill="#bd93f9" x="595" y="125">O(n log n)</text>
+  <!-- O(n^2) quadratica -->
+  <path class="curve" stroke="#ffb86c" d="M 60 370 Q 330 320 520 200 T 660 60"/>
+  <text class="legend" fill="#ffb86c" x="615" y="55">O(n²)</text>
+  <!-- O(2^n) esponenziale (esplode subito) -->
+  <path class="curve" stroke="#ff6b6b" d="M 60 370 Q 200 320 280 200 Q 320 80 350 25"/>
+  <text class="legend" fill="#ff6b6b" x="360" y="30">O(2ⁿ)</text>
+  <!-- O(n!) ancora più ripida -->
+  <path class="curve" stroke="#ff79c6" d="M 60 370 Q 130 300 180 180 Q 210 60 230 25"/>
+  <text class="legend" fill="#ff79c6" x="180" y="20">O(n!)</text>
+</svg>
+</div>
+
+<p>Le curve esponenziali e fattoriali <strong>esplodono</strong> subito (rosso/rosa). Quadratica e linearitmica (arancio/viola) crescono velocemente. La lineare (azzurro) è "ragionevole". La logaritmica (verde) è <strong>quasi piatta</strong>. La costante (grigio) non cambia mai.</p>
+<h3 id="una-nota-su-o1">Una nota su O(1)</h3>
+<p><code>O(1)</code> significa <strong>costante</strong>, cioè "non dipende da n". Non significa "veloce", significa "il tempo non cambia se l'input cresce". Un algoritmo che impiega sempre esattamente 3 secondi è <code>O(1)</code>. Lento ma costante.</p>
+<h3 id="una-nota-su-olog-n">Una nota su O(log n)</h3>
+<p>Il logaritmo è la funzione "inversa dell'esponenziale". <code>log₂(8) = 3</code> perché <code>2³ = 8</code>. <code>log₂(1024) = 10</code> perché <code>2¹⁰ = 1024</code>.</p>
+<p>Il logaritmo cresce <strong>molto lentamente</strong>:</p>
+<ul>
+<li><code>log₂(1) = 0</code></li>
+<li><code>log₂(1 000) ≈ 10</code></li>
+<li><code>log₂(1 000 000) ≈ 20</code></li>
+<li><code>log₂(1 000 000 000) ≈ 30</code></li>
+</ul>
+<p>Quando dividi il problema <strong>a metà ad ogni passo</strong>, ti servono <code>log n</code> passi per arrivare alla risposta. È la magia del binary search.</p>
+<h2 id="parte-5-come-riconoscere-la-complessita-leggendo-il-codice">Parte 5 — Come riconoscere la complessità leggendo il codice</h2>
+<p>Tre regole pratiche, da applicare sempre.</p>
+<h3 id="regola-a-loop-singoli-sono-on">Regola A — Loop singoli sono O(n)</h3>
+<pre><code class="language-python">for x in arr:    # O(n) iterazioni
+    fai_cosa()   # ognuna O(1)
+# Totale: O(n)
+</code></pre>
+<h3 id="regola-b-loop-annidati-sono-on-m">Regola B — Loop annidati sono O(n × m)</h3>
+<p>Se i due loop scorrono indipendentemente sullo stesso array:</p>
+<pre><code class="language-python">for i in range(n):
+    for j in range(n):
+        ...
+# O(n × n) = O(n²)
+</code></pre>
+<p>Se sono due array diversi:</p>
+<pre><code class="language-python">for x in arr1:    # lunghezza n
+    for y in arr2:  # lunghezza m
+        ...
+# O(n × m)
+</code></pre>
+<p><strong>Trappola sottile</strong>: non sempre due loop annidati sono <code>O(n²)</code>. Esempio:</p>
+<pre><code class="language-python">i, j = 0, n-1
+while i &lt; j:
+    if condizione: i += 1
+    else: j -= 1
+</code></pre>
+<p>Sembrano "due puntatori che si muovono". Ma ogni iterazione consuma <strong>un elemento</strong> (o avanza <code>i</code>, o arretra <code>j</code>). Quindi il numero totale di iterazioni è al più <code>n</code>. <strong>Questo è O(n), non O(n²)</strong>.</p>
+<h3 id="regola-c-divisione-a-meta-olog-n">Regola C — Divisione a metà = O(log n)</h3>
+<pre><code class="language-python">while n &gt; 1:
+    n = n // 2  # dimezza ogni volta
+</code></pre>
+<p>Questo loop fa <code>log₂(n)</code> iterazioni. Se vedi "dimezzo a ogni passo" → <code>log n</code>.</p>
+<h3 id="regola-d-per-la-ricorsione-devi-disegnare-lalbero">Regola D — Per la ricorsione, devi disegnare l'albero</h3>
+<p>Vedi sezione apposita più sotto.</p>
+<h2 id="parte-6-esempi-guidati-passo-passo">Parte 6 — Esempi guidati passo passo</h2>
+<p>Mettiamo in pratica. Ecco vari pezzi di codice: prova ad analizzarli <strong>prima di leggere la risposta</strong>.</p>
+<h3 id="esempio-61">Esempio 6.1</h3>
+<pre><code class="language-python">def f1(arr):
+    s = 0
+    for x in arr:
+        s += x
+    return s
+</code></pre>
+<p>Pensaci... Risposta: <strong>O(n)</strong>. Un solo loop, una sola operazione dentro.</p>
+<h3 id="esempio-62">Esempio 6.2</h3>
+<pre><code class="language-python">def f2(arr):
+    s = 0
+    for x in arr:
+        for y in arr:
+            s += x * y
+    return s
+</code></pre>
+<p>Risposta: <strong>O(n²)</strong>. Due loop annidati, ognuno O(n).</p>
+<h3 id="esempio-63">Esempio 6.3</h3>
+<pre><code class="language-python">def f3(n):
+    i = 1
+    while i &lt; n:
+        print(i)
+        i *= 2
+</code></pre>
+<p>Risposta: <strong>O(log n)</strong>. La variabile <code>i</code> raddoppia ad ogni passo. Serve <code>log₂(n)</code> passi per arrivare a <code>n</code>.</p>
+<h3 id="esempio-64">Esempio 6.4</h3>
+<pre><code class="language-python">def f4(arr):
+    for i in range(len(arr)):
+        for j in range(i, len(arr)):
+            print(arr[i], arr[j])
+</code></pre>
+<p>Numero di iterazioni: <code>n + (n-1) + (n-2) + ... + 1 = n(n+1)/2</code>.</p>
+<p>Risposta: <strong>O(n²)</strong>. Anche se il loop interno non è "fino a n" ogni volta, la somma è quadratica. Le costanti spariscono.</p>
+<h3 id="esempio-65">Esempio 6.5</h3>
+<pre><code class="language-python">def f5(arr):
+    arr_ordinato = sorted(arr)
+    for x in arr_ordinato:
+        print(x)
+</code></pre>
+<p>Risposta: <strong>O(n log n)</strong>. <code>sorted</code> è <code>O(n log n)</code>, il loop è <code>O(n)</code>. La somma è <code>O(n log n) + O(n)</code>, che si riduce a <code>O(n log n)</code> (regola del termine dominante).</p>
+<h3 id="esempio-66">Esempio 6.6</h3>
+<pre><code class="language-python">def f6(arr):
+    for x in arr:
+        if x in arr:  # ATTENZIONE
+            print(x)
+</code></pre>
+<p>Risposta: <strong>O(n²)</strong>. L'operatore <code>in</code> su una <strong>lista</strong> è O(n). Se <code>arr</code> fosse un <code>set</code>, sarebbe O(1) e il totale O(n). Questa è una delle trappole più comuni in colloquio.</p>
+<h3 id="esempio-67">Esempio 6.7</h3>
+<pre><code class="language-python">def f7(s):
+    risultato = &quot;&quot;
+    for c in s:
+        risultato += c
+</code></pre>
+<p>Risposta: <strong>O(n²)</strong>. <strong>Domanda di trabocchetto classica</strong>. La concatenazione di stringhe in Python crea ogni volta una nuova stringa, copiando i caratteri precedenti. Iterazione <code>i</code>: copia <code>i</code> caratteri. Somma: <code>1+2+...+n = O(n²)</code>.</p>
+<p>Soluzione: <code>''.join(lista_di_char)</code> → O(n).</p>
+<h2 id="parte-7-complessita-della-ricorsione">Parte 7 — Complessità della ricorsione</h2>
+<p>Per algoritmi ricorsivi non puoi "contare i loop". Devi pensare all'<strong>albero di chiamate</strong>.</p>
+<p>Esempio:</p>
+<pre><code class="language-python">def fib(n):
+    if n &lt; 2: return n
+    return fib(n-1) + fib(n-2)
+</code></pre>
+<p>Disegna l'albero di chiamate per <code>fib(4)</code>:</p>
+<pre><code class="language-mermaid">flowchart TD
+    f4[&quot;fib(4)&quot;] --&gt; f3a[&quot;fib(3)&quot;]
+    f4 --&gt; f2a[&quot;fib(2)&quot;]
+    f3a --&gt; f2b[&quot;fib(2)&quot;]
+    f3a --&gt; f1a[&quot;fib(1)&quot;]
+    f2a --&gt; f1b[&quot;fib(1)&quot;]
+    f2a --&gt; f0a[&quot;fib(0)&quot;]
+    f2b --&gt; f1c[&quot;fib(1)&quot;]
+    f2b --&gt; f0b[&quot;fib(0)&quot;]
+</code></pre>
+<p>L'albero ha profondità <code>n</code> e ogni nodo ha 2 figli → numero totale di nodi ≈ <code>2ⁿ</code>. <strong><code>O(2ⁿ)</code></strong>. Lento orribile.</p>
+<h3 id="come-si-formalizza-ricorrenze">Come si formalizza: ricorrenze</h3>
+<p>Una <strong>relazione di ricorrenza</strong> descrive <code>T(n)</code> in termini di <code>T</code> di input più piccoli.</p>
+<p>Per <code>fib</code>: <code>T(n) = T(n-1) + T(n-2) + O(1)</code> → cresce come <code>φⁿ ≈ 2ⁿ</code>.</p>
+<p>Per <code>binary_search</code> (vedi cap. 11): <code>T(n) = T(n/2) + O(1)</code> → <code>O(log n)</code>. A ogni passo dimezzi.</p>
+<p>Per <code>merge_sort</code>: <code>T(n) = 2 T(n/2) + O(n)</code>. Il "+O(n)" è il merge. Soluzione: <code>O(n log n)</code>.</p>
+<h3 id="il-master-theorem-semplificato">Il "Master theorem" semplificato</h3>
+<p>Per ricorrenze del tipo <code>T(n) = a · T(n/b) + O(nᵈ)</code>:</p>
+<ol>
+<li>Confronta <code>log_b(a)</code> con <code>d</code>.</li>
+<li>Se <code>log_b(a) &lt; d</code> → <code>O(nᵈ)</code>.</li>
+<li>Se <code>log_b(a) = d</code> → <code>O(nᵈ · log n)</code>.</li>
+<li>Se <code>log_b(a) &gt; d</code> → <code>O(n^log_b(a))</code>.</li>
+</ol>
+<p>Esempi:</p>
+<ul>
+<li><strong>Merge sort</strong>: <code>T(n) = 2T(n/2) + O(n)</code>. <code>a=2, b=2, d=1</code>. <code>log_2(2) = 1 = d</code> → caso 3 → <code>O(n log n)</code>. ✓</li>
+<li><strong>Binary search</strong>: <code>T(n) = T(n/2) + O(1)</code>. <code>a=1, b=2, d=0</code>. <code>log_2(1) = 0 = d</code> → caso 3 → <code>O(log n)</code>. ✓</li>
+<li><strong>Karatsuba (moltiplicazione veloce)</strong>: <code>T(n) = 3T(n/2) + O(n)</code>. <code>log_2(3) ≈ 1.58 &gt; 1 = d</code> → caso 4 → <code>O(n^1.58)</code>.</li>
+</ul>
+<p>Non serve memorizzarlo a memoria. Serve riconoscere che esiste e applicarlo.</p>
+<h2 id="parte-8-complessita-di-spazio">Parte 8 — Complessità di spazio</h2>
+<p>Non solo tempo. <strong>Spazio</strong> = quanta memoria extra usa l'algoritmo, oltre all'input.</p>
+<p>Esempi:</p>
+<pre><code class="language-python">def somma(arr):
+    s = 0
+    for x in arr: s += x
+    return s
+</code></pre>
+<p>Spazio: <strong>O(1)</strong>. Una sola variabile <code>s</code>, indipendentemente da <code>n</code>.</p>
+<pre><code class="language-python">def doppia(arr):
+    risultato = []
+    for x in arr: risultato.append(x * 2)
+    return risultato
+</code></pre>
+<p>Spazio: <strong>O(n)</strong>. La lista <code>risultato</code> cresce con <code>n</code>.</p>
+<h3 id="stack-ricorsivo">Stack ricorsivo</h3>
+<p>Anche la ricorsione consuma memoria, perché il computer deve <strong>ricordare dove tornare</strong> dopo ogni chiamata. Questa memoria si chiama <strong>stack di chiamate</strong>.</p>
+<pre><code class="language-python">def somma_rec(arr, i=0):
+    if i == len(arr): return 0
+    return arr[i] + somma_rec(arr, i+1)
+</code></pre>
+<p>Tempo: O(n). <strong>Spazio: O(n)</strong> — perché ci sono <code>n</code> chiamate in pila contemporaneamente.</p>
+<p>In Python il limite di default è ~1000 chiamate ricorsive. Quindi se <code>n &gt; 1000</code>, la ricorsione si schianta con <code>RecursionError</code>. La versione iterativa, invece, è O(1) di spazio (oltre all'input).</p>
+<h2 id="parte-9-la-regola-pratica-del-108">Parte 9 — La "regola pratica del 10⁸"</h2>
+<p>Un computer moderno fa ~10⁸ (cento milioni) operazioni semplici al secondo. Quindi:</p>
+<ul>
+<li>Vuoi che il programma finisca entro <strong>1 secondo</strong>? Le operazioni totali devono essere <strong>≤ ~10⁸</strong>.</li>
+</ul>
+<p>Combinando con la dimensione dell'input, puoi capire <strong>quale complessità ti serve</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>n max</th>
+<th>Complessità attesa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10⁸</td>
+<td>O(n) — niente di più</td>
+</tr>
+<tr>
+<td>10⁶</td>
+<td>O(n log n) ok</td>
+</tr>
+<tr>
+<td>10⁴</td>
+<td>O(n²) ok</td>
+</tr>
+<tr>
+<td>500</td>
+<td>O(n³) ok</td>
+</tr>
+<tr>
+<td>20</td>
+<td>O(2ⁿ) ok</td>
+</tr>
+<tr>
+<td>10</td>
+<td>O(n!) ok</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Usalo al contrario</strong>: quando l'intervistatore dice <em>"n può arrivare a 10⁵"</em>, ti sta dicendo <strong>implicitamente</strong> che si aspetta una soluzione <code>O(n log n)</code> o <code>O(n)</code>. Se proponi <code>O(n²)</code>, ti aspetta una versione migliore.</p>
+<p>Questa è una skill cruciale: <strong>leggere il problema, dedurre la complessità target, e mirare a quella</strong>.</p>
+<h2 id="parte-10-best-case-worst-case-average-case">Parte 10 — Best case, worst case, average case</h2>
+<p>Big-O di default si riferisce al <strong>caso peggiore</strong> (worst case). Esempio:</p>
+<ul>
+<li>Cerca un elemento in un array non ordinato. <strong>Peggior caso</strong>: l'elemento è in ultima posizione → O(n). <strong>Miglior caso</strong>: è in prima posizione → O(1).</li>
+</ul>
+<p>In colloquio, salvo richieste esplicite, <strong>dichiara sempre il worst case</strong>.</p>
+<h3 id="complessita-ammortizzata">Complessità ammortizzata</h3>
+<p>Alcune strutture dati hanno operazioni che sono <strong>occasionalmente lente</strong> ma in media veloci.</p>
+<p>Esempio: <code>list.append(x)</code> in Python. Internamente Python tiene un array che <strong>raddoppia di capacità</strong> quando si riempie. Quando questo succede, paghi O(n) per copiare tutto il contenuto nel nuovo array. Ma raddoppia → succede solo <code>log n</code> volte.</p>
+<p>In media: O(1) per append. Si dice <strong>O(1) ammortizzato</strong>. In colloquio: <em>"L'append è O(1) ammortizzato — nel peggior caso O(n), ma il totale di n append è O(n)"</em>.</p>
+<h2 id="parte-11-cheat-sheet-operazioni-python">Parte 11 — Cheat-sheet operazioni Python</h2>
+<p>Da tenere in testa SEMPRE:</p>
+<table>
+<thead>
+<tr>
+<th>Operazione</th>
+<th>Complessità</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>list[i]</code>, <code>list[i] = x</code>, <code>len(list)</code></td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td><code>list.append(x)</code>, <code>list.pop()</code></td>
+<td>O(1) ammortizzato</td>
+</tr>
+<tr>
+<td><code>list.insert(0, x)</code>, <code>list.pop(0)</code></td>
+<td><strong>O(n)</strong> — usa <code>collections.deque</code>!</td>
+</tr>
+<tr>
+<td><code>list.index(x)</code>, <code>x in list</code></td>
+<td><strong>O(n)</strong></td>
+</tr>
+<tr>
+<td><code>sorted(list)</code>, <code>list.sort()</code></td>
+<td>O(n log n)</td>
+</tr>
+<tr>
+<td><code>dict[k]</code>, <code>dict[k] = v</code>, <code>k in dict</code></td>
+<td>O(1) medio</td>
+</tr>
+<tr>
+<td><code>set</code> add/in/remove</td>
+<td>O(1) medio</td>
+</tr>
+<tr>
+<td><code>collections.deque</code> append/popleft</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td><code>heapq.heappush/heappop</code></td>
+<td>O(log n)</td>
+</tr>
+<tr>
+<td><code>''.join(list_of_str)</code></td>
+<td>O(totale char)</td>
+</tr>
+<tr>
+<td><code>string + string</code> in loop</td>
+<td><strong>O(n²) — evita!</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="trappole-tipiche">Trappole tipiche</h3>
+<pre><code class="language-python"># MALE: O(n²)
+s = &quot;&quot;
+for c in chars: s += c
+
+# BENE: O(n)
+s = &quot;&quot;.join(chars)
+</code></pre>
+<pre><code class="language-python"># MALE: O(n²) — pop(0) è O(n)
+while arr:
+    primo = arr.pop(0)
+    elabora(primo)
+
+# BENE: O(n)
+from collections import deque
+arr = deque(arr)
+while arr:
+    primo = arr.popleft()
+    elabora(primo)
+</code></pre>
+<pre><code class="language-python"># MALE: O(n²)
+seen = []
+for x in arr:
+    if x in seen: ...   # 'in' su lista è O(n)
+    seen.append(x)
+
+# BENE: O(n)
+seen = set()
+for x in arr:
+    if x in seen: ...   # 'in' su set è O(1)
+    seen.add(x)
+</code></pre>
+<h2 id="parte-12-come-dichiarare-la-complessita-in-colloquio">Parte 12 — Come dichiarare la complessità in colloquio</h2>
+<p>Alla fine di ogni soluzione, <strong>prima che l'intervistatore te lo chieda</strong>, dichiara:</p>
+<blockquote>
+<p><em>"Il tempo è O(n log n) perché ordino l'array, poi faccio un passaggio lineare. Lo spazio è O(n) perché conservo un dict di n elementi. Considerando lo stack di ricorsione, lo spazio totale è O(n)."</em></p>
+</blockquote>
+<p>Se sai che la tua soluzione è subottima, <strong>anticipalo</strong>:</p>
+<blockquote>
+<p><em>"Questa è la versione brute force O(n²). Posso fare meglio sfruttando la hashmap, arrivando a O(n) di tempo a costo di O(n) di spazio. Procedo a quella?"</em></p>
+</blockquote>
+<p>Questo dimostra che hai consapevolezza e padronanza — uno dei criteri principali di hire.</p>
+<h2 id="esercizi-guidati">Esercizi guidati</h2>
+<h3 id="esercizio-11-easy">Esercizio 1.1 <span class="problem-tag easy">EASY</span></h3>
+<p>Qual è la complessità di:</p>
+<pre><code class="language-python">for i in range(n):
+    for j in range(i, n):
+        print(i, j)
+</code></pre>
+<details><summary>Ragionamento guidato</summary>
+
+Pensa al numero totale di iterazioni del loop interno:
+
+- Per `i=0`: il loop interno fa `n` iterazioni.
+- Per `i=1`: ne fa `n-1`.
+- Per `i=2`: ne fa `n-2`.
+- ...
+- Per `i=n-1`: ne fa `1`.
+
+Somma: `n + (n-1) + ... + 1 = n(n+1)/2`.
+
+Il termine dominante è `n²/2`. Le costanti si buttano via.
+
+**Risposta: O(n²)**.
+
+L'intuizione: "doppio loop dove il secondo dipende dal primo, ma in modo lineare" è quasi sempre `O(n²)`. Anche se la matrice di iterazioni è "triangolare" invece di "quadrata", la classe rimane la stessa.
+</details>
+
+<h3 id="esercizio-12-easy">Esercizio 1.2 <span class="problem-tag easy">EASY</span></h3>
+<pre><code class="language-python">i = 1
+while i &lt; n:
+    i *= 2
+</code></pre>
+<details><summary>Ragionamento</summary>
+
+`i` raddoppia ad ogni iterazione. Dopo `k` iterazioni, `i = 2^k`. Vogliamo sapere per quale `k` arriviamo o superiamo `n`:
+
+`2^k ≥ n` → `k ≥ log₂(n)`.
+
+Quindi servono `log₂(n)` iterazioni. **O(log n)**.
+
+L'intuizione: ogni volta che vedi "moltiplico/divido per una costante", pensa logaritmo.
+</details>
+
+<h3 id="esercizio-13-medium">Esercizio 1.3 <span class="problem-tag medium">MEDIUM</span></h3>
+<pre><code class="language-python">for i in range(n):
+    j = 1
+    while j &lt; n:
+        j *= 2
+</code></pre>
+<details><summary>Ragionamento</summary>
+
+Loop esterno: O(n). Loop interno: O(log n) (per quanto visto sopra).
+
+I loop sono annidati → si moltiplicano.
+
+**Risposta: O(n log n)**.
+
+Questa è la complessità di tantissimi algoritmi di sorting (merge sort, heap sort, TimSort di Python).
+</details>
+
+<h3 id="esercizio-14-medium">Esercizio 1.4 <span class="problem-tag medium">MEDIUM</span></h3>
+<pre><code class="language-python">def f(n):
+    if n &lt;= 1: return
+    f(n-1)
+    f(n-1)
+</code></pre>
+<details><summary>Ragionamento</summary>
+
+Disegna l'albero di chiamate. Ogni nodo ha 2 figli, profondità `n`. Numero totale di nodi: `2^0 + 2^1 + ... + 2^(n-1) = 2^n - 1 ≈ 2^n`.
+
+**Tempo: O(2ⁿ)**.
+
+**Spazio: O(n)**. In ogni momento, la "catena" di chiamate attive ha al massimo profondità `n` (un percorso dall'alto al basso dell'albero), non l'intero albero.
+
+Lezione: tempo e spazio della ricorsione **non sono uguali**. Il tempo è il numero totale di chiamate, lo spazio è la profondità massima.
+</details>
+
+<h3 id="esercizio-15-medium">Esercizio 1.5 <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Hai un array di stringhe <code>arr</code> di <code>n</code> elementi, ogni stringa lunga al massimo <code>k</code> caratteri. Qual è la complessità di <code>sorted(arr)</code>?</p>
+<details><summary>Ragionamento</summary>
+
+`sorted` fa `O(n log n)` confronti. Ma ogni confronto fra stringhe non è `O(1)`: per confrontare due stringhe lunghe `k`, nel peggior caso devi guardare tutti i caratteri → `O(k)`.
+
+**Risposta: O(n · k · log n)**.
+
+Molti candidati dicono solo `O(n log n)` e perdono punti. **Quando confronti oggetti complessi, conta il costo del confronto.**
+</details>
+
+<h3 id="esercizio-16-hard">Esercizio 1.6 <span class="problem-tag hard">HARD</span></h3>
+<pre><code class="language-python">def f(n):
+    if n &lt;= 1: return 1
+    return f(n//2) + f(n//2) + f(n//2)
+</code></pre>
+<details><summary>Ragionamento</summary>
+
+Ricorrenza: `T(n) = 3 T(n/2) + O(1)`.
+
+Master theorem: `a=3, b=2, d=0`. `log_2(3) ≈ 1.58`. Confronta con `d=0` → caso 3.
+
+**Risposta: O(n^log₂(3)) ≈ O(n^1.58)**.
+
+Strano, vero? Non è né lineare né quadratico, ma una potenza frazionaria. Questo è esattamente il tipo di complessità di Karatsuba per la moltiplicazione veloce.
+</details>
+
+<h3 id="esercizio-17-medium">Esercizio 1.7 <span class="problem-tag medium">MEDIUM</span></h3>
+<p>L'intervistatore dice <em>"n può arrivare a 200 000"</em>. Quali complessità sono accettabili (entro 1 secondo)?</p>
+<details><summary>Ragionamento</summary>
+
+Soglia: ~10⁸ operazioni totali.
+
+- `O(n)` → 2·10⁵ operazioni. ✓
+- `O(n log n)` → ~3.5·10⁶ operazioni. ✓
+- `O(n √n)` → ~10⁸. ✓ (al limite)
+- `O(n²)` → 4·10¹⁰. ✗ (400 secondi)
+
+**L'intervistatore ti sta dicendo che la soluzione attesa è O(n log n) o O(n)**. Se proponi un O(n²), ti spingerà a migliorare.
+
+Saper leggere le constraints è una skill fondamentale.
+</details>
+
+<h3 id="esercizio-18-medium">Esercizio 1.8 <span class="problem-tag medium">MEDIUM</span></h3>
+<pre><code class="language-python">def f(arr):
+    n = len(arr)
+    for i in range(n):
+        for j in range(i+1, n):
+            for k in range(j+1, n):
+                ...
+</code></pre>
+<details><summary>Ragionamento</summary>
+
+Tre loop annidati, ognuno dipendente dal precedente. Il numero di iterazioni è il numero di "triplette" `(i, j, k)` con `i < j < k`, che è `C(n, 3) = n(n-1)(n-2)/6`.
+
+Termine dominante: `n³/6`. **Risposta: O(n³)**.
+
+Quando vedi triplo loop, pensa `O(n³)`. Es. problema 3Sum brute force.
+</details>
+
+<h2 id="riassunto-in-5-punti">Riassunto in 5 punti</h2>
+<ol>
+<li><strong>Big-O misura come cresce un algoritmo al crescere dell'input</strong>, ignorando costanti e termini piccoli.</li>
+<li><strong>Tempo e spazio</strong> sono due metriche diverse, dichiarale entrambe.</li>
+<li><strong>Scala mnemonica</strong>: <code>O(1) &lt; O(log n) &lt; O(n) &lt; O(n log n) &lt; O(n²) &lt; O(2ⁿ) &lt; O(n!)</code>.</li>
+<li><strong>Regola del 10⁸</strong>: ~10⁸ operazioni/secondo. Usa le constraints per dedurre la complessità target.</li>
+<li><strong>Ricorsione</strong>: tempo = numero totale di chiamate (spesso albero), spazio = profondità massima dello stack.</li>
+</ol>
+<p>Quando avrai assimilato questo capitolo, ogni problema dei capitoli successivi diventerà <em>"quale algoritmo mi porta dalla complessità ingenua a quella attesa?"</em>. È letteralmente il framework mentale di tutto il colloquio.</p>
+      <nav class="pager">
+<a href="00-introduzione.html" class="prev"><span class="label">← Precedente</span><span class="title">Introduzione e come usare questo percorso</span></a>
+<a href="02-array-stringhe.html" class="next"><span class="label">Successivo →</span><span class="title">Array e stringhe</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>FAANG Prep</strong> — percorso completo di preparazione: DS&amp;A, system design, behavioral. Costruito per spaccare ai colloqui di Big Tech.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-index.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true,
+      background: '#161922',
+      primaryColor: '#1d2230',
+      primaryTextColor: '#e6e8ee',
+      primaryBorderColor: '#6cf',
+      lineColor: '#7a8194',
+      secondaryColor: '#262b3a',
+      tertiaryColor: '#0f1117',
+      mainBkg: '#1d2230',
+      secondBkg: '#262b3a',
+      tertiaryBkg: '#161922',
+      nodeBorder: '#6cf',
+      clusterBkg: '#161922',
+      clusterBorder: '#262b3a',
+      titleColor: '#6cf',
+      edgeLabelBackground: '#161922',
+      fontFamily: 'Cascadia Code, monospace'
+    }
+  });
+  document.querySelectorAll('pre > code.language-mermaid').forEach((codeEl) => {
+    const pre = codeEl.parentElement;
+    const div = document.createElement('div');
+    div.className = 'mermaid';
+    div.textContent = codeEl.textContent;
+    pre.replaceWith(div);
+  });
+  mermaid.run();
+</script>
+</body>
+</html>

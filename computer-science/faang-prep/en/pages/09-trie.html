@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trie (prefix tree) — FAANG Prep</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">F</div>
+      <div>
+        <div class="brand-title">FAANG Prep</div>
+        <div class="brand-subtitle">DS&amp;A · System Design</div>
+      </div>
+    </div>
+    <div class="lang-bar">
+      <a class="lang-switcher" href="../../pages/09-trie.html" title="Italiano"><span class="flag-icon">🇮🇹</span><span class="flag-label">Italiano</span></a>
+    </div>
+  </div>
+  <div class="search-wrap">
+    <input class="search-input" id="search-input" placeholder="Search content... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/00-introduction.html" class=""><span class="num">00</span>Introduction and how to use this path</a></li><li class="nav-item"><a href="../pages/01-complexity.html" class=""><span class="num">01</span>Computational complexity (Big-O)</a></li><li class="nav-item"><a href="../pages/02-arrays-strings.html" class=""><span class="num">02</span>Arrays and strings</a></li><li class="nav-item"><a href="../pages/03-hashmap-set.html" class=""><span class="num">03</span>Hashmap and set</a></li><li class="nav-item"><a href="../pages/04-linked-list.html" class=""><span class="num">04</span>Linked list</a></li><li class="nav-item"><a href="../pages/05-stack-queue.html" class=""><span class="num">05</span>Stack and queue</a></li><li class="nav-item"><a href="../pages/06-trees.html" class=""><span class="num">06</span>Trees (binary tree and BST)</a></li><li class="nav-item"><a href="../pages/07-heap.html" class=""><span class="num">07</span>Heap and priority queue</a></li><li class="nav-item"><a href="../pages/08-graphs.html" class=""><span class="num">08</span>Graphs</a></li><li class="nav-item"><a href="../pages/09-trie.html" class="active"><span class="num">09</span>Trie (prefix tree)</a></li><li class="nav-item"><a href="../pages/10-recursion-backtracking.html" class=""><span class="num">10</span>Recursion and backtracking</a></li><li class="nav-item"><a href="../pages/11-sorting-searching.html" class=""><span class="num">11</span>Sorting and searching</a></li><li class="nav-item"><a href="../pages/12-two-pointers-sliding-window.html" class=""><span class="num">12</span>Two pointers and sliding window</a></li><li class="nav-item"><a href="../pages/13-greedy.html" class=""><span class="num">13</span>Greedy</a></li><li class="nav-item"><a href="../pages/14-dp.html" class=""><span class="num">14</span>Dynamic programming</a></li><li class="nav-item"><a href="../pages/15-bit-manipulation.html" class=""><span class="num">15</span>Bit manipulation</a></li><li class="nav-item"><a href="../pages/16-oop-design-patterns.html" class=""><span class="num">16</span>OOP and design patterns</a></li><li class="nav-item"><a href="../pages/17-system-design.html" class=""><span class="num">17</span>System design — fundamentals</a></li><li class="nav-item"><a href="../pages/18-system-design-examples.html" class=""><span class="num">18</span>System design — end-to-end examples</a></li><li class="nav-item"><a href="../pages/19-concurrency.html" class=""><span class="num">19</span>Concurrency and parallelism</a></li><li class="nav-item"><a href="../pages/20-database-sql.html" class=""><span class="num">20</span>Database and SQL</a></li><li class="nav-item"><a href="../pages/21-os-networking.html" class=""><span class="num">21</span>OS and networking</a></li><li class="nav-item"><a href="../pages/22-coding-patterns.html" class=""><span class="num">22</span>The 16 interview coding patterns</a></li><li class="nav-item"><a href="../pages/23-behavioral-star.html" class=""><span class="num">23</span>Behavioral interview — STAR and Amazon LP</a></li><li class="nav-item"><a href="../pages/24-mock-interviews.html" class=""><span class="num">24</span>Mock interview and interview strategy</a></li><li class="nav-item"><a href="../pages/25-roadmap-90-days.html" class=""><span class="num">25</span>90-day Roadmap — operational plan</a></li><li class="nav-item"><a href="../pages/26-problem-bank.html" class=""><span class="num">26</span>Problem bank — 200+ FAANG problems</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Data structures</span>
+        <span>Section 9 of 26</span>
+      </div>
+      <h1>Trie (prefix tree)</h1>
+      <p class="summary">Specialized tree for prefix lookup. What it is, how to use it for autocomplete, word search II, XOR maximum.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Data structures</div>
+  
+  
+</div>
+      <p>The trie (pronounced "try", from re<strong>TRIE</strong>val) is a tree structure specialized for <strong>strings</strong>. It beats hashmaps when you need to look up by <strong>prefix</strong>, not by full key.</p>
+<h2 id="part-1-the-motivating-problem">Part 1 — The motivating problem</h2>
+<h3 id="autocomplete">Autocomplete</h3>
+<p>When you type "ca" on Google, you see "casa", "calcio", "cane", "caribbean"... How is this done?</p>
+<p>You have a dictionary of millions of words. Given a prefix, you must return <strong>all</strong> words extending it.</p>
+<p><strong>Hashmap</strong>: scan all keys and check <code>startswith(prefix)</code>. O(N × P) where N = number of words, P = prefix length. Slow.</p>
+<p><strong>Sorted list</strong>: binary search the prefix. Find the range, scan it. O(P log N + results). Works but grows with the list.</p>
+<p><strong>Trie</strong>: O(P + results). Independent of N. Magic.</p>
+<h2 id="part-2-how-it-works">Part 2 — How it works</h2>
+<h3 id="the-idea-share-common-prefixes">The idea: share common prefixes</h3>
+<p>Think of dictionary <code>{"cat", "car", "card", "dog"}</code>. They share prefixes ("ca", "car"). A trie exploits this sharing by organizing words as <strong>paths in a tree</strong>.</p>
+<pre><code class="language-mermaid">flowchart TD
+    root(((root)))
+    root --&gt; c[c]
+    root --&gt; d[d]
+    c --&gt; a[a]
+    d --&gt; o[o]
+    a --&gt; r[r]
+    a --&gt; t[&quot;t ★&quot;]
+    o --&gt; g[&quot;g ★&quot;]
+    r --&gt; rstop[&quot;★&quot;]
+    r --&gt; dn[d]
+    dn --&gt; dnstop[&quot;★&quot;]
+    style t fill:#50fa7b,color:#0a0c12
+    style g fill:#50fa7b,color:#0a0c12
+    style rstop fill:#50fa7b,color:#0a0c12
+    style dnstop fill:#50fa7b,color:#0a0c12
+</code></pre>
+<p>Green ★ indicates <code>is_end = True</code> (ends a valid word).</p>
+<p>Each node represents <strong>one character</strong>. Leaves marked with <code>*</code> end a word. Paths share prefixes.</p>
+<ul>
+<li>"cat": root → c → a → t*. Path of 3 edges.</li>
+<li>"car": root → c → a → r*. Path of 3 edges, shares "ca" with cat.</li>
+<li>"card": root → c → a → r → d*. Extends "car".</li>
+<li>"dog": root → d → o → g*.</li>
+</ul>
+<h3 id="advantages">Advantages</h3>
+<ul>
+<li><strong>Search by prefix</strong>: descend the tree following prefix chars. If you get lost (missing node), the prefix doesn't exist.</li>
+<li><strong>Memory</strong>: words with shared prefixes occupy less total space than storing them separately.</li>
+<li><strong>Enumerate all extensions</strong>: after navigating to the prefix node, DFS to collect all words.</li>
+</ul>
+<h3 id="implementation">Implementation</h3>
+<pre><code class="language-python">class TrieNode:
+    def __init__(self):
+        self.children = {}    # char → TrieNode
+        self.is_end = False   # marks end of word
+
+class Trie:
+    def __init__(self):
+        self.root = TrieNode()
+
+    def insert(self, word):
+        n = self.root
+        for c in word:
+            if c not in n.children:
+                n.children[c] = TrieNode()
+            n = n.children[c]
+        n.is_end = True
+
+    def search(self, word):
+        n = self._walk(word)
+        return n is not None and n.is_end
+
+    def starts_with(self, prefix):
+        return self._walk(prefix) is not None
+
+    def _walk(self, s):
+        n = self.root
+        for c in s:
+            if c not in n.children:
+                return None
+            n = n.children[c]
+        return n
+</code></pre>
+<h3 id="complexity">Complexity</h3>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Time</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Insert(word)</td>
+<td>O(L) where L = word length</td>
+</tr>
+<tr>
+<td>Search(word)</td>
+<td>O(L)</td>
+</tr>
+<tr>
+<td>Starts_with(prefix)</td>
+<td>O(P) where P = prefix length</td>
+</tr>
+<tr>
+<td>Total space</td>
+<td>O(sum of word lengths)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="part-3-array-version-for-fixed-alphabet">Part 3 — "Array" version for fixed alphabet</h2>
+<p>If alphabet is small and fixed (e.g. 26 lowercase letters), an array of 26 children is <strong>faster</strong> than dict (no hashing overhead).</p>
+<pre><code class="language-python">class TrieNode:
+    __slots__ = ('children', 'is_end')
+    def __init__(self):
+        self.children = [None] * 26
+        self.is_end = False
+
+def insert(root, word):
+    n = root
+    for c in word:
+        i = ord(c) - ord('a')
+        if not n.children[i]:
+            n.children[i] = TrieNode()
+        n = n.children[i]
+    n.is_end = True
+</code></pre>
+<p><code>__slots__</code> saves memory by avoiding each instance's internal <code>__dict__</code>.</p>
+<h2 id="part-4-when-to-use-trie">Part 4 — When to use trie</h2>
+<h3 id="golden-cases">Golden cases</h3>
+<ol>
+<li><strong>Autocomplete</strong>: given prefix, find suggestions.</li>
+<li><strong>Spell check</strong>: does the word exist? Suggest close corrections.</li>
+<li><strong>Word search in grid</strong> (ch. 08 exercise): you have a list of words to find; trie cuts branches that can't become any word.</li>
+<li><strong>Longest prefix matching</strong> (IP routing in routers).</li>
+<li><strong>XOR maximum</strong>: binary trie on bits to find max(a XOR b).</li>
+</ol>
+<h3 id="cases-where-not-to-use-it">Cases where NOT to use it</h3>
+<p>To look up <strong>full keys</strong> (no prefix), hashmap is better: O(1) vs O(L). Trie wins only if you exploit the prefix.</p>
+<h2 id="part-5-pattern-word-search-ii-with-trie">Part 5 — Pattern: word search II with trie</h2>
+<h3 id="the-problem">The problem</h3>
+<p>Given a grid of letters and a list of words. Find which words appear as a path in the grid (4-neighbors, no cell reuse).</p>
+<p>Grid:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>c0</th>
+<th>c1</th>
+<th>c2</th>
+<th>c3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>r0</strong></td>
+<td>o</td>
+<td>a</td>
+<td>a</td>
+<td>n</td>
+</tr>
+<tr>
+<td><strong>r1</strong></td>
+<td>e</td>
+<td>t</td>
+<td>a</td>
+<td>e</td>
+</tr>
+<tr>
+<td><strong>r2</strong></td>
+<td>i</td>
+<td>h</td>
+<td>k</td>
+<td>r</td>
+</tr>
+<tr>
+<td><strong>r3</strong></td>
+<td>i</td>
+<td>f</td>
+<td>l</td>
+<td>v</td>
+</tr>
+</tbody>
+</table>
+<p>Words to find: <code>["oath", "pea", "eat", "rain"]</code>.</p>
+<h3 id="naive-approach">Naive approach</h3>
+<p>For each word, DFS from the grid. O(W × R × C × 4^L). Slow.</p>
+<h3 id="approach-with-trie-smart">Approach with trie (smart)</h3>
+<ol>
+<li>Build trie with <strong>all</strong> words.</li>
+<li>DFS from the grid, navigate trie in parallel.</li>
+<li>When current cell doesn't match any child of current trie node → <strong>prune</strong> (exit immediately).</li>
+<li>When you hit <code>is_end</code> → record the word.</li>
+</ol>
+<pre><code class="language-python">class TrieNode:
+    def __init__(self):
+        self.children = {}
+        self.word = None
+
+def find_words(board, words):
+    R, C = len(board), len(board[0])
+    root = TrieNode()
+    # Build trie
+    for w in words:
+        n = root
+        for c in w:
+            n = n.children.setdefault(c, TrieNode())
+        n.word = w
+
+    res = []
+    def dfs(r, c, node):
+        ch = board[r][c]
+        if ch not in node.children:
+            return
+        nxt = node.children[ch]
+        if nxt.word:
+            res.append(nxt.word)
+            nxt.word = None   # avoid duplicates
+        board[r][c] = '#'   # mark visited
+        for dr, dc in [(-1,0),(1,0),(0,-1),(0,1)]:
+            nr, nc = r + dr, c + dc
+            if 0 &lt;= nr &lt; R and 0 &lt;= nc &lt; C and board[nr][nc] != '#':
+                dfs(nr, nc, nxt)
+        board[r][c] = ch   # backtrack
+    for r in range(R):
+        for c in range(C):
+            dfs(r, c, root)
+    return res
+</code></pre>
+<p><strong>Tricks</strong>:</p>
+<ul>
+<li><code>word</code> instead of <code>is_end</code> to directly recover the full word.</li>
+<li><code>nxt.word = None</code> after finding: prevents duplicates in the same run.</li>
+<li><code>board[r][c] = '#'</code> temporary marker.</li>
+</ul>
+<p>Speed: the trie allows cutting entire subtrees of exploration → dramatic speedup vs naive.</p>
+<h2 id="part-6-binary-trie-for-xor-maximum">Part 6 — Binary trie for XOR maximum</h2>
+<p>Given an integer array, find <code>max(a XOR b)</code> with <code>a, b ∈ arr</code>.</p>
+<p><strong>Brute force</strong>: O(n²).</p>
+<p><strong>Binary trie idea</strong>: insert each number as a sequence of bits (MSB → LSB) in a trie. For each number, navigate the trie trying to go to the opposite branch at each bit (maximizes XOR).</p>
+<pre><code class="language-python">def find_maximum_xor(arr):
+    root = {}
+    # Insert
+    for x in arr:
+        n = root
+        for i in range(31, -1, -1):
+            b = (x &gt;&gt; i) &amp; 1
+            n = n.setdefault(b, {})
+    # Query
+    best = 0
+    for x in arr:
+        n = root
+        cur = 0
+        for i in range(31, -1, -1):
+            b = (x &gt;&gt; i) &amp; 1
+            opp = 1 - b
+            if opp in n:
+                cur |= (1 &lt;&lt; i)
+                n = n[opp]
+            else:
+                n = n[b]
+        best = max(best, cur)
+    return best
+</code></pre>
+<p>O(32 × n) = O(n).</p>
+<p>Binary trie is the generalization of trie to a 2-symbol alphabet (0, 1).</p>
+<h2 id="part-7-exercises">Part 7 — Exercises</h2>
+<h3 id="exercise-91-implement-trie-medium">Exercise 9.1 — Implement Trie <span class="problem-tag medium">MEDIUM</span></h3>
+<p><code>insert</code>, <code>search</code>, <code>startsWith</code>.</p>
+<details><summary>Solution</summary>
+
+See Part 2.
+</details>
+
+<h3 id="exercise-92-word-dictionary-with-wildcard-medium">Exercise 9.2 — Word Dictionary with wildcard <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Search supports <code>.</code> as wildcard for any character.</p>
+<details><summary>Reasoning</summary>
+
+When the character is `.`, you must try **all** children. Recursion.
+
+
+<pre><code class="language-python">class WordDictionary:
+    def __init__(self):
+        self.root = TrieNode()
+    def addWord(self, word):
+        n = self.root
+        for c in word:
+            n = n.children.setdefault(c, TrieNode())
+        n.is_end = True
+    def search(self, word):
+        def dfs(n, i):
+            if i == len(word):
+                return n.is_end
+            c = word[i]
+            if c == '.':
+                return any(dfs(child, i + 1) for child in n.children.values())
+            return c in n.children and dfs(n.children[c], i + 1)
+        return dfs(self.root, 0)
+</code></pre>
+
+
+Worst case with all `.`: O(26^L). In practice fast for real dictionaries.
+</details>
+
+<h3 id="exercise-93-word-search-ii-hard">Exercise 9.3 — Word Search II <span class="problem-tag hard">HARD</span></h3>
+<p>See Part 5.</p>
+<h3 id="exercise-94-longest-word-in-dictionary-medium">Exercise 9.4 — Longest Word in Dictionary <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Longest dictionary word that can be built one letter at a time from other dictionary words.</p>
+<details><summary>Idea</summary>
+
+Build trie. Then DFS: descend while every intermediate node (except root) is `is_end`. The deepest reachable word is the answer.
+</details>
+
+<h3 id="exercise-95-replace-words-medium">Exercise 9.5 — Replace Words <span class="problem-tag medium">MEDIUM</span></h3>
+<p>List of roots + sentence. Replace each word with its shortest root.</p>
+<details><summary>Solution</summary>
+
+
+<pre><code class="language-python">def replace_words(roots, sentence):
+    root = TrieNode()
+    for r in roots:
+        n = root
+        for c in r:
+            n = n.children.setdefault(c, TrieNode())
+        n.is_end = True
+
+    def shortest(word):
+        n = root
+        for i, c in enumerate(word):
+            if c not in n.children: return word
+            n = n.children[c]
+            if n.is_end: return word[:i + 1]
+        return word
+
+    return &quot; &quot;.join(shortest(w) for w in sentence.split())
+</code></pre>
+
+
+O(W × L) where W = sentence words, L = max length.
+</details>
+
+<h3 id="exercise-96-maximum-xor-of-two-numbers-medium">Exercise 9.6 — Maximum XOR of Two Numbers <span class="problem-tag medium">MEDIUM</span></h3>
+<p>See Part 6.</p>
+<h2 id="summary">Summary</h2>
+<ol>
+<li><strong>Trie = tree specialized for prefixes</strong>. Each node represents a character; paths = words.</li>
+<li><strong>O(L) operations</strong> instead of O(N × L) of a list.</li>
+<li><strong>When</strong>: autocomplete, spell check, grid word search, XOR puzzles.</li>
+<li><strong>Dict version</strong> flexible; array version (26 children) faster.</li>
+<li><strong>Killer pattern in Word Search II</strong>: trie + DFS with pruning on non-promising branches.</li>
+</ol>
+<p>Trie is a "specialist" structure — not for every problem, but when needed, it shines.</p>
+      <nav class="pager">
+<a href="08-graphs.html" class="prev"><span class="label">← Previous</span><span class="title">Graphs</span></a>
+<a href="10-recursion-backtracking.html" class="next"><span class="label">Next →</span><span class="title">Recursion and backtracking</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>FAANG Prep</strong> — complete prep path: DS&amp;A, system design, behavioral. Built to crush Big Tech interviews.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-index.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true,
+      background: '#161922',
+      primaryColor: '#1d2230',
+      primaryTextColor: '#e6e8ee',
+      primaryBorderColor: '#6cf',
+      lineColor: '#7a8194',
+      secondaryColor: '#262b3a',
+      tertiaryColor: '#0f1117',
+      mainBkg: '#1d2230',
+      secondBkg: '#262b3a',
+      tertiaryBkg: '#161922',
+      nodeBorder: '#6cf',
+      clusterBkg: '#161922',
+      clusterBorder: '#262b3a',
+      titleColor: '#6cf',
+      edgeLabelBackground: '#161922',
+      fontFamily: 'Cascadia Code, monospace'
+    }
+  });
+  document.querySelectorAll('pre > code.language-mermaid').forEach((codeEl) => {
+    const pre = codeEl.parentElement;
+    const div = document.createElement('div');
+    div.className = 'mermaid';
+    div.textContent = codeEl.textContent;
+    pre.replaceWith(div);
+  });
+  mermaid.run();
+</script>
+</body>
+</html>

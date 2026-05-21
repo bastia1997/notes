@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Advanced networking deep dive — AWS Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#232f3e',primaryTextColor:'#ffffff',primaryBorderColor:'#ff9900',lineColor:'#8a99ad',background:'#0c1320'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">λ</div>
+      <div>
+        <div class="brand-title">AWS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/46-advanced-networking.html" class="lang-link" title="Passa all'italiano">IT</a><span class="lang-active" title="English">EN</span></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="search... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-what-is-cloud-and-aws.html" class=""><span class="num">01</span>What the cloud is, and what AWS is</a></li><li class="nav-item"><a href="../pages/02-global-infrastructure.html" class=""><span class="num">02</span>Global infrastructure: Regions, AZs, Edge</a></li><li class="nav-item"><a href="../pages/03-account-root-billing.html" class=""><span class="num">03</span>AWS account, root user, billing</a></li><li class="nav-item"><a href="../pages/04-iam-fundamentals.html" class=""><span class="num">04</span>IAM — fundamentals (users, groups, roles, policies)</a></li><li class="nav-item"><a href="../pages/05-iam-advanced.html" class=""><span class="num">05</span>IAM advanced: conditional policies, STS, ABAC</a></li><li class="nav-item"><a href="../pages/06-cli-sdk-iac.html" class=""><span class="num">06</span>CLI, SDK, CloudShell, IaC primer</a></li><li class="nav-item"><a href="../pages/07-pricing-billing.html" class=""><span class="num">07</span>Pricing, billing, free tier, cost tools</a></li><li class="nav-item"><a href="../pages/08-organizations-multi-account.html" class=""><span class="num">08</span>AWS Organizations &amp; multi-account strategy</a></li><li class="nav-item"><a href="../pages/09-vpc-fundamentals.html" class=""><span class="num">09</span>VPC — fundamentals</a></li><li class="nav-item"><a href="../pages/10-vpc-advanced.html" class=""><span class="num">10</span>VPC advanced: peering, TGW, PrivateLink, endpoints</a></li><li class="nav-item"><a href="../pages/11-route53-cloudfront.html" class=""><span class="num">11</span>Route 53, CloudFront, Global Accelerator</a></li><li class="nav-item"><a href="../pages/12-hybrid-vpn-directconnect.html" class=""><span class="num">12</span>Hybrid: VPN, Direct Connect, PrivateLink</a></li><li class="nav-item"><a href="../pages/13-ec2-fundamentals.html" class=""><span class="num">13</span>EC2 — fundamentals (instances, AMIs, lifecycle)</a></li><li class="nav-item"><a href="../pages/14-ec2-advanced-spot-nitro.html" class=""><span class="num">14</span>EC2 advanced — Spot, Placement Groups, Nitro, hibernation</a></li><li class="nav-item"><a href="../pages/15-asg-elb.html" class=""><span class="num">15</span>Auto Scaling Groups + Elastic Load Balancing</a></li><li class="nav-item"><a href="../pages/16-lambda-deep-dive.html" class=""><span class="num">16</span>Lambda deep dive</a></li><li class="nav-item"><a href="../pages/17-containers-ecs-eks-fargate.html" class=""><span class="num">17</span>Containers: ECS, EKS, Fargate, ECR</a></li><li class="nav-item"><a href="../pages/18-specialty-compute.html" class=""><span class="num">18</span>Specialty compute: Batch, Lightsail, Outposts, Wavelength, Beanstalk</a></li><li class="nav-item"><a href="../pages/19-ebs-efs-fsx.html" class=""><span class="num">19</span>EBS, EFS, FSx, Instance Store</a></li><li class="nav-item"><a href="../pages/20-s3-deep-dive.html" class=""><span class="num">20</span>S3 — deep dive</a></li><li class="nav-item"><a href="../pages/21-archive-snow-gateway-backup.html" class=""><span class="num">21</span>Glacier, Snow, Storage Gateway, DataSync, AWS Backup</a></li><li class="nav-item"><a href="../pages/22-rds.html" class=""><span class="num">22</span>RDS — managed relational DBs (engines, Multi-AZ, replicas, Proxy)</a></li><li class="nav-item"><a href="../pages/23-aurora-deep-dive.html" class=""><span class="num">23</span>Aurora deep dive — shared storage, Serverless v2, Global Database</a></li><li class="nav-item"><a href="../pages/24-dynamodb-deep-dive.html" class=""><span class="num">24</span>DynamoDB deep dive — partitions, GSI, Streams, single-table</a></li><li class="nav-item"><a href="../pages/25-purpose-built-dbs.html" class=""><span class="num">25</span>Purpose-built DBs — ElastiCache, MemoryDB, Neptune, DocumentDB, Keyspaces, Timestream, QLDB</a></li><li class="nav-item"><a href="../pages/26-redshift-data-warehousing.html" class=""><span class="num">26</span>Redshift — MPP data warehousing and zero-ETL</a></li><li class="nav-item"><a href="../pages/27-sqs-sns-eventbridge.html" class=""><span class="num">27</span>SQS, SNS, EventBridge — messaging and events</a></li><li class="nav-item"><a href="../pages/28-step-functions-mq-appflow.html" class=""><span class="num">28</span>Step Functions, MQ, AppFlow — orchestration and integration</a></li><li class="nav-item"><a href="../pages/29-athena-glue-lakeformation.html" class=""><span class="num">29</span>Athena, Glue, Lake Formation — the AWS data lake</a></li><li class="nav-item"><a href="../pages/30-emr-kinesis-msk.html" class=""><span class="num">30</span>EMR, Kinesis, MSK — big data and streaming</a></li><li class="nav-item"><a href="../pages/31-opensearch-quicksight.html" class=""><span class="num">31</span>OpenSearch and QuickSight — search and BI</a></li><li class="nav-item"><a href="../pages/32-sagemaker-overview.html" class=""><span class="num">32</span>SageMaker — the end-to-end ML platform</a></li><li class="nav-item"><a href="../pages/33-bedrock-ai-services.html" class=""><span class="num">33</span>Bedrock and AI services — managed GenAI and ML</a></li><li class="nav-item"><a href="../pages/34-iac-cloudformation-cdk-terraform.html" class=""><span class="num">34</span>IaC on AWS — CloudFormation, CDK, SAM, Terraform</a></li><li class="nav-item"><a href="../pages/35-ci-cd-pipeline.html" class=""><span class="num">35</span>CI/CD on AWS — CodePipeline, CodeBuild, CodeDeploy, CodeCatalyst</a></li><li class="nav-item"><a href="../pages/36-observability-cloudwatch-xray.html" class=""><span class="num">36</span>Observability — CloudWatch, X-Ray, CloudTrail, Config, SSM</a></li><li class="nav-item"><a href="../pages/37-kms-secrets-acm.html" class=""><span class="num">37</span>Encryption — KMS, CloudHSM, Secrets Manager, Parameter Store, ACM</a></li><li class="nav-item"><a href="../pages/38-waf-shield-guardduty-inspector.html" class=""><span class="num">38</span>Threat detection — WAF, Shield, GuardDuty, Inspector, Macie, Security Hub</a></li><li class="nav-item"><a href="../pages/39-governance-org-controltower-identitycenter.html" class=""><span class="num">39</span>Governance — Organizations, Control Tower, Identity Center</a></li><li class="nav-item"><a href="../pages/40-migration-mgn-dms-snow.html" class=""><span class="num">40</span>Migration — MGN, DMS, Snow family, Discovery, Migration Hub</a></li><li class="nav-item"><a href="../pages/41-cost-optimization-finops.html" class=""><span class="num">41</span>Cost optimization and FinOps</a></li><li class="nav-item"><a href="../pages/42-well-architected.html" class=""><span class="num">42</span>Well-Architected Framework — 6 pillars, lenses, review</a></li><li class="nav-item"><a href="../pages/43-architecture-patterns.html" class=""><span class="num">43</span>Architecture patterns — 3-tier, serverless, event-driven, microservices</a></li><li class="nav-item"><a href="../pages/44-disaster-recovery-multi-region.html" class=""><span class="num">44</span>Disaster Recovery and Multi-Region</a></li><li class="nav-item"><a href="../pages/45-reference-architectures.html" class=""><span class="num">45</span>Real-world reference architectures</a></li><li class="nav-item"><a href="../pages/46-advanced-networking.html" class="active"><span class="num">46</span>Advanced networking deep dive</a></li><li class="nav-item"><a href="../pages/47-containers-deep-dive.html" class=""><span class="num">47</span>Containers deep dive — EKS, Karpenter, service mesh</a></li><li class="nav-item"><a href="../pages/48-serverless-patterns.html" class=""><span class="num">48</span>Serverless patterns deep dive</a></li><li class="nav-item"><a href="../pages/49-genai-rag-agents.html" class=""><span class="num">49</span>Generative AI on AWS — RAG and Agents</a></li><li class="nav-item"><a href="../pages/50-aws-certifications.html" class=""><span class="num">50</span>AWS Certifications — roadmap and study guide</a></li><li class="nav-item"><a href="../pages/51-glossary-az.html" class=""><span class="num">51</span>Glossary A-Z</a></li><li class="nav-item"><a href="../pages/52-cheatsheet.html" class=""><span class="num">52</span>Cheat sheet: services, limits, instance families</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Networking</span>
+        <span>Section 46 of 52</span>
+        <span class="level-tag level-exp">Level: expert</span>
+      </div>
+      <h1>Advanced networking deep dive</h1>
+      <p class="summary">BGP, TGW route table design, Cloud WAN, Network Firewall, multi-account VPC sharing, jumbo frames, EFA/ENA Express, PrivateLink for SaaS, Verified Access, Route 53 ARC.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Networking</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>sections 9, 10, 11</li></ul>
+  <div class="label">Tools / references</div>
+  <ul class="source-list"><li>Transit Gateway</li><li>Cloud WAN</li><li>Network Firewall</li></ul>
+</div>
+      <p>Once you understand VPC, subnets, NAT and VPC peering, AWS networking opens up to enterprise network engineer territory: BGP, TGW segmentation, multi-region managed backbones, zero-trust app access. This section covers the tools you need when a company grows beyond a single VPC.</p>
+<h2 id="1-bgp-fundamentals">1. BGP fundamentals</h2>
+<p><strong>BGP</strong> (Border Gateway Protocol) makes the Internet work — and also AWS connections to on-prem (Direct Connect, Site-to-Site VPN, Transit Gateway Connect).</p>
+<p>Key AWS concepts:</p>
+<ul>
+<li><strong>AS (Autonomous System) number</strong>: identifies a "network" (AWS has its own ASNs; your Direct Connect has one, default private 64512).</li>
+<li><strong>AS-PATH</strong>: list of traversed ASes; shorter = preferred.</li>
+<li><strong>Local preference</strong>: internal priority; higher = preferred outgoing.</li>
+<li><strong>MED (Multi-Exit Discriminator)</strong>: tells the peer which entry to prefer; lower = preferred.</li>
+<li><strong>Communities</strong>: tags that enable custom policy (AWS supports standard communities to influence path).</li>
+</ul>
+<p>Use case: route 2 Direct Connect links active-active. You manipulate AS-PATH prepending on the backup to make it less preferred; primary carries traffic, backup takes over if primary fails (BGP failover in 30-180s).</p>
+<h2 id="2-transit-gateway-route-table-design">2. Transit Gateway route table design</h2>
+<p>TGW supports <strong>multiple route tables</strong> that enable <strong>network segmentation</strong> in logical firewall style. Typical "shared services / prod / dev" pattern:</p>
+<pre><code class="language-mermaid">flowchart TB
+    subgraph TGW[&quot;Transit Gateway&quot;]
+        RTP[Route Table PROD]
+        RTD[Route Table DEV]
+        RTS[Route Table SHARED]
+    end
+    VPCP[VPC Prod] --&gt; RTP
+    VPCP2[VPC Prod 2] --&gt; RTP
+    VPCD[VPC Dev] --&gt; RTD
+    VPCS[VPC Shared&lt;br/&gt;logging, AD, proxy] --&gt; RTS
+    DX[Direct Connect&lt;br/&gt;on-prem] --&gt; RTS
+
+    RTP &lt;--&gt;|allow| RTS
+    RTD &lt;--&gt;|allow| RTS
+    RTP -.deny.-&gt; RTD
+</code></pre>
+<p>Each VPC is "associated" to 1 route table (used for outbound routing) and "propagates" to 0-N route tables (who sees its routes). So Prod and Dev are isolated but both reach Shared (AD, logging, proxy).</p>
+<h2 id="3-tgw-connect-and-sd-wan">3. TGW Connect and SD-WAN</h2>
+<p><strong>TGW Connect</strong> is a GRE-based virtual attachment that lets you terminate SD-WAN appliances (Cisco SD-WAN, Aruba, Fortinet, Versa) directly on TGW, with BGP peering on the GRE tunnel. Advantages over classic VPN:</p>
+<ul>
+<li><strong>Throughput</strong>: 5 Gbps per attachment vs 1.25 Gbps VPN.</li>
+<li><strong>Native BGP</strong>: SD-WAN announces on-prem subnets via BGP, no static route hell.</li>
+<li><strong>Multipath</strong>: automatic ECMP.</li>
+</ul>
+<h2 id="4-cloud-wan-managed-backbone">4. Cloud WAN — managed backbone</h2>
+<p><strong>AWS Cloud WAN</strong> (GA 2022) is a managed global backbone that abstracts multi-region TGW. You configure a <strong>core network</strong> with JSON policy (segments, attachments, sharing) and AWS handles TGW peering, routes, path optimization.</p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Global network</strong></td>
+<td>logical container</td>
+</tr>
+<tr>
+<td><strong>Core network</strong></td>
+<td>actual backbone, multi-region</td>
+</tr>
+<tr>
+<td><strong>Segment</strong></td>
+<td>logical partition (prod, dev, shared), policy-defined</td>
+</tr>
+<tr>
+<td><strong>Attachment</strong></td>
+<td>VPC, VPN, Connect, TGW attach</td>
+</tr>
+</tbody>
+</table>
+<p>Use case: enterprise with 30 VPCs in 8 regions, wants segmented any-to-any connectivity without managing 30 TGWs + 100 peerings.</p>
+<h2 id="5-aws-network-firewall">5. AWS Network Firewall</h2>
+<p>Managed stateful network firewall, based on <strong>Suricata</strong> (open-source IDS/IPS). Placed in a dedicated subnet, inspects inter-VPC traffic, ingress/egress, intra-VPC.</p>
+<p>Capabilities:</p>
+<ul>
+<li><strong>Stateful</strong>: track TCP connections, "established/related" rules.</li>
+<li><strong>Suricata rules</strong>: ~50k community rules (ET Open) + custom.</li>
+<li><strong>TLS inspection</strong>: decrypt and inspect HTTPS (requires private CA).</li>
+<li><strong>Domain filter</strong>: blacklist/whitelist FQDNs for egress.</li>
+</ul>
+<p>Pattern: all VPC egress goes through Network Firewall to block data exfiltration, IDS active for detection.</p>
+<h2 id="6-multi-account-vpc-sharing-ram">6. Multi-account VPC sharing (RAM)</h2>
+<p><strong>AWS RAM (Resource Access Manager)</strong> lets you share cross-account resources. For networking:</p>
+<ul>
+<li><strong>Subnet sharing</strong>: "network" account owns the VPC, shares subnets with "app" account. App accounts launch EC2/RDS/Lambda in the shared subnet without seeing the VPC owner. Recommended pattern in <strong>AWS Control Tower / Landing Zone</strong>.</li>
+<li><strong>TGW sharing</strong>: TGW in network account, app accounts attach their VPC.</li>
+<li><strong>License Manager / Route 53 Resolver rules</strong>: shared via RAM.</li>
+</ul>
+<p>Advantage: centralized networking, VPC cost and management on 1 account, autonomous business units.</p>
+<h2 id="7-performance-jumbo-frames-ena-express-efa">7. Performance: jumbo frames, ENA Express, EFA</h2>
+<table>
+<thead>
+<tr>
+<th>Technology</th>
+<th>Advantage</th>
+<th>Use case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Jumbo frames</strong> (MTU 9001)</td>
+<td>less overhead, +throughput</td>
+<td>intra-VPC, EFS, S3 same-region. Internet/VPN: 1500</td>
+</tr>
+<tr>
+<td><strong>ENA Express</strong></td>
+<td>TCP enhancement, lower p99 latency</td>
+<td>EC2 nitro, automatic</td>
+</tr>
+<tr>
+<td><strong>EFA (Elastic Fabric Adapter)</strong></td>
+<td>OS-bypass network, μs latency</td>
+<td>HPC, MPI, distributed ML training</td>
+</tr>
+<tr>
+<td><strong>Cluster placement group</strong></td>
+<td>physically close EC2s in 1 AZ</td>
+<td>low latency + high throughput</td>
+</tr>
+</tbody>
+</table>
+<p>EFA is essential for LLM/HPC training: bypasses kernel, accesses HW directly via libfabric. Available on p4/p5, c5n, hpc7a instances.</p>
+<h2 id="8-privatelink-for-saas">8. PrivateLink for SaaS</h2>
+<p><strong>PrivateLink</strong> is not just for AWS VPC endpoints: SaaS vendors can publish their service as an "endpoint service", and customers access via private VPC endpoint (no internet, no peering).</p>
+<p>Architecture: SaaS deploys NLB in front of the service, exposes it as endpoint service, shares with customer account. Customer creates VPC endpoint pointing to the service. All traffic flows inside AWS network. Snowflake, Databricks, Datadog, Stripe use PrivateLink.</p>
+<h2 id="9-verified-access-zero-trust">9. Verified Access — zero-trust</h2>
+<p><strong>AWS Verified Access</strong> (GA 2023) eliminates the VPN for non-HTTP corporate apps. Identity provider (Okta, Entra ID, IAM Identity Center) + device trust (Jamf, CrowdStrike) verified for each request. Cedar policies (AWS language) decide access.</p>
+<p>Pattern: employees access SSH bastion, Windows RDP, internal apps — no VPN, from any network, always authenticated per request.</p>
+<h2 id="10-exercise">10. Exercise</h2>
+<details>
+<summary>Enterprise with 5 regions, 40 VPCs, on-prem datacenter. Which topology?</summary>
+
+**Cloud WAN + Direct Connect**: 1 global core network, 3 segments (prod, dev, shared-services), policy allows prod↔shared and dev↔shared, blocks prod↔dev.
+
+On-prem: **2 Direct Connect** in 2 distinct locations (for physical HA) terminated on TGW Connect via SD-WAN appliance, active-active BGP with AS-PATH prepending to influence path.
+
+Shared VPC hosts: Network Firewall (egress filter), Route 53 Resolver inbound endpoint (hybrid DNS), AD domain controller.
+
+40 VPCs attached to Cloud WAN via RAM share. Cost: ~$500/month Cloud WAN + DX ~$1000-3000/month. Tradeoff vs manual TGW: less operations, more cost per attachment.
+</details>
+
+<details>
+<summary>You need to connect VPC to Snowflake service without internet traffic. How?</summary>
+
+**PrivateLink endpoint**: Snowflake offers PrivateLink (on Business Critical+ tier). From Snowflake console get the service name (e.g. `com.amazonaws.vpce.us-east-1.vpce-svc-xxx`).
+
+Create VPC interface endpoint in private subnets: `aws ec2 create-vpc-endpoint --vpc-id vpc-xxx --service-name com.amazonaws.vpce... --vpc-endpoint-type Interface --subnet-ids ...`. Add SG allowing 443 from your app.
+
+Configure Route 53 private hosted zone to resolve `xyz.snowflakecomputing.com` to the endpoint DNS name. From this point all Snowflake queries travel inside AWS backbone, no internet, ~10-20ms latency.
+</details>
+
+<blockquote>
+<p><strong>Summary</strong>: BGP governs dynamic routing to on-prem (AS-PATH, local pref, MED); TGW with multiple route tables for prod/dev/shared segmentation; TGW Connect + SD-WAN for multipath BGP; Cloud WAN for managed multi-region backbone; Network Firewall (stateful Suricata) for inspection and egress filter; RAM share for VPC/subnet/TGW multi-account; EFA for HPC/MPI; PrivateLink as SaaS integration pattern; Verified Access for non-HTTP zero-trust apps; Route 53 ARC for critical atomic failover.</p>
+</blockquote>
+      <nav class="pager">
+<a href="45-reference-architectures.html" class="prev"><span class="label">← Previous</span><span class="title">Real-world reference architectures</span></a>
+<a href="47-containers-deep-dive.html" class="next"><span class="label">Next →</span><span class="title">Containers deep dive — EKS, Karpenter, service mesh</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>AWS Zero to Hero</strong> — complete path, in English, from primitives to advanced architecture.</p><p>Open educational material. No sponsorships, no affiliate links, no affiliation with AWS. When a concept is unclear, go back: AWS is a pyramid of primitives, not a tree you skip across.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+</body>
+</html>

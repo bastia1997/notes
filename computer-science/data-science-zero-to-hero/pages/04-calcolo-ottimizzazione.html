@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calcolo, gradiente e ottimizzazione — Data Science Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#3a4a7a',primaryTextColor:'#e8eef0',primaryBorderColor:'#5a6aa0',lineColor:'#8a9499',background:'#11171a'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">Σ</div>
+      <div>
+        <div class="brand-title">DATA SCIENCE</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">🇮🇹 IT</span><a href="../en/pages/04-calculus-optimization.html" class="lang-link" title="Switch to English">🇬🇧 EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-cos-e-data-science.html" class=""><span class="num">01</span>Cos&#x27;è la data science (e cosa non è)</a></li><li class="nav-item"><a href="../pages/02-python-per-data-science.html" class=""><span class="num">02</span>Python per data science: setup professionale</a></li><li class="nav-item"><a href="../pages/02b-matematica-essenziale.html" class=""><span class="num">02b</span>Matematica del liceo che ti serve davvero</a></li><li class="nav-item"><a href="../pages/03-algebra-lineare.html" class=""><span class="num">03</span>Algebra lineare per data scientist</a></li><li class="nav-item"><a href="../pages/04-calcolo-ottimizzazione.html" class="active"><span class="num">04</span>Calcolo, gradiente e ottimizzazione</a></li><li class="nav-item"><a href="../pages/05-probabilita.html" class=""><span class="num">05</span>Probabilità: la lingua dell&#x27;incertezza</a></li><li class="nav-item"><a href="../pages/06-statistica-descrittiva.html" class=""><span class="num">06</span>Statistica descrittiva</a></li><li class="nav-item"><a href="../pages/07-statistica-inferenziale.html" class=""><span class="num">07</span>Statistica inferenziale e test di ipotesi</a></li><li class="nav-item"><a href="../pages/08-distribuzioni.html" class=""><span class="num">08</span>Distribuzioni di probabilità che incontrerai</a></li><li class="nav-item"><a href="../pages/09-numpy.html" class=""><span class="num">09</span>NumPy: pensare in array</a></li><li class="nav-item"><a href="../pages/10-pandas.html" class=""><span class="num">10</span>Pandas: il coltellino svizzero</a></li><li class="nav-item"><a href="../pages/11-sql.html" class=""><span class="num">11</span>SQL per data scientist</a></li><li class="nav-item"><a href="../pages/12-visualizzazione.html" class=""><span class="num">12</span>Visualizzazione: matplotlib, seaborn, plotly</a></li><li class="nav-item"><a href="../pages/13-data-wrangling.html" class=""><span class="num">13</span>Pulizia e data wrangling</a></li><li class="nav-item"><a href="../pages/14-feature-engineering.html" class=""><span class="num">14</span>Feature engineering</a></li><li class="nav-item"><a href="../pages/15-eda.html" class=""><span class="num">15</span>EDA: Exploratory Data Analysis</a></li><li class="nav-item"><a href="../pages/16-ml-fondamenti.html" class=""><span class="num">16</span>ML: fondamenti — bias, varianza, validazione</a></li><li class="nav-item"><a href="../pages/17-regressione-lineare.html" class=""><span class="num">17</span>Regressione lineare e regolarizzazione</a></li><li class="nav-item"><a href="../pages/18-regressione-logistica.html" class=""><span class="num">18</span>Regressione logistica e classificazione</a></li><li class="nav-item"><a href="../pages/19-knn-naive-bayes-svm.html" class=""><span class="num">19</span>KNN, Naive Bayes, SVM</a></li><li class="nav-item"><a href="../pages/20-alberi-decisionali.html" class=""><span class="num">20</span>Alberi decisionali</a></li><li class="nav-item"><a href="../pages/21-random-forest-boosting.html" class=""><span class="num">21</span>Random Forest, Gradient Boosting, XGBoost</a></li><li class="nav-item"><a href="../pages/22-clustering.html" class=""><span class="num">22</span>Clustering: K-Means, DBSCAN, GMM, gerarchico</a></li><li class="nav-item"><a href="../pages/23-pca-tsne-umap.html" class=""><span class="num">23</span>Riduzione dimensionale: PCA, t-SNE, UMAP</a></li><li class="nav-item"><a href="../pages/24-metriche-validazione.html" class=""><span class="num">24</span>Metriche, cross-validation, leakage</a></li><li class="nav-item"><a href="../pages/25-sbilanciamento-classi.html" class=""><span class="num">25</span>Sbilanciamento di classi</a></li><li class="nav-item"><a href="../pages/26-hyperparameter-tuning.html" class=""><span class="num">26</span>Hyperparameter tuning</a></li><li class="nav-item"><a href="../pages/27-reti-neurali.html" class=""><span class="num">27</span>Reti neurali: dalle basi al backprop</a></li><li class="nav-item"><a href="../pages/28-pytorch.html" class=""><span class="num">28</span>PyTorch: dal toy model al training loop</a></li><li class="nav-item"><a href="../pages/29-cnn.html" class=""><span class="num">29</span>CNN per computer vision</a></li><li class="nav-item"><a href="../pages/30-rnn-lstm.html" class=""><span class="num">30</span>RNN, LSTM, GRU per sequenze</a></li><li class="nav-item"><a href="../pages/31-transformer.html" class=""><span class="num">31</span>Transformer e attention</a></li><li class="nav-item"><a href="../pages/32-nlp-llm.html" class=""><span class="num">32</span>NLP: dal text mining ai LLM</a></li><li class="nav-item"><a href="../pages/33-time-series.html" class=""><span class="num">33</span>Time series e forecasting</a></li><li class="nav-item"><a href="../pages/34-mlops.html" class=""><span class="num">34</span>MLOps: deployment, monitoring, drift</a></li><li class="nav-item"><a href="../pages/35-bayesian-causal.html" class=""><span class="num">35</span>Inferenza bayesiana e causale</a></li><li class="nav-item"><a href="../pages/36-capstone-carriera.html" class=""><span class="num">36</span>Capstone, portfolio, carriera</a></li><li class="nav-item"><a href="../pages/37-glossario.html" class=""><span class="num">37</span>Glossario A-Z</a></li><li class="nav-item"><a href="../pages/38-formulario.html" class=""><span class="num">38</span>Formulario: tutte le formule del percorso</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Matematica</span>
+        <span>Sezione 5 di 39</span>
+        <span class="level-tag level-int">Livello: intermedio</span>
+      </div>
+      <h1>Calcolo, gradiente e ottimizzazione</h1>
+      <p class="summary">Derivata, gradiente, hessiana, chain rule. Gradient descent dalla teoria al codice — il motore di ogni rete neurale moderna.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Matematica</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>[[algebra-lineare]]</li><li>concetto intuitivo di funzione</li></ul>
+  <div class="label">Strumenti</div>
+  <ul class="source-list"><li>carta, NumPy, matplotlib</li></ul>
+</div>
+      <h2 id="perche-il-calcolo">Perché il calcolo</h2>
+<p>Quasi ogni algoritmo di ML minimizza una <strong>loss function</strong> $L(\boldsymbol{\theta})$ rispetto ai parametri $\boldsymbol{\theta}$. Trovare il minimo richiede sapere <strong>da che parte scendere</strong>: questa è la definizione di derivata/gradiente.</p>
+<blockquote>
+<p>"Backpropagation" — il cuore del deep learning — è solo applicazione iterata della <strong>chain rule</strong>.</p>
+</blockquote>
+<h2 id="derivata-in-una-variabile">Derivata in una variabile</h2>
+<p>La derivata di $f(x)$ in $x_0$ misura <strong>la pendenza</strong> della funzione lì:</p>
+<p>$$f'(x_0) = \lim_{h \to 0} \frac{f(x_0 + h) - f(x_0)}{h}$$</p>
+<p>Geometricamente: la pendenza della retta tangente al grafico nel punto $x_0$.</p>
+<div class="chart"><svg viewBox="0 0 360 220" xmlns="http://www.w3.org/2000/svg">
+<line x1="30" y1="200" x2="340" y2="200" stroke="#444"/>
+<line x1="30" y1="20" x2="30" y2="200" stroke="#444"/>
+<path d="M 30 195 Q 100 195 180 110 T 340 30" fill="none" stroke="#7aa2ff" stroke-width="2.5"/>
+<line x1="120" y1="180" x2="240" y2="80" stroke="#ffb347" stroke-width="2"/>
+<circle cx="180" cy="130" r="4" fill="#ffb347"/>
+<text x="190" y="125" fill="#ffb347" font-size="11">x₀, f(x₀)</text>
+<text x="245" y="100" fill="#ffb347" font-size="11">f'(x₀) = pendenza</text>
+</svg><div class="chart-caption">La derivata è la pendenza della tangente al grafico.</div></div>
+
+<h3 id="regole-essenziali">Regole essenziali</h3>
+<table>
+<thead>
+<tr>
+<th>Funzione</th>
+<th>Derivata</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$c$ (costante)</td>
+<td>$0$</td>
+</tr>
+<tr>
+<td>$x^n$</td>
+<td>$n x^{n-1}$</td>
+</tr>
+<tr>
+<td>$e^x$</td>
+<td>$e^x$</td>
+</tr>
+<tr>
+<td>$\ln x$</td>
+<td>$1/x$</td>
+</tr>
+<tr>
+<td>$\sin x$</td>
+<td>$\cos x$</td>
+</tr>
+<tr>
+<td>$\sigma(x) = \frac{1}{1+e^{-x}}$</td>
+<td>$\sigma(x)(1-\sigma(x))$</td>
+</tr>
+<tr>
+<td>$\text{ReLU}(x) = \max(0, x)$</td>
+<td>$1$ se $x&gt;0$, $0$ altrimenti</td>
+</tr>
+<tr>
+<td>$\tanh x$</td>
+<td>$1 - \tanh^2 x$</td>
+</tr>
+</tbody>
+</table>
+<p>E le regole di combinazione:</p>
+<ul>
+<li><strong>Somma</strong>: $(f+g)' = f' + g'$</li>
+<li><strong>Prodotto</strong>: $(fg)' = f'g + fg'$</li>
+<li><strong>Quoziente</strong>: $(f/g)' = (f'g - fg')/g^2$</li>
+<li><strong>Catena (chain rule)</strong>: $(f(g(x)))' = f'(g(x)) \cdot g'(x)$</li>
+</ul>
+<p>La <strong>chain rule</strong> è il pezzo più importante. La userai in ogni passo della backpropagation.</p>
+<h3 id="esempio-derivata-della-sigmoid">Esempio: derivata della sigmoid</h3>
+<p>$\sigma(x) = \frac{1}{1+e^{-x}}$. Mostriamo che $\sigma'(x) = \sigma(x)(1 - \sigma(x))$.</p>
+<p>Sia $u = 1 + e^{-x}$. Allora $\sigma = u^{-1}$ e $u' = -e^{-x}$. Per chain rule:</p>
+<p>$$\sigma'(x) = -u^{-2} \cdot u' = \frac{e^{-x}}{(1+e^{-x})^2}$$</p>
+<p>Riscrivendo: $\frac{e^{-x}}{1+e^{-x}} = 1 - \frac{1}{1+e^{-x}} = 1 - \sigma(x)$. Quindi $\sigma'(x) = \sigma(x)(1 - \sigma(x))$. Bello, no?</p>
+<h2 id="funzioni-di-piu-variabili-il-gradiente">Funzioni di più variabili: il gradiente</h2>
+<p>Per $f: \mathbb{R}^n \to \mathbb{R}$, il <strong>gradiente</strong> è il vettore delle derivate parziali:</p>
+<p>$$\nabla f(\mathbf{x}) = \left( \frac{\partial f}{\partial x_1}, \frac{\partial f}{\partial x_2}, \dots, \frac{\partial f}{\partial x_n} \right)^T$$</p>
+<p><strong>Proprietà chiave</strong>: $\nabla f$ punta nella direzione di <strong>massima crescita</strong>. Andando nella direzione opposta $-\nabla f$, scendiamo più velocemente possibile. Questa è la base di <strong>gradient descent</strong>.</p>
+<h3 id="esempio-fx-y-x2-y2">Esempio: $f(x, y) = x^2 + y^2$</h3>
+<p>$\frac{\partial f}{\partial x} = 2x$, $\frac{\partial f}{\partial y} = 2y$. Quindi $\nabla f = (2x, 2y)^T$.</p>
+<p>Nel punto $(1, 1)$ il gradiente è $(2, 2)$ — punta a nord-est, lontano dal minimo che è in $(0, 0)$. Per scendere, ci muoviamo verso $(-2, -2)$.</p>
+<div class="chart"><svg viewBox="0 0 320 220" xmlns="http://www.w3.org/2000/svg">
+<g transform="translate(160,110)">
+  <circle r="80" fill="none" stroke="#444" stroke-width="1"/>
+  <circle r="60" fill="none" stroke="#444" stroke-width="1"/>
+  <circle r="40" fill="none" stroke="#444" stroke-width="1"/>
+  <circle r="20" fill="none" stroke="#444" stroke-width="1"/>
+  <line x1="-100" y1="0" x2="100" y2="0" stroke="#555"/>
+  <line x1="0" y1="-100" x2="0" y2="100" stroke="#555"/>
+  <circle cx="0" cy="0" r="3" fill="#5ee2c4"/>
+  <text x="6" y="-6" fill="#5ee2c4" font-size="10">min</text>
+  <circle cx="50" cy="-50" r="4" fill="#ffb347"/>
+  <line x1="50" y1="-50" x2="80" y2="-80" stroke="#ffb347" stroke-width="2"/>
+  <polygon points="80,-80 73,-75 75,-83" fill="#ffb347"/>
+  <text x="56" y="-46" fill="#ffb347" font-size="10">∇f</text>
+  <line x1="50" y1="-50" x2="20" y2="-20" stroke="#7aa2ff" stroke-width="2" stroke-dasharray="3,2"/>
+  <polygon points="20,-20 27,-25 25,-17" fill="#7aa2ff"/>
+  <text x="6" y="-32" fill="#7aa2ff" font-size="10">-∇f</text>
+</g>
+</svg><div class="chart-caption">Curve di livello di f=x²+y². ∇f è perpendicolare alle curve, punta a salire. -∇f è la direzione di discesa.</div></div>
+
+<h3 id="hessiana">Hessiana</h3>
+<p>La matrice delle derivate seconde:</p>
+<p>$$H_f(\mathbf{x}) = \begin{bmatrix} \frac{\partial^2 f}{\partial x_1^2} &amp; \cdots &amp; \frac{\partial^2 f}{\partial x_1 \partial x_n} \ \vdots &amp; \ddots &amp; \vdots \ \frac{\partial^2 f}{\partial x_n \partial x_1} &amp; \cdots &amp; \frac{\partial^2 f}{\partial x_n^2} \end{bmatrix}$$</p>
+<p>Usata in:
+- <strong>Test del minimo</strong>: $H$ definita positiva → $\mathbf{x}$ è minimo locale.
+- <strong>Newton's method</strong>: $\mathbf{x}_{k+1} = \mathbf{x}_k - H^{-1} \nabla f$. Convergenza quadratica, ma costoso (calcolare e invertire $H$).
+- <strong>Curvature</strong>: caratterizza la "forma" della loss surface.</p>
+<h2 id="gradient-descent">Gradient descent</h2>
+<p>L'algoritmo più importante del machine learning moderno:</p>
+<pre><code>inizializza θ
+ripeti:
+    g = ∇L(θ)              # calcola il gradiente
+    θ = θ - η · g          # aggiorna nella direzione opposta
+finché non converge
+</code></pre>
+<p>dove $\eta$ (eta) è il <strong>learning rate</strong>.</p>
+<h3 id="scelta-del-learning-rate">Scelta del learning rate</h3>
+<pre><code class="language-mermaid">graph LR
+    A[η troppo piccolo&lt;br/&gt;convergenza lenta] --- B[η ottimale&lt;br/&gt;convergenza veloce] --- C[η troppo grande&lt;br/&gt;oscilla / diverge]
+</code></pre>
+<div class="chart"><svg viewBox="0 0 480 200" xmlns="http://www.w3.org/2000/svg">
+<g transform="translate(20,20)">
+  <path d="M 0 160 Q 60 0 120 160" fill="none" stroke="#5ee2c4" stroke-width="2"/>
+  <circle cx="20" cy="120" r="3" fill="#ffb347"/>
+  <circle cx="32" cy="95" r="3" fill="#ffb347"/>
+  <circle cx="44" cy="75" r="3" fill="#ffb347"/>
+  <circle cx="55" cy="55" r="3" fill="#ffb347"/>
+  <text x="20" y="190" fill="#5ee2c4" font-size="11">η piccolo</text>
+</g>
+<g transform="translate(180,20)">
+  <path d="M 0 160 Q 60 0 120 160" fill="none" stroke="#5ee2c4" stroke-width="2"/>
+  <circle cx="20" cy="120" r="3" fill="#ffb347"/>
+  <circle cx="55" cy="55" r="3" fill="#ffb347"/>
+  <circle cx="60" cy="40" r="3" fill="#ffb347"/>
+  <text x="20" y="190" fill="#5ee2c4" font-size="11">η ottimale</text>
+</g>
+<g transform="translate(340,20)">
+  <path d="M 0 160 Q 60 0 120 160" fill="none" stroke="#5ee2c4" stroke-width="2"/>
+  <circle cx="20" cy="120" r="3" fill="#ff7a7a"/>
+  <circle cx="95" cy="100" r="3" fill="#ff7a7a"/>
+  <circle cx="10" cy="135" r="3" fill="#ff7a7a"/>
+  <circle cx="100" cy="120" r="3" fill="#ff7a7a"/>
+  <text x="20" y="190" fill="#ff7a7a" font-size="11">η troppo grande</text>
+</g>
+</svg></div>
+
+<p>In pratica: prova $\eta \in {10^{-1}, 10^{-2}, 10^{-3}, 10^{-4}}$ e guarda la loss. Esistono <strong>scheduler</strong> che lo riducono nel tempo (cosine, step decay, warmup).</p>
+<h3 id="implementazione-manuale">Implementazione manuale</h3>
+<pre><code class="language-python">import numpy as np
+
+def f(x):
+    return (x - 3) ** 2 + 2          # minimo in x=3, f=2
+
+def grad(x):
+    return 2 * (x - 3)
+
+x = 0.0
+eta = 0.1
+history = [x]
+for step in range(50):
+    g = grad(x)
+    x = x - eta * g
+    history.append(x)
+print(f&quot;x finale: {x:.4f}, f: {f(x):.4f}&quot;)
+# x finale: 2.9999, f: 2.0000
+</code></pre>
+<h3 id="visualizzato-la-pallina-che-rotola-nella-valle">Visualizzato: la "pallina che rotola nella valle"</h3>
+<div class="chart"><svg viewBox="0 0 460 240" xmlns="http://www.w3.org/2000/svg">
+<line x1="40" y1="200" x2="440" y2="200" stroke="#555"/>
+<line x1="40" y1="20" x2="40" y2="200" stroke="#555"/>
+<text x="240" y="225" fill="#8b949e" font-size="11" text-anchor="middle">parametro θ →</text>
+<text x="22" y="120" fill="#8b949e" font-size="11">loss L(θ)</text>
+
+<path d="M 60 50 Q 250 230 440 50" fill="none" stroke="#7aa2ff" stroke-width="2"/>
+
+<circle cx="80" cy="76" r="6" fill="#ffb347"/>
+<text x="60" y="70" fill="#ffb347" font-size="10">θ₀</text>
+
+<circle cx="130" cy="135" r="6" fill="#ffb347" opacity="0.85"/>
+<text x="115" y="128" fill="#ffb347" font-size="10">θ₁</text>
+
+<circle cx="180" cy="175" r="6" fill="#ffb347" opacity="0.7"/>
+<text x="165" y="168" fill="#ffb347" font-size="10">θ₂</text>
+
+<circle cx="230" cy="195" r="6" fill="#ffb347" opacity="0.55"/>
+<text x="215" y="188" fill="#ffb347" font-size="10">θ₃</text>
+
+<circle cx="250" cy="200" r="7" fill="#5ee2c4"/>
+<text x="265" y="198" fill="#5ee2c4" font-size="11">minimo θ*</text>
+
+<line x1="80" y1="76" x2="130" y2="135" stroke="#ffb347" stroke-width="1" stroke-dasharray="3,2"/>
+<line x1="130" y1="135" x2="180" y2="175" stroke="#ffb347" stroke-width="1" stroke-dasharray="3,2"/>
+<line x1="180" y1="175" x2="230" y2="195" stroke="#ffb347" stroke-width="1" stroke-dasharray="3,2"/>
+<line x1="230" y1="195" x2="250" y2="200" stroke="#ffb347" stroke-width="1" stroke-dasharray="3,2"/>
+
+<text x="240" y="35" fill="#8b949e" font-size="11" text-anchor="middle">step lunghi all'inizio (gradiente grande), corti vicino al minimo (gradiente piccolo)</text>
+</svg><div class="chart-caption">Gradient descent: ad ogni step ti muovi nella direzione opposta del gradiente, di una quantità proporzionale alla pendenza.</div></div>
+
+<h3 id="varianti-che-vedi-nel-codice-reale">Varianti che vedi nel codice reale</h3>
+<table>
+<thead>
+<tr>
+<th>Variante</th>
+<th>Idea</th>
+<th>Quando usarla</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>GD batch</strong></td>
+<td>$\nabla L$ su tutti i dati</td>
+<td>Dataset piccoli</td>
+</tr>
+<tr>
+<td><strong>SGD</strong></td>
+<td>$\nabla L$ su 1 campione a caso</td>
+<td>Storica, rumorosa ma scalabile</td>
+</tr>
+<tr>
+<td><strong>Mini-batch SGD</strong></td>
+<td>$\nabla L$ su batch di 32–512</td>
+<td>Standard in DL</td>
+</tr>
+<tr>
+<td><strong>SGD + momentum</strong></td>
+<td>accumula direzione passate</td>
+<td>Accelera in valli strette</td>
+</tr>
+<tr>
+<td><strong>Adam</strong></td>
+<td>adatta learning rate per parametro</td>
+<td>Default di partenza per NN</td>
+</tr>
+<tr>
+<td><strong>AdamW</strong></td>
+<td>Adam con decay corretto</td>
+<td>Default attuale per Transformer</td>
+</tr>
+<tr>
+<td><strong>L-BFGS</strong></td>
+<td>approssima Hessian</td>
+<td>Problemi convessi piccoli (Logistic, MLE)</td>
+</tr>
+</tbody>
+</table>
+<p>Adam, in formula compatta:</p>
+<p>$$m_t = \beta_1 m_{t-1} + (1-\beta_1) g_t$$
+$$v_t = \beta_2 v_{t-1} + (1-\beta_2) g_t^2$$
+$$\hat{m}<em t_1="t+1">t = m_t / (1-\beta_1^t), \quad \hat{v}_t = v_t / (1-\beta_2^t)$$
+$$\theta</em>$$} = \theta_t - \eta \frac{\hat{m}_t}{\sqrt{\hat{v}_t} + \epsilon</p>
+<p>Tieni a mente $\beta_1=0.9$, $\beta_2=0.999$, $\epsilon=10^{-8}$ come default.</p>
+<h2 id="la-chain-rule-di-nuovo-backpropagation">La chain rule, di nuovo: backpropagation</h2>
+<p>Una rete neurale è una funzione composta:</p>
+<p>$$y = f_L(f_{L-1}(\dots f_1(\mathbf{x}; \theta_1) \dots; \theta_{L-1}); \theta_L)$$</p>
+<p>Vogliamo $\frac{\partial L}{\partial \theta_l}$ per ogni layer $l$. Backpropagation calcola questi gradienti applicando la chain rule strato per strato, da destra a sinistra. Il costo è O(forward pass) — questo è il miracolo.</p>
+<p>Esempio con due layer:</p>
+<p>$$y = \sigma(w_2 \cdot \sigma(w_1 \cdot x + b_1) + b_2)$$</p>
+<p>$$L = \frac{1}{2}(y - y_\text{true})^2$$</p>
+<p>Per chain rule:</p>
+<p>$$\frac{\partial L}{\partial w_1} = \underbrace{(y - y_\text{true})}<em _="/" _partial="\partial" y="y" z_2="z_2">{\partial L / \partial y} \cdot \underbrace{\sigma'(\dots)}</em>} \cdot \underbrace{w_2<em _partial="\partial" h_1_partial="h_1/\partial" z_1="z_1">{\partial z_2/\partial h_1} \cdot \underbrace{\sigma'(\dots)}</em>$$} \cdot \underbrace{x}_{\partial z_1/\partial w_1</p>
+<p>Lungo, ma meccanico. PyTorch lo fa automaticamente con autograd.</p>
+<h2 id="ottimizzazione-vincolata-e-lagrangiani">Ottimizzazione vincolata e Lagrangiani</h2>
+<p>Per minimizzare $f(\mathbf{x})$ soggetto a $g(\mathbf{x}) = 0$, si introduce il <strong>moltiplicatore di Lagrange</strong>:</p>
+<p>$$\mathcal{L}(\mathbf{x}, \lambda) = f(\mathbf{x}) + \lambda g(\mathbf{x})$$</p>
+<p>e si risolve $\nabla_{\mathbf{x}} \mathcal{L} = 0$, $\nabla_\lambda \mathcal{L} = 0$.</p>
+<p><strong>Dove appare in ML?</strong> SVM (margine massimo), regressione vincolata, PCA con vincolo di norma unitaria. Ne riparleremo nelle sezioni dedicate.</p>
+<h2 id="funzioni-convesse-la-promessa-dellottimizzazione">Funzioni convesse: la promessa dell'ottimizzazione</h2>
+<p>Una funzione $f$ è <strong>convessa</strong> se il segmento tra due punti del grafico sta sopra al grafico:</p>
+<p>$$f(\alpha x_1 + (1-\alpha) x_2) \leq \alpha f(x_1) + (1-\alpha) f(x_2), \quad \alpha \in [0,1]$$</p>
+<p><strong>Perché ti interessa</strong>: per una funzione convessa, <strong>ogni minimo locale è globale</strong>, e gradient descent converge al minimo vero. Sono convesse:</p>
+<ul>
+<li>Loss quadratica della regressione lineare</li>
+<li>Loss logistica della regressione logistica</li>
+<li>Loss SVM (hinge)</li>
+<li>Funzioni L1 e L2</li>
+</ul>
+<p><strong>Non convesse</strong>: le reti neurali. Ecco perché GD sulle NN trova minimi locali (ma in pratica funziona lo stesso — questo è uno dei misteri felici del deep learning).</p>
+<h2 id="numeri-da-memorizzare">Numeri da memorizzare</h2>
+<ul>
+<li>Derivata di $x^n$: $nx^{n-1}$</li>
+<li>$\sigma'(x) = \sigma(x)(1-\sigma(x))$</li>
+<li>$\text{softmax}<em ij="ij">i' = p_i (\delta</em> - p_j)$ (vedrai nei NN)</li>
+<li>$\frac{d}{dx} \ln x = 1/x$, base di tutta la cross-entropy</li>
+</ul>
+<h2 id="esercizi">Esercizi</h2>
+<details>
+<summary>Esercizio 1 — Derivate base</summary>
+
+Calcola:
+1. $f(x) = 3x^4 - 2x^2 + 5$
+2. $f(x) = e^{2x} \sin(x)$
+3. $f(x) = \ln(1 + x^2)$
+4. $f(x) = \sigma(2x + 1)$ (sigmoid)
+
+**Soluzioni**:
+1. $12x^3 - 4x$
+2. $2 e^{2x} \sin x + e^{2x} \cos x = e^{2x}(2\sin x + \cos x)$
+3. $\frac{2x}{1+x^2}$
+4. $2 \sigma(2x+1)(1 - \sigma(2x+1))$
+</details>
+
+<details>
+<summary>Esercizio 2 — Gradiente di funzioni vettoriali</summary>
+
+Calcola $\nabla f$ per:
+1. $f(x, y) = x^2 + 3xy + 2y^2$
+2. $f(\mathbf{x}) = \mathbf{x}^T A \mathbf{x}$ con $A$ simmetrica
+3. $f(\mathbf{w}) = \|\mathbf{y} - X \mathbf{w}\|_2^2$ (loss OLS)
+
+**Soluzioni**:
+1. $(2x + 3y, 3x + 4y)$
+2. $2 A \mathbf{x}$
+3. $-2 X^T (\mathbf{y} - X \mathbf{w})$ → posto a zero: $X^T X \mathbf{w} = X^T \mathbf{y}$ (Normal Equations)
+</details>
+
+<details>
+<summary>Esercizio 3 — Gradient descent su funzione 2D</summary>
+
+Implementa GD per $f(x, y) = x^2 + 5y^2$, partendo da $(3, 2)$. Plotta la traiettoria.
+
+
+<pre><code class="language-python">import numpy as np, matplotlib.pyplot as plt
+
+def f(p): return p[0]**2 + 5*p[1]**2
+def grad(p): return np.array([2*p[0], 10*p[1]])
+
+p = np.array([3.0, 2.0])
+eta = 0.05
+traj = [p.copy()]
+for _ in range(50):
+    p = p - eta * grad(p)
+    traj.append(p.copy())
+traj = np.array(traj)
+
+x = np.linspace(-4, 4, 80); y = np.linspace(-3, 3, 80)
+X, Y = np.meshgrid(x, y); Z = X**2 + 5*Y**2
+plt.contour(X, Y, Z, 20)
+plt.plot(traj[:,0], traj[:,1], 'o-', color='orange')
+plt.show()
+</code></pre>
+
+
+Osserva: il percorso "zig-zaga" perché la funzione è "stretta" su $y$. Questo è il motivo per cui si normalizzano le feature in ML.
+</details>
+
+<details>
+<summary>Esercizio 4 — Confronto SGD vs Adam</summary>
+
+Su una funzione semplice 2D non isotropica $(x^2 + 25 y^2)$, confronta convergenza di vanilla GD vs Adam:
+
+
+<pre><code class="language-python">import numpy as np
+
+def grad(p): return np.array([2*p[0], 50*p[1]])
+
+def run_gd(p0, eta, n=200):
+    p = p0.copy(); h = [p.copy()]
+    for _ in range(n):
+        p = p - eta * grad(p); h.append(p.copy())
+    return np.array(h)
+
+def run_adam(p0, eta=0.1, n=200, b1=0.9, b2=0.999, eps=1e-8):
+    p = p0.copy(); m = np.zeros_like(p); v = np.zeros_like(p)
+    h = [p.copy()]
+    for t in range(1, n+1):
+        g = grad(p)
+        m = b1*m + (1-b1)*g
+        v = b2*v + (1-b2)*g*g
+        mh = m/(1-b1**t); vh = v/(1-b2**t)
+        p = p - eta * mh / (np.sqrt(vh)+eps)
+        h.append(p.copy())
+    return np.array(h)
+
+p0 = np.array([5.0, 1.0])
+gd = run_gd(p0, eta=0.03)
+ad = run_adam(p0)
+print(&quot;GD finale:&quot;, gd[-1], &quot; Adam finale:&quot;, ad[-1])
+</code></pre>
+
+
+Adam tipicamente converge molto più veloce su questo paesaggio.
+</details>
+
+<details>
+<summary>Esercizio 5 — Convessità</summary>
+
+Quali sono convesse?
+1. $f(x) = x^4$
+2. $f(x) = -\ln(x)$ per $x > 0$
+3. $f(x) = x \sin(x)$
+4. $f(x) = \max(0, 1 - x)$ (hinge loss)
+5. $f(x) = x^2 - 4x + 3$
+
+**Soluzioni**: 1 sì (seconda derivata = $12x^2 \geq 0$), 2 sì ($1/x^2 > 0$), 3 NO (oscilla), 4 sì (massimo di due funzioni convesse), 5 sì (parabola).
+</details>
+
+<h2 id="cosa-portarti-via">Cosa portarti via</h2>
+<ul>
+<li>Derivata = pendenza. Gradiente = "verso quale direzione cresce di più".</li>
+<li>Gradient descent: $\theta \leftarrow \theta - \eta \nabla L$, l'algoritmo che muove tutto.</li>
+<li>Chain rule = backpropagation. Capirla = capire il deep learning.</li>
+<li>Convessità garantisce minimi globali. Reti neurali non sono convesse, ma in pratica funzionano lo stesso.</li>
+<li>Adam come default per NN, SGD+momentum è ancora valido (e a volte migliore in generalizzazione).</li>
+</ul>
+<h2 id="letture">Letture</h2>
+<ul>
+<li><strong>3Blue1Brown</strong> — "Essence of Calculus" (YouTube)</li>
+<li><strong>Stanford CS229</strong> — note di matematica (gratis)</li>
+<li><strong>Goodfellow, Bengio, Courville</strong> — "Deep Learning", capitoli 4–5: la teoria dell'ottimizzazione in DL</li>
+</ul>
+<p>Prossimo: probabilità — la lingua dell'incertezza.</p>
+      <nav class="pager">
+<a href="03-algebra-lineare.html" class="prev"><span class="label">← Precedente</span><span class="title">Algebra lineare per data scientist</span></a>
+<a href="05-probabilita.html" class="next"><span class="label">Successivo →</span><span class="title">Probabilità: la lingua dell&#x27;incertezza</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Data Science Zero to Hero</strong> — percorso completo, in italiano, dalla matematica al deployment.</p><p>Materiale didattico aperto. Le formule sono lì per essere capite, non temute. Quando un concetto è oscuro, torna indietro: la data science è una piramide, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

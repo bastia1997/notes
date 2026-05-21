@@ -1,0 +1,611 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ricorsione e backtracking — FAANG Prep</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">F</div>
+      <div>
+        <div class="brand-title">FAANG Prep</div>
+        <div class="brand-subtitle">DS&amp;A · System Design</div>
+      </div>
+    </div>
+    <div class="lang-bar">
+      <a class="lang-switcher" href="../en/pages/10-recursion-backtracking.html" title="English"><span class="flag-icon">🇬🇧</span><span class="flag-label">English</span></a>
+    </div>
+  </div>
+  <div class="search-wrap">
+    <input class="search-input" id="search-input" placeholder="Cerca nei contenuti... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/00-introduzione.html" class=""><span class="num">00</span>Introduzione e come usare questo percorso</a></li><li class="nav-item"><a href="../pages/01-complessita.html" class=""><span class="num">01</span>Complessità computazionale (Big-O)</a></li><li class="nav-item"><a href="../pages/02-array-stringhe.html" class=""><span class="num">02</span>Array e stringhe</a></li><li class="nav-item"><a href="../pages/03-hashmap-set.html" class=""><span class="num">03</span>Hashmap e set</a></li><li class="nav-item"><a href="../pages/04-linked-list.html" class=""><span class="num">04</span>Linked list</a></li><li class="nav-item"><a href="../pages/05-stack-coda.html" class=""><span class="num">05</span>Stack e coda</a></li><li class="nav-item"><a href="../pages/06-alberi.html" class=""><span class="num">06</span>Alberi (binary tree e BST)</a></li><li class="nav-item"><a href="../pages/07-heap.html" class=""><span class="num">07</span>Heap e priority queue</a></li><li class="nav-item"><a href="../pages/08-grafi.html" class=""><span class="num">08</span>Grafi</a></li><li class="nav-item"><a href="../pages/09-trie.html" class=""><span class="num">09</span>Trie (prefix tree)</a></li><li class="nav-item"><a href="../pages/10-ricorsione-backtracking.html" class="active"><span class="num">10</span>Ricorsione e backtracking</a></li><li class="nav-item"><a href="../pages/11-sorting-searching.html" class=""><span class="num">11</span>Sorting e searching</a></li><li class="nav-item"><a href="../pages/12-two-pointers-sliding-window.html" class=""><span class="num">12</span>Two pointers e sliding window</a></li><li class="nav-item"><a href="../pages/13-greedy.html" class=""><span class="num">13</span>Greedy</a></li><li class="nav-item"><a href="../pages/14-dp.html" class=""><span class="num">14</span>Dynamic programming</a></li><li class="nav-item"><a href="../pages/15-bit-manipulation.html" class=""><span class="num">15</span>Bit manipulation</a></li><li class="nav-item"><a href="../pages/16-oop-design-patterns.html" class=""><span class="num">16</span>OOP e design patterns</a></li><li class="nav-item"><a href="../pages/17-system-design.html" class=""><span class="num">17</span>System design — fondamenti</a></li><li class="nav-item"><a href="../pages/18-system-design-esempi.html" class=""><span class="num">18</span>System design — esempi end-to-end</a></li><li class="nav-item"><a href="../pages/19-concorrenza.html" class=""><span class="num">19</span>Concorrenza e parallelismo</a></li><li class="nav-item"><a href="../pages/20-database-sql.html" class=""><span class="num">20</span>Database e SQL</a></li><li class="nav-item"><a href="../pages/21-os-networking.html" class=""><span class="num">21</span>OS e networking</a></li><li class="nav-item"><a href="../pages/22-coding-patterns.html" class=""><span class="num">22</span>I 16 coding patterns dei colloqui</a></li><li class="nav-item"><a href="../pages/23-behavioral-star.html" class=""><span class="num">23</span>Behavioral interview — STAR e Amazon LP</a></li><li class="nav-item"><a href="../pages/24-mock-interviews.html" class=""><span class="num">24</span>Mock interview e strategia in colloquio</a></li><li class="nav-item"><a href="../pages/25-roadmap-90-giorni.html" class=""><span class="num">25</span>Roadmap 90 giorni — piano operativo</a></li><li class="nav-item"><a href="../pages/26-banca-esercizi.html" class=""><span class="num">26</span>Banca esercizi — 200+ problemi FAANG</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Algoritmi</span>
+        <span>Sezione 10 di 26</span>
+      </div>
+      <h1>Ricorsione e backtracking</h1>
+      <p class="summary">Come pensare ricorsivamente fidandosi della funzione. Albero di chiamate disegnato. Backtracking come &quot;ricorsione con cancellazione&quot;.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Algoritmi</div>
+  
+  
+</div>
+      <p>La ricorsione è il concetto che spacca in due le persone: o ti viene naturale dopo molto esercizio, o ti sembra magia nera. Questo capitolo ti porta dal "non capisco" al "lo vedo".</p>
+<h2 id="parte-1-cosa-e-la-ricorsione-davvero">Parte 1 — Cosa è la ricorsione, davvero</h2>
+<h3 id="lanalogia-della-matrioska">L'analogia della matrioska</h3>
+<p>Hai mai aperto una matrioska? È una bambola che dentro contiene un'altra bambola identica ma più piccola, che dentro contiene un'altra ancora più piccola, e così via fino alla più piccola che non si apre.</p>
+<p>La ricorsione è esattamente questo: <strong>una funzione che chiama se stessa con un input "più piccolo"</strong>, fino ad arrivare al caso base che si risolve direttamente.</p>
+<h3 id="definizione-formale">Definizione formale</h3>
+<p>Una funzione ricorsiva ha due parti:</p>
+<ol>
+<li><strong>Base case</strong>: l'input più piccolo, risolto direttamente, senza ulteriore ricorsione.</li>
+<li><strong>Recursive case</strong>: l'input generico, risolto chiamando se stessa su un input più piccolo.</li>
+</ol>
+<p>Esempio del libro: il <strong>fattoriale</strong>.</p>
+<pre><code class="language-python">def fact(n):
+    if n == 0:           # base case
+        return 1
+    return n * fact(n-1)  # recursive case
+</code></pre>
+<p>Trace di <code>fact(4)</code>:</p>
+<pre><code>fact(4) → 4 * fact(3)
+        → 4 * (3 * fact(2))
+        → 4 * (3 * (2 * fact(1)))
+        → 4 * (3 * (2 * (1 * fact(0))))
+        → 4 * (3 * (2 * (1 * 1)))
+        → 4 * (3 * (2 * 1))
+        → 4 * (3 * 2)
+        → 4 * 6
+        → 24
+</code></pre>
+<h3 id="il-salto-di-fede">Il "salto di fede"</h3>
+<p>Il punto chiave per scrivere ricorsione: <strong>non cercare di seguire mentalmente tutto l'albero di chiamate</strong>. Fidati.</p>
+<p>Quando scrivi <code>fact(n-1)</code> e ottieni un valore, <strong>fidati</strong> che sia corretto (perché la stessa funzione lo calcolerà bene per input minori, e induttivamente per tutti). Tu devi solo:</p>
+<ol>
+<li><strong>Definire correttamente il base case</strong>.</li>
+<li><strong>Combinare correttamente</strong> il risultato della chiamata ricorsiva con il valore corrente.</li>
+</ol>
+<p>Se queste due cose sono giuste, la funzione è giusta. Tutto. Non serve simulare 1000 chiamate annidate in testa.</p>
+<p>Questo è il "leap of faith" che separa chi capisce la ricorsione da chi non la capisce.</p>
+<h3 id="i-3-step-per-scrivere-una-funzione-ricorsiva">I 3 step per scrivere una funzione ricorsiva</h3>
+<ol>
+<li><strong>Definisci esattamente cosa significa una chiamata</strong>. Es: <em>"<code>f(arr, i)</code> ritorna la somma di <code>arr[i..fine]</code>"</em>.</li>
+<li><strong>Identifica il base case</strong>: l'input minimo, risposta diretta.</li>
+<li><strong>Spezza il problema</strong>: come ridurre a un sottoproblema?</li>
+</ol>
+<p>Esempio: somma di un array.</p>
+<pre><code class="language-python">def somma(arr, i=0):
+    # 1. Una chiamata: somma di arr[i..fine]
+    # 2. Base: se i è fuori, somma = 0
+    if i == len(arr): return 0
+    # 3. Combina: arr[i] + somma del resto
+    return arr[i] + somma(arr, i+1)
+</code></pre>
+<h2 id="parte-2-albero-di-chiamate-visualizzare-la-ricorsione">Parte 2 — Albero di chiamate: visualizzare la ricorsione</h2>
+<p>Per problemi più complessi, disegnare l'albero di chiamate <strong>a mano</strong> chiarisce tutto.</p>
+<p>Esempio: Fibonacci.</p>
+<pre><code class="language-python">def fib(n):
+    if n &lt; 2: return n
+    return fib(n-1) + fib(n-2)
+</code></pre>
+<p>Trace di <code>fib(4)</code>:</p>
+<pre><code class="language-mermaid">flowchart TD
+    f4[&quot;fib(4)&quot;] --&gt; f3a[&quot;fib(3)&quot;]
+    f4 --&gt; f2a[&quot;fib(2)&quot;]
+    f3a --&gt; f2b[&quot;fib(2)&quot;]
+    f3a --&gt; f1a[&quot;fib(1)&quot;]
+    f2a --&gt; f1b[&quot;fib(1)&quot;]
+    f2a --&gt; f0a[&quot;fib(0)&quot;]
+    f2b --&gt; f1c[&quot;fib(1)&quot;]
+    f2b --&gt; f0b[&quot;fib(0)&quot;]
+</code></pre>
+<p>Osservazioni cruciali:</p>
+<ol>
+<li><strong>Il numero totale di chiamate è esponenziale</strong>: ~2ⁿ. Per fib(40) sono già 10⁹ chiamate.</li>
+<li><strong>Tante chiamate sono ripetute</strong>: fib(2) compare due volte, fib(1) tre volte, ecc.</li>
+<li>La profondità massima dell'albero è <code>n</code>. Quindi spazio = O(n) (stack).</li>
+</ol>
+<p>Questo motiva la <strong>memoization</strong> e poi la <strong>DP</strong> (cap. 14): se ricordo i risultati delle chiamate precedenti, le riuso invece di ricalcolare.</p>
+<pre><code class="language-python">from functools import lru_cache
+@lru_cache(maxsize=None)
+def fib(n):
+    if n &lt; 2: return n
+    return fib(n-1) + fib(n-2)
+</code></pre>
+<p>Con <code>lru_cache</code>, fib(40) diventa O(n) tempo. La differenza con <code>fib(40)</code> "puro" è <strong>30 secondi vs istantaneo</strong>.</p>
+<h2 id="parte-3-ricorsione-vs-iterazione">Parte 3 — Ricorsione vs iterazione</h2>
+<p>Ogni algoritmo ricorsivo si può scrivere iterativamente. Ma alcuni problemi sono <strong>molto più naturali ricorsivamente</strong> (alberi, grafi, backtracking).</p>
+<table>
+<thead>
+<tr>
+<th>Vantaggi ricorsione</th>
+<th>Vantaggi iterazione</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Codice elegante per problemi "decomponibili"</td>
+<td>No stack overhead</td>
+</tr>
+<tr>
+<td>Naturale per alberi/grafi</td>
+<td>Niente RecursionError</td>
+</tr>
+<tr>
+<td>Espressivo</td>
+<td>Spesso più veloce (no overhead chiamate)</td>
+</tr>
+</tbody>
+</table>
+<p>In colloquio:</p>
+<ul>
+<li><strong>Scrivi prima la versione ricorsiva</strong> (più semplice).</li>
+<li>Se l'intervistatore chiede, converti a iterativa (con stack esplicito).</li>
+<li>Per grandi input (<code>n &gt; 10⁴</code>), considera iterativa per evitare <code>RecursionError</code>.</li>
+</ul>
+<h2 id="parte-4-backtracking-ricorsione-con-cancellazione">Parte 4 — Backtracking: ricorsione con cancellazione</h2>
+<h3 id="lidea-base">L'idea base</h3>
+<p>Il backtracking è una <strong>ricorsione che esplora un albero di scelte</strong>. Quando una scelta porta a un dead end, "torna indietro" (back-track) e prova un'altra.</p>
+<p>Esempio mentale: hai un labirinto. Provi un corridoio. Se finisce in un muro, torni indietro e provi un altro corridoio. Se anche quello è cieco, ancora indietro. E così via.</p>
+<h3 id="template-universale">Template universale</h3>
+<pre><code class="language-python">def backtrack(stato_corrente):
+    if soluzione_completa(stato_corrente):
+        salva(stato_corrente)
+        return
+
+    for scelta in scelte_possibili():
+        applica(scelta, stato_corrente)
+        backtrack(stato_corrente)
+        annulla(scelta, stato_corrente)    # ← QUI è il &quot;back&quot; di &quot;backtrack&quot;
+</code></pre>
+<p>L'<strong>annulla</strong> è la parte critica. Stato condiviso (veloce ma serve pulirlo) vs stato copiato (lento ma robusto).</p>
+<h3 id="visualizzazione-subsets-di-1-2-3">Visualizzazione: subsets di [1, 2, 3]</h3>
+<p>L'albero di chiamate del backtracking per "tutti i sottoinsiemi" di <code>[1, 2, 3]</code>:</p>
+<pre><code class="language-mermaid">flowchart TD
+    R[&quot;[ ]&quot;] --&gt;|prendi 1| A1[&quot;[1]&quot;]
+    R --&gt;|skip 1| A2[&quot;[ ]&quot;]
+    A1 --&gt;|prendi 2| B1[&quot;[1,2]&quot;]
+    A1 --&gt;|skip 2| B2[&quot;[1]&quot;]
+    A2 --&gt;|prendi 2| B3[&quot;[2]&quot;]
+    A2 --&gt;|skip 2| B4[&quot;[ ]&quot;]
+    B1 --&gt;|prendi 3| C1[&quot;[1,2,3]&quot;]
+    B1 --&gt;|skip 3| C2[&quot;[1,2]&quot;]
+    B2 --&gt;|prendi 3| C3[&quot;[1,3]&quot;]
+    B2 --&gt;|skip 3| C4[&quot;[1]&quot;]
+    B3 --&gt;|prendi 3| C5[&quot;[2,3]&quot;]
+    B3 --&gt;|skip 3| C6[&quot;[2]&quot;]
+    B4 --&gt;|prendi 3| C7[&quot;[3]&quot;]
+    B4 --&gt;|skip 3| C8[&quot;[ ]&quot;]
+</code></pre>
+<p>Ogni foglia dell'albero rappresenta un sottoinsieme. Numero totale di foglie: 2³ = 8.</p>
+<pre><code class="language-python">def subsets(arr):
+    res = []
+    def go(i, cur):
+        if i == len(arr):
+            res.append(cur[:])   # IMPORTANTE: copia
+            return
+        # Non prendo arr[i]
+        go(i+1, cur)
+        # Prendo arr[i]
+        cur.append(arr[i])
+        go(i+1, cur)
+        cur.pop()    # backtrack
+    go(0, [])
+    return res
+</code></pre>
+<p>Notare:</p>
+<ul>
+<li><code>cur[:]</code> per copiare. Senza, tutti i sottoinsiemi puntano alla stessa lista.</li>
+<li><code>cur.pop()</code> per annullare la modifica. Senza, <code>cur</code> conserva valori di branch precedenti.</li>
+</ul>
+<h2 id="parte-5-i-5-pattern-di-backtracking">Parte 5 — I 5 pattern di backtracking</h2>
+<h3 id="pattern-1-subsets-power-set">Pattern 1 — Subsets (power set)</h3>
+<p>Tutti i 2ⁿ sottoinsiemi. Per ogni elemento: includi o escludi.</p>
+<p>Vista sopra.</p>
+<h3 id="pattern-2-permutations">Pattern 2 — Permutations</h3>
+<p>Tutte le <code>n!</code> permutazioni. Ad ogni passo scegli un elemento non ancora usato.</p>
+<pre><code class="language-python">def perms(arr):
+    res = []
+    used = [False] * len(arr)
+    def go(cur):
+        if len(cur) == len(arr):
+            res.append(cur[:])
+            return
+        for i, x in enumerate(arr):
+            if used[i]: continue
+            used[i] = True
+            cur.append(x)
+            go(cur)
+            cur.pop()
+            used[i] = False
+    go([])
+    return res
+</code></pre>
+<p>Con duplicati: ordina + skip <code>arr[i] == arr[i-1] and not used[i-1]</code> (evita generare la stessa permutazione due volte).</p>
+<h3 id="pattern-3-combinations">Pattern 3 — Combinations</h3>
+<p>Sottoinsiemi di <strong>fissa dimensione</strong>.</p>
+<pre><code class="language-python">def combinations(n, k):
+    res = []
+    def go(start, cur):
+        if len(cur) == k:
+            res.append(cur[:])
+            return
+        for i in range(start, n + 1):
+            cur.append(i)
+            go(i + 1, cur)
+            cur.pop()
+    go(1, [])
+    return res
+</code></pre>
+<p>Trucco: passi <code>i+1</code> al next per evitare ripetizioni e mantenere ordine crescente.</p>
+<h3 id="pattern-4-combination-sum">Pattern 4 — Combination Sum</h3>
+<p>Cerca combinazioni che sommano al target.</p>
+<pre><code class="language-python">def combination_sum(candidates, target):
+    res = []
+    def go(start, remaining, cur):
+        if remaining == 0:
+            res.append(cur[:])
+            return
+        if remaining &lt; 0: return
+        for i in range(start, len(candidates)):
+            cur.append(candidates[i])
+            go(i, remaining - candidates[i], cur)   # passo `i`, NON i+1 (riusabile)
+            cur.pop()
+    go(0, target, [])
+    return res
+</code></pre>
+<p>Per "senza riuso" passi <code>i+1</code>.</p>
+<h3 id="pattern-5-constraint-satisfaction">Pattern 5 — Constraint Satisfaction</h3>
+<p>Esplora una griglia con vincoli (N-Queens, Sudoku, Word Search). Quando un vincolo è violato, indietro.</p>
+<h2 id="parte-6-pruning-tagliare-lalbero-prima">Parte 6 — Pruning: tagliare l'albero prima</h2>
+<p>Senza pruning, il backtracking esplora tutto l'albero. Con pruning, tagli rami impossibili <strong>prima</strong> di scendere.</p>
+<h3 id="tre-tecniche">Tre tecniche</h3>
+<p><strong>1. Bounding</strong>: se la soluzione parziale non può migliorare il best globale, esci.</p>
+<pre><code class="language-python">if current_cost &gt;= best_so_far: return  # questa branch non migliorerà
+</code></pre>
+<p><strong>2. Constraint propagation</strong>: dopo una scelta, deduci altre scelte forzate.</p>
+<p>Es. Sudoku: se metti 5 in (3,3), non puoi mettere 5 nella stessa riga/colonna/box.</p>
+<p><strong>3. Memoization</strong>: se hai sotto-stati che si ripetono, ricorda i risultati (= DP).</p>
+<h2 id="parte-7-le-5-trappole-comuni">Parte 7 — Le 5 trappole comuni</h2>
+<h3 id="trappola-1-resappendcur-invece-di-resappendcur">Trappola 1 — <code>res.append(cur)</code> invece di <code>res.append(cur[:])</code></h3>
+<p>Se aggiungi <code>cur</code> direttamente, ogni soluzione nel risultato <strong>punta alla stessa lista</strong>. Modifiche successive (anche pop di backtrack) modificano "le copie già salvate".</p>
+<p>Sempre <strong>copia</strong> (<code>cur[:]</code> o <code>list(cur)</code>).</p>
+<h3 id="trappola-2-stato-non-resettato">Trappola 2 — Stato non resettato</h3>
+<p>Se modifichi una variabile e dimentichi di resettarla nel backtrack, la prossima iterazione vede lo stato sporco.</p>
+<pre><code class="language-python"># SBAGLIATO:
+cur.append(x)
+go(...)
+# manca cur.pop()!
+</code></pre>
+<h3 id="trappola-3-esplosione-di-stato">Trappola 3 — Esplosione di stato</h3>
+<p>Backtracking è O(branching^depth). Per n=30 con 2 branch, sono 10⁹ chiamate → impossibile.</p>
+<p>Se vedi <code>n &gt; 20</code> su un problema "tutte le ..." con 2 scelte per livello, è quasi sicuramente DP, non backtracking.</p>
+<h3 id="trappola-4-mancata-distinzione-tra-elementi-uguali">Trappola 4 — Mancata distinzione tra elementi uguali</h3>
+<p>In permutazioni con duplicati <code>[1, 1, 2]</code>, le permutazioni "uniche" sono 3, non 6. Devi skippare i duplicati esplicitamente.</p>
+<pre><code class="language-python">arr.sort()
+def go(cur):
+    ...
+    for i in range(len(arr)):
+        if used[i]: continue
+        if i &gt; 0 and arr[i] == arr[i-1] and not used[i-1]:
+            continue   # skip duplicato
+        ...
+</code></pre>
+<h3 id="trappola-5-ordine-sbagliato-di-appendpop">Trappola 5 — Ordine sbagliato di append/pop</h3>
+<pre><code class="language-python"># SBAGLIATO:
+go(i+1, cur)        # ricorri prima di applicare la scelta
+cur.append(arr[i])  # tardi
+</code></pre>
+<p>Sequenza corretta: <strong>applica → ricorri → annulla</strong>.</p>
+<h2 id="parte-8-esercizi-guidati">Parte 8 — Esercizi guidati</h2>
+<h3 id="esercizio-101-subsets-medium">Esercizio 10.1 — Subsets <span class="problem-tag medium">MEDIUM</span></h3>
+<details><summary>Soluzione</summary>
+
+Vedi parte 4.
+
+Versione iterativa (notevole eleganza):
+
+
+<pre><code class="language-python">def subsets(arr):
+    res = [[]]
+    for x in arr:
+        res += [s + [x] for s in res]
+    return res
+</code></pre>
+
+
+Idea: ad ogni elemento, raddoppi la lista esistente (con e senza x).
+</details>
+
+<h3 id="esercizio-102-permutations-medium">Esercizio 10.2 — Permutations <span class="problem-tag medium">MEDIUM</span></h3>
+<details><summary>Soluzione</summary>
+
+Vedi parte 5.
+</details>
+
+<h3 id="esercizio-103-combination-sum-medium">Esercizio 10.3 — Combination Sum <span class="problem-tag medium">MEDIUM</span></h3>
+<details><summary>Soluzione</summary>
+
+Vedi parte 5.
+</details>
+
+<h3 id="esercizio-104-letter-combinations-of-phone-number-medium">Esercizio 10.4 — Letter Combinations of Phone Number <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Tastierino: "23" → "ad", "ae", "af", "bd", ..., "cf".</p>
+<details><summary>Soluzione</summary>
+
+
+<pre><code class="language-python">def letter_combos(digits):
+    if not digits: return []
+    m = {'2':'abc','3':'def','4':'ghi','5':'jkl','6':'mno','7':'pqrs','8':'tuv','9':'wxyz'}
+    res = []
+    def go(i, cur):
+        if i == len(digits):
+            res.append(cur)
+            return
+        for c in m[digits[i]]:
+            go(i + 1, cur + c)
+    go(0, &quot;&quot;)
+    return res
+</code></pre>
+
+
+In questo caso `cur + c` crea una nuova stringa, quindi non serve backtrack esplicito.
+</details>
+
+<h3 id="esercizio-105-generate-parentheses-medium">Esercizio 10.5 — Generate Parentheses <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Tutte le combinazioni valide di n coppie di parentesi.</p>
+<details><summary>Ragionamento</summary>
+
+Per essere valida una sequenza di parentesi:
+
+1. In ogni prefisso, `open_count ≥ close_count`.
+2. Alla fine, `open_count == close_count == n`.
+
+Backtracking con due contatori:
+
+
+<pre><code class="language-python">def gen_parens(n):
+    res = []
+    def go(cur, opened, closed):
+        if len(cur) == 2 * n:
+            res.append(cur)
+            return
+        if opened &lt; n:
+            go(cur + '(', opened + 1, closed)
+        if closed &lt; opened:
+            go(cur + ')', opened, closed + 1)
+    go(&quot;&quot;, 0, 0)
+    return res
+</code></pre>
+
+
+Pruning: non aggiungere `)` se equivale a chiudere prima di aprire.
+
+Per n=3: ["((()))","(()())","(())()","()(())","()()()"]
+</details>
+
+<h3 id="esercizio-106-word-search-medium">Esercizio 10.6 — Word Search <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Cerca una parola in una griglia 2D (4-vicini, no riuso).</p>
+<details><summary>Ragionamento</summary>
+
+Per ogni cella, prova ad iniziare la parola da lì. DFS ricorsivo che matcha carattere per carattere.
+
+Trucco: marca la cella visitata mettendo un placeholder (`'#'`), poi ripristina al backtrack.
+
+
+<pre><code class="language-python">def exist(board, word):
+    R, C = len(board), len(board[0])
+    def dfs(r, c, k):
+        if k == len(word): return True
+        if not (0 &lt;= r &lt; R and 0 &lt;= c &lt; C) or board[r][c] != word[k]:
+            return False
+        tmp = board[r][c]
+        board[r][c] = '#'   # marca come visitato
+        ok = any(dfs(r + dr, c + dc, k + 1) for dr, dc in [(-1,0),(1,0),(0,-1),(0,1)])
+        board[r][c] = tmp   # backtrack
+        return ok
+    for r in range(R):
+        for c in range(C):
+            if dfs(r, c, 0): return True
+    return False
+</code></pre>
+
+
+**Lezione**: il "marker temporaneo" è un trucco generale per "non rivisitare" in DFS senza un set separato.
+</details>
+
+<h3 id="esercizio-107-n-queens-hard">Esercizio 10.7 — N-Queens <span class="problem-tag hard">HARD</span></h3>
+<p>Posiziona n regine su scacchiera n×n senza che si attacchino.</p>
+<details><summary>Ragionamento</summary>
+
+Procedi riga per riga. Su ogni riga prova ogni colonna.
+
+Vincoli: nessuna regina nella stessa colonna, stessa diagonale principale (`r-c` costante), stessa anti-diagonale (`r+c` costante).
+
+Tracking efficiente: 3 set per cols, diag1, diag2.
+
+
+<pre><code class="language-python">def solve_n_queens(n):
+    res = []
+    cols = set(); d1 = set(); d2 = set()
+    def go(r, queens):
+        if r == n:
+            res.append(['.'*c + 'Q' + '.'*(n-c-1) for c in queens])
+            return
+        for c in range(n):
+            if c in cols or (r - c) in d1 or (r + c) in d2:
+                continue
+            cols.add(c); d1.add(r - c); d2.add(r + c)
+            queens.append(c)
+            go(r + 1, queens)
+            queens.pop()
+            cols.discard(c); d1.discard(r - c); d2.discard(r + c)
+    go(0, [])
+    return res
+</code></pre>
+
+
+O(n!).
+
+**Lezione**: in problemi di constraint, identifica gli **invarianti facili da tracciare in O(1)**. Qui le diagonali si tracciano come `r-c` o `r+c` costante.
+</details>
+
+<h3 id="esercizio-108-sudoku-solver-hard">Esercizio 10.8 — Sudoku Solver <span class="problem-tag hard">HARD</span></h3>
+<details><summary>Soluzione</summary>
+
+
+<pre><code class="language-python">def solve_sudoku(board):
+    rows = [set() for _ in range(9)]
+    cols = [set() for _ in range(9)]
+    boxes = [set() for _ in range(9)]
+    empty = []
+    for r in range(9):
+        for c in range(9):
+            v = board[r][c]
+            if v == '.':
+                empty.append((r, c))
+            else:
+                rows[r].add(v); cols[c].add(v); boxes[(r//3)*3 + c//3].add(v)
+    def go(i):
+        if i == len(empty): return True
+        r, c = empty[i]
+        b = (r//3)*3 + c//3
+        for d in '123456789':
+            if d not in rows[r] and d not in cols[c] and d not in boxes[b]:
+                rows[r].add(d); cols[c].add(d); boxes[b].add(d)
+                board[r][c] = d
+                if go(i + 1): return True
+                rows[r].discard(d); cols[c].discard(d); boxes[b].discard(d)
+                board[r][c] = '.'
+        return False
+    go(0)
+</code></pre>
+
+</details>
+
+<h3 id="esercizio-109-restore-ip-addresses-medium">Esercizio 10.9 — Restore IP Addresses <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Inserisci 3 punti in una stringa di cifre per formare un IP valido.</p>
+<details><summary>Soluzione</summary>
+
+
+<pre><code class="language-python">def restore_ip(s):
+    res = []
+    def valid(p):
+        return (len(p) == 1) or (p[0] != '0' and int(p) &lt;= 255)
+    def go(start, parts):
+        if len(parts) == 4:
+            if start == len(s):
+                res.append('.'.join(parts))
+            return
+        for length in (1, 2, 3):
+            if start + length &gt; len(s): break
+            p = s[start:start+length]
+            if valid(p):
+                go(start + length, parts + [p])
+    go(0, [])
+    return res
+</code></pre>
+
+</details>
+
+<h3 id="esercizio-1010-palindrome-partitioning-medium">Esercizio 10.10 — Palindrome Partitioning <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Tutte le partizioni di <code>s</code> in sottostringhe palindrome.</p>
+<details><summary>Soluzione</summary>
+
+
+<pre><code class="language-python">def partition(s):
+    res = []
+    def is_pal(x): return x == x[::-1]
+    def go(start, cur):
+        if start == len(s):
+            res.append(cur[:])
+            return
+        for end in range(start + 1, len(s) + 1):
+            p = s[start:end]
+            if is_pal(p):
+                cur.append(p)
+                go(end, cur)
+                cur.pop()
+    go(0, [])
+    return res
+</code></pre>
+
+
+Pattern combinato: backtracking + check di proprietà (palindromo).
+</details>
+
+<h2 id="riassunto-del-capitolo">Riassunto del capitolo</h2>
+<ol>
+<li><strong>Ricorsione = funzione che chiama sé stessa con input più piccolo</strong>, fino al base case.</li>
+<li><strong>Salto di fede</strong>: fidati delle chiamate ricorsive. Tu definisci solo base + combine.</li>
+<li><strong>Backtracking = ricorsione + applica/annulla</strong>. Template universale.</li>
+<li><strong>5 pattern</strong>: subsets, permutations, combinations, combination sum, constraint satisfaction.</li>
+<li><strong>Trappole top</strong>: <code>append(cur)</code> invece di <code>append(cur[:])</code>, mancato pop al backtrack, esplosione esponenziale.</li>
+</ol>
+<p>Quando ti viene "naturale" pensare ricorsivamente, <strong>alberi, grafi, DP</strong> diventano facili. Tutto il resto del materiale si basa su questo capitolo.</p>
+      <nav class="pager">
+<a href="09-trie.html" class="prev"><span class="label">← Precedente</span><span class="title">Trie (prefix tree)</span></a>
+<a href="11-sorting-searching.html" class="next"><span class="label">Successivo →</span><span class="title">Sorting e searching</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>FAANG Prep</strong> — percorso completo di preparazione: DS&amp;A, system design, behavioral. Costruito per spaccare ai colloqui di Big Tech.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-index.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true,
+      background: '#161922',
+      primaryColor: '#1d2230',
+      primaryTextColor: '#e6e8ee',
+      primaryBorderColor: '#6cf',
+      lineColor: '#7a8194',
+      secondaryColor: '#262b3a',
+      tertiaryColor: '#0f1117',
+      mainBkg: '#1d2230',
+      secondBkg: '#262b3a',
+      tertiaryBkg: '#161922',
+      nodeBorder: '#6cf',
+      clusterBkg: '#161922',
+      clusterBorder: '#262b3a',
+      titleColor: '#6cf',
+      edgeLabelBackground: '#161922',
+      fontFamily: 'Cascadia Code, monospace'
+    }
+  });
+  document.querySelectorAll('pre > code.language-mermaid').forEach((codeEl) => {
+    const pre = codeEl.parentElement;
+    const div = document.createElement('div');
+    div.className = 'mermaid';
+    div.textContent = codeEl.textContent;
+    pre.replaceWith(div);
+  });
+  mermaid.run();
+</script>
+</body>
+</html>

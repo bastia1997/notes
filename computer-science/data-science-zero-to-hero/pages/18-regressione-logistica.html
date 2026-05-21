@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Regressione logistica e classificazione — Data Science Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#3a4a7a',primaryTextColor:'#e8eef0',primaryBorderColor:'#5a6aa0',lineColor:'#8a9499',background:'#11171a'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">Σ</div>
+      <div>
+        <div class="brand-title">DATA SCIENCE</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">🇮🇹 IT</span><a href="../en/pages/18-logistic-regression.html" class="lang-link" title="Switch to English">🇬🇧 EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-cos-e-data-science.html" class=""><span class="num">01</span>Cos&#x27;è la data science (e cosa non è)</a></li><li class="nav-item"><a href="../pages/02-python-per-data-science.html" class=""><span class="num">02</span>Python per data science: setup professionale</a></li><li class="nav-item"><a href="../pages/02b-matematica-essenziale.html" class=""><span class="num">02b</span>Matematica del liceo che ti serve davvero</a></li><li class="nav-item"><a href="../pages/03-algebra-lineare.html" class=""><span class="num">03</span>Algebra lineare per data scientist</a></li><li class="nav-item"><a href="../pages/04-calcolo-ottimizzazione.html" class=""><span class="num">04</span>Calcolo, gradiente e ottimizzazione</a></li><li class="nav-item"><a href="../pages/05-probabilita.html" class=""><span class="num">05</span>Probabilità: la lingua dell&#x27;incertezza</a></li><li class="nav-item"><a href="../pages/06-statistica-descrittiva.html" class=""><span class="num">06</span>Statistica descrittiva</a></li><li class="nav-item"><a href="../pages/07-statistica-inferenziale.html" class=""><span class="num">07</span>Statistica inferenziale e test di ipotesi</a></li><li class="nav-item"><a href="../pages/08-distribuzioni.html" class=""><span class="num">08</span>Distribuzioni di probabilità che incontrerai</a></li><li class="nav-item"><a href="../pages/09-numpy.html" class=""><span class="num">09</span>NumPy: pensare in array</a></li><li class="nav-item"><a href="../pages/10-pandas.html" class=""><span class="num">10</span>Pandas: il coltellino svizzero</a></li><li class="nav-item"><a href="../pages/11-sql.html" class=""><span class="num">11</span>SQL per data scientist</a></li><li class="nav-item"><a href="../pages/12-visualizzazione.html" class=""><span class="num">12</span>Visualizzazione: matplotlib, seaborn, plotly</a></li><li class="nav-item"><a href="../pages/13-data-wrangling.html" class=""><span class="num">13</span>Pulizia e data wrangling</a></li><li class="nav-item"><a href="../pages/14-feature-engineering.html" class=""><span class="num">14</span>Feature engineering</a></li><li class="nav-item"><a href="../pages/15-eda.html" class=""><span class="num">15</span>EDA: Exploratory Data Analysis</a></li><li class="nav-item"><a href="../pages/16-ml-fondamenti.html" class=""><span class="num">16</span>ML: fondamenti — bias, varianza, validazione</a></li><li class="nav-item"><a href="../pages/17-regressione-lineare.html" class=""><span class="num">17</span>Regressione lineare e regolarizzazione</a></li><li class="nav-item"><a href="../pages/18-regressione-logistica.html" class="active"><span class="num">18</span>Regressione logistica e classificazione</a></li><li class="nav-item"><a href="../pages/19-knn-naive-bayes-svm.html" class=""><span class="num">19</span>KNN, Naive Bayes, SVM</a></li><li class="nav-item"><a href="../pages/20-alberi-decisionali.html" class=""><span class="num">20</span>Alberi decisionali</a></li><li class="nav-item"><a href="../pages/21-random-forest-boosting.html" class=""><span class="num">21</span>Random Forest, Gradient Boosting, XGBoost</a></li><li class="nav-item"><a href="../pages/22-clustering.html" class=""><span class="num">22</span>Clustering: K-Means, DBSCAN, GMM, gerarchico</a></li><li class="nav-item"><a href="../pages/23-pca-tsne-umap.html" class=""><span class="num">23</span>Riduzione dimensionale: PCA, t-SNE, UMAP</a></li><li class="nav-item"><a href="../pages/24-metriche-validazione.html" class=""><span class="num">24</span>Metriche, cross-validation, leakage</a></li><li class="nav-item"><a href="../pages/25-sbilanciamento-classi.html" class=""><span class="num">25</span>Sbilanciamento di classi</a></li><li class="nav-item"><a href="../pages/26-hyperparameter-tuning.html" class=""><span class="num">26</span>Hyperparameter tuning</a></li><li class="nav-item"><a href="../pages/27-reti-neurali.html" class=""><span class="num">27</span>Reti neurali: dalle basi al backprop</a></li><li class="nav-item"><a href="../pages/28-pytorch.html" class=""><span class="num">28</span>PyTorch: dal toy model al training loop</a></li><li class="nav-item"><a href="../pages/29-cnn.html" class=""><span class="num">29</span>CNN per computer vision</a></li><li class="nav-item"><a href="../pages/30-rnn-lstm.html" class=""><span class="num">30</span>RNN, LSTM, GRU per sequenze</a></li><li class="nav-item"><a href="../pages/31-transformer.html" class=""><span class="num">31</span>Transformer e attention</a></li><li class="nav-item"><a href="../pages/32-nlp-llm.html" class=""><span class="num">32</span>NLP: dal text mining ai LLM</a></li><li class="nav-item"><a href="../pages/33-time-series.html" class=""><span class="num">33</span>Time series e forecasting</a></li><li class="nav-item"><a href="../pages/34-mlops.html" class=""><span class="num">34</span>MLOps: deployment, monitoring, drift</a></li><li class="nav-item"><a href="../pages/35-bayesian-causal.html" class=""><span class="num">35</span>Inferenza bayesiana e causale</a></li><li class="nav-item"><a href="../pages/36-capstone-carriera.html" class=""><span class="num">36</span>Capstone, portfolio, carriera</a></li><li class="nav-item"><a href="../pages/37-glossario.html" class=""><span class="num">37</span>Glossario A-Z</a></li><li class="nav-item"><a href="../pages/38-formulario.html" class=""><span class="num">38</span>Formulario: tutte le formule del percorso</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Machine Learning</span>
+        <span>Sezione 19 di 39</span>
+        <span class="level-tag level-int">Livello: intermedio</span>
+      </div>
+      <h1>Regressione logistica e classificazione</h1>
+      <p class="summary">Sigmoid, log-loss, odds e log-odds, MLE, multi-classe, soglie decisionali. La &#x27;logistica&#x27; batte le NN nel 60% dei problemi tabellari reali.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Machine Learning</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>[[regressione-lineare]]</li><li>[[calcolo-ottimizzazione]]</li></ul>
+  <div class="label">Strumenti</div>
+  <ul class="source-list"><li>scikit-learn, statsmodels</li></ul>
+</div>
+      <h2 id="perche-non-ols-per-la-classificazione">Perché non OLS per la classificazione</h2>
+<p>Se applichi OLS a $y \in {0, 1}$, ottieni:</p>
+<ul>
+<li>Predizioni fuori da $[0, 1]$ (insensate come probabilità).</li>
+<li>Eteroschedasticità (varianza dipende da $p$).</li>
+<li>Loss inadeguata: il modello "punisce poco" un errore certo (es: predizione 0.99 quando il vero è 0).</li>
+</ul>
+<p>Soluzione: <strong>logistic regression</strong>.</p>
+<h2 id="il-modello">Il modello</h2>
+<p>Per la probabilità di classe 1:</p>
+<p>$$P(y=1 | \mathbf{x}) = \sigma(\mathbf{w}^T \mathbf{x} + b) = \frac{1}{1 + e^{-(\mathbf{w}^T \mathbf{x} + b)}}$$</p>
+<p>La <strong>sigmoid</strong> $\sigma$ schiaccia $(-\infty, \infty)$ in $(0, 1)$.</p>
+<div class="chart"><svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg">
+<line x1="30" y1="160" x2="340" y2="160" stroke="#555"/>
+<line x1="180" y1="20" x2="180" y2="160" stroke="#555"/>
+<line x1="30" y1="30" x2="340" y2="30" stroke="#333" stroke-dasharray="3,3"/>
+<line x1="30" y1="95" x2="340" y2="95" stroke="#333" stroke-dasharray="3,3"/>
+<path d="M 30 158 C 130 158 230 32 340 32" fill="none" stroke="#7aa2ff" stroke-width="2.5"/>
+<text x="345" y="34" fill="#7aa2ff" font-size="11">1</text>
+<text x="345" y="99" fill="#7aa2ff" font-size="11">0.5</text>
+<text x="345" y="165" fill="#7aa2ff" font-size="11">0</text>
+<text x="185" y="175" fill="#ffb347" font-size="11">z=0</text>
+</svg><div class="chart-caption">La sigmoide: lineare attorno a 0, satura a 0 e 1.</div></div>
+
+<h2 id="log-odds-logit">Log-odds (logit)</h2>
+<p>Riarrangiando:</p>
+<p>$$\log \frac{P(y=1|x)}{P(y=0|x)} = \mathbf{w}^T \mathbf{x} + b$$</p>
+<p>Il <strong>log-odds</strong> è lineare in $\mathbf{x}$. Interpretazione:</p>
+<blockquote>
+<p>$w_j$ = aumento del log-odds per un'unità in più di $x_j$.</p>
+</blockquote>
+<p>Esponenziando: $e^{w_j}$ = <strong>moltiplicatore degli odds</strong> per un'unità in più di $x_j$. Es: $w_j = 0.69 \Rightarrow e^{0.69} \approx 2$: la presenza di quella feature <strong>raddoppia gli odds</strong>.</p>
+<h2 id="loss-log-likelihood">Loss: log-likelihood</h2>
+<p>Per un singolo esempio:</p>
+<p>$$P(y_i | \mathbf{x}_i) = p_i^{y_i} (1 - p_i)^{1 - y_i}$$</p>
+<p>Likelihood su tutti gli esempi:</p>
+<p>$$L(\mathbf{w}) = \prod_i p_i^{y_i} (1-p_i)^{1-y_i}$$</p>
+<p>Log-likelihood (massimizzare) o <strong>cross-entropy negativa</strong> (minimizzare):</p>
+<p>$$-\log L(\mathbf{w}) = -\sum_i [y_i \log p_i + (1 - y_i) \log(1-p_i)]$$</p>
+<p>Questa loss è <strong>convessa</strong> in $\mathbf{w}$ → gradient descent trova il minimo globale. Niente forma chiusa come OLS, ma convergenza garantita.</p>
+<h2 id="gradiente">Gradiente</h2>
+<p>Per chi vuole derivare:</p>
+<p>$$\nabla_{\mathbf{w}} L = X^T (\mathbf{p} - \mathbf{y})$$</p>
+<p>dove $\mathbf{p}$ è il vettore delle probabilità predette. Stessa forma dell'OLS, con $\mathbf{p}$ al posto di $\hat{y}$. Bello.</p>
+<p>Quindi:</p>
+<p>$$\mathbf{w}_{t+1} = \mathbf{w}_t - \eta X^T (\mathbf{p}_t - \mathbf{y})$$</p>
+<h2 id="esempio">Esempio</h2>
+<pre><code class="language-python">from sklearn.linear_model import LogisticRegression
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
+from sklearn.datasets import load_breast_cancer
+
+X, y = load_breast_cancer(return_X_y=True)
+X_tr, X_te, y_tr, y_te = train_test_split(X, y, stratify=y, random_state=0)
+
+sc = StandardScaler().fit(X_tr)
+X_tr_s = sc.transform(X_tr); X_te_s = sc.transform(X_te)
+
+m = LogisticRegression(C=1.0, max_iter=5000).fit(X_tr_s, y_tr)
+print(&quot;Accuracy:&quot;, m.score(X_te_s, y_te))
+print(&quot;Coefficienti (primi 5):&quot;, m.coef_[0, :5])
+</code></pre>
+<blockquote>
+<p><code>C</code> è l'<strong>inverso</strong> della regolarizzazione: <code>C</code> grande = poca regolarizzazione, <code>C</code> piccolo = forte. Default <code>C=1.0</code>.</p>
+</blockquote>
+<h2 id="regolarizzazione-di-nuovo">Regolarizzazione (di nuovo)</h2>
+<pre><code class="language-python">LogisticRegression(penalty='l2', C=1.0)       # default Ridge-like
+LogisticRegression(penalty='l1', solver='liblinear', C=0.5)
+LogisticRegression(penalty='elasticnet', solver='saga', l1_ratio=0.5, C=0.5)
+</code></pre>
+<p>L1 fa feature selection automatica.</p>
+<h2 id="multi-classe-due-strategie">Multi-classe: due strategie</h2>
+<h3 id="one-vs-rest-ovr">One-vs-Rest (OvR)</h3>
+<p>$K$ classificatori binari, ognuno "classe $k$" vs "tutto il resto". Si sceglie la classe con probabilità massima.</p>
+<h3 id="softmax-multinomial-logistic">Softmax (Multinomial Logistic)</h3>
+<p>Generalizzazione diretta:</p>
+<p>$$P(y=k | \mathbf{x}) = \frac{e^{\mathbf{w}_k^T \mathbf{x}}}{\sum_j e^{\mathbf{w}_j^T \mathbf{x}}}$$</p>
+<p>Loss = cross-entropy categoriale:</p>
+<p>$$L = -\sum_i \sum_k \mathbb{1}[y_i=k] \log P(y_i=k|x_i)$$</p>
+<pre><code class="language-python">LogisticRegression(multi_class='multinomial', solver='lbfgs')
+</code></pre>
+<blockquote>
+<p>Default in sklearn: <code>'auto'</code>, sceglie multinomial se solver supporta. In genere migliore di OvR.</p>
+</blockquote>
+<h2 id="soglia-decisionale">Soglia decisionale</h2>
+<p>Di default <code>predict()</code> usa soglia 0.5. Ma 0.5 non è sacro:</p>
+<ul>
+<li>Se i <strong>falsi positivi</strong> costano molto (es: spam che blocca email importanti) → soglia più alta.</li>
+<li>Se i <strong>falsi negativi</strong> costano molto (es: cancro non diagnosticato) → soglia più bassa.</li>
+</ul>
+<p>Scegli la soglia in base al <strong>costo</strong>:</p>
+<pre><code class="language-python">proba = m.predict_proba(X_te)[:, 1]
+y_pred = (proba &gt; 0.3).astype(int)  # ad esempio
+</code></pre>
+<p>Il modo professionale: ottimizza la soglia su validation rispetto alla metrica che ti interessa (F1, precision a recall fissa, etc).</p>
+<h2 id="metriche-per-la-classificazione">Metriche per la classificazione</h2>
+<p>Vedi sezione dedicata. Sintesi:</p>
+<table>
+<thead>
+<tr>
+<th>Metrica</th>
+<th>Formula</th>
+<th>Quando</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Accuracy</td>
+<td>$(TP+TN)/N$</td>
+<td>classi bilanciate, costi uguali</td>
+</tr>
+<tr>
+<td>Precision</td>
+<td>$TP/(TP+FP)$</td>
+<td>importa non sbagliare positivi</td>
+</tr>
+<tr>
+<td>Recall</td>
+<td>$TP/(TP+FN)$</td>
+<td>importa trovare tutti positivi</td>
+</tr>
+<tr>
+<td>F1</td>
+<td>media armonica P, R</td>
+<td>compromesso</td>
+</tr>
+<tr>
+<td>AUC ROC</td>
+<td>area sotto ROC</td>
+<td>ranking, indip. dalla soglia</td>
+</tr>
+<tr>
+<td>AUC PR</td>
+<td>area sotto Precision-Recall</td>
+<td>per classi sbilanciate</td>
+</tr>
+<tr>
+<td>Log loss</td>
+<td>cross-entropy</td>
+<td>calibrazione probabilità</td>
+</tr>
+</tbody>
+</table>
+<h2 id="probabilita-calibrate">Probabilità calibrate</h2>
+<p>La logistica produce probabilità <strong>abbastanza calibrate</strong> di default. Verifica con <strong>reliability diagram</strong>:</p>
+<pre><code class="language-python">from sklearn.calibration import calibration_curve
+prob_true, prob_pred = calibration_curve(y_te, m.predict_proba(X_te)[:, 1], n_bins=10)
+import matplotlib.pyplot as plt
+plt.plot([0,1],[0,1], '--', color='gray')
+plt.plot(prob_pred, prob_true, marker='o')
+plt.xlabel('Probabilità predetta'); plt.ylabel('Frazione reale')
+</code></pre>
+<p>Se la curva sta sotto la diagonale: modello sovrastima. Sopra: sottostima.</p>
+<p>Per <strong>calibrare</strong>:</p>
+<pre><code class="language-python">from sklearn.calibration import CalibratedClassifierCV
+cal = CalibratedClassifierCV(m, method='sigmoid', cv=5).fit(X_tr, y_tr)
+</code></pre>
+<blockquote>
+<p>Random Forest e SVM tendono a essere mal calibrati. La logistica è già OK.</p>
+</blockquote>
+<h2 id="logit-nel-mondo-reale-linterpretabilita">Logit nel mondo reale: l'interpretabilità</h2>
+<p>Settori dove la logistica resta il modello principale:</p>
+<ul>
+<li><strong>Medicina</strong>: clinical scoring, calibrazione critica.</li>
+<li><strong>Finanza/credito</strong>: regolatori richiedono interpretabilità.</li>
+<li><strong>Marketing</strong>: lift, propensity scoring.</li>
+<li><strong>Politica/sociologia</strong>: capire effetti di variabili.</li>
+</ul>
+<p>Il fatto che <code>exp(w_j)</code> sia un odds ratio è cruciale per la comunicazione. "Fumare aumenta gli odds di cancro al polmone del 15×" è una frase che si può scrivere e capire.</p>
+<h2 id="esercizi">Esercizi</h2>
+<details>
+<summary>Esercizio 1 — Interpretare i coefficienti</summary>
+
+Modello logistico con feature `eta` (anni) e `fumatore` (0/1). Coefficienti standardizzati: $w_\text{eta} = 0.04$, $w_\text{fumo} = 1.5$.
+
+- Quanto aumentano gli odds per un anno in più?
+- Quanto aumentano per essere fumatori?
+
+**Risposta**: $e^{0.04} \approx 1.041$ → +4.1% per anno. $e^{1.5} \approx 4.48$ → odds quasi 4.5× per fumatori.
+</details>
+
+<details>
+<summary>Esercizio 2 — Implementa logistic da zero</summary>
+
+
+<pre><code class="language-python">import numpy as np
+
+def sigmoid(z): return 1 / (1 + np.exp(-z))
+
+def train(X, y, lr=0.1, n_iter=1000):
+    X_ = np.column_stack([np.ones(len(X)), X])
+    w = np.zeros(X_.shape[1])
+    for _ in range(n_iter):
+        p = sigmoid(X_ @ w)
+        grad = X_.T @ (p - y) / len(y)
+        w -= lr * grad
+    return w
+
+# test
+rng = np.random.default_rng(0)
+X = rng.standard_normal((500, 3))
+true_w = np.array([0.5, 1.0, -1.5])
+y = (sigmoid(0.2 + X @ true_w) &gt; rng.uniform(size=500)).astype(int)
+w_hat = train(X, y, lr=0.5, n_iter=2000)
+print(&quot;hat:&quot;, w_hat)        # ~[0.2, 0.5, 1.0, -1.5]
+</code></pre>
+
+</details>
+
+<details>
+<summary>Esercizio 3 — Tuning della soglia</summary>
+
+Per uno screening del cancro, falsi negativi sono catastrofici. Trova la soglia che produce recall ≥ 0.95:
+
+
+<pre><code class="language-python">from sklearn.metrics import precision_recall_curve
+proba = m.predict_proba(X_val)[:, 1]
+prec, rec, thr = precision_recall_curve(y_val, proba)
+mask = rec &gt;= 0.95
+idx = np.argmax(prec[:-1] * mask[:-1])
+print(f&quot;soglia: {thr[idx]:.3f}, precision: {prec[idx]:.3f}, recall: {rec[idx]:.3f}&quot;)
+</code></pre>
+
+</details>
+
+<details>
+<summary>Esercizio 4 — Logistica vs alberi</summary>
+
+Su Titanic, allena logistica e Random Forest. Confronta AUC e interpretabilità.
+
+
+<pre><code class="language-python">import seaborn as sns
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import roc_auc_score
+from sklearn.model_selection import train_test_split
+
+df = sns.load_dataset('titanic').dropna(subset=['age','embarked'])
+y = df.survived
+X = df[['pclass','age','sibsp','parch','fare']].assign(
+    male=(df.sex == 'male').astype(int)
+)
+X_tr, X_te, y_tr, y_te = train_test_split(X, y, stratify=y, random_state=0)
+
+sc = StandardScaler().fit(X_tr)
+lr = LogisticRegression(max_iter=2000).fit(sc.transform(X_tr), y_tr)
+rf = RandomForestClassifier(n_estimators=300, random_state=0).fit(X_tr, y_tr)
+
+print(&quot;Logistic AUC:&quot;, roc_auc_score(y_te, lr.predict_proba(sc.transform(X_te))[:,1]))
+print(&quot;RF AUC:&quot;, roc_auc_score(y_te, rf.predict_proba(X_te)[:,1]))
+print(&quot;Coefficienti logistica:&quot;, dict(zip(X.columns, lr.coef_[0])))
+</code></pre>
+
+
+Spesso su Titanic: RF leggermente meglio, ma logistica più interpretabile.
+</details>
+
+<h2 id="cosa-portarti-via">Cosa portarti via</h2>
+<ul>
+<li>Logistica = OLS con sigmoid e log-loss.</li>
+<li>Coefficienti = log-odds. $e^w$ = odds ratio.</li>
+<li>Loss convessa → minimo globale.</li>
+<li>Soglia decisionale: 0.5 è default, ma quasi mai ottimale per costi asimmetrici.</li>
+<li>Probabilità calibrate "out of the box" — più di quasi ogni altro modello.</li>
+</ul>
+<p>Prossimo: KNN e Naive Bayes — modelli semplici, ancora utili.</p>
+      <nav class="pager">
+<a href="17-regressione-lineare.html" class="prev"><span class="label">← Precedente</span><span class="title">Regressione lineare e regolarizzazione</span></a>
+<a href="19-knn-naive-bayes-svm.html" class="next"><span class="label">Successivo →</span><span class="title">KNN, Naive Bayes, SVM</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Data Science Zero to Hero</strong> — percorso completo, in italiano, dalla matematica al deployment.</p><p>Materiale didattico aperto. Le formule sono lì per essere capite, non temute. Quando un concetto è oscuro, torna indietro: la data science è una piramide, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

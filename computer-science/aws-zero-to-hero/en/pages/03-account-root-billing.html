@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AWS account, root user, billing — AWS Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#232f3e',primaryTextColor:'#ffffff',primaryBorderColor:'#ff9900',lineColor:'#8a99ad',background:'#0c1320'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">λ</div>
+      <div>
+        <div class="brand-title">AWS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/03-account-root-billing.html" class="lang-link" title="Passa all'italiano">IT</a><span class="lang-active" title="English">EN</span></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="search... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-what-is-cloud-and-aws.html" class=""><span class="num">01</span>What the cloud is, and what AWS is</a></li><li class="nav-item"><a href="../pages/02-global-infrastructure.html" class=""><span class="num">02</span>Global infrastructure: Regions, AZs, Edge</a></li><li class="nav-item"><a href="../pages/03-account-root-billing.html" class="active"><span class="num">03</span>AWS account, root user, billing</a></li><li class="nav-item"><a href="../pages/04-iam-fundamentals.html" class=""><span class="num">04</span>IAM — fundamentals (users, groups, roles, policies)</a></li><li class="nav-item"><a href="../pages/05-iam-advanced.html" class=""><span class="num">05</span>IAM advanced: conditional policies, STS, ABAC</a></li><li class="nav-item"><a href="../pages/06-cli-sdk-iac.html" class=""><span class="num">06</span>CLI, SDK, CloudShell, IaC primer</a></li><li class="nav-item"><a href="../pages/07-pricing-billing.html" class=""><span class="num">07</span>Pricing, billing, free tier, cost tools</a></li><li class="nav-item"><a href="../pages/08-organizations-multi-account.html" class=""><span class="num">08</span>AWS Organizations &amp; multi-account strategy</a></li><li class="nav-item"><a href="../pages/09-vpc-fundamentals.html" class=""><span class="num">09</span>VPC — fundamentals</a></li><li class="nav-item"><a href="../pages/10-vpc-advanced.html" class=""><span class="num">10</span>VPC advanced: peering, TGW, PrivateLink, endpoints</a></li><li class="nav-item"><a href="../pages/11-route53-cloudfront.html" class=""><span class="num">11</span>Route 53, CloudFront, Global Accelerator</a></li><li class="nav-item"><a href="../pages/12-hybrid-vpn-directconnect.html" class=""><span class="num">12</span>Hybrid: VPN, Direct Connect, PrivateLink</a></li><li class="nav-item"><a href="../pages/13-ec2-fundamentals.html" class=""><span class="num">13</span>EC2 — fundamentals (instances, AMIs, lifecycle)</a></li><li class="nav-item"><a href="../pages/14-ec2-advanced-spot-nitro.html" class=""><span class="num">14</span>EC2 advanced — Spot, Placement Groups, Nitro, hibernation</a></li><li class="nav-item"><a href="../pages/15-asg-elb.html" class=""><span class="num">15</span>Auto Scaling Groups + Elastic Load Balancing</a></li><li class="nav-item"><a href="../pages/16-lambda-deep-dive.html" class=""><span class="num">16</span>Lambda deep dive</a></li><li class="nav-item"><a href="../pages/17-containers-ecs-eks-fargate.html" class=""><span class="num">17</span>Containers: ECS, EKS, Fargate, ECR</a></li><li class="nav-item"><a href="../pages/18-specialty-compute.html" class=""><span class="num">18</span>Specialty compute: Batch, Lightsail, Outposts, Wavelength, Beanstalk</a></li><li class="nav-item"><a href="../pages/19-ebs-efs-fsx.html" class=""><span class="num">19</span>EBS, EFS, FSx, Instance Store</a></li><li class="nav-item"><a href="../pages/20-s3-deep-dive.html" class=""><span class="num">20</span>S3 — deep dive</a></li><li class="nav-item"><a href="../pages/21-archive-snow-gateway-backup.html" class=""><span class="num">21</span>Glacier, Snow, Storage Gateway, DataSync, AWS Backup</a></li><li class="nav-item"><a href="../pages/22-rds.html" class=""><span class="num">22</span>RDS — managed relational DBs (engines, Multi-AZ, replicas, Proxy)</a></li><li class="nav-item"><a href="../pages/23-aurora-deep-dive.html" class=""><span class="num">23</span>Aurora deep dive — shared storage, Serverless v2, Global Database</a></li><li class="nav-item"><a href="../pages/24-dynamodb-deep-dive.html" class=""><span class="num">24</span>DynamoDB deep dive — partitions, GSI, Streams, single-table</a></li><li class="nav-item"><a href="../pages/25-purpose-built-dbs.html" class=""><span class="num">25</span>Purpose-built DBs — ElastiCache, MemoryDB, Neptune, DocumentDB, Keyspaces, Timestream, QLDB</a></li><li class="nav-item"><a href="../pages/26-redshift-data-warehousing.html" class=""><span class="num">26</span>Redshift — MPP data warehousing and zero-ETL</a></li><li class="nav-item"><a href="../pages/27-sqs-sns-eventbridge.html" class=""><span class="num">27</span>SQS, SNS, EventBridge — messaging and events</a></li><li class="nav-item"><a href="../pages/28-step-functions-mq-appflow.html" class=""><span class="num">28</span>Step Functions, MQ, AppFlow — orchestration and integration</a></li><li class="nav-item"><a href="../pages/29-athena-glue-lakeformation.html" class=""><span class="num">29</span>Athena, Glue, Lake Formation — the AWS data lake</a></li><li class="nav-item"><a href="../pages/30-emr-kinesis-msk.html" class=""><span class="num">30</span>EMR, Kinesis, MSK — big data and streaming</a></li><li class="nav-item"><a href="../pages/31-opensearch-quicksight.html" class=""><span class="num">31</span>OpenSearch and QuickSight — search and BI</a></li><li class="nav-item"><a href="../pages/32-sagemaker-overview.html" class=""><span class="num">32</span>SageMaker — the end-to-end ML platform</a></li><li class="nav-item"><a href="../pages/33-bedrock-ai-services.html" class=""><span class="num">33</span>Bedrock and AI services — managed GenAI and ML</a></li><li class="nav-item"><a href="../pages/34-iac-cloudformation-cdk-terraform.html" class=""><span class="num">34</span>IaC on AWS — CloudFormation, CDK, SAM, Terraform</a></li><li class="nav-item"><a href="../pages/35-ci-cd-pipeline.html" class=""><span class="num">35</span>CI/CD on AWS — CodePipeline, CodeBuild, CodeDeploy, CodeCatalyst</a></li><li class="nav-item"><a href="../pages/36-observability-cloudwatch-xray.html" class=""><span class="num">36</span>Observability — CloudWatch, X-Ray, CloudTrail, Config, SSM</a></li><li class="nav-item"><a href="../pages/37-kms-secrets-acm.html" class=""><span class="num">37</span>Encryption — KMS, CloudHSM, Secrets Manager, Parameter Store, ACM</a></li><li class="nav-item"><a href="../pages/38-waf-shield-guardduty-inspector.html" class=""><span class="num">38</span>Threat detection — WAF, Shield, GuardDuty, Inspector, Macie, Security Hub</a></li><li class="nav-item"><a href="../pages/39-governance-org-controltower-identitycenter.html" class=""><span class="num">39</span>Governance — Organizations, Control Tower, Identity Center</a></li><li class="nav-item"><a href="../pages/40-migration-mgn-dms-snow.html" class=""><span class="num">40</span>Migration — MGN, DMS, Snow family, Discovery, Migration Hub</a></li><li class="nav-item"><a href="../pages/41-cost-optimization-finops.html" class=""><span class="num">41</span>Cost optimization and FinOps</a></li><li class="nav-item"><a href="../pages/42-well-architected.html" class=""><span class="num">42</span>Well-Architected Framework — 6 pillars, lenses, review</a></li><li class="nav-item"><a href="../pages/43-architecture-patterns.html" class=""><span class="num">43</span>Architecture patterns — 3-tier, serverless, event-driven, microservices</a></li><li class="nav-item"><a href="../pages/44-disaster-recovery-multi-region.html" class=""><span class="num">44</span>Disaster Recovery and Multi-Region</a></li><li class="nav-item"><a href="../pages/45-reference-architectures.html" class=""><span class="num">45</span>Real-world reference architectures</a></li><li class="nav-item"><a href="../pages/46-advanced-networking.html" class=""><span class="num">46</span>Advanced networking deep dive</a></li><li class="nav-item"><a href="../pages/47-containers-deep-dive.html" class=""><span class="num">47</span>Containers deep dive — EKS, Karpenter, service mesh</a></li><li class="nav-item"><a href="../pages/48-serverless-patterns.html" class=""><span class="num">48</span>Serverless patterns deep dive</a></li><li class="nav-item"><a href="../pages/49-genai-rag-agents.html" class=""><span class="num">49</span>Generative AI on AWS — RAG and Agents</a></li><li class="nav-item"><a href="../pages/50-aws-certifications.html" class=""><span class="num">50</span>AWS Certifications — roadmap and study guide</a></li><li class="nav-item"><a href="../pages/51-glossary-az.html" class=""><span class="num">51</span>Glossary A-Z</a></li><li class="nav-item"><a href="../pages/52-cheatsheet.html" class=""><span class="num">52</span>Cheat sheet: services, limits, instance families</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Foundations</span>
+        <span>Section 3 of 52</span>
+        <span class="level-tag level-beg">Level: beginner</span>
+      </div>
+      <h1>AWS account, root user, billing</h1>
+      <p class="summary">Open the account, lock the root user, enable MFA, cost alarms, free tier. The first-30-minute decisions that save you from disasters.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Foundations</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>sections 1-2</li><li>international credit/debit card</li></ul>
+  <div class="label">Tools / references</div>
+  <ul class="source-list"><li>console: https://console.aws.amazon.com</li><li>YubiKey or authenticator app (Google/Microsoft/Authy)</li></ul>
+</div>
+      <p>An AWS account is the <strong>primary billing and security boundary</strong>. Every resource you create (EC2, S3, IAM users) lives inside an account. Serious shops run <strong>dozens or hundreds</strong> of accounts (one per team, environment, workload) federated under AWS Organizations (section 8). Here you open your first.</p>
+<h2 id="1-what-an-account-really-is">1. What an account really is</h2>
+<p>An AWS account has:</p>
+<ul>
+<li>A <strong>12-digit numeric account ID</strong> (e.g. <code>123456789012</code>), shown in ARNs.</li>
+<li>A single registration email and password (the <strong>root user</strong>).</li>
+<li>Its own billing (card or invoicing for Enterprise).</li>
+<li>Its own IAM "tenant": users, roles, policies.</li>
+<li>Its own set of resources, isolated from other accounts unless explicitly shared (Resource Access Manager, cross-account roles).</li>
+</ul>
+<p>The account itself is <strong>free</strong>. You only pay for what you use.</p>
+<h2 id="2-the-root-user-golden-rule">2. The root-user golden rule</h2>
+<p>The root user has <strong>absolute permissions</strong> (can close the account, change email, access billing). If compromised, you've lost. So:</p>
+<ol>
+<li><strong>MFA mandatory</strong>. Right now, before closing the browser. Ideally a hardware key (YubiKey). Since early 2024 AWS mandates root MFA on Organizations accounts.</li>
+<li><strong>Never used for daily work</strong>. After creation, log out and don't return unless emergency (closing account, billing change).</li>
+<li><strong>No root access keys</strong>. Immediately delete any access keys on root. Never create them again.</li>
+<li><strong>Email on a dedicated alias</strong>. Not <code>work@yourcompany.com</code> (can vanish if you leave): <code>aws-root+companyname@…</code> on an inbox controlled by a team alias.</li>
+</ol>
+<h2 id="3-open-the-account-checklist">3. Open the account — checklist</h2>
+<pre><code class="language-text">1. Go to https://aws.amazon.com → &quot;Create AWS account&quot;
+2. Email + password (strong, password manager)
+3. Type: Personal or Business — Business unlocks Organizations features
+4. Tax data (VAT for EU businesses to get reverse-charge VAT exemption)
+5. Credit card (AWS pre-authorizes ~$1 and releases)
+6. Phone verification via SMS or call
+7. Support plan: pick Basic (free)
+</code></pre>
+<p>Registration done: <strong>stop</strong>. The first 30 minutes are critical.</p>
+<h2 id="4-immediate-hardening-the-first-30-minutes">4. Immediate hardening (the first 30 minutes)</h2>
+<p>In order:</p>
+<ol>
+<li><strong>Enable MFA on root</strong>: Console → top right "Security credentials" → "Multi-factor authentication" → Assign.</li>
+<li><strong>Delete any root access key</strong> (if one was accidentally created).</li>
+<li><strong>Create your personal IAM user</strong> or, better, an <strong>IAM Identity Center user</strong> (see sections 5/39). For now an IAM user with <code>AdministratorAccess</code> policy + MFA is fine. Use only this from now on.</li>
+<li><strong>Set an account alias</strong>: IAM dashboard → Account Alias. Now the login URL becomes <code>https://myalias.signin.aws.amazon.com/console</code> instead of the 12-digit ID.</li>
+<li><strong>Enable an IAM password policy</strong>: minimum length, character mix, rotation, no reuse.</li>
+<li><strong>Disable Regions you won't use</strong>: Account settings → Regions. Reduces attack surface and prevents someone launching EC2 in São Paulo.</li>
+<li><strong>Enable CloudTrail in all Regions</strong> (create a "multi-region" trail). Audit log of every API call. Costs ~$2/month typical, indispensable for investigations.</li>
+</ol>
+<h2 id="5-billing-setup-never-skip-this">5. Billing setup — never skip this</h2>
+<p>Every account should have <strong>two</strong> minimum alarms on day one:</p>
+<pre><code class="language-bash"># Example: monthly budget $20 with email notification at $15 (75%) and $20 (100%)
+aws budgets create-budget \
+  --account-id 123456789012 \
+  --budget '{
+    &quot;BudgetName&quot;:&quot;monthly-soft-cap&quot;,
+    &quot;BudgetLimit&quot;:{&quot;Amount&quot;:&quot;20&quot;,&quot;Unit&quot;:&quot;USD&quot;},
+    &quot;TimeUnit&quot;:&quot;MONTHLY&quot;,
+    &quot;BudgetType&quot;:&quot;COST&quot;
+  }' \
+  --notifications-with-subscribers '[{
+    &quot;Notification&quot;:{
+      &quot;NotificationType&quot;:&quot;ACTUAL&quot;,
+      &quot;ComparisonOperator&quot;:&quot;GREATER_THAN&quot;,
+      &quot;Threshold&quot;:75
+    },
+    &quot;Subscribers&quot;:[{&quot;SubscriptionType&quot;:&quot;EMAIL&quot;,&quot;Address&quot;:&quot;you@yourcompany.com&quot;}]
+  }]'
+</code></pre>
+<p>Also enable:</p>
+<ul>
+<li><strong>Free Tier Alerts</strong>: Billing dashboard → Preferences → "Receive Free Tier Usage Alerts".</li>
+<li><strong>Cost Explorer</strong>: free to enable, gives per-service and per-tag breakdowns.</li>
+<li><strong>Cost Anomaly Detection</strong>: ML-based, alerts on suspicious spikes.</li>
+</ul>
+<h2 id="6-free-tier-whats-actually-free">6. Free tier: what's actually free</h2>
+<p>Three categories:</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Example</th>
+<th>Duration</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>12-month free</strong></td>
+<td>750h/mo EC2 t2/t3.micro, 5 GB S3 Standard, 750h RDS db.t2/t3/t4g.micro</td>
+<td>first 12 months from sign-up</td>
+</tr>
+<tr>
+<td><strong>Always free</strong></td>
+<td>1M Lambda invocations/mo, 25 GB DynamoDB, 100 GB CloudFront egress, 750h ElastiCache micro</td>
+<td>forever</td>
+</tr>
+<tr>
+<td><strong>Trials</strong></td>
+<td>Inspector, Macie etc.: 30–90 days</td>
+<td>one-time</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Classic trap</strong>: free tier covers <strong>specific instance types in specific Regions</strong>. Accidentally launch a <code>t3.large</code> or sit in <code>me-south-1</code> and you're billed full price. Always check <a href="https://aws.amazon.com/free/">aws.amazon.com/free</a>.</p>
+<h2 id="7-data-transfer-cost-the-hidden-dumpster">7. Data-transfer cost — the hidden dumpster</h2>
+<table>
+<thead>
+<tr>
+<th>Direction</th>
+<th>Typical cost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Internet → AWS (ingress)</td>
+<td>free</td>
+</tr>
+<tr>
+<td>AWS → Internet (egress)</td>
+<td>~$0.09/GB (with 100 GB/mo free since 2024+)</td>
+</tr>
+<tr>
+<td>EC2 → EC2 same AZ via private IP</td>
+<td>free</td>
+</tr>
+<tr>
+<td>EC2 → EC2 cross-AZ same Region</td>
+<td>$0.01/GB each direction</td>
+</tr>
+<tr>
+<td>Cross-Region</td>
+<td>$0.02–$0.09/GB</td>
+</tr>
+<tr>
+<td>NAT Gateway processing</td>
+<td>$0.045/GB processed</td>
+</tr>
+<tr>
+<td>VPC Gateway Endpoint (S3/DynamoDB)</td>
+<td>free (skips NAT)</td>
+</tr>
+</tbody>
+</table>
+<p>Disaster example: app in private subnet calling S3 via NAT Gateway. 1 TB/month: $45 NAT + $0 to same-region S3. Adding a VPC Gateway Endpoint for S3 takes it to $0. We'll see this in section 10.</p>
+<h2 id="8-exercise-new-account-setup">8. Exercise: new-account setup</h2>
+<details>
+<summary>You opened a new AWS account. Name the 7 first-30-minute actions.</summary>
+
+1. MFA on root user (hardware key if possible).
+2. Log out of root, never use it for work.
+3. Create IAM user (or IAM Identity Center) admin with MFA.
+4. Set account alias for easier login URL.
+5. Configure IAM password policy.
+6. Disable unused Regions.
+7. Enable CloudTrail multi-region + Budget alert.
+
+Bonus: enable Cost Anomaly Detection, AWS Config (for configuration auditing), and — if you already have an organization — invite this account into Organizations.
+</details>
+
+<details>
+<summary>You forgot the root password and lost access to the registered email. How to recover?</summary>
+
+Formal procedure via [aws.amazon.com/support](https://aws.amazon.com/contact-us/account-support/): you must prove ownership with company documents, card receipts, etc. Can take days. **This is why root email must be on a team-controlled alias.**
+
+If you have MFA and lose the device, there's an "alternate verification" procedure (phone + email): 1–2 days.
+</details>
+
+<blockquote>
+<p><strong>Summary</strong>: account = billing and security boundary. Root user is a "president": votes once (sign-up) then leaves. MFA immediately, IAM user for daily work, budget alerts on day one, CloudTrail on for audit. Free tier covers 12 months + some "always free", but check region and instance. The cost line that bites is <strong>data transfer</strong>, mostly egress and NAT Gateway.</p>
+</blockquote>
+      <nav class="pager">
+<a href="02-global-infrastructure.html" class="prev"><span class="label">← Previous</span><span class="title">Global infrastructure: Regions, AZs, Edge</span></a>
+<a href="04-iam-fundamentals.html" class="next"><span class="label">Next →</span><span class="title">IAM — fundamentals (users, groups, roles, policies)</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>AWS Zero to Hero</strong> — complete path, in English, from primitives to advanced architecture.</p><p>Open educational material. No sponsorships, no affiliate links, no affiliation with AWS. When a concept is unclear, go back: AWS is a pyramid of primitives, not a tree you skip across.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+</body>
+</html>

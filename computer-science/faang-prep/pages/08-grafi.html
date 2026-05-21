@@ -1,0 +1,806 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Grafi — FAANG Prep</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">F</div>
+      <div>
+        <div class="brand-title">FAANG Prep</div>
+        <div class="brand-subtitle">DS&amp;A · System Design</div>
+      </div>
+    </div>
+    <div class="lang-bar">
+      <a class="lang-switcher" href="../en/pages/08-graphs.html" title="English"><span class="flag-icon">🇬🇧</span><span class="flag-label">English</span></a>
+    </div>
+  </div>
+  <div class="search-wrap">
+    <input class="search-input" id="search-input" placeholder="Cerca nei contenuti... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/00-introduzione.html" class=""><span class="num">00</span>Introduzione e come usare questo percorso</a></li><li class="nav-item"><a href="../pages/01-complessita.html" class=""><span class="num">01</span>Complessità computazionale (Big-O)</a></li><li class="nav-item"><a href="../pages/02-array-stringhe.html" class=""><span class="num">02</span>Array e stringhe</a></li><li class="nav-item"><a href="../pages/03-hashmap-set.html" class=""><span class="num">03</span>Hashmap e set</a></li><li class="nav-item"><a href="../pages/04-linked-list.html" class=""><span class="num">04</span>Linked list</a></li><li class="nav-item"><a href="../pages/05-stack-coda.html" class=""><span class="num">05</span>Stack e coda</a></li><li class="nav-item"><a href="../pages/06-alberi.html" class=""><span class="num">06</span>Alberi (binary tree e BST)</a></li><li class="nav-item"><a href="../pages/07-heap.html" class=""><span class="num">07</span>Heap e priority queue</a></li><li class="nav-item"><a href="../pages/08-grafi.html" class="active"><span class="num">08</span>Grafi</a></li><li class="nav-item"><a href="../pages/09-trie.html" class=""><span class="num">09</span>Trie (prefix tree)</a></li><li class="nav-item"><a href="../pages/10-ricorsione-backtracking.html" class=""><span class="num">10</span>Ricorsione e backtracking</a></li><li class="nav-item"><a href="../pages/11-sorting-searching.html" class=""><span class="num">11</span>Sorting e searching</a></li><li class="nav-item"><a href="../pages/12-two-pointers-sliding-window.html" class=""><span class="num">12</span>Two pointers e sliding window</a></li><li class="nav-item"><a href="../pages/13-greedy.html" class=""><span class="num">13</span>Greedy</a></li><li class="nav-item"><a href="../pages/14-dp.html" class=""><span class="num">14</span>Dynamic programming</a></li><li class="nav-item"><a href="../pages/15-bit-manipulation.html" class=""><span class="num">15</span>Bit manipulation</a></li><li class="nav-item"><a href="../pages/16-oop-design-patterns.html" class=""><span class="num">16</span>OOP e design patterns</a></li><li class="nav-item"><a href="../pages/17-system-design.html" class=""><span class="num">17</span>System design — fondamenti</a></li><li class="nav-item"><a href="../pages/18-system-design-esempi.html" class=""><span class="num">18</span>System design — esempi end-to-end</a></li><li class="nav-item"><a href="../pages/19-concorrenza.html" class=""><span class="num">19</span>Concorrenza e parallelismo</a></li><li class="nav-item"><a href="../pages/20-database-sql.html" class=""><span class="num">20</span>Database e SQL</a></li><li class="nav-item"><a href="../pages/21-os-networking.html" class=""><span class="num">21</span>OS e networking</a></li><li class="nav-item"><a href="../pages/22-coding-patterns.html" class=""><span class="num">22</span>I 16 coding patterns dei colloqui</a></li><li class="nav-item"><a href="../pages/23-behavioral-star.html" class=""><span class="num">23</span>Behavioral interview — STAR e Amazon LP</a></li><li class="nav-item"><a href="../pages/24-mock-interviews.html" class=""><span class="num">24</span>Mock interview e strategia in colloquio</a></li><li class="nav-item"><a href="../pages/25-roadmap-90-giorni.html" class=""><span class="num">25</span>Roadmap 90 giorni — piano operativo</a></li><li class="nav-item"><a href="../pages/26-banca-esercizi.html" class=""><span class="num">26</span>Banca esercizi — 200+ problemi FAANG</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Strutture dati</span>
+        <span>Sezione 8 di 26</span>
+      </div>
+      <h1>Grafi</h1>
+      <p class="summary">Dalla zero — cos&#x27;è un grafo, come si rappresenta, BFS step-by-step disegnato. Dijkstra, topological sort, Union-Find spiegati con analogie.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Strutture dati</div>
+  
+  
+</div>
+      <p>I grafi sono <strong>ovunque</strong> nella vita reale e nei colloqui: social network, mappe, dipendenze tra task, internet, web crawlers. Sono il capitolo più ricco e profondo del materiale FAANG.</p>
+<p>Iniziamo da zero.</p>
+<h2 id="parte-1-cosa-e-un-grafo">Parte 1 — Cosa è un grafo</h2>
+<h3 id="analogia-la-mappa-delle-citta">Analogia: la mappa delle città</h3>
+<p>Pensa a un foglio con disegnate città collegate da strade.</p>
+<ul>
+<li>Le <strong>città</strong> sono i <strong>nodi</strong> (vertici).</li>
+<li>Le <strong>strade</strong> sono gli <strong>archi</strong> (edges).</li>
+</ul>
+<p>Un grafo è esattamente questo: un insieme di nodi e un insieme di archi che li collegano.</p>
+<h3 id="tipi-di-grafo">Tipi di grafo</h3>
+<p><strong>Diretto vs non diretto</strong></p>
+<ul>
+<li><strong>Non diretto</strong>: gli archi sono bidirezionali. Se c'è una strada da A a B, c'è anche da B ad A. Es: mappa stradale, amicizie su Facebook.</li>
+<li><strong>Diretto</strong> (digrafo): gli archi hanno una direzione. Es: follower su Twitter (puoi seguire X senza che X ti segua), dipendenze tra corsi universitari.</li>
+</ul>
+<p><strong>Non diretto</strong>:</p>
+<pre><code class="language-mermaid">flowchart LR
+    A --- B
+    A --- C
+    B --- C
+</code></pre>
+<p><strong>Diretto</strong>:</p>
+<pre><code class="language-mermaid">flowchart LR
+    A --&gt; B
+    A --&gt; C
+</code></pre>
+<p><strong>Pesato vs non pesato</strong></p>
+<ul>
+<li><strong>Non pesato</strong>: tutti gli archi sono uguali. Conta solo "esiste o no".</li>
+<li><strong>Pesato</strong>: ogni arco ha un valore (costo, distanza, tempo). Es: rete autostradale con km.</li>
+</ul>
+<p><strong>Aciclico vs ciclico</strong></p>
+<ul>
+<li><strong>Aciclico (DAG)</strong>: non ci sono cicli. Importante per topological sort.</li>
+<li><strong>Ciclico</strong>: ci sono cicli.</li>
+</ul>
+<p><strong>Connesso vs sconnesso</strong></p>
+<ul>
+<li><strong>Connesso</strong>: esiste un cammino tra ogni coppia di nodi (nel caso diretto, "fortemente connesso").</li>
+<li><strong>Sconnesso</strong>: ci sono gruppi isolati.</li>
+</ul>
+<h3 id="un-albero-e-un-grafo-speciale">Un albero è un grafo speciale</h3>
+<p>Un albero è un grafo <strong>connesso</strong>, <strong>aciclico</strong>, <strong>non diretto</strong> (o diretto a partire dalla root). Ogni nodo ha esattamente un genitore tranne la root.</p>
+<p>Quindi tutti gli algoritmi che hai imparato sugli alberi sono casi speciali di algoritmi su grafi.</p>
+<h2 id="parte-2-come-rappresentare-un-grafo-in-codice">Parte 2 — Come rappresentare un grafo in codice</h2>
+<p>Tre modi principali. Scegli in base al problema.</p>
+<h3 id="rappresentazione-1-adjacency-list-la-piu-usata">Rappresentazione 1 — Adjacency list (la più usata)</h3>
+<p>Per ogni nodo, una lista dei suoi vicini.</p>
+<pre><code class="language-python">from collections import defaultdict
+graph = defaultdict(list)
+graph[u].append(v)
+# Se non diretto, aggiungi anche:
+graph[v].append(u)
+</code></pre>
+<p>Esempio: grafo non diretto con archi <code>(0,1), (0,2), (1,2), (2,3)</code>:</p>
+<pre><code class="language-python">graph = {
+    0: [1, 2],
+    1: [0, 2],
+    2: [0, 1, 3],
+    3: [2]
+}
+</code></pre>
+<p><strong>Spazio</strong>: O(V + E).
+<strong>Iterare vicini di u</strong>: O(deg(u)).
+<strong>Check "esiste arco (u, v)?"</strong>: O(deg(u)).</p>
+<h3 id="rappresentazione-2-adjacency-matrix">Rappresentazione 2 — Adjacency matrix</h3>
+<p>Matrice <code>n × n</code> dove <code>M[u][v] = 1</code> se esiste arco da u a v, <code>0</code> altrimenti. Per grafo pesato, <code>M[u][v] = peso</code>.</p>
+<pre><code class="language-python">n = 4
+M = [[0]*n for _ in range(n)]
+M[u][v] = 1
+# Non diretto: M[v][u] = 1 anche
+</code></pre>
+<p><strong>Spazio</strong>: O(V²).
+<strong>Check "esiste arco (u, v)?"</strong>: O(1).
+<strong>Iterare vicini di u</strong>: O(V) (devi scorrere tutta la riga).</p>
+<p>Buona se il grafo è <strong>denso</strong> (E ≈ V²) o serve check O(1) sull'esistenza di archi.</p>
+<h3 id="rappresentazione-3-edge-list">Rappresentazione 3 — Edge list</h3>
+<p>Lista di tutte le triple (u, v, peso).</p>
+<pre><code class="language-python">edges = [(0, 1, 5), (0, 2, 3), (1, 2, 1), (2, 3, 4)]
+</code></pre>
+<p><strong>Spazio</strong>: O(E).
+Utile per algoritmi che processano archi in ordine (Kruskal MST, Bellman-Ford).</p>
+<h3 id="grafo-implicito">Grafo implicito</h3>
+<p>Spesso il grafo non è dato esplicitamente. <strong>Lo costruisce il problema</strong>:</p>
+<ul>
+<li><strong>Griglia 2D</strong>: ogni cella è un nodo, vicini = 4 (o 8) celle adiacenti.</li>
+<li><strong>Stati di un puzzle</strong>: ogni stato è un nodo, ogni mossa è un arco.</li>
+<li><strong>Parole</strong>: ogni parola è un nodo, due parole sono vicini se differiscono di una lettera.</li>
+</ul>
+<p>In questi casi NON costruisci esplicitamente il grafo: lo "navighi" generando vicini al volo.</p>
+<h2 id="parte-3-bfs-breadth-first-search">Parte 3 — BFS (Breadth-First Search)</h2>
+<h3 id="lidea-esplora-a-cerchi-concentrici">L'idea: esplora a cerchi concentrici</h3>
+<p>Stai in piazza centrale. Esplori così:</p>
+<ul>
+<li>Step 1: visiti tutte le strade a 1 isolato di distanza.</li>
+<li>Step 2: tutte a 2 isolati.</li>
+<li>Step 3: tutte a 3 isolati.</li>
+<li>...</li>
+</ul>
+<p>BFS è la chiave per <strong>shortest path in grafi non pesati</strong>: visiti i nodi in ordine di distanza crescente.</p>
+<h3 id="visualizzazione">Visualizzazione</h3>
+<p>Grafo:</p>
+<pre><code class="language-mermaid">flowchart TD
+    A --- B
+    A --- C
+    B --- D
+    B --- E
+    C --- F
+    E --- G
+    F --- G
+</code></pre>
+<p>BFS partendo da A:</p>
+<pre><code>Step 0: visita A.            Queue: [B, C]
+Step 1: visita B, poi C.     Queue: [D, E, F]
+Step 2: visita D, E, F.      Queue: [G]
+Step 3: visita G.            Queue: []
+</code></pre>
+<p>Ordine: A, B, C, D, E, F, G. <strong>Per livello</strong>.</p>
+<h3 id="codice">Codice</h3>
+<pre><code class="language-python">from collections import deque
+
+def bfs(start, graph):
+    visited = {start}
+    q = deque([(start, 0)])   # (nodo, distanza)
+    while q:
+        node, dist = q.popleft()
+        print(f&quot;Visito {node} a distanza {dist}&quot;)
+        for nb in graph[node]:
+            if nb not in visited:
+                visited.add(nb)
+                q.append((nb, dist + 1))
+</code></pre>
+<h3 id="chiave-marcare-visited-al-push-non-al-pop">Chiave: marcare visited al PUSH, non al POP</h3>
+<p>Trappola classica. Se marchi al pop, lo stesso nodo può finire nella queue 10 volte prima di essere visitato.</p>
+<pre><code class="language-python"># CORRETTO (marca al push)
+if nb not in visited:
+    visited.add(nb)
+    q.append(nb)
+
+# SBAGLIATO (marca al pop)
+# può aggiungere lo stesso nodo molte volte alla coda
+</code></pre>
+<h3 id="bfs-multi-sorgente">BFS multi-sorgente</h3>
+<p>Cosa succede se partiamo da <strong>più nodi contemporaneamente</strong>? Inizializza la coda con tutti.</p>
+<p>Esempio: "data una griglia, distanza da ogni cella alla porta più vicina".</p>
+<pre><code class="language-python">def bfs_multi(sources, graph):
+    q = deque([(s, 0) for s in sources])
+    visited = set(sources)
+    while q:
+        node, dist = q.popleft()
+        ...
+</code></pre>
+<p>Pattern killer per problemi tipo "Rotten Oranges", "Walls and Gates".</p>
+<h3 id="complessita-bfs">Complessità BFS</h3>
+<p>O(V + E). Ogni nodo aggiunto/rimosso alla queue una volta, ogni arco esplorato una volta.</p>
+<h3 id="0-1-bfs">0-1 BFS</h3>
+<p>Se gli archi hanno peso 0 o 1, usa <strong>deque</strong>: peso 0 → <code>appendleft</code>, peso 1 → <code>append</code>. Trova shortest path in O(V+E).</p>
+<h2 id="parte-4-dfs-depth-first-search">Parte 4 — DFS (Depth-First Search)</h2>
+<h3 id="lidea-profondita-prima">L'idea: profondità prima</h3>
+<p>Vai sempre in profondità su un ramo, poi torni indietro.</p>
+<p>Grafo (stesso di prima):</p>
+<pre><code class="language-mermaid">flowchart TD
+    A --- B
+    A --- C
+    B --- D
+    B --- E
+    C --- F
+    E --- G
+    F --- G
+</code></pre>
+<p>DFS da A: <code>A → B → D → (back) → E → G → (back x3) → C → F → (G già visto)</code>.</p>
+<p>Ordine di visita: <strong>A, B, D, E, G, C, F</strong>.</p>
+<h3 id="codice-ricorsivo">Codice ricorsivo</h3>
+<pre><code class="language-python">def dfs(node, graph, visited):
+    visited.add(node)
+    print(f&quot;Visito {node}&quot;)
+    for nb in graph[node]:
+        if nb not in visited:
+            dfs(nb, graph, visited)
+</code></pre>
+<h3 id="codice-iterativo-con-stack-esplicito">Codice iterativo (con stack esplicito)</h3>
+<pre><code class="language-python">def dfs_iter(start, graph):
+    visited = {start}
+    st = [start]
+    while st:
+        node = st.pop()
+        print(f&quot;Visito {node}&quot;)
+        for nb in graph[node]:
+            if nb not in visited:
+                visited.add(nb)
+                st.append(nb)
+</code></pre>
+<p>Notare la differenza con BFS: solo <code>popleft</code> → <code>pop</code> e <code>deque</code> → <code>list</code>. Tutto il resto identico.</p>
+<h3 id="quando-usare-dfs-vs-bfs">Quando usare DFS vs BFS</h3>
+<table>
+<thead>
+<tr>
+<th>Vuoi...</th>
+<th>Usa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Shortest path in archi non pesati</td>
+<td>BFS</td>
+</tr>
+<tr>
+<td>Connected components / "esiste cammino?"</td>
+<td>DFS o BFS, equivalenti</td>
+</tr>
+<tr>
+<td>Cycle detection</td>
+<td>DFS (più naturale)</td>
+</tr>
+<tr>
+<td>Topological sort</td>
+<td>DFS o BFS (Kahn)</td>
+</tr>
+<tr>
+<td>Pathfinding pesato</td>
+<td>Dijkstra (variante BFS con priority queue)</td>
+</tr>
+<tr>
+<td>Tutti i cammini (esplorazione esaustiva)</td>
+<td>DFS + backtracking</td>
+</tr>
+</tbody>
+</table>
+<h3 id="cycle-detection-in-grafi-diretti">Cycle detection in grafi diretti</h3>
+<p>Si usa il "3-coloring": ogni nodo è WHITE (non visitato), GRAY (in corso di visita), BLACK (visita completata).</p>
+<p>Se durante DFS incontri un nodo GRAY → c'è un <strong>back-edge</strong> → ciclo.</p>
+<pre><code class="language-python">WHITE, GRAY, BLACK = 0, 1, 2
+
+def has_cycle(graph, n):
+    color = [WHITE] * n
+    def dfs(u):
+        color[u] = GRAY
+        for v in graph[u]:
+            if color[v] == GRAY: return True   # ciclo!
+            if color[v] == WHITE and dfs(v): return True
+        color[u] = BLACK
+        return False
+    return any(color[u] == WHITE and dfs(u) for u in range(n))
+</code></pre>
+<p>Per grafi <strong>non diretti</strong>, basta passare il "parent" e ignorare l'arco di ritorno verso di lui.</p>
+<h2 id="parte-5-topological-sort">Parte 5 — Topological sort</h2>
+<p>Per i DAG (Directed Acyclic Graphs). Ordina i nodi tale che ogni arco va da prima a dopo.</p>
+<h3 id="analogia-pianificare-i-corsi-universitari">Analogia: pianificare i corsi universitari</h3>
+<p>Devi seguire CS101 prima di CS201, CS201 prima di CS301. Quale è un ordine valido?</p>
+<pre><code>CS101 → CS201 → CS301
+</code></pre>
+<p>Ovvio: CS101, CS201, CS301. Per grafi più grandi con tanti vincoli, serve algoritmo.</p>
+<h3 id="algoritmo-di-kahn-bfs-based-usa-indegree">Algoritmo di Kahn (BFS-based, usa indegree)</h3>
+<p>L'<strong>indegree</strong> di un nodo è il numero di archi entranti.</p>
+<p><strong>Idea</strong>: parti dai nodi con indegree 0 (nessuna dipendenza). Processali. Quando processi un nodo, "rimuovi" i suoi archi uscenti decrementando l'indegree dei target. Se qualcuno raggiunge indegree 0, aggiungilo alla queue.</p>
+<pre><code class="language-python">from collections import deque, defaultdict
+
+def topo_sort(n, edges):
+    graph = defaultdict(list)
+    indeg = [0] * n
+    for u, v in edges:
+        graph[u].append(v)
+        indeg[v] += 1
+    q = deque(i for i in range(n) if indeg[i] == 0)
+    out = []
+    while q:
+        u = q.popleft()
+        out.append(u)
+        for v in graph[u]:
+            indeg[v] -= 1
+            if indeg[v] == 0:
+                q.append(v)
+    return out if len(out) == n else []   # vuota se c'è ciclo
+</code></pre>
+<p><strong>Bonus</strong>: Kahn rileva automaticamente se c'è un <strong>ciclo</strong>: se l'output ha meno di <code>n</code> nodi, c'è un ciclo.</p>
+<h3 id="dfs-based-topo-sort">DFS-based topo sort</h3>
+<p>Fai DFS. Quando finisci di visitare un nodo (postorder), pushalo su uno stack. L'<strong>inverso</strong> dello stack è il topo sort.</p>
+<h2 id="parte-6-dijkstra-shortest-path-con-pesi-non-negativi">Parte 6 — Dijkstra (shortest path con pesi non negativi)</h2>
+<h3 id="il-problema">Il problema</h3>
+<p>Hai un grafo pesato. Quali sono le distanze più brevi da una sorgente <code>s</code> a tutti gli altri nodi?</p>
+<h3 id="lidea">L'idea</h3>
+<p>Generalizzazione di BFS. Usa una <strong>priority queue</strong> (min-heap) invece della coda FIFO. Estrai sempre il nodo con distanza correntemente minima.</p>
+<pre><code class="language-python">import heapq
+
+def dijkstra(graph, n, src):
+    dist = [float('inf')] * n
+    dist[src] = 0
+    h = [(0, src)]
+    while h:
+        d, u = heapq.heappop(h)
+        if d &gt; dist[u]: continue   # già processato con distanza migliore
+        for v, w in graph[u]:
+            nd = d + w
+            if nd &lt; dist[v]:
+                dist[v] = nd
+                heapq.heappush(h, (nd, v))
+    return dist
+</code></pre>
+<p><strong>Complessità</strong>: O((V + E) log V) con heap binario.</p>
+<h3 id="limiti">Limiti</h3>
+<ul>
+<li><strong>Non funziona con pesi negativi</strong>. Usa Bellman-Ford (O(VE)).</li>
+<li><strong>Cicli negativi</strong>: Dijkstra non li rileva. Bellman-Ford li trova.</li>
+</ul>
+<h3 id="visualizzazione_1">Visualizzazione</h3>
+<p>Grafo (archi pesati):</p>
+<pre><code class="language-mermaid">flowchart LR
+    A --&gt;|3| B
+    A --&gt;|2| C
+    C --&gt;|4| B
+    B --&gt;|1| D
+</code></pre>
+<p>Dijkstra da A:</p>
+<pre><code>Step 1: estrai (0, A). Push (3, B), (2, C). Heap: [(2, C), (3, B)]
+Step 2: estrai (2, C). dist[C]=2. Push (2+4, B)=(6, B). Heap: [(3, B), (6, B)]
+Step 3: estrai (3, B). dist[B]=3. Push (3+1, D)=(4, D). Heap: [(4, D), (6, B)]
+Step 4: estrai (4, D). dist[D]=4.
+Step 5: estrai (6, B). 6 &gt; dist[B]=3 → skip.
+Fine.
+</code></pre>
+<p>Distanze: A=0, B=3, C=2, D=4. ✓</p>
+<h2 id="parte-7-union-find-disjoint-set-union-dsu">Parte 7 — Union-Find (Disjoint Set Union, DSU)</h2>
+<h3 id="il-problema_1">Il problema</h3>
+<p>Hai un insieme di oggetti. Vuoi raggrupparli in <strong>insiemi disgiunti</strong> (componenti). Due operazioni:</p>
+<ul>
+<li><code>find(x)</code>: a quale insieme appartiene x?</li>
+<li><code>union(x, y)</code>: unisci gli insiemi che contengono x e y.</li>
+</ul>
+<h3 id="casi-duso">Casi d'uso</h3>
+<ul>
+<li><strong>Componenti connesse dinamiche</strong> (ogni volta che aggiungi un arco, eventualmente unisci due componenti).</li>
+<li><strong>Cycle detection in grafi non diretti</strong>: prima di aggiungere arco (u, v), se find(u) == find(v), c'è già un ciclo.</li>
+<li><strong>Kruskal MST</strong>.</li>
+</ul>
+<h3 id="implementazione">Implementazione</h3>
+<p>L'idea: ogni insieme è rappresentato da un <strong>albero</strong>. Il root dell'albero è il "rappresentante" dell'insieme.</p>
+<pre><code class="language-python">class DSU:
+    def __init__(self, n):
+        self.parent = list(range(n))   # ogni nodo parte come padre di sé stesso
+        self.rank = [0] * n            # altezza dell'albero per ottimizzazione
+
+    def find(self, x):
+        # Path compression: rendi diretto il link al root
+        while self.parent[x] != x:
+            self.parent[x] = self.parent[self.parent[x]]
+            x = self.parent[x]
+        return x
+
+    def union(self, x, y):
+        rx, ry = self.find(x), self.find(y)
+        if rx == ry: return False   # già nello stesso insieme
+        # Union by rank: attacca l'albero più piccolo sotto il più grande
+        if self.rank[rx] &lt; self.rank[ry]:
+            rx, ry = ry, rx
+        self.parent[ry] = rx
+        if self.rank[rx] == self.rank[ry]:
+            self.rank[rx] += 1
+        return True
+</code></pre>
+<p><strong>Complessità con entrambe le ottimizzazioni</strong>: O(α(n)) per operazione, dove <code>α</code> è la funzione <strong>inversa di Ackermann</strong>. Praticamente O(1) per ogni n realistico (&lt; 65536).</p>
+<h3 id="kruskal-mst">Kruskal MST</h3>
+<p>Algoritmo per MST (Minimum Spanning Tree): l'insieme di archi minimo che connette tutti i nodi.</p>
+<pre><code class="language-python">def kruskal(n, edges):
+    edges.sort(key=lambda e: e[2])   # ordina per peso
+    dsu = DSU(n)
+    total = 0
+    for u, v, w in edges:
+        if dsu.union(u, v):
+            total += w
+    return total
+</code></pre>
+<p>O(E log E).</p>
+<h2 id="parte-8-pattern-fondamentali">Parte 8 — Pattern fondamentali</h2>
+<h3 id="pattern-1-grid-bfsdfs">Pattern 1 — Grid BFS/DFS</h3>
+<p>Ogni cella un nodo, vicini = 4 (o 8).</p>
+<pre><code class="language-python">DIRS = [(-1,0),(1,0),(0,-1),(0,1)]
+def neighbors(grid, r, c):
+    R, C = len(grid), len(grid[0])
+    for dr, dc in DIRS:
+        nr, nc = r+dr, c+dc
+        if 0 &lt;= nr &lt; R and 0 &lt;= nc &lt; C:
+            yield nr, nc
+</code></pre>
+<h3 id="pattern-2-connected-components">Pattern 2 — Connected components</h3>
+<p>Quanti gruppi di nodi connessi? DFS o DSU.</p>
+<h3 id="pattern-3-shortest-path">Pattern 3 — Shortest path</h3>
+<table>
+<thead>
+<tr>
+<th>Caso</th>
+<th>Algoritmo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Non pesato</td>
+<td>BFS</td>
+</tr>
+<tr>
+<td>Pesi non negativi</td>
+<td>Dijkstra</td>
+</tr>
+<tr>
+<td>Pesi qualsiasi</td>
+<td>Bellman-Ford</td>
+</tr>
+<tr>
+<td>Tutte le coppie</td>
+<td>Floyd-Warshall</td>
+</tr>
+</tbody>
+</table>
+<h3 id="pattern-4-topological-order">Pattern 4 — Topological order</h3>
+<p>Pianificazione di dipendenze. Kahn o DFS postorder.</p>
+<h3 id="pattern-5-bipartito-check">Pattern 5 — Bipartito check</h3>
+<p>Colora con 2 colori in BFS. Se conflitto → non bipartito.</p>
+<pre><code class="language-python">def is_bipartite(graph, n):
+    color = [-1] * n
+    for start in range(n):
+        if color[start] != -1: continue
+        q = deque([start])
+        color[start] = 0
+        while q:
+            u = q.popleft()
+            for v in graph[u]:
+                if color[v] == -1:
+                    color[v] = 1 - color[u]
+                    q.append(v)
+                elif color[v] == color[u]:
+                    return False
+    return True
+</code></pre>
+<h2 id="parte-9-trappole-comuni">Parte 9 — Trappole comuni</h2>
+<h3 id="1-marcare-visited-al-pop-invece-che-al-push">1. Marcare visited al pop invece che al push</h3>
+<p>Vedi parte 3. Lento e potenzialmente errato.</p>
+<h3 id="2-stack-overflow-su-dfs-ricorsivo-per-grafi-grandi">2. Stack overflow su DFS ricorsivo per grafi grandi</h3>
+<p><code>n &gt; 10⁵</code> → usa DFS iterativo.</p>
+<h3 id="3-loop-infinito-senza-visited">3. Loop infinito senza visited</h3>
+<p>Per default, tracciare sempre visited.</p>
+<h3 id="4-dijkstra-con-pesi-negativi">4. Dijkstra con pesi negativi</h3>
+<p>Errato. Usa Bellman-Ford.</p>
+<h3 id="5-confondere-diretto-e-non-diretto">5. Confondere diretto e non diretto</h3>
+<p>In non diretto aggiungi entrambi (u,v) e (v,u) in adjacency list.</p>
+<h2 id="esercizi">Esercizi</h2>
+<h3 id="esercizio-81-number-of-islands-medium">Esercizio 8.1 — Number of Islands <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Conta isole in griglia binaria.</p>
+<details><summary>Soluzione</summary>
+
+
+<pre><code class="language-python">def num_islands(grid):
+    if not grid: return 0
+    R, C = len(grid), len(grid[0])
+    def dfs(r, c):
+        if not (0 &lt;= r &lt; R and 0 &lt;= c &lt; C): return
+        if grid[r][c] != '1': return
+        grid[r][c] = '0'
+        for dr, dc in [(-1,0),(1,0),(0,-1),(0,1)]:
+            dfs(r+dr, c+dc)
+    count = 0
+    for r in range(R):
+        for c in range(C):
+            if grid[r][c] == '1':
+                dfs(r, c)
+                count += 1
+    return count
+</code></pre>
+
+
+Trick: modifichiamo la griglia stessa (`'1'` → `'0'`) per evitare un set visited separato.
+</details>
+
+<h3 id="esercizio-82-clone-graph-medium">Esercizio 8.2 — Clone Graph <span class="problem-tag medium">MEDIUM</span></h3>
+<details><summary>Soluzione</summary>
+
+
+<pre><code class="language-python">def clone(node):
+    if not node: return None
+    m = {}
+    def dfs(n):
+        if n in m: return m[n]
+        c = Node(n.val)
+        m[n] = c
+        for nb in n.neighbors:
+            c.neighbors.append(dfs(nb))
+        return c
+    return dfs(node)
+</code></pre>
+
+
+Hashmap `originale → copia`. DFS che usa la mappa per evitare loop infiniti.
+</details>
+
+<h3 id="esercizio-83-course-schedule-medium">Esercizio 8.3 — Course Schedule <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Puoi completare tutti i corsi dati i prerequisiti?</p>
+<details><summary>Soluzione</summary>
+
+Topological sort (Kahn). Se completi tutti i nodi → no ciclo → sì.
+
+
+<pre><code class="language-python">def can_finish(n, prereq):
+    g = defaultdict(list); indeg = [0]*n
+    for a, b in prereq:
+        g[b].append(a); indeg[a] += 1
+    q = deque(i for i in range(n) if indeg[i] == 0)
+    done = 0
+    while q:
+        u = q.popleft(); done += 1
+        for v in g[u]:
+            indeg[v] -= 1
+            if indeg[v] == 0: q.append(v)
+    return done == n
+</code></pre>
+
+</details>
+
+<h3 id="esercizio-84-course-schedule-ii-medium">Esercizio 8.4 — Course Schedule II <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Restituisci un ordine valido.</p>
+<details><summary>Soluzione</summary>
+
+Identica a sopra, ma colleziona l'output:
+
+
+<pre><code class="language-python">def find_order(n, prereq):
+    # ... come sopra ...
+    return out if len(out) == n else []
+</code></pre>
+
+</details>
+
+<h3 id="esercizio-85-pacific-atlantic-water-flow-medium">Esercizio 8.5 — Pacific Atlantic Water Flow <span class="problem-tag medium">MEDIUM</span></h3>
+<details><summary>Ragionamento</summary>
+
+Reverse thinking: invece di chiederti "da quale cella si raggiunge il Pacifico?", inizia dai bordi e risali verso celle più alte. Due BFS/DFS multi-source. Output: celle raggiungibili da **entrambi** gli oceani.
+
+
+<pre><code class="language-python">def pacific_atlantic(M):
+    if not M: return []
+    R, C = len(M), len(M[0])
+    pac = set(); atl = set()
+    def dfs(r, c, seen):
+        seen.add((r,c))
+        for dr, dc in [(-1,0),(1,0),(0,-1),(0,1)]:
+            nr, nc = r+dr, c+dc
+            if 0 &lt;= nr &lt; R and 0 &lt;= nc &lt; C and (nr,nc) not in seen and M[nr][nc] &gt;= M[r][c]:
+                dfs(nr, nc, seen)
+    for r in range(R):
+        dfs(r, 0, pac); dfs(r, C-1, atl)
+    for c in range(C):
+        dfs(0, c, pac); dfs(R-1, c, atl)
+    return list(pac &amp; atl)
+</code></pre>
+
+
+Pattern: **reverse BFS/DFS** quando "raggiungere il bordo" è più facile che "raggiungere il centro".
+</details>
+
+<h3 id="esercizio-86-word-ladder-hard">Esercizio 8.6 — Word Ladder <span class="problem-tag hard">HARD</span></h3>
+<details><summary>Soluzione</summary>
+
+BFS su grafo implicito: due parole sono "vicini" se differiscono di una lettera.
+
+
+<pre><code class="language-python">def ladder_length(begin, end, word_list):
+    words = set(word_list)
+    if end not in words: return 0
+    q = deque([(begin, 1)])
+    while q:
+        w, d = q.popleft()
+        if w == end: return d
+        for i in range(len(w)):
+            for c in 'abcdefghijklmnopqrstuvwxyz':
+                nw = w[:i] + c + w[i+1:]
+                if nw in words:
+                    words.discard(nw)
+                    q.append((nw, d+1))
+    return 0
+</code></pre>
+
+
+Trucco: rimuovi parole già visitate dal set per evitare cicli e velocizzare.
+</details>
+
+<h3 id="esercizio-87-network-delay-dijkstra-medium">Esercizio 8.7 — Network Delay (Dijkstra) <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Tempo perché un segnale partito da k raggiunga tutti i nodi (o -1 se irraggiungibile).</p>
+<details><summary>Soluzione</summary>
+
+Dijkstra puro. Risposta: `max(dist)`.
+
+
+<pre><code class="language-python">def network_delay(times, n, k):
+    g = defaultdict(list)
+    for u, v, w in times: g[u].append((v, w))
+    dist = {k: 0}; h = [(0, k)]
+    while h:
+        d, u = heapq.heappop(h)
+        if d &gt; dist.get(u, float('inf')): continue
+        for v, w in g[u]:
+            nd = d + w
+            if nd &lt; dist.get(v, float('inf')):
+                dist[v] = nd
+                heapq.heappush(h, (nd, v))
+    if len(dist) &lt; n: return -1
+    return max(dist.values())
+</code></pre>
+
+</details>
+
+<h3 id="esercizio-88-cheapest-flights-k-stops-medium">Esercizio 8.8 — Cheapest Flights K Stops <span class="problem-tag medium">MEDIUM</span></h3>
+<details><summary>Soluzione (Bellman-Ford modificato)</summary>
+
+
+<pre><code class="language-python">def find_cheapest(n, flights, src, dst, k):
+    dist = [float('inf')]*n; dist[src] = 0
+    for _ in range(k+1):
+        tmp = dist[:]
+        for u, v, w in flights:
+            if dist[u] + w &lt; tmp[v]:
+                tmp[v] = dist[u] + w
+        dist = tmp
+    return dist[dst] if dist[dst] != float('inf') else -1
+</code></pre>
+
+
+Pattern: k+1 iterazioni di rilassamento limitate.
+</details>
+
+<h3 id="esercizio-89-redundant-connection-medium">Esercizio 8.9 — Redundant Connection <span class="problem-tag medium">MEDIUM</span></h3>
+<details><summary>Soluzione</summary>
+
+DSU. L'arco che unisce due nodi già nello stesso insieme è quello redundante.
+
+
+<pre><code class="language-python">def redundant_connection(edges):
+    dsu = DSU(len(edges) + 1)
+    for u, v in edges:
+        if not dsu.union(u, v):
+            return [u, v]
+</code></pre>
+
+</details>
+
+<h3 id="esercizio-810-min-cost-to-connect-points-mst-medium">Esercizio 8.10 — Min Cost to Connect Points (MST) <span class="problem-tag medium">MEDIUM</span></h3>
+<details><summary>Soluzione</summary>
+
+Kruskal su grafo completo con distanza Manhattan.
+
+
+<pre><code class="language-python">def min_cost_connect(points):
+    n = len(points)
+    edges = []
+    for i in range(n):
+        for j in range(i+1, n):
+            d = abs(points[i][0] - points[j][0]) + abs(points[i][1] - points[j][1])
+            edges.append((d, i, j))
+    edges.sort()
+    dsu = DSU(n); total = 0; count = 0
+    for d, u, v in edges:
+        if dsu.union(u, v):
+            total += d; count += 1
+            if count == n - 1: break
+    return total
+</code></pre>
+
+</details>
+
+<h3 id="esercizio-811-alien-dictionary-hard">Esercizio 8.11 — Alien Dictionary <span class="problem-tag hard">HARD</span></h3>
+<p>Date parole ordinate alfabeticamente in lingua aliena, trova l'ordinamento delle lettere.</p>
+<details><summary>Soluzione</summary>
+
+Topological sort. Confronta coppie consecutive: la prima differenza è un arco "a precede b".
+
+
+<pre><code class="language-python">def alien_order(words):
+    g = defaultdict(set)
+    indeg = {c: 0 for w in words for c in w}
+    for w1, w2 in zip(words, words[1:]):
+        if len(w1) &gt; len(w2) and w1.startswith(w2): return &quot;&quot;
+        for a, b in zip(w1, w2):
+            if a != b:
+                if b not in g[a]:
+                    g[a].add(b); indeg[b] += 1
+                break
+    q = deque([c for c in indeg if indeg[c] == 0])
+    out = []
+    while q:
+        c = q.popleft(); out.append(c)
+        for nb in g[c]:
+            indeg[nb] -= 1
+            if indeg[nb] == 0: q.append(nb)
+    return &quot;&quot;.join(out) if len(out) == len(indeg) else &quot;&quot;
+</code></pre>
+
+</details>
+
+<h3 id="esercizio-812-word-search-ii-hard">Esercizio 8.12 — Word Search II <span class="problem-tag hard">HARD</span></h3>
+<p>Vedi cap. 09 (con trie).</p>
+<h2 id="riassunto-del-capitolo">Riassunto del capitolo</h2>
+<ol>
+<li><strong>Grafo</strong> = nodi + archi. 4 dimensioni: diretto/non, pesato/non, ciclico/aciclico, connesso/non.</li>
+<li><strong>Rappresentazioni</strong>: adjacency list (default), matrix (denso), edge list (Kruskal).</li>
+<li><strong>BFS</strong> per shortest path non pesato, level-order, multi-source.</li>
+<li><strong>DFS</strong> per components, cycle detection, esplorazione esaustiva.</li>
+<li><strong>Dijkstra</strong> per shortest path pesato (non negativi). Bellman-Ford per generale.</li>
+<li><strong>Topological sort</strong> per DAG (Kahn = BFS+indegree, DFS postorder).</li>
+<li><strong>Union-Find</strong> per components dinamiche, MST (Kruskal), cycle in non diretti.</li>
+</ol>
+<p>Domande in colloquio sui grafi sono "ricche": una sola può combinare BFS + hash + tracking di parent. Il pattern recognition viene con la pratica.</p>
+      <nav class="pager">
+<a href="07-heap.html" class="prev"><span class="label">← Precedente</span><span class="title">Heap e priority queue</span></a>
+<a href="09-trie.html" class="next"><span class="label">Successivo →</span><span class="title">Trie (prefix tree)</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>FAANG Prep</strong> — percorso completo di preparazione: DS&amp;A, system design, behavioral. Costruito per spaccare ai colloqui di Big Tech.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-index.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true,
+      background: '#161922',
+      primaryColor: '#1d2230',
+      primaryTextColor: '#e6e8ee',
+      primaryBorderColor: '#6cf',
+      lineColor: '#7a8194',
+      secondaryColor: '#262b3a',
+      tertiaryColor: '#0f1117',
+      mainBkg: '#1d2230',
+      secondBkg: '#262b3a',
+      tertiaryBkg: '#161922',
+      nodeBorder: '#6cf',
+      clusterBkg: '#161922',
+      clusterBorder: '#262b3a',
+      titleColor: '#6cf',
+      edgeLabelBackground: '#161922',
+      fontFamily: 'Cascadia Code, monospace'
+    }
+  });
+  document.querySelectorAll('pre > code.language-mermaid').forEach((codeEl) => {
+    const pre = codeEl.parentElement;
+    const div = document.createElement('div');
+    div.className = 'mermaid';
+    div.textContent = codeEl.textContent;
+    pre.replaceWith(div);
+  });
+  mermaid.run();
+</script>
+</body>
+</html>

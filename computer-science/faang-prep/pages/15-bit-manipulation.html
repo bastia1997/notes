@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bit manipulation — FAANG Prep</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">F</div>
+      <div>
+        <div class="brand-title">FAANG Prep</div>
+        <div class="brand-subtitle">DS&amp;A · System Design</div>
+      </div>
+    </div>
+    <div class="lang-bar">
+      <a class="lang-switcher" href="../en/pages/15-bit-manipulation.html" title="English"><span class="flag-icon">🇬🇧</span><span class="flag-label">English</span></a>
+    </div>
+  </div>
+  <div class="search-wrap">
+    <input class="search-input" id="search-input" placeholder="Cerca nei contenuti... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/00-introduzione.html" class=""><span class="num">00</span>Introduzione e come usare questo percorso</a></li><li class="nav-item"><a href="../pages/01-complessita.html" class=""><span class="num">01</span>Complessità computazionale (Big-O)</a></li><li class="nav-item"><a href="../pages/02-array-stringhe.html" class=""><span class="num">02</span>Array e stringhe</a></li><li class="nav-item"><a href="../pages/03-hashmap-set.html" class=""><span class="num">03</span>Hashmap e set</a></li><li class="nav-item"><a href="../pages/04-linked-list.html" class=""><span class="num">04</span>Linked list</a></li><li class="nav-item"><a href="../pages/05-stack-coda.html" class=""><span class="num">05</span>Stack e coda</a></li><li class="nav-item"><a href="../pages/06-alberi.html" class=""><span class="num">06</span>Alberi (binary tree e BST)</a></li><li class="nav-item"><a href="../pages/07-heap.html" class=""><span class="num">07</span>Heap e priority queue</a></li><li class="nav-item"><a href="../pages/08-grafi.html" class=""><span class="num">08</span>Grafi</a></li><li class="nav-item"><a href="../pages/09-trie.html" class=""><span class="num">09</span>Trie (prefix tree)</a></li><li class="nav-item"><a href="../pages/10-ricorsione-backtracking.html" class=""><span class="num">10</span>Ricorsione e backtracking</a></li><li class="nav-item"><a href="../pages/11-sorting-searching.html" class=""><span class="num">11</span>Sorting e searching</a></li><li class="nav-item"><a href="../pages/12-two-pointers-sliding-window.html" class=""><span class="num">12</span>Two pointers e sliding window</a></li><li class="nav-item"><a href="../pages/13-greedy.html" class=""><span class="num">13</span>Greedy</a></li><li class="nav-item"><a href="../pages/14-dp.html" class=""><span class="num">14</span>Dynamic programming</a></li><li class="nav-item"><a href="../pages/15-bit-manipulation.html" class="active"><span class="num">15</span>Bit manipulation</a></li><li class="nav-item"><a href="../pages/16-oop-design-patterns.html" class=""><span class="num">16</span>OOP e design patterns</a></li><li class="nav-item"><a href="../pages/17-system-design.html" class=""><span class="num">17</span>System design — fondamenti</a></li><li class="nav-item"><a href="../pages/18-system-design-esempi.html" class=""><span class="num">18</span>System design — esempi end-to-end</a></li><li class="nav-item"><a href="../pages/19-concorrenza.html" class=""><span class="num">19</span>Concorrenza e parallelismo</a></li><li class="nav-item"><a href="../pages/20-database-sql.html" class=""><span class="num">20</span>Database e SQL</a></li><li class="nav-item"><a href="../pages/21-os-networking.html" class=""><span class="num">21</span>OS e networking</a></li><li class="nav-item"><a href="../pages/22-coding-patterns.html" class=""><span class="num">22</span>I 16 coding patterns dei colloqui</a></li><li class="nav-item"><a href="../pages/23-behavioral-star.html" class=""><span class="num">23</span>Behavioral interview — STAR e Amazon LP</a></li><li class="nav-item"><a href="../pages/24-mock-interviews.html" class=""><span class="num">24</span>Mock interview e strategia in colloquio</a></li><li class="nav-item"><a href="../pages/25-roadmap-90-giorni.html" class=""><span class="num">25</span>Roadmap 90 giorni — piano operativo</a></li><li class="nav-item"><a href="../pages/26-banca-esercizi.html" class=""><span class="num">26</span>Banca esercizi — 200+ problemi FAANG</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Algoritmi</span>
+        <span>Sezione 15 di 26</span>
+      </div>
+      <h1>Bit manipulation</h1>
+      <p class="summary">Dal binario alla manipolazione dei bit. AND/OR/XOR spiegati con esempi, trucchi classici, XOR magic, bitmask DP.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Algoritmi</div>
+  
+  
+</div>
+      <p>Capitolo veloce ma fondamentale. Nei colloqui non è quasi mai il fulcro, ma compare in problemi come "single number", "subset enumeration", "bitmask DP". Saperlo ti distingue.</p>
+<h2 id="parte-1-numero-binario">Parte 1 — Numero binario</h2>
+<h3 id="cifre-ma-in-base-2">Cifre, ma in base 2</h3>
+<p>Sappiamo contare in base 10: 487 = 4×100 + 8×10 + 7×1.</p>
+<p>In base 2, le cifre sono solo 0 e 1, e i "pesi" sono potenze di 2:</p>
+<p><code>1101</code> (binario) = 1×8 + 1×4 + 0×2 + 1×1 = <strong>13</strong> (decimale).</p>
+<p>In Python:</p>
+<pre><code class="language-python">bin(13)        # '0b1101'
+int('1101', 2) # 13
+0b1101         # 13 (letterale binario)
+</code></pre>
+<h3 id="bit-byte-word">Bit, byte, word</h3>
+<ul>
+<li><strong>Bit</strong>: 0 o 1.</li>
+<li><strong>Byte</strong>: 8 bit. Può rappresentare 256 valori (0-255 unsigned, -128..127 signed).</li>
+<li><strong>Word</strong>: tipicamente 32 o 64 bit. Dimensione "naturale" del processore.</li>
+</ul>
+<h3 id="numeri-negativi-complemento-a-due">Numeri negativi: complemento a due</h3>
+<p>Un numero negativo in binario si rappresenta col <strong>complemento a 2</strong>: inverti i bit e somma 1.</p>
+<pre><code>+5 (8 bit): 00000101
+-5 (8 bit): 11111011   (inversione di 00000101 = 11111010, +1 = 11111011)
+</code></pre>
+<p>Vantaggio: l'hardware fa la somma normale, e <code>+5 + (-5) = 0</code>.</p>
+<p>In Python interi sono illimitati, quindi i bit negativi sono "concettualmente infiniti". Per operazioni bit a 32 bit puoi usare maschere: <code>x &amp; 0xFFFFFFFF</code>.</p>
+<h2 id="parte-2-gli-operatori">Parte 2 — Gli operatori</h2>
+<h3 id="and">AND <code>&amp;</code></h3>
+<p>Bit a bit: 1 se entrambi 1, altrimenti 0.</p>
+<pre><code>0b1100
+0b1010 &amp;
+------
+0b1000
+</code></pre>
+<p>Uso: <strong>mascherare</strong> bit (selezionare).</p>
+<h3 id="or">OR <code>|</code></h3>
+<p>Bit a bit: 1 se almeno uno è 1.</p>
+<pre><code>0b1100
+0b1010 |
+------
+0b1110
+</code></pre>
+<p>Uso: <strong>settare</strong> bit.</p>
+<h3 id="xor">XOR <code>^</code></h3>
+<p>Bit a bit: 1 se i due bit sono <strong>diversi</strong>.</p>
+<pre><code>0b1100
+0b1010 ^
+------
+0b0110
+</code></pre>
+<p>Proprietà chiave:</p>
+<ul>
+<li><code>a ^ 0 = a</code></li>
+<li><code>a ^ a = 0</code></li>
+<li><code>a ^ b ^ a = b</code> (commutativo e associativo)</li>
+</ul>
+<p>XOR si usa per: cancellare un valore, swap, parità, single number.</p>
+<h3 id="not">NOT <code>~</code></h3>
+<p>Inverte ogni bit. In Python: <code>~a = -a - 1</code> (per via del complemento a 2).</p>
+<pre><code class="language-python">~5    # -6
+~(-5) # 4
+</code></pre>
+<p>In colloquio raro.</p>
+<h3 id="shift">Shift <code>&lt;&lt;</code> <code>&gt;&gt;</code></h3>
+<p><code>a &lt;&lt; k</code> = sposta a sinistra di k posizioni = <code>a × 2^k</code>.</p>
+<p><code>a &gt;&gt; k</code> = sposta a destra = <code>a // 2^k</code>.</p>
+<pre><code class="language-python">1 &lt;&lt; 5    # 32 (= 2^5)
+8 &gt;&gt; 2    # 2  (= 8 // 4)
+</code></pre>
+<p>Velocissimi: una singola istruzione macchina.</p>
+<h2 id="parte-3-trucchi-che-devi-memorizzare">Parte 3 — Trucchi che devi memorizzare</h2>
+<h3 id="1-verifica-se-x-e-potenza-di-2">1. Verifica se <code>x</code> è potenza di 2</h3>
+<pre><code class="language-python">x &gt; 0 and (x &amp; (x - 1)) == 0
+</code></pre>
+<p><strong>Perché?</strong> Una potenza di 2 in binario ha <strong>un solo bit a 1</strong> (es. 8 = <code>1000</code>). <code>x - 1</code> lo sposta a destra trasformando in <code>0111</code>. AND tra <code>1000</code> e <code>0111</code> = 0.</p>
+<h3 id="2-conta-i-bit-a-1-popcount">2. Conta i bit a 1 (popcount)</h3>
+<p>Tre versioni:</p>
+<pre><code class="language-python"># Versione 1: bin string
+bin(x).count('1')
+
+# Versione 2: Brian Kernighan
+def count(x):
+    c = 0
+    while x:
+        x &amp;= x - 1   # rimuove l'ultimo bit a 1
+        c += 1
+    return c
+
+# Versione 3: Python 3.10+
+x.bit_count()
+</code></pre>
+<p>Brian Kernighan è geniale: <code>x &amp; (x-1)</code> rimuove <strong>l'ultimo bit settato</strong>. Quindi loopi una volta per ogni bit a 1, non per ogni bit totale.</p>
+<h3 id="3-estrai-lultimo-bit-a-1">3. Estrai l'ultimo bit a 1</h3>
+<pre><code class="language-python">x &amp; -x
+</code></pre>
+<p>Esempio: <code>x = 0b1100</code>. <code>-x</code> in complemento a 2 (8 bit) = <code>0b...11110100</code>. AND = <code>0b0100</code>. Sopravvive solo il bit più basso di <code>x</code>.</p>
+<p>Usato in: Fenwick tree (BIT).</p>
+<h3 id="4-setcleartoggletest-del-bit-i-esimo">4. Set/clear/toggle/test del bit <code>i</code>-esimo</h3>
+<pre><code class="language-python">x | (1 &lt;&lt; i)     # set bit i
+x &amp; ~(1 &lt;&lt; i)    # clear bit i
+x ^ (1 &lt;&lt; i)     # toggle bit i
+(x &gt;&gt; i) &amp; 1     # test bit i (ritorna 0 o 1)
+</code></pre>
+<h3 id="5-verifica-parita">5. Verifica parità</h3>
+<pre><code class="language-python">x &amp; 1   # 1 se dispari, 0 se pari
+</code></pre>
+<h3 id="6-swap-senza-variabile-temp">6. Swap senza variabile temp</h3>
+<pre><code class="language-python">a ^= b
+b ^= a
+a ^= b
+</code></pre>
+<p>Trick "stupido" — non usarlo in codice reale. Ma chi te lo chiede in colloquio si aspetta che lo sappia.</p>
+<h2 id="parte-4-xor-magic">Parte 4 — XOR magic</h2>
+<p>XOR è il preferito dei colloqui per trucchi geniali.</p>
+<h3 id="pattern-1-single-number">Pattern 1 — Single Number</h3>
+<blockquote>
+<p>In un array, ogni elemento appare 2 volte tranne uno. Trova quello unico.</p>
+</blockquote>
+<pre><code class="language-python">def single_number(arr):
+    res = 0
+    for x in arr:
+        res ^= x
+    return res
+</code></pre>
+<p><strong>Perché funziona?</strong> XOR è commutativo e associativo. <code>a ^ a = 0</code>, <code>0 ^ x = x</code>. Quindi tutti i doppioni si cancellano, rimane il singolo.</p>
+<h3 id="pattern-2-find-missing">Pattern 2 — Find Missing</h3>
+<blockquote>
+<p>Array di n distinct in <code>[0..n]</code>, trova il mancante.</p>
+</blockquote>
+<pre><code class="language-python">def missing(nums):
+    res = len(nums)   # n
+    for i, x in enumerate(nums):
+        res ^= i ^ x
+    return res
+</code></pre>
+<p><strong>Perché?</strong> XOR di tutto <code>0..n</code> con tutti i presenti <code>nums</code> lascia solo il mancante (perché tutti i presenti hanno il loro corrispondente in <code>0..n</code> che si cancella).</p>
+<h3 id="pattern-3-find-two-single-numbers">Pattern 3 — Find Two Single Numbers</h3>
+<blockquote>
+<p>Array dove tutti appaiono 2 volte tranne due. Trova entrambi.</p>
+</blockquote>
+<p>XOR di tutto = <code>a ^ b</code> (i due unici). Ora trova un bit dove differiscono (es. l'ultimo bit set di <code>a^b</code>). Splitta l'array in due gruppi (quel bit è 0 o 1). XOR di ciascun gruppo dà uno dei due.</p>
+<pre><code class="language-python">def two_singles(arr):
+    xor = 0
+    for x in arr: xor ^= x
+    diff = xor &amp; -xor   # ultimo bit settato
+    a = b = 0
+    for x in arr:
+        if x &amp; diff: a ^= x
+        else: b ^= x
+    return [a, b]
+</code></pre>
+<h2 id="parte-5-bitmask-rappresentare-set-come-interi">Parte 5 — Bitmask: rappresentare set come interi</h2>
+<h3 id="lidea">L'idea</h3>
+<p>Un intero a <code>n</code> bit può rappresentare un sottoinsieme di <code>n</code> elementi: il bit <code>i</code>-esimo è 1 se l'elemento <code>i</code> è nel sottoinsieme.</p>
+<p>Esempio: per 4 elementi <code>{A, B, C, D}</code>, la maschera <code>0b1010</code> = <code>{B, D}</code>.</p>
+<h3 id="operazioni">Operazioni</h3>
+<pre><code class="language-python">mask | (1 &lt;&lt; i)   # aggiungi elemento i
+mask &amp; ~(1 &lt;&lt; i)  # rimuovi
+(mask &gt;&gt; i) &amp; 1   # è presente?
+mask ^ (1 &lt;&lt; i)   # toggle
+</code></pre>
+<h3 id="enumerare-tutti-i-sottoinsiemi">Enumerare tutti i sottoinsiemi</h3>
+<pre><code class="language-python">n = len(arr)
+for mask in range(1 &lt;&lt; n):
+    subset = [arr[i] for i in range(n) if (mask &gt;&gt; i) &amp; 1]
+    process(subset)
+</code></pre>
+<p><code>1 &lt;&lt; n</code> = <code>2^n</code>. Iteri da 0 (vuoto) a <code>2^n - 1</code> (tutto). Ogni mask rappresenta un sottoinsieme.</p>
+<p><strong>Solo per <code>n ≤ 20-25</code></strong>. Per <code>n=30</code>, <code>2^30 = 10^9</code> iterazioni → troppo.</p>
+<h3 id="bitmask-dp">Bitmask DP</h3>
+<p>Stato include una maschera di "cosa è stato visitato". Esempio classico: <strong>Traveling Salesman Problem</strong>.</p>
+<pre><code class="language-python">def tsp(dist):
+    n = len(dist)
+    INF = float('inf')
+    dp = [[INF] * n for _ in range(1 &lt;&lt; n)]
+    dp[1][0] = 0   # parto da 0, ho visitato solo 0
+    for mask in range(1, 1 &lt;&lt; n):
+        for u in range(n):
+            if not (mask &gt;&gt; u) &amp; 1: continue
+            for v in range(n):
+                if (mask &gt;&gt; v) &amp; 1: continue
+                new_mask = mask | (1 &lt;&lt; v)
+                dp[new_mask][v] = min(dp[new_mask][v], dp[mask][u] + dist[u][v])
+    return min(dp[(1 &lt;&lt; n) - 1][u] + dist[u][0] for u in range(1, n))
+</code></pre>
+<p>O(2^n × n^2). Per n=20: ~10^9 op. Borderline.</p>
+<h2 id="parte-6-trappole">Parte 6 — Trappole</h2>
+<h3 id="1-python-interi-infiniti">1. Python interi infiniti</h3>
+<p>A differenza di C/Java, Python non ha overflow. <code>1 &lt;&lt; 100</code> funziona. Per simulare 32-bit, usa maschere <code>x &amp; 0xFFFFFFFF</code>.</p>
+<h3 id="2-confusione-and-vs">2. Confusione AND vs &amp;&amp;</h3>
+<p>In Python <code>and</code> è logico (boolean), <code>&amp;</code> è bit-a-bit. Non confonderli.</p>
+<pre><code class="language-python">1 and 2   # 2 (logico, ritorna l'ultimo truthy)
+1 &amp; 2     # 0 (bit-a-bit, 01 &amp; 10 = 00)
+</code></pre>
+<h3 id="3-precedenza-degli-operatori">3. Precedenza degli operatori</h3>
+<p><code>&amp;</code>, <code>|</code>, <code>^</code> hanno <strong>precedenza più bassa</strong> del <code>==</code>. Servono parentesi.</p>
+<pre><code class="language-python">x &amp; 1 == 0   # SBAGLIATO: x &amp; (1 == 0) = x &amp; False = 0
+(x &amp; 1) == 0 # CORRETTO
+</code></pre>
+<h3 id="4-shift-di-numeri-grandi">4. Shift di numeri grandi</h3>
+<p><code>1 &lt;&lt; 1000</code> funziona in Python ma occupa memoria. In C/Java è UB (undefined behavior). Attenzione se traduci.</p>
+<h2 id="parte-7-esercizi">Parte 7 — Esercizi</h2>
+<h3 id="esercizio-151-single-number-easy">Esercizio 15.1 — Single Number <span class="problem-tag easy">EASY</span></h3>
+<p>Vedi parte 4.</p>
+<h3 id="esercizio-152-number-of-1-bits-easy">Esercizio 15.2 — Number of 1 Bits <span class="problem-tag easy">EASY</span></h3>
+<p>Vedi parte 3 trucco 2.</p>
+<h3 id="esercizio-153-counting-bits-easy">Esercizio 15.3 — Counting Bits <span class="problem-tag easy">EASY</span></h3>
+<p>Per ogni <code>i ∈ [0..n]</code>, conta i bit a 1.</p>
+<details><summary>Ragionamento</summary>
+
+DP geniale: `dp[i] = dp[i >> 1] + (i & 1)`.
+
+Perché? Il numero di bit di `i` è quello di `i >> 1` (= `i // 2`) più 1 se l'ultimo bit di `i` è 1.
+
+
+<pre><code class="language-python">def counting_bits(n):
+    dp = [0] * (n + 1)
+    for i in range(1, n + 1):
+        dp[i] = dp[i &gt;&gt; 1] + (i &amp; 1)
+    return dp
+</code></pre>
+
+
+O(n).
+</details>
+
+<h3 id="esercizio-154-missing-number-easy">Esercizio 15.4 — Missing Number <span class="problem-tag easy">EASY</span></h3>
+<p>Vedi parte 4 pattern 2.</p>
+<h3 id="esercizio-155-reverse-bits-easy">Esercizio 15.5 — Reverse Bits <span class="problem-tag easy">EASY</span></h3>
+<p>Reverse di un intero a 32 bit.</p>
+<details><summary>Soluzione</summary>
+
+
+<pre><code class="language-python">def reverse_bits(x):
+    res = 0
+    for _ in range(32):
+        res = (res &lt;&lt; 1) | (x &amp; 1)
+        x &gt;&gt;= 1
+    return res
+</code></pre>
+
+
+Idea: shift result a sinistra, prendi l'ultimo bit di x, shift x a destra. Ripeti 32 volte.
+</details>
+
+<h3 id="esercizio-156-sum-of-two-integers-medium">Esercizio 15.6 — Sum of Two Integers <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Somma senza usare <code>+</code> o <code>-</code>.</p>
+<details><summary>Ragionamento</summary>
+
+Sum senza carry = XOR. Carry = AND seguito da shift sinistro.
+
+
+<pre><code class="language-python">a ^ b           # somma senza considerare carry
+(a &amp; b) &lt;&lt; 1    # bit di carry generati
+</code></pre>
+
+
+Ripeti finché il carry è 0.
+
+In Python, con interi illimitati, dovrai mascherare a 32 bit:
+
+
+<pre><code class="language-python">def sum_no_plus(a, b):
+    MASK = 0xFFFFFFFF
+    MAX = 0x7FFFFFFF
+    while b:
+        carry = (a &amp; b) &lt;&lt; 1
+        a = (a ^ b) &amp; MASK
+        b = carry &amp; MASK
+    return a if a &lt;= MAX else ~(a ^ MASK)
+</code></pre>
+
+
+Complesso per i negativi in Python.
+</details>
+
+<h3 id="esercizio-157-single-number-ii-medium">Esercizio 15.7 — Single Number II <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Tutti appaiono 3 volte tranne uno. Trovalo.</p>
+<details><summary>Idea</summary>
+
+Conta i bit modulo 3 ad ogni posizione. I bit del numero unico sono "il resto mod 3" della somma.
+
+
+<pre><code class="language-python">def single_three(arr):
+    res = 0
+    for i in range(32):
+        bit_sum = sum((x &gt;&gt; i) &amp; 1 for x in arr) % 3
+        res |= bit_sum &lt;&lt; i
+    return res if res &lt; (1 &lt;&lt; 31) else res - (1 &lt;&lt; 32)
+</code></pre>
+
+
+O(32n).
+
+C'è anche una versione "stato a due bit" più elegante ma più criptica.
+</details>
+
+<h3 id="esercizio-158-subsets-via-bitmask-medium">Esercizio 15.8 — Subsets via Bitmask <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Tutti i sottoinsiemi di un array di n elementi (n piccolo).</p>
+<details><summary>Soluzione</summary>
+
+
+<pre><code class="language-python">def subsets(arr):
+    n = len(arr)
+    res = []
+    for mask in range(1 &lt;&lt; n):
+        sub = [arr[i] for i in range(n) if (mask &gt;&gt; i) &amp; 1]
+        res.append(sub)
+    return res
+</code></pre>
+
+
+`2^n` sottoinsiemi totali.
+</details>
+
+<h2 id="riassunto">Riassunto</h2>
+<ol>
+<li><strong>Operatori bit</strong>: <code>&amp;</code> (AND), <code>|</code> (OR), <code>^</code> (XOR), <code>~</code> (NOT), <code>&lt;&lt;</code> (shift sinistra), <code>&gt;&gt;</code> (destra).</li>
+<li><strong>Trucchi da memoria</strong>: <code>x &amp; (x-1)</code> rimuove ultimo bit, <code>x &amp; -x</code> estrae ultimo bit settato, <code>x &amp; 1</code> parità.</li>
+<li><strong>XOR magic</strong>: <code>a^a=0</code>, <code>a^0=a</code>. Risolvi "single number" senza extra spazio.</li>
+<li><strong>Bitmask</strong>: rappresenta sottoinsiemi come interi. Per <code>n ≤ 20</code>.</li>
+<li><strong>Bitmask DP</strong>: stato include la maschera di "cosa è stato già usato". TSP.</li>
+</ol>
+<p>Bit manipulation è una "tassa" da pagare una volta: poi torna utile spesso.</p>
+      <nav class="pager">
+<a href="14-dp.html" class="prev"><span class="label">← Precedente</span><span class="title">Dynamic programming</span></a>
+<a href="16-oop-design-patterns.html" class="next"><span class="label">Successivo →</span><span class="title">OOP e design patterns</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>FAANG Prep</strong> — percorso completo di preparazione: DS&amp;A, system design, behavioral. Costruito per spaccare ai colloqui di Big Tech.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-index.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true,
+      background: '#161922',
+      primaryColor: '#1d2230',
+      primaryTextColor: '#e6e8ee',
+      primaryBorderColor: '#6cf',
+      lineColor: '#7a8194',
+      secondaryColor: '#262b3a',
+      tertiaryColor: '#0f1117',
+      mainBkg: '#1d2230',
+      secondBkg: '#262b3a',
+      tertiaryBkg: '#161922',
+      nodeBorder: '#6cf',
+      clusterBkg: '#161922',
+      clusterBorder: '#262b3a',
+      titleColor: '#6cf',
+      edgeLabelBackground: '#161922',
+      fontFamily: 'Cascadia Code, monospace'
+    }
+  });
+  document.querySelectorAll('pre > code.language-mermaid').forEach((codeEl) => {
+    const pre = codeEl.parentElement;
+    const div = document.createElement('div');
+    div.className = 'mermaid';
+    div.textContent = codeEl.textContent;
+    pre.replaceWith(div);
+  });
+  mermaid.run();
+</script>
+</body>
+</html>

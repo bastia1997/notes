@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Well-Architected Framework — 6 pillars, lenses, review — AWS Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#232f3e',primaryTextColor:'#ffffff',primaryBorderColor:'#ff9900',lineColor:'#8a99ad',background:'#0c1320'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">λ</div>
+      <div>
+        <div class="brand-title">AWS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/42-well-architected.html" class="lang-link" title="Passa all'italiano">IT</a><span class="lang-active" title="English">EN</span></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="search... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-what-is-cloud-and-aws.html" class=""><span class="num">01</span>What the cloud is, and what AWS is</a></li><li class="nav-item"><a href="../pages/02-global-infrastructure.html" class=""><span class="num">02</span>Global infrastructure: Regions, AZs, Edge</a></li><li class="nav-item"><a href="../pages/03-account-root-billing.html" class=""><span class="num">03</span>AWS account, root user, billing</a></li><li class="nav-item"><a href="../pages/04-iam-fundamentals.html" class=""><span class="num">04</span>IAM — fundamentals (users, groups, roles, policies)</a></li><li class="nav-item"><a href="../pages/05-iam-advanced.html" class=""><span class="num">05</span>IAM advanced: conditional policies, STS, ABAC</a></li><li class="nav-item"><a href="../pages/06-cli-sdk-iac.html" class=""><span class="num">06</span>CLI, SDK, CloudShell, IaC primer</a></li><li class="nav-item"><a href="../pages/07-pricing-billing.html" class=""><span class="num">07</span>Pricing, billing, free tier, cost tools</a></li><li class="nav-item"><a href="../pages/08-organizations-multi-account.html" class=""><span class="num">08</span>AWS Organizations &amp; multi-account strategy</a></li><li class="nav-item"><a href="../pages/09-vpc-fundamentals.html" class=""><span class="num">09</span>VPC — fundamentals</a></li><li class="nav-item"><a href="../pages/10-vpc-advanced.html" class=""><span class="num">10</span>VPC advanced: peering, TGW, PrivateLink, endpoints</a></li><li class="nav-item"><a href="../pages/11-route53-cloudfront.html" class=""><span class="num">11</span>Route 53, CloudFront, Global Accelerator</a></li><li class="nav-item"><a href="../pages/12-hybrid-vpn-directconnect.html" class=""><span class="num">12</span>Hybrid: VPN, Direct Connect, PrivateLink</a></li><li class="nav-item"><a href="../pages/13-ec2-fundamentals.html" class=""><span class="num">13</span>EC2 — fundamentals (instances, AMIs, lifecycle)</a></li><li class="nav-item"><a href="../pages/14-ec2-advanced-spot-nitro.html" class=""><span class="num">14</span>EC2 advanced — Spot, Placement Groups, Nitro, hibernation</a></li><li class="nav-item"><a href="../pages/15-asg-elb.html" class=""><span class="num">15</span>Auto Scaling Groups + Elastic Load Balancing</a></li><li class="nav-item"><a href="../pages/16-lambda-deep-dive.html" class=""><span class="num">16</span>Lambda deep dive</a></li><li class="nav-item"><a href="../pages/17-containers-ecs-eks-fargate.html" class=""><span class="num">17</span>Containers: ECS, EKS, Fargate, ECR</a></li><li class="nav-item"><a href="../pages/18-specialty-compute.html" class=""><span class="num">18</span>Specialty compute: Batch, Lightsail, Outposts, Wavelength, Beanstalk</a></li><li class="nav-item"><a href="../pages/19-ebs-efs-fsx.html" class=""><span class="num">19</span>EBS, EFS, FSx, Instance Store</a></li><li class="nav-item"><a href="../pages/20-s3-deep-dive.html" class=""><span class="num">20</span>S3 — deep dive</a></li><li class="nav-item"><a href="../pages/21-archive-snow-gateway-backup.html" class=""><span class="num">21</span>Glacier, Snow, Storage Gateway, DataSync, AWS Backup</a></li><li class="nav-item"><a href="../pages/22-rds.html" class=""><span class="num">22</span>RDS — managed relational DBs (engines, Multi-AZ, replicas, Proxy)</a></li><li class="nav-item"><a href="../pages/23-aurora-deep-dive.html" class=""><span class="num">23</span>Aurora deep dive — shared storage, Serverless v2, Global Database</a></li><li class="nav-item"><a href="../pages/24-dynamodb-deep-dive.html" class=""><span class="num">24</span>DynamoDB deep dive — partitions, GSI, Streams, single-table</a></li><li class="nav-item"><a href="../pages/25-purpose-built-dbs.html" class=""><span class="num">25</span>Purpose-built DBs — ElastiCache, MemoryDB, Neptune, DocumentDB, Keyspaces, Timestream, QLDB</a></li><li class="nav-item"><a href="../pages/26-redshift-data-warehousing.html" class=""><span class="num">26</span>Redshift — MPP data warehousing and zero-ETL</a></li><li class="nav-item"><a href="../pages/27-sqs-sns-eventbridge.html" class=""><span class="num">27</span>SQS, SNS, EventBridge — messaging and events</a></li><li class="nav-item"><a href="../pages/28-step-functions-mq-appflow.html" class=""><span class="num">28</span>Step Functions, MQ, AppFlow — orchestration and integration</a></li><li class="nav-item"><a href="../pages/29-athena-glue-lakeformation.html" class=""><span class="num">29</span>Athena, Glue, Lake Formation — the AWS data lake</a></li><li class="nav-item"><a href="../pages/30-emr-kinesis-msk.html" class=""><span class="num">30</span>EMR, Kinesis, MSK — big data and streaming</a></li><li class="nav-item"><a href="../pages/31-opensearch-quicksight.html" class=""><span class="num">31</span>OpenSearch and QuickSight — search and BI</a></li><li class="nav-item"><a href="../pages/32-sagemaker-overview.html" class=""><span class="num">32</span>SageMaker — the end-to-end ML platform</a></li><li class="nav-item"><a href="../pages/33-bedrock-ai-services.html" class=""><span class="num">33</span>Bedrock and AI services — managed GenAI and ML</a></li><li class="nav-item"><a href="../pages/34-iac-cloudformation-cdk-terraform.html" class=""><span class="num">34</span>IaC on AWS — CloudFormation, CDK, SAM, Terraform</a></li><li class="nav-item"><a href="../pages/35-ci-cd-pipeline.html" class=""><span class="num">35</span>CI/CD on AWS — CodePipeline, CodeBuild, CodeDeploy, CodeCatalyst</a></li><li class="nav-item"><a href="../pages/36-observability-cloudwatch-xray.html" class=""><span class="num">36</span>Observability — CloudWatch, X-Ray, CloudTrail, Config, SSM</a></li><li class="nav-item"><a href="../pages/37-kms-secrets-acm.html" class=""><span class="num">37</span>Encryption — KMS, CloudHSM, Secrets Manager, Parameter Store, ACM</a></li><li class="nav-item"><a href="../pages/38-waf-shield-guardduty-inspector.html" class=""><span class="num">38</span>Threat detection — WAF, Shield, GuardDuty, Inspector, Macie, Security Hub</a></li><li class="nav-item"><a href="../pages/39-governance-org-controltower-identitycenter.html" class=""><span class="num">39</span>Governance — Organizations, Control Tower, Identity Center</a></li><li class="nav-item"><a href="../pages/40-migration-mgn-dms-snow.html" class=""><span class="num">40</span>Migration — MGN, DMS, Snow family, Discovery, Migration Hub</a></li><li class="nav-item"><a href="../pages/41-cost-optimization-finops.html" class=""><span class="num">41</span>Cost optimization and FinOps</a></li><li class="nav-item"><a href="../pages/42-well-architected.html" class="active"><span class="num">42</span>Well-Architected Framework — 6 pillars, lenses, review</a></li><li class="nav-item"><a href="../pages/43-architecture-patterns.html" class=""><span class="num">43</span>Architecture patterns — 3-tier, serverless, event-driven, microservices</a></li><li class="nav-item"><a href="../pages/44-disaster-recovery-multi-region.html" class=""><span class="num">44</span>Disaster Recovery and Multi-Region</a></li><li class="nav-item"><a href="../pages/45-reference-architectures.html" class=""><span class="num">45</span>Real-world reference architectures</a></li><li class="nav-item"><a href="../pages/46-advanced-networking.html" class=""><span class="num">46</span>Advanced networking deep dive</a></li><li class="nav-item"><a href="../pages/47-containers-deep-dive.html" class=""><span class="num">47</span>Containers deep dive — EKS, Karpenter, service mesh</a></li><li class="nav-item"><a href="../pages/48-serverless-patterns.html" class=""><span class="num">48</span>Serverless patterns deep dive</a></li><li class="nav-item"><a href="../pages/49-genai-rag-agents.html" class=""><span class="num">49</span>Generative AI on AWS — RAG and Agents</a></li><li class="nav-item"><a href="../pages/50-aws-certifications.html" class=""><span class="num">50</span>AWS Certifications — roadmap and study guide</a></li><li class="nav-item"><a href="../pages/51-glossary-az.html" class=""><span class="num">51</span>Glossary A-Z</a></li><li class="nav-item"><a href="../pages/52-cheatsheet.html" class=""><span class="num">52</span>Cheat sheet: services, limits, instance families</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Architecture</span>
+        <span>Section 42 of 52</span>
+        <span class="level-tag level-int">Level: intermediate</span>
+      </div>
+      <h1>Well-Architected Framework — 6 pillars, lenses, review</h1>
+      <p class="summary">AWS framework to evaluate and improve architectures: 6 pillars (Operational Excellence, Security, Reliability, Performance, Cost, Sustainability), WA Tool, domain lenses and recurring design principles.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Architecture</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>sections 1-15</li></ul>
+  <div class="label">Tools / references</div>
+  <ul class="source-list"><li>AWS Well-Architected Tool</li><li>AWS Trusted Advisor</li></ul>
+</div>
+      <p>The <strong>Well-Architected Framework (WAF)</strong> is the official AWS manual for designing and reviewing cloud workloads. It's not a product: it's a set of questions, principles and best practices grouped into <strong>6 pillars</strong>, supported by the <strong>Well-Architected Tool</strong> (free) to run formal reviews and track remediation over time.</p>
+<h2 id="1-the-6-pillars">1. The 6 pillars</h2>
+<p>Originally 5, <strong>Sustainability</strong> was added in 2021 as the sixth pillar in line with ESG goals.</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Pillar</th>
+<th>Key question</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>Operational Excellence</strong></td>
+<td>How do you run and evolve the system in production?</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>Security</strong></td>
+<td>How do you protect data, systems and assets?</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>Reliability</strong></td>
+<td>How do you recover from failure and manage capacity?</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>Performance Efficiency</strong></td>
+<td>How do you use compute/storage/network efficiently?</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>Cost Optimization</strong></td>
+<td>How do you avoid waste and extract value from the cloud?</td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>Sustainability</strong></td>
+<td>How do you minimize environmental impact (energy, hardware)?</td>
+</tr>
+</tbody>
+</table>
+<p>Each pillar has <strong>design principles</strong> (e.g. "automate everything", "design for failure", "stop guessing capacity") and <strong>best practices</strong> grouped by area.</p>
+<h2 id="2-recurring-design-principles">2. Recurring design principles</h2>
+<p>Cross-pillar, they are the "cloud-native DNA":</p>
+<ul>
+<li><strong>Loosely coupled</strong>: components communicate via API/events, not direct references.</li>
+<li><strong>Design for failure</strong>: every component can fail; tolerate partial failures.</li>
+<li><strong>Automate everything</strong>: IaC + CI/CD + automated runbooks. No manual production clicks.</li>
+<li><strong>Scale horizontally</strong>: many small instances &gt; one large (no SPOF, elastic capacity).</li>
+<li><strong>Test recovery</strong>: chaos engineering, gameday, tested backup restores (not just taken).</li>
+<li><strong>Stop guessing capacity</strong>: use auto-scaling, serverless, elastic managed services.</li>
+<li><strong>Right-size continuously</strong>: monitoring and Compute Optimizer to avoid over-provisioning.</li>
+</ul>
+<h2 id="3-well-architected-tool-review">3. Well-Architected Tool — review</h2>
+<p>Free tool in the AWS console. Create a <strong>workload</strong> (name, environment, regions), pick the pillars and answer 40-60 questions per pillar.</p>
+<p>Each answer produces one of three risk levels:</p>
+<ul>
+<li><strong>High Risk Issue (HRI)</strong>: urgent remediation.</li>
+<li><strong>Medium Risk Issue (MRI)</strong>: plan remediation.</li>
+<li><strong>No risk</strong>: ok.</li>
+</ul>
+<p>The tool generates a <strong>prioritized improvement plan</strong> with links to documentation and concrete actions. You can save <strong>milestones</strong> (snapshots of the review) to track progress over time, and use <strong>custom lenses</strong> to add company-specific questions (e.g. internal banking compliance).</p>
+<h2 id="4-domain-lenses">4. Domain lenses</h2>
+<p><strong>Lenses</strong> extend the framework to vertical domains with targeted questions.</p>
+<table>
+<thead>
+<tr>
+<th>Lens</th>
+<th>When to use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Serverless</strong></td>
+<td>Lambda + API Gateway + DynamoDB workloads</td>
+</tr>
+<tr>
+<td><strong>SaaS</strong></td>
+<td>Multi-tenant, isolation, per-tenant billing</td>
+</tr>
+<tr>
+<td><strong>IoT</strong></td>
+<td>Device fleet, edge processing, telemetry</td>
+</tr>
+<tr>
+<td><strong>Machine Learning</strong></td>
+<td>MLOps pipeline, training, inference</td>
+</tr>
+<tr>
+<td><strong>Foundation Model Operations (FMOps)</strong></td>
+<td>LLM/GenAI: RAG, evaluation, guardrails</td>
+</tr>
+<tr>
+<td><strong>HPC</strong></td>
+<td>MPI, EFA, FSx Lustre, parallel compute</td>
+</tr>
+<tr>
+<td><strong>Data Analytics</strong></td>
+<td>Lakehouse, Redshift, Athena, Glue</td>
+</tr>
+<tr>
+<td><strong>Financial Services Industry</strong></td>
+<td>Banking/insurance compliance</td>
+</tr>
+<tr>
+<td><strong>Government / Healthcare</strong></td>
+<td>Regulated sectors</td>
+</tr>
+</tbody>
+</table>
+<p>Multiple lenses can apply to the same workload (e.g. a multi-tenant GenAI system uses SaaS Lens + FMOps Lens).</p>
+<h2 id="5-review-architecture-diagram">5. Review architecture — diagram</h2>
+<pre><code class="language-mermaid">flowchart TB
+    A[Identified workload] --&gt; B[Define scope&lt;br/&gt;regions, envs, pillars]
+    B --&gt; C[Apply lenses&lt;br/&gt;core + verticals]
+    C --&gt; D{Answer questions&lt;br/&gt;per pillar}
+    D --&gt; E[Tool generates&lt;br/&gt;HRI/MRI risk profile]
+    E --&gt; F[Prioritized&lt;br/&gt;improvement plan]
+    F --&gt; G[Execute remediations&lt;br/&gt;engineering backlog]
+    G --&gt; H[Save milestone]
+    H --&gt; I{Periodic&lt;br/&gt;re-review}
+    I --&gt;|quarterly/yearly| D
+    F --&gt; J[Trusted Advisor&lt;br/&gt;automated tech checks]
+    J --&gt; F
+    F --&gt; K[WA Partner Program&lt;br/&gt;free external review]
+</code></pre>
+<h2 id="6-trusted-advisor-connection">6. Trusted Advisor — connection</h2>
+<p><strong>Trusted Advisor</strong> is the "automated cousin": runs continuous technical checks (open Security Groups, underutilized EC2s, public S3 buckets, root MFA, service limits near cap) and classifies them by pillar. With <strong>Business or Enterprise Support</strong> all ~115 checks unlock; the Basic plan gives only 7.</p>
+<p>WA review is <strong>strategic and human</strong>; Trusted Advisor is <strong>tactical and automated</strong>. They complement each other: TA produces evidence to answer WA questions.</p>
+<h2 id="7-aws-wa-partner-program">7. AWS WA Partner Program</h2>
+<p><strong>Well-Architected Partners</strong> (AWS-certified consulting firms) can run external reviews. AWS often funds <strong>AWS credits</strong> to cover HRI remediation costs (yearly-budgeted program, request via account manager). Useful for independent audits and to unlock funding.</p>
+<h2 id="8-common-anti-patterns">8. Common anti-patterns</h2>
+<ul>
+<li><strong>"One and done"</strong>: review done once and never again. WA is a continuous process (re-review every 6 months).</li>
+<li><strong>Paper answers</strong>: saying "yes we have backups" without tested evidence.</li>
+<li><strong>Ignoring Sustainability</strong>: often skipped; actually overlaps with Cost (right-sizing = fewer watts).</li>
+<li><strong>Confusing core and specialized lenses</strong>: the serverless lens does <em>not</em> replace the 6 core lenses — it integrates them.</li>
+<li><strong>No workload owner</strong>: the remediation plan is unassigned and dies in a spreadsheet.</li>
+</ul>
+<h2 id="9-exercise">9. Exercise</h2>
+<details>
+<summary>A fintech app with Lambda + DynamoDB + Cognito, multi-tenant. Which lenses do you apply?</summary>
+
+**Core WAF** (6 pillars, always) + **Serverless Lens** (Lambda architecture) + **SaaS Lens** (multi-tenant, isolation, metering) + **Financial Services Industry Lens** (PCI-DSS compliance, audit trail, encryption, KYC/AML controls).
+
+Output: ~3x the questions of a base review, but complete coverage. Prioritize Security HRIs (e.g. tenant data leak) before Performance MRIs.
+</details>
+
+<details>
+<summary>WA Tool flags an HRI "no multi-AZ on RDS". How do you respond?</summary>
+
+1. Create an **engineering backlog ticket** with high priority.
+2. Plan Multi-AZ enablement (requires ~10 min failover downtime or use Aurora with minimal disruption).
+3. Add a **gameday** to the runbook to test failover (inject fault with Fault Injection Service).
+4. Update the review in WA Tool, mark the question resolved, save **milestone "post-RDS-HA"**.
+5. Add an automated Trusted Advisor check to prevent regressions.
+</details>
+
+<blockquote>
+<p><strong>Summary</strong>: WAF = 6 pillars (Ops, Sec, Rel, Perf, Cost, Sustainability) + recurring design principles (loose coupling, design for failure, automate, scale horizontal, test recovery); WA Tool runs formal review with HRI/MRI + milestones; specialized lenses (Serverless, SaaS, FMOps, HPC...) extend the framework; Trusted Advisor is the complementary automated check; WA Partner Program can fund remediation with AWS credits.</p>
+</blockquote>
+      <nav class="pager">
+<a href="41-cost-optimization-finops.html" class="prev"><span class="label">← Previous</span><span class="title">Cost optimization and FinOps</span></a>
+<a href="43-architecture-patterns.html" class="next"><span class="label">Next →</span><span class="title">Architecture patterns — 3-tier, serverless, event-driven, microservices</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>AWS Zero to Hero</strong> — complete path, in English, from primitives to advanced architecture.</p><p>Open educational material. No sponsorships, no affiliate links, no affiliation with AWS. When a concept is unclear, go back: AWS is a pyramid of primitives, not a tree you skip across.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+</body>
+</html>

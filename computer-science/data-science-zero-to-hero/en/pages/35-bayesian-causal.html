@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bayesian and Causal Inference — Data Science Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#3a4a7a',primaryTextColor:'#e8eef0',primaryBorderColor:'#5a6aa0',lineColor:'#8a9499',background:'#11171a'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">Σ</div>
+      <div>
+        <div class="brand-title">DATA SCIENCE</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/35-bayesian-causal.html" class="lang-link" title="Passa all'italiano">🇮🇹 IT</a><span class="lang-active" title="English">🇬🇧 EN</span></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="search... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-what-is-data-science.html" class=""><span class="num">01</span>What is data science (and what isn&#x27;t)</a></li><li class="nav-item"><a href="../pages/02-python-for-data-science.html" class=""><span class="num">02</span>Python for data science: pro setup</a></li><li class="nav-item"><a href="../pages/02b-math-essentials.html" class=""><span class="num">02b</span>High-school math you actually need</a></li><li class="nav-item"><a href="../pages/03-linear-algebra.html" class=""><span class="num">03</span>Linear algebra for data scientists</a></li><li class="nav-item"><a href="../pages/04-calculus-optimization.html" class=""><span class="num">04</span>Calculus, gradients, and optimization</a></li><li class="nav-item"><a href="../pages/05-probability.html" class=""><span class="num">05</span>Probability: the language of uncertainty</a></li><li class="nav-item"><a href="../pages/06-descriptive-statistics.html" class=""><span class="num">06</span>Descriptive statistics</a></li><li class="nav-item"><a href="../pages/07-inferential-statistics.html" class=""><span class="num">07</span>Inferential statistics and hypothesis testing</a></li><li class="nav-item"><a href="../pages/08-distributions.html" class=""><span class="num">08</span>Probability distributions you&#x27;ll meet</a></li><li class="nav-item"><a href="../pages/09-numpy.html" class=""><span class="num">09</span>NumPy: thinking in arrays</a></li><li class="nav-item"><a href="../pages/10-pandas.html" class=""><span class="num">10</span>Pandas: the swiss army knife</a></li><li class="nav-item"><a href="../pages/11-sql.html" class=""><span class="num">11</span>SQL for data scientists</a></li><li class="nav-item"><a href="../pages/12-visualization.html" class=""><span class="num">12</span>Visualization: matplotlib, seaborn, plotly</a></li><li class="nav-item"><a href="../pages/13-data-wrangling.html" class=""><span class="num">13</span>Cleaning and data wrangling</a></li><li class="nav-item"><a href="../pages/14-feature-engineering.html" class=""><span class="num">14</span>Feature engineering</a></li><li class="nav-item"><a href="../pages/15-eda.html" class=""><span class="num">15</span>EDA: Exploratory Data Analysis</a></li><li class="nav-item"><a href="../pages/16-ml-fundamentals.html" class=""><span class="num">16</span>ML: fundamentals — bias, variance, validation</a></li><li class="nav-item"><a href="../pages/17-linear-regression.html" class=""><span class="num">17</span>Linear regression and regularization</a></li><li class="nav-item"><a href="../pages/18-logistic-regression.html" class=""><span class="num">18</span>Logistic regression and classification</a></li><li class="nav-item"><a href="../pages/19-knn-naive-bayes-svm.html" class=""><span class="num">19</span>KNN, Naive Bayes, SVM</a></li><li class="nav-item"><a href="../pages/20-decision-trees.html" class=""><span class="num">20</span>Decision trees</a></li><li class="nav-item"><a href="../pages/21-random-forest-boosting.html" class=""><span class="num">21</span>Random Forest, Gradient Boosting, XGBoost</a></li><li class="nav-item"><a href="../pages/22-clustering.html" class=""><span class="num">22</span>Clustering: K-Means, DBSCAN, GMM, hierarchical</a></li><li class="nav-item"><a href="../pages/23-pca-tsne-umap.html" class=""><span class="num">23</span>Dimensionality reduction: PCA, t-SNE, UMAP</a></li><li class="nav-item"><a href="../pages/24-metrics-validation.html" class=""><span class="num">24</span>Metrics, cross-validation, leakage</a></li><li class="nav-item"><a href="../pages/25-class-imbalance.html" class=""><span class="num">25</span>Class imbalance</a></li><li class="nav-item"><a href="../pages/26-hyperparameter-tuning.html" class=""><span class="num">26</span>Hyperparameter tuning</a></li><li class="nav-item"><a href="../pages/27-neural-networks.html" class=""><span class="num">27</span>Neural networks: from fundamentals to backprop</a></li><li class="nav-item"><a href="../pages/28-pytorch.html" class=""><span class="num">28</span>PyTorch: from toy model to training loop</a></li><li class="nav-item"><a href="../pages/29-cnn.html" class=""><span class="num">29</span>CNN for computer vision</a></li><li class="nav-item"><a href="../pages/30-rnn-lstm.html" class=""><span class="num">30</span>RNN, LSTM, GRU for sequences</a></li><li class="nav-item"><a href="../pages/31-transformer.html" class=""><span class="num">31</span>Transformer and attention</a></li><li class="nav-item"><a href="../pages/32-nlp-llm.html" class=""><span class="num">32</span>NLP: from text mining to LLMs</a></li><li class="nav-item"><a href="../pages/33-time-series.html" class=""><span class="num">33</span>Time series and forecasting</a></li><li class="nav-item"><a href="../pages/34-mlops.html" class=""><span class="num">34</span>MLOps: deployment, monitoring, drift</a></li><li class="nav-item"><a href="../pages/35-bayesian-causal.html" class="active"><span class="num">35</span>Bayesian and Causal Inference</a></li><li class="nav-item"><a href="../pages/36-capstone-career.html" class=""><span class="num">36</span>Capstone, portfolio, career</a></li><li class="nav-item"><a href="../pages/37-glossary.html" class=""><span class="num">37</span>Glossary A-Z</a></li><li class="nav-item"><a href="../pages/38-formula-sheet.html" class=""><span class="num">38</span>Formula Sheet: all the formulas from the course</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Advanced</span>
+        <span>Section 36 of 39</span>
+        <span class="level-tag level-exp">Level: expert</span>
+      </div>
+      <h1>Bayesian and Causal Inference</h1>
+      <p class="summary">PyMC and probabilistic programming, hierarchical models, causal inference, DAGs, advanced A/B testing, ethics and fairness.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Advanced</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>[[probability]]</li><li>[[inferential-statistics]]</li></ul>
+  <div class="label">Tools</div>
+  <ul class="source-list"><li>PyMC, ArviZ, DoWhy, EconML</li></ul>
+</div>
+      <h2 id="bayesianism-in-1-minute">Bayesianism in 1 minute</h2>
+<p>For a Bayesian, parameters <strong>are random variables</strong>. Everything revolves around:</p>
+<p>$$P(\theta | D) = \frac{P(D | \theta) P(\theta)}{P(D)}$$</p>
+<ul>
+<li><strong>Prior</strong> $P(\theta)$: knowledge before the data.</li>
+<li><strong>Likelihood</strong> $P(D|\theta)$: probability of the data given $\theta$.</li>
+<li><strong>Posterior</strong> $P(\theta|D)$: what you want.</li>
+</ul>
+<p>Unlike the frequentist approach, you get a <strong>distribution</strong> over the parameter, not a point estimate + CI. You can say things like "there is a 95% probability that $\mu \in [a, b]$" — something a frequentist cannot.</p>
+<h2 id="pymc-probabilistic-programming">PyMC: probabilistic programming</h2>
+<pre><code class="language-bash">pip install pymc arviz
+</code></pre>
+<p>Example: estimating the mean and variance of Gaussian data:</p>
+<pre><code class="language-python">import pymc as pm
+import numpy as np
+import arviz as az
+
+data = np.random.normal(5, 2, 100)
+
+with pm.Model() as model:
+    mu = pm.Normal('mu', mu=0, sigma=10)
+    sigma = pm.HalfNormal('sigma', sigma=10)
+    y = pm.Normal('y', mu=mu, sigma=sigma, observed=data)
+    trace = pm.sample(2000, tune=1000, chains=4)
+
+az.summary(trace)
+az.plot_posterior(trace)
+</code></pre>
+<p><code>pm.sample()</code> uses MCMC (NUTS, No-U-Turn Sampler) to sample from the posterior. Output: posterior for <code>mu</code> and <code>sigma</code>.</p>
+<h2 id="hierarchical-models">Hierarchical models</h2>
+<p>The Bayesian's secret weapon. When you have groups (e.g. cities, schools, products) with few data points each:</p>
+<pre><code class="language-python">import pymc as pm
+with pm.Model() as model:
+    # hyperparameters (global)
+    mu_global = pm.Normal('mu_global', 0, 10)
+    sigma_global = pm.HalfNormal('sigma_global', 5)
+    # per-group parameters
+    mu_group = pm.Normal('mu_group', mu_global, sigma_global, shape=n_groups)
+    sigma_obs = pm.HalfNormal('sigma_obs', 5)
+    y = pm.Normal('y', mu_group[group_idx], sigma_obs, observed=y_data)
+    trace = pm.sample()
+</code></pre>
+<p><strong>Partial pooling</strong> transfers information between groups: small groups "borrow" from the global mean. Better than "no pooling" (one model per group) and "complete pooling" (a single model for all).</p>
+<h2 id="bayesian-ab-test">Bayesian A/B test</h2>
+<p>For two variations with conversion rates $p_A$ and $p_B$, prior Beta(1,1):</p>
+<pre><code class="language-python">import pymc as pm
+with pm.Model():
+    pA = pm.Beta('pA', 1, 1)
+    pB = pm.Beta('pB', 1, 1)
+    pm.Binomial('yA', n=nA, p=pA, observed=conv_A)
+    pm.Binomial('yB', n=nB, p=pB, observed=conv_B)
+    diff = pm.Deterministic('diff', pB - pA)
+    trace = pm.sample(2000)
+print(f&quot;P(B &gt; A): {(trace.posterior['diff'] &gt; 0).mean().item():.3f}&quot;)
+</code></pre>
+<p>Direct output: "B is better than A with probability 0.92". More interpretable than a p-value.</p>
+<h2 id="when-to-choose-bayesian">When to choose Bayesian</h2>
+<ul>
+<li>Few data points per group, many groups → hierarchical models.</li>
+<li>You want to incorporate prior knowledge.</li>
+<li>You need to quantify uncertainty in a "natural" way.</li>
+<li>Complex non-linear / non-standard models.</li>
+</ul>
+<p>Downsides: slow (MCMC), steep learning curve.</p>
+<h2 id="causal-inference">Causal inference</h2>
+<p>One of the most important frontiers for senior data scientists.</p>
+<h3 id="correlation-causation-again">Correlation ≠ causation (again)</h3>
+<p>The classic example: people who take aspirin are more likely to recover from a headache <strong>compared to those who don't</strong>. But those who take it probably had a more severe headache to begin with. <strong>Confounding</strong>.</p>
+<p>To estimate the causal effect, you need a mechanism that simulates "if we had given aspirin to everyone / no one", not just observed correlation.</p>
+<h3 id="the-gold-standard-rct">The gold standard: RCT</h3>
+<p>Randomized Controlled Trial. You assign the treatment randomly → groups are comparable on average. Difference between groups = causal effect.</p>
+<p>In tech, RCT = A/B test. In medicine = clinical trial.</p>
+<blockquote>
+<p><strong>Always prefer RCT</strong> when feasible. Every observational causal method is a workaround when you cannot randomize.</p>
+</blockquote>
+<h3 id="dags-and-do-calculus">DAGs and do-calculus</h3>
+<p>Pearl formalized causal reasoning via <strong>DAGs</strong> (Directed Acyclic Graphs). An arrow $X \to Y$ means "X causes Y".</p>
+<p>The <strong>back-door criterion</strong>: to measure the causal effect of $X$ on $Y$, control for a set $Z$ that "blocks" all indirect paths $X \leftarrow ... \rightarrow Y$.</p>
+<p>Example:</p>
+<pre><code class="language-mermaid">flowchart LR
+    A[Age] --&gt; F[Smoking]
+    A --&gt; M[Disease]
+    F --&gt; M
+</code></pre>
+<p>If you want the effect of Smoking on Disease, you must <strong>control for Age</strong> (it is a confounder). Otherwise the smoking-disease correlation includes part of the age effect.</p>
+<h3 id="quasi-experimental-designs">Quasi-experimental designs</h3>
+<p>When you cannot randomize:</p>
+<ul>
+<li><strong>Difference-in-differences (DiD)</strong>: compares changes over time between treated and control groups.</li>
+<li><strong>Regression discontinuity (RD)</strong>: exploits a cutoff that separates treated and control units.</li>
+<li><strong>Instrumental variables (IV)</strong>: a variable that influences the treatment but not the outcome directly.</li>
+<li><strong>Synthetic control</strong>: construct a "synthetic control" as a combination of untreated units.</li>
+<li><strong>Propensity score matching</strong>: match treated and untreated units with similar probabilities of receiving the treatment.</li>
+</ul>
+<h3 id="dowhy-econml">DoWhy + EconML</h3>
+<pre><code class="language-python">from dowhy import CausalModel
+model = CausalModel(
+    data=df, treatment='T', outcome='Y',
+    common_causes=['age','income','education']
+)
+identified_estimand = model.identify_effect()
+estimate = model.estimate_effect(identified_estimand, method_name=&quot;backdoor.propensity_score_matching&quot;)
+refute = model.refute_estimate(identified_estimand, estimate, method_name=&quot;random_common_cause&quot;)
+</code></pre>
+<p>EconML adds ML-based methods (Double ML, Causal Forests).</p>
+<h2 id="ethics-and-fairness">Ethics and fairness</h2>
+<p>A reliable model is not enough. Consider:</p>
+<h3 id="fairness-metrics">Fairness metrics</h3>
+<ul>
+<li><strong>Demographic parity</strong>: same positive rate across groups.</li>
+<li><strong>Equal opportunity</strong>: same TPR across groups.</li>
+<li><strong>Equalized odds</strong>: same TPR and FPR across groups.</li>
+</ul>
+<p>These metrics are often <strong>mutually incompatible</strong> (impossibility theorem, Kleinberg 2016). You must choose.</p>
+<h3 id="bias-in-data">Bias in data</h3>
+<ul>
+<li>Historical (data reflecting past discrimination).</li>
+<li>Selection (who is in the dataset?).</li>
+<li>Measurement (is the label a proxy for the true target?).</li>
+</ul>
+<p>Tools: <code>fairlearn</code>, <code>aif360</code>.</p>
+<h3 id="guidelines">Guidelines</h3>
+<ol>
+<li><strong>Data audit</strong> before the model.</li>
+<li><strong>Define relevant protected groups</strong> (ethnicity, gender, age).</li>
+<li><strong>Measure</strong> performance per group.</li>
+<li><strong>Discuss tradeoffs</strong> with non-technical stakeholders.</li>
+<li><strong>Document</strong>: who was excluded and why.</li>
+</ol>
+<h2 id="exercises">Exercises</h2>
+<details>
+<summary>Exercise 1 — Bayesian inference on a proportion</summary>
+
+
+<pre><code class="language-python">import pymc as pm
+with pm.Model():
+    p = pm.Beta('p', 1, 1)
+    pm.Binomial('y', n=100, p=p, observed=18)
+    trace = pm.sample(2000)
+import arviz as az
+print(az.summary(trace))
+# estimate ~ 0.18 with 95% HDI [0.11, 0.26]
+</code></pre>
+
+</details>
+
+<details>
+<summary>Exercise 2 — Hierarchical model</summary>
+
+You have conversions for 10 cities with very different sample sizes (some with 5000 visitors, others with 50). Estimate the conversion rate per city with partial pooling.
+
+Expected result: cities with little data are "pulled toward the global mean", while those with many data points remain close to their empirical rate.
+</details>
+
+<details>
+<summary>Exercise 3 — Identify the confounder</summary>
+
+The data show that drinking coffee correlates with lung cancer. Question: causal?
+
+**Answer**: the likely confounder is **smoking**. Smokers drink more coffee and also smoke. Control for smoking in the model and the coffee effect disappears.
+
+Lesson: before modeling, draw the DAG.
+</details>
+
+<details>
+<summary>Exercise 4 — Fairness audit</summary>
+
+On a credit scoring model, compute TPR and FPR per group (e.g. male vs female).
+
+
+<pre><code class="language-python">from fairlearn.metrics import MetricFrame, true_positive_rate, false_positive_rate
+mf = MetricFrame(
+    metrics={'TPR': true_positive_rate, 'FPR': false_positive_rate},
+    y_true=y_test, y_pred=y_pred,
+    sensitive_features=df_test['gender']
+)
+print(mf.by_group)
+</code></pre>
+
+
+If large differences → problem. Mitigation techniques: reweighing, adversarial debiasing, per-group thresholds.
+</details>
+
+<h2 id="key-takeaways">Key takeaways</h2>
+<ul>
+<li>Bayesian = distribution over parameters, direct interpretation.</li>
+<li>Hierarchical models for data with a "groups" structure.</li>
+<li>RCT &gt; observational methods, always when possible.</li>
+<li>DAGs and the back-door criterion for causal analysis.</li>
+<li>Fairness is not optional: measure, document, discuss.</li>
+</ul>
+<p>Next: capstone and career.</p>
+      <nav class="pager">
+<a href="34-mlops.html" class="prev"><span class="label">← Previous</span><span class="title">MLOps: deployment, monitoring, drift</span></a>
+<a href="36-capstone-career.html" class="next"><span class="label">Next →</span><span class="title">Capstone, portfolio, career</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Data Science Zero to Hero</strong> — complete path, in English, from math to deployment.</p><p>Open didactic material. Formulas are here to be understood, not feared. When a concept is unclear, go back: data science is a pyramid, not a tree you skip across.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+</body>
+</html>

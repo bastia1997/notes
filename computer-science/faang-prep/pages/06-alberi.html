@@ -1,0 +1,785 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Alberi (binary tree e BST) — FAANG Prep</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">F</div>
+      <div>
+        <div class="brand-title">FAANG Prep</div>
+        <div class="brand-subtitle">DS&amp;A · System Design</div>
+      </div>
+    </div>
+    <div class="lang-bar">
+      <a class="lang-switcher" href="../en/pages/06-trees.html" title="English"><span class="flag-icon">🇬🇧</span><span class="flag-label">English</span></a>
+    </div>
+  </div>
+  <div class="search-wrap">
+    <input class="search-input" id="search-input" placeholder="Cerca nei contenuti... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/00-introduzione.html" class=""><span class="num">00</span>Introduzione e come usare questo percorso</a></li><li class="nav-item"><a href="../pages/01-complessita.html" class=""><span class="num">01</span>Complessità computazionale (Big-O)</a></li><li class="nav-item"><a href="../pages/02-array-stringhe.html" class=""><span class="num">02</span>Array e stringhe</a></li><li class="nav-item"><a href="../pages/03-hashmap-set.html" class=""><span class="num">03</span>Hashmap e set</a></li><li class="nav-item"><a href="../pages/04-linked-list.html" class=""><span class="num">04</span>Linked list</a></li><li class="nav-item"><a href="../pages/05-stack-coda.html" class=""><span class="num">05</span>Stack e coda</a></li><li class="nav-item"><a href="../pages/06-alberi.html" class="active"><span class="num">06</span>Alberi (binary tree e BST)</a></li><li class="nav-item"><a href="../pages/07-heap.html" class=""><span class="num">07</span>Heap e priority queue</a></li><li class="nav-item"><a href="../pages/08-grafi.html" class=""><span class="num">08</span>Grafi</a></li><li class="nav-item"><a href="../pages/09-trie.html" class=""><span class="num">09</span>Trie (prefix tree)</a></li><li class="nav-item"><a href="../pages/10-ricorsione-backtracking.html" class=""><span class="num">10</span>Ricorsione e backtracking</a></li><li class="nav-item"><a href="../pages/11-sorting-searching.html" class=""><span class="num">11</span>Sorting e searching</a></li><li class="nav-item"><a href="../pages/12-two-pointers-sliding-window.html" class=""><span class="num">12</span>Two pointers e sliding window</a></li><li class="nav-item"><a href="../pages/13-greedy.html" class=""><span class="num">13</span>Greedy</a></li><li class="nav-item"><a href="../pages/14-dp.html" class=""><span class="num">14</span>Dynamic programming</a></li><li class="nav-item"><a href="../pages/15-bit-manipulation.html" class=""><span class="num">15</span>Bit manipulation</a></li><li class="nav-item"><a href="../pages/16-oop-design-patterns.html" class=""><span class="num">16</span>OOP e design patterns</a></li><li class="nav-item"><a href="../pages/17-system-design.html" class=""><span class="num">17</span>System design — fondamenti</a></li><li class="nav-item"><a href="../pages/18-system-design-esempi.html" class=""><span class="num">18</span>System design — esempi end-to-end</a></li><li class="nav-item"><a href="../pages/19-concorrenza.html" class=""><span class="num">19</span>Concorrenza e parallelismo</a></li><li class="nav-item"><a href="../pages/20-database-sql.html" class=""><span class="num">20</span>Database e SQL</a></li><li class="nav-item"><a href="../pages/21-os-networking.html" class=""><span class="num">21</span>OS e networking</a></li><li class="nav-item"><a href="../pages/22-coding-patterns.html" class=""><span class="num">22</span>I 16 coding patterns dei colloqui</a></li><li class="nav-item"><a href="../pages/23-behavioral-star.html" class=""><span class="num">23</span>Behavioral interview — STAR e Amazon LP</a></li><li class="nav-item"><a href="../pages/24-mock-interviews.html" class=""><span class="num">24</span>Mock interview e strategia in colloquio</a></li><li class="nav-item"><a href="../pages/25-roadmap-90-giorni.html" class=""><span class="num">25</span>Roadmap 90 giorni — piano operativo</a></li><li class="nav-item"><a href="../pages/26-banca-esercizi.html" class=""><span class="num">26</span>Banca esercizi — 200+ problemi FAANG</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Strutture dati</span>
+        <span>Sezione 6 di 26</span>
+      </div>
+      <h1>Alberi (binary tree e BST)</h1>
+      <p class="summary">Dalla zero — cos&#x27;è un albero, l&#x27;analogia della famiglia, ricorsione su alberi spiegata 3 volte, traversals visualizzati.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Strutture dati</div>
+  
+  
+</div>
+      <p>Almeno il <strong>20%</strong> dei problemi medium nei colloqui FAANG riguarda alberi. La buona notizia: padroneggiando i fondamenti, <strong>tutti i problemi seguono lo stesso schema mentale</strong>.</p>
+<p>In questo capitolo costruiamo l'intuizione da zero. La chiave non è memorizzare codice: è imparare a pensare ricorsivamente.</p>
+<h2 id="parte-1-cose-un-albero">Parte 1 — Cos'è un albero</h2>
+<h3 id="lanalogia-della-famiglia-la-migliore">L'analogia della famiglia (la migliore)</h3>
+<p>Pensa a un albero genealogico:</p>
+<pre><code class="language-mermaid">flowchart TD
+    Anna --&gt; Bruno
+    Anna --&gt; Carlo
+    Bruno --&gt; Dario
+    Bruno --&gt; Elena
+    Carlo --&gt; Fabio
+</code></pre>
+<p>Anna ha due figli, Bruno e Carlo. Bruno ha a sua volta due figli (Dario e Elena). Carlo ha un solo figlio (Fabio). Dario, Elena e Fabio non hanno figli (sono "foglie").</p>
+<p>In CS, un albero è la stessa cosa:</p>
+<ul>
+<li>Un nodo speciale chiamato <strong>root</strong> (la "matriarca").</li>
+<li>Ogni nodo può avere <strong>figli</strong> (children).</li>
+<li>Un nodo senza figli è una <strong>foglia</strong> (leaf).</li>
+<li>Ogni nodo (eccetto root) ha esattamente <strong>un genitore</strong> (parent).</li>
+</ul>
+<h3 id="definizione-formale">Definizione formale</h3>
+<p>Un albero è un grafo connesso, <strong>aciclico</strong> (senza cicli), <strong>diretto</strong> (le frecce vanno da padre a figli) e <strong>gerarchico</strong> (un solo "punto di partenza", la root).</p>
+<h3 id="albero-binario">Albero binario</h3>
+<p>L'albero più studiato: ogni nodo ha <strong>al massimo 2 figli</strong>, chiamati <code>left</code> e <code>right</code>.</p>
+<pre><code class="language-python">class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+</code></pre>
+<p>In memoria, un albero binario "vive" come una rete di oggetti collegati da puntatori, simile alla linked list.</p>
+<h3 id="terminologia">Terminologia</h3>
+<p>Imparala una volta per tutte:</p>
+<ul>
+<li><strong>Root</strong>: il nodo "in cima". L'unico senza genitore.</li>
+<li><strong>Parent / Child</strong>: relazione padre-figlio.</li>
+<li><strong>Sibling</strong>: nodi con stesso padre.</li>
+<li><strong>Leaf</strong>: nodo senza figli.</li>
+<li><strong>Internal node</strong>: nodo non-foglia.</li>
+<li><strong>Depth</strong> di un nodo: numero di archi dal root al nodo. Root ha depth 0.</li>
+<li><strong>Height</strong> di un nodo: numero massimo di archi dal nodo a una foglia. Foglie hanno height 0.</li>
+<li><strong>Height dell'albero</strong> = height del root.</li>
+<li><strong>Subtree</strong>: un nodo + tutti i suoi discendenti.</li>
+</ul>
+<h3 id="tipi-speciali-di-alberi">Tipi speciali di alberi</h3>
+<ul>
+<li><strong>Albero pieno (full)</strong>: ogni nodo ha 0 o 2 figli.</li>
+<li><strong>Albero completo (complete)</strong>: tutti i livelli pieni tranne forse l'ultimo, riempito da sinistra.</li>
+<li><strong>Albero perfetto (perfect)</strong>: full + tutte le foglie alla stessa profondità.</li>
+<li><strong>Albero bilanciato</strong>: per ogni nodo, |height(left) − height(right)| ≤ 1.</li>
+</ul>
+<p>Perché ci importa? Perché in un albero <strong>bilanciato</strong> con <code>n</code> nodi, l'altezza è <strong>O(log n)</strong>. Tutte le operazioni che scendono "verticalmente" diventano O(log n).</p>
+<p>In uno <strong>sbilanciato</strong> (es. "lista" — ogni nodo ha solo figlio sinistro), l'altezza è O(n). Tutto degenera.</p>
+<h2 id="parte-2-pensare-ricorsivamente-la-chiave-di-tutto">Parte 2 — Pensare ricorsivamente: la chiave di tutto</h2>
+<h3 id="lanalogia-dellamministratore-delegato">L'analogia dell'amministratore delegato</h3>
+<p>Sei l'AD di un'azienda. Il direttivo ti chiede: "qual è il fatturato totale dell'azienda?".</p>
+<p>Tu non vai personalmente in ogni filiale a contare. Chiedi al CEO di ogni divisione: <em>"qual è il fatturato della TUA divisione?"</em>. Ognuno fa lo stesso con i suoi subordinati, fino agli impiegati base.</p>
+<p>Tu <strong>sommi</strong> le risposte e dai il totale.</p>
+<p>Questo è esattamente come si pensa ricorsivamente su alberi: <strong>delega ai figli e combina</strong>.</p>
+<h3 id="il-pattern-universale">Il pattern universale</h3>
+<p>Per quasi ogni problema su alberi, la funzione ricorsiva segue questo schema:</p>
+<pre><code class="language-python">def solve(node):
+    # 1. Base case: cosa succede su un nodo None?
+    if not node:
+        return base_value
+
+    # 2. Risolvi sui figli
+    left_result = solve(node.left)
+    right_result = solve(node.right)
+
+    # 3. Combina i risultati con questo nodo
+    return combine(node.val, left_result, right_result)
+</code></pre>
+<p>Devi solo decidere:</p>
+<ul>
+<li><strong>Cosa ritorna la chiamata ricorsiva?</strong> (la "domanda" che fai al figlio)</li>
+<li><strong>Cos'è il base case?</strong></li>
+<li><strong>Come combini i risultati?</strong></li>
+</ul>
+<h3 id="esempi-del-pattern">Esempi del pattern</h3>
+<p><strong>1. Altezza dell'albero</strong></p>
+<p>Domanda al figlio: "qual è la tua altezza?"</p>
+<pre><code class="language-python">def height(node):
+    if not node: return 0
+    return 1 + max(height(node.left), height(node.right))
+</code></pre>
+<p><strong>2. Conta nodi</strong></p>
+<p>Domanda al figlio: "quanti nodi hai?"</p>
+<pre><code class="language-python">def count(node):
+    if not node: return 0
+    return 1 + count(node.left) + count(node.right)
+</code></pre>
+<p><strong>3. Somma valori</strong></p>
+<p>Domanda al figlio: "qual è la somma dei tuoi valori?"</p>
+<pre><code class="language-python">def sum_tree(node):
+    if not node: return 0
+    return node.val + sum_tree(node.left) + sum_tree(node.right)
+</code></pre>
+<p><strong>4. Trova max</strong></p>
+<pre><code class="language-python">def find_max(node):
+    if not node: return float('-inf')
+    return max(node.val, find_max(node.left), find_max(node.right))
+</code></pre>
+<p>Notalo: una volta capito il pattern, sono tutti uguali. Cambia solo il <code>combine</code>.</p>
+<h2 id="parte-3-traversals-i-4-modi-di-visitare-un-albero">Parte 3 — Traversals: i 4 modi di visitare un albero</h2>
+<p>Visitare un albero significa "passare per tutti i nodi una volta". I 4 ordini fondamentali:</p>
+<h3 id="preorder-root-left-right">Preorder: ROOT → LEFT → RIGHT</h3>
+<pre><code class="language-python">def preorder(node):
+    if not node: return
+    print(node.val)            # ROOT: prima visita
+    preorder(node.left)
+    preorder(node.right)
+</code></pre>
+<p>Visualizzazione su:</p>
+<pre><code class="language-mermaid">flowchart TD
+    A --&gt; B
+    A --&gt; C
+    B --&gt; D
+    B --&gt; E
+</code></pre>
+<p>Preorder visita: <strong>A, B, D, E, C</strong>.</p>
+<p><strong>Quando usarlo</strong>: quando devi processare il nodo prima dei suoi figli. Es. copiare un albero, serialize.</p>
+<h3 id="inorder-left-root-right">Inorder: LEFT → ROOT → RIGHT</h3>
+<pre><code class="language-python">def inorder(node):
+    if not node: return
+    inorder(node.left)
+    print(node.val)
+    inorder(node.right)
+</code></pre>
+<p>Stesso albero: <strong>D, B, E, A, C</strong>.</p>
+<p><strong>Magia con BST</strong>: inorder su un Binary Search Tree dà i valori <strong>in ordine crescente</strong>.</p>
+<h3 id="postorder-left-right-root">Postorder: LEFT → RIGHT → ROOT</h3>
+<pre><code class="language-python">def postorder(node):
+    if not node: return
+    postorder(node.left)
+    postorder(node.right)
+    print(node.val)
+</code></pre>
+<p>Stesso albero: <strong>D, E, B, C, A</strong>.</p>
+<p><strong>Quando usarlo</strong>: quando devi processare i figli prima del nodo. Es. eliminare un albero (devi cancellare i figli prima), calcoli che dipendono dai risultati dei figli (altezza, somma).</p>
+<h3 id="level-order-bfs">Level order (BFS)</h3>
+<p>Visita livello per livello, sinistra a destra:</p>
+<pre><code class="language-python">from collections import deque
+def level_order(root):
+    if not root: return
+    q = deque([root])
+    while q:
+        node = q.popleft()
+        print(node.val)
+        if node.left: q.append(node.left)
+        if node.right: q.append(node.right)
+</code></pre>
+<p>Stesso albero: <strong>A, B, C, D, E</strong>.</p>
+<p><strong>Quando usarlo</strong>: shortest path in archi non pesati, processi per livello (es. zigzag, right side view, min depth).</p>
+<h3 id="riassunto-pratico">Riassunto pratico</h3>
+<table>
+<thead>
+<tr>
+<th>Cosa devi fare</th>
+<th>Traversal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Visita BST in ordine crescente</td>
+<td>Inorder</td>
+</tr>
+<tr>
+<td>Validare BST</td>
+<td>Inorder (deve essere strettamente crescente)</td>
+</tr>
+<tr>
+<td>Copia / clone</td>
+<td>Preorder</td>
+</tr>
+<tr>
+<td>Serialize</td>
+<td>Preorder (con marker per null)</td>
+</tr>
+<tr>
+<td>Calcoli che richiedono i figli</td>
+<td>Postorder</td>
+</tr>
+<tr>
+<td>Eliminazione sicura</td>
+<td>Postorder</td>
+</tr>
+<tr>
+<td>Stampa livello per livello</td>
+<td>BFS</td>
+</tr>
+<tr>
+<td>Profondità minima</td>
+<td>BFS (early exit alla prima foglia)</td>
+</tr>
+<tr>
+<td>Profondità massima</td>
+<td>DFS (postorder o preorder)</td>
+</tr>
+<tr>
+<td>Trovare nodo per valore</td>
+<td>Preorder con early exit</td>
+</tr>
+</tbody>
+</table>
+<h3 id="dfs-iterativo-con-stack-esplicito">DFS iterativo (con stack esplicito)</h3>
+<p>Per alberi profondi <code>n &gt; 10⁴</code>, lo stack di ricorsione può esplodere. Allora si usa stack esplicito.</p>
+<pre><code class="language-python">def preorder_iter(root):
+    if not root: return []
+    st = [root]
+    out = []
+    while st:
+        n = st.pop()
+        out.append(n.val)
+        if n.right: st.append(n.right)   # right prima!
+        if n.left: st.append(n.left)
+    return out
+</code></pre>
+<p>Trucco: <code>right</code> prima sullo stack, così <code>left</code> viene poppato per primo (LIFO).</p>
+<p>Inorder iterativo è più sottile:</p>
+<pre><code class="language-python">def inorder_iter(root):
+    st = []
+    cur = root
+    out = []
+    while cur or st:
+        while cur:
+            st.append(cur)
+            cur = cur.left
+        cur = st.pop()
+        out.append(cur.val)
+        cur = cur.right
+    return out
+</code></pre>
+<p>Idea: scendi tutto a sinistra (push tutto sullo stack), poi pop, vai a destra, ripeti.</p>
+<h2 id="parte-4-binary-search-tree-bst">Parte 4 — Binary Search Tree (BST)</h2>
+<h3 id="definizione">Definizione</h3>
+<p>Un BST è un albero binario dove, per <strong>ogni nodo</strong>:</p>
+<ul>
+<li>Tutti i valori nel sottoalbero <strong>sinistro</strong> sono <strong>minori</strong> del nodo.</li>
+<li>Tutti i valori nel sottoalbero <strong>destro</strong> sono <strong>maggiori</strong> del nodo.</li>
+</ul>
+<pre><code class="language-mermaid">flowchart TD
+    n5((5)) --&gt; n3((3))
+    n5 --&gt; n8((8))
+    n3 --&gt; n1((1))
+    n3 --&gt; n4((4))
+    n8 --&gt; n9((9))
+</code></pre>
+<p>Notare: 1 &lt; 3 &lt; 4 &lt; 5 &lt; 8 &lt; 9. <strong>Inorder = sequenza ordinata</strong>.</p>
+<h3 id="operazioni">Operazioni</h3>
+<p><strong>Search</strong>: scendi a sinistra se il target è minore, a destra se maggiore.</p>
+<pre><code class="language-python">def search_bst(root, target):
+    cur = root
+    while cur and cur.val != target:
+        cur = cur.left if target &lt; cur.val else cur.right
+    return cur
+</code></pre>
+<p>O(h) tempo, dove <code>h</code> è l'altezza. Per BST <strong>bilanciato</strong>: O(log n). Per sbilanciato: O(n).</p>
+<p><strong>Insert</strong>: come search, ma a fine cammino crei un nodo.</p>
+<pre><code class="language-python">def insert_bst(root, val):
+    if not root: return TreeNode(val)
+    if val &lt; root.val:
+        root.left = insert_bst(root.left, val)
+    else:
+        root.right = insert_bst(root.right, val)
+    return root
+</code></pre>
+<p><strong>Delete</strong>: tre casi:</p>
+<ol>
+<li>Foglia: rimuovi.</li>
+<li>Un figlio: scollega, attacca il figlio al genitore.</li>
+<li>Due figli: trova il successore inorder (più piccolo del sottoalbero destro), copia il suo valore nel nodo da eliminare, elimina il successore (caso 1 o 2).</li>
+</ol>
+<h3 id="bilanciamento">Bilanciamento</h3>
+<p>Inserendo valori già ordinati in un BST, ottieni una lista degenere → O(n).</p>
+<p>Inserendo 1, 2, 3, 4, 5 in ordine:</p>
+<pre><code class="language-mermaid">flowchart TD
+    n1((1)) --&gt; n2((2))
+    n2 --&gt; n3((3))
+    n3 --&gt; n4((4))
+    n4 --&gt; n5((5))
+</code></pre>
+<p>Per garantire O(log n), servono <strong>BST auto-bilancianti</strong>: AVL, Red-Black, Treap, B-tree. Non implementarli in colloquio (1 giornata di codice). Sappi solo che esistono e che <code>set</code>/<code>dict</code> di Python NON sono BST (sono hashmap).</p>
+<h2 id="parte-5-lowest-common-ancestor-lca">Parte 5 — Lowest Common Ancestor (LCA)</h2>
+<p>Il primo antenato comune di due nodi. Problema classico, due varianti:</p>
+<h3 id="lca-su-bst">LCA su BST</h3>
+<p>Sfrutta la proprietà BST: scendi finché i due target sono "splittati" (uno a sinistra, uno a destra). Quel nodo è LCA.</p>
+<pre><code class="language-python">def lca_bst(root, p, q):
+    while root:
+        if p.val &lt; root.val and q.val &lt; root.val:
+            root = root.left
+        elif p.val &gt; root.val and q.val &gt; root.val:
+            root = root.right
+        else:
+            return root   # splittano qui
+</code></pre>
+<h3 id="lca-su-albero-binario-generico">LCA su albero binario generico</h3>
+<p>Senza BST property. Ricorsione "trova p o q che bubble-up".</p>
+<pre><code class="language-python">def lca(root, p, q):
+    if not root or root is p or root is q:
+        return root
+    L = lca(root.left, p, q)
+    R = lca(root.right, p, q)
+    if L and R: return root   # p e q in sottoalberi diversi → root è LCA
+    return L or R              # entrambi nello stesso sottoalbero
+</code></pre>
+<p><strong>Perché funziona?</strong> La ricorsione restituisce:</p>
+<ul>
+<li><code>None</code> se né p né q sono nel sottoalbero.</li>
+<li><code>p</code> o <code>q</code> se solo uno è.</li>
+<li>L'LCA se entrambi sono.</li>
+</ul>
+<p>Quando il root vede uno in left e uno in right → è lui l'LCA. Altrimenti propaga.</p>
+<h2 id="parte-6-trappole-comuni">Parte 6 — Trappole comuni</h2>
+<h3 id="trappola-1-validare-bst-con-solo-confronti-locali">Trappola 1 — Validare BST con solo confronti locali</h3>
+<pre><code class="language-python"># SBAGLIATO:
+def is_bst(node):
+    if not node: return True
+    if node.left and node.left.val &gt;= node.val: return False
+    if node.right and node.right.val &lt;= node.val: return False
+    return is_bst(node.left) and is_bst(node.right)
+</code></pre>
+<p>Questo passa su <code>[5, 1, 4, null, null, 3, 6]</code>:</p>
+<pre><code class="language-mermaid">flowchart TD
+    n5((5)) --&gt; n1((1))
+    n5 --&gt; n4((4))
+    n4 --&gt; n3((3))
+    n4 --&gt; n6((6))
+    style n3 stroke:#ff6b6b,stroke-width:3px
+</code></pre>
+<p>Confronto locale: 4 ha 3 &lt; 4 ✓ e 6 &gt; 4 ✓. Sembra OK. <strong>Ma è sbagliato</strong>: 3 deve essere &gt; 5 perché è nel sottoalbero destro di 5.</p>
+<p><strong>Corretto</strong>: passa giù i bound (min, max).</p>
+<pre><code class="language-python">def is_bst(node, lo=float('-inf'), hi=float('inf')):
+    if not node: return True
+    if not (lo &lt; node.val &lt; hi): return False
+    return is_bst(node.left, lo, node.val) and is_bst(node.right, node.val, hi)
+</code></pre>
+<h3 id="trappola-2-stack-overflow-su-alberi-sbilanciati">Trappola 2 — Stack overflow su alberi sbilanciati</h3>
+<p>Per un albero "lista" con n = 10⁵, lo stack di ricorsione supera il limite Python (default ~1000).</p>
+<p>Soluzione: aumenta limite (<code>sys.setrecursionlimit(10**6)</code>) o usa stack esplicito.</p>
+<h3 id="trappola-3-none-checks-dimenticati">Trappola 3 — None checks dimenticati</h3>
+<p>Quasi ogni bug su alberi nasce da <code>node.left.val</code> dove <code>node.left is None</code>.</p>
+<p>Idiom sicuro: <code>if node.left:</code> o <code>node.left.val if node.left else default</code>.</p>
+<h3 id="trappola-4-confondere-altezza-e-profondita">Trappola 4 — Confondere "altezza" e "profondità"</h3>
+<ul>
+<li><strong>Depth</strong>: dall'alto al nodo (root = 0).</li>
+<li><strong>Height</strong>: dal nodo al basso (foglie = 0).</li>
+</ul>
+<p>Sono dual. Confonderli porta a bug off-by-one.</p>
+<h3 id="trappola-5-iterare-un-dict-mentre-lo-modifichi">Trappola 5 — Iterare un dict mentre lo modifichi</h3>
+<p>Vale anche con <code>Counter</code> di valori d'albero. Usa <code>list(d.items())</code>.</p>
+<h2 id="esercizi-guidati">Esercizi guidati</h2>
+<h3 id="esercizio-61-maximum-depth-easy">Esercizio 6.1 — Maximum Depth <span class="problem-tag easy">EASY</span></h3>
+<details><summary>Soluzione</summary>
+
+
+<pre><code class="language-python">def max_depth(root):
+    if not root: return 0
+    return 1 + max(max_depth(root.left), max_depth(root.right))
+</code></pre>
+
+
+Pattern ricorsivo classico. Chiedi ai figli "qual è la tua profondità?", aggiungi 1.
+</details>
+
+<h3 id="esercizio-62-invert-binary-tree-easy">Esercizio 6.2 — Invert Binary Tree <span class="problem-tag easy">EASY</span></h3>
+<p>Specchia (swap left/right ricorsivamente).</p>
+<details><summary>Soluzione</summary>
+
+
+<pre><code class="language-python">def invert(root):
+    if not root: return None
+    root.left, root.right = invert(root.right), invert(root.left)
+    return root
+</code></pre>
+
+
+Problema reso famoso dal tweet di Max Howell: *"Google: 90% of our engineers use the software you wrote (Homebrew), but you can't invert a binary tree on a whiteboard so f*** off"*.
+</details>
+
+<h3 id="esercizio-63-same-tree-easy">Esercizio 6.3 — Same Tree <span class="problem-tag easy">EASY</span></h3>
+<details><summary>Soluzione</summary>
+
+
+<pre><code class="language-python">def same(a, b):
+    if not a and not b: return True
+    if not a or not b: return False
+    return a.val == b.val and same(a.left, b.left) and same(a.right, b.right)
+</code></pre>
+
+</details>
+
+<h3 id="esercizio-64-symmetric-tree-easy">Esercizio 6.4 — Symmetric Tree <span class="problem-tag easy">EASY</span></h3>
+<p>L'albero è specchiato attorno alla root?</p>
+<details><summary>Soluzione</summary>
+
+
+<pre><code class="language-python">def is_sym(root):
+    def mirror(a, b):
+        if not a and not b: return True
+        if not a or not b: return False
+        return a.val == b.val and mirror(a.left, b.right) and mirror(a.right, b.left)
+    return mirror(root, root) if root else True
+</code></pre>
+
+
+Funzione di supporto `mirror(a, b)` che controlla se due sottoalberi sono mirror image l'uno dell'altro.
+</details>
+
+<h3 id="esercizio-65-balanced-binary-tree-easy">Esercizio 6.5 — Balanced Binary Tree <span class="problem-tag easy">EASY</span></h3>
+<details><summary>Ragionamento</summary>
+
+**Naive**: per ogni nodo, calcola altezza dei due figli e confronta. O(n²).
+
+**Ottimo**: in una sola passata. La ricorsione ritorna l'altezza, oppure `-1` se sbilanciato (sentinella). Se un sottoalbero è già sbilanciato, propaga `-1` su.
+
+
+<pre><code class="language-python">def is_balanced(root):
+    def h(node):
+        if not node: return 0
+        l = h(node.left)
+        if l == -1: return -1
+        r = h(node.right)
+        if r == -1 or abs(l - r) &gt; 1: return -1
+        return 1 + max(l, r)
+    return h(root) != -1
+</code></pre>
+
+
+O(n).
+
+**Lezione**: a volte "early exit" si fa con valore sentinella nella ricorsione.
+</details>
+
+<h3 id="esercizio-66-diameter-easy">Esercizio 6.6 — Diameter <span class="problem-tag easy">EASY</span></h3>
+<p>Numero massimo di archi tra due nodi qualsiasi.</p>
+<details><summary>Ragionamento</summary>
+
+Il diametro **passando per un nodo specifico** = (altezza sinistra) + (altezza destra).
+
+Quindi: ricorsione che calcola altezza, e in parallelo aggiorna un `best` globale con `left_h + right_h`.
+
+
+<pre><code class="language-python">def diameter(root):
+    best = 0
+    def h(node):
+        nonlocal best
+        if not node: return 0
+        l = h(node.left)
+        r = h(node.right)
+        best = max(best, l + r)
+        return 1 + max(l, r)
+    h(root)
+    return best
+</code></pre>
+
+
+**Lezione (importante)**: il "trucco delle due variabili":
+
+- La **funzione ricorsiva** ritorna qualcosa che serve al padre per essere combinabile (qui: altezza).
+- La **variabile globale/nonlocal** traccia il "miglior risultato globale" attraversando i nodi.
+
+Questo trucco è usato in MOLTI problemi hard sugli alberi.
+</details>
+
+<h3 id="esercizio-67-validate-bst-medium">Esercizio 6.7 — Validate BST <span class="problem-tag medium">MEDIUM</span></h3>
+<details><summary>Soluzione</summary>
+
+Vedi parte 6 trappola 1.
+</details>
+
+<h3 id="esercizio-68-lca-binary-tree-medium">Esercizio 6.8 — LCA (Binary Tree) <span class="problem-tag medium">MEDIUM</span></h3>
+<details><summary>Soluzione</summary>
+
+Vedi parte 5.
+</details>
+
+<h3 id="esercizio-69-path-sum-ii-medium">Esercizio 6.9 — Path Sum II <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Tutti i cammini root→foglia con somma = target.</p>
+<details><summary>Soluzione (con backtracking)</summary>
+
+
+<pre><code class="language-python">def path_sum(root, target):
+    res = []
+    def dfs(node, path, rem):
+        if not node: return
+        path.append(node.val)
+        if not node.left and not node.right and rem == node.val:
+            res.append(path[:])   # IMPORTANTE: copia!
+        else:
+            dfs(node.left, path, rem - node.val)
+            dfs(node.right, path, rem - node.val)
+        path.pop()   # backtrack
+    dfs(root, [], target)
+    return res
+</code></pre>
+
+
+Pattern backtracking: appendi prima di ricorrere, pop al ritorno. Risultati salvati per copia (`path[:]`), altrimenti tutti puntano alla stessa lista.
+</details>
+
+<h3 id="esercizio-610-level-order-traversal-medium">Esercizio 6.10 — Level Order Traversal <span class="problem-tag medium">MEDIUM</span></h3>
+<details><summary>Soluzione</summary>
+
+BFS che raccoglie nodi per livello:
+
+
+<pre><code class="language-python">def level_order(root):
+    if not root: return []
+    q = deque([root])
+    out = []
+    while q:
+        level = []
+        for _ in range(len(q)):  # numero di nodi del livello corrente
+            n = q.popleft()
+            level.append(n.val)
+            if n.left: q.append(n.left)
+            if n.right: q.append(n.right)
+        out.append(level)
+    return out
+</code></pre>
+
+
+Trucco: `for _ in range(len(q))` ti dà la dimensione del livello prima di iniziare ad aggiungere il livello successivo.
+</details>
+
+<h3 id="esercizio-611-right-side-view-medium">Esercizio 6.11 — Right Side View <span class="problem-tag medium">MEDIUM</span></h3>
+<details><summary>Soluzione</summary>
+
+BFS, prendi l'ultimo nodo di ogni livello:
+
+
+<pre><code class="language-python">def right_view(root):
+    if not root: return []
+    q = deque([root])
+    res = []
+    while q:
+        size = len(q)
+        for i in range(size):
+            n = q.popleft()
+            if i == size - 1:
+                res.append(n.val)   # ultimo del livello
+            if n.left: q.append(n.left)
+            if n.right: q.append(n.right)
+    return res
+</code></pre>
+
+</details>
+
+<h3 id="esercizio-612-kth-smallest-in-bst-medium">Esercizio 6.12 — Kth Smallest in BST <span class="problem-tag medium">MEDIUM</span></h3>
+<details><summary>Soluzione</summary>
+
+Inorder iterativo, ferma al k-esimo.
+
+
+<pre><code class="language-python">def kth_smallest(root, k):
+    st = []
+    cur = root
+    while True:
+        while cur:
+            st.append(cur)
+            cur = cur.left
+        cur = st.pop()
+        k -= 1
+        if k == 0: return cur.val
+        cur = cur.right
+</code></pre>
+
+
+O(h + k). Bonus: implementazione lazy.
+</details>
+
+<h3 id="esercizio-613-serializedeserialize-binary-tree-hard">Esercizio 6.13 — Serialize/Deserialize Binary Tree <span class="problem-tag hard">HARD</span></h3>
+<details><summary>Soluzione</summary>
+
+Preorder con marker `'#'` per null.
+
+
+<pre><code class="language-python">class Codec:
+    def serialize(self, root):
+        out = []
+        def go(n):
+            if not n:
+                out.append('#'); return
+            out.append(str(n.val))
+            go(n.left); go(n.right)
+        go(root)
+        return ' '.join(out)
+
+    def deserialize(self, data):
+        it = iter(data.split())
+        def build():
+            v = next(it)
+            if v == '#': return None
+            n = TreeNode(int(v))
+            n.left = build()
+            n.right = build()
+            return n
+        return build()
+</code></pre>
+
+
+Preorder è scelta naturale: l'ordine di visita è anche l'ordine in cui ricostruisci.
+</details>
+
+<h3 id="esercizio-614-binary-tree-maximum-path-sum-hard">Esercizio 6.14 — Binary Tree Maximum Path Sum <span class="problem-tag hard">HARD</span></h3>
+<p>Somma massima di un cammino tra due nodi qualsiasi (può anche essere un solo nodo).</p>
+<details><summary>Ragionamento (importante)</summary>
+
+Stesso trucco di Diameter, generalizzato.
+
+La funzione ricorsiva ritorna: **miglior somma scendendo dal nodo verso UN solo dei figli** (compositiva).
+
+La variabile globale traccia: **miglior somma attraversando questo nodo come "piega"** (passando da sinistra a destra attraverso il nodo).
+
+
+<pre><code class="language-python">def max_path_sum(root):
+    best = float('-inf')
+    def gain(node):
+        nonlocal best
+        if not node: return 0
+        l = max(gain(node.left), 0)   # se negativo, scarta
+        r = max(gain(node.right), 0)
+        best = max(best, node.val + l + r)   # &quot;piega&quot; qui
+        return node.val + max(l, r)          # propaga su solo un lato
+    gain(root)
+    return best
+</code></pre>
+
+
+**Trucco**: `max(..., 0)` per scartare contributi negativi. Se aggiungere un sottoalbero peggiora, meglio non aggiungerlo.
+
+Pattern d'oro: la funzione **non ritorna** ciò che vuoi (best), ritorna ciò che **serve al padre** per essere composto. Il "tuo" risultato viaggia in una variabile esterna.
+</details>
+
+<h3 id="esercizio-615-construct-from-preorder-inorder-medium">Esercizio 6.15 — Construct from Preorder + Inorder <span class="problem-tag medium">MEDIUM</span></h3>
+<details><summary>Ragionamento</summary>
+
+**Insight**: il primo elemento di preorder è la **root**. Trovala in inorder → tutto a sinistra è il sottoalbero sinistro, tutto a destra il destro.
+
+
+<pre><code class="language-python">def build_tree(preorder, inorder):
+    idx = {v: i for i, v in enumerate(inorder)}
+    pre_it = iter(preorder)
+    def go(lo, hi):
+        if lo &gt; hi: return None
+        val = next(pre_it)
+        n = TreeNode(val)
+        m = idx[val]
+        n.left = go(lo, m - 1)
+        n.right = go(m + 1, hi)
+        return n
+    return go(0, len(inorder) - 1)
+</code></pre>
+
+
+O(n) con hashmap per lookup inorder.
+
+Trace su `preorder = [3,9,20,15,7]`, `inorder = [9,3,15,20,7]`:
+
+- root = 3. In inorder, 3 è all'indice 1. Left subtree: inorder[0:1] = [9]. Right: inorder[2:5] = [15,20,7].
+- Procedo ricorsivamente. Per left: preorder.next = 9 → TreeNode(9), niente figli.
+- Per right: preorder.next = 20 → TreeNode(20). In inorder right è all'indice 3. Left subtree: [15]. Right: [7].
+- ... e così via.
+
+Albero finale:
+
+
+<pre><code class="language-mermaid">flowchart TD
+    n3((3)) --&gt; n9((9))
+    n3 --&gt; n20((20))
+    n20 --&gt; n15((15))
+    n20 --&gt; n7((7))
+</code></pre>
+
+</details>
+
+<h2 id="riassunto-del-capitolo">Riassunto del capitolo</h2>
+<ol>
+<li><strong>Albero = root + figli ricorsivamente</strong>. Pensa "famiglia".</li>
+<li><strong>Pensiero ricorsivo</strong>: chiedi ai figli, combina. Non fare "tutto in una funzione iterativa".</li>
+<li><strong>4 traversals</strong>: preorder, inorder, postorder, BFS. Sai a memoria a cosa servono.</li>
+<li><strong>BST</strong>: inorder = sequenza ordinata. Search O(h).</li>
+<li><strong>Pattern "due variabili"</strong>: ricorsione ritorna ciò che serve al padre; variabile globale traccia il best globale.</li>
+<li><strong>Trappola n.1</strong>: validate BST richiede bound, non solo confronti locali.</li>
+</ol>
+<p>Quando padroneggi alberi, sei pronto per <strong>grafi</strong> (cap. 08). Un albero è un caso speciale di grafo. Tutti gli algoritmi che impariamo sugli alberi (DFS, BFS, ricorsione) si generalizzano.</p>
+      <nav class="pager">
+<a href="05-stack-coda.html" class="prev"><span class="label">← Precedente</span><span class="title">Stack e coda</span></a>
+<a href="07-heap.html" class="next"><span class="label">Successivo →</span><span class="title">Heap e priority queue</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>FAANG Prep</strong> — percorso completo di preparazione: DS&amp;A, system design, behavioral. Costruito per spaccare ai colloqui di Big Tech.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-index.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true,
+      background: '#161922',
+      primaryColor: '#1d2230',
+      primaryTextColor: '#e6e8ee',
+      primaryBorderColor: '#6cf',
+      lineColor: '#7a8194',
+      secondaryColor: '#262b3a',
+      tertiaryColor: '#0f1117',
+      mainBkg: '#1d2230',
+      secondBkg: '#262b3a',
+      tertiaryBkg: '#161922',
+      nodeBorder: '#6cf',
+      clusterBkg: '#161922',
+      clusterBorder: '#262b3a',
+      titleColor: '#6cf',
+      edgeLabelBackground: '#161922',
+      fontFamily: 'Cascadia Code, monospace'
+    }
+  });
+  document.querySelectorAll('pre > code.language-mermaid').forEach((codeEl) => {
+    const pre = codeEl.parentElement;
+    const div = document.createElement('div');
+    div.className = 'mermaid';
+    div.textContent = codeEl.textContent;
+    pre.replaceWith(div);
+  });
+  mermaid.run();
+</script>
+</body>
+</html>

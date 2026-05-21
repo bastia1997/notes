@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inferential statistics and hypothesis testing — Data Science Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#3a4a7a',primaryTextColor:'#e8eef0',primaryBorderColor:'#5a6aa0',lineColor:'#8a9499',background:'#11171a'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">Σ</div>
+      <div>
+        <div class="brand-title">DATA SCIENCE</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/07-statistica-inferenziale.html" class="lang-link" title="Passa all'italiano">🇮🇹 IT</a><span class="lang-active" title="English">🇬🇧 EN</span></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="search... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-what-is-data-science.html" class=""><span class="num">01</span>What is data science (and what isn&#x27;t)</a></li><li class="nav-item"><a href="../pages/02-python-for-data-science.html" class=""><span class="num">02</span>Python for data science: pro setup</a></li><li class="nav-item"><a href="../pages/02b-math-essentials.html" class=""><span class="num">02b</span>High-school math you actually need</a></li><li class="nav-item"><a href="../pages/03-linear-algebra.html" class=""><span class="num">03</span>Linear algebra for data scientists</a></li><li class="nav-item"><a href="../pages/04-calculus-optimization.html" class=""><span class="num">04</span>Calculus, gradients, and optimization</a></li><li class="nav-item"><a href="../pages/05-probability.html" class=""><span class="num">05</span>Probability: the language of uncertainty</a></li><li class="nav-item"><a href="../pages/06-descriptive-statistics.html" class=""><span class="num">06</span>Descriptive statistics</a></li><li class="nav-item"><a href="../pages/07-inferential-statistics.html" class="active"><span class="num">07</span>Inferential statistics and hypothesis testing</a></li><li class="nav-item"><a href="../pages/08-distributions.html" class=""><span class="num">08</span>Probability distributions you&#x27;ll meet</a></li><li class="nav-item"><a href="../pages/09-numpy.html" class=""><span class="num">09</span>NumPy: thinking in arrays</a></li><li class="nav-item"><a href="../pages/10-pandas.html" class=""><span class="num">10</span>Pandas: the swiss army knife</a></li><li class="nav-item"><a href="../pages/11-sql.html" class=""><span class="num">11</span>SQL for data scientists</a></li><li class="nav-item"><a href="../pages/12-visualization.html" class=""><span class="num">12</span>Visualization: matplotlib, seaborn, plotly</a></li><li class="nav-item"><a href="../pages/13-data-wrangling.html" class=""><span class="num">13</span>Cleaning and data wrangling</a></li><li class="nav-item"><a href="../pages/14-feature-engineering.html" class=""><span class="num">14</span>Feature engineering</a></li><li class="nav-item"><a href="../pages/15-eda.html" class=""><span class="num">15</span>EDA: Exploratory Data Analysis</a></li><li class="nav-item"><a href="../pages/16-ml-fundamentals.html" class=""><span class="num">16</span>ML: fundamentals — bias, variance, validation</a></li><li class="nav-item"><a href="../pages/17-linear-regression.html" class=""><span class="num">17</span>Linear regression and regularization</a></li><li class="nav-item"><a href="../pages/18-logistic-regression.html" class=""><span class="num">18</span>Logistic regression and classification</a></li><li class="nav-item"><a href="../pages/19-knn-naive-bayes-svm.html" class=""><span class="num">19</span>KNN, Naive Bayes, SVM</a></li><li class="nav-item"><a href="../pages/20-decision-trees.html" class=""><span class="num">20</span>Decision trees</a></li><li class="nav-item"><a href="../pages/21-random-forest-boosting.html" class=""><span class="num">21</span>Random Forest, Gradient Boosting, XGBoost</a></li><li class="nav-item"><a href="../pages/22-clustering.html" class=""><span class="num">22</span>Clustering: K-Means, DBSCAN, GMM, hierarchical</a></li><li class="nav-item"><a href="../pages/23-pca-tsne-umap.html" class=""><span class="num">23</span>Dimensionality reduction: PCA, t-SNE, UMAP</a></li><li class="nav-item"><a href="../pages/24-metrics-validation.html" class=""><span class="num">24</span>Metrics, cross-validation, leakage</a></li><li class="nav-item"><a href="../pages/25-class-imbalance.html" class=""><span class="num">25</span>Class imbalance</a></li><li class="nav-item"><a href="../pages/26-hyperparameter-tuning.html" class=""><span class="num">26</span>Hyperparameter tuning</a></li><li class="nav-item"><a href="../pages/27-neural-networks.html" class=""><span class="num">27</span>Neural networks: from fundamentals to backprop</a></li><li class="nav-item"><a href="../pages/28-pytorch.html" class=""><span class="num">28</span>PyTorch: from toy model to training loop</a></li><li class="nav-item"><a href="../pages/29-cnn.html" class=""><span class="num">29</span>CNN for computer vision</a></li><li class="nav-item"><a href="../pages/30-rnn-lstm.html" class=""><span class="num">30</span>RNN, LSTM, GRU for sequences</a></li><li class="nav-item"><a href="../pages/31-transformer.html" class=""><span class="num">31</span>Transformer and attention</a></li><li class="nav-item"><a href="../pages/32-nlp-llm.html" class=""><span class="num">32</span>NLP: from text mining to LLMs</a></li><li class="nav-item"><a href="../pages/33-time-series.html" class=""><span class="num">33</span>Time series and forecasting</a></li><li class="nav-item"><a href="../pages/34-mlops.html" class=""><span class="num">34</span>MLOps: deployment, monitoring, drift</a></li><li class="nav-item"><a href="../pages/35-bayesian-causal.html" class=""><span class="num">35</span>Bayesian and Causal Inference</a></li><li class="nav-item"><a href="../pages/36-capstone-career.html" class=""><span class="num">36</span>Capstone, portfolio, career</a></li><li class="nav-item"><a href="../pages/37-glossary.html" class=""><span class="num">37</span>Glossary A-Z</a></li><li class="nav-item"><a href="../pages/38-formula-sheet.html" class=""><span class="num">38</span>Formula Sheet: all the formulas from the course</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Statistics</span>
+        <span>Section 8 of 39</span>
+        <span class="level-tag level-int">Level: intermediate</span>
+      </div>
+      <h1>Inferential statistics and hypothesis testing</h1>
+      <p class="summary">Estimators, confidence intervals, p-values (and why everyone misinterprets them), t-tests, chi-squared, ANOVA, statistical power.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Statistics</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>[[probability]]</li><li>[[descriptive-statistics]]</li></ul>
+  <div class="label">Tools</div>
+  <ul class="source-list"><li>scipy.stats, statsmodels</li></ul>
+</div>
+      <h2 id="inference-in-one-line">Inference in one line</h2>
+<blockquote>
+<p>Given observed data from a <strong>sample</strong>, what can we say about the <strong>population</strong>?</p>
+</blockquote>
+<p>Everything else is technical detail. Answers come in two forms: <strong>estimates</strong> (with confidence intervals) and <strong>tests</strong> (with p-values).</p>
+<h2 id="point-estimators">Point estimators</h2>
+<p>We want to estimate a parameter $\theta$ (e.g., population mean $\mu$) from data. An <strong>estimator</strong> $\hat{\theta}$ is a function of the sample.</p>
+<p>Properties we want:</p>
+<ul>
+<li><strong>Unbiased</strong>: $E[\hat{\theta}] = \theta$</li>
+<li><strong>Consistent</strong>: $\hat{\theta} \to \theta$ as $n$ grows</li>
+<li><strong>Efficient</strong>: low variance among unbiased estimators</li>
+</ul>
+<p>The <strong>sample mean</strong> $\bar{X}$ is unbiased, consistent, efficient (for Gaussian data) for estimating $\mu$.</p>
+<h3 id="mle-maximum-likelihood-estimation">MLE — Maximum Likelihood Estimation</h3>
+<p>The premier method to build estimators. Given a model family $p(x | \theta)$ and iid data $x_1, \dots, x_n$, the <strong>likelihood</strong> is:</p>
+<p>$$L(\theta) = \prod_{i=1}^n p(x_i | \theta)$$</p>
+<p>MLE picks $\theta$ maximizing $L$ (or equivalently $\log L$, which is more numerically stable and algebraically tractable).</p>
+<p><strong>Example</strong>: $X_i \sim \mathcal{N}(\mu, \sigma^2)$. The MLE of $\mu$ is $\bar{X}$, and of $\sigma^2$ is $\frac{1}{n}\sum (x_i - \bar{X})^2$. (Note: with $n$, not $n-1$. The MLE version is biased downward; for unbiased use $n-1$.)</p>
+<p>MLE generalizes to regression, logistic, mixed models, NNs — every "training" is maximizing a log-likelihood (or minimizing negative cross-entropy).</p>
+<h2 id="confidence-intervals">Confidence intervals</h2>
+<p>A <strong>95% confidence interval</strong> for $\mu$ is a procedure that produces intervals which, <strong>on repeated experiments</strong>, contain $\mu$ in 95% of cases.</p>
+<p><strong>Correct interpretation</strong>:</p>
+<blockquote>
+<p>"If we repeated the study 100 times, ~95 of the 100 constructed intervals would contain the true $\mu$."</p>
+</blockquote>
+<p><strong>WRONG interpretation</strong> (which everyone makes):</p>
+<blockquote>
+<p>"There's a 95% probability that $\mu$ is in this interval." (That's Bayesian — credible interval — different.)</p>
+</blockquote>
+<p>For the mean:</p>
+<p>$$\bar{x} \pm t_{n-1, 1-\alpha/2} \cdot \frac{s}{\sqrt{n}}$$</p>
+<p>where $t$ is the quantile of Student's t with $n-1$ degrees of freedom.</p>
+<pre><code class="language-python">import numpy as np
+from scipy import stats
+
+x = np.random.normal(50, 10, 30)
+mean = x.mean()
+se = stats.sem(x)              # s/√n
+ci = stats.t.interval(0.95, len(x)-1, loc=mean, scale=se)
+print(mean, ci)
+</code></pre>
+<h3 id="bootstrap-ci-without-assumptions">Bootstrap: CI without assumptions</h3>
+<p>When you don't want to assume normality or have no closed form:</p>
+<ol>
+<li>Resample with replacement from data $B$ times (e.g., $B=1000$).</li>
+<li>Compute the statistic on each resample.</li>
+<li>Take the 2.5 and 97.5 percentiles of the distribution of statistics.</li>
+</ol>
+<pre><code class="language-python">rng = np.random.default_rng(0)
+B = 5000
+boot_means = [rng.choice(x, size=len(x), replace=True).mean() for _ in range(B)]
+np.percentile(boot_means, [2.5, 97.5])
+</code></pre>
+<p>Bootstrap works for almost any statistic: median, IQR, R², ML metrics.</p>
+<h2 id="hypothesis-tests">Hypothesis tests</h2>
+<p>Every test is a dialogue:</p>
+<ol>
+<li>Set a <strong>null hypothesis</strong> $H_0$ (usually "no effect").</li>
+<li>Set the <strong>alternative</strong> $H_1$.</li>
+<li>Compute a <strong>test statistic</strong> $T$ from data.</li>
+<li>Under $H_0$, $T$ follows a known distribution.</li>
+<li>Compute the probability of observing $T$ or more extreme, <strong>assuming $H_0$ is true</strong>. This is the <strong>p-value</strong>.</li>
+<li>If p-value &lt; $\alpha$ (typically 0.05), you reject $H_0$.</li>
+</ol>
+<h3 id="what-the-p-value-really-is">What the p-value really is</h3>
+<blockquote>
+<p>"p-value = probability of observing data as extreme as this (or more), <strong>assuming $H_0$ is true</strong>."</p>
+</blockquote>
+<p><strong>It is not</strong>:
+- P($H_0$ true | data). It's not a probability about $H_0$.
+- The probability of erring in rejecting.
+- A measure of <strong>effect size</strong>. p=0.001 with microscopic effect is clinically irrelevant.</p>
+<h3 id="type-i-and-ii-errors">Type I and II errors</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>$H_0$ true</th>
+<th>$H_0$ false</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Reject $H_0$</strong></td>
+<td>Type I error (α) — false positive</td>
+<td>Correct decision (power $1-\beta$)</td>
+</tr>
+<tr>
+<td><strong>Don't reject $H_0$</strong></td>
+<td>Correct</td>
+<td>Type II error (β) — false negative</td>
+</tr>
+</tbody>
+</table>
+<p>You choose $\alpha$ (usually 0.05). $\beta$ depends on effect size and $n$. <strong>More samples = more power</strong>.</p>
+<h2 id="tests-you-need">Tests you need</h2>
+<h3 id="t-test">t-test</h3>
+<p>Compares means. Three versions:</p>
+<ul>
+<li><strong>One sample</strong>: $\bar{x}$ vs expected $\mu_0$.</li>
+<li><strong>Two sample independent</strong>: $\bar{x}_1$ vs $\bar{x}_2$ (separate groups).</li>
+<li><strong>Paired</strong>: two measurements on same subjects (pre/post).</li>
+</ul>
+<p>Assumptions: data ~normal (CLT helps for $n&gt;30$), variances ~equal (for the classic version; use <strong>Welch</strong> if different).</p>
+<pre><code class="language-python">from scipy.stats import ttest_ind, ttest_rel
+ttest_ind(group_a, group_b, equal_var=False)   # Welch
+</code></pre>
+<h3 id="mann-whitney-u-wilcoxon">Mann-Whitney U / Wilcoxon</h3>
+<p>Non-parametric, replace t-tests when data isn't normal (skewed, heavy tails).</p>
+<pre><code class="language-python">from scipy.stats import mannwhitneyu
+mannwhitneyu(group_a, group_b, alternative='two-sided')
+</code></pre>
+<h3 id="anova">ANOVA</h3>
+<p>Compares $k &gt; 2$ groups. $H_0$: all means equal.</p>
+<pre><code class="language-python">from scipy.stats import f_oneway
+f_oneway(group_a, group_b, group_c)
+</code></pre>
+<p>If you reject, follows <strong>post-hoc</strong> test (Tukey HSD) to identify which pairs differ.</p>
+<h3 id="chi-squared">Chi-squared</h3>
+<p>For categorical. Two kinds:</p>
+<ul>
+<li><strong>Goodness of fit</strong>: does a categorical follow an expected distribution?</li>
+<li><strong>Independence</strong>: are two categoricals independent?</li>
+</ul>
+<pre><code class="language-python">import pandas as pd
+from scipy.stats import chi2_contingency
+table = pd.crosstab(df.gender, df.purchased)
+chi2, p, dof, expected = chi2_contingency(table)
+</code></pre>
+<h3 id="normality-tests">Normality tests</h3>
+<ul>
+<li><strong>Shapiro-Wilk</strong> (<code>scipy.stats.shapiro</code>): powerful for $n &lt; 5000$.</li>
+<li><strong>Anderson-Darling</strong>, <strong>Kolmogorov-Smirnov</strong>.</li>
+<li><strong>Q-Q plot</strong>: the best visual method. If points sit on the line, it's normal.</li>
+</ul>
+<blockquote>
+<p><strong>Caveat</strong>: with large $n$, every normality test rejects $H_0$ even for tiny deviations. Use the <strong>Q-Q plot</strong> and common sense.</p>
+</blockquote>
+<h2 id="multiple-testing-correction">Multiple testing correction</h2>
+<p>If you do 20 independent tests at $\alpha=0.05$, you expect $\sim 1$ false positive by chance. In genomics or A/B testing across many metrics, <strong>correct</strong>:</p>
+<ul>
+<li><strong>Bonferroni</strong>: $\alpha_{adj} = \alpha / m$. Conservative.</li>
+<li><strong>Benjamini-Hochberg (FDR)</strong>: controls the false discovery rate. Less conservative, biology standard.</li>
+</ul>
+<pre><code class="language-python">from statsmodels.stats.multitest import multipletests
+reject, p_adj, _, _ = multipletests(p_values, alpha=0.05, method='fdr_bh')
+</code></pre>
+<h2 id="statistical-power-and-sample-size">Statistical power and sample size</h2>
+<p>Before launching a study: how many samples to detect an effect of a given size?</p>
+<p>For a two-sample t-test with <strong>Cohen's d = 0.5</strong> (medium), $\alpha=0.05$, 80% power, you need <strong>~64 subjects per group</strong>.</p>
+<pre><code class="language-python">from statsmodels.stats.power import TTestIndPower
+power = TTestIndPower()
+power.solve_power(effect_size=0.5, alpha=0.05, power=0.8)
+# ≈ 63.7
+</code></pre>
+<blockquote>
+<p>Lesson: a test that doesn't reject doesn't mean "$H_0$ is true". It might mean "$n$ was too small".</p>
+</blockquote>
+<h2 id="ab-testing-in-the-real-world">A/B testing in the real world</h2>
+<pre><code class="language-mermaid">flowchart LR
+    A[Define primary metric] --&gt; B[Compute sample size&lt;br/&gt;with realistic MDE]
+    B --&gt; C[Assign users&lt;br/&gt;randomly A/B]
+    C --&gt; D[Collect data&lt;br/&gt;up to sample size]
+    D --&gt; E[Analyze ONCE&lt;br/&gt;at the end]
+    E --&gt; F[Decide]
+</code></pre>
+<p><strong>Frequent mistakes</strong>:</p>
+<ol>
+<li><strong>Peeking</strong>: looking at results daily and stopping when significant. Inflates false positive rate. Use <strong>sequential testing</strong> or <strong>always-valid p-values</strong> if you want early stopping.</li>
+<li><strong>Multiple metrics</strong>: testing 10 metrics increases false positive probability. Pre-register primary metric.</li>
+<li><strong>Novelty effect</strong>: new design excites users first days. Run at least 1–2 weeks.</li>
+<li><strong>Non-random assignment</strong>: by device, cohort, location. Always check balance.</li>
+</ol>
+<h2 id="bayesian-vs-frequentist-in-30-seconds">Bayesian vs frequentist in 30 seconds</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Frequentist</th>
+<th>Bayesian</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Parameters</td>
+<td>Fixed (unknown)</td>
+<td>Random variables with distribution</td>
+</tr>
+<tr>
+<td>Output</td>
+<td>p-value, CI</td>
+<td>Posterior, credible interval</td>
+</tr>
+<tr>
+<td>Prior</td>
+<td>None</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>CI/credible interpretation</td>
+<td>About the procedure</td>
+<td>About the parameter</td>
+</tr>
+<tr>
+<td>Compute cost</td>
+<td>Low</td>
+<td>Often high (MCMC)</td>
+</tr>
+</tbody>
+</table>
+<p>Both work. In industry frequentist dominates (A/B test, regression). In scientific research Bayesian is growing.</p>
+<h2 id="exercises">Exercises</h2>
+<details>
+<summary>Exercise 1 — Manual CI</summary>
+
+You have $n=25$, $\bar{x}=78$, $s=12$. Compute the 95% CI for $\mu$.
+
+**Solution**: $t_{24, 0.975} \approx 2.064$. SE = $12/\sqrt{25} = 2.4$. CI = $78 \pm 2.064 \cdot 2.4 = 78 \pm 4.95 = [73.05, 82.95]$.
+</details>
+
+<details>
+<summary>Exercise 2 — How much effect is "real"?</summary>
+
+A test shows p = 0.04 with effect = 0.5 percentage points on a metric averaging 50%. Important result?
+
+**Answer**: probably not. Statistical significance doesn't imply practical significance. 0.5pp on 50% is a 1% relative improvement: often implementation cost wipes it out. **Always report effect size** (Cohen's d, OR, lift) alongside p-value.
+</details>
+
+<details>
+<summary>Exercise 3 — Simulated A/B test</summary>
+
+Simulate an A/B test where treatment has conversion rate 10.5% vs control 10%. How many samples per group to get p<0.05 with 80% power?
+
+
+<pre><code class="language-python">from statsmodels.stats.power import NormalIndPower
+from statsmodels.stats.proportion import proportion_effectsize
+es = proportion_effectsize(0.105, 0.10)
+n = NormalIndPower().solve_power(effect_size=es, alpha=0.05, power=0.8)
+print(int(n))  # ~60000 per group
+</code></pre>
+
+
+Lesson: small rate effects require huge sample sizes. This is why A/B tests on minor features require weeks of Netflix-scale traffic.
+</details>
+
+<details>
+<summary>Exercise 4 — Multiple testing</summary>
+
+Simulate 100 independent tests all under $H_0$ at $\alpha=0.05$. How many rejections do you expect? Verify.
+
+
+<pre><code class="language-python">import numpy as np
+from scipy.stats import ttest_1samp
+rng = np.random.default_rng(0)
+ps = []
+for _ in range(100):
+    x = rng.normal(0, 1, 30)
+    _, p = ttest_1samp(x, 0)
+    ps.append(p)
+print(sum(p &lt; 0.05 for p in ps))  # ~5
+</code></pre>
+
+
+Now apply Bonferroni and BH:
+
+<pre><code class="language-python">from statsmodels.stats.multitest import multipletests
+print(&quot;Bonferroni:&quot;, multipletests(ps, alpha=0.05, method='bonferroni')[0].sum())
+print(&quot;BH (FDR):&quot;, multipletests(ps, alpha=0.05, method='fdr_bh')[0].sum())
+</code></pre>
+
+</details>
+
+<details>
+<summary>Exercise 5 — Bootstrap CI for the median</summary>
+
+
+<pre><code class="language-python">import numpy as np
+rng = np.random.default_rng(0)
+x = rng.lognormal(0, 1, 200)
+
+B = 5000
+boot = np.array([np.median(rng.choice(x, len(x), replace=True)) for _ in range(B)])
+ci = np.percentile(boot, [2.5, 97.5])
+print(f&quot;median: {np.median(x):.3f}, CI: {ci}&quot;)
+</code></pre>
+
+
+Compare with an analytical CI (complex for median). Bootstrap makes inference easy for almost any statistic.
+</details>
+
+<h2 id="takeaways">Takeaways</h2>
+<ul>
+<li>p-value $\neq$ P(H_0 true). Memorize.</li>
+<li>95% CI is a property of the <strong>procedure</strong>, not the single interval.</li>
+<li>Bootstrap = swiss army knife for CIs without normality assumptions.</li>
+<li>Effect size matters as much as significance.</li>
+<li>A/B tests done wrong are worse than not doing them.</li>
+</ul>
+<p>Next: probability distributions you'll meet daily.</p>
+      <nav class="pager">
+<a href="06-descriptive-statistics.html" class="prev"><span class="label">← Previous</span><span class="title">Descriptive statistics</span></a>
+<a href="08-distributions.html" class="next"><span class="label">Next →</span><span class="title">Probability distributions you&#x27;ll meet</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Data Science Zero to Hero</strong> — complete path, in English, from math to deployment.</p><p>Open didactic material. Formulas are here to be understood, not feared. When a concept is unclear, go back: data science is a pyramid, not a tree you skip across.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+</body>
+</html>

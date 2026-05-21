@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Black-Scholes e le greche — Educazione Finanziaria Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#3a3a2a',primaryTextColor:'#f4f1e8',primaryBorderColor:'#9b7d34',lineColor:'#9a9685',background:'#181c27'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">€</div>
+      <div>
+        <div class="brand-title">FINANZA</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">IT</span><a href="../en/pages/23-black-scholes-greeks.html" class="lang-link" title="Switch to English">EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-cos-e-il-denaro.html" class=""><span class="num">01</span>Cos&#x27;è il denaro (e come è cambiato)</a></li><li class="nav-item"><a href="../pages/02-sistema-finanziario.html" class=""><span class="num">02</span>Il sistema finanziario: come funziona davvero</a></li><li class="nav-item"><a href="../pages/03-banche-centrali.html" class=""><span class="num">03</span>Banche centrali (BCE, FED, BOE, BOJ)</a></li><li class="nav-item"><a href="../pages/04-inflazione.html" class=""><span class="num">04</span>Inflazione, deflazione, potere d&#x27;acquisto</a></li><li class="nav-item"><a href="../pages/05-budget-personale.html" class=""><span class="num">05</span>Budget personale e cash flow</a></li><li class="nav-item"><a href="../pages/06-piramide-finanziaria.html" class=""><span class="num">06</span>Piramide finanziaria e fondo emergenza</a></li><li class="nav-item"><a href="../pages/07-conti-e-pagamenti.html" class=""><span class="num">07</span>Conti correnti, conti deposito, sistemi di pagamento</a></li><li class="nav-item"><a href="../pages/08-credit-score-crif.html" class=""><span class="num">08</span>Credit score, CRIF e identità finanziaria</a></li><li class="nav-item"><a href="../pages/09-tipi-di-banche.html" class=""><span class="num">09</span>Tipologie di banche (e perché le neobank sono diverse)</a></li><li class="nav-item"><a href="../pages/10-bilancio-banca-basilea.html" class=""><span class="num">10</span>Il bilancio di una banca e Basilea III/IV</a></li><li class="nav-item"><a href="../pages/11-mutui.html" class=""><span class="num">11</span>Mutui (fisso, variabile, misto, surroga, INPS)</a></li><li class="nav-item"><a href="../pages/12-prestiti-carte-cessione.html" class=""><span class="num">12</span>Prestiti personali, carte revolving, cessione del quinto</a></li><li class="nav-item"><a href="../pages/13-mercati-finanziari.html" class=""><span class="num">13</span>Mercati finanziari: come funzionano davvero</a></li><li class="nav-item"><a href="../pages/14-azioni.html" class=""><span class="num">14</span>Azioni: cosa compri davvero quando compri un&#x27;azione</a></li><li class="nav-item"><a href="../pages/15-obbligazioni.html" class=""><span class="num">15</span>Obbligazioni: cedola, prezzo, yield, duration</a></li><li class="nav-item"><a href="../pages/16-etf-fondi.html" class=""><span class="num">16</span>ETF, fondi comuni e gestione attiva vs passiva</a></li><li class="nav-item"><a href="../pages/17-asset-allocation-mpt.html" class=""><span class="num">17</span>Asset allocation e teoria moderna del portafoglio (MPT)</a></li><li class="nav-item"><a href="../pages/18-diversificazione-correlazione.html" class=""><span class="num">18</span>Diversificazione, correlazione e rischio non sistematico</a></li><li class="nav-item"><a href="../pages/19-analisi-fondamentale.html" class=""><span class="num">19</span>Analisi fondamentale: DCF, multipli, ratio</a></li><li class="nav-item"><a href="../pages/20-analisi-tecnica.html" class=""><span class="num">20</span>Analisi tecnica (e perché l&#x27;accademia è scettica)</a></li><li class="nav-item"><a href="../pages/21-capm-fama-french.html" class=""><span class="num">21</span>CAPM e modelli multi-fattoriali (Fama-French)</a></li><li class="nav-item"><a href="../pages/22-derivati.html" class=""><span class="num">22</span>Derivati: futures, opzioni, swap, forward</a></li><li class="nav-item"><a href="../pages/23-black-scholes-greche.html" class="active"><span class="num">23</span>Black-Scholes e le greche</a></li><li class="nav-item"><a href="../pages/24-var-cvar-risk-management.html" class=""><span class="num">24</span>Risk management quantitativo: VaR e CVaR</a></li><li class="nav-item"><a href="../pages/25-stress-test-scenari.html" class=""><span class="num">25</span>Stress test, scenari estremi, tail risk</a></li><li class="nav-item"><a href="../pages/26-behavioral-finance.html" class=""><span class="num">26</span>Behavioral finance: i bias che ti rovinano gli investimenti</a></li><li class="nav-item"><a href="../pages/27-macroeconomia-investitori.html" class=""><span class="num">27</span>Macroeconomia essenziale per investitori</a></li><li class="nav-item"><a href="../pages/28-tassi-cambio-forex.html" class=""><span class="num">28</span>Tassi di cambio e Forex</a></li><li class="nav-item"><a href="../pages/29-commodities.html" class=""><span class="num">29</span>Commodities: oro, petrolio, metalli, agri</a></li><li class="nav-item"><a href="../pages/30-crisi-finanziarie-storia.html" class=""><span class="num">30</span>Crisi finanziarie nella storia: cosa si ripete</a></li><li class="nav-item"><a href="../pages/31-tassazione-investimenti-italia.html" class=""><span class="num">31</span>Tassazione degli investimenti in Italia (e come è altrove)</a></li><li class="nav-item"><a href="../pages/32-previdenza-pensione-tfr.html" class=""><span class="num">32</span>Previdenza: INPS, pensione di base, fondi pensione, TFR</a></li><li class="nav-item"><a href="../pages/33-assicurazioni.html" class=""><span class="num">33</span>Assicurazioni: cosa serve davvero e cosa è solo commissione</a></li><li class="nav-item"><a href="../pages/34-immobiliare-reit.html" class=""><span class="num">34</span>Immobiliare: comprare, affittare, REIT, mattoncino digitale</a></li><li class="nav-item"><a href="../pages/35-crypto-blockchain-defi.html" class=""><span class="num">35</span>Crypto, Bitcoin, Ethereum, stablecoin, DeFi</a></li><li class="nav-item"><a href="../pages/36-fintech.html" class=""><span class="num">36</span>Fintech: robo-advisor, neobanking, BNPL, embedded finance</a></li><li class="nav-item"><a href="../pages/37-esg-finanza-sostenibile.html" class=""><span class="num">37</span>ESG e finanza sostenibile</a></li><li class="nav-item"><a href="../pages/38-ai-in-finanza.html" class=""><span class="num">38</span>AI nella finanza: ML per trading, robo-advisor, credit scoring, LLM</a></li><li class="nav-item"><a href="../pages/39-costruire-portafoglio.html" class=""><span class="num">39</span>Costruire un portafoglio: lazy, three-fund, all-weather, core-satellite</a></li><li class="nav-item"><a href="../pages/40-pac-pic-ribilanciamento.html" class=""><span class="num">40</span>PAC vs PIC, ribilanciamento e tax loss harvesting</a></li><li class="nav-item"><a href="../pages/41-fire-indipendenza-finanziaria.html" class=""><span class="num">41</span>FIRE, indipendenza finanziaria e longevity planning</a></li><li class="nav-item"><a href="../pages/42-frodi-errori-comuni.html" class=""><span class="num">42</span>Frodi, truffe, errori comuni: come non perdere tutto</a></li><li class="nav-item"><a href="../pages/43-glossario-az.html" class=""><span class="num">43</span>Glossario A–Z</a></li><li class="nav-item"><a href="../pages/44-formulario.html" class=""><span class="num">44</span>Formulario</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Derivati</span>
+        <span>Sezione 23 di 44</span>
+        <span class="level-tag level-exp">Livello: esperto</span>
+      </div>
+      <h1>Black-Scholes e le greche</h1>
+      <p class="summary">La formula del 1973 che ha rivoluzionato la finanza: derivazione intuitiva, calcolo passo passo, greche (Delta, Gamma, Vega, Theta, Rho) e volatilità implicita.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Derivati</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>Aver letto [Derivati: futures, opzioni, swap](22-derivati.html)</li><li>Distribuzione normale standard</li><li>Logaritmi, esponenziali, derivate parziali</li></ul>
+  <div class="label">Strumenti / riferimenti</div>
+  <ul class="source-list"><li>Foglio Excel (NORMSDIST per Φ)</li><li>Python con scipy.stats.norm</li><li>Tavole della distribuzione normale standard</li></ul>
+</div>
+      <p>Nel 1973, due mesi dopo l'apertura della Chicago Board Options Exchange, <strong>Fischer Black</strong> e <strong>Myron Scholes</strong> pubblicano "The Pricing of Options and Corporate Liabilities". Lo stesso anno, <strong>Robert Merton</strong> sviluppa la stessa equazione con un approccio più rigoroso. Nasce un modello chiuso per il prezzo di un'opzione europea: la <strong>formula di Black-Scholes-Merton</strong>.</p>
+<p>L'impatto è gigantesco. Per la prima volta i trader hanno un riferimento matematico per stabilire se un'opzione è cara o a sconto. Le scrivanie di opzioni esplodono. Scholes e Merton vincono il <strong>Nobel 1997</strong> (Black era morto due anni prima). E nello stesso anno, ironicamente, l'hedge fund LTCM in cui i due lavorano fa default su un'esposizione di 100 miliardi $.</p>
+<p>In questo capitolo: ipotesi del modello, cenno alla PDE, formula chiusa per la call europea, calcolo numerico passo passo, put-call parity, le cinque greche (Delta, Gamma, Vega, Theta, Rho), volatilità implicita, smile/skew, modelli alternativi (Heston, SABR), hedging dinamico, implementazione Python.</p>
+<h2 id="1-le-ipotesi-del-modello">1. Le ipotesi del modello</h2>
+<p>Black-Scholes non funziona "perché sì". Si appoggia su ipotesi forti:</p>
+<ol>
+<li><strong>Sottostante lognormale</strong>: i log-rendimenti sono distribuiti normalmente con media e varianza costanti. Equivalente: $S_T$ segue moto browniano geometrico.</li>
+<li><strong>Volatilità $\sigma$ costante</strong> nel tempo e per tutti gli strike. (Falso nel mondo reale: vedi §10.)</li>
+<li><strong>Tasso risk-free $r$ costante</strong> e privo di credito.</li>
+<li><strong>Niente dividendi</strong> (la versione base; la variante Merton aggiunge $q$).</li>
+<li><strong>Niente costi di transazione</strong>, niente tasse, sottostante divisibile.</li>
+<li><strong>Short selling illimitato</strong> e libero accesso al funding.</li>
+<li><strong>No arbitraggio</strong>.</li>
+<li><strong>Mercati continui</strong>: si possono ribilanciare i portafogli in tempo continuo.</li>
+<li><strong>Opzione europea</strong>: esercizio solo a scadenza.</li>
+</ol>
+<p>Nessuna di queste regge perfettamente, ma il modello funziona "abbastanza bene" per opzioni vicino al denaro su sottostanti liquidi.</p>
+<h2 id="2-cenno-alla-pde-di-black-scholes-merton">2. Cenno alla PDE di Black-Scholes-Merton</h2>
+<p>Costruisci un portafoglio $\Pi$ composto da una opzione e $-\Delta$ unità del sottostante. Scrivendo l'evoluzione di $\Pi$ tramite il lemma di Itô e imponendo che il portafoglio sia istantaneamente risk-free (deve rendere $r$ per assenza di arbitraggio), si ottiene la PDE:</p>
+<p>$$\frac{\partial V}{\partial t} + \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} + rS\frac{\partial V}{\partial S} - rV = 0$$</p>
+<p>Con condizione al contorno $V(S,T) = \max(S-K,0)$ per la call. La soluzione esplicita è la formula chiusa che vedi nel paragrafo successivo. (Per il dettaglio rigoroso si rimanda a Hull, <em>Options Futures</em>, cap. 15; oppure Wilmott, <em>Quantitative Finance</em>.)</p>
+<h2 id="3-la-formula-chiusa">3. La formula chiusa</h2>
+<p>Per una <strong>call europea</strong> su un sottostante senza dividendi:</p>
+<p>$$\boxed{C = S_0 \Phi(d_1) - K e^{-rT} \Phi(d_2)}$$</p>
+<p>Per la <strong>put europea</strong>:</p>
+<p>$$\boxed{P = K e^{-rT} \Phi(-d_2) - S_0 \Phi(-d_1)}$$</p>
+<p>Dove:</p>
+<p>$$d_1 = \frac{\ln(S_0/K) + (r + \sigma^2/2)T}{\sigma\sqrt{T}}$$</p>
+<p>$$d_2 = d_1 - \sigma\sqrt{T} = \frac{\ln(S_0/K) + (r - \sigma^2/2)T}{\sigma\sqrt{T}}$$</p>
+<p>E $\Phi(\cdot)$ è la <strong>funzione di ripartizione della normale standard</strong> (l'integrale della campana di Gauss).</p>
+<h3 id="31-interpretazione-intuitiva">3.1 Interpretazione intuitiva</h3>
+<ul>
+<li>$\Phi(d_2)$ è (in misura risk-neutral) la <strong>probabilità che l'opzione finisca ITM</strong> (cioè $S_T &gt; K$).</li>
+<li>$\Phi(d_1)$ è la <strong>delta</strong> della call, ossia la sensibilità del prezzo al sottostante.</li>
+<li>$S_0 \Phi(d_1)$ è il valore atteso del sottostante condizionato all'esercizio.</li>
+<li>$K e^{-rT} \Phi(d_2)$ è il valore attuale dello strike pagato in caso di esercizio.</li>
+</ul>
+<p>Insomma: prezzo call = (valore atteso di ricevere il sottostante se esercito) − (valore attuale dello strike se esercito).</p>
+<h2 id="4-calcolo-numerico-passo-passo">4. Calcolo numerico passo passo</h2>
+<p>Esempio concreto: $S=100$, $K=100$, $r=4\%$, $\sigma=20\%$, $T=1$ anno. Calcoliamo il prezzo della call europea.</p>
+<p><strong>Passo 1</strong>: calcola $d_1$.</p>
+<p>$$d_1 = \frac{\ln(100/100) + (0.04 + 0.20^2/2) \cdot 1}{0.20 \cdot \sqrt{1}}$$</p>
+<p>$$d_1 = \frac{0 + (0.04 + 0.02)}{0.20} = \frac{0.06}{0.20} = 0.30$$</p>
+<p><strong>Passo 2</strong>: calcola $d_2$.</p>
+<p>$$d_2 = d_1 - \sigma\sqrt{T} = 0.30 - 0.20 = 0.10$$</p>
+<p><strong>Passo 3</strong>: leggi $\Phi(d_1)$ e $\Phi(d_2)$ dalle tavole della normale standard.</p>
+<table>
+<thead>
+<tr>
+<th>z</th>
+<th>Φ(z)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.00</td>
+<td>0.5000</td>
+</tr>
+<tr>
+<td>0.10</td>
+<td>0.5398</td>
+</tr>
+<tr>
+<td>0.20</td>
+<td>0.5793</td>
+</tr>
+<tr>
+<td>0.30</td>
+<td>0.6179</td>
+</tr>
+<tr>
+<td>0.40</td>
+<td>0.6554</td>
+</tr>
+<tr>
+<td>0.50</td>
+<td>0.6915</td>
+</tr>
+</tbody>
+</table>
+<p>Quindi $\Phi(0.30) = 0.6179$ e $\Phi(0.10) = 0.5398$.</p>
+<p><strong>Passo 4</strong>: calcola $e^{-rT}$.</p>
+<p>$$e^{-0.04 \cdot 1} = e^{-0.04} \approx 0.9608$$</p>
+<p><strong>Passo 5</strong>: assembla la formula.</p>
+<p>$$C = 100 \cdot 0.6179 - 100 \cdot 0.9608 \cdot 0.5398$$</p>
+<p>$$C = 61.79 - 51.86 = 9.93$$</p>
+<p><strong>Prezzo della call ≈ 9.93</strong>.</p>
+<p><strong>Passo 6</strong> (bonus): calcola la put via parità.</p>
+<p>$$P = C - S_0 + K e^{-rT} = 9.93 - 100 + 96.08 = 6.01$$</p>
+<p>Verifica diretta:</p>
+<p>$$P = K e^{-rT} \Phi(-d_2) - S_0 \Phi(-d_1)$$
+$$= 96.08 \cdot (1 - 0.5398) - 100 \cdot (1 - 0.6179)$$
+$$= 96.08 \cdot 0.4602 - 100 \cdot 0.3821$$
+$$= 44.21 - 38.21 = 6.00$$</p>
+<p>(Il piccolo scarto da 6.01 è arrotondamento sulle tavole.)</p>
+<h2 id="5-put-call-parity-verifica">5. Put-Call Parity (verifica)</h2>
+<p>Per opzioni europee senza dividendi:</p>
+<p>$$C - P = S_0 - K e^{-rT}$$</p>
+<p>Nel nostro esempio: $C - P = 9.93 - 6.00 = 3.93$. E $S_0 - Ke^{-rT} = 100 - 96.08 = 3.92$. Combacia (errore di arrotondamento).</p>
+<p>Se non valesse, esisterebbe un arbitraggio: vendi il lato sopravvalutato, compri il sintetico, lock-in del profitto.</p>
+<h2 id="6-le-greche-sensibilita-del-prezzo">6. Le greche: sensibilità del prezzo</h2>
+<p>Le <strong>greche</strong> sono le derivate parziali del prezzo dell'opzione rispetto ai vari parametri. Servono per <strong>gestire il rischio</strong> di un libro di opzioni.</p>
+<h3 id="61-delta">6.1 Delta</h3>
+<p>$$\Delta = \frac{\partial C}{\partial S} = \Phi(d_1) \quad \text{(call)}$$</p>
+<p>$$\Delta = \Phi(d_1) - 1 = -\Phi(-d_1) \quad \text{(put)}$$</p>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Range Delta</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Call deep ITM</td>
+<td>→ 1</td>
+</tr>
+<tr>
+<td>Call ATM</td>
+<td>≈ 0.5</td>
+</tr>
+<tr>
+<td>Call deep OTM</td>
+<td>→ 0</td>
+</tr>
+<tr>
+<td>Put deep ITM</td>
+<td>→ −1</td>
+</tr>
+<tr>
+<td>Put ATM</td>
+<td>≈ −0.5</td>
+</tr>
+<tr>
+<td>Put deep OTM</td>
+<td>→ 0</td>
+</tr>
+</tbody>
+</table>
+<p>Interpretazione: se il sottostante sale di 1€, una call con $\Delta=0.6$ aumenta di 0.6€. Delta è anche il rapporto di hedge: per coprire 1 call venduta serve comprare $\Delta$ unità di sottostante (delta hedging).</p>
+<p>Nel nostro esempio: $\Delta_{\text{call}} = \Phi(0.30) = 0.6179$.</p>
+<h3 id="62-gamma">6.2 Gamma</h3>
+<p>$$\Gamma = \frac{\partial^2 C}{\partial S^2} = \frac{\phi(d_1)}{S_0 \sigma \sqrt{T}}$$</p>
+<p>Dove $\phi(\cdot)$ è la densità della normale standard: $\phi(z) = \frac{1}{\sqrt{2\pi}} e^{-z^2/2}$.</p>
+<p>Gamma è la <strong>convessità</strong>: dice quanto Delta cambia quando $S$ cambia. È massima ATM e diminuisce sia ITM che OTM. È sempre positiva sia per call che per put long.</p>
+<p>Nel nostro esempio: $\phi(0.30) = \frac{1}{\sqrt{2\pi}} e^{-0.045} \approx 0.3814$. Quindi $\Gamma = 0.3814 / (100 \cdot 0.20 \cdot 1) = 0.01907$. Se $S$ sale di 1€, $\Delta$ aumenta di 0.019.</p>
+<h3 id="63-vega">6.3 Vega</h3>
+<p>$$\mathcal{V} = \frac{\partial C}{\partial \sigma} = S_0 \sqrt{T} \cdot \phi(d_1)$$</p>
+<p>(Nota: Vega non è una vera lettera greca, è un nome convenzionale.)</p>
+<p>Vega misura la sensibilità a $\sigma$. Una variazione di 1 punto percentuale (es. da 20% a 21%) modifica il prezzo di Vega/100.</p>
+<p>Nel nostro esempio: $\mathcal{V} = 100 \cdot 1 \cdot 0.3814 = 38.14$. Per un aumento di volatilità da 20% a 21% il prezzo della call passa da 9.93 a circa 9.93 + 0.3814 = <strong>10.31</strong>.</p>
+<h3 id="64-theta">6.4 Theta</h3>
+<p>$$\Theta_{\text{call}} = -\frac{S_0 \sigma \phi(d_1)}{2\sqrt{T}} - rK e^{-rT}\Phi(d_2)$$</p>
+<p>Theta è la <strong>derivata rispetto al tempo</strong> (sempre negativa per opzioni long): il valore temporale si "consuma" man mano che si avvicina la scadenza. È il famoso <strong>time decay</strong>.</p>
+<p>Nel nostro esempio (annuo): 
+$$\Theta = -\frac{100 \cdot 0.20 \cdot 0.3814}{2} - 0.04 \cdot 96.08 \cdot 0.5398 \approx -3.81 - 2.07 = -5.88 \text{ €/anno}$$</p>
+<p>Diviso per 252 giorni di trading: ≈ <strong>−0.023 €/giorno</strong>. Ogni giorno che passa, la call perde 2.3 centesimi di valore (a parità di altro).</p>
+<h3 id="65-rho">6.5 Rho</h3>
+<p>$$\rho_{\text{call}} = KT e^{-rT} \Phi(d_2)$$</p>
+<p>Sensibilità al tasso risk-free. Aumento di $r$ → aumenta la call (penso a un costo opportunità di tenere cash invece di esercitare). Rho è la greca "meno importante" perché $r$ varia poco su orizzonti brevi.</p>
+<p>Nel nostro esempio: $\rho = 100 \cdot 1 \cdot 0.9608 \cdot 0.5398 \approx 51.86$. Variazione di 1 punto percentuale di $r$ → impatto di 0.5186 sul prezzo.</p>
+<h3 id="66-tabella-riassuntiva">6.6 Tabella riassuntiva</h3>
+<p>Greche al nostro punto $S=100, K=100, r=4\%, \sigma=20\%, T=1$:</p>
+<table>
+<thead>
+<tr>
+<th>Greca</th>
+<th>Valore</th>
+<th>Significato pratico</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$\Delta$ (Delta)</td>
+<td>0.6179</td>
+<td>+€1 in S → +€0.62 in C</td>
+</tr>
+<tr>
+<td>$\Gamma$ (Gamma)</td>
+<td>0.01907</td>
+<td>+€1 in S → +0.019 in $\Delta$</td>
+</tr>
+<tr>
+<td>$\mathcal{V}$ (Vega)</td>
+<td>38.14</td>
+<td>+1pp σ → +€0.38 in C</td>
+</tr>
+<tr>
+<td>$\Theta$ (Theta)</td>
+<td>−5.88/anno</td>
+<td>ogni giorno: −€0.023</td>
+</tr>
+<tr>
+<td>$\rho$ (Rho)</td>
+<td>51.86</td>
+<td>+1pp r → +€0.52 in C</td>
+</tr>
+</tbody>
+</table>
+<h2 id="7-volatilita-implicita">7. Volatilità implicita</h2>
+<p>Tutti i parametri della formula sono osservabili <strong>tranne $\sigma$</strong>. Quindi nella pratica si fa il contrario: dato il prezzo di mercato $C_{\text{mkt}}$, si trova la $\sigma$ che, inserita nella formula, restituisce $C_{\text{mkt}}$.</p>
+<p>$$\sigma_{\text{implicita}} : BS(S, K, r, T, \sigma) = C_{\text{mkt}}$$</p>
+<p>Si risolve numericamente (Newton-Raphson o bisezione). La volatilità implicita (IV) è la "previsione del mercato" sulla volatilità futura del sottostante.</p>
+<h3 id="71-vix">7.1 VIX</h3>
+<p>Il <strong>VIX</strong> (CBOE Volatility Index) è una media ponderata della IV di opzioni S&amp;P 500 a 30 giorni. È il "termometro della paura" del mercato:</p>
+<ul>
+<li>VIX &lt; 15: bassa volatilità attesa, mercato calmo.</li>
+<li>VIX 15–25: livelli normali.</li>
+<li>VIX &gt; 30: stress.</li>
+<li>VIX &gt; 50: panico (es. 2008, marzo 2020 COVID).</li>
+</ul>
+<h2 id="8-smile-e-skew-di-volatilita">8. Smile e skew di volatilità</h2>
+<p>La volatilità implicita non è costante (contrariamente all'ipotesi di Black-Scholes). Plottata in funzione dello strike $K$ assume forme caratteristiche.</p>
+<h3 id="81-smile">8.1 Smile</h3>
+<p>Su FX e indici, opzioni deep ITM/OTM hanno IV più alta delle ATM. Il grafico ha forma di sorriso.</p>
+<h3 id="82-skew">8.2 Skew</h3>
+<p>Su equity index (S&amp;P 500, FTSE MIB), opzioni OTM-put hanno IV molto più alta delle OTM-call. È il <strong>volatility skew</strong>, comparso vistosamente dopo il crash del <strong>19 ottobre 1987</strong> ("Black Monday"). Riflette il fatto che il mercato teme molto i crash al ribasso.</p>
+<pre><code class="language-mermaid">flowchart LR
+    A[OTM put&lt;br/&gt;IV alta] --&gt; B[ATM&lt;br/&gt;IV media]
+    B --&gt; C[OTM call&lt;br/&gt;IV più bassa]
+</code></pre>
+<p>Implicazione: Black-Scholes con $\sigma$ costante sottoprezza le put OTM e sovraprezza le call OTM rispetto al mercato. Da qui i modelli più sofisticati.</p>
+<h2 id="9-modelli-alternativi-cenni">9. Modelli alternativi (cenni)</h2>
+<h3 id="91-heston-1993">9.1 Heston (1993)</h3>
+<p>Volatilità <strong>stocastica</strong> che segue il suo processo di mean reversion:</p>
+<p>$$dv_t = \kappa(\theta - v_t)dt + \xi\sqrt{v_t}\,dW_t$$</p>
+<p>Genera naturalmente smile/skew. Pricing semi-analitico via trasformata di Fourier. Usato dalle banche di investimento per FX e equity index.</p>
+<h3 id="92-sabr-2002-hagan-et-al">9.2 SABR (2002, Hagan et al.)</h3>
+<p>Modello a 4 parametri ($\alpha, \beta, \rho, \nu$) molto popolare per interest rate options (swaption). Buon fit empirico dello skew.</p>
+<h3 id="93-modelli-a-salti-merton-1976-kou-2002">9.3 Modelli a salti (Merton 1976, Kou 2002)</h3>
+<p>Aggiungono un processo di Poisson al sottostante. Catturano gap e crash.</p>
+<h3 id="94-local-volatility-dupire-1994">9.4 Local volatility (Dupire 1994)</h3>
+<p>$\sigma(S,t)$ è funzione deterministica di sottostante e tempo. Si calibra perfettamente a una superficie di IV osservata, ma non genera bene la dinamica futura.</p>
+<h2 id="10-hedging-dinamico-delta-hedging">10. Hedging dinamico (delta hedging)</h2>
+<p>L'idea: se vendi una call e vuoi essere "neutro" al sottostante, compri $\Delta$ azioni. Ma siccome $\Delta$ cambia (Gamma!), devi <strong>ribilanciare</strong> continuamente.</p>
+<p>Esempio: vendi 100 call con $\Delta = 0.6$ (cioè 60 azioni equivalenti). Compri 60 azioni del sottostante. Il giorno dopo $S$ è salito, $\Delta$ è 0.65 → devi comprare altre 5 azioni. Ribilanciamento.</p>
+<p>Costi: ogni ribilanciamento sostiene commissioni e bid-ask spread. In teoria (Black-Scholes) il delta hedging continuo replica perfettamente l'opzione. In pratica c'è errore di replica + costi. Le "P&amp;L attribution" delle scrivanie opzioni decompongono il P&amp;L tra Theta (incassato vendendo opzioni), Vega (esposizione a IV), Gamma scalping (guadagni/perdite dal ribilanciamento), Rho.</p>
+<h2 id="11-implementazione-python">11. Implementazione Python</h2>
+<pre><code class="language-python">import numpy as np
+from scipy.stats import norm
+
+def bs_call(S, K, r, T, sigma):
+    d1 = (np.log(S/K) + (r + 0.5*sigma**2)*T) / (sigma*np.sqrt(T))
+    d2 = d1 - sigma*np.sqrt(T)
+    C  = S*norm.cdf(d1) - K*np.exp(-r*T)*norm.cdf(d2)
+    return C
+
+def bs_put(S, K, r, T, sigma):
+    d1 = (np.log(S/K) + (r + 0.5*sigma**2)*T) / (sigma*np.sqrt(T))
+    d2 = d1 - sigma*np.sqrt(T)
+    P  = K*np.exp(-r*T)*norm.cdf(-d2) - S*norm.cdf(-d1)
+    return P
+
+def greeks(S, K, r, T, sigma):
+    d1 = (np.log(S/K) + (r + 0.5*sigma**2)*T) / (sigma*np.sqrt(T))
+    d2 = d1 - sigma*np.sqrt(T)
+    delta = norm.cdf(d1)
+    gamma = norm.pdf(d1) / (S*sigma*np.sqrt(T))
+    vega  = S*np.sqrt(T)*norm.pdf(d1)
+    theta = -S*sigma*norm.pdf(d1)/(2*np.sqrt(T)) - r*K*np.exp(-r*T)*norm.cdf(d2)
+    rho   = K*T*np.exp(-r*T)*norm.cdf(d2)
+    return dict(delta=delta, gamma=gamma, vega=vega, theta=theta, rho=rho)
+
+# Esempio
+print(bs_call(100, 100, 0.04, 1, 0.20))   # ~9.93
+print(greeks(100, 100, 0.04, 1, 0.20))
+</code></pre>
+<p>Per la <strong>volatilità implicita</strong> si usa Newton-Raphson:</p>
+<pre><code class="language-python">def implied_vol(C_mkt, S, K, r, T, tol=1e-6, max_iter=100):
+    sigma = 0.2  # guess iniziale
+    for _ in range(max_iter):
+        price = bs_call(S, K, r, T, sigma)
+        d1 = (np.log(S/K) + (r + 0.5*sigma**2)*T) / (sigma*np.sqrt(T))
+        vega = S*np.sqrt(T)*norm.pdf(d1)
+        diff = price - C_mkt
+        if abs(diff) &lt; tol:
+            return sigma
+        sigma -= diff / vega
+    return sigma
+</code></pre>
+<h2 id="12-esercizi">12. Esercizi</h2>
+<details><summary>Esercizio: prezzo di una put europea</summary>
+
+$S=100$, $K=110$, $r=3\%$, $\sigma=25\%$, $T=0.5$. Calcola il prezzo della put.
+
+1. $d_1 = [\ln(100/110) + (0.03 + 0.5\cdot 0.0625)\cdot 0.5] / (0.25 \cdot \sqrt{0.5}) = [-0.0953 + 0.03065] / 0.1768 = -0.0647/0.1768 = -0.366$.
+2. $d_2 = -0.366 - 0.1768 = -0.543$.
+3. $\Phi(-d_1) = \Phi(0.366) \approx 0.6428$.
+4. $\Phi(-d_2) = \Phi(0.543) \approx 0.7065$.
+5. $Ke^{-rT} = 110 \cdot e^{-0.015} \approx 108.36$.
+6. $P = 108.36 \cdot 0.7065 - 100 \cdot 0.6428 = 76.56 - 64.28 = $ **€12.28**.
+
+</details>
+
+<details><summary>Esercizio: delta hedging</summary>
+
+Hai venduto 1000 call su un'azione con $\Delta = 0.45$. Quante azioni devi comprare per essere delta-neutrale?
+
+1000 · 0.45 = **450 azioni**. Il giorno dopo $\Delta$ è 0.52 → 1000·0.52 = 520 azioni. Compri altre 70 azioni per restare neutrale.
+
+Il P&L tra i due ribilanciamenti dipende da quanto $S$ si è mosso vs quanto previsto dalla IV (questo è il **gamma scalping**).
+
+</details>
+
+<details><summary>Esercizio: cosa succede a una call ATM a 1 giorno dalla scadenza?</summary>
+
+$S=K=100$, $r=4\%$, $\sigma=20\%$, $T=1/365$.
+
+1. $d_1 = [0 + (0.04 + 0.02) \cdot 0.00274] / (0.20 \cdot 0.05234) = 0.000164 / 0.01047 = 0.0157$.
+2. $d_2 = 0.0157 - 0.01047 = 0.00527$.
+3. $\Phi(0.0157) \approx 0.5063$, $\Phi(0.00527) \approx 0.5021$.
+4. $C = 100 \cdot 0.5063 - 100 \cdot e^{-0.000109} \cdot 0.5021 \approx 50.63 - 50.20 = $ **€0.43**.
+
+A 1 giorno il valore temporale è quasi zero. La call ATM vale solo lo "speranza" di muoversi nelle prossime 24h: praticamente $\sim \sigma\sqrt{T}/\sqrt{2\pi} \cdot S \approx 0.20 \cdot 0.0524 \cdot 100 \cdot 0.4 \approx 0.42$ €.
+
+</details>
+
+<h2 id="13-critiche-e-limiti">13. Critiche e limiti</h2>
+<ul>
+<li><strong>$\sigma$ costante</strong> non è vera (vedi skew/smile).</li>
+<li><strong>Distribuzione lognormale</strong> sottostima fortemente le code fat (i crash sono molto più frequenti del previsto).</li>
+<li><strong>Mercati continui</strong> sono finzione: nei weekend e holidays non puoi hedgare.</li>
+<li><strong>No costi di transazione</strong>: in pratica il delta hedging continuo è infattibile, si fa con frequenza discreta.</li>
+<li><strong>Tassi e dividendi costanti</strong>: deviazioni accettabili su orizzonti brevi, problematiche su LEAPS (opzioni multi-annuali).</li>
+<li><strong>Liquidità del sottostante</strong>: su single name illiquidi il modello sbanda.</li>
+</ul>
+<p>Nonostante tutto, BS è ancora il <strong>lingua franca</strong> del mercato delle opzioni: anche chi usa Heston o SABR quota e gestisce in termini di "BS-implied vol", e i pricing più sofisticati sono raffinamenti del modello base.</p>
+<h2 id="14-riferimenti">14. Riferimenti</h2>
+<ul>
+<li>Black, Scholes (1973), "The Pricing of Options and Corporate Liabilities", <em>Journal of Political Economy</em>.</li>
+<li>Merton (1973), "Theory of Rational Option Pricing", <em>Bell Journal of Economics</em>.</li>
+<li>Hull, <em>Options, Futures, and Other Derivatives</em> (capitoli 15–19).</li>
+<li>Wilmott, <em>Paul Wilmott on Quantitative Finance</em> (3 vol.).</li>
+<li>Gatheral, <em>The Volatility Surface</em>.</li>
+</ul>
+<h2 id="punti-chiave">Punti chiave</h2>
+<ul>
+<li><strong>Black-Scholes (1973)</strong> è il primo modello chiuso per opzioni europee.</li>
+<li>Ipotesi forti: sottostante lognormale, $\sigma$ e $r$ costanti, no arbitraggio, mercati continui.</li>
+<li>Formula call: $C = S_0 \Phi(d_1) - K e^{-rT} \Phi(d_2)$.</li>
+<li>Esempio numerico (S=K=100, r=4%, σ=20%, T=1): <strong>call ≈ 9.93 €</strong>.</li>
+<li><strong>Put-Call Parity</strong>: $C - P = S_0 - K e^{-rT}$.</li>
+<li>Greche: $\Delta$ (sensibilità a S), $\Gamma$ (convessità), $\mathcal{V}$ (Vega, sensibilità a σ), $\Theta$ (time decay), $\rho$ (sensibilità a r).</li>
+<li><strong>Volatilità implicita</strong> = σ che riproduce il prezzo di mercato; il <strong>VIX</strong> la misura sull'S&amp;P 500.</li>
+<li><strong>Smile/skew</strong> post-1987 mostra che $\sigma$ non è costante: nascono Heston, SABR, local vol.</li>
+<li><strong>Delta hedging</strong> è la strategia base per gestire un libro di opzioni; <strong>Gamma scalping</strong> ne è il sottoprodotto P&amp;L.</li>
+<li>Implementazione in Python in ~15 righe con <code>scipy.stats.norm</code>.</li>
+</ul>
+      <nav class="pager">
+<a href="22-derivati.html" class="prev"><span class="label">← Precedente</span><span class="title">Derivati: futures, opzioni, swap, forward</span></a>
+<a href="24-var-cvar-risk-management.html" class="next"><span class="label">Successivo →</span><span class="title">Risk management quantitativo: VaR e CVaR</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Educazione Finanziaria Zero to Hero</strong> — percorso completo, in italiano, dai fondamentali al pricing dei derivati.</p><p>Materiale didattico aperto. Nessuna sponsorizzazione, nessun affiliate link. Quando un concetto è oscuro, torna indietro: la finanza è una piramide, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

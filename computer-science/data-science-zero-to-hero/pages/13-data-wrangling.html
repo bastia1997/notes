@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pulizia e data wrangling — Data Science Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#3a4a7a',primaryTextColor:'#e8eef0',primaryBorderColor:'#5a6aa0',lineColor:'#8a9499',background:'#11171a'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">Σ</div>
+      <div>
+        <div class="brand-title">DATA SCIENCE</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">🇮🇹 IT</span><a href="../en/pages/13-data-wrangling.html" class="lang-link" title="Switch to English">🇬🇧 EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-cos-e-data-science.html" class=""><span class="num">01</span>Cos&#x27;è la data science (e cosa non è)</a></li><li class="nav-item"><a href="../pages/02-python-per-data-science.html" class=""><span class="num">02</span>Python per data science: setup professionale</a></li><li class="nav-item"><a href="../pages/02b-matematica-essenziale.html" class=""><span class="num">02b</span>Matematica del liceo che ti serve davvero</a></li><li class="nav-item"><a href="../pages/03-algebra-lineare.html" class=""><span class="num">03</span>Algebra lineare per data scientist</a></li><li class="nav-item"><a href="../pages/04-calcolo-ottimizzazione.html" class=""><span class="num">04</span>Calcolo, gradiente e ottimizzazione</a></li><li class="nav-item"><a href="../pages/05-probabilita.html" class=""><span class="num">05</span>Probabilità: la lingua dell&#x27;incertezza</a></li><li class="nav-item"><a href="../pages/06-statistica-descrittiva.html" class=""><span class="num">06</span>Statistica descrittiva</a></li><li class="nav-item"><a href="../pages/07-statistica-inferenziale.html" class=""><span class="num">07</span>Statistica inferenziale e test di ipotesi</a></li><li class="nav-item"><a href="../pages/08-distribuzioni.html" class=""><span class="num">08</span>Distribuzioni di probabilità che incontrerai</a></li><li class="nav-item"><a href="../pages/09-numpy.html" class=""><span class="num">09</span>NumPy: pensare in array</a></li><li class="nav-item"><a href="../pages/10-pandas.html" class=""><span class="num">10</span>Pandas: il coltellino svizzero</a></li><li class="nav-item"><a href="../pages/11-sql.html" class=""><span class="num">11</span>SQL per data scientist</a></li><li class="nav-item"><a href="../pages/12-visualizzazione.html" class=""><span class="num">12</span>Visualizzazione: matplotlib, seaborn, plotly</a></li><li class="nav-item"><a href="../pages/13-data-wrangling.html" class="active"><span class="num">13</span>Pulizia e data wrangling</a></li><li class="nav-item"><a href="../pages/14-feature-engineering.html" class=""><span class="num">14</span>Feature engineering</a></li><li class="nav-item"><a href="../pages/15-eda.html" class=""><span class="num">15</span>EDA: Exploratory Data Analysis</a></li><li class="nav-item"><a href="../pages/16-ml-fondamenti.html" class=""><span class="num">16</span>ML: fondamenti — bias, varianza, validazione</a></li><li class="nav-item"><a href="../pages/17-regressione-lineare.html" class=""><span class="num">17</span>Regressione lineare e regolarizzazione</a></li><li class="nav-item"><a href="../pages/18-regressione-logistica.html" class=""><span class="num">18</span>Regressione logistica e classificazione</a></li><li class="nav-item"><a href="../pages/19-knn-naive-bayes-svm.html" class=""><span class="num">19</span>KNN, Naive Bayes, SVM</a></li><li class="nav-item"><a href="../pages/20-alberi-decisionali.html" class=""><span class="num">20</span>Alberi decisionali</a></li><li class="nav-item"><a href="../pages/21-random-forest-boosting.html" class=""><span class="num">21</span>Random Forest, Gradient Boosting, XGBoost</a></li><li class="nav-item"><a href="../pages/22-clustering.html" class=""><span class="num">22</span>Clustering: K-Means, DBSCAN, GMM, gerarchico</a></li><li class="nav-item"><a href="../pages/23-pca-tsne-umap.html" class=""><span class="num">23</span>Riduzione dimensionale: PCA, t-SNE, UMAP</a></li><li class="nav-item"><a href="../pages/24-metriche-validazione.html" class=""><span class="num">24</span>Metriche, cross-validation, leakage</a></li><li class="nav-item"><a href="../pages/25-sbilanciamento-classi.html" class=""><span class="num">25</span>Sbilanciamento di classi</a></li><li class="nav-item"><a href="../pages/26-hyperparameter-tuning.html" class=""><span class="num">26</span>Hyperparameter tuning</a></li><li class="nav-item"><a href="../pages/27-reti-neurali.html" class=""><span class="num">27</span>Reti neurali: dalle basi al backprop</a></li><li class="nav-item"><a href="../pages/28-pytorch.html" class=""><span class="num">28</span>PyTorch: dal toy model al training loop</a></li><li class="nav-item"><a href="../pages/29-cnn.html" class=""><span class="num">29</span>CNN per computer vision</a></li><li class="nav-item"><a href="../pages/30-rnn-lstm.html" class=""><span class="num">30</span>RNN, LSTM, GRU per sequenze</a></li><li class="nav-item"><a href="../pages/31-transformer.html" class=""><span class="num">31</span>Transformer e attention</a></li><li class="nav-item"><a href="../pages/32-nlp-llm.html" class=""><span class="num">32</span>NLP: dal text mining ai LLM</a></li><li class="nav-item"><a href="../pages/33-time-series.html" class=""><span class="num">33</span>Time series e forecasting</a></li><li class="nav-item"><a href="../pages/34-mlops.html" class=""><span class="num">34</span>MLOps: deployment, monitoring, drift</a></li><li class="nav-item"><a href="../pages/35-bayesian-causal.html" class=""><span class="num">35</span>Inferenza bayesiana e causale</a></li><li class="nav-item"><a href="../pages/36-capstone-carriera.html" class=""><span class="num">36</span>Capstone, portfolio, carriera</a></li><li class="nav-item"><a href="../pages/37-glossario.html" class=""><span class="num">37</span>Glossario A-Z</a></li><li class="nav-item"><a href="../pages/38-formulario.html" class=""><span class="num">38</span>Formulario: tutte le formule del percorso</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Dati</span>
+        <span>Sezione 14 di 39</span>
+        <span class="level-tag level-int">Livello: intermedio</span>
+      </div>
+      <h1>Pulizia e data wrangling</h1>
+      <p class="summary">Missing data, duplicati, outlier, parsing date, regex, normalizzazione, codifica categoriali. La parte 50% del lavoro che nessuno racconta nei tutorial.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Dati</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>[[pandas]]</li></ul>
+  <div class="label">Strumenti</div>
+  <ul class="source-list"><li>pandas, regex, dateparser</li></ul>
+</div>
+      <h2 id="il-segreto-sporco">Il segreto sporco</h2>
+<blockquote>
+<p>"Garbage in, garbage out." Tutti citano. Pochi praticano.</p>
+</blockquote>
+<p>Il 50% del tempo di un data scientist senior va in capire e ripulire dati. Non perché sia stupido — perché i dati reali <strong>sono sporchi</strong>: formati misti, valori mancanti, errori di battitura, encoding, fusi orari, sistemi che cambiano nel tempo.</p>
+<h2 id="diagnosi-iniziale-i-primi-10-minuti">Diagnosi iniziale (i primi 10 minuti)</h2>
+<pre><code class="language-python">import pandas as pd
+df = pd.read_csv(&quot;data.csv&quot;)
+
+df.shape
+df.head()
+df.tail()
+df.info()                            # tipi e null per colonna
+df.describe(include='all')           # stats numeriche e categoriche
+df.isna().sum().sort_values(ascending=False)
+df.nunique().sort_values()
+df.duplicated().sum()
+
+# memory check
+df.memory_usage(deep=True).sum() / 1e6  # MB
+
+# distribuzioni rapide
+df.hist(figsize=(12, 8))
+</code></pre>
+<p>Cose a cui prestare attenzione:</p>
+<ul>
+<li>Colonne con <strong>un solo valore</strong> → inutili (zero varianza).</li>
+<li>Colonne con <strong>n valori distinti = n righe</strong> → probabilmente ID o testo libero.</li>
+<li><strong>Dtype <code>object</code></strong> su colonne che sembrano numeriche → c'è dello sporco (virgola decimale, valuta, %).</li>
+<li><strong>Date come stringhe</strong>.</li>
+</ul>
+<h2 id="missing-values-7-strategie">Missing values: 7 strategie</h2>
+<pre><code class="language-mermaid">flowchart TD
+    M[Missing in colonna X] --&gt; Q1{Quanto è grande&lt;br/&gt;la frazione?}
+    Q1 --&gt;|&amp;lt; 5%| A[Drop righe&lt;br/&gt;o imputa media/mediana]
+    Q1 --&gt;|5-30%| B[Imputa con modello&lt;br/&gt;o flag missing]
+    Q1 --&gt;|&amp;gt; 30%| C{Colonna&lt;br/&gt;davvero utile?}
+    C --&gt;|sì| D[Modello dedicato&lt;br/&gt;per imputazione]
+    C --&gt;|no| E[Drop colonna]
+    M --&gt; Q2{Pattern&lt;br/&gt;casuale o no?}
+    Q2 --&gt;|MCAR| F[Imputazione semplice ok]
+    Q2 --&gt;|MAR/MNAR| G[Servono metodi avanzati&lt;br/&gt;o modello che li gestisce]
+</code></pre>
+<p>I tre tipi di missing (Rubin, 1976):</p>
+<ul>
+<li><strong>MCAR</strong> (Missing Completely At Random): missing indipendente da tutto. Raro. Imputazione media OK.</li>
+<li><strong>MAR</strong> (Missing At Random): missing dipende da altre variabili <strong>osservate</strong>. Imputazione con modello (KNN, MICE) corretta.</li>
+<li><strong>MNAR</strong> (Missing Not At Random): missing dipende da variabili <strong>non osservate</strong> (es: i ricchi non dichiarano il reddito). Difficile, serve domain knowledge.</li>
+</ul>
+<h3 id="codice">Codice</h3>
+<pre><code class="language-python"># semplice
+df.fillna(0)
+df.fillna(df.median(numeric_only=True))
+df['cat'].fillna('UNKNOWN')
+
+# avanzato
+from sklearn.impute import KNNImputer, IterativeImputer  # IterativeImputer va abilitato
+imputer = KNNImputer(n_neighbors=5)
+X_imp = imputer.fit_transform(X)
+
+# flag missing come feature
+df['col_was_missing'] = df['col'].isna().astype(int)
+df['col'] = df['col'].fillna(df['col'].median())
+</code></pre>
+<blockquote>
+<p>Un trucco potente: <strong>mantieni il missing come informazione</strong>. Crea una colonna binaria che indica "originalmente NaN". Spesso è la feature più predittiva.</p>
+</blockquote>
+<h2 id="duplicati">Duplicati</h2>
+<pre><code class="language-python">df.duplicated().sum()
+df = df.drop_duplicates()
+
+# duplicati su sottoinsieme di colonne, mantieni la riga più recente
+df = (
+    df.sort_values('ts', ascending=False)
+      .drop_duplicates(subset=['user_id', 'product_id'], keep='first')
+)
+</code></pre>
+<p>Attenzione: ID duplicati spesso indicano un <strong>bug nel join</strong> o un <strong>dato sporco</strong>. Non camuffare il problema rimuovendo: indaga.</p>
+<h2 id="parsing-di-date-la-sofferenza-universale">Parsing di date (la sofferenza universale)</h2>
+<pre><code class="language-python"># pandas è generoso
+df['date'] = pd.to_datetime(df['date_str'], errors='coerce')  # NaT su parse fail
+
+# formato specifico (molto più veloce)
+df['date'] = pd.to_datetime(df['date_str'], format='%d/%m/%Y')
+
+# timezone
+df['ts'] = pd.to_datetime(df['ts'], utc=True)
+df['ts'] = df['ts'].dt.tz_convert('Europe/Rome')
+
+# formati misti? dateparser è più tollerante (ma lento)
+import dateparser
+df['date'] = df['date_str'].apply(dateparser.parse)
+</code></pre>
+<p>Domande sempre da farti:</p>
+<ul>
+<li>Qual è il <strong>fuso orario</strong> dei timestamp? UTC, locale, naive?</li>
+<li>I dati attraversano <strong>cambi di DST</strong> (ora legale)?</li>
+<li>Le date sono <strong>DD/MM</strong> o <strong>MM/DD</strong>? L'ambiguità è una mina vagante.</li>
+</ul>
+<h2 id="stringhe-sporche">Stringhe sporche</h2>
+<pre><code class="language-python">s = df['email'].str
+s.lower()
+s.strip()                       # spazi all'inizio/fine
+s.replace(r'\s+', ' ', regex=True)
+s.contains(r'@\w+\.\w+', regex=True)
+s.extract(r'@(\w+)')            # gruppo regex
+s.split('@', expand=True)
+s.normalize('NFKD').encode('ascii','ignore').decode('ascii')  # rimuove accenti
+</code></pre>
+<h3 id="pulizia-di-numeri-stringa">Pulizia di numeri stringa</h3>
+<pre><code class="language-python">df['amount'] = (
+    df['amount']
+    .str.replace('€', '', regex=False)
+    .str.replace('.', '', regex=False)      # separatore migliaia italiano
+    .str.replace(',', '.', regex=False)     # decimale italiano
+    .astype(float)
+)
+</code></pre>
+<h3 id="categoriche-con-typo">Categoriche con typo</h3>
+<p>Cluster simili con <strong>fuzzy matching</strong> (es: <code>rapidfuzz</code> o <code>recordlinkage</code>):</p>
+<pre><code class="language-python">from rapidfuzz import process, fuzz
+clean = &quot;Milano&quot;
+candidates = df['city'].unique()
+match = process.extractOne(&quot;Mlano&quot;, candidates, scorer=fuzz.ratio)
+# ('Milano', 91, 5)
+</code></pre>
+<h2 id="encoding-categoriali">Encoding categoriali</h2>
+<p>Dipende dal tipo:</p>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Metodo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Binaria (sì/no)</td>
+<td><code>astype(int)</code></td>
+</tr>
+<tr>
+<td>Ordinale (basso/medio/alto)</td>
+<td>mapping numerico esplicito</td>
+</tr>
+<tr>
+<td>Nominale, pochi valori</td>
+<td>one-hot</td>
+</tr>
+<tr>
+<td>Nominale, molti valori</td>
+<td>target encoding, frequency encoding, embedding</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-python"># one-hot
+pd.get_dummies(df, columns=['city', 'category'], drop_first=True)
+
+# ordinal
+order = {'low': 0, 'mid': 1, 'high': 2}
+df['level'] = df['level'].map(order)
+
+# target encoding (con cross-validation per evitare leak)
+from category_encoders import TargetEncoder
+te = TargetEncoder()
+X_te = te.fit_transform(X[['city']], y)
+</code></pre>
+<blockquote>
+<p>Target encoding senza CV produce <strong>leakage</strong>: il valore della classe finisce nelle feature. Usa <code>KFoldTargetEncoder</code> o pipeline con <code>sklearn.preprocessing.OrdinalEncoder</code> + <code>MeanEncoder</code> con <code>cv</code>.</p>
+</blockquote>
+<h2 id="normalizzazione-e-scaling">Normalizzazione e scaling</h2>
+<p>Quando contano: KNN, SVM, regressione regolarizzata, reti neurali, PCA. Quando NON contano: alberi (Random Forest, XGBoost).</p>
+<table>
+<thead>
+<tr>
+<th>Scaler</th>
+<th>Formula</th>
+<th>Usalo quando</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>StandardScaler</strong></td>
+<td>$(x - \mu)/\sigma$</td>
+<td>distribuzioni ~ normali</td>
+</tr>
+<tr>
+<td><strong>MinMaxScaler</strong></td>
+<td>$(x - \min)/(\max-\min)$</td>
+<td>feature in $[0,1]$</td>
+</tr>
+<tr>
+<td><strong>RobustScaler</strong></td>
+<td>$(x - \text{median})/\text{IQR}$</td>
+<td>outlier presenti</td>
+</tr>
+<tr>
+<td><strong>PowerTransformer</strong></td>
+<td>Box-Cox/Yeo-Johnson</td>
+<td>skew forte, vuoi normalità</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-python">from sklearn.preprocessing import StandardScaler, RobustScaler, PowerTransformer
+sc = StandardScaler().fit(X_train)
+X_train = sc.transform(X_train)
+X_test = sc.transform(X_test)
+</code></pre>
+<blockquote>
+<p><strong>Fit solo su train</strong>. Trasforma test con i parametri di train. Altrimenti: data leakage.</p>
+</blockquote>
+<h2 id="outlier-rimuovere-capping-o-tenere">Outlier: rimuovere, capping, o tenere?</h2>
+<table>
+<thead>
+<tr>
+<th>Strategia</th>
+<th>Quando</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tenere</td>
+<td>sono dati veri, importanti (frodi, rare events)</td>
+</tr>
+<tr>
+<td>Cap a percentile (winsorize)</td>
+<td>distorsione moderata, modello sensibile</td>
+</tr>
+<tr>
+<td>Rimuovere</td>
+<td>sicuro che siano errori (es: età = 999)</td>
+</tr>
+<tr>
+<td>Trasformare (log)</td>
+<td>code lunghe naturali</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-python"># winsorize al 1% e 99%
+from scipy.stats.mstats import winsorize
+df['amount_w'] = winsorize(df['amount'], limits=[0.01, 0.01])
+
+# manuale
+low, high = df['amount'].quantile([0.01, 0.99])
+df['amount'] = df['amount'].clip(low, high)
+</code></pre>
+<h2 id="stratificazione-e-bilanciamento-a-colpo-docchio">Stratificazione e bilanciamento (a colpo d'occhio)</h2>
+<pre><code class="language-python"># proporzioni della target
+df['target'].value_counts(normalize=True)
+
+# stratificato in train/test
+from sklearn.model_selection import train_test_split
+X_tr, X_te, y_tr, y_te = train_test_split(X, y, stratify=y, test_size=0.2)
+</code></pre>
+<p>Bilanciamento avanzato (SMOTE, class weights) lo vedi in sezione dedicata.</p>
+<h2 id="salva-il-data-dictionary">Salva il "data dictionary"</h2>
+<p>Per ogni colonna, documenta:</p>
+<ul>
+<li>Tipo</li>
+<li>Significato</li>
+<li>Unità di misura</li>
+<li>Range atteso</li>
+<li>Trattamento dei missing</li>
+<li>Eventuali trasformazioni applicate</li>
+</ul>
+<p>Un Markdown semplice o uno YAML va benissimo. È <strong>la</strong> cosa che ti farà ringraziare il-te-del-futuro tra 6 mesi.</p>
+<h2 id="validazione-assert-tutto">Validazione: assert tutto</h2>
+<p>Negli script di pipeline, usa assertion difensive:</p>
+<pre><code class="language-python">import pandera as pa
+
+schema = pa.DataFrameSchema({
+    &quot;user_id&quot;: pa.Column(int, checks=pa.Check.ge(0)),
+    &quot;email&quot;: pa.Column(str, checks=pa.Check.str_contains(&quot;@&quot;)),
+    &quot;age&quot;: pa.Column(int, checks=pa.Check.in_range(0, 120), nullable=True),
+    &quot;country&quot;: pa.Column(str, checks=pa.Check.isin([&quot;IT&quot;,&quot;FR&quot;,&quot;DE&quot;,&quot;ES&quot;])),
+})
+
+df_clean = schema.validate(df)
+</code></pre>
+<p>In alternativa: <strong>great_expectations</strong> (più heavy, ma integrabile con pipeline data).</p>
+<h2 id="esercizi">Esercizi</h2>
+<details>
+<summary>Esercizio 1 — Pulisci una colonna prezzo sporca</summary>
+
+Hai una colonna `price` con valori tipo `"€ 1.299,99"`, `"€2,500.00"`, `"1500"`, `"N/D"`. Convertirla in float.
+
+
+<pre><code class="language-python">import pandas as pd, re
+def clean_price(s):
+    if pd.isna(s) or s in ('N/D', '-', ''): return None
+    s = str(s).strip().replace('€','').replace(' ','')
+    # se contiene sia . che , decidi qual è decimale (l'ultimo)
+    if ',' in s and '.' in s:
+        if s.rfind(',') &gt; s.rfind('.'):
+            s = s.replace('.','').replace(',', '.')
+        else:
+            s = s.replace(',','')
+    elif ',' in s:
+        s = s.replace(',','.')
+    try:
+        return float(s)
+    except ValueError:
+        return None
+</code></pre>
+
+</details>
+
+<details>
+<summary>Esercizio 2 — Imputazione con KNN</summary>
+
+
+<pre><code class="language-python">import numpy as np
+from sklearn.impute import KNNImputer
+rng = np.random.default_rng(0)
+X = rng.standard_normal((100, 5))
+mask = rng.random(X.shape) &lt; 0.1
+X_miss = X.copy()
+X_miss[mask] = np.nan
+
+imp = KNNImputer(n_neighbors=5)
+X_filled = imp.fit_transform(X_miss)
+print(&quot;MSE imputazione:&quot;, ((X_filled - X)**2).mean())
+</code></pre>
+
+</details>
+
+<details>
+<summary>Esercizio 3 — Detect anomalie con z-score robust</summary>
+
+
+<pre><code class="language-python">import numpy as np
+def robust_outliers(x, k=3.5):
+    med = np.median(x)
+    mad = np.median(np.abs(x - med)) + 1e-9
+    return np.abs((x - med) / (1.4826 * mad)) &gt; k
+</code></pre>
+
+
+Test:
+
+<pre><code class="language-python">x = np.concatenate([np.random.randn(1000), [10, -8, 20]])
+print(np.where(robust_outliers(x))[0])
+</code></pre>
+
+</details>
+
+<details>
+<summary>Esercizio 4 — Parsing date miste</summary>
+
+Hai una colonna con: `"2024-01-15"`, `"15/01/2024"`, `"Jan 15, 2024"`, `"2024.01.15"`. Convertili in datetime uniformi.
+
+
+<pre><code class="language-python">import pandas as pd
+ser = pd.Series([&quot;2024-01-15&quot;,&quot;15/01/2024&quot;,&quot;Jan 15, 2024&quot;,&quot;2024.01.15&quot;])
+parsed = pd.to_datetime(ser, errors='coerce')
+# se rimangono NaT, fallback con dateparser
+import dateparser
+parsed = parsed.fillna(ser.apply(lambda s: dateparser.parse(s, settings={'DATE_ORDER': 'DMY'})))
+</code></pre>
+
+</details>
+
+<details>
+<summary>Esercizio 5 — Validazione con pandera</summary>
+
+Schema per un dataset utenti:
+
+
+<pre><code class="language-python">import pandera as pa
+schema = pa.DataFrameSchema({
+    &quot;user_id&quot;:  pa.Column(int, unique=True, checks=pa.Check.gt(0)),
+    &quot;email&quot;:    pa.Column(str, checks=pa.Check.str_matches(r'^[^@]+@[^@]+\.[^@]+$')),
+    &quot;country&quot;:  pa.Column(str, checks=pa.Check.isin([&quot;IT&quot;,&quot;FR&quot;,&quot;DE&quot;,&quot;ES&quot;,&quot;UK&quot;])),
+    &quot;age&quot;:      pa.Column(int, checks=pa.Check.in_range(13, 120), nullable=True),
+})
+</code></pre>
+
+
+Aggiungi al test: 1 utente con email senza @, 1 con age=-5. Verifica che pandera rifiuti correttamente.
+</details>
+
+<h2 id="cosa-portarti-via">Cosa portarti via</h2>
+<ul>
+<li>50% del tempo: pulizia. Non saltarla, è dove nascono i bug peggiori.</li>
+<li>Missing è informativo: aggiungi flag.</li>
+<li>Validare lo schema in produzione: pandera o great_expectations.</li>
+<li>Fit scaler solo su train, mai su tutto il dataset.</li>
+<li>Documenta il "data dictionary".</li>
+</ul>
+<p>Prossimo: feature engineering, l'arte che separa modelli mediocri da quelli buoni.</p>
+      <nav class="pager">
+<a href="12-visualizzazione.html" class="prev"><span class="label">← Precedente</span><span class="title">Visualizzazione: matplotlib, seaborn, plotly</span></a>
+<a href="14-feature-engineering.html" class="next"><span class="label">Successivo →</span><span class="title">Feature engineering</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Data Science Zero to Hero</strong> — percorso completo, in italiano, dalla matematica al deployment.</p><p>Materiale didattico aperto. Le formule sono lì per essere capite, non temute. Quando un concetto è oscuro, torna indietro: la data science è una piramide, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

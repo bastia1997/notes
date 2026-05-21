@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Alberi decisionali — Data Science Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#3a4a7a',primaryTextColor:'#e8eef0',primaryBorderColor:'#5a6aa0',lineColor:'#8a9499',background:'#11171a'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">Σ</div>
+      <div>
+        <div class="brand-title">DATA SCIENCE</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">🇮🇹 IT</span><a href="../en/pages/20-decision-trees.html" class="lang-link" title="Switch to English">🇬🇧 EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-cos-e-data-science.html" class=""><span class="num">01</span>Cos&#x27;è la data science (e cosa non è)</a></li><li class="nav-item"><a href="../pages/02-python-per-data-science.html" class=""><span class="num">02</span>Python per data science: setup professionale</a></li><li class="nav-item"><a href="../pages/02b-matematica-essenziale.html" class=""><span class="num">02b</span>Matematica del liceo che ti serve davvero</a></li><li class="nav-item"><a href="../pages/03-algebra-lineare.html" class=""><span class="num">03</span>Algebra lineare per data scientist</a></li><li class="nav-item"><a href="../pages/04-calcolo-ottimizzazione.html" class=""><span class="num">04</span>Calcolo, gradiente e ottimizzazione</a></li><li class="nav-item"><a href="../pages/05-probabilita.html" class=""><span class="num">05</span>Probabilità: la lingua dell&#x27;incertezza</a></li><li class="nav-item"><a href="../pages/06-statistica-descrittiva.html" class=""><span class="num">06</span>Statistica descrittiva</a></li><li class="nav-item"><a href="../pages/07-statistica-inferenziale.html" class=""><span class="num">07</span>Statistica inferenziale e test di ipotesi</a></li><li class="nav-item"><a href="../pages/08-distribuzioni.html" class=""><span class="num">08</span>Distribuzioni di probabilità che incontrerai</a></li><li class="nav-item"><a href="../pages/09-numpy.html" class=""><span class="num">09</span>NumPy: pensare in array</a></li><li class="nav-item"><a href="../pages/10-pandas.html" class=""><span class="num">10</span>Pandas: il coltellino svizzero</a></li><li class="nav-item"><a href="../pages/11-sql.html" class=""><span class="num">11</span>SQL per data scientist</a></li><li class="nav-item"><a href="../pages/12-visualizzazione.html" class=""><span class="num">12</span>Visualizzazione: matplotlib, seaborn, plotly</a></li><li class="nav-item"><a href="../pages/13-data-wrangling.html" class=""><span class="num">13</span>Pulizia e data wrangling</a></li><li class="nav-item"><a href="../pages/14-feature-engineering.html" class=""><span class="num">14</span>Feature engineering</a></li><li class="nav-item"><a href="../pages/15-eda.html" class=""><span class="num">15</span>EDA: Exploratory Data Analysis</a></li><li class="nav-item"><a href="../pages/16-ml-fondamenti.html" class=""><span class="num">16</span>ML: fondamenti — bias, varianza, validazione</a></li><li class="nav-item"><a href="../pages/17-regressione-lineare.html" class=""><span class="num">17</span>Regressione lineare e regolarizzazione</a></li><li class="nav-item"><a href="../pages/18-regressione-logistica.html" class=""><span class="num">18</span>Regressione logistica e classificazione</a></li><li class="nav-item"><a href="../pages/19-knn-naive-bayes-svm.html" class=""><span class="num">19</span>KNN, Naive Bayes, SVM</a></li><li class="nav-item"><a href="../pages/20-alberi-decisionali.html" class="active"><span class="num">20</span>Alberi decisionali</a></li><li class="nav-item"><a href="../pages/21-random-forest-boosting.html" class=""><span class="num">21</span>Random Forest, Gradient Boosting, XGBoost</a></li><li class="nav-item"><a href="../pages/22-clustering.html" class=""><span class="num">22</span>Clustering: K-Means, DBSCAN, GMM, gerarchico</a></li><li class="nav-item"><a href="../pages/23-pca-tsne-umap.html" class=""><span class="num">23</span>Riduzione dimensionale: PCA, t-SNE, UMAP</a></li><li class="nav-item"><a href="../pages/24-metriche-validazione.html" class=""><span class="num">24</span>Metriche, cross-validation, leakage</a></li><li class="nav-item"><a href="../pages/25-sbilanciamento-classi.html" class=""><span class="num">25</span>Sbilanciamento di classi</a></li><li class="nav-item"><a href="../pages/26-hyperparameter-tuning.html" class=""><span class="num">26</span>Hyperparameter tuning</a></li><li class="nav-item"><a href="../pages/27-reti-neurali.html" class=""><span class="num">27</span>Reti neurali: dalle basi al backprop</a></li><li class="nav-item"><a href="../pages/28-pytorch.html" class=""><span class="num">28</span>PyTorch: dal toy model al training loop</a></li><li class="nav-item"><a href="../pages/29-cnn.html" class=""><span class="num">29</span>CNN per computer vision</a></li><li class="nav-item"><a href="../pages/30-rnn-lstm.html" class=""><span class="num">30</span>RNN, LSTM, GRU per sequenze</a></li><li class="nav-item"><a href="../pages/31-transformer.html" class=""><span class="num">31</span>Transformer e attention</a></li><li class="nav-item"><a href="../pages/32-nlp-llm.html" class=""><span class="num">32</span>NLP: dal text mining ai LLM</a></li><li class="nav-item"><a href="../pages/33-time-series.html" class=""><span class="num">33</span>Time series e forecasting</a></li><li class="nav-item"><a href="../pages/34-mlops.html" class=""><span class="num">34</span>MLOps: deployment, monitoring, drift</a></li><li class="nav-item"><a href="../pages/35-bayesian-causal.html" class=""><span class="num">35</span>Inferenza bayesiana e causale</a></li><li class="nav-item"><a href="../pages/36-capstone-carriera.html" class=""><span class="num">36</span>Capstone, portfolio, carriera</a></li><li class="nav-item"><a href="../pages/37-glossario.html" class=""><span class="num">37</span>Glossario A-Z</a></li><li class="nav-item"><a href="../pages/38-formulario.html" class=""><span class="num">38</span>Formulario: tutte le formule del percorso</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Machine Learning</span>
+        <span>Sezione 21 di 39</span>
+        <span class="level-tag level-int">Livello: intermedio</span>
+      </div>
+      <h1>Alberi decisionali</h1>
+      <p class="summary">Splits, impurità Gini/entropia, profondità, pruning. Le basi degli ensemble più potenti (RF, XGBoost) — capirli è obbligatorio.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Machine Learning</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>[[ml-fondamenti]]</li></ul>
+  <div class="label">Strumenti</div>
+  <ul class="source-list"><li>scikit-learn</li></ul>
+</div>
+      <h2 id="lintuizione">L'intuizione</h2>
+<p>Un albero pone una serie di domande "$x_j \leq t$?" che dividono lo spazio delle feature in regioni rettangolari. In ogni regione, predice la media (regressione) o la classe maggioritaria (classificazione).</p>
+<pre><code class="language-mermaid">flowchart TD
+    A{eta &amp;lt; 30?} --&gt;|sì| B{income &amp;lt; 40k?}
+    A --&gt;|no| C{is_owner?}
+    B --&gt;|sì| D[CLASS A]
+    B --&gt;|no| E[CLASS B]
+    C --&gt;|sì| F[CLASS B]
+    C --&gt;|no| G[CLASS A]
+</code></pre>
+<p>Vantaggi: <strong>interpretabile</strong>, gestisce categoriche e numeriche, niente scaling necessario, robusto agli outlier.</p>
+<h3 id="come-vede-un-albero-il-piano-cartesiano">Come "vede" un albero il piano cartesiano</h3>
+<p>Pensa a un dataset 2D con 2 feature $(x_1, x_2)$ e 2 classi. Un albero traccia <strong>rette parallele agli assi</strong>, dividendo lo spazio in rettangoli, e in ogni rettangolo predice la classe maggioritaria:</p>
+<div class="chart"><svg viewBox="0 0 480 260" xmlns="http://www.w3.org/2000/svg">
+<rect x="40" y="20" width="400" height="200" fill="none" stroke="#555"/>
+<text x="240" y="240" fill="#8b949e" font-size="11" text-anchor="middle">x₁</text>
+<text x="22" y="120" fill="#8b949e" font-size="11">x₂</text>
+
+<line x1="200" y1="20" x2="200" y2="220" stroke="#c084fc" stroke-width="2" stroke-dasharray="5,3"/>
+<text x="205" y="34" fill="#c084fc" font-size="11">x₁ &lt; 5?</text>
+
+<line x1="40" y1="120" x2="200" y2="120" stroke="#ffb347" stroke-width="2" stroke-dasharray="5,3"/>
+<text x="50" y="115" fill="#ffb347" font-size="11">x₂ &lt; 3?</text>
+
+<line x1="200" y1="80" x2="440" y2="80" stroke="#5ee2c4" stroke-width="2" stroke-dasharray="5,3"/>
+<text x="280" y="75" fill="#5ee2c4" font-size="11">x₂ &lt; 6?</text>
+
+<rect x="40" y="20" width="160" height="100" fill="rgba(122,162,255,0.10)"/>
+<rect x="40" y="120" width="160" height="100" fill="rgba(255,179,71,0.15)"/>
+<rect x="200" y="20" width="240" height="60" fill="rgba(255,179,71,0.15)"/>
+<rect x="200" y="80" width="240" height="140" fill="rgba(122,162,255,0.10)"/>
+
+<circle cx="90" cy="60" r="4" fill="#7aa2ff"/>
+<circle cx="130" cy="90" r="4" fill="#7aa2ff"/>
+<circle cx="170" cy="50" r="4" fill="#7aa2ff"/>
+<circle cx="80" cy="100" r="4" fill="#7aa2ff"/>
+
+<circle cx="110" cy="180" r="4" fill="#ffb347"/>
+<circle cx="150" cy="200" r="4" fill="#ffb347"/>
+<circle cx="80" cy="170" r="4" fill="#ffb347"/>
+
+<circle cx="250" cy="50" r="4" fill="#ffb347"/>
+<circle cx="320" cy="60" r="4" fill="#ffb347"/>
+<circle cx="380" cy="40" r="4" fill="#ffb347"/>
+
+<circle cx="280" cy="130" r="4" fill="#7aa2ff"/>
+<circle cx="370" cy="170" r="4" fill="#7aa2ff"/>
+<circle cx="240" cy="200" r="4" fill="#7aa2ff"/>
+<circle cx="420" cy="100" r="4" fill="#7aa2ff"/>
+</svg><div class="chart-caption">Un albero divide il piano in rettangoli. Ogni split aggiunge una linea parallela a un asse — mai oblique come SVM o logistica.</div></div>
+
+<p>Confronta con la regressione logistica, che traccia <strong>una sola retta obliqua</strong>. Un albero può catturare frontiere a "scalini", ma con tanti scalini approssima quasi qualsiasi forma — al prezzo di overfittare se non lo limiti.</p>
+<h2 id="costruzione-criterio-di-split">Costruzione: criterio di split</h2>
+<p>Per ogni nodo:</p>
+<ol>
+<li>Per ogni feature $j$ e soglia $t$, calcola la "purezza" delle due sotto-regioni risultanti.</li>
+<li>Scegli $(j, t)$ che massimizza il guadagno di purezza.</li>
+<li>Ricorri su entrambi i figli.</li>
+<li>Fermati quando: profondità massima, nodo puro, o min samples.</li>
+</ol>
+<h3 id="criteri-di-impurita-classificazione">Criteri di impurità (classificazione)</h3>
+<p><strong>Gini index</strong>:
+$$G = \sum_k p_k (1 - p_k) = 1 - \sum_k p_k^2$$</p>
+<p><strong>Entropia</strong>:
+$$H = -\sum_k p_k \log_2 p_k$$</p>
+<p>Entrambi misurano "quanto è mista" una regione. 0 = pura (un solo classe), max = uniforme.</p>
+<h3 id="per-la-regressione">Per la regressione</h3>
+<p><strong>Varianza residua</strong>:
+$$L = \sum_i (y_i - \bar{y}_R)^2$$</p>
+<p>dove $\bar{y}_R$ è la media nella regione.</p>
+<h3 id="information-gain">Information gain</h3>
+<p>$$IG = L_\text{parent} - \frac{n_L}{n} L_L - \frac{n_R}{n} L_R$$</p>
+<p>Quanto la divisione <strong>riduce</strong> l'impurità, pesata dalla taglia dei figli.</p>
+<h2 id="overfitting-e-pruning">Overfitting e pruning</h2>
+<p>Un albero senza vincoli <strong>memorizza</strong> il training set: ogni foglia ha un solo esempio, accuracy 100% in train, disastro in test.</p>
+<p><strong>Strategie anti-overfit</strong>:</p>
+<ol>
+<li>
+<p><strong>Pre-pruning</strong> (early stopping):
+   - <code>max_depth</code>: profondità massima
+   - <code>min_samples_split</code>: minimo per splittare
+   - <code>min_samples_leaf</code>: minimo in una foglia
+   - <code>max_leaf_nodes</code>: numero massimo di foglie
+   - <code>min_impurity_decrease</code>: gain minimo richiesto</p>
+</li>
+<li>
+<p><strong>Post-pruning</strong> (cost-complexity pruning):
+   $$L_\alpha(T) = L(T) + \alpha |T|$$
+   dove $|T|$ è il numero di foglie. Aumentare $\alpha$ rimuove foglie meno utili.</p>
+</li>
+</ol>
+<pre><code class="language-python">from sklearn.tree import DecisionTreeClassifier
+tree = DecisionTreeClassifier(max_depth=5, min_samples_leaf=10, random_state=0)
+tree.fit(X_tr, y_tr)
+</code></pre>
+<h3 id="cost-complexity-path">Cost-complexity path</h3>
+<pre><code class="language-python">path = tree.cost_complexity_pruning_path(X_tr, y_tr)
+alphas = path.ccp_alphas
+# allena un albero per ogni alpha, scegli col CV
+</code></pre>
+<h2 id="visualizzare-un-albero">Visualizzare un albero</h2>
+<pre><code class="language-python">from sklearn.tree import plot_tree, export_text
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(15, 8))
+plot_tree(tree, feature_names=feature_names, class_names=['no','yes'],
+          filled=True, rounded=True, fontsize=8)
+plt.show()
+
+print(export_text(tree, feature_names=list(feature_names)))
+</code></pre>
+<p>Gli alberi sono il modello <strong>più interpretabile</strong> disponibile. In settori regolamentati (medicina, credito) sono spesso preferiti per questo.</p>
+<h2 id="limitazioni-di-un-singolo-albero">Limitazioni di un singolo albero</h2>
+<ul>
+<li><strong>Alta varianza</strong>: piccoli cambi nei dati → albero diverso.</li>
+<li><strong>Frontiere "step-wise"</strong>: solo perpendicolari agli assi.</li>
+<li><strong>Sbilanciamento</strong>: tendono a favorire feature continue con molti split possibili.</li>
+<li><strong>Estrapolazione assente</strong> in regressione: prediction limitata al range visto.</li>
+</ul>
+<p>Soluzione: <strong>ensemble</strong> (Random Forest, Boosting) — vedremo nelle sezioni successive.</p>
+<h2 id="esempio-completo">Esempio completo</h2>
+<pre><code class="language-python">from sklearn.datasets import load_breast_cancer
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.model_selection import train_test_split, cross_val_score
+import numpy as np
+
+X, y = load_breast_cancer(return_X_y=True)
+X_tr, X_te, y_tr, y_te = train_test_split(X, y, stratify=y, random_state=0)
+
+# CV per scegliere max_depth
+depths = range(1, 20)
+scores = [cross_val_score(DecisionTreeClassifier(max_depth=d, random_state=0), X_tr, y_tr, cv=5).mean()
+          for d in depths]
+best_d = depths[np.argmax(scores)]
+print(f&quot;miglior max_depth: {best_d}&quot;)
+
+tree = DecisionTreeClassifier(max_depth=best_d, random_state=0).fit(X_tr, y_tr)
+print(f&quot;Test acc: {tree.score(X_te, y_te):.3f}&quot;)
+print(f&quot;Top 5 feature: {sorted(zip(tree.feature_importances_, range(30)), reverse=True)[:5]}&quot;)
+</code></pre>
+<h2 id="feature-importance">Feature importance</h2>
+<p>Misurate dall'<strong>impurità totale ridotta</strong> da ogni feature, pesata per la frequenza dei nodi:</p>
+<p>$$\text{Imp}<em _text_nodi="\text{nodi">j = \sum</em> \cdot \Delta L$$}: \text{split su } j} \frac{n_{\text{node}}}{n</p>
+<p>Limitazioni:
+- Favorisce feature continue (più split possibili) e feature con molti valori unici.
+- Permutation importance è <strong>più affidabile</strong> (vedi sezione feature engineering).</p>
+<h2 id="trees-per-la-regressione">Trees per la regressione</h2>
+<p>Stessa struttura, ma:
+- Loss = varianza.
+- Predizione = media della foglia.</p>
+<pre><code class="language-python">from sklearn.tree import DecisionTreeRegressor
+reg = DecisionTreeRegressor(max_depth=6, min_samples_leaf=20)
+</code></pre>
+<h2 id="quando-usare-alberi-singoli">Quando usare alberi singoli</h2>
+<p>In pratica, raramente. Sono utili come:</p>
+<ul>
+<li><strong>Interpretabilità massima</strong>: regola decisionale visualizzabile.</li>
+<li><strong>Baseline</strong>: per capire quanto guadagna un ensemble.</li>
+<li><strong>Componenti</strong> di Random Forest o Boosting.</li>
+</ul>
+<p>Per <strong>prestazioni</strong>, vai sempre su RF o XGBoost.</p>
+<h2 id="esercizi">Esercizi</h2>
+<details>
+<summary>Esercizio 1 — Calcola Gini a mano</summary>
+
+Un nodo contiene 30 esempi: 18 classe A, 12 classe B. Calcola Gini.
+
+**Soluzione**: $p_A = 0.6, p_B = 0.4$. $G = 1 - 0.36 - 0.16 = 0.48$.
+</details>
+
+<details>
+<summary>Esercizio 2 — Information gain</summary>
+
+Padre: $n=100$, 50/50, Gini=0.5.
+Figlio sinistro: $n=40$, 30 A / 10 B, Gini = 1 - 0.5625 - 0.0625 = 0.375.
+Figlio destro: $n=60$, 20 A / 40 B, Gini = 1 - 0.111 - 0.444 = 0.444.
+
+IG = $0.5 - (40/100) \cdot 0.375 - (60/100) \cdot 0.444 = 0.5 - 0.15 - 0.267 = 0.083$.
+</details>
+
+<details>
+<summary>Esercizio 3 — Albero da zero (semplificato)</summary>
+
+
+<pre><code class="language-python">import numpy as np
+
+def gini(y):
+    p = np.bincount(y) / len(y)
+    return 1 - (p**2).sum()
+
+def best_split(X, y):
+    best = (None, None, 1.0)  # (feature, threshold, gini)
+    for j in range(X.shape[1]):
+        vals = np.unique(X[:, j])
+        for t in vals[:-1]:
+            mask = X[:, j] &lt;= t
+            if mask.sum() == 0 or mask.sum() == len(y): continue
+            g = (mask.sum() * gini(y[mask]) + (~mask).sum() * gini(y[~mask])) / len(y)
+            if g &lt; best[2]: best = (j, t, g)
+    return best
+
+from sklearn.datasets import load_iris
+X, y = load_iris(return_X_y=True)
+print(best_split(X, y))   # (feature, threshold, gini)
+</code></pre>
+
+
+Confronta con sklearn.
+</details>
+
+<details>
+<summary>Esercizio 4 — Pruning con cost-complexity</summary>
+
+
+<pre><code class="language-python">from sklearn.tree import DecisionTreeClassifier
+from sklearn.datasets import load_breast_cancer
+from sklearn.model_selection import train_test_split
+import matplotlib.pyplot as plt
+
+X, y = load_breast_cancer(return_X_y=True)
+X_tr, X_te, y_tr, y_te = train_test_split(X, y, stratify=y, random_state=0)
+
+tree = DecisionTreeClassifier(random_state=0).fit(X_tr, y_tr)
+path = tree.cost_complexity_pruning_path(X_tr, y_tr)
+
+trains, tests = [], []
+for a in path.ccp_alphas:
+    t = DecisionTreeClassifier(random_state=0, ccp_alpha=a).fit(X_tr, y_tr)
+    trains.append(t.score(X_tr, y_tr))
+    tests.append(t.score(X_te, y_te))
+
+plt.plot(path.ccp_alphas, trains, label='train')
+plt.plot(path.ccp_alphas, tests, label='test')
+plt.xlabel('alpha'); plt.legend()
+</code></pre>
+
+
+Vedi: aumentando $\alpha$, l'accuracy in train scende e in test prima sale (riduce overfit) poi scende (underfit).
+</details>
+
+<h2 id="cosa-portarti-via">Cosa portarti via</h2>
+<ul>
+<li>Alberi: serie di split, regioni rettangolari, super interpretabili.</li>
+<li>Impurità: Gini per classification, varianza per regressione.</li>
+<li>Singolo albero: alta varianza, overfit facile. Limita con <code>max_depth</code>, <code>min_samples_leaf</code>.</li>
+<li>Quasi mai usati da soli — sono <strong>building block</strong> di RF e Boosting.</li>
+</ul>
+<p>Prossimo: Random Forest e ensembles.</p>
+      <nav class="pager">
+<a href="19-knn-naive-bayes-svm.html" class="prev"><span class="label">← Precedente</span><span class="title">KNN, Naive Bayes, SVM</span></a>
+<a href="21-random-forest-boosting.html" class="next"><span class="label">Successivo →</span><span class="title">Random Forest, Gradient Boosting, XGBoost</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Data Science Zero to Hero</strong> — percorso completo, in italiano, dalla matematica al deployment.</p><p>Materiale didattico aperto. Le formule sono lì per essere capite, non temute. Quando un concetto è oscuro, torna indietro: la data science è una piramide, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

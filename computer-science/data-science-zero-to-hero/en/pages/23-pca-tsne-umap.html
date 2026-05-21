@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dimensionality reduction: PCA, t-SNE, UMAP — Data Science Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#3a4a7a',primaryTextColor:'#e8eef0',primaryBorderColor:'#5a6aa0',lineColor:'#8a9499',background:'#11171a'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">Σ</div>
+      <div>
+        <div class="brand-title">DATA SCIENCE</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/23-pca-tsne-umap.html" class="lang-link" title="Passa all'italiano">🇮🇹 IT</a><span class="lang-active" title="English">🇬🇧 EN</span></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="search... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-what-is-data-science.html" class=""><span class="num">01</span>What is data science (and what isn&#x27;t)</a></li><li class="nav-item"><a href="../pages/02-python-for-data-science.html" class=""><span class="num">02</span>Python for data science: pro setup</a></li><li class="nav-item"><a href="../pages/02b-math-essentials.html" class=""><span class="num">02b</span>High-school math you actually need</a></li><li class="nav-item"><a href="../pages/03-linear-algebra.html" class=""><span class="num">03</span>Linear algebra for data scientists</a></li><li class="nav-item"><a href="../pages/04-calculus-optimization.html" class=""><span class="num">04</span>Calculus, gradients, and optimization</a></li><li class="nav-item"><a href="../pages/05-probability.html" class=""><span class="num">05</span>Probability: the language of uncertainty</a></li><li class="nav-item"><a href="../pages/06-descriptive-statistics.html" class=""><span class="num">06</span>Descriptive statistics</a></li><li class="nav-item"><a href="../pages/07-inferential-statistics.html" class=""><span class="num">07</span>Inferential statistics and hypothesis testing</a></li><li class="nav-item"><a href="../pages/08-distributions.html" class=""><span class="num">08</span>Probability distributions you&#x27;ll meet</a></li><li class="nav-item"><a href="../pages/09-numpy.html" class=""><span class="num">09</span>NumPy: thinking in arrays</a></li><li class="nav-item"><a href="../pages/10-pandas.html" class=""><span class="num">10</span>Pandas: the swiss army knife</a></li><li class="nav-item"><a href="../pages/11-sql.html" class=""><span class="num">11</span>SQL for data scientists</a></li><li class="nav-item"><a href="../pages/12-visualization.html" class=""><span class="num">12</span>Visualization: matplotlib, seaborn, plotly</a></li><li class="nav-item"><a href="../pages/13-data-wrangling.html" class=""><span class="num">13</span>Cleaning and data wrangling</a></li><li class="nav-item"><a href="../pages/14-feature-engineering.html" class=""><span class="num">14</span>Feature engineering</a></li><li class="nav-item"><a href="../pages/15-eda.html" class=""><span class="num">15</span>EDA: Exploratory Data Analysis</a></li><li class="nav-item"><a href="../pages/16-ml-fundamentals.html" class=""><span class="num">16</span>ML: fundamentals — bias, variance, validation</a></li><li class="nav-item"><a href="../pages/17-linear-regression.html" class=""><span class="num">17</span>Linear regression and regularization</a></li><li class="nav-item"><a href="../pages/18-logistic-regression.html" class=""><span class="num">18</span>Logistic regression and classification</a></li><li class="nav-item"><a href="../pages/19-knn-naive-bayes-svm.html" class=""><span class="num">19</span>KNN, Naive Bayes, SVM</a></li><li class="nav-item"><a href="../pages/20-decision-trees.html" class=""><span class="num">20</span>Decision trees</a></li><li class="nav-item"><a href="../pages/21-random-forest-boosting.html" class=""><span class="num">21</span>Random Forest, Gradient Boosting, XGBoost</a></li><li class="nav-item"><a href="../pages/22-clustering.html" class=""><span class="num">22</span>Clustering: K-Means, DBSCAN, GMM, hierarchical</a></li><li class="nav-item"><a href="../pages/23-pca-tsne-umap.html" class="active"><span class="num">23</span>Dimensionality reduction: PCA, t-SNE, UMAP</a></li><li class="nav-item"><a href="../pages/24-metrics-validation.html" class=""><span class="num">24</span>Metrics, cross-validation, leakage</a></li><li class="nav-item"><a href="../pages/25-class-imbalance.html" class=""><span class="num">25</span>Class imbalance</a></li><li class="nav-item"><a href="../pages/26-hyperparameter-tuning.html" class=""><span class="num">26</span>Hyperparameter tuning</a></li><li class="nav-item"><a href="../pages/27-neural-networks.html" class=""><span class="num">27</span>Neural networks: from fundamentals to backprop</a></li><li class="nav-item"><a href="../pages/28-pytorch.html" class=""><span class="num">28</span>PyTorch: from toy model to training loop</a></li><li class="nav-item"><a href="../pages/29-cnn.html" class=""><span class="num">29</span>CNN for computer vision</a></li><li class="nav-item"><a href="../pages/30-rnn-lstm.html" class=""><span class="num">30</span>RNN, LSTM, GRU for sequences</a></li><li class="nav-item"><a href="../pages/31-transformer.html" class=""><span class="num">31</span>Transformer and attention</a></li><li class="nav-item"><a href="../pages/32-nlp-llm.html" class=""><span class="num">32</span>NLP: from text mining to LLMs</a></li><li class="nav-item"><a href="../pages/33-time-series.html" class=""><span class="num">33</span>Time series and forecasting</a></li><li class="nav-item"><a href="../pages/34-mlops.html" class=""><span class="num">34</span>MLOps: deployment, monitoring, drift</a></li><li class="nav-item"><a href="../pages/35-bayesian-causal.html" class=""><span class="num">35</span>Bayesian and Causal Inference</a></li><li class="nav-item"><a href="../pages/36-capstone-career.html" class=""><span class="num">36</span>Capstone, portfolio, career</a></li><li class="nav-item"><a href="../pages/37-glossary.html" class=""><span class="num">37</span>Glossary A-Z</a></li><li class="nav-item"><a href="../pages/38-formula-sheet.html" class=""><span class="num">38</span>Formula Sheet: all the formulas from the course</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Machine Learning</span>
+        <span>Section 24 of 39</span>
+        <span class="level-tag level-adv">Level: advanced</span>
+      </div>
+      <h1>Dimensionality reduction: PCA, t-SNE, UMAP</h1>
+      <p class="summary">From PCA&#x27;s mathematical derivation to 2D plots with t-SNE and UMAP. When to compress data, and when to visualize.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Machine Learning</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>[[linear-algebra]]</li><li>[[clustering]]</li></ul>
+  <div class="label">Tools</div>
+  <ul class="source-list"><li>scikit-learn, umap-learn</li></ul>
+</div>
+      <h2 id="why-reduce-dimensions">Why reduce dimensions</h2>
+<p>Three reasons:</p>
+<ol>
+<li><strong>Visualization</strong>: 2D/3D is what you see on a screen.</li>
+<li><strong>Compression</strong>: fewer features = less RAM, less training time.</li>
+<li><strong>Anti-curse-of-dimensionality</strong>: KNN, K-Means, distances in general work better in low-dim.</li>
+<li><strong>Denoising</strong>: discarding low-variance components often removes noise.</li>
+</ol>
+<h2 id="pca-principal-component-analysis">PCA — Principal Component Analysis</h2>
+<h3 id="idea">Idea</h3>
+<p>Find the <strong>directions along which data varies the most</strong>. These directions are orthogonal (principal components) and orthonormal to each other.</p>
+<pre><code class="language-mermaid">flowchart LR
+    X[Data n×p] --&gt;|center+scale| C[Covariance matrix p×p]
+    C --&gt;|eigenvalues&lt;br/&gt;+ eigenvectors| E[Principal components]
+    E --&gt;|first k| Z[Projected data n×k]
+</code></pre>
+<h3 id="derivation">Derivation</h3>
+<ol>
+<li>Center $X$ (subtract mean). Optional: divide by std (standardized PCA).</li>
+<li>Compute the <strong>covariance matrix</strong> $C = \frac{1}{n-1} X^T X$ (with $X$ centered).</li>
+<li>Find eigenvalues and eigenvectors of $C$: $C v_k = \lambda_k v_k$.</li>
+<li>The $v_k$ sorted by decreasing $\lambda_k$ are the <strong>principal components</strong>.</li>
+<li>Project the data: $Z = X V_K$, where $V_K$ contains the first $K$ components.</li>
+</ol>
+<h3 id="equivalence-with-svd">Equivalence with SVD</h3>
+<p>If $X = U \Sigma V^T$ (SVD), then $V$ are the principal components and $\Sigma^2 / (n-1)$ are the eigenvalues. In practice, SVD is always used (more stable).</p>
+<h3 id="explained-variance">Explained variance</h3>
+<p>Each component has an explained variance $\lambda_k$. The cumulative fraction $\sum \lambda_k / \sum \lambda$ shows how much you can retain with $K$ components.</p>
+<pre><code class="language-python">from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
+
+X_s = StandardScaler().fit_transform(X)
+pca = PCA().fit(X_s)
+print(pca.explained_variance_ratio_.cumsum())
+# e.g.: [0.42, 0.65, 0.78, 0.86, 0.92, 0.95, ...]
+# choose K where the cumulative reaches 0.9 or 0.95
+</code></pre>
+<div class="chart"><svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg">
+<line x1="40" y1="150" x2="340" y2="150" stroke="#555"/>
+<line x1="40" y1="20" x2="40" y2="150" stroke="#555"/>
+<path d="M 40 150 L 70 95 L 100 65 L 130 47 L 160 38 L 190 33 L 220 30 L 250 29 L 280 28 L 310 28 L 340 28" fill="none" stroke="#7aa2ff" stroke-width="2.5"/>
+<line x1="40" y1="27" x2="340" y2="27" stroke="#5ee2c4" stroke-dasharray="3,3"/>
+<text x="345" y="30" fill="#5ee2c4" font-size="10">95%</text>
+<text x="180" y="170" fill="#8b949e" font-size="11" text-anchor="middle">number of components</text>
+<text x="115" y="58" fill="#ffb347" font-size="10">elbow</text>
+<circle cx="100" cy="65" r="3" fill="#ffb347"/>
+</svg><div class="chart-caption">Scree plot: cumulative explained variance. Choose K at the elbow or at 95%.</div></div>
+
+<h3 id="example">Example</h3>
+<pre><code class="language-python">from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
+import matplotlib.pyplot as plt
+
+X_s = StandardScaler().fit_transform(X)
+pca = PCA(n_components=2).fit(X_s)
+X_2d = pca.transform(X_s)
+plt.scatter(X_2d[:, 0], X_2d[:, 1], c=y, cmap='tab10')
+</code></pre>
+<h3 id="when-it-works">When it works</h3>
+<ul>
+<li>Data with strong <strong>linear correlations</strong>.</li>
+<li>Want a <strong>deterministic</strong> and fast method.</li>
+<li>Want <strong>interpretable</strong> components (they are linear combinations of the original features).</li>
+</ul>
+<h3 id="when-it-does-not-work">When it does NOT work</h3>
+<ul>
+<li><strong>Non-linear</strong> structures (e.g.: spirals, curved manifolds).</li>
+<li>Distributions with very separated but symmetric clusters (PCA doesn't see them).</li>
+<li>Extremely sparse data → use <strong>TruncatedSVD</strong> (for sparse matrices).</li>
+</ul>
+<h2 id="kernel-pca">Kernel PCA</h2>
+<p>Extension of PCA via the kernel trick (like SVM):</p>
+<pre><code class="language-python">from sklearn.decomposition import KernelPCA
+kpca = KernelPCA(n_components=2, kernel='rbf', gamma=0.1).fit(X)
+</code></pre>
+<p>Captures non-linearities but expensive and less interpretable. Often superseded by t-SNE/UMAP.</p>
+<h2 id="t-sne-t-distributed-stochastic-neighbor-embedding">t-SNE — t-distributed Stochastic Neighbor Embedding</h2>
+<p>van der Maaten &amp; Hinton (2008). <strong>Visualization algorithm</strong>, not a general compression method.</p>
+<h3 id="idea_1">Idea</h3>
+<p>Finds an embedding in 2D (or 3D) that <strong>preserves local distances</strong>:</p>
+<ol>
+<li>In high dim, build a probability distribution over pairs of points (neighbors = high prob).</li>
+<li>In low dim, do the same using a <strong>t-Student</strong> distribution (heavy tails to avoid crowding).</li>
+<li>Minimize KL divergence between the two distributions.</li>
+</ol>
+<h3 id="hyperparameters">Hyperparameters</h3>
+<ul>
+<li><strong><code>perplexity</code></strong>: ~ number of neighbors considered. Typically 5–50. 30 default.</li>
+<li><strong><code>learning_rate</code></strong>: 200–1000. Often <code>auto</code>.</li>
+<li><strong><code>n_iter</code></strong>: 1000+ for convergence.</li>
+</ul>
+<pre><code class="language-python">from sklearn.manifold import TSNE
+ts = TSNE(n_components=2, perplexity=30, init='pca', random_state=0)
+X_2d = ts.fit_transform(X_s)
+</code></pre>
+<h3 id="important-caveats">IMPORTANT caveats</h3>
+<ol>
+<li><strong>Global distances NOT preserved</strong>: clusters close in 2D are NOT necessarily similar in high dim. The plot shape is only locally informative.</li>
+<li><strong>Stochastic</strong>: each run produces a different result (set a seed).</li>
+<li><strong>Slow</strong>: $O(n^2)$ in naive version. Use Barnes-Hut or openTSNE for large datasets.</li>
+<li><strong>Not for "supervised" applications</strong>: don't use t-SNE features as input to a classifier.</li>
+</ol>
+<blockquote>
+<p>Distill.pub has an excellent article ("How to Use t-SNE Effectively") showing why it gets misunderstood. Read it.</p>
+</blockquote>
+<h2 id="umap-uniform-manifold-approximation-and-projection">UMAP — Uniform Manifold Approximation and Projection</h2>
+<p>McInnes et al. (2018). Modern successor to t-SNE: faster, better preserves global structure, handles larger datasets.</p>
+<h3 id="idea-simplified">Idea (simplified)</h3>
+<p>Builds a neighbor graph in high dim, then seeks a layout in low dim that preserves its topology.</p>
+<pre><code class="language-python">import umap
+um = umap.UMAP(n_neighbors=15, min_dist=0.1, n_components=2, random_state=0)
+X_2d = um.fit_transform(X_s)
+</code></pre>
+<h3 id="hyperparameters_1">Hyperparameters</h3>
+<ul>
+<li><strong><code>n_neighbors</code></strong> (default 15): local/global trade-off. Small = local focus, large = global structure.</li>
+<li><strong><code>min_dist</code></strong> (default 0.1): how compact the clusters are. Small = compact clusters, large = sparse.</li>
+<li><strong><code>metric</code></strong>: Euclidean (default), cosine, Manhattan, ...</li>
+</ul>
+<h3 id="when-to-prefer-umap-over-t-sne">When to prefer UMAP over t-SNE</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>t-SNE</th>
+<th>UMAP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Speed</td>
+<td>slow</td>
+<td>fast</td>
+</tr>
+<tr>
+<td>Large datasets</td>
+<td>difficult</td>
+<td>OK up to 10⁶</td>
+</tr>
+<tr>
+<td>Global structure</td>
+<td>lost</td>
+<td>better preserved</td>
+</tr>
+<tr>
+<td>Determinism</td>
+<td>stochastic</td>
+<td>stochastic but more stable</td>
+</tr>
+<tr>
+<td>Modern standard</td>
+<td>yes (history)</td>
+<td>yes (present)</td>
+</tr>
+</tbody>
+</table>
+<p>UMAP is now the default for visualizations in many projects (e.g.: single-cell biology, document embeddings).</p>
+<h2 id="other-methods">Other methods</h2>
+<ul>
+<li><strong>MDS (Multidimensional Scaling)</strong>: preserves pairwise distances. Simpler but less effective than UMAP.</li>
+<li><strong>Isomap</strong>: preserves geodesic distances on a manifold.</li>
+<li><strong>LLE (Locally Linear Embedding)</strong>: preserves local linear relationships.</li>
+<li><strong>Autoencoder</strong>: NN that learns a compressed representation. More powerful, but "black box".</li>
+<li><strong>TruncatedSVD</strong>: PCA for sparse matrices (TF-IDF).</li>
+</ul>
+<h2 id="recommended-workflow">Recommended workflow</h2>
+<pre><code class="language-mermaid">flowchart TD
+    A[Data 100D] --&gt; B{Goal?}
+    B --&gt;|compress&lt;br/&gt;for ML| P[PCA at 95% variance]
+    B --&gt;|visualize| U[UMAP to 2D&lt;br/&gt;often preceded by PCA to 50D]
+    P --&gt; M[ML model]
+    U --&gt; V[Scatter plot colored by cluster/target]
+</code></pre>
+<p>Pattern used in single-cell genomics, document embeddings, image embeddings: <strong>PCA to 50–100D + UMAP to 2D</strong>. PCA removes noise, UMAP visualizes.</p>
+<h2 id="exercises">Exercises</h2>
+<details>
+<summary>Exercise 1 — PCA on the digits dataset</summary>
+
+
+<pre><code class="language-python">from sklearn.datasets import load_digits
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
+import matplotlib.pyplot as plt
+
+X, y = load_digits(return_X_y=True)
+X_s = StandardScaler().fit_transform(X)
+pca = PCA(n_components=2).fit(X_s)
+X_2d = pca.transform(X_s)
+plt.scatter(X_2d[:,0], X_2d[:,1], c=y, cmap='tab10', s=10)
+plt.colorbar()
+</code></pre>
+
+
+Shows that just 2 PCA components already separate many digits.
+</details>
+
+<details>
+<summary>Exercise 2 — Choose K with explained variance</summary>
+
+
+<pre><code class="language-python">pca_full = PCA().fit(X_s)
+cum = pca_full.explained_variance_ratio_.cumsum()
+k95 = (cum &lt; 0.95).sum() + 1
+print(f&quot;K for 95% variance: {k95}&quot;)
+</code></pre>
+
+</details>
+
+<details>
+<summary>Exercise 3 — t-SNE vs UMAP on digits</summary>
+
+
+<pre><code class="language-python">from sklearn.manifold import TSNE
+import umap
+import matplotlib.pyplot as plt
+
+ts = TSNE(n_components=2, random_state=0).fit_transform(X)
+um = umap.UMAP(random_state=0).fit_transform(X)
+
+fig, ax = plt.subplots(1, 2, figsize=(12, 5))
+ax[0].scatter(ts[:,0], ts[:,1], c=y, cmap='tab10', s=8); ax[0].set_title('t-SNE')
+ax[1].scatter(um[:,0], um[:,1], c=y, cmap='tab10', s=8); ax[1].set_title('UMAP')
+</code></pre>
+
+
+UMAP is typically faster and produces more compact clusters.
+</details>
+
+<details>
+<summary>Exercise 4 — Pipeline PCA + KNN</summary>
+
+
+<pre><code class="language-python">from sklearn.pipeline import Pipeline
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.model_selection import cross_val_score
+
+pipe = Pipeline([
+    ('sc', StandardScaler()),
+    ('pca', PCA(n_components=20)),
+    ('knn', KNeighborsClassifier(5)),
+])
+print(cross_val_score(pipe, X, y, cv=5).mean())
+</code></pre>
+
+
+Cross-validated, on digits reaches ~95% accuracy with only 20 components.
+</details>
+
+<h2 id="takeaways">Takeaways</h2>
+<ul>
+<li>PCA: linear, deterministic, interpretable. For compression and denoising.</li>
+<li>t-SNE: visualization, local, stochastic, slow. Only for plots.</li>
+<li>UMAP: modern, faster, better global preservation. Today's default.</li>
+<li>PCA to 50D + UMAP to 2D = standard visualization pipeline.</li>
+<li>Never use t-SNE/UMAP features as input to supervised ML.</li>
+</ul>
+<p>Next: metrics, cross-validation, leakage — evaluation done right.</p>
+      <nav class="pager">
+<a href="22-clustering.html" class="prev"><span class="label">← Previous</span><span class="title">Clustering: K-Means, DBSCAN, GMM, hierarchical</span></a>
+<a href="24-metrics-validation.html" class="next"><span class="label">Next →</span><span class="title">Metrics, cross-validation, leakage</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Data Science Zero to Hero</strong> — complete path, in English, from math to deployment.</p><p>Open didactic material. Formulas are here to be understood, not feared. When a concept is unclear, go back: data science is a pyramid, not a tree you skip across.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+</body>
+</html>

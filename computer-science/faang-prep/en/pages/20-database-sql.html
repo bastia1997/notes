@@ -1,0 +1,569 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Database and SQL — FAANG Prep</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">F</div>
+      <div>
+        <div class="brand-title">FAANG Prep</div>
+        <div class="brand-subtitle">DS&amp;A · System Design</div>
+      </div>
+    </div>
+    <div class="lang-bar">
+      <a class="lang-switcher" href="../../pages/20-database-sql.html" title="Italiano"><span class="flag-icon">🇮🇹</span><span class="flag-label">Italiano</span></a>
+    </div>
+  </div>
+  <div class="search-wrap">
+    <input class="search-input" id="search-input" placeholder="Search content... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/00-introduction.html" class=""><span class="num">00</span>Introduction and how to use this path</a></li><li class="nav-item"><a href="../pages/01-complexity.html" class=""><span class="num">01</span>Computational complexity (Big-O)</a></li><li class="nav-item"><a href="../pages/02-arrays-strings.html" class=""><span class="num">02</span>Arrays and strings</a></li><li class="nav-item"><a href="../pages/03-hashmap-set.html" class=""><span class="num">03</span>Hashmap and set</a></li><li class="nav-item"><a href="../pages/04-linked-list.html" class=""><span class="num">04</span>Linked list</a></li><li class="nav-item"><a href="../pages/05-stack-queue.html" class=""><span class="num">05</span>Stack and queue</a></li><li class="nav-item"><a href="../pages/06-trees.html" class=""><span class="num">06</span>Trees (binary tree and BST)</a></li><li class="nav-item"><a href="../pages/07-heap.html" class=""><span class="num">07</span>Heap and priority queue</a></li><li class="nav-item"><a href="../pages/08-graphs.html" class=""><span class="num">08</span>Graphs</a></li><li class="nav-item"><a href="../pages/09-trie.html" class=""><span class="num">09</span>Trie (prefix tree)</a></li><li class="nav-item"><a href="../pages/10-recursion-backtracking.html" class=""><span class="num">10</span>Recursion and backtracking</a></li><li class="nav-item"><a href="../pages/11-sorting-searching.html" class=""><span class="num">11</span>Sorting and searching</a></li><li class="nav-item"><a href="../pages/12-two-pointers-sliding-window.html" class=""><span class="num">12</span>Two pointers and sliding window</a></li><li class="nav-item"><a href="../pages/13-greedy.html" class=""><span class="num">13</span>Greedy</a></li><li class="nav-item"><a href="../pages/14-dp.html" class=""><span class="num">14</span>Dynamic programming</a></li><li class="nav-item"><a href="../pages/15-bit-manipulation.html" class=""><span class="num">15</span>Bit manipulation</a></li><li class="nav-item"><a href="../pages/16-oop-design-patterns.html" class=""><span class="num">16</span>OOP and design patterns</a></li><li class="nav-item"><a href="../pages/17-system-design.html" class=""><span class="num">17</span>System design — fundamentals</a></li><li class="nav-item"><a href="../pages/18-system-design-examples.html" class=""><span class="num">18</span>System design — end-to-end examples</a></li><li class="nav-item"><a href="../pages/19-concurrency.html" class=""><span class="num">19</span>Concurrency and parallelism</a></li><li class="nav-item"><a href="../pages/20-database-sql.html" class="active"><span class="num">20</span>Database and SQL</a></li><li class="nav-item"><a href="../pages/21-os-networking.html" class=""><span class="num">21</span>OS and networking</a></li><li class="nav-item"><a href="../pages/22-coding-patterns.html" class=""><span class="num">22</span>The 16 interview coding patterns</a></li><li class="nav-item"><a href="../pages/23-behavioral-star.html" class=""><span class="num">23</span>Behavioral interview — STAR and Amazon LP</a></li><li class="nav-item"><a href="../pages/24-mock-interviews.html" class=""><span class="num">24</span>Mock interview and interview strategy</a></li><li class="nav-item"><a href="../pages/25-roadmap-90-days.html" class=""><span class="num">25</span>90-day Roadmap — operational plan</a></li><li class="nav-item"><a href="../pages/26-problem-bank.html" class=""><span class="num">26</span>Problem bank — 200+ FAANG problems</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Systems</span>
+        <span>Section 20 of 26</span>
+      </div>
+      <h1>Database and SQL</h1>
+      <p class="summary">SQL from scratch to window functions, indexes explained with analogy, ACID, isolation levels, SQL vs NoSQL.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Systems</div>
+  
+  
+</div>
+      <p>In many FAANG loops (Meta, Amazon, Stripe in particular) there's a round dedicated to <strong>SQL</strong>. For backend roles you also need to know indexes, transactions, NoSQL.</p>
+<h2 id="part-1-what-a-database-really-is">Part 1 — What a database really is</h2>
+<h3 id="the-problem">The problem</h3>
+<p>You have data that must <strong>survive</strong> application crashes, be efficiently <strong>queried</strong>, and <strong>modified</strong> safely even with concurrent access.</p>
+<p>A DIY solution: JSON file. Works until:</p>
+<ul>
+<li>You have little data (&lt; 1 GB).</li>
+<li>One writer at a time.</li>
+<li>You don't care about indexes and complex queries.</li>
+</ul>
+<p>When you grow, you need a DBMS (Database Management System).</p>
+<h3 id="the-two-families">The two families</h3>
+<p><strong>Relational (RDBMS)</strong>: PostgreSQL, MySQL, Oracle, SQL Server. Rigid schema (tables with columns), JOINs, ACID.</p>
+<p><strong>NoSQL</strong>: various families:
+- Document (MongoDB).
+- Key-value (Redis, DynamoDB).
+- Wide-column (Cassandra).
+- Graph (Neo4j).
+- Time-series (InfluxDB).</p>
+<p>In this chapter let's focus on RDBMS + SQL, then touch NoSQL at the end.</p>
+<h2 id="part-2-essential-sql">Part 2 — Essential SQL</h2>
+<p>SQL is the standard language for relational DBs. <strong>Declarative</strong>: you say what you want, not how to get it. DB optimizes for you.</p>
+<h3 id="base-crud">Base CRUD</h3>
+<pre><code class="language-sql">-- CREATE (insert)
+INSERT INTO users (name, age) VALUES ('Alice', 30);
+
+-- READ (select)
+SELECT name, age FROM users WHERE age &gt; 18;
+
+-- UPDATE
+UPDATE users SET age = 31 WHERE name = 'Alice';
+
+-- DELETE
+DELETE FROM users WHERE age &lt; 0;
+</code></pre>
+<h3 id="select-the-main-weapon">SELECT — the main weapon</h3>
+<pre><code class="language-sql">SELECT column1, column2, ...
+FROM table
+WHERE filter
+GROUP BY grouping
+HAVING filter_post_aggregate
+ORDER BY column [ASC|DESC]
+LIMIT n;
+</code></pre>
+<h3 id="logical-execution-order-not-syntactic">LOGICAL execution order (not syntactic!)</h3>
+<p>Very important to understand SQL:</p>
+<ol>
+<li><strong>FROM</strong> (and JOIN)</li>
+<li><strong>WHERE</strong></li>
+<li><strong>GROUP BY</strong></li>
+<li><strong>HAVING</strong></li>
+<li><strong>SELECT</strong> (including window functions)</li>
+<li><strong>ORDER BY</strong></li>
+<li><strong>LIMIT</strong></li>
+</ol>
+<p>This explains why <code>SELECT name AS n ... WHERE n &gt; 0</code> doesn't work: the alias <code>n</code> doesn't exist yet in WHERE (executed before SELECT).</p>
+<h2 id="part-3-join">Part 3 — JOIN</h2>
+<p>Combining rows from multiple tables.</p>
+<h3 id="example-setup">Example setup</h3>
+<pre><code class="language-sql">employees: (id, name, dept_id, salary)
+departments: (id, name)
+</code></pre>
+<h3 id="inner-join">INNER JOIN</h3>
+<p>Only rows matching in both.</p>
+<pre><code class="language-sql">SELECT e.name, d.name AS dept
+FROM employees e
+INNER JOIN departments d ON e.dept_id = d.id;
+</code></pre>
+<p>Visualization: intersection of the two sets.</p>
+<h3 id="left-join">LEFT JOIN</h3>
+<p>All rows from the left. If no match on right, NULL.</p>
+<pre><code class="language-sql">SELECT e.name, d.name AS dept
+FROM employees e
+LEFT JOIN departments d ON e.dept_id = d.id;
+</code></pre>
+<p>Employees without department → <code>dept</code> = NULL but still appear.</p>
+<h3 id="right-join-full-outer-join">RIGHT JOIN / FULL OUTER JOIN</h3>
+<p>Symmetric / complete union. Less used.</p>
+<h3 id="cross-join">CROSS JOIN</h3>
+<p>Cartesian product: every row × every row. Rarely intentional.</p>
+<h3 id="self-join">Self join</h3>
+<p>Same table twice (with different aliases). Typical for hierarchies.</p>
+<pre><code class="language-sql">-- Show each employee with their own manager (both in employees)
+SELECT e.name AS emp, m.name AS mgr
+FROM employees e
+LEFT JOIN employees m ON e.manager_id = m.id;
+</code></pre>
+<h2 id="part-4-aggregation-group-by-and-having">Part 4 — Aggregation: GROUP BY and HAVING</h2>
+<p>Group rows and calculate statistics.</p>
+<pre><code class="language-sql">SELECT dept_id, COUNT(*) AS n_emp, AVG(salary) AS avg_sal
+FROM employees
+GROUP BY dept_id
+HAVING AVG(salary) &gt; 50000;
+</code></pre>
+<p><strong>WHERE vs HAVING</strong>:</p>
+<ul>
+<li>WHERE filters <strong>rows</strong> before grouping.</li>
+<li>HAVING filters <strong>groups</strong> after aggregation.</li>
+</ul>
+<p>Aggregate functions: COUNT, SUM, AVG, MIN, MAX, GROUP_CONCAT (MySQL) / STRING_AGG (Postgres).</p>
+<h2 id="part-5-window-functions-the-secret-weapon">Part 5 — Window functions (the secret weapon)</h2>
+<p>Compute values "in window" without collapsing rows like GROUP BY does.</p>
+<pre><code class="language-sql">SELECT
+  name, dept, salary,
+  RANK()       OVER (PARTITION BY dept ORDER BY salary DESC) AS rk,
+  DENSE_RANK() OVER (PARTITION BY dept ORDER BY salary DESC) AS drk,
+  ROW_NUMBER() OVER (PARTITION BY dept ORDER BY salary DESC) AS rn,
+  LAG(salary)  OVER (PARTITION BY dept ORDER BY salary)      AS prev_sal,
+  SUM(salary)  OVER (PARTITION BY dept)                       AS total_dept
+FROM employees;
+</code></pre>
+<h3 id="row_number-vs-rank-vs-dense_rank-differences">ROW_NUMBER vs RANK vs DENSE_RANK differences</h3>
+<p>Salaries <code>[100, 100, 90, 80]</code>:</p>
+<ul>
+<li><code>ROW_NUMBER</code>: 1, 2, 3, 4 (always unique).</li>
+<li><code>RANK</code>: 1, 1, 3, 4 (leaves gaps).</li>
+<li><code>DENSE_RANK</code>: 1, 1, 2, 3 (no gaps).</li>
+</ul>
+<h3 id="lag-and-lead">LAG and LEAD</h3>
+<p>Access previous / next row.</p>
+<pre><code class="language-sql">SELECT name, salary, LAG(salary) OVER (ORDER BY hire_date) AS prev
+FROM employees;
+</code></pre>
+<p>Useful for: consecutive differences, run-length, time-series.</p>
+<h3 id="running-totals">Running totals</h3>
+<pre><code class="language-sql">SELECT user_id, date,
+       SUM(amount) OVER (PARTITION BY user_id ORDER BY date) AS running_total
+FROM transactions;
+</code></pre>
+<h2 id="part-6-cte-common-table-expression">Part 6 — CTE (Common Table Expression)</h2>
+<p>Named sub-query, <strong>readable</strong> and reusable.</p>
+<pre><code class="language-sql">WITH dept_avg AS (
+  SELECT dept_id, AVG(salary) AS avg_sal
+  FROM employees
+  GROUP BY dept_id
+)
+SELECT e.name
+FROM employees e
+JOIN dept_avg d ON e.dept_id = d.dept_id
+WHERE e.salary &gt; d.avg_sal;
+</code></pre>
+<p>Replace nested sub-queries. More readable, debuggable.</p>
+<h3 id="recursive-cte">Recursive CTE</h3>
+<p>For hierarchies (trees, graphs).</p>
+<pre><code class="language-sql">WITH RECURSIVE tree AS (
+  -- base case
+  SELECT id, parent_id, 0 AS depth FROM nodes WHERE parent_id IS NULL
+  UNION ALL
+  -- recursive step
+  SELECT n.id, n.parent_id, t.depth + 1
+  FROM nodes n
+  JOIN tree t ON n.parent_id = t.id
+)
+SELECT * FROM tree;
+</code></pre>
+<h2 id="part-7-handling-null">Part 7 — Handling NULL</h2>
+<p><code>NULL</code> means "absent/unknown". 3-valued logic (true, false, <strong>unknown</strong>).</p>
+<pre><code class="language-sql">NULL = NULL          -- unknown (NOT true!)
+NULL IS NULL         -- true
+COALESCE(x, default) -- x if not null, else default
+</code></pre>
+<pre><code class="language-sql">SELECT COALESCE(phone, email, 'n/a') AS contact FROM users;
+</code></pre>
+<h2 id="part-8-index">Part 8 — Index</h2>
+<p>An <strong>index</strong> is a separate data structure (B-tree, hash) that speeds up specific queries.</p>
+<h3 id="analogy-the-index-of-a-book">Analogy: the index of a book</h3>
+<p>Without index: to find "recursion" you flip through the whole book page by page. O(n).</p>
+<p>With index: go to end of book, look up "recursion" → "p. 347". O(log n).</p>
+<h3 id="costs">Costs</h3>
+<p>Index isn't free:</p>
+<ul>
+<li><strong>Space</strong>: index takes disk memory.</li>
+<li><strong>Slower Insert/Update/Delete</strong>: every change must update the index too.</li>
+</ul>
+<p>Rule: index on <strong>frequently filtered</strong> or <strong>JOIN/ORDER BY</strong> columns. Not on rarely queried columns.</p>
+<h3 id="index-types">Index types</h3>
+<ul>
+<li><strong>B-tree</strong> (default): supports <code>=</code>, range (&lt;, &gt;), ORDER BY.</li>
+<li><strong>Hash</strong>: only <code>=</code>. Faster for equality.</li>
+<li><strong>GIN</strong> (Postgres): full-text search, JSON.</li>
+<li><strong>Bitmap</strong> (Oracle, Postgres): columns with few distinct values.</li>
+</ul>
+<h3 id="composite-index">Composite index</h3>
+<p>Index on multiple columns, sorted lexicographically.</p>
+<pre><code class="language-sql">CREATE INDEX idx ON employees(dept_id, salary);
+</code></pre>
+<p>Usable for:</p>
+<ul>
+<li><code>WHERE dept_id = X</code> ✓</li>
+<li><code>WHERE dept_id = X AND salary &gt; Y</code> ✓</li>
+<li><code>WHERE salary &gt; Y</code> <strong>NO</strong> (the order is (dept, salary), not (salary)).</li>
+</ul>
+<p><strong>Leftmost prefix rule</strong>: index helps only if you filter on <strong>leading</strong> columns.</p>
+<h3 id="explain">EXPLAIN</h3>
+<p>In Postgres/MySQL: <code>EXPLAIN ANALYZE &lt;query&gt;</code> shows the execution plan.</p>
+<ul>
+<li><strong>Seq Scan</strong>: full table (no index used). Slow for large tables.</li>
+<li><strong>Index Scan / Index Only Scan</strong>: great.</li>
+<li><strong>Nested Loop, Hash Join, Merge Join</strong>: join types.</li>
+</ul>
+<p>Fundamental debug tool for slow queries.</p>
+<h2 id="part-9-transactions-and-acid">Part 9 — Transactions and ACID</h2>
+<h3 id="what-a-transaction-is">What a transaction is</h3>
+<p>Sequence of operations that must be executed as <strong>an atomic unit</strong>.</p>
+<p>Example: bank transfer from A to B.</p>
+<pre><code class="language-sql">BEGIN;
+  UPDATE accounts SET balance = balance - 100 WHERE id = 'A';
+  UPDATE accounts SET balance = balance + 100 WHERE id = 'B';
+COMMIT;
+</code></pre>
+<p>If the system crashes between the two UPDATEs, you want <strong>both</strong> to fail (rollback), not money to disappear.</p>
+<h3 id="acid">ACID</h3>
+<ul>
+<li><strong>A</strong>tomicity: all or nothing. Crash → rollback.</li>
+<li><strong>C</strong>onsistency: constraints respected (foreign keys, check constraints).</li>
+<li><strong>I</strong>solation: concurrent transactions as if serial.</li>
+<li><strong>D</strong>urability: once commit, persists even if system goes down.</li>
+</ul>
+<h3 id="isolation-levels">Isolation levels</h3>
+<p>How strict must isolation be? 4 levels, weak to strong:</p>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>Dirty read</th>
+<th>Non-repeatable read</th>
+<th>Phantom read</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Read Uncommitted</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>Read Committed</td>
+<td>✗</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>Repeatable Read</td>
+<td>✗</td>
+<td>✗</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>Serializable</td>
+<td>✗</td>
+<td>✗</td>
+<td>✗</td>
+</tr>
+</tbody>
+</table>
+<p>Anomalies:</p>
+<ul>
+<li><strong>Dirty read</strong>: read data not yet committed by another transaction.</li>
+<li><strong>Non-repeatable read</strong>: read same row twice, different values.</li>
+<li><strong>Phantom read</strong>: read same range twice, different rows (concurrent insert/delete).</li>
+</ul>
+<p><strong>Postgres default</strong>: Read Committed.
+<strong>MySQL InnoDB default</strong>: Repeatable Read.</p>
+<p>Stricter = safer but slower.</p>
+<h2 id="part-10-lock-and-mvcc">Part 10 — Lock and MVCC</h2>
+<h3 id="lock">Lock</h3>
+<ul>
+<li><strong>Shared (read) lock</strong>: many can hold simultaneously.</li>
+<li><strong>Exclusive (write) lock</strong>: only one.</li>
+</ul>
+<p>When a transaction writes a row, it takes the exclusive lock. Other readers wait.</p>
+<h3 id="mvcc-multi-version-concurrency-control">MVCC (Multi-Version Concurrency Control)</h3>
+<p>Postgres/InnoDB use MVCC: each transaction sees a <strong>snapshot</strong> of the database at the moment it started (or of every statement, depends on level).</p>
+<p>Consequence: <strong>reads don't block writes and vice versa</strong>. Greater concurrency.</p>
+<h2 id="part-11-normalization">Part 11 — Normalization</h2>
+<p>Schema without redundancy, with clean dependencies.</p>
+<h3 id="normal-forms">Normal forms</h3>
+<ul>
+<li><strong>1NF</strong>: every cell has an atomic value (no lists in a cell).</li>
+<li><strong>2NF</strong>: 1NF + no partial dependency on composite key.</li>
+<li><strong>3NF</strong>: 2NF + no transitive dependency (an attribute depends on key, not on other attributes).</li>
+<li><strong>BCNF</strong>: every dependency has a superkey as determinant.</li>
+</ul>
+<p>In practice you reach 3NF.</p>
+<h3 id="denormalization">Denormalization</h3>
+<p>For <strong>performance</strong>, sometimes you duplicate data. E.g. save <code>user_name</code> in every <code>order</code> instead of doing JOINs. NoSQL often denormalizes by design.</p>
+<p>Trade-off: storage + write complexity vs read speed.</p>
+<h2 id="part-12-sql-vs-nosql-decision-tree">Part 12 — SQL vs NoSQL: decision tree</h2>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Choice</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ACID multi-table transactions</td>
+<td>SQL</td>
+</tr>
+<tr>
+<td>Rapidly evolving schema</td>
+<td>NoSQL document</td>
+</tr>
+<tr>
+<td>Massive per-key reads/writes</td>
+<td>NoSQL KV</td>
+</tr>
+<tr>
+<td>Complex JOINs</td>
+<td>SQL</td>
+</tr>
+<tr>
+<td>Huge horizontal scale (10M+ QPS)</td>
+<td>NoSQL</td>
+</tr>
+<tr>
+<td>Time-series / log</td>
+<td>Time-series DB</td>
+</tr>
+<tr>
+<td>Complex relationships (social graph)</td>
+<td>Graph DB</td>
+</tr>
+<tr>
+<td>Full-text search</td>
+<td>Elasticsearch</td>
+</tr>
+</tbody>
+</table>
+<h2 id="part-13-sql-exercises">Part 13 — SQL exercises</h2>
+<h3 id="exercise-201-second-highest-salary-easy">Exercise 20.1 — Second Highest Salary <span class="problem-tag easy">EASY</span></h3>
+<details><summary>Solution</summary>
+
+
+<pre><code class="language-sql">SELECT MAX(salary) AS second
+FROM employees
+WHERE salary &lt; (SELECT MAX(salary) FROM employees);
+</code></pre>
+
+
+Or with window:
+
+
+<pre><code class="language-sql">SELECT DISTINCT salary
+FROM (
+  SELECT salary, DENSE_RANK() OVER (ORDER BY salary DESC) AS rk
+  FROM employees
+) t
+WHERE rk = 2;
+</code></pre>
+
+</details>
+
+<h3 id="exercise-202-nth-highest-salary-medium">Exercise 20.2 — Nth Highest Salary <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Generalization. <code>DENSE_RANK() = N</code>.</p>
+<h3 id="exercise-203-department-top-three-salaries-hard">Exercise 20.3 — Department Top Three Salaries <span class="problem-tag hard">HARD</span></h3>
+<details><summary>Solution</summary>
+
+
+<pre><code class="language-sql">SELECT dept, name, salary FROM (
+  SELECT d.name AS dept, e.name, e.salary,
+         DENSE_RANK() OVER (PARTITION BY d.id ORDER BY e.salary DESC) AS rk
+  FROM employees e
+  JOIN departments d ON e.dept_id = d.id
+) t
+WHERE rk &lt;= 3;
+</code></pre>
+
+
+Window with PARTITION BY = "top N per group".
+</details>
+
+<h3 id="exercise-204-duplicate-emails-easy">Exercise 20.4 — Duplicate Emails <span class="problem-tag easy">EASY</span></h3>
+<details><summary>Solution</summary>
+
+
+<pre><code class="language-sql">SELECT email FROM users GROUP BY email HAVING COUNT(*) &gt; 1;
+</code></pre>
+
+
+HAVING to filter groups post-aggregate.
+</details>
+
+<h3 id="exercise-205-customers-who-never-order-easy">Exercise 20.5 — Customers Who Never Order <span class="problem-tag easy">EASY</span></h3>
+<details><summary>Solution</summary>
+
+
+<pre><code class="language-sql">SELECT c.name
+FROM customers c
+LEFT JOIN orders o ON c.id = o.customer_id
+WHERE o.id IS NULL;
+</code></pre>
+
+
+LEFT JOIN + NULL filter: "anti-join".
+</details>
+
+<h3 id="exercise-206-trips-and-users-hard">Exercise 20.6 — Trips and Users <span class="problem-tag hard">HARD</span></h3>
+<p>Per-day cancellation rate, excluding banned users.</p>
+<details><summary>Solution</summary>
+
+
+<pre><code class="language-sql">SELECT request_at AS Day,
+       ROUND(
+         SUM(CASE WHEN status != 'completed' THEN 1 ELSE 0 END)::numeric / COUNT(*),
+         2
+       ) AS &quot;Cancellation Rate&quot;
+FROM trips
+WHERE request_at BETWEEN '2013-10-01' AND '2013-10-03'
+  AND client_id NOT IN (SELECT users_id FROM users WHERE banned = 'Yes')
+  AND driver_id NOT IN (SELECT users_id FROM users WHERE banned = 'Yes')
+GROUP BY request_at;
+</code></pre>
+
+
+Technique: `CASE WHEN ... THEN 1 ELSE 0 END` to count conditionally in SUM.
+</details>
+
+<h3 id="exercise-207-consecutive-numbers-medium">Exercise 20.7 — Consecutive Numbers <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Find <code>num</code> values appearing at least 3 times consecutively in logs.</p>
+<details><summary>Solution</summary>
+
+
+<pre><code class="language-sql">SELECT DISTINCT l1.num AS ConsecutiveNums
+FROM logs l1
+JOIN logs l2 ON l2.id = l1.id + 1 AND l2.num = l1.num
+JOIN logs l3 ON l3.id = l1.id + 2 AND l3.num = l1.num;
+</code></pre>
+
+
+Self-join three times. For "at least k consecutive" generalized, window with LAG/LEAD is better.
+</details>
+
+<h3 id="exercise-208-running-total-medium">Exercise 20.8 — Running Total <span class="problem-tag medium">MEDIUM</span></h3>
+<pre><code class="language-sql">SELECT user_id, date,
+       SUM(amount) OVER (PARTITION BY user_id ORDER BY date) AS running_total
+FROM transactions;
+</code></pre>
+<h3 id="exercise-209-median-salary-hard">Exercise 20.9 — Median Salary <span class="problem-tag hard">HARD</span></h3>
+<details><summary>Solution</summary>
+
+
+<pre><code class="language-sql">WITH ranked AS (
+  SELECT salary,
+         ROW_NUMBER() OVER (ORDER BY salary) AS rn,
+         COUNT(*) OVER () AS n
+  FROM employees
+)
+SELECT AVG(salary) AS median
+FROM ranked
+WHERE rn IN (FLOOR((n+1)/2), CEIL((n+1)/2));
+</code></pre>
+
+
+For odd n: single row (rn = (n+1)/2). For even n: average of the two centrals.
+</details>
+
+<h2 id="summary">Summary</h2>
+<ol>
+<li><strong>Declarative SQL</strong>: you say what you want, DB optimizes.</li>
+<li><strong>Logical order</strong>: FROM → WHERE → GROUP → HAVING → SELECT → ORDER → LIMIT.</li>
+<li><strong>JOIN</strong>: INNER (intersection), LEFT (all left), self-join for hierarchies.</li>
+<li><strong>Window functions</strong>: superpower. ROW_NUMBER, RANK, DENSE_RANK, LAG/LEAD, running totals.</li>
+<li><strong>Indexes</strong>: like book index. B-tree for <code>=</code> and range, hash for <code>=</code>.</li>
+<li><strong>ACID + isolation levels</strong>: 4 levels, concurrency/safety trade-off.</li>
+<li><strong>MVCC</strong>: reads don't block writes. Postgres/InnoDB.</li>
+<li><strong>SQL vs NoSQL</strong>: SQL for transactions and JOINs, NoSQL for scale and flexible schema.</li>
+</ol>
+<p>In SQL interview: practice with LeetCode SQL (50 problems is a good target). Window functions are <strong>must-have</strong> for medium levels.</p>
+      <nav class="pager">
+<a href="19-concurrency.html" class="prev"><span class="label">← Previous</span><span class="title">Concurrency and parallelism</span></a>
+<a href="21-os-networking.html" class="next"><span class="label">Next →</span><span class="title">OS and networking</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>FAANG Prep</strong> — complete prep path: DS&amp;A, system design, behavioral. Built to crush Big Tech interviews.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-index.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true,
+      background: '#161922',
+      primaryColor: '#1d2230',
+      primaryTextColor: '#e6e8ee',
+      primaryBorderColor: '#6cf',
+      lineColor: '#7a8194',
+      secondaryColor: '#262b3a',
+      tertiaryColor: '#0f1117',
+      mainBkg: '#1d2230',
+      secondBkg: '#262b3a',
+      tertiaryBkg: '#161922',
+      nodeBorder: '#6cf',
+      clusterBkg: '#161922',
+      clusterBorder: '#262b3a',
+      titleColor: '#6cf',
+      edgeLabelBackground: '#161922',
+      fontFamily: 'Cascadia Code, monospace'
+    }
+  });
+  document.querySelectorAll('pre > code.language-mermaid').forEach((codeEl) => {
+    const pre = codeEl.parentElement;
+    const div = document.createElement('div');
+    div.className = 'mermaid';
+    div.textContent = codeEl.textContent;
+    pre.replaceWith(div);
+  });
+  mermaid.run();
+</script>
+</body>
+</html>

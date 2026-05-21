@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>Regex, automata, and parsers for security — Cybersec Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">&gt;_</div>
+      <div>
+        <div class="brand-title">CYBERSEC</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/02b-regex-automi.html" class="lang-link" title="Passa all'italiano"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="10" height="20" fill="#009246"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ce2b37"/></svg> IT</a><span class="lang-active" title="English"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="30" height="20" fill="#012169"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#fff" stroke-width="3"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#c8102e" stroke-width="1.5"/><path d="M15,0 v20 M0,10 h30" stroke="#fff" stroke-width="5"/><path d="M15,0 v20 M0,10 h30" stroke="#c8102e" stroke-width="3"/></svg> EN</span></div>
+  </div>
+  <div class="search-wrap">
+    <div class="search-row">
+      <div class="search-inputwrap">
+        <span class="search-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"/>
+            <line x1="20" y1="20" x2="16.65" y2="16.65"/>
+          </svg>
+        </span>
+        <input class="search-input" id="search-input" type="text" placeholder="search... (press /)" autocomplete="off" aria-label="Search">
+        <button class="search-clear" id="search-clear" type="button" aria-label="Clear" title="Clear">&times;</button>
+      </div>
+      <button class="search-btn" id="search-btn" type="button" aria-label="SEARCH" title="SEARCH">SEARCH</button>
+    </div>
+    <div class="search-hits" id="search-hits" role="listbox"></div>
+  </div>
+  <div class="sidebar-nav">
+    <nav class="nav-section">
+      <div class="nav-section-title">Path</div>
+      <ul class="nav-list">
+        <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+        <li class="nav-item"><a href="../pages/00-path-and-mindset.html" class=""><span class="num">00</span>Path, mindset, ethics and law</a></li><li class="nav-item"><a href="../pages/00b-math-and-cs.html" class=""><span class="num">00b</span>Math and computation theory (the bare minimum, integrated)</a></li><li class="nav-item"><a href="../pages/01-cs-fundamentals.html" class=""><span class="num">01</span>Computer science fundamentals for security</a></li><li class="nav-item"><a href="../pages/01b-assembly-from-zero.html" class=""><span class="num">01b</span>x86-64 and ARM64 Assembly from zero</a></li><li class="nav-item"><a href="../pages/02-essential-linux.html" class=""><span class="num">02</span>Essential Linux for security</a></li><li class="nav-item"><a href="../pages/02b-regex-automata.html" class="active"><span class="num">02b</span>Regex, automata, and parsers for security</a></li><li class="nav-item"><a href="../pages/03-networking-tcp-ip.html" class=""><span class="num">03</span>Networking: from cables to TCP/IP</a></li><li class="nav-item"><a href="../pages/04-http-tls.html" class=""><span class="num">04</span>HTTP, HTTPS and TLS in depth</a></li><li class="nav-item"><a href="../pages/05-cryptography.html" class=""><span class="num">05</span>Cryptography: theory and practice</a></li><li class="nav-item"><a href="../pages/05b-crypto-worked-examples.html" class=""><span class="num">05b</span>Cryptography — step-by-step worked examples</a></li><li class="nav-item"><a href="../pages/06-os-internals.html" class=""><span class="num">06</span>OS internals: Linux and Windows in depth</a></li><li class="nav-item"><a href="../pages/07-programming-for-security.html" class=""><span class="num">07</span>Programming for security: Python, C, Go</a></li><li class="nav-item"><a href="../pages/08-osint-recon.html" class=""><span class="num">08</span>OSINT and reconnaissance</a></li><li class="nav-item"><a href="../pages/09-scanning-enumeration.html" class=""><span class="num">09</span>Scanning, enumeration and fingerprinting</a></li><li class="nav-item"><a href="../pages/10-owasp-top10.html" class=""><span class="num">10</span>OWASP Top 10 and beyond — basic web vulnerabilities</a></li><li class="nav-item"><a href="../pages/10b-walkthrough-byte-by-byte.html" class=""><span class="num">10b</span>Byte-by-byte walkthrough: SQLi, XSS, SSRF, IDOR</a></li><li class="nav-item"><a href="../pages/11-advanced-web.html" class=""><span class="num">11</span>Advanced web hacking</a></li><li class="nav-item"><a href="../pages/12-network-attacks.html" class=""><span class="num">12</span>Network attacks: MITM, spoofing, pivoting</a></li><li class="nav-item"><a href="../pages/13-active-directory.html" class=""><span class="num">13</span>Active Directory hacking</a></li><li class="nav-item"><a href="../pages/14-exploit-development.html" class=""><span class="num">14</span>Exploit development: from buffer overflow to ROP</a></li><li class="nav-item"><a href="../pages/14b-bof-to-shell-complete.html" class=""><span class="num">14b</span>BoF → shell: a complete exploit from zero</a></li><li class="nav-item"><a href="../pages/15-reverse-engineering.html" class=""><span class="num">15</span>Reverse engineering</a></li><li class="nav-item"><a href="../pages/16-malware-analysis.html" class=""><span class="num">16</span>Malware: taxonomy and analysis</a></li><li class="nav-item"><a href="../pages/17-mobile-security.html" class=""><span class="num">17</span>Mobile security: Android and iOS</a></li><li class="nav-item"><a href="../pages/18-cloud-security.html" class=""><span class="num">18</span>Cloud security: AWS, Azure, GCP</a></li><li class="nav-item"><a href="../pages/19-container-kubernetes.html" class=""><span class="num">19</span>Containers and Kubernetes</a></li><li class="nav-item"><a href="../pages/20-wireless-radio.html" class=""><span class="num">20</span>Wireless and radio: WiFi, BT, SDR</a></li><li class="nav-item"><a href="../pages/21-hardware-firmware.html" class=""><span class="num">21</span>Hardware and firmware hacking</a></li><li class="nav-item"><a href="../pages/22-forensics-dfir.html" class=""><span class="num">22</span>Forensics and DFIR</a></li><li class="nav-item"><a href="../pages/23-blue-team-soc.html" class=""><span class="num">23</span>Blue team: SOC, SIEM, EDR, hunting</a></li><li class="nav-item"><a href="../pages/24-threat-intelligence.html" class=""><span class="num">24</span>Threat intelligence</a></li><li class="nav-item"><a href="../pages/25-grc-regulations.html" class=""><span class="num">25</span>GRC, regulations, and standards</a></li><li class="nav-item"><a href="../pages/26-red-team.html" class=""><span class="num">26</span>Red team and adversary emulation</a></li><li class="nav-item"><a href="../pages/27-ai-ml-security.html" class=""><span class="num">27</span>AI / ML security</a></li><li class="nav-item"><a href="../pages/28-capstone-roadmap.html" class=""><span class="num">28</span>Capstone: CTF roadmap, home lab, certifications</a></li><li class="nav-item"><a href="../pages/29-master-cheatsheet.html" class=""><span class="num">29</span>Master cheatsheet</a></li><li class="nav-item"><a href="../pages/30-extended-glossary.html" class=""><span class="num">30</span>Extended glossary (250+ terms)</a></li><li class="nav-item"><a href="../pages/31-it-eu-regulations.html" class=""><span class="num">31</span>IT/EU regulatory references in detail</a></li>
+      </ul>
+    </nav>
+  </div>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Prerequisites</span>
+        <span>Section 4 of 36</span>
+        <span class="level-tag level-beg">Level: beginner</span>
+      </div>
+      <h1>Regex, automata, and parsers for security</h1>
+      <p class="summary">Regex explained from scratch, with drawn-out automata. ReDoS — why a bad regex can kill a server. Difference between regex / parsers / grammars. Parser ambiguity → polyglots and smuggling. Practical uses in security.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Prerequisites</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>Sections 01, 02, 07</li></ul>
+  <div class="label">Tools</div>
+  <ul class="source-list"><li>regex101.com (interactive debugger)</li><li>Python re / regex (PCRE-like)</li><li>grep / ripgrep / less /</li></ul>
+</div>
+      <blockquote>
+<p>Regex is the Swiss Army knife of the security engineer (grep, log parsing, IDS, WAF, SIEM rules). But it is also a source of vulnerabilities (ReDoS, WAF bypass) and subtle bugs. Understanding it deeply, including the <strong>machine</strong> behind it, pays off.</p>
+</blockquote>
+<h2 id="what-is-a-regex">What is a regex?</h2>
+<p>A <strong>regular expression</strong> is a mini-grammar for describing patterns in strings. It recognizes <strong>regular languages</strong> (formally: strings accepted by a finite state automaton).</p>
+<p>Example: the regex <code>^[a-z]+@[a-z]+\.[a-z]+$</code> matches strings like <code>alice@example.com</code> but not <code>alice@1234</code>.</p>
+<h2 id="basic-building-blocks-pcre-flavored-as-used-by-python-re">Basic building blocks (PCRE-flavored, as used by Python <code>re</code>)</h2>
+<table>
+<thead>
+<tr>
+<th>Syntax</th>
+<th>Meaning</th>
+<th>Example match</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>a</code></td>
+<td>literal</td>
+<td><code>a</code></td>
+</tr>
+<tr>
+<td><code>.</code></td>
+<td>any char (except newline by default)</td>
+<td><code>b</code>, <code>9</code>, <code>@</code></td>
+</tr>
+<tr>
+<td><code>\d</code></td>
+<td>digit (<code>[0-9]</code>)</td>
+<td><code>7</code></td>
+</tr>
+<tr>
+<td><code>\w</code></td>
+<td>word char (<code>[A-Za-z0-9_]</code>)</td>
+<td><code>x</code>, <code>9</code>, <code>_</code></td>
+</tr>
+<tr>
+<td><code>\s</code></td>
+<td>whitespace</td>
+<td>space, tab, newline</td>
+</tr>
+<tr>
+<td><code>\D \W \S</code></td>
+<td>negations</td>
+<td>non-digit, non-word, non-ws</td>
+</tr>
+<tr>
+<td><code>[abc]</code></td>
+<td>one of a, b, c</td>
+<td><code>b</code></td>
+</tr>
+<tr>
+<td><code>[^abc]</code></td>
+<td>one NOT among a, b, c</td>
+<td><code>d</code></td>
+</tr>
+<tr>
+<td><code>[a-z]</code></td>
+<td>range</td>
+<td><code>m</code></td>
+</tr>
+<tr>
+<td><code>a*</code></td>
+<td>0 or more <code>a</code></td>
+<td><code>""</code>, <code>a</code>, <code>aaa</code></td>
+</tr>
+<tr>
+<td><code>a+</code></td>
+<td>1 or more</td>
+<td><code>a</code>, <code>aaa</code></td>
+</tr>
+<tr>
+<td><code>a?</code></td>
+<td>0 or 1</td>
+<td><code>""</code>, <code>a</code></td>
+</tr>
+<tr>
+<td><code>a{3}</code></td>
+<td>exactly 3</td>
+<td><code>aaa</code></td>
+</tr>
+<tr>
+<td><code>a{2,4}</code></td>
+<td>2-4</td>
+<td><code>aa</code>, <code>aaa</code>, <code>aaaa</code></td>
+</tr>
+<tr>
+<td><code>a{2,}</code></td>
+<td>2 or more</td>
+<td><code>aa+</code></td>
+</tr>
+<tr>
+<td><code>^</code></td>
+<td>start of string (or line with flag <code>m</code>)</td>
+<td></td>
+</tr>
+<tr>
+<td><code>$</code></td>
+<td>end of string</td>
+<td></td>
+</tr>
+<tr>
+<td><code>\b</code></td>
+<td>word boundary</td>
+<td>between <code>\w</code> and non-<code>\w</code></td>
+</tr>
+<tr>
+<td><code>(abc)</code></td>
+<td>group (capturing)</td>
+<td></td>
+</tr>
+<tr>
+<td><code>(?:abc)</code></td>
+<td>non-capturing group</td>
+<td></td>
+</tr>
+<tr>
+<td><code>(?P&lt;name&gt;...)</code></td>
+<td>named group (Python)</td>
+<td></td>
+</tr>
+<tr>
+<td><code>a|b</code></td>
+<td>alternation</td>
+<td><code>a</code> or <code>b</code></td>
+</tr>
+<tr>
+<td><code>\1</code></td>
+<td>backreference to group 1</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Greedy vs lazy:</strong>
+- <code>.*</code> is <strong>greedy</strong>: takes as much as it can.
+- <code>.*?</code> is <strong>lazy</strong>: takes as little as it can, expanding only when needed.</p>
+<p>Decisive example: extracting text between <code>&lt;b&gt;</code> and <code>&lt;/b&gt;</code> tags in <code>&lt;b&gt;foo&lt;/b&gt;&lt;b&gt;bar&lt;/b&gt;</code>:
+- <code>&lt;b&gt;.*&lt;/b&gt;</code> → matches the entire string (greedy goes to the last <code>&lt;/b&gt;</code>).
+- <code>&lt;b&gt;.*?&lt;/b&gt;</code> → matches <code>&lt;b&gt;foo&lt;/b&gt;</code> (lazy stops at the first one).</p>
+<h2 id="the-automaton-behind-the-regex-intuition">The automaton behind the regex (intuition)</h2>
+<p>A simple regex translates into a <strong>finite state automaton</strong> (FA). Example: <code>ab*c</code>:</p>
+<pre><code>   ┌─────┐  a   ┌─────┐ b ┌─────┐
+   │  q0 │ ───▶│  q1 │◀─┐│  q2 │
+   └─────┘     └─────┘  └└─────┘
+                        c│
+                        ▼
+                  ┌─────────┐
+                  │ q_accept│
+                  └─────────┘
+</code></pre>
+<ul>
+<li>Start <code>q0</code>.</li>
+<li>On <code>a</code> → <code>q1</code>.</li>
+<li>From <code>q1</code> on <code>b</code> back to <code>q1</code> (loop 0+ b).</li>
+<li>From <code>q1</code> on <code>c</code> → <code>q_accept</code>.</li>
+</ul>
+<p>Recognizes <code>ac</code>, <code>abc</code>, <code>abbbc</code>, ... not <code>bc</code>, not <code>abca</code>.</p>
+<h3 id="nfa-vs-dfa">NFA vs DFA</h3>
+<ul>
+<li><strong>DFA</strong> (Deterministic FA): from a state and a symbol, exactly 1 transition. Fast, linear.</li>
+<li><strong>NFA</strong> (Non-deterministic FA): can "guess" between multiple transitions (backtracking). More expressive but can be slow.</li>
+</ul>
+<p>Regexes with <strong>backreferences</strong> (<code>(a)\1</code>) or lookahead/lookbehind require an NFA with backtracking. Most engines (Python re, PCRE, Java) are <strong>NFA with backtracking</strong>. RE2 (Google) and Rust regex are <strong>DFA</strong> → no backtracking → no ReDoS, but no backreferences.</p>
+<h2 id="redos-when-regex-kills">ReDoS — when regex kills</h2>
+<p>Patterns like <code>(a+)+$</code> on input <code>aaaaaaaaa...!</code> explode <strong>exponentially</strong> in NFA backtracking.</p>
+<p>Classic example <strong>CVE-2017-16026</strong> (npm <code>ms</code>): the regex <code>^((?:\d+)?\.?\d+) *(milliseconds?|...)?$</code> with long input caused blocking.</p>
+<p>Dangerous patterns:
+- <code>(.*)+</code> — nested repetition.
+- <code>(.+)+</code> — same.
+- <code>(a|aa)+</code> — overlapping alternation.
+- <code>(a|ab)*c</code> — overlapping in alternation.</p>
+<h3 id="quick-redos-test-in-python">Quick ReDoS test in Python</h3>
+<pre><code class="language-python">import re, time
+
+pat = r'^(a+)+$'
+s = 'a' * 30 + '!'   # at the end there's '!' which does NOT match
+start = time.time()
+re.match(pat, s)
+print(time.time() - start, &quot;sec&quot;)
+</code></pre>
+<p>With <code>n = 30</code>, the match takes seconds. <code>n = 40</code>, minutes. <strong>Exponential time</strong>. On a public server it's a DoS.</p>
+<h3 id="mitigations">Mitigations</h3>
+<ol>
+<li><strong>Use non-backtracking engines</strong> (RE2 in Go natively, <code>re2</code> Python package, Rust <code>regex</code>).</li>
+<li><strong>Timeout</strong> on the match.</li>
+<li><strong>Limit input length</strong>.</li>
+<li><strong>Avoid catastrophic patterns</strong>: no <code>(.*)+</code>, no <code>(a|a)+</code>. Tools: <a href="https://www.npmjs.com/package/safe-regex">safe-regex</a>, <a href="https://github.com/superhuman/rxxr2">rxxr2</a>.</li>
+<li><strong>Atomic groups and possessive quantifiers</strong> (<code>(?&gt;...)</code>, <code>a*+</code>) — they disable backtracking but aren't available in Python.</li>
+</ol>
+<h2 id="practical-uses-in-security">Practical uses in security</h2>
+<h3 id="detection-with-grep-siem">Detection with grep / SIEM</h3>
+<pre><code class="language-bash"># IPv4 IP
+grep -E '\b(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}\b'
+
+# Email
+grep -E '[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}'
+
+# MD5 (32 hex)
+grep -E '\b[a-fA-F0-9]{32}\b'
+
+# Long base64 chunk (&gt;40 chars)
+grep -E '[A-Za-z0-9+/]{40,}={0,2}'
+
+# JWT (3 base64url segments)
+grep -oE 'eyJ[A-Za-z0-9_-]+\.eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+'
+
+# AWS access key
+grep -E 'AKIA[0-9A-Z]{16}'
+
+# URL in logs
+grep -oE 'https?://[^ &quot;]+'
+</code></pre>
+<h3 id="sigma-rule-see-section-23">Sigma rule (see section 23)</h3>
+<pre><code class="language-yaml">detection:
+    suspicious_cmdline:
+        ProcessCommandLine|re: '(?i)(invoke-(expression|webrequest|restmethod)|downloadstring|frombase64|iex\s|nop\s+-w|hidden\s+win)'
+    condition: suspicious_cmdline
+</code></pre>
+<h3 id="waf-rules">WAF rules</h3>
+<p>WAFs (ModSecurity, Cloudflare WAF, AWS WAF) block payloads via regex. E.g.:</p>
+<pre><code>(?i)union\s+select       # SQLi
+(?i)&lt;script               # XSS
+(?i)../../               # path traversal
+</code></pre>
+<p><strong>Bypassing a WAF = bypassing a regex</strong>:
+- Encoding (<code>%00</code>, double url-encode, mixed case).
+- SQL comments (<code>uni/*!*/on sel/*!*/ect</code>).
+- Char split via JS string concatenation.
+- Unicode normalization tricks.
+- Polyglot.</p>
+<h3 id="extracting-iocs-with-grep-oe">Extracting IoCs with <code>grep -oE</code></h3>
+<pre><code class="language-bash"># all unique IPs from a log
+grep -oE '([0-9]{1,3}\.){3}[0-9]{1,3}' access.log | sort -u
+
+# all requested paths
+grep -oE '&quot;GET ([^ ]+)' access.log | awk '{print $2}' | sort | uniq -c | sort -rn | head
+</code></pre>
+<h3 id="server-side-validation">Server-side validation</h3>
+<p><strong>Never</strong> use regex as primary security (e.g., HTML tag blacklist). Always <strong>whitelist</strong> + a parser appropriate to the context. Bad examples:</p>
+<pre><code class="language-python"># vulnerable
+if not re.search(r'&lt;script', user_input, re.I):
+    render(user_input)
+# bypass: &lt;ScRiPt&gt;, &lt;img onerror=&gt;, &lt;svg/onload=...&gt;, &lt;body onload=&gt;, ...
+</code></pre>
+<p><strong>Good</strong>: use an HTML sanitization library (Bleach, DOMPurify) that has a DOM-aware parser and a semantic whitelist.</p>
+<h2 id="grammars-parsers-languages">Grammars, parsers, languages</h2>
+<p>Regexes recognize <strong>regular languages</strong>, a limited family. They <strong>cannot</strong> match balanced parentheses, Python indentation, nested JSON. For that you need <strong>context-free language parsers</strong>.</p>
+<p>Chomsky hierarchy (recap):
+1. <strong>Regular</strong> (regex / DFA).
+2. <strong>Context-free</strong> (BNF / push-down automata): JSON, XML, HTML, programming languages.
+3. <strong>Context-sensitive</strong>.
+4. <strong>Recursively enumerable</strong> (Turing).</p>
+<h3 id="bnf-example-partial-json">BNF example (partial JSON)</h3>
+<pre><code>object = &quot;{&quot; [ pair (, pair)* ] &quot;}&quot;
+pair   = string &quot;:&quot; value
+value  = string | number | object | array | &quot;true&quot; | &quot;false&quot; | &quot;null&quot;
+</code></pre>
+<h3 id="parser-combinators-generators">Parser combinators / generators</h3>
+<ul>
+<li><strong>PEG</strong> (Parsing Expression Grammars).</li>
+<li>ANTLR, yacc/bison.</li>
+<li>Python: <code>pyparsing</code>, <code>lark</code>.</li>
+</ul>
+<h2 id="parser-ambiguity-security-holes">Parser ambiguity = security holes</h2>
+<p>When two parsers interpret the same input differently, an attacker can abuse it:</p>
+<h3 id="http-request-smuggling">HTTP request smuggling</h3>
+<p>The frontend (HAProxy/Nginx) uses <code>Content-Length</code>. The backend uses <code>Transfer-Encoding: chunked</code>. A request with both headers → each "splits" it at a different point. The attacker can <strong>hide a request inside another</strong>. (See section 11.)</p>
+<h3 id="json-ambiguity">JSON ambiguity</h3>
+<p>Different parsers handle duplicate keys differently:</p>
+<pre><code class="language-json">{&quot;role&quot;: &quot;user&quot;, &quot;role&quot;: &quot;admin&quot;}
+</code></pre>
+<ul>
+<li>Some take the first, others the last. Authorization check on one, business logic on the other = bypass.</li>
+</ul>
+<h3 id="xml-soap-xxe">XML / SOAP / XXE</h3>
+<p>Permissive XML parsers (DTD external entity) → SSRF/LFI.</p>
+<h3 id="polyglot-file">Polyglot file</h3>
+<p>A file that is <strong>simultaneously</strong> PDF + JPEG + HTML. Bypass content-type filtering, MIME sniffing.</p>
+<h3 id="smuggling-url-parsing">Smuggling URL parsing</h3>
+<pre><code>http://example.com#@evil.com/
+http://evil.com\@example.com/
+http://example.com:80@evil.com/
+</code></pre>
+<p>Different URL libraries (<code>urllib.parse</code>, <code>parse-url</code> JS, ...) interpret these differently → SSRF, open-redirect. See the paper "<strong>A New Era of SSRF</strong>" (Black Hat 2017).</p>
+<h2 id="hands-on-practical-examples">Hands-on practical examples</h2>
+<h3 id="example-1-extract-all-https-urls-from-a-text">Example 1: extract all HTTPS URLs from a text</h3>
+<pre><code class="language-python">import re
+text = open(&quot;dump.txt&quot;).read()
+urls = re.findall(r'https://[^\s&lt;&gt;&quot;\']+', text)
+</code></pre>
+<h3 id="example-2-find-hardcoded-api-keys">Example 2: find hardcoded API keys</h3>
+<pre><code class="language-python">patterns = {
+    'aws_key':   r'AKIA[0-9A-Z]{16}',
+    'aws_secret': r'(?i)aws_secret[^=]*=[\s&quot;\']*([A-Za-z0-9/+=]{40})',
+    'github':    r'ghp_[A-Za-z0-9]{36}',
+    'slack':     r'xoxb-[A-Za-z0-9-]+',
+    'jwt':       r'eyJ[A-Za-z0-9_-]+\.eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+',
+    'rsa_priv':  r'-----BEGIN (RSA )?PRIVATE KEY-----',
+}
+import re, sys
+for name, pat in patterns.items():
+    for m in re.finditer(pat, sys.stdin.read()):
+        print(f&quot;{name}: {m.group(0)}&quot;)
+</code></pre>
+<p><strong>All modern secret scanners (gitleaks, trufflehog) are this + many more patterns + a verifier (calling the API to validate).</strong></p>
+<h3 id="example-3-parse-apache-combined-format-logs">Example 3: parse Apache combined-format logs</h3>
+<pre><code class="language-python"># 127.0.0.1 - - [21/May/2026:10:00:00 +0200] &quot;GET /admin HTTP/1.1&quot; 200 1234 &quot;-&quot; &quot;curl/8.0&quot;
+pat = re.compile(
+    r'^(?P&lt;ip&gt;\S+) \S+ \S+ '
+    r'\[(?P&lt;ts&gt;[^\]]+)\] '
+    r'&quot;(?P&lt;method&gt;\w+) (?P&lt;url&gt;\S+) (?P&lt;proto&gt;[^&quot;]+)&quot; '
+    r'(?P&lt;status&gt;\d+) (?P&lt;size&gt;\d+) '
+    r'&quot;(?P&lt;ref&gt;[^&quot;]*)&quot; &quot;(?P&lt;ua&gt;[^&quot;]*)&quot;$'
+)
+for line in open(&quot;access.log&quot;):
+    m = pat.match(line)
+    if m: print(m.groupdict())
+</code></pre>
+<h3 id="example-4-redos-demo">Example 4: ReDoS demo</h3>
+<pre><code class="language-python">import re, time
+def time_match(pat, s):
+    t0 = time.time(); re.match(pat, s); return time.time() - t0
+
+for n in range(20, 35):
+    s = 'a' * n + '!'
+    print(n, time_match(r'^(a+)+$', s))
+</code></pre>
+<p>Watch time grow exponentially with <code>n</code>.</p>
+<h2 id="exercises">Exercises</h2>
+<h3 id="ex-2b1-write-regexes">Ex 2b.1 — Write regexes</h3>
+<ol>
+<li>Strict email pattern (RFC 5322 is complicated; "good enough" is fine).</li>
+<li>HTTP/HTTPS URL.</li>
+<li>Valid IPv4 (no <code>999.999.999.999</code>).</li>
+<li>IPv6 (simplified version).</li>
+<li>UUID v4.</li>
+</ol>
+<details><summary>Solutions</summary>
+
+1. `[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}` (simplified).
+2. `https?://[^\s/$.?#].[^\s]*`.
+3. `\b(25[0-5]|2[0-4]\d|1?\d?\d)(\.(25[0-5]|2[0-4]\d|1?\d?\d)){3}\b`.
+4. An exact one is hard; `([0-9a-f]{1,4}:){7}[0-9a-f]{1,4}` doesn't handle `::` compression. See RFC 4291 for the complete one.
+5. `[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}`.
+
+</details>
+
+<h3 id="ex-2b2-redos-in-practice">Ex 2b.2 — ReDoS in practice</h3>
+<p>Find a ReDoS pattern in an open source project (old npm repos have plenty). Reproduce it with crafted input. Explain.</p>
+<h3 id="ex-2b3-bypass-a-waf-regex">Ex 2b.3 — Bypass a WAF regex</h3>
+<p>Given a blacklist regex <code>(?i)union.*select</code>, come up with 5 ways to bypass it:</p>
+<details><summary>Hints</summary>
+
+- SQL comment: `union/*foo*/select`.
+- Case mix: `UnIoN sElEcT`.
+- URL encoding: `%55nion`.
+- Double URL encoding.
+- Newline (if regex isn't `(?s)`): `union\nselect` (in some engines `.` doesn't match `\n`).
+- Unicode equivalents (`%c0%a7` on several web stacks).
+- Whitespace: tab, vertical tab, form feed.
+
+</details>
+
+<h3 id="ex-2b4-hands-on-parser-ambiguity">Ex 2b.4 — Hands-on parser ambiguity</h3>
+<p>Write two JSON parsers (one in Python <code>json.loads</code>, one simple "DIY" line-by-line). Find an input where they differ. Discussion.</p>
+<h3 id="ex-2b5-regex101-deep-dive">Ex 2b.5 — RegEx101 deep dive</h3>
+<p>Go to <a href="https://regex101.com">regex101.com</a>. Paste in a complex regex (e.g., the Apache log one above). Study the debugger step-by-step. Understand every group.</p>
+<h3 id="ex-2b6-build-a-mini-parser">Ex 2b.6 — Build a mini-parser</h3>
+<p>Write a parser for arithmetic expressions <code>1 + 2 * (3 + 4)</code>. Use <code>lark</code> or <code>pyparsing</code> or write it by hand (recursive descent). How "regex-impossible" is it? (Spoiler: balanced parentheses require a CFG, not a regex.)</p>
+<h2 id="key-takeaways">Key takeaways</h2>
+<ol>
+<li><strong>Regex = DFA/NFA</strong>. DFA engines are safe (RE2). NFA with backtracking → ReDoS.</li>
+<li><strong>Greedy vs lazy</strong> is the most common trap for beginners.</li>
+<li><strong>Replace regex with a proper parser</strong> for HTML/JSON/HTTP — don't sanitize with regex.</li>
+<li><strong>Catastrophic patterns</strong>: <code>(.*)+</code>, <code>(a|a)+</code>, <code>(a+)+</code>.</li>
+<li><strong>WAF bypass</strong> = regex bypass: encoding, case, comments, parser mismatch.</li>
+<li><strong>Parser ambiguity</strong> = a vulnerability class (HTTP smuggling, JSON dup keys, URL parsing).</li>
+<li>Tools: regex101.com, safe-regex, RE2, gitleaks pattern lib.</li>
+</ol>
+<p>Regexes are extremely powerful. Using them well is a skill that will follow you everywhere in security.</p>
+      <nav class="pager">
+<a href="02-essential-linux.html" class="prev"><span class="label">← Previous</span><span class="title">Essential Linux for security</span></a>
+<a href="03-networking-tcp-ip.html" class="next"><span class="label">Next →</span><span class="title">Networking: from cables to TCP/IP</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Cybersec Zero to Hero</strong> — built as a continuous path. Static build from Markdown.</p><p>Educational material. Everything you learn here is to be used only on systems you own, in labs, in authorized bug-bounty programs, or under signed pentest contracts. <strong>Don't break the law.</strong></p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true, background: '#131a1e', primaryColor: '#1d262b',
+      primaryTextColor: '#e8eef0', primaryBorderColor: '#00ff9c',
+      lineColor: '#00e6ff', secondaryColor: '#11171a', tertiaryColor: '#161d21',
+      mainBkg: '#1d262b', nodeBorder: '#00ff9c', clusterBkg: '#0b0f10',
+      clusterBorder: '#243035', titleColor: '#00ff9c',
+      edgeLabelBackground: '#0b0f10', textColor: '#e8eef0',
+      labelTextColor: '#e8eef0', actorBkg: '#1d262b', actorBorder: '#00ff9c',
+      actorTextColor: '#00ff9c', actorLineColor: '#00e6ff',
+      signalColor: '#e8eef0', signalTextColor: '#e8eef0',
+      labelBoxBkgColor: '#1d262b', labelBoxBorderColor: '#00ff9c',
+      noteBkgColor: '#ffe066', noteTextColor: '#0b0f10', noteBorderColor: '#ffe066',
+      activationBkgColor: '#1d262b', activationBorderColor: '#00ff9c',
+      sequenceNumberColor: '#0b0f10'
+    },
+    flowchart: { curve: 'basis', padding: 16 },
+    sequence: { mirrorActors: false, bottomMarginAdj: 10 },
+    fontFamily: 'JetBrains Mono, Cascadia Code, Consolas, monospace'
+  });
+</script>
+</body>
+</html>

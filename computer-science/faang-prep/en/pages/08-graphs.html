@@ -1,0 +1,792 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Graphs — FAANG Prep</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">F</div>
+      <div>
+        <div class="brand-title">FAANG Prep</div>
+        <div class="brand-subtitle">DS&amp;A · System Design</div>
+      </div>
+    </div>
+    <div class="lang-bar">
+      <a class="lang-switcher" href="../../pages/08-grafi.html" title="Italiano"><span class="flag-icon">🇮🇹</span><span class="flag-label">Italiano</span></a>
+    </div>
+  </div>
+  <div class="search-wrap">
+    <input class="search-input" id="search-input" placeholder="Search content... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/00-introduction.html" class=""><span class="num">00</span>Introduction and how to use this path</a></li><li class="nav-item"><a href="../pages/01-complexity.html" class=""><span class="num">01</span>Computational complexity (Big-O)</a></li><li class="nav-item"><a href="../pages/02-arrays-strings.html" class=""><span class="num">02</span>Arrays and strings</a></li><li class="nav-item"><a href="../pages/03-hashmap-set.html" class=""><span class="num">03</span>Hashmap and set</a></li><li class="nav-item"><a href="../pages/04-linked-list.html" class=""><span class="num">04</span>Linked list</a></li><li class="nav-item"><a href="../pages/05-stack-queue.html" class=""><span class="num">05</span>Stack and queue</a></li><li class="nav-item"><a href="../pages/06-trees.html" class=""><span class="num">06</span>Trees (binary tree and BST)</a></li><li class="nav-item"><a href="../pages/07-heap.html" class=""><span class="num">07</span>Heap and priority queue</a></li><li class="nav-item"><a href="../pages/08-graphs.html" class="active"><span class="num">08</span>Graphs</a></li><li class="nav-item"><a href="../pages/09-trie.html" class=""><span class="num">09</span>Trie (prefix tree)</a></li><li class="nav-item"><a href="../pages/10-recursion-backtracking.html" class=""><span class="num">10</span>Recursion and backtracking</a></li><li class="nav-item"><a href="../pages/11-sorting-searching.html" class=""><span class="num">11</span>Sorting and searching</a></li><li class="nav-item"><a href="../pages/12-two-pointers-sliding-window.html" class=""><span class="num">12</span>Two pointers and sliding window</a></li><li class="nav-item"><a href="../pages/13-greedy.html" class=""><span class="num">13</span>Greedy</a></li><li class="nav-item"><a href="../pages/14-dp.html" class=""><span class="num">14</span>Dynamic programming</a></li><li class="nav-item"><a href="../pages/15-bit-manipulation.html" class=""><span class="num">15</span>Bit manipulation</a></li><li class="nav-item"><a href="../pages/16-oop-design-patterns.html" class=""><span class="num">16</span>OOP and design patterns</a></li><li class="nav-item"><a href="../pages/17-system-design.html" class=""><span class="num">17</span>System design — fundamentals</a></li><li class="nav-item"><a href="../pages/18-system-design-examples.html" class=""><span class="num">18</span>System design — end-to-end examples</a></li><li class="nav-item"><a href="../pages/19-concurrency.html" class=""><span class="num">19</span>Concurrency and parallelism</a></li><li class="nav-item"><a href="../pages/20-database-sql.html" class=""><span class="num">20</span>Database and SQL</a></li><li class="nav-item"><a href="../pages/21-os-networking.html" class=""><span class="num">21</span>OS and networking</a></li><li class="nav-item"><a href="../pages/22-coding-patterns.html" class=""><span class="num">22</span>The 16 interview coding patterns</a></li><li class="nav-item"><a href="../pages/23-behavioral-star.html" class=""><span class="num">23</span>Behavioral interview — STAR and Amazon LP</a></li><li class="nav-item"><a href="../pages/24-mock-interviews.html" class=""><span class="num">24</span>Mock interview and interview strategy</a></li><li class="nav-item"><a href="../pages/25-roadmap-90-days.html" class=""><span class="num">25</span>90-day Roadmap — operational plan</a></li><li class="nav-item"><a href="../pages/26-problem-bank.html" class=""><span class="num">26</span>Problem bank — 200+ FAANG problems</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Data structures</span>
+        <span>Section 8 of 26</span>
+      </div>
+      <h1>Graphs</h1>
+      <p class="summary">From scratch — what a graph is, how to represent it, BFS step-by-step drawn. Dijkstra, topological sort, Union-Find explained with analogies.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Data structures</div>
+  
+  
+</div>
+      <p>Graphs are <strong>everywhere</strong> in real life and interviews: social networks, maps, task dependencies, internet, web crawlers. They're the richest and deepest chapter of the FAANG material.</p>
+<p>Let's start from scratch.</p>
+<h2 id="part-1-what-a-graph-is">Part 1 — What a graph is</h2>
+<h3 id="analogy-the-city-map">Analogy: the city map</h3>
+<p>Imagine a sheet with cities drawn, connected by roads.</p>
+<ul>
+<li><strong>Cities</strong> are the <strong>nodes</strong> (vertices).</li>
+<li><strong>Roads</strong> are the <strong>edges</strong>.</li>
+</ul>
+<p>A graph is exactly this: a set of nodes and a set of edges connecting them.</p>
+<h3 id="types-of-graphs">Types of graphs</h3>
+<p><strong>Directed vs undirected</strong></p>
+<ul>
+<li><strong>Undirected</strong>: edges are bidirectional. If there's a road A↔B, there's also B↔A. E.g. road map, Facebook friendships.</li>
+<li><strong>Directed</strong> (digraph): edges have direction. E.g. Twitter followers (you can follow X without X following you), course prerequisites.</li>
+</ul>
+<p><strong>Undirected</strong>:</p>
+<pre><code class="language-mermaid">flowchart LR
+    A --- B
+    A --- C
+    B --- C
+</code></pre>
+<p><strong>Directed</strong>:</p>
+<pre><code class="language-mermaid">flowchart LR
+    A --&gt; B
+    A --&gt; C
+</code></pre>
+<p><strong>Weighted vs unweighted</strong></p>
+<ul>
+<li><strong>Unweighted</strong>: all edges equal. Counts only "exists or not".</li>
+<li><strong>Weighted</strong>: each edge has a value (cost, distance, time). E.g. highway network with km.</li>
+</ul>
+<p><strong>Acyclic vs cyclic</strong></p>
+<ul>
+<li><strong>Acyclic (DAG)</strong>: no cycles. Important for topological sort.</li>
+<li><strong>Cyclic</strong>: has cycles.</li>
+</ul>
+<p><strong>Connected vs disconnected</strong></p>
+<ul>
+<li><strong>Connected</strong>: a path exists between every pair of nodes (in directed case, "strongly connected").</li>
+<li><strong>Disconnected</strong>: isolated groups.</li>
+</ul>
+<h3 id="a-tree-is-a-special-graph">A tree is a special graph</h3>
+<p>A tree is a graph that's <strong>connected</strong>, <strong>acyclic</strong>, <strong>undirected</strong> (or directed from the root). Every node has exactly one parent except root.</p>
+<p>So all algorithms you learned on trees are special cases of graph algorithms.</p>
+<h2 id="part-2-how-to-represent-a-graph-in-code">Part 2 — How to represent a graph in code</h2>
+<p>Three main ways. Choose by problem.</p>
+<h3 id="representation-1-adjacency-list-most-used">Representation 1 — Adjacency list (most used)</h3>
+<p>For each node, a list of its neighbors.</p>
+<pre><code class="language-python">from collections import defaultdict
+graph = defaultdict(list)
+graph[u].append(v)
+# If undirected, also add:
+graph[v].append(u)
+</code></pre>
+<p>Example: undirected graph with edges <code>(0,1), (0,2), (1,2), (2,3)</code>:</p>
+<pre><code class="language-python">graph = {
+    0: [1, 2],
+    1: [0, 2],
+    2: [0, 1, 3],
+    3: [2]
+}
+</code></pre>
+<p><strong>Space</strong>: O(V + E).
+<strong>Iterate neighbors of u</strong>: O(deg(u)).
+<strong>Check "edge (u, v) exists?"</strong>: O(deg(u)).</p>
+<h3 id="representation-2-adjacency-matrix">Representation 2 — Adjacency matrix</h3>
+<p><code>n × n</code> matrix where <code>M[u][v] = 1</code> if edge from u to v exists, <code>0</code> otherwise. For weighted graph, <code>M[u][v] = weight</code>.</p>
+<pre><code class="language-python">n = 4
+M = [[0]*n for _ in range(n)]
+M[u][v] = 1
+# Undirected: also M[v][u] = 1
+</code></pre>
+<p><strong>Space</strong>: O(V²).
+<strong>Check "edge (u, v) exists?"</strong>: O(1).
+<strong>Iterate neighbors of u</strong>: O(V) (must scan entire row).</p>
+<p>Good if graph is <strong>dense</strong> (E ≈ V²) or you need O(1) check on edge existence.</p>
+<h3 id="representation-3-edge-list">Representation 3 — Edge list</h3>
+<p>List of all triples (u, v, weight).</p>
+<pre><code class="language-python">edges = [(0, 1, 5), (0, 2, 3), (1, 2, 1), (2, 3, 4)]
+</code></pre>
+<p><strong>Space</strong>: O(E).
+Useful for algorithms processing edges in order (Kruskal MST, Bellman-Ford).</p>
+<h3 id="implicit-graph">Implicit graph</h3>
+<p>Often the graph isn't given explicitly. <strong>The problem constructs it</strong>:</p>
+<ul>
+<li><strong>2D grid</strong>: each cell is a node, neighbors = 4 (or 8) adjacent cells.</li>
+<li><strong>Puzzle states</strong>: each state is a node, each move an edge.</li>
+<li><strong>Words</strong>: each word a node, two words neighbors if they differ by one letter.</li>
+</ul>
+<p>In these cases you DON'T build the graph explicitly: you "navigate" it generating neighbors on the fly.</p>
+<h2 id="part-3-bfs-breadth-first-search">Part 3 — BFS (Breadth-First Search)</h2>
+<h3 id="the-idea-explore-in-concentric-circles">The idea: explore in concentric circles</h3>
+<p>You're in central square. Explore like this:</p>
+<ul>
+<li>Step 1: visit all streets 1 block away.</li>
+<li>Step 2: all 2 blocks away.</li>
+<li>Step 3: all 3 blocks away.</li>
+<li>...</li>
+</ul>
+<p>BFS is the key for <strong>shortest path in unweighted graphs</strong>: visit nodes in order of increasing distance.</p>
+<h3 id="visualization">Visualization</h3>
+<p>Graph:</p>
+<pre><code class="language-mermaid">flowchart TD
+    A --- B
+    A --- C
+    B --- D
+    B --- E
+    C --- F
+    E --- G
+    F --- G
+</code></pre>
+<p>BFS starting from A:</p>
+<pre><code>Step 0: visit A.            Queue: [B, C]
+Step 1: visit B, then C.    Queue: [D, E, F]
+Step 2: visit D, E, F.      Queue: [G]
+Step 3: visit G.            Queue: []
+</code></pre>
+<p>Order: A, B, C, D, E, F, G. <strong>By level</strong>.</p>
+<h3 id="code">Code</h3>
+<pre><code class="language-python">from collections import deque
+
+def bfs(start, graph):
+    visited = {start}
+    q = deque([(start, 0)])   # (node, distance)
+    while q:
+        node, dist = q.popleft()
+        print(f&quot;Visit {node} at distance {dist}&quot;)
+        for nb in graph[node]:
+            if nb not in visited:
+                visited.add(nb)
+                q.append((nb, dist + 1))
+</code></pre>
+<h3 id="key-mark-visited-on-push-not-on-pop">Key: mark visited on PUSH, not on POP</h3>
+<p>Classic trap. If you mark on pop, the same node can end up in the queue 10 times before being visited.</p>
+<pre><code class="language-python"># CORRECT (mark on push)
+if nb not in visited:
+    visited.add(nb)
+    q.append(nb)
+
+# WRONG (mark on pop)
+# can add the same node to queue many times
+</code></pre>
+<h3 id="multi-source-bfs">Multi-source BFS</h3>
+<p>What if we start from <strong>multiple nodes simultaneously</strong>? Initialize the queue with all.</p>
+<p>Example: "given a grid, distance from each cell to the nearest door".</p>
+<pre><code class="language-python">def bfs_multi(sources, graph):
+    q = deque([(s, 0) for s in sources])
+    visited = set(sources)
+    while q:
+        node, dist = q.popleft()
+        ...
+</code></pre>
+<p>Killer pattern for problems like "Rotting Oranges", "Walls and Gates".</p>
+<h3 id="bfs-complexity">BFS complexity</h3>
+<p>O(V + E). Each node added/removed from queue once, each edge explored once.</p>
+<h3 id="0-1-bfs">0-1 BFS</h3>
+<p>If edges have weight 0 or 1, use <strong>deque</strong>: weight 0 → <code>appendleft</code>, weight 1 → <code>append</code>. Find shortest path in O(V+E).</p>
+<h2 id="part-4-dfs-depth-first-search">Part 4 — DFS (Depth-First Search)</h2>
+<h3 id="the-idea-depth-first">The idea: depth first</h3>
+<p>Always go deep on a branch, then back up.</p>
+<p>Graph (same as before):</p>
+<pre><code class="language-mermaid">flowchart TD
+    A --- B
+    A --- C
+    B --- D
+    B --- E
+    C --- F
+    E --- G
+    F --- G
+</code></pre>
+<p>DFS from A: <code>A → B → D → (back) → E → G → (back x3) → C → F → (G already seen)</code>.</p>
+<p>Visit order: <strong>A, B, D, E, G, C, F</strong>.</p>
+<h3 id="recursive-code">Recursive code</h3>
+<pre><code class="language-python">def dfs(node, graph, visited):
+    visited.add(node)
+    print(f&quot;Visit {node}&quot;)
+    for nb in graph[node]:
+        if nb not in visited:
+            dfs(nb, graph, visited)
+</code></pre>
+<h3 id="iterative-code-with-explicit-stack">Iterative code (with explicit stack)</h3>
+<pre><code class="language-python">def dfs_iter(start, graph):
+    visited = {start}
+    st = [start]
+    while st:
+        node = st.pop()
+        print(f&quot;Visit {node}&quot;)
+        for nb in graph[node]:
+            if nb not in visited:
+                visited.add(nb)
+                st.append(nb)
+</code></pre>
+<p>Note the difference with BFS: only <code>popleft</code> → <code>pop</code> and <code>deque</code> → <code>list</code>. Everything else identical.</p>
+<h3 id="when-to-use-dfs-vs-bfs">When to use DFS vs BFS</h3>
+<table>
+<thead>
+<tr>
+<th>You want...</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Shortest path in unweighted edges</td>
+<td>BFS</td>
+</tr>
+<tr>
+<td>Connected components / "path exists?"</td>
+<td>DFS or BFS, equivalent</td>
+</tr>
+<tr>
+<td>Cycle detection</td>
+<td>DFS (more natural)</td>
+</tr>
+<tr>
+<td>Topological sort</td>
+<td>DFS or BFS (Kahn)</td>
+</tr>
+<tr>
+<td>Weighted pathfinding</td>
+<td>Dijkstra (BFS variant with priority queue)</td>
+</tr>
+<tr>
+<td>All paths (exhaustive exploration)</td>
+<td>DFS + backtracking</td>
+</tr>
+</tbody>
+</table>
+<h3 id="cycle-detection-in-directed-graphs">Cycle detection in directed graphs</h3>
+<p>Use "3-coloring": each node is WHITE (not visited), GRAY (visiting), BLACK (visit complete).</p>
+<p>If during DFS you meet a GRAY node → there's a <strong>back-edge</strong> → cycle.</p>
+<pre><code class="language-python">WHITE, GRAY, BLACK = 0, 1, 2
+
+def has_cycle(graph, n):
+    color = [WHITE] * n
+    def dfs(u):
+        color[u] = GRAY
+        for v in graph[u]:
+            if color[v] == GRAY: return True   # cycle!
+            if color[v] == WHITE and dfs(v): return True
+        color[u] = BLACK
+        return False
+    return any(color[u] == WHITE and dfs(u) for u in range(n))
+</code></pre>
+<p>For <strong>undirected</strong> graphs, just pass the "parent" and ignore the back edge to him.</p>
+<h2 id="part-5-topological-sort">Part 5 — Topological sort</h2>
+<p>For DAGs (Directed Acyclic Graphs). Order nodes such that every edge goes from before to after.</p>
+<h3 id="analogy-planning-university-courses">Analogy: planning university courses</h3>
+<p>You must take CS101 before CS201, CS201 before CS301. Which is a valid order?</p>
+<p><code>CS101 → CS201 → CS301</code>. Obvious. For larger graphs with many constraints, you need an algorithm.</p>
+<h3 id="kahns-algorithm-bfs-based-uses-indegree">Kahn's algorithm (BFS-based, uses indegree)</h3>
+<p>A node's <strong>indegree</strong> is the number of incoming edges.</p>
+<p><strong>Idea</strong>: start from nodes with indegree 0 (no dependencies). Process them. When you process a node, "remove" its outgoing edges by decrementing target indegrees. If anyone reaches indegree 0, add to queue.</p>
+<pre><code class="language-python">from collections import deque, defaultdict
+
+def topo_sort(n, edges):
+    graph = defaultdict(list)
+    indeg = [0] * n
+    for u, v in edges:
+        graph[u].append(v)
+        indeg[v] += 1
+    q = deque(i for i in range(n) if indeg[i] == 0)
+    out = []
+    while q:
+        u = q.popleft()
+        out.append(u)
+        for v in graph[u]:
+            indeg[v] -= 1
+            if indeg[v] == 0:
+                q.append(v)
+    return out if len(out) == n else []   # empty if cycle
+</code></pre>
+<p><strong>Bonus</strong>: Kahn automatically detects <strong>cycles</strong>: if output has fewer than <code>n</code> nodes, there's a cycle.</p>
+<h3 id="dfs-based-topo-sort">DFS-based topo sort</h3>
+<p>Do DFS. When you finish visiting a node (postorder), push it on a stack. The <strong>reverse</strong> of the stack is the topo sort.</p>
+<h2 id="part-6-dijkstra-shortest-path-with-non-negative-weights">Part 6 — Dijkstra (shortest path with non-negative weights)</h2>
+<h3 id="the-problem">The problem</h3>
+<p>You have a weighted graph. What are the shortest distances from a source <code>s</code> to all other nodes?</p>
+<h3 id="the-idea">The idea</h3>
+<p>Generalization of BFS. Use a <strong>priority queue</strong> (min-heap) instead of FIFO queue. Always extract the node with currently smallest distance.</p>
+<pre><code class="language-python">import heapq
+
+def dijkstra(graph, n, src):
+    dist = [float('inf')] * n
+    dist[src] = 0
+    h = [(0, src)]
+    while h:
+        d, u = heapq.heappop(h)
+        if d &gt; dist[u]: continue   # already processed with better distance
+        for v, w in graph[u]:
+            nd = d + w
+            if nd &lt; dist[v]:
+                dist[v] = nd
+                heapq.heappush(h, (nd, v))
+    return dist
+</code></pre>
+<p><strong>Complexity</strong>: O((V + E) log V) with binary heap.</p>
+<h3 id="limits">Limits</h3>
+<ul>
+<li><strong>Doesn't work with negative weights</strong>. Use Bellman-Ford (O(VE)).</li>
+<li><strong>Negative cycles</strong>: Dijkstra doesn't detect them. Bellman-Ford does.</li>
+</ul>
+<h3 id="visualization_1">Visualization</h3>
+<p>Graph (weighted edges):</p>
+<pre><code class="language-mermaid">flowchart LR
+    A --&gt;|3| B
+    A --&gt;|2| C
+    C --&gt;|4| B
+    B --&gt;|1| D
+</code></pre>
+<p>Dijkstra from A:</p>
+<pre><code>Step 1: extract (0, A). Push (3, B), (2, C). Heap: [(2, C), (3, B)]
+Step 2: extract (2, C). dist[C]=2. Push (2+4, B)=(6, B). Heap: [(3, B), (6, B)]
+Step 3: extract (3, B). dist[B]=3. Push (3+1, D)=(4, D). Heap: [(4, D), (6, B)]
+Step 4: extract (4, D). dist[D]=4.
+Step 5: extract (6, B). 6 &gt; dist[B]=3 → skip.
+End.
+</code></pre>
+<p>Distances: A=0, B=3, C=2, D=4. ✓</p>
+<h2 id="part-7-union-find-disjoint-set-union-dsu">Part 7 — Union-Find (Disjoint Set Union, DSU)</h2>
+<h3 id="the-problem_1">The problem</h3>
+<p>You have a set of objects. Group them in <strong>disjoint sets</strong> (components). Two operations:</p>
+<ul>
+<li><code>find(x)</code>: which set does x belong to?</li>
+<li><code>union(x, y)</code>: merge the sets containing x and y.</li>
+</ul>
+<h3 id="use-cases">Use cases</h3>
+<ul>
+<li><strong>Dynamic connected components</strong> (each time you add an edge, possibly merge two components).</li>
+<li><strong>Cycle detection in undirected graphs</strong>: before adding edge (u, v), if find(u) == find(v), there's already a cycle.</li>
+<li><strong>Kruskal MST</strong>.</li>
+</ul>
+<h3 id="implementation">Implementation</h3>
+<p>Idea: each set is represented by a <strong>tree</strong>. The tree's root is the set's "representative".</p>
+<pre><code class="language-python">class DSU:
+    def __init__(self, n):
+        self.parent = list(range(n))   # each node starts as its own parent
+        self.rank = [0] * n            # tree height for optimization
+
+    def find(self, x):
+        # Path compression: make link to root direct
+        while self.parent[x] != x:
+            self.parent[x] = self.parent[self.parent[x]]
+            x = self.parent[x]
+        return x
+
+    def union(self, x, y):
+        rx, ry = self.find(x), self.find(y)
+        if rx == ry: return False   # already in same set
+        # Union by rank: attach smaller tree under larger
+        if self.rank[rx] &lt; self.rank[ry]:
+            rx, ry = ry, rx
+        self.parent[ry] = rx
+        if self.rank[rx] == self.rank[ry]:
+            self.rank[rx] += 1
+        return True
+</code></pre>
+<p><strong>Complexity with both optimizations</strong>: O(α(n)) per operation, where <code>α</code> is the <strong>inverse Ackermann</strong> function. Practically O(1) for any realistic n (&lt; 65536).</p>
+<h3 id="kruskal-mst">Kruskal MST</h3>
+<p>Algorithm for MST (Minimum Spanning Tree): the minimum set of edges connecting all nodes.</p>
+<pre><code class="language-python">def kruskal(n, edges):
+    edges.sort(key=lambda e: e[2])   # sort by weight
+    dsu = DSU(n)
+    total = 0
+    for u, v, w in edges:
+        if dsu.union(u, v):
+            total += w
+    return total
+</code></pre>
+<p>O(E log E).</p>
+<h2 id="part-8-fundamental-patterns">Part 8 — Fundamental patterns</h2>
+<h3 id="pattern-1-grid-bfsdfs">Pattern 1 — Grid BFS/DFS</h3>
+<p>Each cell a node, neighbors = 4 (or 8).</p>
+<pre><code class="language-python">DIRS = [(-1,0),(1,0),(0,-1),(0,1)]
+def neighbors(grid, r, c):
+    R, C = len(grid), len(grid[0])
+    for dr, dc in DIRS:
+        nr, nc = r+dr, c+dc
+        if 0 &lt;= nr &lt; R and 0 &lt;= nc &lt; C:
+            yield nr, nc
+</code></pre>
+<h3 id="pattern-2-connected-components">Pattern 2 — Connected components</h3>
+<p>How many groups of connected nodes? DFS or DSU.</p>
+<h3 id="pattern-3-shortest-path">Pattern 3 — Shortest path</h3>
+<table>
+<thead>
+<tr>
+<th>Case</th>
+<th>Algorithm</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Unweighted</td>
+<td>BFS</td>
+</tr>
+<tr>
+<td>Non-negative weights</td>
+<td>Dijkstra</td>
+</tr>
+<tr>
+<td>Any weights</td>
+<td>Bellman-Ford</td>
+</tr>
+<tr>
+<td>All pairs</td>
+<td>Floyd-Warshall</td>
+</tr>
+</tbody>
+</table>
+<h3 id="pattern-4-topological-order">Pattern 4 — Topological order</h3>
+<p>Dependency planning. Kahn or DFS postorder.</p>
+<h3 id="pattern-5-bipartite-check">Pattern 5 — Bipartite check</h3>
+<p>Color with 2 colors in BFS. If conflict → not bipartite.</p>
+<pre><code class="language-python">def is_bipartite(graph, n):
+    color = [-1] * n
+    for start in range(n):
+        if color[start] != -1: continue
+        q = deque([start])
+        color[start] = 0
+        while q:
+            u = q.popleft()
+            for v in graph[u]:
+                if color[v] == -1:
+                    color[v] = 1 - color[u]
+                    q.append(v)
+                elif color[v] == color[u]:
+                    return False
+    return True
+</code></pre>
+<h2 id="part-9-common-traps">Part 9 — Common traps</h2>
+<h3 id="1-marking-visited-on-pop-instead-of-push">1. Marking visited on pop instead of push</h3>
+<p>See Part 3. Slow and potentially wrong.</p>
+<h3 id="2-stack-overflow-on-recursive-dfs-for-large-graphs">2. Stack overflow on recursive DFS for large graphs</h3>
+<p><code>n &gt; 10⁵</code> → use iterative DFS.</p>
+<h3 id="3-infinite-loop-without-visited">3. Infinite loop without visited</h3>
+<p>By default, always track visited.</p>
+<h3 id="4-dijkstra-with-negative-weights">4. Dijkstra with negative weights</h3>
+<p>Wrong. Use Bellman-Ford.</p>
+<h3 id="5-confusing-directed-and-undirected">5. Confusing directed and undirected</h3>
+<p>In undirected add both (u,v) and (v,u) in adjacency list.</p>
+<h2 id="exercises">Exercises</h2>
+<h3 id="exercise-81-number-of-islands-medium">Exercise 8.1 — Number of Islands <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Count islands in binary grid.</p>
+<details><summary>Solution</summary>
+
+
+<pre><code class="language-python">def num_islands(grid):
+    if not grid: return 0
+    R, C = len(grid), len(grid[0])
+    def dfs(r, c):
+        if not (0 &lt;= r &lt; R and 0 &lt;= c &lt; C): return
+        if grid[r][c] != '1': return
+        grid[r][c] = '0'
+        for dr, dc in [(-1,0),(1,0),(0,-1),(0,1)]:
+            dfs(r+dr, c+dc)
+    count = 0
+    for r in range(R):
+        for c in range(C):
+            if grid[r][c] == '1':
+                dfs(r, c)
+                count += 1
+    return count
+</code></pre>
+
+
+Trick: we modify the grid itself (`'1'` → `'0'`) to avoid a separate visited set.
+</details>
+
+<h3 id="exercise-82-clone-graph-medium">Exercise 8.2 — Clone Graph <span class="problem-tag medium">MEDIUM</span></h3>
+<details><summary>Solution</summary>
+
+
+<pre><code class="language-python">def clone(node):
+    if not node: return None
+    m = {}
+    def dfs(n):
+        if n in m: return m[n]
+        c = Node(n.val)
+        m[n] = c
+        for nb in n.neighbors:
+            c.neighbors.append(dfs(nb))
+        return c
+    return dfs(node)
+</code></pre>
+
+
+Hashmap `original → copy`. DFS that uses the map to avoid infinite loops.
+</details>
+
+<h3 id="exercise-83-course-schedule-medium">Exercise 8.3 — Course Schedule <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Can you complete all courses given the prerequisites?</p>
+<details><summary>Solution</summary>
+
+Topological sort (Kahn). If you complete all nodes → no cycle → yes.
+
+
+<pre><code class="language-python">def can_finish(n, prereq):
+    g = defaultdict(list); indeg = [0]*n
+    for a, b in prereq:
+        g[b].append(a); indeg[a] += 1
+    q = deque(i for i in range(n) if indeg[i] == 0)
+    done = 0
+    while q:
+        u = q.popleft(); done += 1
+        for v in g[u]:
+            indeg[v] -= 1
+            if indeg[v] == 0: q.append(v)
+    return done == n
+</code></pre>
+
+</details>
+
+<h3 id="exercise-84-course-schedule-ii-medium">Exercise 8.4 — Course Schedule II <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Return a valid order. Same as above but collect output.</p>
+<h3 id="exercise-85-pacific-atlantic-water-flow-medium">Exercise 8.5 — Pacific Atlantic Water Flow <span class="problem-tag medium">MEDIUM</span></h3>
+<details><summary>Reasoning</summary>
+
+Reverse thinking: instead of asking "from which cell can I reach the Pacific?", start from the edges and climb up to higher cells. Two multi-source BFS/DFS. Output: cells reachable from **both** oceans.
+
+
+<pre><code class="language-python">def pacific_atlantic(M):
+    if not M: return []
+    R, C = len(M), len(M[0])
+    pac = set(); atl = set()
+    def dfs(r, c, seen):
+        seen.add((r,c))
+        for dr, dc in [(-1,0),(1,0),(0,-1),(0,1)]:
+            nr, nc = r+dr, c+dc
+            if 0 &lt;= nr &lt; R and 0 &lt;= nc &lt; C and (nr,nc) not in seen and M[nr][nc] &gt;= M[r][c]:
+                dfs(nr, nc, seen)
+    for r in range(R):
+        dfs(r, 0, pac); dfs(r, C-1, atl)
+    for c in range(C):
+        dfs(0, c, pac); dfs(R-1, c, atl)
+    return list(pac &amp; atl)
+</code></pre>
+
+
+Pattern: **reverse BFS/DFS** when "reaching the edge" is easier than "reaching the center".
+</details>
+
+<h3 id="exercise-86-word-ladder-hard">Exercise 8.6 — Word Ladder <span class="problem-tag hard">HARD</span></h3>
+<details><summary>Solution</summary>
+
+BFS on implicit graph: two words are "neighbors" if they differ by one letter.
+
+
+<pre><code class="language-python">def ladder_length(begin, end, word_list):
+    words = set(word_list)
+    if end not in words: return 0
+    q = deque([(begin, 1)])
+    while q:
+        w, d = q.popleft()
+        if w == end: return d
+        for i in range(len(w)):
+            for c in 'abcdefghijklmnopqrstuvwxyz':
+                nw = w[:i] + c + w[i+1:]
+                if nw in words:
+                    words.discard(nw)
+                    q.append((nw, d+1))
+    return 0
+</code></pre>
+
+
+Trick: remove visited words from the set to avoid cycles and speed up.
+</details>
+
+<h3 id="exercise-87-network-delay-dijkstra-medium">Exercise 8.7 — Network Delay (Dijkstra) <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Time for a signal sent from k to reach all nodes (or -1 if unreachable).</p>
+<details><summary>Solution</summary>
+
+Plain Dijkstra. Answer: `max(dist)`.
+
+
+<pre><code class="language-python">def network_delay(times, n, k):
+    g = defaultdict(list)
+    for u, v, w in times: g[u].append((v, w))
+    dist = {k: 0}; h = [(0, k)]
+    while h:
+        d, u = heapq.heappop(h)
+        if d &gt; dist.get(u, float('inf')): continue
+        for v, w in g[u]:
+            nd = d + w
+            if nd &lt; dist.get(v, float('inf')):
+                dist[v] = nd
+                heapq.heappush(h, (nd, v))
+    if len(dist) &lt; n: return -1
+    return max(dist.values())
+</code></pre>
+
+</details>
+
+<h3 id="exercise-88-cheapest-flights-k-stops-medium">Exercise 8.8 — Cheapest Flights K Stops <span class="problem-tag medium">MEDIUM</span></h3>
+<details><summary>Solution (modified Bellman-Ford)</summary>
+
+
+<pre><code class="language-python">def find_cheapest(n, flights, src, dst, k):
+    dist = [float('inf')]*n; dist[src] = 0
+    for _ in range(k+1):
+        tmp = dist[:]
+        for u, v, w in flights:
+            if dist[u] + w &lt; tmp[v]:
+                tmp[v] = dist[u] + w
+        dist = tmp
+    return dist[dst] if dist[dst] != float('inf') else -1
+</code></pre>
+
+
+Pattern: k+1 bounded relaxation iterations.
+</details>
+
+<h3 id="exercise-89-redundant-connection-medium">Exercise 8.9 — Redundant Connection <span class="problem-tag medium">MEDIUM</span></h3>
+<details><summary>Solution</summary>
+
+DSU. The edge that joins two already-connected nodes is the redundant one.
+
+
+<pre><code class="language-python">def redundant_connection(edges):
+    dsu = DSU(len(edges) + 1)
+    for u, v in edges:
+        if not dsu.union(u, v):
+            return [u, v]
+</code></pre>
+
+</details>
+
+<h3 id="exercise-810-min-cost-to-connect-points-mst-medium">Exercise 8.10 — Min Cost to Connect Points (MST) <span class="problem-tag medium">MEDIUM</span></h3>
+<details><summary>Solution</summary>
+
+Kruskal on complete graph with Manhattan distance.
+
+
+<pre><code class="language-python">def min_cost_connect(points):
+    n = len(points)
+    edges = []
+    for i in range(n):
+        for j in range(i+1, n):
+            d = abs(points[i][0] - points[j][0]) + abs(points[i][1] - points[j][1])
+            edges.append((d, i, j))
+    edges.sort()
+    dsu = DSU(n); total = 0; count = 0
+    for d, u, v in edges:
+        if dsu.union(u, v):
+            total += d; count += 1
+            if count == n - 1: break
+    return total
+</code></pre>
+
+</details>
+
+<h3 id="exercise-811-alien-dictionary-hard">Exercise 8.11 — Alien Dictionary <span class="problem-tag hard">HARD</span></h3>
+<p>Given alphabetically ordered words in an alien language, find the letter ordering.</p>
+<details><summary>Solution</summary>
+
+Topological sort. Compare consecutive pairs: the first difference is an edge "a precedes b".
+
+
+<pre><code class="language-python">def alien_order(words):
+    g = defaultdict(set)
+    indeg = {c: 0 for w in words for c in w}
+    for w1, w2 in zip(words, words[1:]):
+        if len(w1) &gt; len(w2) and w1.startswith(w2): return &quot;&quot;
+        for a, b in zip(w1, w2):
+            if a != b:
+                if b not in g[a]:
+                    g[a].add(b); indeg[b] += 1
+                break
+    q = deque([c for c in indeg if indeg[c] == 0])
+    out = []
+    while q:
+        c = q.popleft(); out.append(c)
+        for nb in g[c]:
+            indeg[nb] -= 1
+            if indeg[nb] == 0: q.append(nb)
+    return &quot;&quot;.join(out) if len(out) == len(indeg) else &quot;&quot;
+</code></pre>
+
+</details>
+
+<h3 id="exercise-812-word-search-ii-hard">Exercise 8.12 — Word Search II <span class="problem-tag hard">HARD</span></h3>
+<p>See ch. 09 (with trie).</p>
+<h2 id="chapter-summary">Chapter summary</h2>
+<ol>
+<li><strong>Graph</strong> = nodes + edges. 4 dimensions: directed/un, weighted/un, cyclic/acyclic, connected/dis.</li>
+<li><strong>Representations</strong>: adjacency list (default), matrix (dense), edge list (Kruskal).</li>
+<li><strong>BFS</strong> for unweighted shortest path, level-order, multi-source.</li>
+<li><strong>DFS</strong> for components, cycle detection, exhaustive exploration.</li>
+<li><strong>Dijkstra</strong> for weighted shortest path (non-negative). Bellman-Ford for general.</li>
+<li><strong>Topological sort</strong> for DAG (Kahn = BFS+indegree, DFS postorder).</li>
+<li><strong>Union-Find</strong> for dynamic components, MST (Kruskal), cycle in undirected.</li>
+</ol>
+<p>Graph interview questions are "rich": one alone can combine BFS + hash + parent tracking. Pattern recognition comes with practice.</p>
+      <nav class="pager">
+<a href="07-heap.html" class="prev"><span class="label">← Previous</span><span class="title">Heap and priority queue</span></a>
+<a href="09-trie.html" class="next"><span class="label">Next →</span><span class="title">Trie (prefix tree)</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>FAANG Prep</strong> — complete prep path: DS&amp;A, system design, behavioral. Built to crush Big Tech interviews.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-index.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true,
+      background: '#161922',
+      primaryColor: '#1d2230',
+      primaryTextColor: '#e6e8ee',
+      primaryBorderColor: '#6cf',
+      lineColor: '#7a8194',
+      secondaryColor: '#262b3a',
+      tertiaryColor: '#0f1117',
+      mainBkg: '#1d2230',
+      secondBkg: '#262b3a',
+      tertiaryBkg: '#161922',
+      nodeBorder: '#6cf',
+      clusterBkg: '#161922',
+      clusterBorder: '#262b3a',
+      titleColor: '#6cf',
+      edgeLabelBackground: '#161922',
+      fontFamily: 'Cascadia Code, monospace'
+    }
+  });
+  document.querySelectorAll('pre > code.language-mermaid').forEach((codeEl) => {
+    const pre = codeEl.parentElement;
+    const div = document.createElement('div');
+    div.className = 'mermaid';
+    div.textContent = codeEl.textContent;
+    pre.replaceWith(div);
+  });
+  mermaid.run();
+</script>
+</body>
+</html>

@@ -1,0 +1,538 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stack e coda — FAANG Prep</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">F</div>
+      <div>
+        <div class="brand-title">FAANG Prep</div>
+        <div class="brand-subtitle">DS&amp;A · System Design</div>
+      </div>
+    </div>
+    <div class="lang-bar">
+      <a class="lang-switcher" href="../en/pages/05-stack-queue.html" title="English"><span class="flag-icon">🇬🇧</span><span class="flag-label">English</span></a>
+    </div>
+  </div>
+  <div class="search-wrap">
+    <input class="search-input" id="search-input" placeholder="Cerca nei contenuti... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/00-introduzione.html" class=""><span class="num">00</span>Introduzione e come usare questo percorso</a></li><li class="nav-item"><a href="../pages/01-complessita.html" class=""><span class="num">01</span>Complessità computazionale (Big-O)</a></li><li class="nav-item"><a href="../pages/02-array-stringhe.html" class=""><span class="num">02</span>Array e stringhe</a></li><li class="nav-item"><a href="../pages/03-hashmap-set.html" class=""><span class="num">03</span>Hashmap e set</a></li><li class="nav-item"><a href="../pages/04-linked-list.html" class=""><span class="num">04</span>Linked list</a></li><li class="nav-item"><a href="../pages/05-stack-coda.html" class="active"><span class="num">05</span>Stack e coda</a></li><li class="nav-item"><a href="../pages/06-alberi.html" class=""><span class="num">06</span>Alberi (binary tree e BST)</a></li><li class="nav-item"><a href="../pages/07-heap.html" class=""><span class="num">07</span>Heap e priority queue</a></li><li class="nav-item"><a href="../pages/08-grafi.html" class=""><span class="num">08</span>Grafi</a></li><li class="nav-item"><a href="../pages/09-trie.html" class=""><span class="num">09</span>Trie (prefix tree)</a></li><li class="nav-item"><a href="../pages/10-ricorsione-backtracking.html" class=""><span class="num">10</span>Ricorsione e backtracking</a></li><li class="nav-item"><a href="../pages/11-sorting-searching.html" class=""><span class="num">11</span>Sorting e searching</a></li><li class="nav-item"><a href="../pages/12-two-pointers-sliding-window.html" class=""><span class="num">12</span>Two pointers e sliding window</a></li><li class="nav-item"><a href="../pages/13-greedy.html" class=""><span class="num">13</span>Greedy</a></li><li class="nav-item"><a href="../pages/14-dp.html" class=""><span class="num">14</span>Dynamic programming</a></li><li class="nav-item"><a href="../pages/15-bit-manipulation.html" class=""><span class="num">15</span>Bit manipulation</a></li><li class="nav-item"><a href="../pages/16-oop-design-patterns.html" class=""><span class="num">16</span>OOP e design patterns</a></li><li class="nav-item"><a href="../pages/17-system-design.html" class=""><span class="num">17</span>System design — fondamenti</a></li><li class="nav-item"><a href="../pages/18-system-design-esempi.html" class=""><span class="num">18</span>System design — esempi end-to-end</a></li><li class="nav-item"><a href="../pages/19-concorrenza.html" class=""><span class="num">19</span>Concorrenza e parallelismo</a></li><li class="nav-item"><a href="../pages/20-database-sql.html" class=""><span class="num">20</span>Database e SQL</a></li><li class="nav-item"><a href="../pages/21-os-networking.html" class=""><span class="num">21</span>OS e networking</a></li><li class="nav-item"><a href="../pages/22-coding-patterns.html" class=""><span class="num">22</span>I 16 coding patterns dei colloqui</a></li><li class="nav-item"><a href="../pages/23-behavioral-star.html" class=""><span class="num">23</span>Behavioral interview — STAR e Amazon LP</a></li><li class="nav-item"><a href="../pages/24-mock-interviews.html" class=""><span class="num">24</span>Mock interview e strategia in colloquio</a></li><li class="nav-item"><a href="../pages/25-roadmap-90-giorni.html" class=""><span class="num">25</span>Roadmap 90 giorni — piano operativo</a></li><li class="nav-item"><a href="../pages/26-banca-esercizi.html" class=""><span class="num">26</span>Banca esercizi — 200+ problemi FAANG</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Strutture dati</span>
+        <span>Sezione 5 di 26</span>
+      </div>
+      <h1>Stack e coda</h1>
+      <p class="summary">LIFO e FIFO da zero. Monotonic stack visualizzato (il superpotere per &quot;next greater&quot;), deque per sliding window O(n).</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Strutture dati</div>
+  
+  
+</div>
+      <p>Stack e coda sono strutture semplicissime in apparenza. Ma una loro variante — il <strong>monotonic stack</strong> — è uno dei trucchi più devastanti dei colloqui FAANG. Dedichiamogli il tempo che merita.</p>
+<h2 id="parte-1-stack-lifo">Parte 1 — Stack (LIFO)</h2>
+<h3 id="lanalogia-pila-di-piatti">L'analogia: pila di piatti</h3>
+<p>Pensa a una pila di piatti su un tavolo. Le operazioni naturali sono:</p>
+<ul>
+<li><strong>Push</strong>: aggiungi un piatto in cima.</li>
+<li><strong>Pop</strong>: prendi il piatto in cima.</li>
+<li><strong>Peek</strong>: guarda il piatto in cima senza prenderlo.</li>
+</ul>
+<p>L'<strong>ultimo</strong> piatto che hai messo è il <strong>primo</strong> che togli. <strong>LIFO</strong> (Last In, First Out).</p>
+<h3 id="stack-in-python">Stack in Python</h3>
+<p>Usa una <code>list</code>:</p>
+<pre><code class="language-python">st = []
+st.append(x)        # push, O(1) ammortizzato
+x = st.pop()        # pop, O(1)
+top = st[-1]        # peek
+len(st) == 0        # empty?
+</code></pre>
+<h3 id="quando-usarlo">Quando usarlo</h3>
+<p>Lo stack è la struttura giusta quando devi <strong>ricordare cosa è ancora "aperto"</strong> e processarlo in ordine LIFO.</p>
+<ul>
+<li><strong>Matching di parentesi</strong>: ogni <code>(</code> aperto va su una pila. Quando arriva <code>)</code>, deve corrispondere all'ultimo aperto.</li>
+<li><strong>DFS iterativo</strong> (vedi cap. 06, 08).</li>
+<li><strong>Undo/redo</strong>: l'ultima azione si annulla per prima.</li>
+<li><strong>Evaluation di espressioni postfix</strong>.</li>
+<li><strong>Function call stack</strong>: il computer stesso usa uno stack per le chiamate di funzione.</li>
+<li><strong>Monotonic stack</strong> (la parte succosa, sotto).</li>
+</ul>
+<h3 id="esempio-parentesi-bilanciate">Esempio: parentesi bilanciate</h3>
+<pre><code class="language-python">def valid_parens(s):
+    st = []
+    pair = {')': '(', ']': '[', '}': '{'}
+    for c in s:
+        if c in '([{':
+            st.append(c)
+        elif c in ')]}':
+            if not st or st.pop() != pair[c]:
+                return False
+    return not st   # alla fine lo stack deve essere vuoto
+</code></pre>
+<p>Trace su <code>"({[]})"</code>:</p>
+<pre><code>'(': push → ['(']
+'{': push → ['(', '{']
+'[': push → ['(', '{', '[']
+']': pop '[', match con ']' → ['(', '{']
+'}': pop '{', match → ['(']
+')': pop '(', match → []
+fine, stack vuoto → True
+</code></pre>
+<p>Trace su <code>"([)]"</code>:</p>
+<pre><code>'(': push → ['(']
+'[': push → ['(', '[']
+')': pop '[', MA il match di ')' è '(', non '[' → False
+</code></pre>
+<h2 id="parte-2-coda-fifo">Parte 2 — Coda (FIFO)</h2>
+<h3 id="lanalogia-la-fila-al-supermercato">L'analogia: la fila al supermercato</h3>
+<p>Il primo che si mette in fila è il primo servito. <strong>FIFO</strong> (First In, First Out).</p>
+<pre><code>Entra → [ A, B, C, D ] → Esce (A esce per primo)
+</code></pre>
+<h3 id="implementazione-in-python">Implementazione in Python</h3>
+<p><strong>Non usare <code>list</code> come coda</strong>. <code>list.pop(0)</code> è O(n) (deve shiftare tutti gli elementi). Usa <code>collections.deque</code>:</p>
+<pre><code class="language-python">from collections import deque
+q = deque()
+q.append(x)         # enqueue, O(1)
+x = q.popleft()     # dequeue, O(1)
+q.appendleft(x)     # push in testa
+q.pop()             # rimuovi dalla fine
+front = q[0]; back = q[-1]
+</code></pre>
+<h3 id="quando-usarla">Quando usarla</h3>
+<ul>
+<li><strong>BFS</strong>: lo abbiamo già visto nei capitoli alberi e grafi.</li>
+<li><strong>Producer/Consumer</strong>.</li>
+<li><strong>Round-robin scheduling</strong>.</li>
+<li><strong>Sliding window max</strong> con deque monotona (cap. 12).</li>
+</ul>
+<h2 id="parte-3-deque-double-ended-queue">Parte 3 — Deque (double-ended queue)</h2>
+<p><code>collections.deque</code> di Python supporta push/pop in <strong>O(1) a entrambe le estremità</strong>. È simultaneamente uno stack e una coda.</p>
+<pre><code class="language-python">dq = deque()
+dq.append(x)        # destra
+dq.appendleft(x)    # sinistra
+dq.pop()            # destra
+dq.popleft()        # sinistra
+</code></pre>
+<p>In colloquio: quando vedi "deve essere FIFO ma può servire anche da stack" → deque.</p>
+<h2 id="parte-4-monotonic-stack-il-superpotere">Parte 4 — Monotonic stack (il superpotere)</h2>
+<h3 id="il-problema-motivante">Il problema motivante</h3>
+<blockquote>
+<p><em>"Per ogni elemento dell'array, trova il primo elemento alla sua destra che è maggiore di lui."</em></p>
+</blockquote>
+<p>Esempio: <code>arr = [3, 1, 2, 4]</code>. Risultato: <code>[4, 2, 4, -1]</code> (l'ultimo non ha nessuno più grande a destra).</p>
+<p><strong>Brute force</strong>: doppio loop → O(n²).</p>
+<p><strong>Sliding window</strong>? No, non c'è "finestra".</p>
+<p><strong>Idea monotonic stack</strong>: O(n).</p>
+<h3 id="lintuizione">L'intuizione</h3>
+<p>Scorriamo l'array da sinistra. Manteniamo uno stack di <strong>indici</strong> i cui valori sono <strong>decrescenti</strong> dal basso. Cioè: in fondo allo stack c'è il valore più grande, in cima il più piccolo (tra quelli sullo stack).</p>
+<p>Quando arriva un nuovo elemento <code>arr[i]</code>:</p>
+<ul>
+<li>Se è <strong>maggiore</strong> del top dello stack, vuol dire: <strong><code>arr[i]</code> è il "next greater element" per quel top</strong>. Pop, registra il risultato.</li>
+<li>Continua finché lo stack è vuoto o il top è ≥ arr[i].</li>
+<li>Poi push i.</li>
+</ul>
+<p>Trace su <code>arr = [3, 1, 2, 4]</code>:</p>
+<pre><code>i=0 arr[i]=3: stack vuoto, push 0. stack=[0] (valori sotto: [3])
+i=1 arr[i]=1: arr[stack.top]=3 ≥ 1, no pop. push 1. stack=[0,1] (valori: [3,1])
+i=2 arr[i]=2: arr[1]=1 &lt; 2 → pop 1, res[1]=2. Ora arr[0]=3 ≥ 2, stop. push 2. stack=[0,2] (valori: [3,2])
+i=3 arr[i]=4: arr[2]=2 &lt; 4 → pop 2, res[2]=4. arr[0]=3 &lt; 4 → pop 0, res[0]=4. stack vuoto. push 3. stack=[3] (valori: [4])
+fine. Elementi rimasti nello stack (3) non hanno next greater → res[3]=-1.
+</code></pre>
+<p>Risultato: <code>[4, 2, 4, -1]</code>. ✓</p>
+<h3 id="codice">Codice</h3>
+<pre><code class="language-python">def next_greater(arr):
+    n = len(arr)
+    res = [-1] * n
+    st = []   # indici, valori monotoni decrescenti dal basso
+    for i, x in enumerate(arr):
+        while st and arr[st[-1]] &lt; x:
+            res[st.pop()] = x
+        st.append(i)
+    return res
+</code></pre>
+<h3 id="perche-e-on">Perché è O(n)?</h3>
+<p>Ogni elemento entra ed esce dallo stack <strong>al massimo una volta</strong>. Il while interno può sembrare "n²" ma in totale fa al massimo n pop sull'intera esecuzione. Ammortizzato: O(n).</p>
+<h3 id="variante-next-smaller">Variante: next smaller</h3>
+<p>Cambia <code>&lt;</code> con <code>&gt;</code>. Tieni stack crescente.</p>
+<h3 id="variante-previous-greater-smaller">Variante: previous greater / smaller</h3>
+<p>Scorri <strong>da destra a sinistra</strong>.</p>
+<h3 id="pattern-recognition-quando-applicarlo">Pattern recognition: quando applicarlo</h3>
+<p>Quando il problema dice una di queste cose:</p>
+<ul>
+<li>"Next greater/smaller element".</li>
+<li>"Per ogni elemento, trova il primo che..."</li>
+<li>"Stock span" (giorni consecutivi finché il prezzo era più basso).</li>
+<li>"Daily temperatures": quanti giorni fino a temperatura più alta.</li>
+<li>"Largest rectangle in histogram".</li>
+</ul>
+<p>In tutti questi casi: <strong>monotonic stack</strong>.</p>
+<h2 id="parte-5-largest-rectangle-in-histogram-classico-hard">Parte 5 — Largest Rectangle in Histogram (classico hard)</h2>
+<p>Array di altezze <code>h</code>. Trova il rettangolo di area massima sotto l'istogramma.</p>
+<pre><code>       █
+   █   █
+   █ █ █   █
+█  █ █ █ █ █
+3  1 4 5 2 6
+</code></pre>
+<p>Vuoi trovare l'area "rettangolo solido" più grande sotto le barre.</p>
+<h3 id="lidea-con-monotonic-stack">L'idea con monotonic stack</h3>
+<p>Per ogni barra, voglio sapere: <strong>fino a dove si estende un rettangolo di altezza = altezza barra</strong>?</p>
+<p>Si estende a sinistra finché incontri una barra più bassa (incluso). Stessa cosa a destra.</p>
+<p>Quindi, per ogni barra <code>h[i]</code>:</p>
+<ul>
+<li><code>left[i]</code> = indice della prima barra a sinistra <strong>più bassa</strong>.</li>
+<li><code>right[i]</code> = indice della prima barra a destra <strong>più bassa</strong>.</li>
+</ul>
+<p>Area massima con barra <code>i</code> come "altezza" = <code>h[i] × (right[i] - left[i] - 1)</code>.</p>
+<p>Calcoliamo <code>left</code> e <code>right</code> con monotonic stack.</p>
+<p><strong>Versione one-pass elegante</strong>:</p>
+<pre><code class="language-python">def largest_rect(h):
+    h.append(0)   # sentinella per chiudere lo stack alla fine
+    st = []       # indici, altezze crescenti dal basso
+    best = 0
+    for i, x in enumerate(h):
+        while st and h[st[-1]] &gt;= x:
+            top = st.pop()
+            width = i if not st else i - st[-1] - 1
+            best = max(best, h[top] * width)
+        st.append(i)
+    h.pop()
+    return best
+</code></pre>
+<p>Trace su <code>h = [2, 1, 5, 6, 2, 3, 0]</code> (l'ultimo 0 è la sentinella):</p>
+<pre><code>i=0 x=2: stack vuoto, push 0. stack=[0]
+i=1 x=1: h[0]=2 ≥ 1, pop 0. width = 1 (stack vuoto). area = 2*1 = 2. best=2. push 1. stack=[1]
+i=2 x=5: h[1]=1 &lt; 5, push. stack=[1,2]
+i=3 x=6: h[2]=5 &lt; 6, push. stack=[1,2,3]
+i=4 x=2: h[3]=6 ≥ 2, pop 3. width = 4 - 2 - 1 = 1. area = 6*1 = 6. best=6.
+        h[2]=5 ≥ 2, pop 2. width = 4 - 1 - 1 = 2. area = 5*2 = 10. best=10.
+        h[1]=1 &lt; 2, push. stack=[1,4]
+i=5 x=3: h[4]=2 &lt; 3, push. stack=[1,4,5]
+i=6 x=0 (sentinella): h[5]=3 ≥ 0, pop 5. width = 6-4-1 = 1. area = 3*1 = 3.
+        h[4]=2 ≥ 0, pop 4. width = 6-1-1 = 4. area = 2*4 = 8.
+        h[1]=1 ≥ 0, pop 1. width = 6 (stack vuoto). area = 1*6 = 6.
+</code></pre>
+<p>Risultato: best = 10. ✓ (rettangolo 5×2 sui valori 5,6)</p>
+<p>O(n) tempo, O(n) spazio.</p>
+<h2 id="parte-6-sliding-window-maximum-deque-monotona">Parte 6 — Sliding Window Maximum (deque monotona)</h2>
+<p>Massimo in ogni finestra di lunghezza k, in O(n) totale.</p>
+<p>Già visto nel cap. 12. Idea: deque di <strong>indici</strong> con valori decrescenti dal davanti. La testa è sempre il massimo della finestra.</p>
+<pre><code class="language-python">from collections import deque
+def max_in_windows(arr, k):
+    dq = deque()
+    res = []
+    for i, x in enumerate(arr):
+        # Rimuovi dal fondo tutti i valori ≤ x (mai più massimi)
+        while dq and arr[dq[-1]] &lt;= x:
+            dq.pop()
+        dq.append(i)
+        # Rimuovi dalla testa se fuori finestra
+        if dq[0] &lt;= i - k:
+            dq.popleft()
+        if i &gt;= k - 1:
+            res.append(arr[dq[0]])
+    return res
+</code></pre>
+<h2 id="parte-7-evaluation-di-espressioni">Parte 7 — Evaluation di espressioni</h2>
+<h3 id="postfix-reverse-polish-notation">Postfix (Reverse Polish Notation)</h3>
+<p><code>"3 4 + 5 *"</code> significa <code>(3 + 4) * 5 = 35</code>.</p>
+<pre><code class="language-python">def eval_postfix(tokens):
+    st = []
+    for t in tokens:
+        if t in '+-*/':
+            b = st.pop(); a = st.pop()
+            if t == '+': st.append(a + b)
+            elif t == '-': st.append(a - b)
+            elif t == '*': st.append(a * b)
+            else: st.append(int(a / b))   # int() trunca verso 0
+        else:
+            st.append(int(t))
+    return st[0]
+</code></pre>
+<p>Trace <code>["3","4","+","5","*"]</code>:</p>
+<pre><code>&quot;3&quot;: push 3 → [3]
+&quot;4&quot;: push 4 → [3, 4]
+&quot;+&quot;: pop 4, pop 3, push 7 → [7]
+&quot;5&quot;: push 5 → [7, 5]
+&quot;*&quot;: pop 5, pop 7, push 35 → [35]
+fine. result = 35.
+</code></pre>
+<h3 id="infix-con-parentesi">Infix (con parentesi)</h3>
+<p>Le notazioni con parentesi (es. <code>"(2+3)*4"</code>) sono più complesse. Si usano due stack (operandi + operatori) e la regola di precedenza degli operatori (algoritmo "shunting-yard" di Dijkstra). Raro in colloquio.</p>
+<h2 id="parte-8-dfs-iterativo">Parte 8 — DFS iterativo</h2>
+<p>Equivalente a ricorsione, ma con stack esplicito. Evita stack overflow per alberi/grafi profondi.</p>
+<pre><code class="language-python">def dfs_iter(root, graph):
+    st = [root]
+    visited = set()
+    while st:
+        n = st.pop()
+        if n in visited: continue
+        visited.add(n)
+        for nb in graph[n]:
+            if nb not in visited:
+                st.append(nb)
+</code></pre>
+<p>Visita LIFO → "depth-first": esplora a fondo un ramo prima di tornare indietro.</p>
+<h2 id="parte-9-trappole-comuni">Parte 9 — Trappole comuni</h2>
+<h3 id="trappola-1-usare-list-come-coda">Trappola 1 — Usare <code>list</code> come coda</h3>
+<p><code>list.pop(0)</code> è O(n). Usa <code>deque</code>.</p>
+<h3 id="trappola-2-confondere-stack-e-coda">Trappola 2 — Confondere stack e coda</h3>
+<p>Stack pop = ultimo aggiunto. Coda pop = primo aggiunto.</p>
+<h3 id="trappola-3-stack-monotono-confondere-e">Trappola 3 — Stack monotono: confondere <code>&lt;</code> e <code>&lt;=</code></h3>
+<p>Spesso "next greater" vs "next greater or equal" cambia di un singolo <code>&lt;</code> vs <code>&lt;=</code>. Disegna su carta un esempio piccolo per controllare.</p>
+<h3 id="trappola-4-dimenticare-la-sentinella">Trappola 4 — Dimenticare la sentinella</h3>
+<p>In Largest Rectangle, senza l'ultimo <code>0</code> aggiunto, gli elementi rimasti in stack alla fine non vengono mai popped.</p>
+<h2 id="esercizi">Esercizi</h2>
+<h3 id="esercizio-51-valid-parentheses-easy">Esercizio 5.1 — Valid Parentheses <span class="problem-tag easy">EASY</span></h3>
+<details><summary>Soluzione</summary>
+
+Vedi parte 1.
+</details>
+
+<h3 id="esercizio-52-min-stack-medium">Esercizio 5.2 — Min Stack <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Stack che supporta <code>push, pop, top, getMin</code> tutti in O(1).</p>
+<details><summary>Ragionamento</summary>
+
+Tieni **due** stack: uno con i valori, uno con i minimi correnti.
+
+
+<pre><code class="language-python">class MinStack:
+    def __init__(self):
+        self.st = []
+        self.mins = []
+    def push(self, x):
+        self.st.append(x)
+        if not self.mins or x &lt;= self.mins[-1]:
+            self.mins.append(x)
+    def pop(self):
+        x = self.st.pop()
+        if x == self.mins[-1]:
+            self.mins.pop()
+    def top(self): return self.st[-1]
+    def getMin(self): return self.mins[-1]
+</code></pre>
+
+
+Push del minimo solo se ≤ del minimo corrente. Pop dal minimo solo se rimuovi proprio il minimo.
+
+O(1) tutto.
+</details>
+
+<h3 id="esercizio-53-daily-temperatures-medium">Esercizio 5.3 — Daily Temperatures <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Per ogni giorno, quanti giorni di attesa per temperatura più alta?</p>
+<details><summary>Soluzione</summary>
+
+Monotonic stack di indici:
+
+
+<pre><code class="language-python">def daily_temps(T):
+    n = len(T)
+    res = [0] * n
+    st = []
+    for i, t in enumerate(T):
+        while st and T[st[-1]] &lt; t:
+            j = st.pop()
+            res[j] = i - j
+        st.append(i)
+    return res
+</code></pre>
+
+
+O(n).
+</details>
+
+<h3 id="esercizio-54-evaluate-rpn-medium">Esercizio 5.4 — Evaluate RPN <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Vedi parte 7.</p>
+<h3 id="esercizio-55-sliding-window-maximum-hard">Esercizio 5.5 — Sliding Window Maximum <span class="problem-tag hard">HARD</span></h3>
+<p>Vedi parte 6.</p>
+<h3 id="esercizio-56-largest-rectangle-in-histogram-hard">Esercizio 5.6 — Largest Rectangle in Histogram <span class="problem-tag hard">HARD</span></h3>
+<p>Vedi parte 5.</p>
+<h3 id="esercizio-57-implement-queue-using-stacks-easy">Esercizio 5.7 — Implement Queue using Stacks <span class="problem-tag easy">EASY</span></h3>
+<details><summary>Ragionamento</summary>
+
+Due stack: `inb` per push, `outb` per pop. Quando outb è vuota, riversa tutto inb in outb (inverte l'ordine → FIFO).
+
+
+<pre><code class="language-python">class MyQueue:
+    def __init__(self):
+        self.inb = []
+        self.outb = []
+    def push(self, x):
+        self.inb.append(x)
+    def pop(self):
+        self._move()
+        return self.outb.pop()
+    def peek(self):
+        self._move()
+        return self.outb[-1]
+    def empty(self):
+        return not self.inb and not self.outb
+    def _move(self):
+        if not self.outb:
+            while self.inb:
+                self.outb.append(self.inb.pop())
+</code></pre>
+
+
+O(1) **ammortizzato** per push/pop. Ogni elemento entra/esce ognuno dei due stack al massimo una volta.
+</details>
+
+<h3 id="esercizio-58-decode-string-medium">Esercizio 5.8 — Decode String <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Decodifica stringhe tipo <code>"3[a2[c]]"</code> → <code>"accaccacc"</code>.</p>
+<details><summary>Soluzione</summary>
+
+
+<pre><code class="language-python">def decode(s):
+    st = []
+    cur = &quot;&quot;
+    k = 0
+    for c in s:
+        if c.isdigit():
+            k = k * 10 + int(c)
+        elif c == '[':
+            st.append((cur, k))
+            cur = &quot;&quot;
+            k = 0
+        elif c == ']':
+            prev, n = st.pop()
+            cur = prev + cur * n
+        else:
+            cur += c
+    return cur
+</code></pre>
+
+
+Stack di stati `(stringa parziale, moltiplicatore)`. Quando entri in `[`, salva stato. Quando esci da `]`, ripeti la stringa corrente e concatena al precedente.
+</details>
+
+<h3 id="esercizio-59-asteroid-collision-medium">Esercizio 5.9 — Asteroid Collision <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Array di asteroidi: positivo = va a destra, negativo = va a sinistra. Stessa velocità, più grande sopravvive.</p>
+<details><summary>Soluzione</summary>
+
+
+<pre><code class="language-python">def asteroid_collision(arr):
+    st = []
+    for a in arr:
+        while st and a &lt; 0 &lt; st[-1]:
+            if st[-1] &lt; -a:
+                st.pop()       # quello sullo stack è più piccolo, esplode
+                continue
+            elif st[-1] == -a:
+                st.pop()       # entrambi esplodono
+            break              # quello sullo stack è più grande, l'arrivato esplode
+        else:
+            st.append(a)        # niente collisione, aggiungi
+    return st
+</code></pre>
+
+
+`for ... else` di Python: l'else viene eseguito **se il for finisce senza break**.
+</details>
+
+<h3 id="esercizio-510-basic-calculator-hard">Esercizio 5.10 — Basic Calculator <span class="problem-tag hard">HARD</span></h3>
+<p>Valuta espressioni con <code>+, -, ()</code> e spazi. Senza <code>eval()</code>.</p>
+<details><summary>Soluzione</summary>
+
+
+<pre><code class="language-python">def calculate(s):
+    st = [1]
+    sign = 1
+    res = 0
+    i = 0
+    while i &lt; len(s):
+        c = s[i]
+        if c == ' ': i += 1
+        elif c == '+': sign = st[-1]; i += 1
+        elif c == '-': sign = -st[-1]; i += 1
+        elif c == '(': st.append(sign); i += 1
+        elif c == ')': st.pop(); i += 1
+        else:
+            num = 0
+            while i &lt; len(s) and s[i].isdigit():
+                num = num * 10 + int(s[i])
+                i += 1
+            res += sign * num
+    return res
+</code></pre>
+
+
+Stack di "segno corrente esterno". Trucco molto pulito.
+</details>
+
+<h2 id="riassunto">Riassunto</h2>
+<ol>
+<li><strong>Stack LIFO</strong>, <strong>coda FIFO</strong>. Usa <code>list</code> per stack, <code>deque</code> per coda.</li>
+<li><strong>Mai <code>list.pop(0)</code></strong>: è O(n). Usa <code>deque.popleft()</code>.</li>
+<li><strong>Monotonic stack</strong>: O(n) per "next greater/smaller". Pattern killer.</li>
+<li><strong>Largest rectangle</strong>: monotonic stack + sentinella alla fine.</li>
+<li><strong>Deque monotona</strong>: O(n) per "max in finestra".</li>
+<li><strong>Pattern parsing</strong>: stack di stati per espressioni con parentesi.</li>
+</ol>
+<p>Stack apparentemente "facile", ma le sue varianti monotone sono tra le tecniche più potenti per problemi hard.</p>
+      <nav class="pager">
+<a href="04-linked-list.html" class="prev"><span class="label">← Precedente</span><span class="title">Linked list</span></a>
+<a href="06-alberi.html" class="next"><span class="label">Successivo →</span><span class="title">Alberi (binary tree e BST)</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>FAANG Prep</strong> — percorso completo di preparazione: DS&amp;A, system design, behavioral. Costruito per spaccare ai colloqui di Big Tech.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-index.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true,
+      background: '#161922',
+      primaryColor: '#1d2230',
+      primaryTextColor: '#e6e8ee',
+      primaryBorderColor: '#6cf',
+      lineColor: '#7a8194',
+      secondaryColor: '#262b3a',
+      tertiaryColor: '#0f1117',
+      mainBkg: '#1d2230',
+      secondBkg: '#262b3a',
+      tertiaryBkg: '#161922',
+      nodeBorder: '#6cf',
+      clusterBkg: '#161922',
+      clusterBorder: '#262b3a',
+      titleColor: '#6cf',
+      edgeLabelBackground: '#161922',
+      fontFamily: 'Cascadia Code, monospace'
+    }
+  });
+  document.querySelectorAll('pre > code.language-mermaid').forEach((codeEl) => {
+    const pre = codeEl.parentElement;
+    const div = document.createElement('div');
+    div.className = 'mermaid';
+    div.textContent = codeEl.textContent;
+    pre.replaceWith(div);
+  });
+  mermaid.run();
+</script>
+</body>
+</html>

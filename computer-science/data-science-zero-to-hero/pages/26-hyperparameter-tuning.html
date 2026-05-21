@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hyperparameter tuning — Data Science Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#3a4a7a',primaryTextColor:'#e8eef0',primaryBorderColor:'#5a6aa0',lineColor:'#8a9499',background:'#11171a'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">Σ</div>
+      <div>
+        <div class="brand-title">DATA SCIENCE</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">🇮🇹 IT</span><a href="../en/pages/26-hyperparameter-tuning.html" class="lang-link" title="Switch to English">🇬🇧 EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-cos-e-data-science.html" class=""><span class="num">01</span>Cos&#x27;è la data science (e cosa non è)</a></li><li class="nav-item"><a href="../pages/02-python-per-data-science.html" class=""><span class="num">02</span>Python per data science: setup professionale</a></li><li class="nav-item"><a href="../pages/02b-matematica-essenziale.html" class=""><span class="num">02b</span>Matematica del liceo che ti serve davvero</a></li><li class="nav-item"><a href="../pages/03-algebra-lineare.html" class=""><span class="num">03</span>Algebra lineare per data scientist</a></li><li class="nav-item"><a href="../pages/04-calcolo-ottimizzazione.html" class=""><span class="num">04</span>Calcolo, gradiente e ottimizzazione</a></li><li class="nav-item"><a href="../pages/05-probabilita.html" class=""><span class="num">05</span>Probabilità: la lingua dell&#x27;incertezza</a></li><li class="nav-item"><a href="../pages/06-statistica-descrittiva.html" class=""><span class="num">06</span>Statistica descrittiva</a></li><li class="nav-item"><a href="../pages/07-statistica-inferenziale.html" class=""><span class="num">07</span>Statistica inferenziale e test di ipotesi</a></li><li class="nav-item"><a href="../pages/08-distribuzioni.html" class=""><span class="num">08</span>Distribuzioni di probabilità che incontrerai</a></li><li class="nav-item"><a href="../pages/09-numpy.html" class=""><span class="num">09</span>NumPy: pensare in array</a></li><li class="nav-item"><a href="../pages/10-pandas.html" class=""><span class="num">10</span>Pandas: il coltellino svizzero</a></li><li class="nav-item"><a href="../pages/11-sql.html" class=""><span class="num">11</span>SQL per data scientist</a></li><li class="nav-item"><a href="../pages/12-visualizzazione.html" class=""><span class="num">12</span>Visualizzazione: matplotlib, seaborn, plotly</a></li><li class="nav-item"><a href="../pages/13-data-wrangling.html" class=""><span class="num">13</span>Pulizia e data wrangling</a></li><li class="nav-item"><a href="../pages/14-feature-engineering.html" class=""><span class="num">14</span>Feature engineering</a></li><li class="nav-item"><a href="../pages/15-eda.html" class=""><span class="num">15</span>EDA: Exploratory Data Analysis</a></li><li class="nav-item"><a href="../pages/16-ml-fondamenti.html" class=""><span class="num">16</span>ML: fondamenti — bias, varianza, validazione</a></li><li class="nav-item"><a href="../pages/17-regressione-lineare.html" class=""><span class="num">17</span>Regressione lineare e regolarizzazione</a></li><li class="nav-item"><a href="../pages/18-regressione-logistica.html" class=""><span class="num">18</span>Regressione logistica e classificazione</a></li><li class="nav-item"><a href="../pages/19-knn-naive-bayes-svm.html" class=""><span class="num">19</span>KNN, Naive Bayes, SVM</a></li><li class="nav-item"><a href="../pages/20-alberi-decisionali.html" class=""><span class="num">20</span>Alberi decisionali</a></li><li class="nav-item"><a href="../pages/21-random-forest-boosting.html" class=""><span class="num">21</span>Random Forest, Gradient Boosting, XGBoost</a></li><li class="nav-item"><a href="../pages/22-clustering.html" class=""><span class="num">22</span>Clustering: K-Means, DBSCAN, GMM, gerarchico</a></li><li class="nav-item"><a href="../pages/23-pca-tsne-umap.html" class=""><span class="num">23</span>Riduzione dimensionale: PCA, t-SNE, UMAP</a></li><li class="nav-item"><a href="../pages/24-metriche-validazione.html" class=""><span class="num">24</span>Metriche, cross-validation, leakage</a></li><li class="nav-item"><a href="../pages/25-sbilanciamento-classi.html" class=""><span class="num">25</span>Sbilanciamento di classi</a></li><li class="nav-item"><a href="../pages/26-hyperparameter-tuning.html" class="active"><span class="num">26</span>Hyperparameter tuning</a></li><li class="nav-item"><a href="../pages/27-reti-neurali.html" class=""><span class="num">27</span>Reti neurali: dalle basi al backprop</a></li><li class="nav-item"><a href="../pages/28-pytorch.html" class=""><span class="num">28</span>PyTorch: dal toy model al training loop</a></li><li class="nav-item"><a href="../pages/29-cnn.html" class=""><span class="num">29</span>CNN per computer vision</a></li><li class="nav-item"><a href="../pages/30-rnn-lstm.html" class=""><span class="num">30</span>RNN, LSTM, GRU per sequenze</a></li><li class="nav-item"><a href="../pages/31-transformer.html" class=""><span class="num">31</span>Transformer e attention</a></li><li class="nav-item"><a href="../pages/32-nlp-llm.html" class=""><span class="num">32</span>NLP: dal text mining ai LLM</a></li><li class="nav-item"><a href="../pages/33-time-series.html" class=""><span class="num">33</span>Time series e forecasting</a></li><li class="nav-item"><a href="../pages/34-mlops.html" class=""><span class="num">34</span>MLOps: deployment, monitoring, drift</a></li><li class="nav-item"><a href="../pages/35-bayesian-causal.html" class=""><span class="num">35</span>Inferenza bayesiana e causale</a></li><li class="nav-item"><a href="../pages/36-capstone-carriera.html" class=""><span class="num">36</span>Capstone, portfolio, carriera</a></li><li class="nav-item"><a href="../pages/37-glossario.html" class=""><span class="num">37</span>Glossario A-Z</a></li><li class="nav-item"><a href="../pages/38-formulario.html" class=""><span class="num">38</span>Formulario: tutte le formule del percorso</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Machine Learning</span>
+        <span>Sezione 27 di 39</span>
+        <span class="level-tag level-int">Livello: intermedio</span>
+      </div>
+      <h1>Hyperparameter tuning</h1>
+      <p class="summary">Grid search, random search, Bayesian optimization, Optuna. Quando vale e quando è perdita di tempo.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Machine Learning</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>[[metriche-validazione]]</li></ul>
+  <div class="label">Strumenti</div>
+  <ul class="source-list"><li>scikit-learn, Optuna</li></ul>
+</div>
+      <h2 id="cosa-sono-gli-iperparametri">Cosa sono gli iperparametri</h2>
+<p>I <strong>parametri</strong> vengono appresi durante il training (coefficienti regressione, pesi NN).
+Gli <strong>iperparametri</strong> sono fissati prima del training: regolarizzazione, profondità albero, learning rate, numero di neuroni.</p>
+<p>Iperparametri controllano la <strong>capacità</strong> del modello. Mal tarati = under/overfit. Ben tarati = sweet spot.</p>
+<h2 id="strategie-principali">Strategie principali</h2>
+<pre><code class="language-mermaid">flowchart LR
+    A[Tuning] --&gt; G[Grid search&lt;br/&gt;esaustivo]
+    A --&gt; R[Random search&lt;br/&gt;random nei range]
+    A --&gt; B[Bayesian opt.&lt;br/&gt;Optuna, scikit-optimize]
+    A --&gt; H[Halving&lt;br/&gt;Successive Halving]
+</code></pre>
+<h2 id="grid-search">Grid search</h2>
+<p>Prova tutte le combinazioni in una griglia.</p>
+<pre><code class="language-python">from sklearn.model_selection import GridSearchCV
+param_grid = {
+    'n_estimators': [100, 300, 500],
+    'max_depth': [3, 5, 7, None],
+    'min_samples_leaf': [1, 5, 20],
+}
+gs = GridSearchCV(RandomForestClassifier(random_state=0), param_grid,
+                  cv=5, scoring='roc_auc', n_jobs=-1)
+gs.fit(X, y)
+print(gs.best_params_, gs.best_score_)
+</code></pre>
+<p><strong>Pro</strong>: deterministico, vedi tutto.
+<strong>Contro</strong>: $4 \times 4 \times 3 \times 5\text{-fold} = 240$ fit. Esplode con più parametri.</p>
+<h2 id="random-search">Random search</h2>
+<p>Campiona casualmente dai range. Spesso <strong>più efficiente</strong> di grid:</p>
+<blockquote>
+<p>Bergstra &amp; Bengio (2012): per la stessa "budget" di trial, random search trova migliori iperparametri di grid search.</p>
+</blockquote>
+<p>Perché: in genere solo pochi iperparametri "contano". Grid spreca trial su varianti ininfluenti.</p>
+<pre><code class="language-python">from sklearn.model_selection import RandomizedSearchCV
+from scipy.stats import randint, loguniform
+param_distributions = {
+    'n_estimators': randint(100, 1000),
+    'max_depth': randint(3, 15),
+    'min_samples_leaf': randint(1, 50),
+    'max_features': loguniform(0.1, 1.0),
+}
+rs = RandomizedSearchCV(RandomForestClassifier(random_state=0),
+                        param_distributions, n_iter=50, cv=5,
+                        scoring='roc_auc', random_state=0, n_jobs=-1)
+rs.fit(X, y)
+</code></pre>
+<h2 id="bayesian-optimization">Bayesian optimization</h2>
+<p>Costruisce un <strong>modello surrogato</strong> della funzione "iperparams → metrica", usa quel modello per scegliere il prossimo trial. Convergenza spesso più rapida.</p>
+<h3 id="optuna-lo-standard-moderno">Optuna (lo standard moderno)</h3>
+<pre><code class="language-python">import optuna, lightgbm as lgb
+from sklearn.model_selection import cross_val_score
+
+def objective(trial):
+    params = dict(
+        n_estimators=trial.suggest_int('n_estimators', 100, 2000),
+        learning_rate=trial.suggest_float('lr', 1e-3, 0.3, log=True),
+        num_leaves=trial.suggest_int('num_leaves', 8, 256),
+        max_depth=trial.suggest_int('max_depth', 3, 12),
+        min_data_in_leaf=trial.suggest_int('min_data_in_leaf', 5, 100),
+        feature_fraction=trial.suggest_float('feature_fraction', 0.4, 1.0),
+        bagging_fraction=trial.suggest_float('bagging_fraction', 0.4, 1.0),
+        bagging_freq=trial.suggest_int('bagging_freq', 0, 7),
+        reg_lambda=trial.suggest_float('reg_lambda', 1e-3, 10, log=True),
+        random_state=0, verbose=-1,
+    )
+    m = lgb.LGBMClassifier(**params)
+    return cross_val_score(m, X, y, cv=5, scoring='roc_auc', n_jobs=-1).mean()
+
+study = optuna.create_study(direction='maximize',
+                            sampler=optuna.samplers.TPESampler(seed=0))
+study.optimize(objective, n_trials=100, n_jobs=4)
+print(study.best_params)
+print(study.best_value)
+</code></pre>
+<h3 id="vantaggi-di-optuna">Vantaggi di Optuna</h3>
+<ul>
+<li>API semplice: <code>trial.suggest_*</code> dichiara lo spazio.</li>
+<li><strong>Pruning</strong>: stoppa trial poco promettenti early.</li>
+<li>Multi-objective optimization.</li>
+<li>Storage su DB per riprendere studi interrotti.</li>
+<li>Visualizzazione integrata.</li>
+</ul>
+<pre><code class="language-python">optuna.visualization.plot_optimization_history(study)
+optuna.visualization.plot_param_importances(study)
+optuna.visualization.plot_parallel_coordinate(study)
+</code></pre>
+<h2 id="halving-search-sklearn">Halving search (sklearn)</h2>
+<p>Successive Halving: alleno tutti i candidati su pochi dati, scarto i peggiori, raddoppio dati per i sopravvissuti, ripeto.</p>
+<pre><code class="language-python">from sklearn.experimental import enable_halving_search_cv  # noqa
+from sklearn.model_selection import HalvingRandomSearchCV
+hs = HalvingRandomSearchCV(estimator, param_distributions, factor=3,
+                          random_state=0, n_jobs=-1)
+hs.fit(X, y)
+</code></pre>
+<p>Molto efficiente per grandi dataset o modelli costosi.</p>
+<h2 id="quanto-serve-tunare">Quanto serve tunare?</h2>
+<p>Verità non popolare: per molti modelli, <strong>i default + early stopping bastano</strong> per il 90% del miglioramento. Iperparam tuning serio rende un altro 5–10%.</p>
+<p>Suggerimento: prima fai <strong>feature engineering</strong>. Poi modelli baseline con default. <strong>Solo dopo</strong> tuning serio.</p>
+<blockquote>
+<p>Nei Kaggle Grandmaster, il tempo è speso 70% feature, 20% architettura/blending, 10% tuning. Non l'inverso.</p>
+</blockquote>
+<h2 id="cosa-non-tunare">Cosa NON tunare</h2>
+<ul>
+<li><strong>Soglia decisionale</strong>: tunala separatamente in post-processing.</li>
+<li><strong>Cosa includere nelle feature</strong>: usa feature selection, non grid search sulle colonne.</li>
+<li><strong>Random seed</strong>: se i tuoi risultati cambiano molto col seed, hai un problema di varianza, non di tuning.</li>
+</ul>
+<h2 id="pitfall-tuning-su-test-set">Pitfall: tuning su test set</h2>
+<p>Lo dicemmo già ma è il modo più frequente di barare a sé stessi:</p>
+<pre><code class="language-python"># SBAGLIATO
+gs.fit(X_train, y_train)
+best = gs.best_estimator_
+score = best.score(X_test, y_test)
+# se ora ritocchi gli iperparam guardando il test set, ti stai contaminando
+</code></pre>
+<p><strong>Regola</strong>: una sola valutazione finale sul test. Se l'AUC è 0.82 e ti sembra "basso", non tornare al tuning con info dal test. Quello diventa il tuo numero.</p>
+<h2 id="distribuzioni-log-uniformi">Distribuzioni log-uniformi</h2>
+<p>Per parametri che vivono su scala logaritmica (learning rate, C, alpha):</p>
+<pre><code class="language-python"># corretto
+trial.suggest_float('lr', 1e-5, 1, log=True)
+# campiona uniformemente in log → equivalente di ampia esplorazione
+</code></pre>
+<p>Non:</p>
+<pre><code class="language-python">trial.suggest_float('lr', 1e-5, 1)
+# campiona uniformemente in [0,1] → 99% dei trial intorno a 0.5, inutile
+</code></pre>
+<h2 id="workflow-tipo">Workflow tipo</h2>
+<pre><code class="language-mermaid">flowchart TD
+    A[1. Baseline con default] --&gt; B[2. Feature engineering iniziale]
+    B --&gt; C[3. Modello principale&lt;br/&gt;default + early stop]
+    C --&gt; D[4. Random search&lt;br/&gt;30-50 trial]
+    D --&gt; E[5. Optuna fine&lt;br/&gt;100-300 trial]
+    E --&gt; F[6. Threshold moving]
+    F --&gt; G[7. Stima finale&lt;br/&gt;su test]
+</code></pre>
+<h2 id="esercizi">Esercizi</h2>
+<details>
+<summary>Esercizio 1 — Grid vs Random vs Optuna</summary>
+
+Misura tempo e best score per i tre metodi con lo stesso budget di 30 trials.
+
+
+<pre><code class="language-python">import time, optuna
+from sklearn.datasets import load_breast_cancer
+from sklearn.model_selection import GridSearchCV, RandomizedSearchCV, cross_val_score
+from sklearn.ensemble import RandomForestClassifier
+from scipy.stats import randint
+
+X, y = load_breast_cancer(return_X_y=True)
+base = RandomForestClassifier(random_state=0)
+
+# grid
+t = time.perf_counter()
+grid = {'n_estimators': [100, 200, 500], 'max_depth': [3, 5, 7, 10],
+        'min_samples_leaf': [1, 5, 20]}
+gs = GridSearchCV(base, grid, cv=3, n_jobs=-1).fit(X, y)
+print(f&quot;Grid: {time.perf_counter()-t:.1f}s best={gs.best_score_:.3f}&quot;)
+
+# random
+t = time.perf_counter()
+dist = {'n_estimators': randint(50, 500), 'max_depth': randint(2, 12),
+        'min_samples_leaf': randint(1, 30)}
+rs = RandomizedSearchCV(base, dist, n_iter=30, cv=3, random_state=0,
+                        n_jobs=-1).fit(X, y)
+print(f&quot;Random: {time.perf_counter()-t:.1f}s best={rs.best_score_:.3f}&quot;)
+
+# optuna
+t = time.perf_counter()
+def obj(tr):
+    m = RandomForestClassifier(
+        n_estimators=tr.suggest_int('n', 50, 500),
+        max_depth=tr.suggest_int('d', 2, 12),
+        min_samples_leaf=tr.suggest_int('l', 1, 30),
+        random_state=0
+    )
+    return cross_val_score(m, X, y, cv=3, n_jobs=-1).mean()
+study = optuna.create_study(direction='maximize')
+optuna.logging.set_verbosity(optuna.logging.WARNING)
+study.optimize(obj, n_trials=30)
+print(f&quot;Optuna: {time.perf_counter()-t:.1f}s best={study.best_value:.3f}&quot;)
+</code></pre>
+
+</details>
+
+<details>
+<summary>Esercizio 2 — Iperparametri importanti via Optuna</summary>
+
+
+<pre><code class="language-python">import optuna
+optuna.visualization.plot_param_importances(study)
+</code></pre>
+
+
+Il grafico mostra quali iperparam contribuiscono di più al miglioramento. Spesso 2–3 dominano.
+</details>
+
+<details>
+<summary>Esercizio 3 — Pruning con Optuna</summary>
+
+Per modelli con learning curve (boosting, NN), abbandona trial poco promettenti early:
+
+
+<pre><code class="language-python">import optuna, lightgbm as lgb
+
+def obj(trial):
+    p = dict(
+        n_estimators=2000,
+        learning_rate=trial.suggest_float('lr', 1e-3, 0.3, log=True),
+        max_depth=trial.suggest_int('d', 3, 10),
+    )
+    m = lgb.LGBMClassifier(**p, random_state=0, verbose=-1)
+    pruning_cb = optuna.integration.LightGBMPruningCallback(trial, 'auc')
+    m.fit(X_tr, y_tr, eval_set=[(X_val, y_val)],
+          eval_metric='auc', callbacks=[pruning_cb, lgb.early_stopping(50)])
+    proba = m.predict_proba(X_val)[:, 1]
+    return roc_auc_score(y_val, proba)
+
+study = optuna.create_study(direction='maximize', pruner=optuna.pruners.MedianPruner())
+study.optimize(obj, n_trials=100)
+</code></pre>
+
+</details>
+
+<h2 id="cosa-portarti-via">Cosa portarti via</h2>
+<ul>
+<li>Random &gt; Grid in genere.</li>
+<li>Optuna &gt; Random in genere.</li>
+<li>Default + early stopping = 90% del miglioramento.</li>
+<li>Log-uniform per parametri di scala log.</li>
+<li>Tunare il test set = barare a sé stessi.</li>
+<li>70% feature, 20% architettura, 10% tuning.</li>
+</ul>
+<p>Prossimo: deep learning — reti neurali da zero.</p>
+      <nav class="pager">
+<a href="25-sbilanciamento-classi.html" class="prev"><span class="label">← Precedente</span><span class="title">Sbilanciamento di classi</span></a>
+<a href="27-reti-neurali.html" class="next"><span class="label">Successivo →</span><span class="title">Reti neurali: dalle basi al backprop</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Data Science Zero to Hero</strong> — percorso completo, in italiano, dalla matematica al deployment.</p><p>Materiale didattico aperto. Le formule sono lì per essere capite, non temute. Quando un concetto è oscuro, torna indietro: la data science è una piramide, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

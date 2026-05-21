@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hybrid: VPN, Direct Connect, PrivateLink — AWS Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#232f3e',primaryTextColor:'#ffffff',primaryBorderColor:'#ff9900',lineColor:'#8a99ad',background:'#0c1320'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">λ</div>
+      <div>
+        <div class="brand-title">AWS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/12-hybrid-vpn-directconnect.html" class="lang-link" title="Passa all'italiano">IT</a><span class="lang-active" title="English">EN</span></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="search... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-what-is-cloud-and-aws.html" class=""><span class="num">01</span>What the cloud is, and what AWS is</a></li><li class="nav-item"><a href="../pages/02-global-infrastructure.html" class=""><span class="num">02</span>Global infrastructure: Regions, AZs, Edge</a></li><li class="nav-item"><a href="../pages/03-account-root-billing.html" class=""><span class="num">03</span>AWS account, root user, billing</a></li><li class="nav-item"><a href="../pages/04-iam-fundamentals.html" class=""><span class="num">04</span>IAM — fundamentals (users, groups, roles, policies)</a></li><li class="nav-item"><a href="../pages/05-iam-advanced.html" class=""><span class="num">05</span>IAM advanced: conditional policies, STS, ABAC</a></li><li class="nav-item"><a href="../pages/06-cli-sdk-iac.html" class=""><span class="num">06</span>CLI, SDK, CloudShell, IaC primer</a></li><li class="nav-item"><a href="../pages/07-pricing-billing.html" class=""><span class="num">07</span>Pricing, billing, free tier, cost tools</a></li><li class="nav-item"><a href="../pages/08-organizations-multi-account.html" class=""><span class="num">08</span>AWS Organizations &amp; multi-account strategy</a></li><li class="nav-item"><a href="../pages/09-vpc-fundamentals.html" class=""><span class="num">09</span>VPC — fundamentals</a></li><li class="nav-item"><a href="../pages/10-vpc-advanced.html" class=""><span class="num">10</span>VPC advanced: peering, TGW, PrivateLink, endpoints</a></li><li class="nav-item"><a href="../pages/11-route53-cloudfront.html" class=""><span class="num">11</span>Route 53, CloudFront, Global Accelerator</a></li><li class="nav-item"><a href="../pages/12-hybrid-vpn-directconnect.html" class="active"><span class="num">12</span>Hybrid: VPN, Direct Connect, PrivateLink</a></li><li class="nav-item"><a href="../pages/13-ec2-fundamentals.html" class=""><span class="num">13</span>EC2 — fundamentals (instances, AMIs, lifecycle)</a></li><li class="nav-item"><a href="../pages/14-ec2-advanced-spot-nitro.html" class=""><span class="num">14</span>EC2 advanced — Spot, Placement Groups, Nitro, hibernation</a></li><li class="nav-item"><a href="../pages/15-asg-elb.html" class=""><span class="num">15</span>Auto Scaling Groups + Elastic Load Balancing</a></li><li class="nav-item"><a href="../pages/16-lambda-deep-dive.html" class=""><span class="num">16</span>Lambda deep dive</a></li><li class="nav-item"><a href="../pages/17-containers-ecs-eks-fargate.html" class=""><span class="num">17</span>Containers: ECS, EKS, Fargate, ECR</a></li><li class="nav-item"><a href="../pages/18-specialty-compute.html" class=""><span class="num">18</span>Specialty compute: Batch, Lightsail, Outposts, Wavelength, Beanstalk</a></li><li class="nav-item"><a href="../pages/19-ebs-efs-fsx.html" class=""><span class="num">19</span>EBS, EFS, FSx, Instance Store</a></li><li class="nav-item"><a href="../pages/20-s3-deep-dive.html" class=""><span class="num">20</span>S3 — deep dive</a></li><li class="nav-item"><a href="../pages/21-archive-snow-gateway-backup.html" class=""><span class="num">21</span>Glacier, Snow, Storage Gateway, DataSync, AWS Backup</a></li><li class="nav-item"><a href="../pages/22-rds.html" class=""><span class="num">22</span>RDS — managed relational DBs (engines, Multi-AZ, replicas, Proxy)</a></li><li class="nav-item"><a href="../pages/23-aurora-deep-dive.html" class=""><span class="num">23</span>Aurora deep dive — shared storage, Serverless v2, Global Database</a></li><li class="nav-item"><a href="../pages/24-dynamodb-deep-dive.html" class=""><span class="num">24</span>DynamoDB deep dive — partitions, GSI, Streams, single-table</a></li><li class="nav-item"><a href="../pages/25-purpose-built-dbs.html" class=""><span class="num">25</span>Purpose-built DBs — ElastiCache, MemoryDB, Neptune, DocumentDB, Keyspaces, Timestream, QLDB</a></li><li class="nav-item"><a href="../pages/26-redshift-data-warehousing.html" class=""><span class="num">26</span>Redshift — MPP data warehousing and zero-ETL</a></li><li class="nav-item"><a href="../pages/27-sqs-sns-eventbridge.html" class=""><span class="num">27</span>SQS, SNS, EventBridge — messaging and events</a></li><li class="nav-item"><a href="../pages/28-step-functions-mq-appflow.html" class=""><span class="num">28</span>Step Functions, MQ, AppFlow — orchestration and integration</a></li><li class="nav-item"><a href="../pages/29-athena-glue-lakeformation.html" class=""><span class="num">29</span>Athena, Glue, Lake Formation — the AWS data lake</a></li><li class="nav-item"><a href="../pages/30-emr-kinesis-msk.html" class=""><span class="num">30</span>EMR, Kinesis, MSK — big data and streaming</a></li><li class="nav-item"><a href="../pages/31-opensearch-quicksight.html" class=""><span class="num">31</span>OpenSearch and QuickSight — search and BI</a></li><li class="nav-item"><a href="../pages/32-sagemaker-overview.html" class=""><span class="num">32</span>SageMaker — the end-to-end ML platform</a></li><li class="nav-item"><a href="../pages/33-bedrock-ai-services.html" class=""><span class="num">33</span>Bedrock and AI services — managed GenAI and ML</a></li><li class="nav-item"><a href="../pages/34-iac-cloudformation-cdk-terraform.html" class=""><span class="num">34</span>IaC on AWS — CloudFormation, CDK, SAM, Terraform</a></li><li class="nav-item"><a href="../pages/35-ci-cd-pipeline.html" class=""><span class="num">35</span>CI/CD on AWS — CodePipeline, CodeBuild, CodeDeploy, CodeCatalyst</a></li><li class="nav-item"><a href="../pages/36-observability-cloudwatch-xray.html" class=""><span class="num">36</span>Observability — CloudWatch, X-Ray, CloudTrail, Config, SSM</a></li><li class="nav-item"><a href="../pages/37-kms-secrets-acm.html" class=""><span class="num">37</span>Encryption — KMS, CloudHSM, Secrets Manager, Parameter Store, ACM</a></li><li class="nav-item"><a href="../pages/38-waf-shield-guardduty-inspector.html" class=""><span class="num">38</span>Threat detection — WAF, Shield, GuardDuty, Inspector, Macie, Security Hub</a></li><li class="nav-item"><a href="../pages/39-governance-org-controltower-identitycenter.html" class=""><span class="num">39</span>Governance — Organizations, Control Tower, Identity Center</a></li><li class="nav-item"><a href="../pages/40-migration-mgn-dms-snow.html" class=""><span class="num">40</span>Migration — MGN, DMS, Snow family, Discovery, Migration Hub</a></li><li class="nav-item"><a href="../pages/41-cost-optimization-finops.html" class=""><span class="num">41</span>Cost optimization and FinOps</a></li><li class="nav-item"><a href="../pages/42-well-architected.html" class=""><span class="num">42</span>Well-Architected Framework — 6 pillars, lenses, review</a></li><li class="nav-item"><a href="../pages/43-architecture-patterns.html" class=""><span class="num">43</span>Architecture patterns — 3-tier, serverless, event-driven, microservices</a></li><li class="nav-item"><a href="../pages/44-disaster-recovery-multi-region.html" class=""><span class="num">44</span>Disaster Recovery and Multi-Region</a></li><li class="nav-item"><a href="../pages/45-reference-architectures.html" class=""><span class="num">45</span>Real-world reference architectures</a></li><li class="nav-item"><a href="../pages/46-advanced-networking.html" class=""><span class="num">46</span>Advanced networking deep dive</a></li><li class="nav-item"><a href="../pages/47-containers-deep-dive.html" class=""><span class="num">47</span>Containers deep dive — EKS, Karpenter, service mesh</a></li><li class="nav-item"><a href="../pages/48-serverless-patterns.html" class=""><span class="num">48</span>Serverless patterns deep dive</a></li><li class="nav-item"><a href="../pages/49-genai-rag-agents.html" class=""><span class="num">49</span>Generative AI on AWS — RAG and Agents</a></li><li class="nav-item"><a href="../pages/50-aws-certifications.html" class=""><span class="num">50</span>AWS Certifications — roadmap and study guide</a></li><li class="nav-item"><a href="../pages/51-glossary-az.html" class=""><span class="num">51</span>Glossary A-Z</a></li><li class="nav-item"><a href="../pages/52-cheatsheet.html" class=""><span class="num">52</span>Cheat sheet: services, limits, instance families</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Networking</span>
+        <span>Section 12 of 52</span>
+        <span class="level-tag level-adv">Level: advanced</span>
+      </div>
+      <h1>Hybrid: VPN, Direct Connect, PrivateLink</h1>
+      <p class="summary">Connecting on-prem data centers to AWS: Site-to-Site VPN, Direct Connect (DX), VPN over DX, hybrid DNS with Route 53 Resolver, transit patterns.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Networking</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>sections 9-10</li></ul>
+  <div class="label">Tools / references</div>
+  <ul class="source-list"><li>BGP awareness</li><li>AWS Direct Connect partner locations</li></ul>
+</div>
+      <p>Pure cloud is the exception: most companies have data centers, offices, factories, stores — all needing to connect to AWS. AWS offers three main mechanisms (VPN, DX, PrivateLink) that combine to build robust <strong>hybrid cloud</strong>.</p>
+<h2 id="1-site-to-site-vpn">1. Site-to-Site VPN</h2>
+<p>IPsec tunnel over the Internet. Fast to set up (minutes), priced per hour ($0.05/h ≈ $36/month) + traffic.</p>
+<ul>
+<li>2 HA tunnels by default (one per AWS AZ).</li>
+<li>Bandwidth up to ~1.25 Gbps per tunnel.</li>
+<li>Dynamic BGP recommended (automatic subnet announcements, automatic failover).</li>
+</ul>
+<pre><code class="language-mermaid">flowchart LR
+    onprem[On-prem data center]
+    cgw[Customer Gateway&lt;br&gt;your router]
+    vgw[Virtual Private Gateway&lt;br&gt;or Transit Gateway]
+    vpc[VPC]
+    onprem --- cgw -. IPsec tunnel 1 .- vgw
+    cgw -. IPsec tunnel 2 .- vgw
+    vgw --- vpc
+</code></pre>
+<p><strong>Limits</strong>: variable latency (Internet), no guaranteed throughput, no strict SLA. OK for non-critical or DX-backup roles.</p>
+<h2 id="2-direct-connect-dx">2. Direct Connect (DX)</h2>
+<p>Dedicated fiber from a partner location (e.g. Equinix MI3 Milan, Frankfurt Interxion) to an AWS <strong>DX location</strong>. Private physical link, stable latency, up to 100 Gbps.</p>
+<p>Three setups:</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Bandwidth</th>
+<th>When</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Dedicated</strong></td>
+<td>1/10/100 Gbps physical</td>
+<td>heavy consumption</td>
+</tr>
+<tr>
+<td><strong>Hosted</strong> (via partner)</td>
+<td>50 Mbps – 25 Gbps logical</td>
+<td>small/medium</td>
+</tr>
+<tr>
+<td><strong>Public VIF</strong></td>
+<td>access to AWS public services (S3, DynamoDB) over DX</td>
+<td>bypass Internet for massive egress</td>
+</tr>
+<tr>
+<td><strong>Private VIF</strong></td>
+<td>access to your VPC (via VGW or DX Gateway/TGW)</td>
+<td>the common case</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Costs</strong>: ~$0.30/h per dedicated 1 Gbps port (~$220/month) + traffic over DX (~$0.02/GB egress, far less than Internet $0.09).</p>
+<p><strong>HA pattern</strong>: 2 DX connections in 2 different DX locations + VPN as extra backup. The DX single point of failure is missing redundancy.</p>
+<h2 id="3-vpn-over-dx">3. VPN over DX</h2>
+<p>IPsec tunnel built <em>on top</em> of the DX fiber. Pros:</p>
+<ul>
+<li>End-to-end <strong>encryption</strong> (DX is not encrypted by default).</li>
+<li>Faster failover between links.</li>
+</ul>
+<p>Standard for regulated workloads (banking, healthcare).</p>
+<h2 id="4-direct-connect-gateway">4. Direct Connect Gateway</h2>
+<p>A DX Gateway is a virtual hub that connects <strong>one DX connection to VPCs in multiple Regions</strong>. Without DXGW, a DX connection only sees VPCs in its Region. With DXGW, it sees worldwide (with caveats).</p>
+<h2 id="5-hybrid-dns-with-route-53-resolver">5. Hybrid DNS with Route 53 Resolver</h2>
+<p>Three typical scenarios:</p>
+<ul>
+<li><strong>Resolver Inbound endpoint</strong>: on-prem can do DNS queries into the AWS VPC (resolve <code>db.internal.acme.aws</code>).</li>
+<li><strong>Resolver Outbound endpoint + rules</strong>: VPC can forward queries for <code>corp.acme.com</code> to on-prem DNS.</li>
+<li><strong>Conditional forwarding</strong> between the two.</li>
+</ul>
+<p>Enables <strong>bidirectional</strong> name resolution without exposing anything publicly.</p>
+<h2 id="6-complete-hybrid-pattern">6. Complete hybrid pattern</h2>
+<pre><code class="language-mermaid">flowchart TB
+    onprem[Data center]
+    dc[Remote offices]
+    onprem -. DX primary 10G .-&gt; dxloc[DX Location MI]
+    onprem -. DX backup 1G .-&gt; dxloc2[DX Location FR]
+    dc -. VPN .-&gt; tgw[Transit Gateway]
+    dxloc --&gt; dxgw[DX Gateway]
+    dxloc2 --&gt; dxgw
+    dxgw --&gt; tgw
+    tgw --&gt; vpcs[All AWS VPCs]
+</code></pre>
+<h2 id="7-privatelink-hybrid">7. PrivateLink hybrid</h2>
+<p>PrivateLink (section 10) can be consumed from on-prem too <strong>if you go through DX or VPN</strong>. Example: your on-prem servers call Snowflake via a PrivateLink endpoint inside AWS — traffic goes on-prem → DX → AWS → endpoint → Snowflake, never the public Internet.</p>
+<h2 id="8-exercise">8. Exercise</h2>
+<details>
+<summary>3 on-prem EU data centers. You need HA + encryption + low latency to AWS. Setup?</summary>
+
+- **2 DX connections** to different DX locations (Milan + Frankfurt) for geographic redundancy.
+- **VPN over DX** on both for encryption.
+- **Internet VPN** as a 3rd backup (low cost, triggered on full DX failure).
+- **Transit Gateway** in AWS as the hub: each DX + VPN attaches to TGW.
+- BGP for automatic failover (DX primary, DX secondary, VPN backup) using AS-PATH prepending.
+- **Route 53 Resolver** inbound/outbound for hybrid name resolution.
+</details>
+
+<details>
+<summary>On-prem ↔ VPC AWS latency is 200 ms over Internet, 8 ms over DX. Why?</summary>
+
+- **Internet VPN**: traffic crosses multiple ISPs, IPsec encapsulation overhead, public Internet congestion.
+- **DX**: dedicated private fiber from the partner location to the AWS Region, direct physical distance. Latency is essentially $\sim \frac{d}{c \cdot 0.66}$ (speed of light in fiber). 1000 km ≈ 5 ms RTT.
+
+For DB workloads or chatty RPCs (hundreds of queries per user request), 200 ms vs 8 ms is the difference between "unusable" and "transparent".
+</details>
+
+<blockquote>
+<p><strong>Summary</strong>: VPN to start fast and as backup; DX for high bandwidth, stable latency, and cheaper egress at volume; VPN over DX for encryption; DX Gateway or TGW to scale to multi-Region/multi-VPC; Route 53 Resolver for hybrid bidirectional name resolution; PrivateLink also consumable from on-prem over DX/VPN.</p>
+</blockquote>
+      <nav class="pager">
+<a href="11-route53-cloudfront.html" class="prev"><span class="label">← Previous</span><span class="title">Route 53, CloudFront, Global Accelerator</span></a>
+<a href="13-ec2-fundamentals.html" class="next"><span class="label">Next →</span><span class="title">EC2 — fundamentals (instances, AMIs, lifecycle)</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>AWS Zero to Hero</strong> — complete path, in English, from primitives to advanced architecture.</p><p>Open educational material. No sponsorships, no affiliate links, no affiliation with AWS. When a concept is unclear, go back: AWS is a pyramid of primitives, not a tree you skip across.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+</body>
+</html>

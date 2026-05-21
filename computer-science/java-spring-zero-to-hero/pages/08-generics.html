@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>Generics: tipi parametrici, PECS, type erasure, wildcards — Java + Spring Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">☕</div>
+      <div>
+        <div class="brand-title">JAVA · SPRING</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="10" height="20" fill="#009246"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ce2b37"/></svg> IT</span><a href="../en/pages/08-generics.html" class="lang-link" title="Switch to English"><svg viewBox="0 0 30 20" width="22" height="15"><rect width="30" height="20" fill="#012169"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#fff" stroke-width="3"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#c8102e" stroke-width="1.5"/><path d="M15,0 v20 M0,10 h30" stroke="#fff" stroke-width="5"/><path d="M15,0 v20 M0,10 h30" stroke="#c8102e" stroke-width="3"/></svg> EN</a></div>
+  </div>
+  <div class="search-wrap">
+    <div class="search-row">
+      <div class="search-inputwrap">
+        <span class="search-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"/>
+            <line x1="20" y1="20" x2="16.65" y2="16.65"/>
+          </svg>
+        </span>
+        <input class="search-input" id="search-input" type="text" placeholder="cerca... (premi /)" autocomplete="off" aria-label="Search">
+        <button class="search-clear" id="search-clear" type="button" aria-label="Clear" title="Clear">&times;</button>
+      </div>
+      <button class="search-btn" id="search-btn" type="button" aria-label="CERCA" title="CERCA">CERCA</button>
+    </div>
+    <div class="search-hits" id="search-hits" role="listbox"></div>
+  </div>
+  <div class="sidebar-nav">
+    <nav class="nav-section">
+      <div class="nav-section-title">Percorso</div>
+      <ul class="nav-list">
+        <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+        <li class="nav-item"><a href="../pages/00-percorso-e-mindset.html" class=""><span class="num">00</span>Il percorso e la giusta mentalità</a></li><li class="nav-item"><a href="../pages/01-introduzione-java.html" class=""><span class="num">01</span>Java: cos&#x27;è davvero, JVM/JRE/JDK, primo programma</a></li><li class="nav-item"><a href="../pages/02-sintassi-base.html" class=""><span class="num">02</span>Sintassi di base: tipi, variabili, operatori, controllo di flusso</a></li><li class="nav-item"><a href="../pages/03-stringhe-array-io.html" class=""><span class="num">03</span>Stringhe, array, I/O da console</a></li><li class="nav-item"><a href="../pages/04-oop-classi-oggetti.html" class=""><span class="num">04</span>OOP I — Classi, oggetti, costruttori, this, package, visibilità</a></li><li class="nav-item"><a href="../pages/05-oop-ereditarieta-polimorfismo.html" class=""><span class="num">05</span>OOP II — Ereditarietà, polimorfismo, interfacce, classi astratte</a></li><li class="nav-item"><a href="../pages/06-equals-hashcode-immutabilita.html" class=""><span class="num">06</span>OOP III — equals, hashCode, toString, immutabilità, record</a></li><li class="nav-item"><a href="../pages/07-eccezioni.html" class=""><span class="num">07</span>Eccezioni: checked vs unchecked, try-with-resources, custom</a></li><li class="nav-item"><a href="../pages/08-generics.html" class="active"><span class="num">08</span>Generics: tipi parametrici, PECS, type erasure, wildcards</a></li><li class="nav-item"><a href="../pages/09-collections.html" class=""><span class="num">09</span>Collections: List, Set, Map, Queue, complessità, scelta della struttura</a></li><li class="nav-item"><a href="../pages/10-stream-lambda-optional.html" class=""><span class="num">10</span>Stream API, lambda, functional interfaces, Optional</a></li><li class="nav-item"><a href="../pages/11-io-nio.html" class=""><span class="num">11</span>I/O e NIO.2: File, Path, channels, buffer</a></li><li class="nav-item"><a href="../pages/12-concurrency-thread.html" class=""><span class="num">12</span>Concurrency I — Thread, sincronizzazione, volatile, Java Memory Model</a></li><li class="nav-item"><a href="../pages/13-executor-future-completablefuture.html" class=""><span class="num">13</span>Concurrency II — ExecutorService, Future, CompletableFuture</a></li><li class="nav-item"><a href="../pages/14-concurrency-jucconcurrent.html" class=""><span class="num">14</span>Concurrency III — java.util.concurrent: locks, atomics, concurrent collections</a></li><li class="nav-item"><a href="../pages/15-jvm-internals.html" class=""><span class="num">15</span>JVM internals: classloader, bytecode, runtime data areas, JIT</a></li><li class="nav-item"><a href="../pages/16-memoria-gc.html" class=""><span class="num">16</span>Memoria e garbage collection: G1, ZGC, Shenandoah</a></li><li class="nav-item"><a href="../pages/17-profiling-jfr.html" class=""><span class="num">17</span>Profiling: JFR, async-profiler, jstack, heap dump, jcmd</a></li><li class="nav-item"><a href="../pages/18-java-moderno.html" class=""><span class="num">18</span>Java moderno: dal 8 al 21 — features chiave</a></li><li class="nav-item"><a href="../pages/19-jdbc.html" class=""><span class="num">19</span>JDBC: connessione, PreparedStatement, transazioni, isolation levels</a></li><li class="nav-item"><a href="../pages/20-jpa-hibernate.html" class=""><span class="num">20</span>JPA / Hibernate: entità, relazioni, lazy/eager, N+1, cache</a></li><li class="nav-item"><a href="../pages/21-sql-essenziale.html" class=""><span class="num">21</span>SQL essenziale per chi sviluppa in Java</a></li><li class="nav-item"><a href="../pages/22-spring-intro-ioc-di.html" class=""><span class="num">22</span>Spring intro: IoC, DI, ApplicationContext, BeanFactory</a></li><li class="nav-item"><a href="../pages/23-spring-beans-lifecycle.html" class=""><span class="num">23</span>Bean: scopes, lifecycle, BeanPostProcessor, FactoryBean</a></li><li class="nav-item"><a href="../pages/24-spring-configurazione.html" class=""><span class="num">24</span>Configurazione: Java config, @ComponentScan, profili, conditionals, properties</a></li><li class="nav-item"><a href="../pages/25-spring-aop-transactional.html" class=""><span class="num">25</span>AOP, proxy, @Transactional: cosa accade davvero</a></li><li class="nav-item"><a href="../pages/26-spring-boot.html" class=""><span class="num">26</span>Spring Boot: auto-configuration, starters, Actuator</a></li><li class="nav-item"><a href="../pages/27-spring-data-jpa.html" class=""><span class="num">27</span>Spring Data JPA: Repository, derived queries, paginazione, Specification</a></li><li class="nav-item"><a href="../pages/28-spring-mvc-rest.html" class=""><span class="num">28</span>Spring MVC: DispatcherServlet, controller, REST endpoint</a></li><li class="nav-item"><a href="../pages/29-rest-openapi-hateoas.html" class=""><span class="num">29</span>REST: best practice, OpenAPI/Swagger, HATEOAS, versionamento</a></li><li class="nav-item"><a href="../pages/30-spring-webflux.html" class=""><span class="num">30</span>Spring WebFlux + Reactor: Mono, Flux, programmazione reattiva</a></li><li class="nav-item"><a href="../pages/31-spring-security.html" class=""><span class="num">31</span>Spring Security: filter chain, autenticazione, autorizzazione, JWT, OAuth2</a></li><li class="nav-item"><a href="../pages/32-spring-cloud.html" class=""><span class="num">32</span>Spring Cloud: Config Server, Discovery, Gateway, Resilience4j</a></li><li class="nav-item"><a href="../pages/33-testing.html" class=""><span class="num">33</span>Testing: JUnit 5, Mockito, MockMvc, Testcontainers</a></li><li class="nav-item"><a href="../pages/34-spring-batch-intro.html" class=""><span class="num">34</span>Spring Batch intro: domain model, Job, Step, primo batch</a></li><li class="nav-item"><a href="../pages/35-spring-batch-jobrepository.html" class=""><span class="num">35</span>JobRepository, JobLauncher, schema dei metadati</a></li><li class="nav-item"><a href="../pages/36-spring-batch-chunk-skip-retry.html" class=""><span class="num">36</span>Chunk processing: commit interval, skip, retry, fault tolerance</a></li><li class="nav-item"><a href="../pages/37-spring-batch-tasklet-flow.html" class=""><span class="num">37</span>Tasklet vs Chunk; flow control: decisioni, split, conditional</a></li><li class="nav-item"><a href="../pages/38-spring-batch-itemreader.html" class=""><span class="num">38</span>ItemReader: flat file, XML/JSON, JDBC cursor/paging, JPA, multi-resource</a></li><li class="nav-item"><a href="../pages/39-spring-batch-itemwriter.html" class=""><span class="num">39</span>ItemWriter: file, JDBC, JPA, composite, classifier, batch insert</a></li><li class="nav-item"><a href="../pages/40-spring-batch-scaling-partitioning.html" class=""><span class="num">40</span>Scaling: multi-threaded step, partitioning, remote chunking/partitioning</a></li><li class="nav-item"><a href="../pages/41-spring-batch-listeners-restart-k8s.html" class=""><span class="num">41</span>Listeners, restart, monitoring, integrazione con Spring Boot e Kubernetes</a></li><li class="nav-item"><a href="../pages/42-design-patterns.html" class=""><span class="num">42</span>Design pattern in Java/Spring: GoF + DDD-lite</a></li><li class="nav-item"><a href="../pages/43-performance-observability.html" class=""><span class="num">43</span>Performance tuning e observability production-grade</a></li><li class="nav-item"><a href="../pages/44-esercizi-sintesi.html" class=""><span class="num">44</span>50 esercizi cumulativi: dalla sintassi a Spring Batch</a></li><li class="nav-item"><a href="../pages/45-progetto-finale-etl.html" class=""><span class="num">45</span>Progetto finale guidato: ETL bancario notturno</a></li>
+      </ul>
+    </nav>
+  </div>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Java Foundations</span>
+        <span>Sezione 8 di 45</span>
+        <span class="level-tag level-int">Livello: intermedio</span>
+      </div>
+      <h1>Generics: tipi parametrici, PECS, type erasure, wildcards</h1>
+      <p class="summary">Cos&#x27;è un tipo generico, perché esiste, type parameters in classi e metodi, bounded type parameters, wildcards (extends, super, ?), regola PECS, type erasure e i suoi limiti.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Java Foundations</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>Sezione 7</li></ul>
+  <div class="label">Strumenti</div>
+  <ul class="source-list"><li>JDK 21</li></ul>
+</div>
+      <h2 id="perche-esistono-i-generics">Perché esistono i generics</h2>
+<p>Prima di Java 5, <code>List</code> era così:</p>
+<pre><code class="language-java">List nomi = new ArrayList();
+nomi.add(&quot;Anna&quot;);
+nomi.add(42);                    // ouch, compila ma...
+String s = (String) nomi.get(1); // ClassCastException a runtime
+</code></pre>
+<p>Senza generics, le collezioni "sapevano" solo di contenere <code>Object</code>. Casting manuale, errori a runtime.</p>
+<p>I <strong>generics</strong> (Java 5+) ti danno <strong>type safety a compile time</strong>:</p>
+<pre><code class="language-java">List&lt;String&gt; nomi = new ArrayList&lt;&gt;();
+nomi.add(&quot;Anna&quot;);
+nomi.add(42);                    // ERRORE compilazione
+String s = nomi.get(0);          // niente cast
+</code></pre>
+<h2 id="classi-e-metodi-generici">Classi e metodi generici</h2>
+<h3 id="classe-generica">Classe generica</h3>
+<pre><code class="language-java">public class Box&lt;T&gt; {
+    private T contenuto;
+    public Box(T contenuto) { this.contenuto = contenuto; }
+    public T get() { return contenuto; }
+    public void set(T v) { this.contenuto = v; }
+}
+
+Box&lt;String&gt; b1 = new Box&lt;&gt;(&quot;ciao&quot;);
+Box&lt;Integer&gt; b2 = new Box&lt;&gt;(42);
+</code></pre>
+<p><code>T</code> è il <strong>type parameter</strong>. Convenzioni:
+- <code>T</code> (Type) — generico
+- <code>E</code> (Element) — per collezioni
+- <code>K</code>, <code>V</code> (Key, Value) — per mappe
+- <code>R</code> (Return)
+- <code>N</code> (Number)</p>
+<h3 id="piu-parametri">Più parametri</h3>
+<pre><code class="language-java">public class Coppia&lt;K, V&gt; {
+    private final K chiave;
+    private final V valore;
+    public Coppia(K k, V v) { this.chiave = k; this.valore = v; }
+    public K chiave() { return chiave; }
+    public V valore() { return valore; }
+}
+</code></pre>
+<h3 id="metodo-generico">Metodo generico</h3>
+<pre><code class="language-java">public static &lt;T&gt; T primo(List&lt;T&gt; lista) {
+    if (lista.isEmpty()) return null;
+    return lista.get(0);
+}
+
+String s = primo(List.of(&quot;a&quot;, &quot;b&quot;));   // T = String
+Integer i = primo(List.of(1, 2));      // T = Integer
+</code></pre>
+<p>Il <code>&lt;T&gt;</code> <em>prima</em> del tipo di ritorno introduce il parametro.</p>
+<h2 id="bounded-type-parameters">Bounded type parameters</h2>
+<h3 id="upper-bound-extends">Upper bound: <code>extends</code></h3>
+<p>Limita <code>T</code> a essere un sottotipo di qualcosa.</p>
+<pre><code class="language-java">public static &lt;T extends Number&gt; double somma(List&lt;T&gt; nums) {
+    double s = 0;
+    for (T n : nums) s += n.doubleValue();   // Number ha doubleValue()
+    return s;
+}
+
+somma(List.of(1, 2, 3));         // ok, Integer extends Number
+somma(List.of(1.0, 2.0));        // ok
+somma(List.of(&quot;a&quot;, &quot;b&quot;));        // ERRORE, String non extends Number
+</code></pre>
+<h3 id="bound-multipli">Bound multipli</h3>
+<pre><code class="language-java">public static &lt;T extends Number &amp; Comparable&lt;T&gt;&gt; T max(List&lt;T&gt; l) {
+    T m = l.get(0);
+    for (T x : l) if (x.compareTo(m) &gt; 0) m = x;
+    return m;
+}
+</code></pre>
+<p><code>&amp; Comparable&lt;T&gt;</code> aggiunge un secondo vincolo. La classe (se presente) deve essere il primo bound.</p>
+<h2 id="wildcards">Wildcards</h2>
+<h3 id="wildcard-incognita"><code>?</code> — wildcard incognita</h3>
+<pre><code class="language-java">List&lt;?&gt; lista = ...;        // lista di qualcosa, non so cosa
+lista.size();               // ok
+lista.add(&quot;x&quot;);             // ERRORE: non puoi aggiungere
+Object x = lista.get(0);    // ok, ma solo come Object
+</code></pre>
+<p><code>List&lt;?&gt;</code> è usabile per leggere "qualcosa", ma non per aggiungere (tranne <code>null</code>).</p>
+<h3 id="extends-t-covariance-lettura"><code>? extends T</code> — covariance (lettura)</h3>
+<pre><code class="language-java">public static double sommaNumeri(List&lt;? extends Number&gt; nums) {
+    double s = 0;
+    for (Number n : nums) s += n.doubleValue();
+    return s;
+}
+
+sommaNumeri(List.of(1, 2, 3));         // List&lt;Integer&gt;: ok
+sommaNumeri(List.of(1.0, 2.0));        // List&lt;Double&gt;: ok
+</code></pre>
+<p><code>List&lt;? extends Number&gt;</code> accetta <code>List&lt;Integer&gt;</code>, <code>List&lt;Double&gt;</code>, <code>List&lt;Float&gt;</code>, etc. Ma:</p>
+<pre><code class="language-java">List&lt;? extends Number&gt; l = new ArrayList&lt;Integer&gt;();
+l.add(42);  // ERRORE: non sai esattamente cos'è dentro
+</code></pre>
+<p>Puoi <strong>leggere</strong> ma non <strong>scrivere</strong> (tranne <code>null</code>).</p>
+<h3 id="super-t-contravariance-scrittura"><code>? super T</code> — contravariance (scrittura)</h3>
+<pre><code class="language-java">public static void aggiungi(List&lt;? super Integer&gt; lista) {
+    lista.add(1);
+    lista.add(2);
+}
+
+List&lt;Integer&gt; li = new ArrayList&lt;&gt;();
+List&lt;Number&gt; ln = new ArrayList&lt;&gt;();
+List&lt;Object&gt; lo = new ArrayList&lt;&gt;();
+aggiungi(li);   // ok
+aggiungi(ln);   // ok
+aggiungi(lo);   // ok
+</code></pre>
+<p><code>List&lt;? super Integer&gt;</code> accetta <code>List&lt;Integer&gt;</code>, <code>List&lt;Number&gt;</code>, <code>List&lt;Object&gt;</code>. Puoi <strong>scrivere</strong> ma non sai cosa esce quando leggi (solo <code>Object</code>).</p>
+<h3 id="pecs-producer-extends-consumer-super">PECS: Producer Extends, Consumer Super</h3>
+<p>Regola d'oro:</p>
+<ul>
+<li>Se la collezione <strong>produce</strong> valori per te (la leggi) → <code>? extends T</code></li>
+<li>Se la collezione <strong>consuma</strong> valori che le passi (la scrivi) → <code>? super T</code></li>
+</ul>
+<pre><code class="language-java">public static &lt;T&gt; void copia(List&lt;? extends T&gt; sorgente, List&lt;? super T&gt; destinazione) {
+    for (T x : sorgente) destinazione.add(x);
+    //       ↑ produce               ↑ consuma
+}
+</code></pre>
+<p>Esempio reale dalla JDK: <code>Collections.copy(List&lt;? super T&gt; dest, List&lt;? extends T&gt; src)</code>.</p>
+<h2 id="type-erasure-il-segreto-sporco">Type erasure: il segreto sporco</h2>
+<p>I generics esistono <em>solo a compile-time</em>. A runtime, la JVM non li vede:</p>
+<pre><code class="language-java">List&lt;String&gt; li = new ArrayList&lt;&gt;();
+List&lt;Integer&gt; li2 = new ArrayList&lt;&gt;();
+System.out.println(li.getClass() == li2.getClass());   // true!
+</code></pre>
+<p>A runtime sono entrambi <code>ArrayList</code>. Tutti i <code>T</code> vengono cancellati ("type erasure"), sostituiti col bound (<code>Object</code> se non specificato).</p>
+<h3 id="conseguenze-pratiche">Conseguenze pratiche</h3>
+<ol>
+<li>
+<p><strong>Non puoi fare <code>new T()</code></strong>:
+   <code>java
+   public class Box&lt;T&gt; {
+       T newOne() { return new T(); }   // NON compila
+   }</code>
+   Workaround: passa un <code>Supplier&lt;T&gt;</code> o una <code>Class&lt;T&gt;</code>.</p>
+</li>
+<li>
+<p><strong>Non puoi fare <code>instanceof List&lt;String&gt;</code></strong>:
+   <code>java
+   if (x instanceof List&lt;String&gt;) ...   // NON compila
+   if (x instanceof List&lt;?&gt;) ...        // ok</code></p>
+</li>
+<li>
+<p><strong>Array generici proibiti</strong>:
+   <code>java
+   T[] arr = new T[10];                   // NON compila
+   List&lt;String&gt;[] arr = new List[10];     // unsafe warning</code>
+   Usa <code>List&lt;T&gt;</code> invece di array.</p>
+</li>
+<li>
+<p><strong>Overload "fantasma"</strong>:
+   <code>java
+   void f(List&lt;String&gt; l) {}
+   void f(List&lt;Integer&gt; l) {}   // NON compila: stessa firma dopo erasure</code></p>
+</li>
+</ol>
+<h3 id="reified-vs-erased">Reified vs erased</h3>
+<p>C# ha "reified generics": il tipo è disponibile a runtime. Java no. Pagamenti tempo, ma a volte ti tocca:</p>
+<pre><code class="language-java">public &lt;T&gt; T parse(String json, Class&lt;T&gt; clazz) {
+    // ottieni T a runtime
+}
+parse(&quot;{...}&quot;, Customer.class);
+</code></pre>
+<p>Le librerie come Jackson e Spring usano <code>TypeReference</code> o <code>ParameterizedTypeReference</code> per workaround.</p>
+<h2 id="generics-e-collezioni-della-jdk">Generics e collezioni della JDK</h2>
+<p>Tutte le collezioni sono generiche:</p>
+<pre><code class="language-java">List&lt;Customer&gt; customers = new ArrayList&lt;&gt;();
+Map&lt;String, Customer&gt; byEmail = new HashMap&lt;&gt;();
+Set&lt;UUID&gt; ids = new HashSet&lt;&gt;();
+Optional&lt;User&gt; user = repo.find(42);
+Stream&lt;Order&gt; orders = ...;
+</code></pre>
+<p>Il diamond <code>&lt;&gt;</code> (Java 7+) lascia inferire il tipo a destra:</p>
+<pre><code class="language-java">List&lt;Customer&gt; list = new ArrayList&lt;&gt;();   // invece di new ArrayList&lt;Customer&gt;()
+</code></pre>
+<h2 id="esempio-integrato-repository-generico">Esempio integrato: Repository generico</h2>
+<pre><code class="language-java">public interface Repository&lt;T, ID&gt; {
+    Optional&lt;T&gt; findById(ID id);
+    List&lt;T&gt; findAll();
+    T save(T entity);
+    void deleteById(ID id);
+}
+
+public class JdbcRepository&lt;T, ID&gt; implements Repository&lt;T, ID&gt; {
+    private final DataSource ds;
+    private final RowMapper&lt;T&gt; mapper;
+    private final String tableName;
+
+    public JdbcRepository(DataSource ds, String tableName, RowMapper&lt;T&gt; mapper) {
+        this.ds = ds;
+        this.tableName = tableName;
+        this.mapper = mapper;
+    }
+
+    @Override
+    public Optional&lt;T&gt; findById(ID id) {
+        // SELECT * FROM tableName WHERE id = ?
+        // ...
+        return Optional.empty();
+    }
+    // ...
+}
+</code></pre>
+<p>Spring Data JPA usa esattamente questo schema: <code>JpaRepository&lt;T, ID&gt;</code>.</p>
+<h2 id="esercizi">Esercizi</h2>
+<details>
+<summary>Es 8.1 — `Pair<A, B>`</summary>
+
+Crea un record `Pair<A, B>` con metodi `first()`, `second()`, `swap()` (ritorna `Pair<B, A>`).
+
+
+<pre><code class="language-java">public record Pair&lt;A, B&gt;(A first, B second) {
+    public Pair&lt;B, A&gt; swap() { return new Pair&lt;&gt;(second, first); }
+}
+
+Pair&lt;String, Integer&gt; p = new Pair&lt;&gt;(&quot;ciao&quot;, 1);
+Pair&lt;Integer, String&gt; q = p.swap();
+</code></pre>
+
+
+</details>
+
+<details>
+<summary>Es 8.2 — `min` generico</summary>
+
+Implementa `static <T extends Comparable<T>> T min(List<T> list)`.
+
+
+<pre><code class="language-java">public static &lt;T extends Comparable&lt;T&gt;&gt; T min(List&lt;T&gt; list) {
+    if (list.isEmpty()) throw new IllegalArgumentException(&quot;vuota&quot;);
+    T m = list.get(0);
+    for (T x : list) if (x.compareTo(m) &lt; 0) m = x;
+    return m;
+}
+
+min(List.of(3, 1, 4, 1, 5));        // 1
+min(List.of(&quot;banana&quot;, &quot;apple&quot;));    // &quot;apple&quot;
+</code></pre>
+
+
+</details>
+
+<details>
+<summary>Es 8.3 — Applica PECS</summary>
+
+Scrivi `static <T> void aggiungiTutto(List<? super T> dest, T... elementi)`.
+
+
+<pre><code class="language-java">public static &lt;T&gt; void aggiungiTutto(List&lt;? super T&gt; dest, T... elementi) {
+    for (T e : elementi) dest.add(e);
+}
+
+List&lt;Number&gt; ln = new ArrayList&lt;&gt;();
+aggiungiTutto(ln, 1, 2, 3);   // ln è List&lt;Number&gt;, ricevuto Integer: ok
+</code></pre>
+
+
+</details>
+
+<details>
+<summary>Es 8.4 — Type erasure trap</summary>
+
+Compila o no?
+
+
+<pre><code class="language-java">public class Wrap&lt;T&gt; {
+    public T value() { ... }
+    public Integer value() { return 0; }   // overload?
+}
+</code></pre>
+
+
+**Non compila.** Dopo erasure entrambi i metodi sono `Object value()`/`Integer value()` con la stessa firma (`T` cancella in `Object`). Conflitto.
+
+</details>
+
+<details>
+<summary>Es 8.5 — Wildcard quiz</summary>
+
+Quale di queste compila?
+
+
+<pre><code class="language-java">List&lt;Number&gt; ln = new ArrayList&lt;&gt;();
+List&lt;? extends Number&gt; lext = ln;
+List&lt;? super Number&gt; lsup = ln;
+
+lext.add(1);     // ?
+lsup.add(1);     // ?
+Number n1 = lext.get(0);     // ?
+Number n2 = lsup.get(0);     // ?
+</code></pre>
+
+
+- `lext.add(1)` → **errore**: con `? extends`, non puoi aggiungere.
+- `lsup.add(1)` → **ok**: puoi aggiungere Integer (subtipo di Number).
+- `n1 = lext.get(0)` → **ok**: leggi come Number (limite superiore).
+- `n2 = lsup.get(0)` → **errore**: con `? super`, leggi come `Object`.
+
+</details>
+
+<h2 id="cosa-devi-portarti-via">Cosa devi portarti via</h2>
+<ul>
+<li>Generics = type safety a compile time. Niente cast espliciti.</li>
+<li><code>&lt;T extends X&gt;</code> per limitare ad un sottotipo di X.</li>
+<li><strong>PECS</strong>: <code>? extends</code> per produrre (leggere), <code>? super</code> per consumare (scrivere).</li>
+<li><strong>Type erasure</strong>: a runtime i parametri di tipo sono cancellati. Implicazioni: niente <code>new T()</code>, niente array generici diretti.</li>
+<li>I record + generics + collezioni = fondamenta della programmazione moderna in Java.</li>
+</ul>
+<p>Prossimo: Collections framework in dettaglio.</p>
+      <nav class="pager">
+<a href="07-eccezioni.html" class="prev"><span class="label">← Precedente</span><span class="title">Eccezioni: checked vs unchecked, try-with-resources, custom</span></a>
+<a href="09-collections.html" class="next"><span class="label">Successivo →</span><span class="title">Collections: List, Set, Map, Queue, complessità, scelta della struttura</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Java + Spring Zero to Hero</strong> — percorso completo da Java base a Spring Batch in produzione.</p><p>Materiale a scopo educativo. Codice sotto licenza MIT; usalo liberamente nei tuoi progetti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body, {delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true, background: '#15191e', primaryColor: '#1d2530',
+      primaryTextColor: '#eef1f5', primaryBorderColor: '#f89820',
+      lineColor: '#6db33f', secondaryColor: '#1a1f25', tertiaryColor: '#222a33',
+      mainBkg: '#1d2530', nodeBorder: '#f89820', clusterBkg: '#0f1318',
+      clusterBorder: '#2a3340', titleColor: '#f89820',
+      edgeLabelBackground: '#0f1318', textColor: '#eef1f5',
+      labelTextColor: '#eef1f5', actorBkg: '#1d2530', actorBorder: '#f89820',
+      actorTextColor: '#f89820', actorLineColor: '#6db33f',
+      signalColor: '#eef1f5', signalTextColor: '#eef1f5',
+      labelBoxBkgColor: '#1d2530', labelBoxBorderColor: '#f89820',
+      noteBkgColor: '#fff6a8', noteTextColor: '#0f1318', noteBorderColor: '#fff6a8',
+      activationBkgColor: '#1d2530', activationBorderColor: '#f89820',
+      sequenceNumberColor: '#0f1318'
+    },
+    flowchart: { curve: 'basis', padding: 16 },
+    sequence: { mirrorActors: false, bottomMarginAdj: 10 },
+    fontFamily: 'JetBrains Mono, Cascadia Code, Consolas, monospace'
+  });
+</script>
+</body>
+</html>

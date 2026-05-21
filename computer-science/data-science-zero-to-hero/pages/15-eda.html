@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EDA: Exploratory Data Analysis — Data Science Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#3a4a7a',primaryTextColor:'#e8eef0',primaryBorderColor:'#5a6aa0',lineColor:'#8a9499',background:'#11171a'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">Σ</div>
+      <div>
+        <div class="brand-title">DATA SCIENCE</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">🇮🇹 IT</span><a href="../en/pages/15-eda.html" class="lang-link" title="Switch to English">🇬🇧 EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-cos-e-data-science.html" class=""><span class="num">01</span>Cos&#x27;è la data science (e cosa non è)</a></li><li class="nav-item"><a href="../pages/02-python-per-data-science.html" class=""><span class="num">02</span>Python per data science: setup professionale</a></li><li class="nav-item"><a href="../pages/02b-matematica-essenziale.html" class=""><span class="num">02b</span>Matematica del liceo che ti serve davvero</a></li><li class="nav-item"><a href="../pages/03-algebra-lineare.html" class=""><span class="num">03</span>Algebra lineare per data scientist</a></li><li class="nav-item"><a href="../pages/04-calcolo-ottimizzazione.html" class=""><span class="num">04</span>Calcolo, gradiente e ottimizzazione</a></li><li class="nav-item"><a href="../pages/05-probabilita.html" class=""><span class="num">05</span>Probabilità: la lingua dell&#x27;incertezza</a></li><li class="nav-item"><a href="../pages/06-statistica-descrittiva.html" class=""><span class="num">06</span>Statistica descrittiva</a></li><li class="nav-item"><a href="../pages/07-statistica-inferenziale.html" class=""><span class="num">07</span>Statistica inferenziale e test di ipotesi</a></li><li class="nav-item"><a href="../pages/08-distribuzioni.html" class=""><span class="num">08</span>Distribuzioni di probabilità che incontrerai</a></li><li class="nav-item"><a href="../pages/09-numpy.html" class=""><span class="num">09</span>NumPy: pensare in array</a></li><li class="nav-item"><a href="../pages/10-pandas.html" class=""><span class="num">10</span>Pandas: il coltellino svizzero</a></li><li class="nav-item"><a href="../pages/11-sql.html" class=""><span class="num">11</span>SQL per data scientist</a></li><li class="nav-item"><a href="../pages/12-visualizzazione.html" class=""><span class="num">12</span>Visualizzazione: matplotlib, seaborn, plotly</a></li><li class="nav-item"><a href="../pages/13-data-wrangling.html" class=""><span class="num">13</span>Pulizia e data wrangling</a></li><li class="nav-item"><a href="../pages/14-feature-engineering.html" class=""><span class="num">14</span>Feature engineering</a></li><li class="nav-item"><a href="../pages/15-eda.html" class="active"><span class="num">15</span>EDA: Exploratory Data Analysis</a></li><li class="nav-item"><a href="../pages/16-ml-fondamenti.html" class=""><span class="num">16</span>ML: fondamenti — bias, varianza, validazione</a></li><li class="nav-item"><a href="../pages/17-regressione-lineare.html" class=""><span class="num">17</span>Regressione lineare e regolarizzazione</a></li><li class="nav-item"><a href="../pages/18-regressione-logistica.html" class=""><span class="num">18</span>Regressione logistica e classificazione</a></li><li class="nav-item"><a href="../pages/19-knn-naive-bayes-svm.html" class=""><span class="num">19</span>KNN, Naive Bayes, SVM</a></li><li class="nav-item"><a href="../pages/20-alberi-decisionali.html" class=""><span class="num">20</span>Alberi decisionali</a></li><li class="nav-item"><a href="../pages/21-random-forest-boosting.html" class=""><span class="num">21</span>Random Forest, Gradient Boosting, XGBoost</a></li><li class="nav-item"><a href="../pages/22-clustering.html" class=""><span class="num">22</span>Clustering: K-Means, DBSCAN, GMM, gerarchico</a></li><li class="nav-item"><a href="../pages/23-pca-tsne-umap.html" class=""><span class="num">23</span>Riduzione dimensionale: PCA, t-SNE, UMAP</a></li><li class="nav-item"><a href="../pages/24-metriche-validazione.html" class=""><span class="num">24</span>Metriche, cross-validation, leakage</a></li><li class="nav-item"><a href="../pages/25-sbilanciamento-classi.html" class=""><span class="num">25</span>Sbilanciamento di classi</a></li><li class="nav-item"><a href="../pages/26-hyperparameter-tuning.html" class=""><span class="num">26</span>Hyperparameter tuning</a></li><li class="nav-item"><a href="../pages/27-reti-neurali.html" class=""><span class="num">27</span>Reti neurali: dalle basi al backprop</a></li><li class="nav-item"><a href="../pages/28-pytorch.html" class=""><span class="num">28</span>PyTorch: dal toy model al training loop</a></li><li class="nav-item"><a href="../pages/29-cnn.html" class=""><span class="num">29</span>CNN per computer vision</a></li><li class="nav-item"><a href="../pages/30-rnn-lstm.html" class=""><span class="num">30</span>RNN, LSTM, GRU per sequenze</a></li><li class="nav-item"><a href="../pages/31-transformer.html" class=""><span class="num">31</span>Transformer e attention</a></li><li class="nav-item"><a href="../pages/32-nlp-llm.html" class=""><span class="num">32</span>NLP: dal text mining ai LLM</a></li><li class="nav-item"><a href="../pages/33-time-series.html" class=""><span class="num">33</span>Time series e forecasting</a></li><li class="nav-item"><a href="../pages/34-mlops.html" class=""><span class="num">34</span>MLOps: deployment, monitoring, drift</a></li><li class="nav-item"><a href="../pages/35-bayesian-causal.html" class=""><span class="num">35</span>Inferenza bayesiana e causale</a></li><li class="nav-item"><a href="../pages/36-capstone-carriera.html" class=""><span class="num">36</span>Capstone, portfolio, carriera</a></li><li class="nav-item"><a href="../pages/37-glossario.html" class=""><span class="num">37</span>Glossario A-Z</a></li><li class="nav-item"><a href="../pages/38-formulario.html" class=""><span class="num">38</span>Formulario: tutte le formule del percorso</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Dati</span>
+        <span>Sezione 16 di 39</span>
+        <span class="level-tag level-int">Livello: intermedio</span>
+      </div>
+      <h1>EDA: Exploratory Data Analysis</h1>
+      <p class="summary">Il workflow standard per esplorare un dataset nuovo — Tukey, Tufte e best practice. Da zero a &#x27;so cosa c&#x27;è dentro&#x27; in 2 ore.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Dati</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>[[statistica-descrittiva]]</li><li>[[pandas]]</li><li>[[visualizzazione]]</li></ul>
+  <div class="label">Strumenti</div>
+  <ul class="source-list"><li>pandas, seaborn, ydata-profiling</li></ul>
+</div>
+      <h2 id="cose">Cos'è</h2>
+<p>L'EDA è la fase in cui <strong>conosci i dati</strong>. Tukey la inventò negli anni '70 come reazione al modellare in cieco: prima di proporre un modello, lascia i dati parlare. La regola d'oro:</p>
+<blockquote>
+<p>"Far better an approximate answer to the right question, than an exact answer to the wrong question." — John Tukey</p>
+</blockquote>
+<p>Tutte le scelte successive (feature engineering, modello, validation) dipendono da quanto bene hai capito i dati in questa fase.</p>
+<h2 id="workflow-in-7-step">Workflow in 7 step</h2>
+<pre><code class="language-mermaid">flowchart TD
+    A[1. Caricamento + sanity check] --&gt; B[2. Univariate analysis]
+    B --&gt; C[3. Bivariate: feature ↔ target]
+    C --&gt; D[4. Bivariate: feature ↔ feature]
+    D --&gt; E[5. Missing patterns]
+    E --&gt; F[6. Outlier inspection]
+    F --&gt; G[7. Domain check + report]
+</code></pre>
+<h2 id="step-1-caricamento-e-sanity-check">Step 1 — Caricamento e sanity check</h2>
+<pre><code class="language-python">import pandas as pd
+df = pd.read_csv(&quot;dataset.csv&quot;)
+
+# checklist veloce
+print(df.shape)
+print(df.dtypes)
+print(df.head())
+print(df.tail())
+df.info()
+df.describe(include='all').T
+df.isna().sum().sort_values(ascending=False)
+df.nunique().sort_values()
+df.duplicated().sum()
+</code></pre>
+<p>Domande:</p>
+<ul>
+<li>Le <strong>righe</strong> sono quante mi aspetto? (es: 1000 utenti = 1000 righe)</li>
+<li>Le <strong>colonne</strong> hanno i tipi giusti? (date come datetime, non object)</li>
+<li>Esistono righe completamente vuote o duplicate?</li>
+<li>Ci sono colonne con un solo valore (zero varianza, inutili)?</li>
+</ul>
+<h2 id="step-2-analisi-univariata">Step 2 — Analisi univariata</h2>
+<p>Per ogni colonna, capisci la distribuzione.</p>
+<pre><code class="language-python"># numeriche
+df.hist(figsize=(14, 10), bins=40)
+
+# categoriali
+for col in df.select_dtypes(include=['object', 'category']):
+    print(f&quot;\n=== {col} ===&quot;)
+    print(df[col].value_counts(normalize=True).head(10))
+</code></pre>
+<p>Cosa cercare:</p>
+<ul>
+<li><strong>Skew</strong>: code lunghe → considera log o Box-Cox.</li>
+<li><strong>Bimodalità</strong>: due picchi suggeriscono che la popolazione è eterogenea (es: maschio/femmina, prima/dopo un cambio policy).</li>
+<li><strong>Categorie rare</strong>: &lt; 1% potrebbero essere typo o noise.</li>
+<li><strong>Range strani</strong>: età = 999, salary = -1 sono codifiche di NaN.</li>
+</ul>
+<h2 id="step-3-bivariate-feature-vs-target">Step 3 — Bivariate: feature vs target</h2>
+<p>Il cuore dell'EDA per ML. Per ogni feature, guarda come si relaziona col target.</p>
+<h3 id="target-categoriale">Target categoriale</h3>
+<pre><code class="language-python"># numerical → target
+for col in num_cols:
+    sns.boxplot(data=df, x='target', y=col)
+
+# categorical → target
+for col in cat_cols:
+    pd.crosstab(df[col], df['target'], normalize='index').plot(kind='bar', stacked=True)
+</code></pre>
+<h3 id="target-continuo">Target continuo</h3>
+<pre><code class="language-python"># numerical → target
+for col in num_cols:
+    sns.scatterplot(data=df.sample(2000), x=col, y='target')
+    sns.regplot(data=df.sample(2000), x=col, y='target', scatter=False, color='red')
+
+# correlation
+df.corr(numeric_only=True)['target'].abs().sort_values(ascending=False)
+</code></pre>
+<blockquote>
+<p>Correlazioni alte (&gt;0.95) sospette: o sono <strong>leakage</strong> (feature derivata dal target) o sono <strong>proxy</strong> (es: <code>revenue</code> per predire <code>revenue_per_user</code>).</p>
+</blockquote>
+<h2 id="step-4-bivariate-feature-feature">Step 4 — Bivariate: feature ↔ feature</h2>
+<p>Multicollinearità è il diavolo della regressione lineare:</p>
+<pre><code class="language-python">import seaborn as sns
+sns.heatmap(df.corr(method='spearman', numeric_only=True),
+            annot=True, fmt='.2f', cmap='RdBu_r', center=0)
+</code></pre>
+<p>Coppie con $|\rho| &gt; 0.9$: scegline una, scarta l'altra (a meno che entrambe siano importanti per interpretazione).</p>
+<p>Per non-linearità, usa <strong>mutual information</strong>:</p>
+<pre><code class="language-python">from sklearn.feature_selection import mutual_info_regression
+mi = mutual_info_regression(X, y)
+</code></pre>
+<h2 id="step-5-missing-patterns">Step 5 — Missing patterns</h2>
+<p>Sono i missing casuali (MCAR) o pattern? Plotta:</p>
+<pre><code class="language-python">import missingno as msno
+msno.matrix(df)
+msno.heatmap(df)
+msno.dendrogram(df)
+</code></pre>
+<p>Se due colonne mancano sempre insieme, indicano lo stesso evento mancato (es: utente non ha completato form). Tratte come una sola feature "form incompleto".</p>
+<h2 id="step-6-outlier-inspection">Step 6 — Outlier inspection</h2>
+<pre><code class="language-python"># boxplot per outlier visual
+df.select_dtypes(include='number').boxplot(figsize=(15, 6), rot=45)
+
+# isolation forest
+from sklearn.ensemble import IsolationForest
+iso = IsolationForest(contamination=0.05, random_state=0)
+mask = iso.fit_predict(df.select_dtypes(include='number').fillna(0)) == -1
+df_outliers = df[mask]
+</code></pre>
+<p>Per ogni outlier: <strong>investiga</strong>. È un errore (digitato male)? Un evento eccezionale (frode)? Un caso d'uso non previsto?</p>
+<h2 id="step-7-domain-check">Step 7 — Domain check</h2>
+<p>Discuti con qualcuno che conosce i dati. <strong>Sempre</strong>. Domande tipo:</p>
+<ul>
+<li>"Vedo che le vendite si dimezzano in agosto. Normale?"</li>
+<li>"Le età di 12 utenti sono &gt; 100. Errore o utenti anziani veri?"</li>
+<li>"Esiste un periodo (es: maggio 2024) dove il dato sembra rotto. Cosa è successo?"</li>
+</ul>
+<p>Spesso scopri:
+- Cambi di sistema che invalidano dati storici.
+- Promozioni che gonfiano metriche.
+- Cancellazioni di righe non documentate.</p>
+<p>Senza domain check, costruirai modelli sopra leggende.</p>
+<h2 id="strumenti-per-eda-automatica">Strumenti per EDA automatica</h2>
+<h3 id="ydata-profiling-ex-pandas-profiling">ydata-profiling (ex pandas-profiling)</h3>
+<pre><code class="language-python">from ydata_profiling import ProfileReport
+ProfileReport(df, title=&quot;EDA&quot;).to_file(&quot;profile.html&quot;)
+</code></pre>
+<p>Genera un report HTML completo: distribuzioni, correlazioni, missing pattern, outlier, alert.</p>
+<blockquote>
+<p>Utile come <strong>prima passata</strong>, ma <strong>non sostituisce</strong> un'EDA mirata. Pensa con la tua testa, non solo coi grafici automatici.</p>
+</blockquote>
+<h3 id="sweetviz">sweetviz</h3>
+<p>Confronta due dataset (es: train vs test) automaticamente:</p>
+<pre><code class="language-python">import sweetviz as sv
+sv.compare([df_train, &quot;Train&quot;], [df_test, &quot;Test&quot;], target_feat=&quot;target&quot;).show_html(&quot;compare.html&quot;)
+</code></pre>
+<p>Indispensabile per detect <strong>data drift</strong> tra train e production.</p>
+<h2 id="pattern-frequenti-che-scoprirai">Pattern frequenti che scoprirai</h2>
+<table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Cosa significa</th>
+<th>Cosa fare</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Bimodalità</td>
+<td>popolazione mista</td>
+<td>considera segmentare o aggiungere flag</td>
+</tr>
+<tr>
+<td>Spike a 0</td>
+<td>"non risposta" come 0</td>
+<td>crea flag <code>was_zero</code></td>
+</tr>
+<tr>
+<td>Picco a -1, 999, -9999</td>
+<td>codifica di NaN</td>
+<td>sostituisci con NaN reale</td>
+</tr>
+<tr>
+<td>Distribuzione log-normal</td>
+<td>tipica di redditi, durate</td>
+<td>log transform</td>
+</tr>
+<tr>
+<td>Trend nel tempo</td>
+<td>non-stazionarietà</td>
+<td>feature temporali, time-series CV</td>
+</tr>
+<tr>
+<td>Correlazione 0.99 con target</td>
+<td>LEAKAGE</td>
+<td>indaga, probabilmente rimuovi</td>
+</tr>
+<tr>
+<td>Categoria "Other" enorme</td>
+<td>aggregato di rare</td>
+<td>espandi se possibile</td>
+</tr>
+</tbody>
+</table>
+<h2 id="esempio-completo-titanic">Esempio completo: Titanic</h2>
+<pre><code class="language-python">import seaborn as sns, pandas as pd, matplotlib.pyplot as plt
+df = sns.load_dataset('titanic')
+
+# step 1
+df.info(); print(df.isna().sum())
+
+# step 2
+df['age'].hist(bins=40); plt.show()
+df['sex'].value_counts(normalize=True)
+df['class'].value_counts(normalize=True)
+
+# step 3 vs survived
+sns.barplot(data=df, x='class', y='survived', hue='sex')
+sns.kdeplot(data=df, x='age', hue='survived', common_norm=False, fill=True)
+
+# step 4
+sns.heatmap(df.corr(numeric_only=True), annot=True, cmap='RdBu_r')
+
+# step 5
+import missingno as msno
+msno.matrix(df)
+
+# insight chiave:
+# - sopravvivenza femmine ~74%, maschi ~19%
+# - 1ª classe ~62%, 3ª classe ~24%
+# - intersezione: maschio 3ª classe ~14%, femmina 1ª classe ~97%
+</code></pre>
+<p>Dato il pattern, <strong>una regola ingenua</strong> "sopravvive se femmina o bambino in 1ª/2ª classe" ottiene ~78% accuracy. È il <strong>baseline da battere</strong> con qualsiasi modello.</p>
+<h2 id="esercizi">Esercizi</h2>
+<details>
+<summary>Esercizio 1 — EDA su dataset Boston housing alternativo</summary>
+
+
+<pre><code class="language-python">from sklearn.datasets import fetch_california_housing
+data = fetch_california_housing(as_frame=True).frame
+
+# fai i 7 step
+data.info()
+data.describe().T
+data.hist(figsize=(15,10), bins=40)
+data.corr()['MedHouseVal'].sort_values()
+</code></pre>
+
+
+Quali feature predicono meglio `MedHouseVal`? Cosa è strano in `AveBedrms` o `Population`?
+</details>
+
+<details>
+<summary>Esercizio 2 — Detect leakage</summary>
+
+Hai un modello che predice "default su prestito" con AUC = 0.99. Domanda: come fai a sospettare un leakage?
+
+**Risposta**: AUC 0.99 su problemi reali è quasi sempre sospetto. Indizi:
+- Correlazione di una feature con target > 0.95.
+- Feature il cui valore è "noto solo dopo l'evento" (es: `total_late_payments` per predire default — è il risultato!).
+- Feature derivata dal target stesso (es: `risk_score` interno).
+
+Cura: rimuovi le feature future, ri-allena, l'AUC scende a ~0.75. Solo allora ti credi al modello.
+</details>
+
+<details>
+<summary>Esercizio 3 — Profile automatico</summary>
+
+
+<pre><code class="language-python">import seaborn as sns
+from ydata_profiling import ProfileReport
+df = sns.load_dataset('diamonds')
+ProfileReport(df, title=&quot;Diamonds EDA&quot;).to_file(&quot;diamonds_profile.html&quot;)
+</code></pre>
+
+
+Apri il report. Quali alert ha trovato? (Tipici: alta cardinalità, skew, correlazioni.)
+</details>
+
+<h2 id="cosa-portarti-via">Cosa portarti via</h2>
+<ul>
+<li>EDA prima di modellare, sempre.</li>
+<li>7 step: load → univariate → vs target → between features → missing → outliers → domain.</li>
+<li>Strumenti automatici (ydata, sweetviz) = first pass, <strong>non</strong> sostituto della testa.</li>
+<li>Modello sospetto = leakage. AUC &gt; 0.95 indaga.</li>
+<li>Discuti coi domain expert. Sempre.</li>
+</ul>
+<p>Prossimo: machine learning — fondamenti, bias-variance, validazione.</p>
+      <nav class="pager">
+<a href="14-feature-engineering.html" class="prev"><span class="label">← Precedente</span><span class="title">Feature engineering</span></a>
+<a href="16-ml-fondamenti.html" class="next"><span class="label">Successivo →</span><span class="title">ML: fondamenti — bias, varianza, validazione</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Data Science Zero to Hero</strong> — percorso completo, in italiano, dalla matematica al deployment.</p><p>Materiale didattico aperto. Le formule sono lì per essere capite, non temute. Quando un concetto è oscuro, torna indietro: la data science è una piramide, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

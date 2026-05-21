@@ -1,0 +1,810 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dynamic programming — FAANG Prep</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">F</div>
+      <div>
+        <div class="brand-title">FAANG Prep</div>
+        <div class="brand-subtitle">DS&amp;A · System Design</div>
+      </div>
+    </div>
+    <div class="lang-bar">
+      <a class="lang-switcher" href="../en/pages/14-dp.html" title="English"><span class="flag-icon">🇬🇧</span><span class="flag-label">English</span></a>
+    </div>
+  </div>
+  <div class="search-wrap">
+    <input class="search-input" id="search-input" placeholder="Cerca nei contenuti... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/00-introduzione.html" class=""><span class="num">00</span>Introduzione e come usare questo percorso</a></li><li class="nav-item"><a href="../pages/01-complessita.html" class=""><span class="num">01</span>Complessità computazionale (Big-O)</a></li><li class="nav-item"><a href="../pages/02-array-stringhe.html" class=""><span class="num">02</span>Array e stringhe</a></li><li class="nav-item"><a href="../pages/03-hashmap-set.html" class=""><span class="num">03</span>Hashmap e set</a></li><li class="nav-item"><a href="../pages/04-linked-list.html" class=""><span class="num">04</span>Linked list</a></li><li class="nav-item"><a href="../pages/05-stack-coda.html" class=""><span class="num">05</span>Stack e coda</a></li><li class="nav-item"><a href="../pages/06-alberi.html" class=""><span class="num">06</span>Alberi (binary tree e BST)</a></li><li class="nav-item"><a href="../pages/07-heap.html" class=""><span class="num">07</span>Heap e priority queue</a></li><li class="nav-item"><a href="../pages/08-grafi.html" class=""><span class="num">08</span>Grafi</a></li><li class="nav-item"><a href="../pages/09-trie.html" class=""><span class="num">09</span>Trie (prefix tree)</a></li><li class="nav-item"><a href="../pages/10-ricorsione-backtracking.html" class=""><span class="num">10</span>Ricorsione e backtracking</a></li><li class="nav-item"><a href="../pages/11-sorting-searching.html" class=""><span class="num">11</span>Sorting e searching</a></li><li class="nav-item"><a href="../pages/12-two-pointers-sliding-window.html" class=""><span class="num">12</span>Two pointers e sliding window</a></li><li class="nav-item"><a href="../pages/13-greedy.html" class=""><span class="num">13</span>Greedy</a></li><li class="nav-item"><a href="../pages/14-dp.html" class="active"><span class="num">14</span>Dynamic programming</a></li><li class="nav-item"><a href="../pages/15-bit-manipulation.html" class=""><span class="num">15</span>Bit manipulation</a></li><li class="nav-item"><a href="../pages/16-oop-design-patterns.html" class=""><span class="num">16</span>OOP e design patterns</a></li><li class="nav-item"><a href="../pages/17-system-design.html" class=""><span class="num">17</span>System design — fondamenti</a></li><li class="nav-item"><a href="../pages/18-system-design-esempi.html" class=""><span class="num">18</span>System design — esempi end-to-end</a></li><li class="nav-item"><a href="../pages/19-concorrenza.html" class=""><span class="num">19</span>Concorrenza e parallelismo</a></li><li class="nav-item"><a href="../pages/20-database-sql.html" class=""><span class="num">20</span>Database e SQL</a></li><li class="nav-item"><a href="../pages/21-os-networking.html" class=""><span class="num">21</span>OS e networking</a></li><li class="nav-item"><a href="../pages/22-coding-patterns.html" class=""><span class="num">22</span>I 16 coding patterns dei colloqui</a></li><li class="nav-item"><a href="../pages/23-behavioral-star.html" class=""><span class="num">23</span>Behavioral interview — STAR e Amazon LP</a></li><li class="nav-item"><a href="../pages/24-mock-interviews.html" class=""><span class="num">24</span>Mock interview e strategia in colloquio</a></li><li class="nav-item"><a href="../pages/25-roadmap-90-giorni.html" class=""><span class="num">25</span>Roadmap 90 giorni — piano operativo</a></li><li class="nav-item"><a href="../pages/26-banca-esercizi.html" class=""><span class="num">26</span>Banca esercizi — 200+ problemi FAANG</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Algoritmi</span>
+        <span>Sezione 14 di 26</span>
+      </div>
+      <h1>Dynamic programming</h1>
+      <p class="summary">DP demistificata. Dal &quot;ricorsione + memo&quot; alla tabella bottom-up. 5 esempi step-by-step con tabella riempita a mano.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Algoritmi</div>
+  
+  
+</div>
+      <p>DP è il capitolo dove la maggior parte dei candidati molla. È anche il capitolo dove <strong>fai la differenza</strong>: chi sa DP solidamente passa molti più colloqui.</p>
+<p>Questo capitolo costruisce DP <strong>da zero</strong>, partendo dalla ricorsione che già conosci.</p>
+<h2 id="parte-1-da-dove-nasce-dp">Parte 1 — Da dove nasce DP</h2>
+<h3 id="il-problema-del-fibonacci-ingenuo">Il problema del Fibonacci ingenuo</h3>
+<p>Riprendiamo:</p>
+<pre><code class="language-python">def fib(n):
+    if n &lt; 2: return n
+    return fib(n-1) + fib(n-2)
+</code></pre>
+<p>Abbiamo visto nel cap. 10 che <code>fib(4)</code> ha questo albero:</p>
+<pre><code class="language-mermaid">flowchart TD
+    f4[&quot;fib(4)&quot;] --&gt; f3a[&quot;fib(3)&quot;]
+    f4 --&gt; f2a[&quot;fib(2)&quot;]
+    f3a --&gt; f2b[&quot;fib(2)&quot;]
+    f3a --&gt; f1a[&quot;fib(1)&quot;]
+    f2a --&gt; f1b[&quot;fib(1)&quot;]
+    f2a --&gt; f0a[&quot;fib(0)&quot;]
+    f2b --&gt; f1c[&quot;fib(1)&quot;]
+    f2b --&gt; f0b[&quot;fib(0)&quot;]
+    style f2a fill:#ffb86c,color:#0a0c12
+    style f2b fill:#ffb86c,color:#0a0c12
+    style f1a fill:#ff6b6b,color:#0a0c12
+    style f1b fill:#ff6b6b,color:#0a0c12
+    style f1c fill:#ff6b6b,color:#0a0c12
+    style f0a fill:#bd93f9,color:#0a0c12
+    style f0b fill:#bd93f9,color:#0a0c12
+</code></pre>
+<p>Colorati i nodi duplicati: arancio <code>fib(2)</code>, rosso <code>fib(1)</code>, viola <code>fib(0)</code>.</p>
+<p><code>fib(2)</code> compare <strong>due volte</strong>. <code>fib(1)</code> tre volte. <code>fib(0)</code> due volte.</p>
+<p>Per fib(40) il numero totale di chiamate è ~1.6 miliardi. Esponenziale.</p>
+<h3 id="losservazione-chiave">L'osservazione chiave</h3>
+<p><strong>Calcoliamo gli stessi sotto-problemi più volte</strong>. È spreco puro.</p>
+<h3 id="soluzione-ricorda">Soluzione: ricorda</h3>
+<p>Se memorizziamo il risultato di ogni <code>fib(k)</code> la prima volta che lo calcoliamo, e poi quando lo ri-incontriamo restituiamo il valore memorizzato:</p>
+<pre><code class="language-python">memo = {}
+def fib(n):
+    if n in memo: return memo[n]
+    if n &lt; 2: return n
+    res = fib(n-1) + fib(n-2)
+    memo[n] = res
+    return res
+</code></pre>
+<p>Ora <code>fib(40)</code> fa solo <code>40</code> chiamate effettive. <strong>Lineare</strong>.</p>
+<p>Questa tecnica si chiama <strong>memoization</strong> (o "top-down DP").</p>
+<h3 id="equivalente-con-lru_cache">Equivalente con <code>lru_cache</code></h3>
+<p>Python ha un decoratore che fa esattamente questo:</p>
+<pre><code class="language-python">from functools import lru_cache
+
+@lru_cache(maxsize=None)
+def fib(n):
+    if n &lt; 2: return n
+    return fib(n-1) + fib(n-2)
+</code></pre>
+<p>Stesso effetto, una riga in più.</p>
+<h3 id="cosa-e-dp">Cosa è DP</h3>
+<p><strong>Dynamic Programming = ricorsione con memoization</strong>. È solo questo, fondamentalmente.</p>
+<p>Ma c'è una variante più "old-school" e spesso più veloce: <strong>bottom-up DP</strong>.</p>
+<h2 id="parte-2-bottom-up-dp-costruire-la-tabella">Parte 2 — Bottom-up DP: costruire la tabella</h2>
+<p>Invece di calcolare ricorsivamente, <strong>inizia dal base case</strong> e costruisci risultati per input via via più grandi, salvandoli in una tabella.</p>
+<p>Fibonacci bottom-up:</p>
+<pre><code class="language-python">def fib(n):
+    if n &lt; 2: return n
+    dp = [0] * (n + 1)
+    dp[0] = 0; dp[1] = 1
+    for i in range(2, n + 1):
+        dp[i] = dp[i-1] + dp[i-2]
+    return dp[n]
+</code></pre>
+<p>Stessa O(n), niente stack di ricorsione.</p>
+<h3 id="ottimizzazione-spazio">Ottimizzazione spazio</h3>
+<p>Notare: ci servono solo gli ultimi 2 valori. Possiamo sostituire l'array con 2 variabili.</p>
+<pre><code class="language-python">def fib(n):
+    if n &lt; 2: return n
+    a, b = 0, 1
+    for _ in range(n):
+        a, b = b, a + b
+    return a
+</code></pre>
+<p>O(n) tempo, <strong>O(1) spazio</strong>.</p>
+<p>Questo è l'ultimo step della maturazione di un algoritmo DP: riconoscere quali stati passati ti servono davvero e tagliare il resto.</p>
+<h2 id="parte-3-i-4-passi-per-risolvere-qualsiasi-problema-dp">Parte 3 — I 4 passi per risolvere QUALSIASI problema DP</h2>
+<p>Quando l'intervistatore ti dà un problema che pensi sia DP, segui questi 4 passi:</p>
+<h3 id="passo-1-identifica-lo-stato">Passo 1 — Identifica lo stato</h3>
+<p><strong>Quali variabili definiscono univocamente un sotto-problema?</strong></p>
+<p>In Fibonacci: solo <code>n</code>. Stato = <code>n</code>.</p>
+<p>In <em>"min cost path in una griglia"</em>: posizione attuale <code>(r, c)</code>. Stato = <code>(r, c)</code>.</p>
+<p>In <em>"knapsack 0/1"</em>: l'item che stai considerando + capacità rimanente. Stato = <code>(i, capacity)</code>.</p>
+<h3 id="passo-2-definisci-la-transizione">Passo 2 — Definisci la transizione</h3>
+<p><strong>Come si arriva da uno stato al successivo? Come <code>dp[stato]</code> dipende da <code>dp</code> di stati precedenti?</strong></p>
+<p>In Fibonacci: <code>dp[n] = dp[n-1] + dp[n-2]</code>.</p>
+<p>In min path: <code>dp[r][c] = grid[r][c] + min(dp[r-1][c], dp[r][c-1])</code>.</p>
+<p>In knapsack: <code>dp[i][c] = max(dp[i-1][c], dp[i-1][c - w_i] + v_i)</code>.</p>
+<h3 id="passo-3-definisci-i-base-case">Passo 3 — Definisci i base case</h3>
+<p>I sotto-problemi più piccoli, con risposta nota.</p>
+<p>In Fibonacci: <code>dp[0] = 0</code>, <code>dp[1] = 1</code>.</p>
+<p>In min path: <code>dp[0][0] = grid[0][0]</code>. La prima riga e la prima colonna hanno solo un modo per essere raggiunte.</p>
+<h3 id="passo-4-ordine-di-computazione-bottom-up">Passo 4 — Ordine di computazione (bottom-up)</h3>
+<p>In che ordine compili la tabella? Sempre: dal piccolo al grande, in modo che quando hai bisogno di <code>dp[stato]</code>, gli stati richiesti siano già calcolati.</p>
+<p>In Fibonacci: <code>for i in range(2, n+1)</code>.</p>
+<p>In min path: <code>for r in range(R): for c in range(C):</code> (riga per riga, sinistra a destra).</p>
+<p>In knapsack: <code>for i in range(1, n+1): for c in range(W+1):</code>.</p>
+<h3 id="top-down-vs-bottom-up">Top-down vs bottom-up</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Top-down (memoization)</th>
+<th>Bottom-up</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Stile</td>
+<td>ricorsivo + cache</td>
+<td>iterativo + tabella</td>
+</tr>
+<tr>
+<td>Overhead</td>
+<td>stack di ricorsione</td>
+<td>nessuno</td>
+</tr>
+<tr>
+<td>Velocità</td>
+<td>leggermente più lento</td>
+<td>spesso più veloce (no chiamate funzione)</td>
+</tr>
+<tr>
+<td>Scrittura</td>
+<td>facile (parti dalla ricorsione naturale)</td>
+<td>richiede ragionamento su ordine</td>
+</tr>
+<tr>
+<td>Quando preferire</td>
+<td>problemi con tanti stati ma solo alcuni raggiungibili (sparse)</td>
+<td>problemi con riempimento denso della tabella</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Best practice in colloquio</strong>: scrivi prima top-down (più facile), poi se chiesto converti a bottom-up.</p>
+<h2 id="parte-4-esempi-step-by-step-con-tabella">Parte 4 — Esempi step-by-step con tabella</h2>
+<h3 id="esempio-a-climbing-stairs">Esempio A — Climbing Stairs</h3>
+<p>Problema: hai una scala di <code>n</code> gradini. Ad ogni passo sali 1 o 2 gradini. Quanti modi di arrivare in cima?</p>
+<p><strong>Passo 1 (stato)</strong>: <code>dp[i]</code> = numero di modi per arrivare al gradino <code>i</code>.</p>
+<p><strong>Passo 2 (transizione)</strong>: per arrivare al gradino <code>i</code>, devi aver fatto un salto di 1 dal gradino <code>i-1</code> o un salto di 2 dal gradino <code>i-2</code>. Quindi <code>dp[i] = dp[i-1] + dp[i-2]</code>.</p>
+<p><strong>Passo 3 (base)</strong>: <code>dp[0] = 1</code> (1 modo "vuoto" di stare al gradino 0), <code>dp[1] = 1</code>.</p>
+<p><strong>Passo 4 (ordine)</strong>: da 2 a n.</p>
+<p>Tabella per n = 5:</p>
+<table>
+<thead>
+<tr>
+<th>i</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>dp[i]</strong></td>
+<td>1</td>
+<td>1</td>
+<td><strong>2</strong></td>
+<td><strong>3</strong></td>
+<td>5</td>
+<td><strong>8</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><code>dp[2] = dp[1] + dp[0] = 1 + 1 = 2</code></li>
+<li><code>dp[3] = dp[2] + dp[1] = 2 + 1 = 3</code></li>
+<li><code>dp[5] = dp[4] + dp[3] = 5 + 3 = 8</code></li>
+</ul>
+<p>8 modi per arrivare al gradino 5.</p>
+<pre><code class="language-python">def climb(n):
+    if n &lt; 2: return 1
+    a, b = 1, 1
+    for _ in range(n - 1):
+        a, b = b, a + b
+    return b
+</code></pre>
+<h3 id="esempio-b-house-robber">Esempio B — House Robber</h3>
+<p>Problema: array <code>nums</code> di valori delle case. Devi rubare il massimo possibile <strong>senza rubare due case adiacenti</strong>.</p>
+<p><strong>Passo 1 (stato)</strong>: <code>dp[i]</code> = massimo bottino considerando le case <code>[0..i]</code>.</p>
+<p><strong>Passo 2 (transizione)</strong>: due opzioni per ogni casa:
+1. <strong>Non rubo <code>i</code></strong>: <code>dp[i] = dp[i-1]</code>.
+2. <strong>Rubo <code>i</code></strong>: non posso aver rubato <code>i-1</code>, quindi <code>dp[i] = nums[i] + dp[i-2]</code>.</p>
+<p><code>dp[i] = max(dp[i-1], nums[i] + dp[i-2])</code>.</p>
+<p><strong>Passo 3 (base)</strong>: <code>dp[0] = nums[0]</code>, <code>dp[1] = max(nums[0], nums[1])</code>.</p>
+<p><strong>Passo 4 (ordine)</strong>: da 2 a n-1.</p>
+<p>Tabella per <code>nums = [2, 7, 9, 3, 1]</code>:</p>
+<table>
+<thead>
+<tr>
+<th>i</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>nums[i]</strong></td>
+<td>2</td>
+<td>7</td>
+<td>9</td>
+<td>3</td>
+<td>1</td>
+</tr>
+<tr>
+<td><strong>dp[i]</strong></td>
+<td>2</td>
+<td><strong>7</strong></td>
+<td><strong>11</strong></td>
+<td>11</td>
+<td><strong>12</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><code>dp[1] = max(2, 7) = 7</code></li>
+<li><code>dp[2] = max(7, 9+2) = 11</code></li>
+<li><code>dp[4] = max(11, 1+11) = 12</code></li>
+</ul>
+<p>Risultato: 12 (case 0, 2, 4 = 2+9+1 oppure case 1, 3 = 7+3 = 10... aspetta, 2+9+1 = 12 vs 7+3 = 10. Sì, 12).</p>
+<pre><code class="language-python">def rob(nums):
+    a = b = 0
+    for x in nums:
+        a, b = b, max(b, a + x)
+    return b
+</code></pre>
+<p>Ottimizzato a O(1) spazio.</p>
+<h3 id="esempio-c-coin-change-minimo-monete">Esempio C — Coin Change (minimo monete)</h3>
+<p>Problema: dato un set di monete e un amount, trova il minimo numero di monete per fare amount (riusabili). -1 se impossibile.</p>
+<p><strong>Stato</strong>: <code>dp[i]</code> = minimo numero di monete per fare amount <code>i</code>.</p>
+<p><strong>Transizione</strong>: per ogni moneta <code>c</code>, <code>dp[i] = min(dp[i - c]) + 1</code> (se <code>c ≤ i</code>). Cioè: prendo una moneta di valore c, e devo riempire <code>i - c</code> con il minimo.</p>
+<p><strong>Base</strong>: <code>dp[0] = 0</code> (0 monete per amount 0).</p>
+<p><strong>Ordine</strong>: i da 1 a amount.</p>
+<p>Tabella per <code>coins = [1, 2, 5]</code>, <code>amount = 11</code>:</p>
+<table>
+<thead>
+<tr>
+<th>i</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+<th>11</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>dp[i]</strong></td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td><strong>2</strong></td>
+<td>2</td>
+<td>1</td>
+<td>2</td>
+<td>2</td>
+<td>3</td>
+<td>3</td>
+<td>2</td>
+<td><strong>3</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><code>dp[0] = 0</code> (base case).</li>
+<li><code>dp[3] = min(dp[2], dp[1]) + 1 = 2</code>.</li>
+<li><code>dp[11] = min(dp[10], dp[9], dp[6]) + 1 = 3</code> (es. 5+5+1).</li>
+</ul>
+<p>Risultato: 3 (es. 5+5+1).</p>
+<pre><code class="language-python">def coin_change(coins, amount):
+    dp = [float('inf')] * (amount + 1)
+    dp[0] = 0
+    for i in range(1, amount + 1):
+        for c in coins:
+            if c &lt;= i:
+                dp[i] = min(dp[i], dp[i - c] + 1)
+    return dp[amount] if dp[amount] != float('inf') else -1
+</code></pre>
+<p>O(n · m).</p>
+<h3 id="esempio-d-unique-paths-2d">Esempio D — Unique Paths (2D)</h3>
+<p>Problema: in una griglia m × n, parti da top-left, devi arrivare bottom-right, muovendoti solo down o right. Quanti cammini possibili?</p>
+<p><strong>Stato</strong>: <code>dp[r][c]</code> = numero di cammini da (0,0) a (r,c).</p>
+<p><strong>Transizione</strong>: <code>dp[r][c] = dp[r-1][c] + dp[r][c-1]</code> (vieni da sopra o da sinistra).</p>
+<p><strong>Base</strong>: <code>dp[0][c] = 1</code> per ogni c (un solo cammino lungo prima riga). <code>dp[r][0] = 1</code> per ogni r.</p>
+<p>Tabella per 3×3:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><strong>c=0</strong></th>
+<th><strong>c=1</strong></th>
+<th><strong>c=2</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>r=0</strong></td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td><strong>r=1</strong></td>
+<td>1</td>
+<td><strong>2</strong></td>
+<td>3</td>
+</tr>
+<tr>
+<td><strong>r=2</strong></td>
+<td>1</td>
+<td>3</td>
+<td><strong>6</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><code>dp[1][1] = dp[0][1] + dp[1][0] = 1 + 1 = 2</code></li>
+<li><code>dp[2][2] = dp[1][2] + dp[2][1] = 3 + 3 = 6</code></li>
+</ul>
+<p>6 cammini possibili.</p>
+<pre><code class="language-python">def unique_paths(m, n):
+    dp = [[1] * n for _ in range(m)]
+    for r in range(1, m):
+        for c in range(1, n):
+            dp[r][c] = dp[r-1][c] + dp[r][c-1]
+    return dp[m-1][n-1]
+</code></pre>
+<p><strong>Ottimizzazione spazio</strong>: ti basta una riga (1D), perché ogni riga dipende solo dalla precedente.</p>
+<pre><code class="language-python">def unique_paths(m, n):
+    dp = [1] * n
+    for r in range(1, m):
+        for c in range(1, n):
+            dp[c] += dp[c-1]   # dp[c] è &quot;sopra&quot;, dp[c-1] è &quot;a sinistra&quot;
+    return dp[-1]
+</code></pre>
+<h3 id="esempio-e-knapsack-01">Esempio E — Knapsack 0/1</h3>
+<p>Problema: hai n oggetti, ognuno con peso <code>w_i</code> e valore <code>v_i</code>. Zaino con capacità <code>W</code>. Massimizza valore totale. Ogni oggetto preso al massimo una volta.</p>
+<p><strong>Stato</strong>: <code>dp[i][c]</code> = valore massimo considerando i primi <code>i</code> oggetti, con capacità <code>c</code> rimanente.</p>
+<p><strong>Transizione</strong>: per l'oggetto <code>i</code>, due opzioni:
+1. <strong>Non prendere</strong>: <code>dp[i][c] = dp[i-1][c]</code>.
+2. <strong>Prendere</strong> (se <code>w_i ≤ c</code>): <code>dp[i][c] = dp[i-1][c - w_i] + v_i</code>.</p>
+<p><code>dp[i][c] = max(dp[i-1][c], dp[i-1][c - w_i] + v_i)</code>.</p>
+<p><strong>Base</strong>: <code>dp[0][c] = 0</code> per ogni c (0 oggetti = 0 valore).</p>
+<pre><code class="language-python">def knapsack(weights, values, W):
+    n = len(weights)
+    dp = [[0] * (W + 1) for _ in range(n + 1)]
+    for i in range(1, n + 1):
+        for c in range(W + 1):
+            dp[i][c] = dp[i-1][c]
+            if weights[i-1] &lt;= c:
+                dp[i][c] = max(dp[i][c], dp[i-1][c - weights[i-1]] + values[i-1])
+    return dp[n][W]
+</code></pre>
+<p>O(n · W). Notare: dipende da W (pseudo-polinomiale, non vero poly se W è esponenziale rispetto a <code>log W</code>).</p>
+<h2 id="parte-5-le-6-famiglie-di-problemi-dp">Parte 5 — Le 6 famiglie di problemi DP</h2>
+<h3 id="famiglia-1-dp-1d-lineare">Famiglia 1 — DP 1D lineare</h3>
+<p>Stato <code>dp[i]</code>. Dipende da pochi precedenti. Esempi: Climbing Stairs, House Robber, Word Break, Decode Ways, LIS.</p>
+<h3 id="famiglia-2-dp-2d-griglia">Famiglia 2 — DP 2D griglia</h3>
+<p>Stato <code>dp[i][j]</code>. Esempi: Unique Paths, Min Path Sum.</p>
+<h3 id="famiglia-3-knapsack-family">Famiglia 3 — Knapsack family</h3>
+<p>Decisioni "prendo/non prendo" su una sequenza di oggetti. Esempi: 0/1, unbounded, subset sum, partition.</p>
+<h3 id="famiglia-4-dp-su-stringhe">Famiglia 4 — DP su stringhe</h3>
+<p>Stato <code>dp[i][j]</code> su due stringhe. Esempi: LCS, Edit Distance, Regex matching.</p>
+<h3 id="famiglia-5-dp-su-intervalli">Famiglia 5 — DP su intervalli</h3>
+<p>Stato <code>dp[i][j]</code> = miglior risultato per il range <code>arr[i..j]</code>. Esempi: Burst Balloons, Matrix Chain Multiplication, Palindrome Partitioning.</p>
+<h3 id="famiglia-6-dp-con-bitmask">Famiglia 6 — DP con bitmask</h3>
+<p>Stato include una bitmask (sottoinsieme di n elementi). Solo per <code>n ≤ 20</code>. Esempi: TSP, Partition to K Equal Sum Subsets.</p>
+<h2 id="parte-6-lis-e-lcs-in-dettaglio">Parte 6 — LIS e LCS in dettaglio</h2>
+<p>Due problemi-cult.</p>
+<h3 id="lis-longest-increasing-subsequence">LIS (Longest Increasing Subsequence)</h3>
+<p><code>arr = [10, 9, 2, 5, 3, 7, 101, 18]</code>. LIS = <code>[2, 3, 7, 101]</code>, lunghezza 4.</p>
+<p><strong>DP O(n²)</strong>:</p>
+<p><code>dp[i]</code> = lunghezza della LIS che <strong>termina</strong> in <code>arr[i]</code>.</p>
+<p><code>dp[i] = 1 + max(dp[j])</code> per ogni <code>j &lt; i</code> con <code>arr[j] &lt; arr[i]</code>. Se nessuno, <code>dp[i] = 1</code>.</p>
+<pre><code class="language-python">def lis(arr):
+    n = len(arr)
+    dp = [1] * n
+    for i in range(n):
+        for j in range(i):
+            if arr[j] &lt; arr[i]:
+                dp[i] = max(dp[i], dp[j] + 1)
+    return max(dp) if arr else 0
+</code></pre>
+<p><strong>Versione O(n log n)</strong> con binary search:</p>
+<p>Idea: mantieni un array <code>tails</code> dove <code>tails[k]</code> = ultimo elemento più piccolo possibile di una LIS di lunghezza <code>k+1</code>. Per ogni nuovo <code>x</code>, binary-search dove va in <code>tails</code>.</p>
+<pre><code class="language-python">from bisect import bisect_left
+def lis_fast(arr):
+    tails = []
+    for x in arr:
+        i = bisect_left(tails, x)
+        if i == len(tails):
+            tails.append(x)
+        else:
+            tails[i] = x
+    return len(tails)
+</code></pre>
+<p><code>tails</code> finale <strong>non è</strong> la LIS, ma ne ha la lunghezza corretta. Algoritmo "Patience sorting".</p>
+<h3 id="lcs-longest-common-subsequence">LCS (Longest Common Subsequence)</h3>
+<p>Date due stringhe, trova la più lunga sottosequenza comune (non necessariamente contigua).</p>
+<p><code>a = "ABCBDAB"</code>, <code>b = "BDCABA"</code>. LCS = "BDAB" o "BCAB" o "BCBA", lunghezza 4.</p>
+<p><strong>Stato</strong>: <code>dp[i][j]</code> = LCS di <code>a[0..i-1]</code> e <code>b[0..j-1]</code>.</p>
+<p><strong>Transizione</strong>:
+- Se <code>a[i-1] == b[j-1]</code>: <code>dp[i][j] = dp[i-1][j-1] + 1</code> (matchano, prendi entrambi).
+- Altrimenti: <code>dp[i][j] = max(dp[i-1][j], dp[i][j-1])</code> (skip uno dei due).</p>
+<pre><code class="language-python">def lcs(a, b):
+    n, m = len(a), len(b)
+    dp = [[0] * (m+1) for _ in range(n+1)]
+    for i in range(1, n+1):
+        for j in range(1, m+1):
+            if a[i-1] == b[j-1]:
+                dp[i][j] = dp[i-1][j-1] + 1
+            else:
+                dp[i][j] = max(dp[i-1][j], dp[i][j-1])
+    return dp[n][m]
+</code></pre>
+<p>O(n · m).</p>
+<h3 id="edit-distance-levenshtein">Edit Distance (Levenshtein)</h3>
+<p>Minimo numero di operazioni (insert, delete, replace) per trasformare <code>a</code> in <code>b</code>.</p>
+<p><strong>Stato</strong>: <code>dp[i][j]</code> = edit distance tra <code>a[0..i-1]</code> e <code>b[0..j-1]</code>.</p>
+<p><strong>Transizione</strong>:
+- Se uguali: <code>dp[i][j] = dp[i-1][j-1]</code>.
+- Altrimenti: <code>dp[i][j] = 1 + min(dp[i-1][j-1], dp[i-1][j], dp[i][j-1])</code> (replace, delete, insert).</p>
+<p><strong>Base</strong>: <code>dp[i][0] = i</code>, <code>dp[0][j] = j</code>.</p>
+<pre><code class="language-python">def edit_distance(a, b):
+    n, m = len(a), len(b)
+    dp = [[0]*(m+1) for _ in range(n+1)]
+    for i in range(n+1): dp[i][0] = i
+    for j in range(m+1): dp[0][j] = j
+    for i in range(1, n+1):
+        for j in range(1, m+1):
+            if a[i-1] == b[j-1]:
+                dp[i][j] = dp[i-1][j-1]
+            else:
+                dp[i][j] = 1 + min(dp[i-1][j-1], dp[i-1][j], dp[i][j-1])
+    return dp[n][m]
+</code></pre>
+<h2 id="parte-7-ottimizzazione-spazio">Parte 7 — Ottimizzazione spazio</h2>
+<p>Pattern frequente: se <code>dp[i]</code> dipende solo da <code>dp[i-1]</code> (e magari <code>dp[i-2]</code>), non ti serve tutto l'array.</p>
+<p>Per DP 2D, se <code>dp[i][j]</code> dipende solo da <code>dp[i-1][...]</code> e <code>dp[i][...]</code>, basta tenere 1-2 righe.</p>
+<p>Per knapsack: usa <strong>una riga, iterata in reverse</strong>:</p>
+<pre><code class="language-python">dp = [0] * (W + 1)
+for w_i, v_i in items:
+    for c in range(W, w_i - 1, -1):   # reverse!
+        dp[c] = max(dp[c], dp[c - w_i] + v_i)
+</code></pre>
+<p>L'iterazione in reverse evita di "riusare" l'item stesso nella stessa passata.</p>
+<h2 id="parte-8-riconoscere-un-problema-dp">Parte 8 — Riconoscere un problema DP</h2>
+<p>Trigger linguistici:</p>
+<ul>
+<li><em>"Numero di modi di..."</em> → DP di conteggio.</li>
+<li><em>"Massimizza/minimizza costo/profitto..."</em> → DP di ottimizzazione.</li>
+<li><em>"Esiste cammino con somma X"</em> → DP booleano.</li>
+<li><em>"Più lungo/più corto..."</em> → DP su stringhe/array.</li>
+<li>"Greedy non funziona" + "backtracking è troppo lento" → quasi sicuramente DP.</li>
+</ul>
+<p>Esempio negativo: <em>"trova la sottostringa palindroma più lunga"</em> — sembra DP ma c'è anche expand-around-center O(n²). Conosci entrambi.</p>
+<h2 id="esercizi">Esercizi</h2>
+<h3 id="esercizio-141-climbing-stairs-easy">Esercizio 14.1 — Climbing Stairs <span class="problem-tag easy">EASY</span></h3>
+<p>Vedi parte 4 esempio A.</p>
+<h3 id="esercizio-142-house-robber-medium">Esercizio 14.2 — House Robber <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Vedi parte 4 esempio B.</p>
+<h3 id="esercizio-143-house-robber-ii-medium">Esercizio 14.3 — House Robber II <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Case in cerchio (prima e ultima adiacenti).</p>
+<details><summary>Soluzione</summary>
+
+
+<pre><code class="language-python">def rob(nums):
+    def helper(a):
+        x = y = 0
+        for v in a: x, y = y, max(y, x + v)
+        return y
+    if len(nums) == 1: return nums[0]
+    return max(helper(nums[1:]), helper(nums[:-1]))
+</code></pre>
+
+
+Trucco: due chiamate. Una esclude la prima (può rubare l'ultima), una esclude l'ultima (può rubare la prima). Max.
+</details>
+
+<h3 id="esercizio-144-coin-change-medium">Esercizio 14.4 — Coin Change <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Vedi parte 4 esempio C.</p>
+<h3 id="esercizio-145-coin-change-ii-medium">Esercizio 14.5 — Coin Change II <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Numero di modi diversi di formare amount.</p>
+<details><summary>Soluzione</summary>
+
+
+<pre><code class="language-python">def change(amount, coins):
+    dp = [0] * (amount + 1)
+    dp[0] = 1
+    for c in coins:
+        for i in range(c, amount + 1):
+            dp[i] += dp[i - c]
+    return dp[amount]
+</code></pre>
+
+
+**Importante**: outer loop su monete, inner su amount. Se inverti, conti permutazioni invece di combinazioni.
+</details>
+
+<h3 id="esercizio-146-lis-medium">Esercizio 14.6 — LIS <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Vedi parte 6.</p>
+<h3 id="esercizio-147-word-break-medium">Esercizio 14.7 — Word Break <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Data <code>s</code> e dizionario <code>words</code>, può <code>s</code> essere "spezzata" in parole del dizionario?</p>
+<details><summary>Soluzione</summary>
+
+
+<pre><code class="language-python">def word_break(s, words):
+    words = set(words)
+    n = len(s)
+    dp = [False] * (n + 1)
+    dp[0] = True
+    for i in range(1, n + 1):
+        for j in range(i):
+            if dp[j] and s[j:i] in words:
+                dp[i] = True
+                break
+    return dp[n]
+</code></pre>
+
+
+`dp[i]` = True se `s[0..i-1]` è spezzabile.
+
+Per ogni i, controlla tutti gli split point j. Se dp[j] è True e s[j..i] è una parola, dp[i] è True.
+
+O(n²) tempo (con check su set O(1)).
+</details>
+
+<h3 id="esercizio-148-partition-equal-subset-sum-medium">Esercizio 14.8 — Partition Equal Subset Sum <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Puoi dividere <code>nums</code> in due sottoinsiemi con stessa somma?</p>
+<details><summary>Soluzione</summary>
+
+Riduzione a "subset sum = total/2".
+
+
+<pre><code class="language-python">def can_partition(nums):
+    total = sum(nums)
+    if total % 2: return False
+    target = total // 2
+    dp = {0}
+    for x in nums:
+        dp |= {s + x for s in dp}
+    return target in dp
+</code></pre>
+
+
+Versione "set delle somme raggiungibili". Compatta ed elegante.
+</details>
+
+<h3 id="esercizio-149-unique-paths-min-path-sum-medium">Esercizio 14.9 — Unique Paths / Min Path Sum <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Vedi parte 4 esempio D.</p>
+<h3 id="esercizio-1410-edit-distance-hard">Esercizio 14.10 — Edit Distance <span class="problem-tag hard">HARD</span></h3>
+<p>Vedi parte 6.</p>
+<h3 id="esercizio-1411-lcs-medium">Esercizio 14.11 — LCS <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Vedi parte 6.</p>
+<h3 id="esercizio-1412-maximum-product-subarray-medium">Esercizio 14.12 — Maximum Product Subarray <span class="problem-tag medium">MEDIUM</span></h3>
+<details><summary>Ragionamento</summary>
+
+Trucco con negativi: un numero negativo grande × un altro negativo grande = positivo grande. Devi tracciare sia max che min correnti.
+
+
+<pre><code class="language-python">def max_product(nums):
+    mx = mn = best = nums[0]
+    for x in nums[1:]:
+        if x &lt; 0:
+            mx, mn = mn, mx
+        mx = max(x, mx * x)
+        mn = min(x, mn * x)
+        best = max(best, mx)
+    return best
+</code></pre>
+
+
+**Lezione**: a volte un singolo stato non basta. Tieni multipli stati paralleli.
+</details>
+
+<h3 id="esercizio-1413-stock-with-cooldown-medium">Esercizio 14.13 — Stock with Cooldown <span class="problem-tag medium">MEDIUM</span></h3>
+<details><summary>Soluzione</summary>
+
+Tre stati: holding, sold (cooldown), rest.
+
+
+<pre><code class="language-python">def max_profit(prices):
+    hold = float('-inf')
+    sold = 0
+    rest = 0
+    for p in prices:
+        prev_sold = sold
+        sold = hold + p
+        hold = max(hold, rest - p)
+        rest = max(rest, prev_sold)
+    return max(sold, rest)
+</code></pre>
+
+
+DP su stati. Pattern "state machine".
+</details>
+
+<h3 id="esercizio-1414-decode-ways-medium">Esercizio 14.14 — Decode Ways <span class="problem-tag medium">MEDIUM</span></h3>
+<p>Stringa di cifre. Numero di decodifiche in lettere (A=1 ... Z=26).</p>
+<details><summary>Soluzione</summary>
+
+
+<pre><code class="language-python">def num_decodings(s):
+    if not s or s[0] == '0': return 0
+    n = len(s)
+    a, b = 1, 1
+    for i in range(1, n):
+        cur = 0
+        if s[i] != '0': cur += b
+        two = int(s[i-1:i+1])
+        if 10 &lt;= two &lt;= 26: cur += a
+        a, b = b, cur
+    return b
+</code></pre>
+
+
+Come Fibonacci con vincoli: dp[i] = dp[i-1] (se s[i] ≠ 0) + dp[i-2] (se s[i-1:i+1] è 10-26).
+</details>
+
+<h3 id="esercizio-1415-regex-matching-hard">Esercizio 14.15 — Regex Matching <span class="problem-tag hard">HARD</span></h3>
+<p>Match <code>s</code> contro pattern con <code>.</code> e <code>*</code>.</p>
+<details><summary>Soluzione (memoization)</summary>
+
+
+<pre><code class="language-python">from functools import lru_cache
+def is_match(s, p):
+    @lru_cache(None)
+    def go(i, j):
+        if j == len(p): return i == len(s)
+        first = i &lt; len(s) and p[j] in (s[i], '.')
+        if j + 1 &lt; len(p) and p[j+1] == '*':
+            return go(i, j+2) or (first and go(i+1, j))
+        return first and go(i+1, j+1)
+    return go(0, 0)
+</code></pre>
+
+
+Stato `(i, j)` = "matchando da s[i:] con p[j:]". Caso `*`: skip pattern (`go(i, j+2)`) o consuma uno e ripeti (`go(i+1, j)`).
+</details>
+
+<h3 id="esercizio-1416-burst-balloons-hard">Esercizio 14.16 — Burst Balloons <span class="problem-tag hard">HARD</span></h3>
+<p>DP su intervalli.</p>
+<details><summary>Idea</summary>
+
+Pad con 1 ai due lati. `dp[i][j]` = punti massimi scoppiando tutti i palloncini in `(i, j)` esclusi. Inverti: per ogni k tra i e j, considera k come **ultimo** palloncino scoppiato. Allora puoi calcolare il suo contributo `nums[i] × nums[k] × nums[j]` (i vicini di k a quel punto sono i bordi i e j).
+
+
+<pre><code class="language-python">def max_coins(nums):
+    nums = [1] + nums + [1]
+    n = len(nums)
+    dp = [[0]*n for _ in range(n)]
+    for length in range(2, n):
+        for i in range(n - length):
+            j = i + length
+            for k in range(i+1, j):
+                dp[i][j] = max(dp[i][j], dp[i][k] + dp[k][j] + nums[i]*nums[k]*nums[j])
+    return dp[0][n-1]
+</code></pre>
+
+
+O(n³). Pattern intervalli classico.
+</details>
+
+<h3 id="esercizio-1417-maximal-rectangle-hard">Esercizio 14.17 — Maximal Rectangle <span class="problem-tag hard">HARD</span></h3>
+<p>Matrice binaria, rettangolo più grande di 1.</p>
+<details><summary>Idea</summary>
+
+Per ogni riga, calcola "histogram di altezze cumulate". Applica `largest_rect` (cap. 05) per ogni riga.
+
+
+<pre><code class="language-python">def maximal_rectangle(matrix):
+    if not matrix: return 0
+    h = [0] * len(matrix[0])
+    best = 0
+    for row in matrix:
+        for c, v in enumerate(row):
+            h[c] = h[c] + 1 if v == '1' else 0
+        best = max(best, largest_rect(h[:]))
+    return best
+</code></pre>
+
+
+Combinazione di DP (altezza cumulativa) + monotonic stack (largest_rect).
+</details>
+
+<h2 id="riassunto-del-capitolo">Riassunto del capitolo</h2>
+<ol>
+<li><strong>DP = ricorsione con memoization</strong>. Niente di più, niente di meno.</li>
+<li><strong>4 passi</strong>: stato, transizione, base, ordine.</li>
+<li><strong>Top-down (memoization) vs bottom-up (tabella)</strong>. Inizia top-down, converti se serve.</li>
+<li><strong>6 famiglie</strong>: 1D, 2D griglia, knapsack, stringhe, intervalli, bitmask.</li>
+<li><strong>Ottimizzazione spazio</strong>: se <code>dp[i]</code> dipende solo dai pochi precedenti, comprimi.</li>
+<li><strong>Linguaggio del problema</strong>: "modi di...", "max/min", "esiste...", "più lungo...".</li>
+</ol>
+<p>DP è un muscolo. Si costruisce solo facendo <strong>molti</strong> problemi. Non c'è scorciatoia. Dopo 30-40 problemi DP, il pattern recognition diventa automatico.</p>
+      <nav class="pager">
+<a href="13-greedy.html" class="prev"><span class="label">← Precedente</span><span class="title">Greedy</span></a>
+<a href="15-bit-manipulation.html" class="next"><span class="label">Successivo →</span><span class="title">Bit manipulation</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>FAANG Prep</strong> — percorso completo di preparazione: DS&amp;A, system design, behavioral. Costruito per spaccare ai colloqui di Big Tech.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-index.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true,
+      background: '#161922',
+      primaryColor: '#1d2230',
+      primaryTextColor: '#e6e8ee',
+      primaryBorderColor: '#6cf',
+      lineColor: '#7a8194',
+      secondaryColor: '#262b3a',
+      tertiaryColor: '#0f1117',
+      mainBkg: '#1d2230',
+      secondBkg: '#262b3a',
+      tertiaryBkg: '#161922',
+      nodeBorder: '#6cf',
+      clusterBkg: '#161922',
+      clusterBorder: '#262b3a',
+      titleColor: '#6cf',
+      edgeLabelBackground: '#161922',
+      fontFamily: 'Cascadia Code, monospace'
+    }
+  });
+  document.querySelectorAll('pre > code.language-mermaid').forEach((codeEl) => {
+    const pre = codeEl.parentElement;
+    const div = document.createElement('div');
+    div.className = 'mermaid';
+    div.textContent = codeEl.textContent;
+    pre.replaceWith(div);
+  });
+  mermaid.run();
+</script>
+</body>
+</html>
