@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Serie di potenze e raggio di convergenza — Analisi Matematica I Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#1a2647',primaryTextColor:'#f3eed9',primaryBorderColor:'#d4af37',lineColor:'#8aa3c8',background:'#0c1428'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">∫</div>
+      <div>
+        <div class="brand-title">ANALYSIS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">IT</span><a href="../en/pages/48-power-series.html" class="lang-link" title="Switch">EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li><li class="nav-item"><a href="00-intro.html" class=""><span class="num">00</span>Cos&#x27;è l&#x27;analisi matematica</a></li><li class="nav-item"><a href="01-logica-dimostrazioni.html" class=""><span class="num">01</span>Logica e dimostrazioni per l&#x27;analisi</a></li><li class="nav-item"><a href="02-insiemi-funzioni.html" class=""><span class="num">02</span>Insiemi, relazioni, funzioni</a></li><li class="nav-item"><a href="03-induzione-naturali.html" class=""><span class="num">03</span>Numeri naturali e principio di induzione</a></li><li class="nav-item"><a href="04-interi-razionali.html" class=""><span class="num">04</span>Numeri interi e razionali</a></li><li class="nav-item"><a href="05-cardinalita-cantor.html" class=""><span class="num">05</span>Cardinalità e infinito (Cantor)</a></li><li class="nav-item"><a href="06-numeri-reali-assiomi.html" class=""><span class="num">06</span>Numeri reali: gli assiomi</a></li><li class="nav-item"><a href="07-estremo-superiore.html" class=""><span class="num">07</span>Estremo superiore e completezza</a></li><li class="nav-item"><a href="08-costruzione-reali.html" class=""><span class="num">08</span>Costruzione di R: Dedekind e Cauchy</a></li><li class="nav-item"><a href="09-numeri-complessi.html" class=""><span class="num">09</span>Numeri complessi</a></li><li class="nav-item"><a href="10-topologia-r.html" class=""><span class="num">10</span>Topologia di R: intorni, aperti, chiusi, compatti</a></li><li class="nav-item"><a href="11-successioni-definizione.html" class=""><span class="num">11</span>Successioni e limiti: la definizione ε-N</a></li><li class="nav-item"><a href="12-algebra-limiti-successioni.html" class=""><span class="num">12</span>Algebra dei limiti di successioni</a></li><li class="nav-item"><a href="13-monotone-bolzano-weierstrass.html" class=""><span class="num">13</span>Successioni monotone e Bolzano-Weierstrass</a></li><li class="nav-item"><a href="14-cauchy-completezza.html" class=""><span class="num">14</span>Successioni di Cauchy e completezza di R</a></li><li class="nav-item"><a href="15-limiti-notevoli-landau.html" class=""><span class="num">15</span>Limiti notevoli e simboli di Landau (o-piccolo, O-grande)</a></li><li class="nav-item"><a href="16-liminf-limsup.html" class=""><span class="num">16</span>Limite superiore, limite inferiore, sottosuccessioni</a></li><li class="nav-item"><a href="17-funzioni-elementari.html" class=""><span class="num">17</span>Funzioni elementari: panoramica</a></li><li class="nav-item"><a href="18-esponenziale-logaritmo.html" class=""><span class="num">18</span>Esponenziale, logaritmo, potenze</a></li><li class="nav-item"><a href="19-trigonometriche-iperboliche.html" class=""><span class="num">19</span>Funzioni trigonometriche e iperboliche</a></li><li class="nav-item"><a href="20-limite-funzione.html" class=""><span class="num">20</span>Limite di funzione: la definizione</a></li><li class="nav-item"><a href="21-teoremi-limiti-funzioni.html" class=""><span class="num">21</span>Teoremi sui limiti di funzioni</a></li><li class="nav-item"><a href="22-limiti-notevoli-funzioni.html" class=""><span class="num">22</span>Limiti notevoli per funzioni</a></li><li class="nav-item"><a href="23-asintoti.html" class=""><span class="num">23</span>Asintoti orizzontali, verticali, obliqui</a></li><li class="nav-item"><a href="24-continuita-definizione.html" class=""><span class="num">24</span>Continuità: la definizione e le prime proprietà</a></li><li class="nav-item"><a href="25-teoremi-continue.html" class=""><span class="num">25</span>Teoremi sulle funzioni continue (Weierstrass, valori intermedi)</a></li><li class="nav-item"><a href="26-uniforme-continuita.html" class=""><span class="num">26</span>Uniforme continuità, Heine, lipschitzianità</a></li><li class="nav-item"><a href="27-discontinuita.html" class=""><span class="num">27</span>Tipi di discontinuità</a></li><li class="nav-item"><a href="28-derivata-definizione.html" class=""><span class="num">28</span>Derivata: definizione e interpretazione geometrica</a></li><li class="nav-item"><a href="29-regole-derivazione.html" class=""><span class="num">29</span>Regole di derivazione (somma, prodotto, quoziente, catena)</a></li><li class="nav-item"><a href="30-derivate-elementari.html" class=""><span class="num">30</span>Derivate delle funzioni elementari</a></li><li class="nav-item"><a href="31-teoremi-differenziale.html" class=""><span class="num">31</span>Teoremi del calcolo differenziale: Fermat, Rolle, Lagrange, Cauchy</a></li><li class="nav-item"><a href="32-hopital.html" class=""><span class="num">32</span>Regola di de L&#x27;Hôpital</a></li><li class="nav-item"><a href="33-taylor.html" class=""><span class="num">33</span>Polinomi e formula di Taylor</a></li><li class="nav-item"><a href="34-limiti-taylor.html" class=""><span class="num">34</span>Calcolo di limiti tramite Taylor</a></li><li class="nav-item"><a href="35-monotonia-estremi.html" class=""><span class="num">35</span>Monotonia, massimi, minimi, punti critici</a></li><li class="nav-item"><a href="36-convessita-concavita.html" class=""><span class="num">36</span>Convessità, concavità, flessi</a></li><li class="nav-item"><a href="37-studio-funzione.html" class=""><span class="num">37</span>Studio di funzione completo</a></li><li class="nav-item"><a href="38-applicazioni-ottimizzazione.html" class=""><span class="num">38</span>Applicazioni dell&#x27;ottimizzazione: fisica, economia, geometria</a></li><li class="nav-item"><a href="39-integrale-riemann.html" class=""><span class="num">39</span>Integrale di Riemann: definizione</a></li><li class="nav-item"><a href="40-teorema-fondamentale-calcolo.html" class=""><span class="num">40</span>Teorema fondamentale del calcolo integrale</a></li><li class="nav-item"><a href="41-tecniche-integrazione.html" class=""><span class="num">41</span>Tecniche di integrazione: per parti, per sostituzione</a></li><li class="nav-item"><a href="42-integrali-razionali.html" class=""><span class="num">42</span>Integrazione di funzioni razionali</a></li><li class="nav-item"><a href="43-integrali-impropri.html" class=""><span class="num">43</span>Integrali impropri</a></li><li class="nav-item"><a href="44-funzioni-integrali.html" class=""><span class="num">44</span>Funzioni integrali e applicazioni geometriche</a></li><li class="nav-item"><a href="45-serie-numeriche.html" class=""><span class="num">45</span>Serie numeriche: definizione e convergenza</a></li><li class="nav-item"><a href="46-criteri-positivi.html" class=""><span class="num">46</span>Criteri di convergenza per serie a termini positivi</a></li><li class="nav-item"><a href="47-serie-segno-qualunque.html" class=""><span class="num">47</span>Serie a segno qualunque, Leibniz, convergenza assoluta</a></li><li class="nav-item"><a href="48-serie-potenze.html" class="active"><span class="num">48</span>Serie di potenze e raggio di convergenza</a></li><li class="nav-item"><a href="49-serie-taylor.html" class=""><span class="num">49</span>Serie di Taylor e analiticità</a></li><li class="nav-item"><a href="50-serie-fourier-cenni.html" class=""><span class="num">50</span>Serie di Fourier: introduzione</a></li><li class="nav-item"><a href="51-edo-primo-ordine.html" class=""><span class="num">51</span>EDO del primo ordine</a></li><li class="nav-item"><a href="52-edo-lineari-ordine-n.html" class=""><span class="num">52</span>EDO lineari di ordine $n$ a coefficienti costanti</a></li><li class="nav-item"><a href="53-cauchy-esistenza-unicita.html" class=""><span class="num">53</span>Problema di Cauchy, esistenza e unicità</a></li><li class="nav-item"><a href="54-topologia-rn.html" class=""><span class="num">54</span>Topologia in $\mathbb{R}^n$</a></li><li class="nav-item"><a href="55-derivate-parziali-differenziale.html" class=""><span class="num">55</span>Derivate parziali e differenziale in più variabili</a></li><li class="nav-item"><a href="56-cenni-lebesgue-funzionale.html" class=""><span class="num">56</span>Oltre Riemann: Lebesgue, Banach, Hilbert</a></li><li class="nav-item"><a href="57-eserciziario.html" class=""><span class="num">57</span>Eserciziario: problemi tipo d&#x27;esame</a></li><li class="nav-item"><a href="58-glossario-az.html" class=""><span class="num">58</span>Glossario A-Z dell&#x27;Analisi Matematica I</a></li><li class="nav-item"><a href="59-formulario-completo.html" class=""><span class="num">59</span>Formulario completo di Analisi Matematica I</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Serie</span>
+        <span>Sezione 48 di 59</span>
+        <span class="level-tag level-int">Livello: intermedio</span>
+      </div>
+      <h1>Serie di potenze e raggio di convergenza</h1>
+      <p class="summary">$\sum a_n (x-x_0)^n$. Esiste sempre un **raggio** $R \in [0, +\infty]$: converge per $|x-x_0|&lt;R$, diverge per $|x-x_0|&gt;R$. **Cauchy-Hadamard**, derivazione/integrazione termine a termine, bordi caso per caso.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Serie</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>Serie numeriche (sez. 45-47)</li><li>Successioni e $\limsup$</li></ul>
+  <div class="label">Strumenti / riferimenti</div>
+  <ul class="source-list"><li>Rudin — *Principles*, cap. 8</li></ul>
+</div>
+      <h2 id="perche-parlarne">Perché parlarne</h2>
+<p>Finora ogni $a_n$ era un numero. Ora consideriamo serie dipendenti da $x$. La più "rigida" e fondamentale è la <strong>serie di potenze</strong>.</p>
+<p><strong>Definizione.</strong> Una <strong>serie di potenze</strong> centrata in $x_0$ è
+$$\sum_{n=0}^\infty a_n (x - x_0)^n.$$</p>
+<blockquote>
+<p><strong>Glossarietto:</strong></p>
+<ul>
+<li>$a_n \in \mathbb{R}$ = <strong>coefficienti</strong>.</li>
+<li>$x_0$ = <strong>centro</strong>.</li>
+<li>In $x$ fissato è una serie numerica; convergenza dipende da $x$.</li>
+</ul>
+</blockquote>
+<p>Senza perdita di generalità $x_0 = 0$.</p>
+<h2 id="teorema-di-abel-struttura-geometrica">Teorema di Abel (struttura geometrica)</h2>
+<p><strong>Teorema (Abel, 1826).</strong> Se $\sum a_n x_1^n$ converge in $x_1 \ne 0$, allora $\sum a_n x^n$ converge <strong>assolutamente</strong> per $|x| < |x_1|$.</p>
+<p><em>Dim.</em> $a_n x_1^n \to 0$, limitata: $|a_n x_1^n| \le M$. Posto $r = |x/x_1| < 1$:
+$$|a_n x^n| \le M r^n.$$
+Geometrica + confronto. ∎</p>
+<p><strong>Corollario.</strong> Esiste $R \in [0, +\infty]$ tale che la serie converge per $|x|<R$, diverge per $|x|>R$. $R$ = <strong>raggio di convergenza</strong>.</p>
+<blockquote>
+<p><strong>Bordi $|x| = R$:</strong> caso per caso (convergenza assoluta, semplice, o divergenza).</p>
+</blockquote>
+<h2 id="cauchy-hadamard">Cauchy-Hadamard</h2>
+<p><strong>Teorema.</strong> Il raggio è
+$$\frac{1}{R} = \limsup_{n\to\infty} \sqrt[n]{|a_n|}.$$
+(Convenzioni: $1/0 = +\infty$, $1/\infty = 0$.)</p>
+<p><em>Dim.</em> Criterio della radice: $\limsup \sqrt[n]{|a_n x^n|} = |x|/R$. Converge se $<1$, diverge se $>1$. ∎</p>
+<p><strong>Formula via rapporto</strong> (se il limite esiste):
+$$\frac{1}{R} = \lim_{n\to\infty} \left|\frac{a_{n+1}}{a_n}\right|.$$</p>
+<p>In pratica: rapporto è più semplice; Hadamard serve quando il rapporto oscilla.</p>
+<h2 id="esempi-paradigmatici">Esempi paradigmatici</h2>
+<table>
+<thead>
+<tr>
+<th>Serie</th>
+<th>$R$</th>
+<th>Bordi</th>
+<th>Somma</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$\sum x^n$</td>
+<td>1</td>
+<td>$x=1$ diverge, $x=-1$ indeterm.</td>
+<td>$1/(1-x)$</td>
+</tr>
+<tr>
+<td>$\sum x^n/n$</td>
+<td>1</td>
+<td>$x=1$ diverge, $x=-1$ converge</td>
+<td>$-\ln(1-x)$</td>
+</tr>
+<tr>
+<td>$\sum x^n/n^2$</td>
+<td>1</td>
+<td>converge assolutamente $\pm 1$</td>
+<td>—</td>
+</tr>
+<tr>
+<td>$\sum x^n/n!$</td>
+<td>$+\infty$</td>
+<td>—</td>
+<td>$e^x$</td>
+</tr>
+<tr>
+<td>$\sum n! x^n$</td>
+<td>0</td>
+<td>—</td>
+<td>solo in 0</td>
+</tr>
+</tbody>
+</table>
+<h2 id="convergenza-uniforme-su-compatti">Convergenza uniforme su compatti</h2>
+<p><strong>Teorema.</strong> Per ogni $r$ con $0 < r < R$, $\sum a_n x^n$ converge <strong>uniformemente</strong> su $[-r, r]$.</p>
+<p><em>Dim. (Weierstrass M-test).</em> $|a_n x^n| \le |a_n| r^n$ con $\sum |a_n| r^n < \infty$. ∎</p>
+<p><strong>Conseguenze:</strong>
+- $f(x) = \sum a_n x^n$ è <strong>continua</strong> su $(-R, R)$.
+- Integrabile termine a termine.
+- Derivabile termine a termine.</p>
+<blockquote>
+<p><strong>Cautela:</strong> convergenza uniforme su <strong>compatti</strong> $\subset (-R,R)$, non sull'intero intervallo aperto.</p>
+</blockquote>
+<h2 id="derivazione-e-integrazione-termine-a-termine">Derivazione e integrazione termine a termine</h2>
+<p><strong>Teorema.</strong> $\sum a_n x^n$ con raggio $R > 0$:
+1. $\sum n a_n x^{n-1}$ ha <strong>stesso raggio</strong> $R$.
+2. $f'(x) = \sum n a_n x^{n-1}$ su $(-R, R)$.
+3. $\int_0^x f = \sum a_n x^{n+1}/(n+1)$ ha raggio $R$.
+4. $f \in C^\infty(-R, R)$.</p>
+<p><em>Dim. (parte 1).</em> $\sqrt[n]{n|a_n|} = \sqrt[n]{n}\sqrt[n]{|a_n|}$, $\sqrt[n]{n} \to 1$. ∎</p>
+<p><strong>Corollario (unicità).</strong> Se due serie coincidono in un intorno di 0, hanno gli stessi coefficienti: $a_n = f^{(n)}(0)/n!$.</p>
+<h2 id="teorema-di-abel-al-bordo">Teorema di Abel al bordo</h2>
+<p><strong>Teorema.</strong> Se $\sum a_n R^n$ converge, allora $\lim_{x \to R^-} \sum a_n x^n = \sum a_n R^n$.</p>
+<p><strong>Applicazioni notevoli:</strong></p>
+<ul>
+<li>
+<p>$\ln(1+x) = \sum (-1)^{n+1} x^n/n$ per $|x|<1$. In $x=1$: $\sum (-1)^{n+1}/n$ converge (Leibniz). Per Abel:
+$$\sum_{n=1}^\infty \frac{(-1)^{n+1}}{n} = \ln 2.$$</p>
+</li>
+<li>
+<p>$\arctan x = \sum (-1)^n x^{2n+1}/(2n+1)$. In $x=1$: $\sum (-1)^n/(2n+1)$ converge. Per Abel:
+$$\sum_{n=0}^\infty \frac{(-1)^n}{2n+1} = \frac{\pi}{4} \quad \text{(Leibniz-Madhava)}.$$</p>
+</li>
+</ul>
+<h2 id="aritmetica-delle-serie-di-potenze">Aritmetica delle serie di potenze</h2>
+<p>Per $f = \sum a_n x^n$, $g = \sum b_n x^n$, raggi $R_f, R_g$, $R = \min(R_f, R_g)$:</p>
+<ul>
+<li><strong>Somma:</strong> $f+g = \sum (a_n+b_n) x^n$, raggio $\ge R$.</li>
+<li><strong>Prodotto (Cauchy):</strong> $f \cdot g = \sum c_n x^n$ con $c_n = \sum_{k=0}^n a_k b_{n-k}$.</li>
+<li><strong>Quoziente:</strong> se $g(0) \ne 0$, $1/g$ è serie di potenze in un intorno di 0.</li>
+<li><strong>Composizione:</strong> se $g(0) = 0$, $f \circ g$ è serie di potenze in un intorno di 0.</li>
+</ul>
+<h2 id="sviluppi-notevoli-derivati">Sviluppi notevoli derivati</h2>
+<ul>
+<li>$1/(1-x)^2 = \sum_{n=0}^\infty (n+1) x^n$ (derivata di geometrica).</li>
+<li>$\arctan x = \sum (-1)^n x^{2n+1}/(2n+1)$ (integrazione di $1/(1+x^2) = \sum (-1)^n x^{2n}$).</li>
+<li>$-\ln(1-x) = \sum x^n/n$ (integrazione di geometrica).</li>
+</ul>
+<h2 id="esercizi">Esercizi</h2>
+<details>
+<summary>Esercizio 1 — Raggio standard</summary>
+
+$\sum \binom{2n}{n} x^n$. Rapporto: $\frac{(2n+2)(2n+1)}{(n+1)^2} \to 4$. $R = 1/4$. ∎
+</details>
+
+<details>
+<summary>Esercizio 2 — Hadamard ineludibile</summary>
+
+$a_n = 2^n$ se pari, $3^n$ se dispari. Rapporto oscilla. Hadamard: $\sqrt[n]{|a_n|}$ vale 2 o 3; $\limsup = 3$. $R = 1/3$. ∎
+</details>
+
+<details>
+<summary>Esercizio 3 — Somma in forma chiusa</summary>
+
+$\sum n x^n$ per $|x|<1$:
+$$= x \frac{d}{dx}\sum x^n = x \frac{d}{dx}\frac{1}{1-x} = \frac{x}{(1-x)^2}. \qquad ∎$$
+</details>
+
+<details>
+<summary>Esercizio 4 — Abel al bordo</summary>
+
+$\sum (-1)^n/(2n+1) = \pi/4$ via $\arctan x$ + Abel. ∎
+</details>
+
+<details>
+<summary>Esercizio 5 — Centratura traslata</summary>
+
+$1/x$ centrato in $x_0 = 1$: $1/x = 1/(1+(x-1)) = \sum (-1)^n (x-1)^n$ per $|x-1|<1$. $R = 1$. ∎
+</details>
+
+<h2 id="riassunto-in-una-riga">Riassunto in una riga</h2>
+<p>Ogni serie di potenze ha un <strong>raggio</strong> $R$ (Cauchy-Hadamard: $1/R = \limsup\sqrt[n]{|a_n|}$); converge assolutamente in $(-R,R)$ e uniformemente sui compatti dentro; <strong>derivazione/integrazione termine a termine</strong> preservano il raggio; bordi caso per caso; <strong>Abel al bordo</strong> lega serie a somme.</p>
+      <nav class="pager">
+<a href="47-serie-segno-qualunque.html" class="prev"><span class="label">← Precedente</span><span class="title">Serie a segno qualunque, Leibniz, convergenza assoluta</span></a>
+<a href="49-serie-taylor.html" class="next"><span class="label">Successivo →</span><span class="title">Serie di Taylor e analiticità</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Analisi Matematica I Zero to Hero</strong> — percorso completo bilingue, dai naturali agli integrali impropri, dalle serie di Fourier alle EDO lineari.</p><p>Materiale didattico aperto. Quando una dimostrazione è oscura, torna indietro: l'analisi è una scala, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

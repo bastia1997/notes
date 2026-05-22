@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Curry-Howard e type theory: dimostrazioni come programmi — Logica e Pensiero Critico Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#2a2540',primaryTextColor:'#ecebff',primaryBorderColor:'#7a6cd6',lineColor:'#9890b8',background:'#141226'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">∴</div>
+      <div>
+        <div class="brand-title">LOGOS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">IT</span><a href="../en/pages/19-curry-howard-type-theory.html" class="lang-link" title="Switch to English">EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-cosa-e-la-logica.html" class=""><span class="num">01</span>Cos&#x27;è la logica e il pensiero critico</a></li><li class="nav-item"><a href="../pages/02-storia-della-logica.html" class=""><span class="num">02</span>Breve storia della logica</a></li><li class="nav-item"><a href="../pages/03-tipi-di-ragionamento.html" class=""><span class="num">03</span>Tipi di ragionamento: deduttivo, induttivo, abduttivo, analogico</a></li><li class="nav-item"><a href="../pages/04-anatomia-degli-argomenti.html" class=""><span class="num">04</span>Argomenti: premesse, conclusione, validità, solidità</a></li><li class="nav-item"><a href="../pages/05-standard-paul-elder.html" class=""><span class="num">05</span>Pensiero critico: standard di Paul-Elder</a></li><li class="nav-item"><a href="../pages/06-linguaggio-e-ambiguita.html" class=""><span class="num">06</span>Linguaggio, ambiguità, definizioni</a></li><li class="nav-item"><a href="../pages/07-logica-proposizionale.html" class=""><span class="num">07</span>Logica proposizionale: connettivi e tabelle di verità</a></li><li class="nav-item"><a href="../pages/08-equivalenze-forme-normali.html" class=""><span class="num">08</span>Equivalenze logiche, De Morgan, forme normali</a></li><li class="nav-item"><a href="../pages/09-regole-inferenza.html" class=""><span class="num">09</span>Regole di inferenza</a></li><li class="nav-item"><a href="../pages/10-deduzione-naturale.html" class=""><span class="num">10</span>Deduzione naturale: regole I/E e dimostrazione strutturata</a></li><li class="nav-item"><a href="../pages/11-sistemi-assiomatici-sequenti.html" class=""><span class="num">11</span>Sistemi assiomatici e calcolo dei sequenti</a></li><li class="nav-item"><a href="../pages/12-logica-predicati-sintassi.html" class=""><span class="num">12</span>Logica dei predicati (FOL): sintassi e quantificatori</a></li><li class="nav-item"><a href="../pages/13-logica-predicati-semantica.html" class=""><span class="num">13</span>FOL: semantica, modelli, validità</a></li><li class="nav-item"><a href="../pages/14-insiemi-relazioni-funzioni.html" class=""><span class="num">14</span>Insiemi, relazioni, funzioni</a></li><li class="nav-item"><a href="../pages/15-metalogica-godel.html" class=""><span class="num">15</span>Metalogica: soundness, completezza, teoremi di Gödel</a></li><li class="nav-item"><a href="../pages/16-logiche-modali.html" class=""><span class="num">16</span>Logiche modali e mondi possibili</a></li><li class="nav-item"><a href="../pages/17-logiche-temporale-deontica-epistemica.html" class=""><span class="num">17</span>Logiche temporale, deontica, epistemica</a></li><li class="nav-item"><a href="../pages/18-logiche-non-classiche.html" class=""><span class="num">18</span>Logiche non classiche: intuizionista, fuzzy, paraconsistente</a></li><li class="nav-item"><a href="../pages/19-curry-howard-type-theory.html" class="active"><span class="num">19</span>Curry-Howard e type theory: dimostrazioni come programmi</a></li><li class="nav-item"><a href="../pages/20-fallacie-formali.html" class=""><span class="num">20</span>Fallacie formali: quando la forma del ragionamento mente</a></li><li class="nav-item"><a href="../pages/21-fallacie-informali-rilevanza.html" class=""><span class="num">21</span>Fallacie informali di rilevanza: distrarre invece di argomentare</a></li><li class="nav-item"><a href="../pages/22-fallacie-informali-presunzione.html" class=""><span class="num">22</span>Fallacie informali di presunzione e ambiguità</a></li><li class="nav-item"><a href="../pages/23-bias-cognitivi.html" class=""><span class="num">23</span>Bias cognitivi: catalogo ragionato</a></li><li class="nav-item"><a href="../pages/24-dual-process.html" class=""><span class="num">24</span>Sistema 1 e Sistema 2: dual process theory</a></li><li class="nav-item"><a href="../pages/25-polya-problem-solving.html" class=""><span class="num">25</span>Polya: come risolvere un problema (4 step)</a></li><li class="nav-item"><a href="../pages/26-euristiche-problem-solving.html" class=""><span class="num">26</span>Euristiche del problem solving</a></li><li class="nav-item"><a href="../pages/27-pensiero-computazionale.html" class=""><span class="num">27</span>Pensiero computazionale</a></li><li class="nav-item"><a href="../pages/28-algoritmi-strategie.html" class=""><span class="num">28</span>Algoritmi e strategie di risoluzione</a></li><li class="nav-item"><a href="../pages/29-pensiero-creativo.html" class=""><span class="num">29</span>Pensiero creativo: lateral thinking, TRIZ, SCAMPER</a></li><li class="nav-item"><a href="../pages/30-design-thinking.html" class=""><span class="num">30</span>Design thinking</a></li><li class="nav-item"><a href="../pages/31-mental-models.html" class=""><span class="num">31</span>Mental models: modelli mentali</a></li><li class="nav-item"><a href="../pages/32-probabilita-fondamenti.html" class=""><span class="num">32</span>Probabilità: fondamenti per il ragionamento</a></li><li class="nav-item"><a href="../pages/33-teorema-bayes.html" class=""><span class="num">33</span>Teorema di Bayes e aggiornamento delle credenze</a></li><li class="nav-item"><a href="../pages/34-paradossi-probabilistici.html" class=""><span class="num">34</span>Paradossi probabilistici: Monty Hall, base rate, Simpson</a></li><li class="nav-item"><a href="../pages/35-teoria-decisione.html" class=""><span class="num">35</span>Teoria della decisione: utilità attesa e prospect theory</a></li><li class="nav-item"><a href="../pages/36-forecasting-calibrazione.html" class=""><span class="num">36</span>Forecasting e calibrazione: la lezione dei superforecaster</a></li><li class="nav-item"><a href="../pages/37-knightian-cigni-neri.html" class=""><span class="num">37</span>Knightian uncertainty, cigni neri, antifragile</a></li><li class="nav-item"><a href="../pages/38-argomentazione-toulmin.html" class=""><span class="num">38</span>Argomentazione: Toulmin, Walton, argument mapping</a></li><li class="nav-item"><a href="../pages/39-retorica-persuasione.html" class=""><span class="num">39</span>Retorica e persuasione</a></li><li class="nav-item"><a href="../pages/40-dibattito-dialettica.html" class=""><span class="num">40</span>Dibattito, dialettica socratica, steelmanning</a></li><li class="nav-item"><a href="../pages/41-negoziazione-teoria-giochi.html" class=""><span class="num">41</span>Negoziazione e teoria dei giochi</a></li><li class="nav-item"><a href="../pages/42-epistemologia.html" class=""><span class="num">42</span>Epistemologia: JTB, Gettier, virtù epistemiche</a></li><li class="nav-item"><a href="../pages/43-metodo-scientifico-popper.html" class=""><span class="num">43</span>Metodo scientifico, Popper, falsificabilità</a></li><li class="nav-item"><a href="../pages/44-kuhn-lakatos-feyerabend.html" class=""><span class="num">44</span>Paradigmi: Kuhn, Lakatos, Feyerabend</a></li><li class="nav-item"><a href="../pages/45-causalita-pearl.html" class=""><span class="num">45</span>Causalità: Hume, Pearl, do-calculus</a></li><li class="nav-item"><a href="../pages/46-paradossi-celebri.html" class=""><span class="num">46</span>Paradossi celebri: dal mentitore al Newcomb</a></li><li class="nav-item"><a href="../pages/47-systems-thinking.html" class=""><span class="num">47</span>Systems thinking e modelli di feedback</a></li><li class="nav-item"><a href="../pages/48-wicked-problems.html" class=""><span class="num">48</span>Wicked problems, complessità, VUCA</a></li><li class="nav-item"><a href="../pages/49-critical-reading-writing.html" class=""><span class="num">49</span>Critical reading e scrittura argomentativa</a></li><li class="nav-item"><a href="../pages/50-propaganda-manipolazione.html" class=""><span class="num">50</span>Propaganda, manipolazione, news literacy, fact-checking</a></li><li class="nav-item"><a href="../pages/51-eserciziario.html" class=""><span class="num">51</span>Eserciziario completo con soluzioni</a></li><li class="nav-item"><a href="../pages/52-glossario-az.html" class=""><span class="num">52</span>Glossario A-Z bilingue</a></li><li class="nav-item"><a href="../pages/53-formulario.html" class=""><span class="num">53</span>Formulario / scheda riassuntiva</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Logica/Informatica</span>
+        <span>Sezione 19 di 53</span>
+        <span class="level-tag level-exp">Livello: esperto</span>
+      </div>
+      <h1>Curry-Howard e type theory: dimostrazioni come programmi</h1>
+      <p class="summary">L&#x27;isomorfismo di Curry-Howard collega proposizioni e tipi, dimostrazioni e programmi. È il ponte fra logica intuizionista, lambda-calcolo tipato e assistenti di prova come Coq, Agda e Lean.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Logica/Informatica</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>Aver letto [Deduzione naturale](10-deduzione-naturale.html)</li><li>Aver letto [Logica dei predicati: sintassi](12-logica-predicati-sintassi.html)</li><li>Familiarità minima con un linguaggio funzionale (Haskell, OCaml, F#) o tipato in stile ML</li></ul>
+  <div class="label">Strumenti / riferimenti</div>
+  <ul class="source-list"><li>Coq, Agda o Lean 4 (uno qualsiasi) installato per esperimenti</li><li>Compilatore Haskell (GHC) per i mini-esempi</li></ul>
+</div>
+      <p>C'è una scoperta del Novecento talmente bella che molti logici considerano un <em>miracolo</em>: <strong>logica e programmazione sono la stessa cosa</strong>. Non per analogia, non per metafora — proprio la stessa cosa, sotto un cambio di vocabolario. Le proposizioni sono tipi, le dimostrazioni sono programmi, l'eliminazione del modus ponens è applicazione di funzione, la normalizzazione di una prova è valutazione di un termine. Questo è l'isomorfismo di <strong>Curry-Howard</strong>, e quando lo si vede per la prima volta è uno di quei momenti in cui la matematica smette di essere una collezione di trucchi e diventa una struttura unica.</p>
+<p>Storicamente l'idea germoglia in tre tempi: Haskell B. Curry (anni '30-'50) nota che gli assiomi della logica combinatoria corrispondono ai tipi dei combinatori; William A. Howard la formalizza per la deduzione naturale e il lambda-calcolo tipato in un paper del 1969 (circolato come manoscritto, pubblicato nel 1980); negli anni '70 Per Martin-Löf costruisce la <strong>type theory intuizionista</strong>, che assorbe anche i quantificatori tramite <em>dependent types</em>. Da lì discendono Coq (Coquand-Huet 1989, oggi Rocq), Agda (Norell 2007), Lean (de Moura 2013). Philip Wadler ne ha raccontato la storia in <em>Propositions as Types</em> (2015) con uno spirito quasi religioso: "this isn't just an analogy, it's an <em>identity</em>".</p>
+<h2 id="1-il-vocabolario-dellisomorfismo">1. Il vocabolario dell'isomorfismo</h2>
+<p>L'idea è semplicissima da enunciare in tabella. Ogni costrutto logico ha un gemello nei tipi.</p>
+<table>
+<thead>
+<tr>
+<th>Logica (intuizionista)</th>
+<th>Type theory</th>
+<th>Esempio Haskell</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Proposizione $A$</td>
+<td>Tipo $A$</td>
+<td><code>Int</code>, <code>Bool</code>, <code>a -&gt; b</code></td>
+</tr>
+<tr>
+<td>Dimostrazione di $A$</td>
+<td>Termine $t : A$</td>
+<td><code>42 :: Int</code></td>
+</tr>
+<tr>
+<td>Implicazione $A \to B$</td>
+<td>Tipo funzione $A \to B$</td>
+<td><code>f :: Int -&gt; Bool</code></td>
+</tr>
+<tr>
+<td>Congiunzione $A \wedge B$</td>
+<td>Tipo prodotto $A \times B$</td>
+<td><code>(x, y) :: (a, b)</code></td>
+</tr>
+<tr>
+<td>Disgiunzione $A \vee B$</td>
+<td>Tipo somma $A + B$</td>
+<td><code>Either a b</code></td>
+</tr>
+<tr>
+<td>Falso $\bot$</td>
+<td>Tipo vuoto (<code>Void</code>, <code>Empty</code>)</td>
+<td><code>data Void</code></td>
+</tr>
+<tr>
+<td>Vero $\top$</td>
+<td>Tipo unitario (<code>()</code>, <code>Unit</code>)</td>
+<td><code>()</code></td>
+</tr>
+<tr>
+<td>Modus ponens</td>
+<td>Applicazione di funzione</td>
+<td><code>f x</code></td>
+</tr>
+<tr>
+<td>Introduzione di $\to$</td>
+<td>Lambda-astrazione</td>
+<td><code>\x -&gt; body</code></td>
+</tr>
+<tr>
+<td>Quantificatore $\forall x.\,P(x)$</td>
+<td>Prodotto dipendente $\Pi x:A.\,P(x)$</td>
+<td>(richiede dependent types)</td>
+</tr>
+<tr>
+<td>Quantificatore $\exists x.\,P(x)$</td>
+<td>Somma dipendente $\Sigma x:A.\,P(x)$</td>
+<td>(richiede dependent types)</td>
+</tr>
+</tbody>
+</table>
+<p>La frase chiave: <em>trovare una dimostrazione di $A \to B$ è equivalente a scrivere un programma che, dato un input di tipo $A$, restituisce un output di tipo $B$</em>. Se hai il programma, hai la prova; se hai la prova, hai il programma. È letteralmente la stessa cosa scritta in due notazioni.</p>
+<h2 id="2-implicazione-come-funzione-il-caso-base">2. Implicazione come funzione: il caso base</h2>
+<p>Considera la tautologia banale $A \to A$. La sua dimostrazione in deduzione naturale è una riga: assumi $A$, scarica l'assunzione, ottieni $A \to A$ per introduzione di $\to$. Il termine corrispondente nel lambda-calcolo tipato è la <strong>funzione identità</strong>:</p>
+<p>$$\lambda x{:}A.\,x \;:\; A \to A$$</p>
+<p>In Haskell: <code>id :: a -&gt; a; id x = x</code>.</p>
+<p>Prendiamo qualcosa di leggermente meno banale: $A \to (B \to A)$, il primo assioma di Hilbert ("K"). La prova: assumi $A$, assumi $B$, scarta $B$, restituisci $A$. Il termine: $\lambda x{:}A.\,\lambda y{:}B.\,x$. In Haskell:</p>
+<pre><code class="language-haskell">k :: a -&gt; b -&gt; a
+k x _ = x
+</code></pre>
+<p>Questo è il combinatore $K$ di Curry. Lo stesso nome non è un caso: Curry aveva <em>già</em> notato che i suoi combinatori avevano tipi che erano teoremi della logica implicazionale. Il combinatore $S = \lambda x.\,\lambda y.\,\lambda z.\,(x\,z)(y\,z)$ ha tipo $(A \to B \to C) \to (A \to B) \to A \to C$, che è un altro assioma classico. $S$ e $K$ generano l'intero lambda-calcolo <em>e</em> l'intera logica implicazionale.</p>
+<h2 id="3-prodotto-somma-falso">3. Prodotto, somma, falso</h2>
+<p><strong>Congiunzione = prodotto.</strong> Dimostrare $A \wedge B$ significa fornire una prova di $A$ <em>e</em> una prova di $B$: la coppia $(p, q)$ dove $p:A$ e $q:B$. Le proiezioni $\pi_1, \pi_2$ corrispondono alle regole di eliminazione di $\wedge$.</p>
+<p><strong>Disgiunzione = somma.</strong> Per dimostrare $A \vee B$ devi fornire una prova di $A$ <em>oppure</em> una prova di $B$, etichettata con la scelta. In Haskell:</p>
+<pre><code class="language-haskell">data Either a b = Left a | Right b
+</code></pre>
+<p><code>Left p</code> è la prova "via $A$"; <code>Right q</code> è la prova "via $B$". L'eliminazione di $\vee$ (analisi per casi) è il <code>case</code> di Haskell.</p>
+<p><strong>Falso = tipo vuoto.</strong> $\bot$ è la proposizione senza dimostrazioni; il suo tipo gemello è il tipo <code>Void</code> senza costruttori. Da $\bot$ si deriva qualunque cosa (<em>ex falso quodlibet</em>): la funzione <code>absurd :: Void -&gt; a</code> è la versione programmatica. Non puoi mai chiamarla, perché nessuno può costruire un valore di tipo <code>Void</code>. La negazione $\neg A$ diventa $A \to \bot$: una funzione che, se le passi una prova di $A$, ti dà l'assurdo.</p>
+<pre><code class="language-haskell">type Not a = a -&gt; Void
+</code></pre>
+<h2 id="4-schema-visivo-dellisomorfismo">4. Schema visivo dell'isomorfismo</h2>
+<pre><code class="language-mermaid">flowchart LR
+  subgraph Logica[&quot;Deduzione naturale&quot;]
+    P[A → B] --&gt;|MP| Q[B]
+    R[A]
+  end
+  subgraph Tipi[&quot;Lambda-calcolo tipato&quot;]
+    F[&quot;f : A → B&quot;] --&gt;|f x| Y[&quot;y : B&quot;]
+    X[&quot;x : A&quot;]
+  end
+  P -. corrisponde a .-&gt; F
+  R -. corrisponde a .-&gt; X
+  Q -. corrisponde a .-&gt; Y
+</code></pre>
+<p>Sopra: la regola di eliminazione di $\to$ (modus ponens) a sinistra, l'applicazione di funzione a destra. Lo stesso albero, due notazioni.</p>
+<p>E sotto un secondo grafico, il ciclo "prova ↔ programma":</p>
+<pre><code class="language-mermaid">flowchart TB
+  A[Proposizione A] --&gt;|interpreta come| B[Tipo A]
+  B --&gt;|abita con un termine| C[Programma t : A]
+  C --&gt;|estrai| D[Dimostrazione di A]
+  D --&gt; A
+</code></pre>
+<h2 id="5-quantificatori-e-dependent-types">5. Quantificatori e dependent types</h2>
+<p>Fin qui abbiamo solo logica proposizionale. I quantificatori richiedono un salto: i tipi devono poter <strong>dipendere da valori</strong>. Un tipo dipendente è qualcosa come <code>Vec n Int</code> — vettori di interi di lunghezza esattamente $n$, dove $n$ è un <em>valore</em>, non una costante sintattica.</p>
+<ul>
+<li>$\forall x{:}A.\,P(x)$ diventa il <strong>prodotto dipendente</strong> $\Pi x{:}A.\,P(x)$: una funzione che a ogni $x:A$ associa una prova di $P(x)$.</li>
+<li>$\exists x{:}A.\,P(x)$ diventa la <strong>somma dipendente</strong> $\Sigma x{:}A.\,P(x)$: una coppia $(a, p)$ dove $a:A$ e $p:P(a)$.</li>
+</ul>
+<p>In Agda o Lean puoi quindi scrivere <em>teoremi come tipi e dimostrazioni come programmi</em> anche al primo ordine.</p>
+<h2 id="6-mini-esempio-in-coq-rocq">6. Mini-esempio in Coq (Rocq)</h2>
+<p>Il teorema "se $A \to B$ e $A$ allora $B$" come programma:</p>
+<pre><code class="language-coq">Definition modus_ponens (A B : Prop) (f : A -&gt; B) (a : A) : B := f a.
+
+(* Oppure come &quot;Theorem&quot; con tattiche: *)
+Theorem mp : forall (A B : Prop), (A -&gt; B) -&gt; A -&gt; B.
+Proof.
+  intros A B f a. apply f. exact a.
+Qed.
+</code></pre>
+<p>Sotto il cofano <code>mp</code> è esattamente la funzione <code>modus_ponens</code>. Le tattiche (<code>intros</code>, <code>apply</code>, <code>exact</code>) costruiscono il termine di prova, che Coq verifica essere ben tipato. Nessun magic: solo type-checking.</p>
+<p>Un esempio leggermente più sostanzioso — la commutatività di $\wedge$:</p>
+<pre><code class="language-coq">Theorem and_comm : forall A B : Prop, A /\ B -&gt; B /\ A.
+Proof.
+  intros A B H. destruct H as [a b]. split.
+  - exact b.
+  - exact a.
+Qed.
+</code></pre>
+<p>Il termine sottostante: <code>fun A B H =&gt; match H with conj a b =&gt; conj b a end</code>. Una semplice destrutturazione di una coppia.</p>
+<h2 id="7-programmazione-e-verifica-formale">7. Programmazione e verifica formale</h2>
+<p>Curry-Howard non è folklore: è il motore di un'intera industria di <strong>verifica formale</strong>.</p>
+<ul>
+<li><strong>Compilatori certificati</strong>: CompCert (Leroy) è un compilatore C scritto e <em>dimostrato corretto</em> in Coq. Il teorema "il binario prodotto è semanticamente equivalente al sorgente" è un termine di tipo enorme ma controllato dalla macchina.</li>
+<li><strong>Teoremi matematici</strong>: il teorema dei quattro colori (Gonthier 2005) e Feit-Thompson (Gonthier 2012) sono stati formalizzati in Coq. Lean ha la libreria mathlib con centinaia di migliaia di teoremi.</li>
+<li><strong>Kernel di sistemi operativi</strong>: seL4 (NICTA, 2009) è un microkernel verificato in Isabelle/HOL.</li>
+<li><strong>Crittografia</strong>: protocolli come TLS sono stati verificati in F* (HACL*, miTLS).</li>
+</ul>
+<p>In tutti questi casi: una proprietà di sicurezza è una proposizione → un tipo; il programma che la rispetta è un termine di quel tipo; il type-checker è il <em>proof-checker</em>.</p>
+<h2 id="8-classico-vs-intuizionista">8. Classico vs intuizionista</h2>
+<p>Curry-Howard, nella forma originale, copre la <strong>logica intuizionista</strong>: niente terzo escluso $A \vee \neg A$ "gratis", niente doppia negazione $\neg\neg A \to A$. Perché? Perché non c'è un programma generale che, dato un tipo $A$, restituisce <em>o</em> un valore di $A$ <em>o</em> una funzione $A \to \mathit{Void}$. Decidere quale dei due richiederebbe poter risolvere problemi indecidibili.</p>
+<p>Per recuperare la logica classica si usa la corrispondenza estesa di <strong>Griffin (1990)</strong>: il terzo escluso corrisponde a operatori di controllo come <code>call/cc</code> (call-with-current-continuation). Una prova classica diventa un programma che manipola continuazioni. È un risultato magnifico ma poco intuitivo, e per molto codice "ordinario" la logica intuizionista è già abbondante.</p>
+<h2 id="9-esercizio">9. Esercizio</h2>
+<details>
+  <summary>Esercizio — scrivi i termini di prova per i seguenti teoremi (in Haskell o pseudo-lambda)</summary>
+
+(a) $A \to (B \to (A \wedge B))$
+
+Termine: $\lambda x.\,\lambda y.\,(x, y)$. Haskell:
+
+
+<pre><code class="language-haskell">pair :: a -&gt; b -&gt; (a, b)
+pair x y = (x, y)
+</code></pre>
+
+
+(b) $(A \wedge B) \to (B \wedge A)$ (commutatività di $\wedge$)
+
+Termine: $\lambda p.\,(\pi_2\, p,\, \pi_1\, p)$. Haskell:
+
+
+<pre><code class="language-haskell">swap :: (a, b) -&gt; (b, a)
+swap (x, y) = (y, x)
+</code></pre>
+
+
+(c) $(A \to B) \to (B \to C) \to (A \to C)$ (composizione = sillogismo ipotetico)
+
+Termine: $\lambda f.\,\lambda g.\,\lambda x.\,g\,(f\,x)$. Haskell: `(.)` rovesciato, ovvero `flip (.)`.
+
+(d) $\neg(A \wedge \neg A)$ (non-contraddizione)
+
+Ricorda $\neg X = X \to \bot$. Cerchiamo un termine di tipo $(A \wedge (A \to \bot)) \to \bot$. Termine: $\lambda p.\,(\pi_2\, p)(\pi_1\, p)$. In Haskell:
+
+
+<pre><code class="language-haskell">nonContradiction :: (a, a -&gt; Void) -&gt; Void
+nonContradiction (a, notA) = notA a
+</code></pre>
+
+
+(e) Prova che il *terzo escluso* $A \vee \neg A$ **non** ha un termine ovvio. Spiegazione: dovresti scrivere `lem :: Either a (a -> Void)` polimorficamente in `a`. Ma quale costruttore scegli? `Left` richiede di produrre un `a` dal nulla; `Right` richiede una funzione che falsifichi *qualunque* `a`. Né l'uno né l'altro è possibile senza informazioni su `a`. Questo è precisamente perché il terzo escluso non è intuizionisticamente derivabile.
+
+</details>
+
+<h2 id="sintesi">Sintesi</h2>
+<ul>
+<li><strong>Curry-Howard</strong> identifica proposizioni con tipi, dimostrazioni con programmi, normalizzazione con valutazione.</li>
+<li>Implicazione ↔ funzione, congiunzione ↔ prodotto, disgiunzione ↔ somma, falso ↔ tipo vuoto.</li>
+<li>I quantificatori richiedono <strong>dependent types</strong> (Martin-Löf): $\forall$ è $\Pi$, $\exists$ è $\Sigma$.</li>
+<li><strong>Coq/Rocq, Agda, Lean</strong> sono assistenti di prova basati su questa identità; producono codice eseguibile <em>e</em> certificato.</li>
+<li>La corrispondenza originale è <strong>intuizionista</strong>; per la logica classica serve l'estensione di Griffin via continuazioni.</li>
+<li>Verifica formale industriale (CompCert, seL4, mathlib) è Curry-Howard applicata su scala reale.</li>
+</ul>
+<h2 id="letture">Letture</h2>
+<ul>
+<li>W. A. Howard, <em>The formulae-as-types notion of construction</em> (1969/1980).</li>
+<li>P. Martin-Löf, <em>Intuitionistic Type Theory</em> (Bibliopolis 1984).</li>
+<li>P. Wadler, <em>Propositions as Types</em> (CACM 2015) — saggio divulgativo eccellente.</li>
+<li>B. Pierce, <em>Types and Programming Languages</em> (MIT Press 2002), cap. 9-11.</li>
+<li>Adam Chlipala, <em>Certified Programming with Dependent Types</em> (MIT Press 2013) — tutorial Coq.</li>
+<li><em>Software Foundations</em> (Pierce et al., online) — corso interattivo in Coq.</li>
+<li>Cross-link: <a href="10-deduzione-naturale.html">Deduzione naturale</a>, <a href="18-logiche-non-classiche.html">Logiche non classiche</a>, <a href="15-metalogica-godel.html">Metalogica e Gödel</a>.</li>
+</ul>
+      <nav class="pager">
+<a href="18-logiche-non-classiche.html" class="prev"><span class="label">← Precedente</span><span class="title">Logiche non classiche: intuizionista, fuzzy, paraconsistente</span></a>
+<a href="20-fallacie-formali.html" class="next"><span class="label">Successivo →</span><span class="title">Fallacie formali: quando la forma del ragionamento mente</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Logica, Problem Solving e Pensiero Critico Zero to Hero</strong> — percorso completo, in italiano, dall'anatomia di un argomento al do-calculus di Pearl.</p><p>Materiale didattico aperto. Nessuna sponsorizzazione. Quando un concetto è oscuro, torna indietro: la logica è una scala, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

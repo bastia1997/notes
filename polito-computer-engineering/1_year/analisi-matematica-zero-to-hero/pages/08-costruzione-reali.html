@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Costruzione di R: Dedekind e Cauchy — Analisi Matematica I Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#1a2647',primaryTextColor:'#f3eed9',primaryBorderColor:'#d4af37',lineColor:'#8aa3c8',background:'#0c1428'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">∫</div>
+      <div>
+        <div class="brand-title">ANALYSIS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">IT</span><a href="../en/pages/08-construction-of-r.html" class="lang-link" title="Switch">EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li><li class="nav-item"><a href="00-intro.html" class=""><span class="num">00</span>Cos&#x27;è l&#x27;analisi matematica</a></li><li class="nav-item"><a href="01-logica-dimostrazioni.html" class=""><span class="num">01</span>Logica e dimostrazioni per l&#x27;analisi</a></li><li class="nav-item"><a href="02-insiemi-funzioni.html" class=""><span class="num">02</span>Insiemi, relazioni, funzioni</a></li><li class="nav-item"><a href="03-induzione-naturali.html" class=""><span class="num">03</span>Numeri naturali e principio di induzione</a></li><li class="nav-item"><a href="04-interi-razionali.html" class=""><span class="num">04</span>Numeri interi e razionali</a></li><li class="nav-item"><a href="05-cardinalita-cantor.html" class=""><span class="num">05</span>Cardinalità e infinito (Cantor)</a></li><li class="nav-item"><a href="06-numeri-reali-assiomi.html" class=""><span class="num">06</span>Numeri reali: gli assiomi</a></li><li class="nav-item"><a href="07-estremo-superiore.html" class=""><span class="num">07</span>Estremo superiore e completezza</a></li><li class="nav-item"><a href="08-costruzione-reali.html" class="active"><span class="num">08</span>Costruzione di R: Dedekind e Cauchy</a></li><li class="nav-item"><a href="09-numeri-complessi.html" class=""><span class="num">09</span>Numeri complessi</a></li><li class="nav-item"><a href="10-topologia-r.html" class=""><span class="num">10</span>Topologia di R: intorni, aperti, chiusi, compatti</a></li><li class="nav-item"><a href="11-successioni-definizione.html" class=""><span class="num">11</span>Successioni e limiti: la definizione ε-N</a></li><li class="nav-item"><a href="12-algebra-limiti-successioni.html" class=""><span class="num">12</span>Algebra dei limiti di successioni</a></li><li class="nav-item"><a href="13-monotone-bolzano-weierstrass.html" class=""><span class="num">13</span>Successioni monotone e Bolzano-Weierstrass</a></li><li class="nav-item"><a href="14-cauchy-completezza.html" class=""><span class="num">14</span>Successioni di Cauchy e completezza di R</a></li><li class="nav-item"><a href="15-limiti-notevoli-landau.html" class=""><span class="num">15</span>Limiti notevoli e simboli di Landau (o-piccolo, O-grande)</a></li><li class="nav-item"><a href="16-liminf-limsup.html" class=""><span class="num">16</span>Limite superiore, limite inferiore, sottosuccessioni</a></li><li class="nav-item"><a href="17-funzioni-elementari.html" class=""><span class="num">17</span>Funzioni elementari: panoramica</a></li><li class="nav-item"><a href="18-esponenziale-logaritmo.html" class=""><span class="num">18</span>Esponenziale, logaritmo, potenze</a></li><li class="nav-item"><a href="19-trigonometriche-iperboliche.html" class=""><span class="num">19</span>Funzioni trigonometriche e iperboliche</a></li><li class="nav-item"><a href="20-limite-funzione.html" class=""><span class="num">20</span>Limite di funzione: la definizione</a></li><li class="nav-item"><a href="21-teoremi-limiti-funzioni.html" class=""><span class="num">21</span>Teoremi sui limiti di funzioni</a></li><li class="nav-item"><a href="22-limiti-notevoli-funzioni.html" class=""><span class="num">22</span>Limiti notevoli per funzioni</a></li><li class="nav-item"><a href="23-asintoti.html" class=""><span class="num">23</span>Asintoti orizzontali, verticali, obliqui</a></li><li class="nav-item"><a href="24-continuita-definizione.html" class=""><span class="num">24</span>Continuità: la definizione e le prime proprietà</a></li><li class="nav-item"><a href="25-teoremi-continue.html" class=""><span class="num">25</span>Teoremi sulle funzioni continue (Weierstrass, valori intermedi)</a></li><li class="nav-item"><a href="26-uniforme-continuita.html" class=""><span class="num">26</span>Uniforme continuità, Heine, lipschitzianità</a></li><li class="nav-item"><a href="27-discontinuita.html" class=""><span class="num">27</span>Tipi di discontinuità</a></li><li class="nav-item"><a href="28-derivata-definizione.html" class=""><span class="num">28</span>Derivata: definizione e interpretazione geometrica</a></li><li class="nav-item"><a href="29-regole-derivazione.html" class=""><span class="num">29</span>Regole di derivazione (somma, prodotto, quoziente, catena)</a></li><li class="nav-item"><a href="30-derivate-elementari.html" class=""><span class="num">30</span>Derivate delle funzioni elementari</a></li><li class="nav-item"><a href="31-teoremi-differenziale.html" class=""><span class="num">31</span>Teoremi del calcolo differenziale: Fermat, Rolle, Lagrange, Cauchy</a></li><li class="nav-item"><a href="32-hopital.html" class=""><span class="num">32</span>Regola di de L&#x27;Hôpital</a></li><li class="nav-item"><a href="33-taylor.html" class=""><span class="num">33</span>Polinomi e formula di Taylor</a></li><li class="nav-item"><a href="34-limiti-taylor.html" class=""><span class="num">34</span>Calcolo di limiti tramite Taylor</a></li><li class="nav-item"><a href="35-monotonia-estremi.html" class=""><span class="num">35</span>Monotonia, massimi, minimi, punti critici</a></li><li class="nav-item"><a href="36-convessita-concavita.html" class=""><span class="num">36</span>Convessità, concavità, flessi</a></li><li class="nav-item"><a href="37-studio-funzione.html" class=""><span class="num">37</span>Studio di funzione completo</a></li><li class="nav-item"><a href="38-applicazioni-ottimizzazione.html" class=""><span class="num">38</span>Applicazioni dell&#x27;ottimizzazione: fisica, economia, geometria</a></li><li class="nav-item"><a href="39-integrale-riemann.html" class=""><span class="num">39</span>Integrale di Riemann: definizione</a></li><li class="nav-item"><a href="40-teorema-fondamentale-calcolo.html" class=""><span class="num">40</span>Teorema fondamentale del calcolo integrale</a></li><li class="nav-item"><a href="41-tecniche-integrazione.html" class=""><span class="num">41</span>Tecniche di integrazione: per parti, per sostituzione</a></li><li class="nav-item"><a href="42-integrali-razionali.html" class=""><span class="num">42</span>Integrazione di funzioni razionali</a></li><li class="nav-item"><a href="43-integrali-impropri.html" class=""><span class="num">43</span>Integrali impropri</a></li><li class="nav-item"><a href="44-funzioni-integrali.html" class=""><span class="num">44</span>Funzioni integrali e applicazioni geometriche</a></li><li class="nav-item"><a href="45-serie-numeriche.html" class=""><span class="num">45</span>Serie numeriche: definizione e convergenza</a></li><li class="nav-item"><a href="46-criteri-positivi.html" class=""><span class="num">46</span>Criteri di convergenza per serie a termini positivi</a></li><li class="nav-item"><a href="47-serie-segno-qualunque.html" class=""><span class="num">47</span>Serie a segno qualunque, Leibniz, convergenza assoluta</a></li><li class="nav-item"><a href="48-serie-potenze.html" class=""><span class="num">48</span>Serie di potenze e raggio di convergenza</a></li><li class="nav-item"><a href="49-serie-taylor.html" class=""><span class="num">49</span>Serie di Taylor e analiticità</a></li><li class="nav-item"><a href="50-serie-fourier-cenni.html" class=""><span class="num">50</span>Serie di Fourier: introduzione</a></li><li class="nav-item"><a href="51-edo-primo-ordine.html" class=""><span class="num">51</span>EDO del primo ordine</a></li><li class="nav-item"><a href="52-edo-lineari-ordine-n.html" class=""><span class="num">52</span>EDO lineari di ordine $n$ a coefficienti costanti</a></li><li class="nav-item"><a href="53-cauchy-esistenza-unicita.html" class=""><span class="num">53</span>Problema di Cauchy, esistenza e unicità</a></li><li class="nav-item"><a href="54-topologia-rn.html" class=""><span class="num">54</span>Topologia in $\mathbb{R}^n$</a></li><li class="nav-item"><a href="55-derivate-parziali-differenziale.html" class=""><span class="num">55</span>Derivate parziali e differenziale in più variabili</a></li><li class="nav-item"><a href="56-cenni-lebesgue-funzionale.html" class=""><span class="num">56</span>Oltre Riemann: Lebesgue, Banach, Hilbert</a></li><li class="nav-item"><a href="57-eserciziario.html" class=""><span class="num">57</span>Eserciziario: problemi tipo d&#x27;esame</a></li><li class="nav-item"><a href="58-glossario-az.html" class=""><span class="num">58</span>Glossario A-Z dell&#x27;Analisi Matematica I</a></li><li class="nav-item"><a href="59-formulario-completo.html" class=""><span class="num">59</span>Formulario completo di Analisi Matematica I</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Numeri reali</span>
+        <span>Sezione 8 di 59</span>
+        <span class="level-tag level-adv">Livello: avanzato</span>
+      </div>
+      <h1>Costruzione di R: Dedekind e Cauchy</h1>
+      <p class="summary">Costruire $\mathbb{R}$ partendo da $\mathbb{Q}$. Due strade — **sezioni di Dedekind** (tagli sull&#x27;asse razionale) e **completamento di Cauchy** (successioni che si addensano). Entrambe danno lo stesso $\mathbb{R}$.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Numeri reali</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>$\mathbb{Q}$ non completo (sez. 04)</li><li>Assiomi di $\mathbb{R}$ (sez. 06)</li><li>Estremo superiore (sez. 07)</li></ul>
+  <div class="label">Strumenti / riferimenti</div>
+  <ul class="source-list"><li>Rudin — *Principles of Mathematical Analysis*, appendice</li><li>Landau — *Foundations of Analysis*</li><li>Pugh — *Real Mathematical Analysis*</li></ul>
+</div>
+      <h2 id="perche-parlarne">Perché parlarne</h2>
+<p>Nelle sezioni 06–07 abbiamo <strong>postulato</strong> che esista un campo ordinato completo (chiamato $\mathbb{R}$) e ne abbiamo studiato le proprietà. Adesso facciamo il passo che mancava: <strong>costruirlo davvero</strong> a partire da $\mathbb{Q}$, dimostrando così che $\mathbb{R}$ esiste e non è solo un'astrazione consolatoria.</p>
+<p>Due strade classiche:
+1. <strong>Dedekind (1872)</strong> — un numero reale è un "taglio" dell'asse razionale.
+2. <strong>Cauchy (formalizzato da Méray, Cantor, ~1870)</strong> — un numero reale è una "classe di successioni razionali che si addensano".</p>
+<p>Entrambe portano allo stesso $\mathbb{R}$ (a meno di isomorfismo, sez. 06). Il completamento di Cauchy è inoltre una <strong>tecnica generale</strong>, che riapplicherete a tappare buchi in altri spazi (es. $L^p$ in analisi funzionale, $\mathbb{Q}_p$ in teoria dei numeri).</p>
+<h2 id="lidea-generale">L'idea generale</h2>
+<p>$\mathbb{Q}$ ha <strong>buchi</strong> (cap. 04): per esempio $\sqrt 2$ "dovrebbe" stare in mezzo ai razionali ma non c'è. Vogliamo costruire $\mathbb{R}$ riempiendo i buchi. Due modi di farlo:</p>
+<ol>
+<li>
+<p><strong>Dedekind</strong>: ogni reale $r$ taglia $\mathbb{Q}$ in due insiemi: razionali $< r$ e razionali $\ge r$. Possiamo <em>identificare</em> $r$ con la sua metà sinistra del taglio. Anche per $\sqrt 2$: definiamo $\sqrt 2$ come l'insieme $\{q \in \mathbb{Q} : q^2 < 2\ \lor\ q \le 0\}$.</p>
+</li>
+<li>
+<p><strong>Cauchy</strong>: la successione $1, 1.4, 1.41, 1.414, \dots$ "vorrebbe convergere a $\sqrt 2$" ma il limite non sta in $\mathbb{Q}$. Identifichiamo $\sqrt 2$ con la successione stessa, modulo equivalenza con altre successioni che hanno lo stesso "limite ideale".</p>
+</li>
+</ol>
+<pre><code class="language-mermaid">flowchart LR
+  Q[&quot;Q: incompleto&quot;]
+  Q --&gt; D[&quot;Sezioni di Dedekind&quot;]
+  Q --&gt; C[&quot;Completamento di Cauchy&quot;]
+  D --&gt; R1[&quot;R (Dedekind)&quot;]
+  C --&gt; R2[&quot;R (Cauchy)&quot;]
+  R1 -.isomorfi.- R2
+</code></pre>
+<h2 id="costruzione-1-sezioni-di-dedekind">Costruzione 1: Sezioni di Dedekind</h2>
+<h3 id="definizione-di-sezione">Definizione di sezione</h3>
+<p><strong>Definizione.</strong> Una <strong>sezione di Dedekind</strong> è un sottoinsieme $\alpha \subseteq \mathbb{Q}$ che soddisfa:</p>
+<ul>
+<li><strong>(D1)</strong> $\alpha \ne \emptyset$ e $\alpha \ne \mathbb{Q}$ (è "qualcosa, ma non tutto").</li>
+<li><strong>(D2)</strong> Se $p \in \alpha$ e $q < p$ (in $\mathbb{Q}$), allora $q \in \alpha$. (chiuso "verso il basso").</li>
+<li><strong>(D3)</strong> $\alpha$ <strong>non ha massimo</strong>.</li>
+</ul>
+<p>L'insieme di tutte le sezioni si chiama $\mathbb{R}_D$ ("R alla Dedekind").</p>
+<blockquote>
+<p><strong>Glossarietto:</strong></p>
+<ul>
+<li>$\alpha$ ("alfa") = un sottoinsieme di $\mathbb{Q}$ — la "metà sinistra" del taglio.</li>
+<li>"Chiuso verso il basso" = se prendi un elemento, ogni razionale più piccolo è anche dentro.</li>
+<li>"Non ha massimo" = non c'è un elemento più grande di tutti gli altri all'interno della sezione (può però avere un sup esterno).</li>
+</ul>
+</blockquote>
+<h3 id="esempi">Esempi</h3>
+<p><strong>1.</strong> Per $r \in \mathbb{Q}$, definiamo
+$$\alpha_r := \{q \in \mathbb{Q} : q < r\}.$$
+È una sezione. (D1)✓ (D2)✓ (D3): se $q < r$, per densità di $\mathbb{Q}$ esiste $q'$ con $q < q' < r$, quindi $q' \in \alpha_r$ e $q' > q$, dunque $q$ non è max.</p>
+<p><strong>Quindi ogni razionale è "rappresentato" da una sezione</strong>.</p>
+<p><strong>2.</strong> La sezione che corrisponde a $\sqrt 2$:
+$$\alpha_{\sqrt 2} := \{q \in \mathbb{Q} : q \le 0\} \cup \{q \in \mathbb{Q}^+ : q^2 < 2\}.$$</p>
+<p>È una sezione (verifica le D1, D2, D3). <strong>Non è del tipo $\alpha_r$ con $r \in \mathbb{Q}$</strong>, perché non esiste razionale con quadrato 2. Questo è il "buco" — e Dedekind dice: il buco <em>è</em> il numero $\sqrt 2$.</p>
+<h3 id="ordine">Ordine</h3>
+<p><strong>Definizione.</strong> $\alpha \le \beta \iff \alpha \subseteq \beta$ (l'inclusione fra insiemi).</p>
+<p>Si verifica che è un ordine totale (esercizio non banale ma diretto).</p>
+<h3 id="somma">Somma</h3>
+<p><strong>Definizione.</strong> $\alpha + \beta := \{p + q : p \in \alpha,\ q \in \beta\}$.</p>
+<p>Si verifica che è ancora una sezione. Lo zero è $\alpha_0 = \{q \in \mathbb{Q} : q < 0\}$. L'opposto $-\alpha$ richiede un piccolo aggiustamento tecnico (per garantire (D3)): $-\alpha = \{-p : p \in \mathbb{Q} \setminus \alpha,\ p \text{ non è min di } \mathbb{Q} \setminus \alpha\}$.</p>
+<h3 id="prodotto">Prodotto</h3>
+<p>Più tecnico, definito per casi col segno. <strong>Caso $\alpha, \beta \ge \alpha_0$</strong>:
+$$\alpha \cdot \beta := \alpha_0 \cup \{p q : p \in \alpha, q \in \beta, p \ge 0, q \ge 0\}.$$
+Unità moltiplicativa: $\alpha_1 = \{q < 1\}$.</p>
+<h3 id="il-punto-chiave-completezza-e-automatica">Il punto chiave: completezza è automatica</h3>
+<p><strong>Teorema (completezza di $\mathbb{R}_D$).</strong> Ogni famiglia non vuota di sezioni superiormente limitata ammette estremo superiore.</p>
+<p><em>Dim. (sorprendentemente semplice).</em> Sia $\mathcal F$ una famiglia di sezioni con un maggiorante $\gamma$ (cioè $\alpha \subseteq \gamma$ per ogni $\alpha \in \mathcal F$). Definisci
+$$\sigma := \bigcup_{\alpha \in \mathcal F} \alpha.$$</p>
+<p>Affermiamo che $\sigma$ è una sezione, ed è il sup di $\mathcal F$.</p>
+<ul>
+<li><strong>(D1)</strong> $\sigma$ non vuota (eredita da una qualsiasi $\alpha \in \mathcal F$); $\sigma \subseteq \gamma \ne \mathbb{Q}$, quindi $\sigma \ne \mathbb{Q}$.</li>
+<li><strong>(D2)</strong> Se $p \in \sigma$, allora $p \in \alpha$ per qualche $\alpha$; ogni $q < p$ sta in $\alpha \subseteq \sigma$.</li>
+<li><strong>(D3)</strong> Se $p \in \sigma$, sta in qualche $\alpha$ che non ha max; quindi esiste $q \in \alpha$ con $q > p$, e $q \in \sigma$.</li>
+</ul>
+<p><em>Maggiorante</em>: $\alpha \subseteq \sigma$ per ogni $\alpha \in \mathcal F$ (banale).
+<em>Minimo dei maggioranti</em>: se $\tau$ è maggiorante, $\alpha \subseteq \tau$ per ogni $\alpha$, quindi $\sigma = \bigcup \alpha \subseteq \tau$. ∎</p>
+<blockquote>
+<p><strong>Eleganza.</strong> Il sup di una famiglia di sezioni è <strong>semplicemente l'unione</strong>. Niente di più. La completezza è incorporata nella struttura insiemistica. Bellissimo.</p>
+</blockquote>
+<div class="chart">
+<svg viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="600" height="300" fill="#111a30"/>
+  <line x1="30" y1="180" x2="570" y2="180" stroke="#f3eed9" stroke-width="2"/>
+  <text x="300" y="210" fill="#f3eed9" font-family="serif" font-size="13" text-anchor="middle">Q</text>
+  <rect x="30" y="170" width="270" height="20" fill="#d4af37" fill-opacity="0.4"/>
+  <text x="160" y="155" fill="#d4af37" font-family="serif" font-size="14">α (sezione)</text>
+  <rect x="300" y="170" width="270" height="20" fill="#6aa9d8" fill-opacity="0.3"/>
+  <text x="430" y="155" fill="#6aa9d8" font-family="serif" font-size="14">Q ∖ α</text>
+  <line x1="300" y1="100" x2="300" y2="220" stroke="#e07a8d" stroke-width="2" stroke-dasharray="4 4"/>
+  <text x="300" y="90" fill="#e07a8d" font-family="serif" font-size="14" text-anchor="middle">taglio = √2 (irrazionale!)</text>
+  <text x="300" y="260" fill="#f3eed9" font-family="serif" font-size="13" text-anchor="middle">Una sezione di Dedekind è la metà sinistra del taglio</text>
+</svg>
+<div class="chart-caption">Sezione di Dedekind: la metà sinistra di un taglio di $\mathbb{Q}$. Il "punto di taglio" può non esistere in $\mathbb{Q}$ (come $\sqrt 2$), e questa stessa sezione *è* il nuovo numero reale.</div>
+</div>
+
+<h3 id="immersione-di-math90-in-math91">Immersione di $\mathbb{Q}$ in $\mathbb{R}_D$</h3>
+<p>$r \mapsto \alpha_r$ è iniettiva e conserva ordine, somma, prodotto. Quindi $\mathbb{Q}$ si identifica con un sottoinsieme di $\mathbb{R}_D$, e il "vecchio" $\mathbb{Q}$ vive dentro al "nuovo" $\mathbb{R}_D$.</p>
+<h2 id="costruzione-2-completamento-di-cauchy">Costruzione 2: Completamento di Cauchy</h2>
+<h3 id="lidea">L'idea</h3>
+<p>$\sqrt 2$ non sta in $\mathbb{Q}$, ma la successione razionale
+$$1,\ 1.4,\ 1.41,\ 1.414,\ 1.4142,\ \dots$$
+<em>vorrebbe</em> convergere a $\sqrt 2$. I suoi termini "si avvicinano fra loro a piacere", anche se non hanno un limite in $\mathbb{Q}$.</p>
+<p>L'idea di Cauchy: <strong>identifichiamo i reali con queste successioni razionali</strong>, modulo un'equivalenza che dice "due successioni rappresentano lo stesso reale se i loro termini convergono allo stesso limite ideale".</p>
+<h3 id="successioni-di-cauchy-in-math101">Successioni di Cauchy in $\mathbb{Q}$</h3>
+<p><strong>Definizione.</strong> Una successione $(a_n) \subseteq \mathbb{Q}$ è <strong>di Cauchy</strong> se i suoi termini si stringono fra loro a piacere:
+$$\forall \varepsilon \in \mathbb{Q}^+,\ \exists N \in \mathbb{N} : \forall n, m \ge N,\ |a_n - a_m| < \varepsilon.$$</p>
+<blockquote>
+<p><strong>Glossarietto della formula:</strong></p>
+<ul>
+<li>$\varepsilon$ = una distanza piccola positiva (razionale, per stare dentro $\mathbb{Q}$).</li>
+<li>$\forall \varepsilon \in \mathbb{Q}^+$ = "per ogni soglia di vicinanza razionale positiva".</li>
+<li>$\exists N$ = "esiste un indice $N$" (la "soglia temporale" da cui in poi la cosa vale).</li>
+<li>$\forall n, m \ge N$ = "per ogni coppia di indici dopo $N$".</li>
+<li>$|a_n - a_m| < \varepsilon$ = "$a_n$ e $a_m$ distano meno di $\varepsilon$".</li>
+</ul>
+<p><strong>Tradotto:</strong> per quanto piccola scegli la soglia $\varepsilon$, <strong>da un certo punto $N$ in poi</strong> tutti i termini della successione sono entro $\varepsilon$ l'uno dall'altro. La successione "si addensa".</p>
+</blockquote>
+<p>Esempio: $1, 1.4, 1.41, 1.414, \dots$ è di Cauchy in $\mathbb{Q}$ (verifica: $|a_n - a_m| \le 10^{-\min(n,m)}$, che va a zero).</p>
+<h3 id="equivalenza">Equivalenza</h3>
+<p><strong>Definizione.</strong> $(a_n) \sim (b_n)$ se la differenza tende a zero:
+$$\forall \varepsilon > 0,\ \exists N : \forall n \ge N,\ |a_n - b_n| < \varepsilon.$$</p>
+<blockquote>
+<p><strong>Tradotto:</strong> due successioni di Cauchy rappresentano lo stesso "limite ideale" se la loro differenza si annulla.</p>
+</blockquote>
+<p>Verifica che è di equivalenza: riflessiva e simmetrica ovvie; transitiva via triangolare $|a_n - c_n| \le |a_n - b_n| + |b_n - c_n|$.</p>
+<h3 id="definizione-di-math122">Definizione di $\mathbb{R}_C$</h3>
+<p>$$\mathbb{R}_C := \frac{\{\text{successioni di Cauchy in } \mathbb{Q}\}}{\sim}.$$</p>
+<p>Cioè: i reali "alla Cauchy" sono <strong>classi di equivalenza di successioni di Cauchy razionali</strong>. La classe $[(a_n)]$ rappresenta "il limite ideale" della successione.</p>
+<h3 id="operazioni">Operazioni</h3>
+<ul>
+<li><strong>Somma</strong>: $[(a_n)] + [(b_n)] := [(a_n + b_n)]$.</li>
+<li><strong>Prodotto</strong>: $[(a_n)] \cdot [(b_n)] := [(a_n b_n)]$.</li>
+</ul>
+<p>Buona definizione: somme e prodotti di successioni di Cauchy sono di Cauchy (richiede un po' di lavoro tecnico), e l'equivalenza si conserva.</p>
+<h3 id="ordine_1">Ordine</h3>
+<p>$[(a_n)] < [(b_n)]$ se esiste $\varepsilon \in \mathbb{Q}^+$ e $N \in \mathbb{N}$ con $b_n - a_n \ge \varepsilon$ per $n \ge N$.</p>
+<blockquote>
+<p><strong>A parole:</strong> "$(b_n)$ è definitivamente almeno $\varepsilon$ sopra $(a_n)$". Definizione tecnica, ma è quella giusta per essere indipendente dai rappresentanti.</p>
+</blockquote>
+<h3 id="completezza">Completezza</h3>
+<p><strong>Teorema.</strong> $\mathbb{R}_C$ è completo: ogni successione di Cauchy <em>in $\mathbb{R}_C$</em> converge <em>in $\mathbb{R}_C$</em>.</p>
+<p><em>Idea di dim.</em> Data una successione di Cauchy $(\xi_n)$ di reali (classi di Cauchy razionali), scegliamo un rappresentante razionale "vicino" per ognuno: $r_n \in \mathbb{Q}$ con $|\xi_n - r_n| < 1/n$. Si verifica che $(r_n)$ è una successione di Cauchy razionale. Sia $\xi = [(r_n)]$. Allora $\xi_n \to \xi$. ∎</p>
+<blockquote>
+<p><strong>Generalizzazione.</strong> Questo schema (prendere Cauchy in uno spazio metrico $X$, identificarle modulo equivalenza, ottenere un nuovo spazio completo $\hat X$ contenente $X$ in modo denso) si chiama <strong>completamento metrico</strong> e si applica a <em>qualunque</em> spazio metrico. Lo userete in analisi funzionale.</p>
+</blockquote>
+<h2 id="equivalenza-delle-due-costruzioni">Equivalenza delle due costruzioni</h2>
+<p><strong>Teorema.</strong> $\mathbb{R}_D$ e $\mathbb{R}_C$ sono entrambi campi ordinati completi. Per il teorema di unicità (sez. 06), sono <strong>isomorfi</strong>.</p>
+<p><strong>Isomorfismo esplicito (idea).</strong> Una sezione $\alpha$ corrisponde alla classe della successione $(a_n)$, dove $a_n$ = "il più grande razionale di denominatore $n$ che sta in $\alpha$".</p>
+<p>Viceversa: una successione di Cauchy $(a_n)$ corrisponde alla sezione $\{q \in \mathbb{Q} : q < a_n \text{ definitivamente}\}$.</p>
+<h2 id="il-risultato-finale">Il risultato finale</h2>
+<pre><code class="language-mermaid">flowchart TB
+  Start[&quot;Partiamo da N (Peano)&quot;]
+  Start --&gt; Int[&quot;Costruiamo Z (classi di equivalenza)&quot;]
+  Int --&gt; Rat[&quot;Costruiamo Q (frazioni)&quot;]
+  Rat --&gt; Sez[&quot;Sezioni di Dedekind&quot;]
+  Rat --&gt; Cau[&quot;Completamento di Cauchy&quot;]
+  Sez --&gt; R[&quot;R: unico (a iso) campo ordinato completo&quot;]
+  Cau --&gt; R
+</code></pre>
+<p>$\mathbb{R}$ <strong>esiste</strong>, è <strong>unico</strong>, è <strong>completo</strong>, e tutte le proprietà postulate in sezione 06 sono in realtà <strong>dimostrabili</strong>. Adesso sappiamo che la matematica che useremo nei prossimi capitoli poggia su fondamenta solide.</p>
+<h2 id="perche-due-costruzioni">Perché due costruzioni?</h2>
+<p><strong>Dedekind</strong>: più diretto, completezza incorporata (basta unione di insiemi). Limitato però: non si generalizza molto oltre $\mathbb{R}$.</p>
+<p><strong>Cauchy</strong>: tecnica più generale. Si applica:
+- ai numeri $p$-adici $\mathbb{Q}_p$ (con un'altra metrica su $\mathbb{Q}$, ottieni un <em>altro</em> campo completo);
+- al completamento di spazi vettoriali normati;
+- all'analisi funzionale (gli spazi $L^p$ come completamenti di funzioni a gradino).</p>
+<p>Nell'analisi moderna si usa quasi sempre la tecnica di Cauchy.</p>
+<h2 id="esempi-numerici">Esempi numerici</h2>
+<p><strong>1.</strong> $\sqrt 2$ in Dedekind: $\alpha = \{q \in \mathbb{Q} : q \le 0\} \cup \{q > 0 : q^2 < 2\}$.</p>
+<p><strong>2.</strong> $\sqrt 2$ in Cauchy (metodo di Erone): $a_0 = 1$, $a_{n+1} = \dfrac{a_n + 2/a_n}{2}$. Successione di Cauchy razionale, la cui classe è $\sqrt 2$.</p>
+<p><strong>3.</strong> $e$ in Cauchy: $a_n = \sum_{k=0}^n \frac{1}{k!}$. Successione di Cauchy razionale, classe = $e$.</p>
+<p><strong>4.</strong> $\pi$ in Cauchy: vari modi (Leibniz–Madhava $4(1 - \frac 1 3 + \frac 1 5 - \frac 1 7 + \dots)$, formula di Machin, ecc.).</p>
+<h2 id="numeri-math172-adici-cenno">Numeri $p$-adici (cenno)</h2>
+<p>Su $\mathbb{Q}$ esistono metriche diverse da $|\cdot|$. Fissato un primo $p$:
+$$|x|_p := p^{-v_p(x)}$$
+dove $v_p(x)$ è l'esponente di $p$ nella fattorizzazione di $x$.</p>
+<blockquote>
+<p><strong>Esempio.</strong> $v_2(12) = 2$ (perché $12 = 4 \cdot 3 = 2^2 \cdot 3$). Quindi $|12|_2 = 2^{-2} = 1/4$.</p>
+</blockquote>
+<p>Con la metrica $p$-adica, "$x$ è piccolo" significa "$x$ è divisibile per molte potenze di $p$". Strano, ma è una metrica vera.</p>
+<p>Il <strong>completamento di Cauchy</strong> di $\mathbb{Q}$ rispetto a $|\cdot|_p$ produce un campo $\mathbb{Q}_p$ — i numeri $p$-adici. È completo, ha cardinalità $\mathfrak{c}$, ma è <strong>diverso</strong> da $\mathbb{R}$ (non è nemmeno ordinabile).</p>
+<p><strong>Teorema di Ostrowski.</strong> Su $\mathbb{Q}$ esistono <em>solo</em>: la metrica banale, $|\cdot|$ (che dà $\mathbb{R}$), e $|\cdot|_p$ per $p$ primo (che danno $\mathbb{Q}_p$). Nient'altro.</p>
+<h2 id="esercizi">Esercizi</h2>
+<details>
+<summary>Esercizio 1 — Perché (D3)?</summary>
+
+Spiega perché nella definizione di sezione richiediamo "$\alpha$ non ha massimo".
+
+**Soluzione.** Senza (D3), $\alpha_r$ con $r$ razionale avrebbe **due** rappresentazioni come sezione: $\{q < r\}$ e $\{q \le r\}$. Sarebbero diverse come insiemi, ma rappresenterebbero lo stesso reale $r$, complicando la corrispondenza. (D3) fissa una scelta canonica, garantendo che ogni reale abbia **un'unica** sezione.
+</details>
+
+<details>
+<summary>Esercizio 2 — Cauchy in $\mathbb{Q}$ che non converge in $\mathbb{Q}$</summary>
+
+Dai un esempio esplicito.
+
+**Soluzione.** $a_n$ = approssimazione decimale di $\sqrt 2$ a $n$ cifre: $1, 1.4, 1.41, 1.414, 1.4142, \dots$.
+
+È di Cauchy razionale (in $\mathbb{Q}$): $|a_n - a_m| \le 10^{-\min(n, m)} \to 0$.
+
+Non converge in $\mathbb{Q}$: se convergesse a $r \in \mathbb{Q}$, allora $a_n^2 \to r^2$ ma anche $a_n^2 \to 2$, quindi $r^2 = 2$ con $r \in \mathbb{Q}$ — impossibile (sez. 04).
+</details>
+
+<details>
+<summary>Esercizio 3 — Sezione che rappresenta $-\sqrt 2$</summary>
+
+Scrivi la sezione di Dedekind corrispondente a $-\sqrt 2$.
+
+**Soluzione.** $\alpha_{-\sqrt 2} = \{q \in \mathbb{Q} : q < -\sqrt 2\} = \{q \in \mathbb{Q} : q < 0\ \text{e}\ q^2 > 2\}$.
+
+In parole: tutti i razionali strettamente negativi con quadrato $> 2$. Si verifica (D1)–(D3).
+</details>
+
+<details>
+<summary>Esercizio 4 — Somma di sezioni</summary>
+
+Calcola $\alpha_{1/2} + \alpha_{1/3}$ e verifica che è uguale a $\alpha_{5/6}$.
+
+**Soluzione.** Per definizione, $\alpha_{1/2} + \alpha_{1/3} = \{p + q : p < 1/2,\ q < 1/3\}$.
+
+- **$\subseteq$**: se $p < 1/2$ e $q < 1/3$, allora $p + q < 5/6$.
+- **$\supseteq$**: dato $s < 5/6$, sia $\delta = (5/6 - s)/2 > 0$. Prendi $p = 1/2 - \delta$ e $q = s - p$. Allora $p < 1/2$, e $q = s - 1/2 + \delta = s - 1/2 + (5/6 - s)/2 = (s + 5/6)/2 - 1/2 = (s - 1/6)/2$. Per $s < 5/6$, $q < (5/6 - 1/6)/2 = 1/3$. ✓
+
+Quindi $s = p + q$ con $p \in \alpha_{1/2}$ e $q \in \alpha_{1/3}$.
+</details>
+
+<details>
+<summary>Esercizio 5 — Completamento di uno spazio metrico generico</summary>
+
+Generalizza la costruzione di Cauchy: dato uno spazio metrico $(X, d)$, definisci formalmente il completamento $\hat X$.
+
+**Soluzione (schema).**
+
+- Sia $\mathcal C$ l'insieme di tutte le successioni di Cauchy in $(X, d)$.
+- Relazione: $(x_n) \sim (y_n) \iff d(x_n, y_n) \to 0$.
+- $\hat X := \mathcal C / \sim$.
+- Metrica: $\hat d([(x_n)], [(y_n)]) := \lim_n d(x_n, y_n)$. (Il limite esiste perché $(d(x_n, y_n))$ è una successione di Cauchy reale, e $\mathbb{R}$ è completo.)
+- Immersione: $X \hookrightarrow \hat X$, $x \mapsto [(x, x, x, \dots)]$ (successione costante).
+- $\hat X$ è completo (stessa logica di $\mathbb{R}_C$).
+- $X$ è denso in $\hat X$.
+
+Questa è la costruzione standard del **completamento metrico**, alla base di tutta l'analisi funzionale.
+</details>
+
+<h2 id="trappole-comuni">Trappole comuni</h2>
+<ul>
+<li><strong>Sezione ≠ insieme qualsiasi</strong>: tutte e tre le proprietà (D1)–(D3) sono necessarie.</li>
+<li><strong>Cauchy razionale ≠ convergente in $\mathbb{Q}$</strong>. Ogni successione che converge in $\mathbb{Q}$ è di Cauchy, ma il viceversa è falso (è proprio il fallimento della completezza di $\mathbb{Q}$).</li>
+<li><strong>Confondere "Cauchy" con "convergente"</strong>: in uno spazio metrico generico, le successioni di Cauchy possono non convergere. <strong>Completezza</strong> = "ogni Cauchy converge".</li>
+<li><strong>Trascurare l'unicità a meno di isomorfismo</strong>: una volta provato che esiste un campo ordinato completo, l'unicità ti dice che $\mathbb{R}_D$ e $\mathbb{R}_C$ sono "lo stesso oggetto" descritto in due lingue.</li>
+</ul>
+<blockquote>
+<p><strong>Pillola.</strong> Quando un libro dice "consideriamo $\mathbb{R}$", presuppone tacitamente una di queste due costruzioni. Per usare l'analisi quotidianamente non importa quale: ti basta che $\mathbb{R}$ esista. Ma il giorno in cui dovrai completare $L^2$ o capire $\mathbb{Q}_p$, ti tornerà utile aver visto Cauchy.</p>
+</blockquote>
+<h2 id="riassunto-in-una-riga">Riassunto in una riga</h2>
+<p>$\mathbb{R}$ si costruisce da $\mathbb{Q}$ in due modi equivalenti: <strong>sezioni di Dedekind</strong> (tagli sull'asse razionale) o <strong>completamento di Cauchy</strong> (classi di successioni razionali che si addensano) — entrambe producono lo stesso unico campo ordinato completo.</p>
+      <nav class="pager">
+<a href="07-estremo-superiore.html" class="prev"><span class="label">← Precedente</span><span class="title">Estremo superiore e completezza</span></a>
+<a href="09-numeri-complessi.html" class="next"><span class="label">Successivo →</span><span class="title">Numeri complessi</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Analisi Matematica I Zero to Hero</strong> — percorso completo bilingue, dai naturali agli integrali impropri, dalle serie di Fourier alle EDO lineari.</p><p>Materiale didattico aperto. Quando una dimostrazione è oscura, torna indietro: l'analisi è una scala, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

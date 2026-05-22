@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Serie di Taylor e analiticità — Analisi Matematica I Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#1a2647',primaryTextColor:'#f3eed9',primaryBorderColor:'#d4af37',lineColor:'#8aa3c8',background:'#0c1428'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">∫</div>
+      <div>
+        <div class="brand-title">ANALYSIS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">IT</span><a href="../en/pages/49-taylor-series.html" class="lang-link" title="Switch">EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li><li class="nav-item"><a href="00-intro.html" class=""><span class="num">00</span>Cos&#x27;è l&#x27;analisi matematica</a></li><li class="nav-item"><a href="01-logica-dimostrazioni.html" class=""><span class="num">01</span>Logica e dimostrazioni per l&#x27;analisi</a></li><li class="nav-item"><a href="02-insiemi-funzioni.html" class=""><span class="num">02</span>Insiemi, relazioni, funzioni</a></li><li class="nav-item"><a href="03-induzione-naturali.html" class=""><span class="num">03</span>Numeri naturali e principio di induzione</a></li><li class="nav-item"><a href="04-interi-razionali.html" class=""><span class="num">04</span>Numeri interi e razionali</a></li><li class="nav-item"><a href="05-cardinalita-cantor.html" class=""><span class="num">05</span>Cardinalità e infinito (Cantor)</a></li><li class="nav-item"><a href="06-numeri-reali-assiomi.html" class=""><span class="num">06</span>Numeri reali: gli assiomi</a></li><li class="nav-item"><a href="07-estremo-superiore.html" class=""><span class="num">07</span>Estremo superiore e completezza</a></li><li class="nav-item"><a href="08-costruzione-reali.html" class=""><span class="num">08</span>Costruzione di R: Dedekind e Cauchy</a></li><li class="nav-item"><a href="09-numeri-complessi.html" class=""><span class="num">09</span>Numeri complessi</a></li><li class="nav-item"><a href="10-topologia-r.html" class=""><span class="num">10</span>Topologia di R: intorni, aperti, chiusi, compatti</a></li><li class="nav-item"><a href="11-successioni-definizione.html" class=""><span class="num">11</span>Successioni e limiti: la definizione ε-N</a></li><li class="nav-item"><a href="12-algebra-limiti-successioni.html" class=""><span class="num">12</span>Algebra dei limiti di successioni</a></li><li class="nav-item"><a href="13-monotone-bolzano-weierstrass.html" class=""><span class="num">13</span>Successioni monotone e Bolzano-Weierstrass</a></li><li class="nav-item"><a href="14-cauchy-completezza.html" class=""><span class="num">14</span>Successioni di Cauchy e completezza di R</a></li><li class="nav-item"><a href="15-limiti-notevoli-landau.html" class=""><span class="num">15</span>Limiti notevoli e simboli di Landau (o-piccolo, O-grande)</a></li><li class="nav-item"><a href="16-liminf-limsup.html" class=""><span class="num">16</span>Limite superiore, limite inferiore, sottosuccessioni</a></li><li class="nav-item"><a href="17-funzioni-elementari.html" class=""><span class="num">17</span>Funzioni elementari: panoramica</a></li><li class="nav-item"><a href="18-esponenziale-logaritmo.html" class=""><span class="num">18</span>Esponenziale, logaritmo, potenze</a></li><li class="nav-item"><a href="19-trigonometriche-iperboliche.html" class=""><span class="num">19</span>Funzioni trigonometriche e iperboliche</a></li><li class="nav-item"><a href="20-limite-funzione.html" class=""><span class="num">20</span>Limite di funzione: la definizione</a></li><li class="nav-item"><a href="21-teoremi-limiti-funzioni.html" class=""><span class="num">21</span>Teoremi sui limiti di funzioni</a></li><li class="nav-item"><a href="22-limiti-notevoli-funzioni.html" class=""><span class="num">22</span>Limiti notevoli per funzioni</a></li><li class="nav-item"><a href="23-asintoti.html" class=""><span class="num">23</span>Asintoti orizzontali, verticali, obliqui</a></li><li class="nav-item"><a href="24-continuita-definizione.html" class=""><span class="num">24</span>Continuità: la definizione e le prime proprietà</a></li><li class="nav-item"><a href="25-teoremi-continue.html" class=""><span class="num">25</span>Teoremi sulle funzioni continue (Weierstrass, valori intermedi)</a></li><li class="nav-item"><a href="26-uniforme-continuita.html" class=""><span class="num">26</span>Uniforme continuità, Heine, lipschitzianità</a></li><li class="nav-item"><a href="27-discontinuita.html" class=""><span class="num">27</span>Tipi di discontinuità</a></li><li class="nav-item"><a href="28-derivata-definizione.html" class=""><span class="num">28</span>Derivata: definizione e interpretazione geometrica</a></li><li class="nav-item"><a href="29-regole-derivazione.html" class=""><span class="num">29</span>Regole di derivazione (somma, prodotto, quoziente, catena)</a></li><li class="nav-item"><a href="30-derivate-elementari.html" class=""><span class="num">30</span>Derivate delle funzioni elementari</a></li><li class="nav-item"><a href="31-teoremi-differenziale.html" class=""><span class="num">31</span>Teoremi del calcolo differenziale: Fermat, Rolle, Lagrange, Cauchy</a></li><li class="nav-item"><a href="32-hopital.html" class=""><span class="num">32</span>Regola di de L&#x27;Hôpital</a></li><li class="nav-item"><a href="33-taylor.html" class=""><span class="num">33</span>Polinomi e formula di Taylor</a></li><li class="nav-item"><a href="34-limiti-taylor.html" class=""><span class="num">34</span>Calcolo di limiti tramite Taylor</a></li><li class="nav-item"><a href="35-monotonia-estremi.html" class=""><span class="num">35</span>Monotonia, massimi, minimi, punti critici</a></li><li class="nav-item"><a href="36-convessita-concavita.html" class=""><span class="num">36</span>Convessità, concavità, flessi</a></li><li class="nav-item"><a href="37-studio-funzione.html" class=""><span class="num">37</span>Studio di funzione completo</a></li><li class="nav-item"><a href="38-applicazioni-ottimizzazione.html" class=""><span class="num">38</span>Applicazioni dell&#x27;ottimizzazione: fisica, economia, geometria</a></li><li class="nav-item"><a href="39-integrale-riemann.html" class=""><span class="num">39</span>Integrale di Riemann: definizione</a></li><li class="nav-item"><a href="40-teorema-fondamentale-calcolo.html" class=""><span class="num">40</span>Teorema fondamentale del calcolo integrale</a></li><li class="nav-item"><a href="41-tecniche-integrazione.html" class=""><span class="num">41</span>Tecniche di integrazione: per parti, per sostituzione</a></li><li class="nav-item"><a href="42-integrali-razionali.html" class=""><span class="num">42</span>Integrazione di funzioni razionali</a></li><li class="nav-item"><a href="43-integrali-impropri.html" class=""><span class="num">43</span>Integrali impropri</a></li><li class="nav-item"><a href="44-funzioni-integrali.html" class=""><span class="num">44</span>Funzioni integrali e applicazioni geometriche</a></li><li class="nav-item"><a href="45-serie-numeriche.html" class=""><span class="num">45</span>Serie numeriche: definizione e convergenza</a></li><li class="nav-item"><a href="46-criteri-positivi.html" class=""><span class="num">46</span>Criteri di convergenza per serie a termini positivi</a></li><li class="nav-item"><a href="47-serie-segno-qualunque.html" class=""><span class="num">47</span>Serie a segno qualunque, Leibniz, convergenza assoluta</a></li><li class="nav-item"><a href="48-serie-potenze.html" class=""><span class="num">48</span>Serie di potenze e raggio di convergenza</a></li><li class="nav-item"><a href="49-serie-taylor.html" class="active"><span class="num">49</span>Serie di Taylor e analiticità</a></li><li class="nav-item"><a href="50-serie-fourier-cenni.html" class=""><span class="num">50</span>Serie di Fourier: introduzione</a></li><li class="nav-item"><a href="51-edo-primo-ordine.html" class=""><span class="num">51</span>EDO del primo ordine</a></li><li class="nav-item"><a href="52-edo-lineari-ordine-n.html" class=""><span class="num">52</span>EDO lineari di ordine $n$ a coefficienti costanti</a></li><li class="nav-item"><a href="53-cauchy-esistenza-unicita.html" class=""><span class="num">53</span>Problema di Cauchy, esistenza e unicità</a></li><li class="nav-item"><a href="54-topologia-rn.html" class=""><span class="num">54</span>Topologia in $\mathbb{R}^n$</a></li><li class="nav-item"><a href="55-derivate-parziali-differenziale.html" class=""><span class="num">55</span>Derivate parziali e differenziale in più variabili</a></li><li class="nav-item"><a href="56-cenni-lebesgue-funzionale.html" class=""><span class="num">56</span>Oltre Riemann: Lebesgue, Banach, Hilbert</a></li><li class="nav-item"><a href="57-eserciziario.html" class=""><span class="num">57</span>Eserciziario: problemi tipo d&#x27;esame</a></li><li class="nav-item"><a href="58-glossario-az.html" class=""><span class="num">58</span>Glossario A-Z dell&#x27;Analisi Matematica I</a></li><li class="nav-item"><a href="59-formulario-completo.html" class=""><span class="num">59</span>Formulario completo di Analisi Matematica I</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Serie</span>
+        <span>Sezione 49 di 59</span>
+        <span class="level-tag level-adv">Livello: avanzato</span>
+      </div>
+      <h1>Serie di Taylor e analiticità</h1>
+      <p class="summary">Data $f \in C^\infty$ vicino a $x_0$, la **serie di Taylor** è $\sum f^{(n)}(x_0)(x-x_0)^n/n!$. Converge a $f$ $\iff R_n \to 0$. Funzioni **analitiche**, sviluppi cardine, il celebre controesempio $C^\infty$ non analitico.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Serie</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>Serie di potenze (sez. 48)</li><li>Taylor con resto (sez. 33)</li></ul>
+  <div class="label">Strumenti / riferimenti</div>
+  <ul class="source-list"><li>Rudin — *Principles*, cap. 8</li></ul>
+</div>
+      <h2 id="perche-parlarne">Perché parlarne</h2>
+<p>Nella sezione precedente: data $\sum a_n x^n$, trovare $R$, somma $C^\infty$.</p>
+<p>Ora <strong>invertiamo</strong>: data $f \in C^\infty$ in un intorno di $x_0$, <strong>quando</strong> $f$ è somma di una serie di potenze? Risposta: precisamente quando $f$ è <strong>analitica</strong>.</p>
+<h2 id="polinomio-e-serie-di-taylor">Polinomio e serie di Taylor</h2>
+<p><strong>Definizione.</strong> $f \in C^n$ vicino a $x_0$. Il <strong>polinomio di Taylor di grado $n$</strong>:
+$$T_n(x) := \sum_{k=0}^n \frac{f^{(k)}(x_0)}{k!} (x-x_0)^k.$$</p>
+<p><strong>Definizione.</strong> $f \in C^\infty$ vicino a $x_0$. La <strong>serie di Taylor</strong>:
+$$\sum_{n=0}^\infty \frac{f^{(n)}(x_0)}{n!} (x-x_0)^n.$$</p>
+<blockquote>
+<p><strong>Glossarietto:</strong></p>
+<ul>
+<li>$x_0 = 0$ → serie di <strong>Maclaurin</strong>.</li>
+<li>La serie è una serie di potenze: ha raggio $R$, somma $S(x)$.</li>
+<li><strong>Domanda chiave:</strong> $S(x) = f(x)$? Non necessariamente!</li>
+</ul>
+</blockquote>
+<h2 id="resto-di-taylor-criterio-di-analiticita">Resto di Taylor — criterio di analiticità</h2>
+<p><strong>Lagrange.</strong> $f \in C^{n+1}$: esiste $\xi$ tra $x_0$ e $x$:
+$$f(x) - T_n(x) = R_n(x) = \frac{f^{(n+1)}(\xi)}{(n+1)!}(x-x_0)^{n+1}.$$</p>
+<p><strong>Criterio fondamentale.</strong> La serie di Taylor converge a $f$ in $x$ $\iff$ $R_n(x) \to 0$.</p>
+<blockquote>
+<p>"$f$ è analitica?" $\equiv$ "il resto va a zero?"</p>
+</blockquote>
+<h2 id="funzioni-analitiche">Funzioni analitiche</h2>
+<p><strong>Definizione.</strong> $f$ è <strong>analitica in $x_0$</strong> se esiste $\delta > 0$ tale che per $|x-x_0|<\delta$:
+$$f(x) = \sum_{n=0}^\infty \frac{f^{(n)}(x_0)}{n!}(x-x_0)^n.$$</p>
+<p><strong>Notazione:</strong> $f \in C^\omega$.</p>
+<p><strong>Gerarchia:</strong> $C^\omega \subsetneq C^\infty \subsetneq \dots \subsetneq C^1 \subsetneq C^0$.</p>
+<p><strong>Proprietà.</strong>
+1. Somma, prodotto, quoziente, composizione di analitiche è analitica.
+2. Derivata e primitiva di analitica è analitica.
+3. <strong>Principio di identità:</strong> se $f, g$ analitiche su connesso e coincidono su un insieme con punto di accumulazione, allora $f \equiv g$. (Forte, raro in $C^\infty$.)</p>
+<h2 id="sviluppi-cardine">Sviluppi cardine</h2>
+<h3 id="math44">$e^x$</h3>
+<p><strong>Teorema.</strong> $e^x = \sum x^n/n!$ per ogni $x$.</p>
+<p><em>Dim.</em> $f^{(n)}(x) = e^x$. Resto: $|R_n(x)| \le e^x |x|^{n+1}/(n+1)! \to 0$ ($n! \gg |x|^n$). ∎</p>
+<h3 id="math50">$\sin, \cos$</h3>
+<p><strong>Teorema.</strong> $\sin x = \sum (-1)^n x^{2n+1}/(2n+1)!$ e $\cos x = \sum (-1)^n x^{2n}/(2n)!$ per ogni $x$.</p>
+<p><em>Dim.</em> $|f^{(n)}(\xi)| \le 1$, quindi $|R_n| \le |x|^{n+1}/(n+1)! \to 0$. ∎</p>
+<p><strong>Eulero (formale).</strong> $e^{ix} = \cos x + i\sin x$ (sostituendo $ix$ nella serie di $e^x$).</p>
+<h3 id="math59">$\ln(1+x)$</h3>
+<p><strong>Teorema.</strong> Per $-1 < x \le 1$:
+$$\ln(1+x) = \sum_{n=1}^\infty (-1)^{n+1} x^n/n.$$</p>
+<p><em>Dim.</em> Integro $1/(1+t) = \sum(-1)^n t^n$ su $[0,x]$. In $x=1$: Leibniz + Abel al bordo. ∎</p>
+<p><strong>Conseguenza:</strong> $\ln 2 = 1 - 1/2 + 1/3 - 1/4 + \dots$</p>
+<h3 id="binomiale-math65">Binomiale $(1+x)^\alpha$</h3>
+<p><strong>Teorema (Newton).</strong> Per $\alpha \in \mathbb{R}$ e $|x| < 1$:
+$$(1+x)^\alpha = \sum_{n=0}^\infty \binom{\alpha}{n} x^n, \quad \binom{\alpha}{n} = \frac{\alpha(\alpha-1)\cdots(\alpha-n+1)}{n!}.$$</p>
+<p><strong>Casi utili:</strong>
+- $\alpha = 1/2$: $\sqrt{1+x} = 1 + x/2 - x^2/8 + \dots$
+- $\alpha = -1$: $(1+x)^{-1} = \sum (-1)^n x^n$.
+- $\alpha = -1/2$: $1/\sqrt{1+x}$ (usata in $\arcsin$).</p>
+<h2 id="tabella-delle-maclaurin-notevoli">Tabella delle Maclaurin notevoli</h2>
+<table>
+<thead>
+<tr>
+<th>$f(x)$</th>
+<th>Serie</th>
+<th>Validità</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$e^x$</td>
+<td>$\sum x^n/n!$</td>
+<td>$\forall x$</td>
+</tr>
+<tr>
+<td>$\sin x$</td>
+<td>$\sum (-1)^n x^{2n+1}/(2n+1)!$</td>
+<td>$\forall x$</td>
+</tr>
+<tr>
+<td>$\cos x$</td>
+<td>$\sum (-1)^n x^{2n}/(2n)!$</td>
+<td>$\forall x$</td>
+</tr>
+<tr>
+<td>$\sinh x$</td>
+<td>$\sum x^{2n+1}/(2n+1)!$</td>
+<td>$\forall x$</td>
+</tr>
+<tr>
+<td>$\cosh x$</td>
+<td>$\sum x^{2n}/(2n)!$</td>
+<td>$\forall x$</td>
+</tr>
+<tr>
+<td>$\ln(1+x)$</td>
+<td>$\sum (-1)^{n+1} x^n/n$</td>
+<td>$-1 < x \le 1$</td>
+</tr>
+<tr>
+<td>$\arctan x$</td>
+<td>$\sum (-1)^n x^{2n+1}/(2n+1)$</td>
+<td>$-1 \le x \le 1$</td>
+</tr>
+<tr>
+<td>$(1+x)^\alpha$</td>
+<td>$\sum \binom{\alpha}{n} x^n$</td>
+<td>$|x|<1$</td>
+</tr>
+<tr>
+<td>$1/(1-x)$</td>
+<td>$\sum x^n$</td>
+<td>$-1<x<1$</td>
+</tr>
+</tbody>
+</table>
+<h2 id="il-controesempio-math103-non-analitica">Il controesempio: $C^\infty$ non analitica</h2>
+<p><strong>Definizione.</strong>
+$$f(x) := \begin{cases} e^{-1/x^2} & x \ne 0 \\ 0 & x = 0. \end{cases}$$</p>
+<p><strong>Teorema.</strong> $f \in C^\infty(\mathbb{R})$ e $f^{(n)}(0) = 0$ per ogni $n$.</p>
+<p><em>Dim. (sketch).</em> Per $x \ne 0$, $f$ è composizione $C^\infty$. In 0:
+- $f'(0) = \lim_{h\to 0} e^{-1/h^2}/h$. Posto $t = 1/h^2$: $\pm\sqrt t\,e^{-t} \to 0$.
+- Per induzione, $f^{(n)}(x) = P_n(1/x) e^{-1/x^2}$ per $x \ne 0$. Limite in 0 = 0 (esponenziale schiaccia ogni polinomio). ∎</p>
+<p><strong>Conseguenza.</strong> La serie di Taylor in 0 è $\sum 0 \cdot x^n/n! = 0$, ma $f \not\equiv 0$. <strong>Non analitica in 0</strong>.</p>
+<blockquote>
+<p><strong>Morale.</strong> $C^\infty$ non garantisce analiticità. Serve $R_n \to 0$, condizione non locale.</p>
+</blockquote>
+<h2 id="funzioni-bump">Funzioni "bump"</h2>
+<p>Il controesempio è la base per <strong>bump functions</strong> $C^\infty$ a supporto compatto, ad es.
+$$\varphi(x) = \begin{cases} e^{-1/(1-x^2)} & |x|<1 \\ 0 & |x| \ge 1. \end{cases}$$</p>
+<p>Impossibili nell'analitico (principio di identità). Pilastri di distribuzioni, analisi armonica, PDE.</p>
+<h2 id="tecniche-di-sviluppo">Tecniche di sviluppo</h2>
+<ul>
+<li><strong>Sostituzione:</strong> $\sin(x^2) = \sum (-1)^n x^{4n+2}/(2n+1)!$.</li>
+<li><strong>Combinazione:</strong> $\cosh x = (e^x + e^{-x})/2$.</li>
+<li><strong>Prodotto:</strong> Cauchy.</li>
+<li><strong>Derivazione/integrazione termine a termine.</strong></li>
+</ul>
+<h2 id="esercizi">Esercizi</h2>
+<details>
+<summary>Esercizio 1 — $\pi$ via Leibniz</summary>
+
+Con $\pi/4 = \sum (-1)^n/(2n+1)$: $S_5 = 4(1-1/3+1/5-1/7+1/9) \approx 3.34$. Errore Leibniz $\le 4/11 \approx 0.36$. **Lentissima** (serve Machin per accelerare). ∎
+</details>
+
+<details>
+<summary>Esercizio 2 — Sviluppo binomiale</summary>
+
+$\sqrt{1-x^2}$ fino a $x^6$. $u = -x^2$, $\alpha = 1/2$:
+$$= 1 - x^2/2 - x^4/8 - x^6/16 + O(x^8). \qquad ∎$$
+</details>
+
+<details>
+<summary>Esercizio 3 — Stima errore $e^x$</summary>
+
+Quanti termini servono per $e^{0.5}$ con errore $< 10^{-5}$? $|R_n| \le 2 \cdot 0.5^{n+1}/(n+1)!$. Provando: $n=5$ insufficiente, $n=6$ basta. **7 termini**. ∎
+</details>
+
+<details>
+<summary>Esercizio 4 — Identità di Poisson</summary>
+
+$\sum r^n \cos(n\theta) = (1-r\cos\theta)/(1-2r\cos\theta+r^2)$ per $|r|<1$.
+
+*Dim.* Geometrica complessa $\sum (re^{i\theta})^n = 1/(1-re^{i\theta})$, parte reale. ∎
+</details>
+
+<h2 id="riassunto-in-una-riga">Riassunto in una riga</h2>
+<p>La <strong>serie di Taylor</strong> di $f \in C^\infty$ converge a $f$ $\iff R_n \to 0$; le funzioni <strong>analitiche</strong> sono il sottoinsieme di $C^\infty$ con questa proprietà; esempi cardine ($e^x, \sin, \cos, \ln(1+x), \arctan, (1+x)^\alpha$) sono analitiche; il celebre $e^{-1/x^2}$ è $C^\infty$ ma non analitica in 0, base delle bump function.</p>
+      <nav class="pager">
+<a href="48-serie-potenze.html" class="prev"><span class="label">← Precedente</span><span class="title">Serie di potenze e raggio di convergenza</span></a>
+<a href="50-serie-fourier-cenni.html" class="next"><span class="label">Successivo →</span><span class="title">Serie di Fourier: introduzione</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Analisi Matematica I Zero to Hero</strong> — percorso completo bilingue, dai naturali agli integrali impropri, dalle serie di Fourier alle EDO lineari.</p><p>Materiale didattico aperto. Quando una dimostrazione è oscura, torna indietro: l'analisi è una scala, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

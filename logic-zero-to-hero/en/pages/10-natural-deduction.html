@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Natural deduction: I/E rules and structured proof — Logic & Critical Thinking Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#2a2540',primaryTextColor:'#ecebff',primaryBorderColor:'#7a6cd6',lineColor:'#9890b8',background:'#141226'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">∴</div>
+      <div>
+        <div class="brand-title">LOGOS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/10-deduzione-naturale.html" class="lang-link" title="Passa all'italiano">IT</a><span class="lang-active" title="English">EN</span></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="search... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-what-is-logic.html" class=""><span class="num">01</span>What is logic and critical thinking</a></li><li class="nav-item"><a href="../pages/02-history-of-logic.html" class=""><span class="num">02</span>A short history of logic</a></li><li class="nav-item"><a href="../pages/03-types-of-reasoning.html" class=""><span class="num">03</span>Types of reasoning: deductive, inductive, abductive, analogical</a></li><li class="nav-item"><a href="../pages/04-anatomy-of-arguments.html" class=""><span class="num">04</span>Arguments: premises, conclusion, validity, soundness</a></li><li class="nav-item"><a href="../pages/05-paul-elder-standards.html" class=""><span class="num">05</span>Critical thinking: Paul-Elder standards</a></li><li class="nav-item"><a href="../pages/06-language-and-ambiguity.html" class=""><span class="num">06</span>Language, ambiguity, definitions</a></li><li class="nav-item"><a href="../pages/07-propositional-logic.html" class=""><span class="num">07</span>Propositional logic: connectives and truth tables</a></li><li class="nav-item"><a href="../pages/08-equivalences-normal-forms.html" class=""><span class="num">08</span>Logical equivalences, De Morgan, normal forms</a></li><li class="nav-item"><a href="../pages/09-rules-of-inference.html" class=""><span class="num">09</span>Rules of inference</a></li><li class="nav-item"><a href="../pages/10-natural-deduction.html" class="active"><span class="num">10</span>Natural deduction: I/E rules and structured proof</a></li><li class="nav-item"><a href="../pages/11-axiomatic-sequent-systems.html" class=""><span class="num">11</span>Axiomatic and sequent calculus systems</a></li><li class="nav-item"><a href="../pages/12-predicate-logic-syntax.html" class=""><span class="num">12</span>Predicate logic (FOL): syntax and quantifiers</a></li><li class="nav-item"><a href="../pages/13-predicate-logic-semantics.html" class=""><span class="num">13</span>FOL: semantics, models, validity</a></li><li class="nav-item"><a href="../pages/14-sets-relations-functions.html" class=""><span class="num">14</span>Sets, relations, functions</a></li><li class="nav-item"><a href="../pages/15-metalogic-godel.html" class=""><span class="num">15</span>Metalogic: soundness, completeness, Gödel&#x27;s theorems</a></li><li class="nav-item"><a href="../pages/16-modal-logic.html" class=""><span class="num">16</span>Modal logic and possible worlds</a></li><li class="nav-item"><a href="../pages/17-temporal-deontic-epistemic-logic.html" class=""><span class="num">17</span>Temporal, deontic, epistemic logics</a></li><li class="nav-item"><a href="../pages/18-non-classical-logic.html" class=""><span class="num">18</span>Non-classical logics: intuitionistic, fuzzy, paraconsistent</a></li><li class="nav-item"><a href="../pages/19-curry-howard-type-theory.html" class=""><span class="num">19</span>Curry-Howard and type theory</a></li><li class="nav-item"><a href="../pages/20-formal-fallacies.html" class=""><span class="num">20</span>Formal fallacies</a></li><li class="nav-item"><a href="../pages/21-informal-fallacies-relevance.html" class=""><span class="num">21</span>Informal fallacies of relevance</a></li><li class="nav-item"><a href="../pages/22-informal-fallacies-presumption.html" class=""><span class="num">22</span>Informal fallacies of presumption and ambiguity</a></li><li class="nav-item"><a href="../pages/23-cognitive-biases.html" class=""><span class="num">23</span>Cognitive biases: a curated catalog</a></li><li class="nav-item"><a href="../pages/24-dual-process.html" class=""><span class="num">24</span>System 1 and System 2: dual-process theory</a></li><li class="nav-item"><a href="../pages/25-polya-problem-solving.html" class=""><span class="num">25</span>Polya: how to solve a problem (4 steps)</a></li><li class="nav-item"><a href="../pages/26-problem-solving-heuristics.html" class=""><span class="num">26</span>Problem-solving heuristics</a></li><li class="nav-item"><a href="../pages/27-computational-thinking.html" class=""><span class="num">27</span>Computational thinking</a></li><li class="nav-item"><a href="../pages/28-algorithms-strategies.html" class=""><span class="num">28</span>Algorithms and problem-solving strategies</a></li><li class="nav-item"><a href="../pages/29-creative-thinking.html" class=""><span class="num">29</span>Creative thinking: lateral thinking, TRIZ, SCAMPER</a></li><li class="nav-item"><a href="../pages/30-design-thinking.html" class=""><span class="num">30</span>Design thinking</a></li><li class="nav-item"><a href="../pages/31-mental-models.html" class=""><span class="num">31</span>Mental models</a></li><li class="nav-item"><a href="../pages/32-probability-foundations.html" class=""><span class="num">32</span>Probability: foundations for reasoning</a></li><li class="nav-item"><a href="../pages/33-bayes-theorem.html" class=""><span class="num">33</span>Bayes&#x27; theorem and updating beliefs</a></li><li class="nav-item"><a href="../pages/34-probability-paradoxes.html" class=""><span class="num">34</span>Probability paradoxes: Monty Hall, base rate, Simpson</a></li><li class="nav-item"><a href="../pages/35-decision-theory.html" class=""><span class="num">35</span>Decision theory: expected utility and prospect theory</a></li><li class="nav-item"><a href="../pages/36-forecasting-calibration.html" class=""><span class="num">36</span>Forecasting and calibration</a></li><li class="nav-item"><a href="../pages/37-knightian-black-swans.html" class=""><span class="num">37</span>Knightian uncertainty, black swans, antifragility</a></li><li class="nav-item"><a href="../pages/38-argumentation-toulmin.html" class=""><span class="num">38</span>Argumentation: Toulmin, Walton, argument mapping</a></li><li class="nav-item"><a href="../pages/39-rhetoric-persuasion.html" class=""><span class="num">39</span>Rhetoric and persuasion</a></li><li class="nav-item"><a href="../pages/40-debate-dialectic.html" class=""><span class="num">40</span>Debate, Socratic dialectic, steelmanning</a></li><li class="nav-item"><a href="../pages/41-negotiation-game-theory.html" class=""><span class="num">41</span>Negotiation and game theory</a></li><li class="nav-item"><a href="../pages/42-epistemology.html" class=""><span class="num">42</span>Epistemology: JTB, Gettier, intellectual virtues</a></li><li class="nav-item"><a href="../pages/43-scientific-method-popper.html" class=""><span class="num">43</span>Scientific method, Popper, falsifiability</a></li><li class="nav-item"><a href="../pages/44-kuhn-lakatos-feyerabend.html" class=""><span class="num">44</span>Paradigms: Kuhn, Lakatos, Feyerabend</a></li><li class="nav-item"><a href="../pages/45-causality-pearl.html" class=""><span class="num">45</span>Causality: Hume, Pearl, do-calculus</a></li><li class="nav-item"><a href="../pages/46-famous-paradoxes.html" class=""><span class="num">46</span>Famous paradoxes: logic, sets, motion, decision</a></li><li class="nav-item"><a href="../pages/47-systems-thinking.html" class=""><span class="num">47</span>Systems thinking and feedback models</a></li><li class="nav-item"><a href="../pages/48-wicked-problems.html" class=""><span class="num">48</span>Wicked problems, complexity, VUCA</a></li><li class="nav-item"><a href="../pages/49-critical-reading-writing.html" class=""><span class="num">49</span>Critical reading and argumentative writing</a></li><li class="nav-item"><a href="../pages/50-propaganda-manipulation.html" class=""><span class="num">50</span>Propaganda, manipulation, news literacy, fact-checking</a></li><li class="nav-item"><a href="../pages/51-exercises.html" class=""><span class="num">51</span>Full exercise book with solutions</a></li><li class="nav-item"><a href="../pages/52-glossary-az.html" class=""><span class="num">52</span>A-Z bilingual glossary</a></li><li class="nav-item"><a href="../pages/53-formula-sheet.html" class=""><span class="num">53</span>Formula sheet / cheat sheet</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Formal Logic</span>
+        <span>Section 10 of 53</span>
+        <span class="level-tag level-int">Level: intermediate</span>
+      </div>
+      <h1>Natural deduction: I/E rules and structured proof</h1>
+      <p class="summary">Gerhard Gentzen&#x27;s 1934 system: for each logical connective, two rules — one to introduce it, one to eliminate it. Fitch and tree style, step-by-step proofs, and the delicate machinery of discharging assumptions.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Formal Logic</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>Read [Propositional logic](07-propositional-logic.html)</li><li>Read [Rules of inference](09-rules-of-inference.html)</li></ul>
+  <div class="label">Tools / references</div>
+  <ul class="source-list"><li>Pen and paper</li><li>Optional software: Proof Companion, Carnap.io, KaTeX for typesetting</li></ul>
+</div>
+      <p>Natural deduction was born from Gerhard Gentzen's discomfort with the axiomatic systems of the Frege-Hilbert school: long, counterintuitive, populated by axioms no flesh-and-blood mathematician ever uses while actually reasoning. In 1934 (<em>Untersuchungen über das logische Schließen</em>) Gentzen introduced <strong>NK</strong> (natural deduction <em>klassisch</em>) and <strong>NJ</strong> (<em>intuitionistisch</em>): a system in which every connective comes with two rules — an <strong>introduction</strong> (I) rule that justifies its formation, and an <strong>elimination</strong> (E) rule that exploits its presence. Dag Prawitz in 1965 (<em>Natural Deduction: A Proof-Theoretical Study</em>) gave the system the canonical form still taught today.</p>
+<p>The symmetric I/E idea has a philosophical elegance: the meaning of a connective is fully captured by the rules that introduce and eliminate it. This is the celebrated <strong>inferentialist thesis</strong> (Brandom, Dummett): "meaning is use", literally. This section presents the rules, two competing notations (Fitch and tree), a handful of worked proofs, and the discharge mechanism.</p>
+<h2 id="1-ie-rules-per-connective">1. I/E rules per connective</h2>
+<p>For each propositional connective we give the I/E pair. We use $\varphi, \psi, \chi$ for generic formulas and $\Gamma$ for the set of active assumptions.</p>
+<h3 id="conjunction-wedge">Conjunction $\wedge$</h3>
+<p>$$\frac{\varphi \qquad \psi}{\varphi \wedge \psi}\; \wedge\text{-I} \qquad \frac{\varphi \wedge \psi}{\varphi}\; \wedge\text{-E}_1 \qquad \frac{\varphi \wedge \psi}{\psi}\; \wedge\text{-E}_2$$</p>
+<h3 id="implication-rightarrow">Implication $\rightarrow$</h3>
+<p>$$\frac{[\varphi]^n \;\vdots\; \psi}{\varphi \rightarrow \psi}\; \rightarrow\text{-I}^n \qquad \frac{\varphi \rightarrow \psi \qquad \varphi}{\psi}\; \rightarrow\text{-E (modus ponens)}$$</p>
+<p>The superscript $n$ marks the assumption that is <strong>discharged</strong> — no longer "live" after the rule.</p>
+<h3 id="disjunction-vee">Disjunction $\vee$</h3>
+<p>$$\frac{\varphi}{\varphi \vee \psi}\; \vee\text{-I}_1 \qquad \frac{\psi}{\varphi \vee \psi}\; \vee\text{-I}_2$$</p>
+<p>$$\frac{\varphi \vee \psi \qquad [\varphi]^n \;\vdots\; \chi \qquad [\psi]^m \;\vdots\; \chi}{\chi}\; \vee\text{-E}^{n,m}$$</p>
+<p>Disjunction elimination is <strong>reasoning by cases</strong>: from $\varphi \vee \psi$ and a derivation of $\chi$ from each disjunct, conclude $\chi$.</p>
+<h3 id="negation-neg-and-absurdity-bot">Negation $\neg$ and absurdity $\bot$</h3>
+<p>Standard definition: $\neg \varphi \equiv \varphi \rightarrow \bot$.</p>
+<p>$$\frac{[\varphi]^n \;\vdots\; \bot}{\neg \varphi}\; \neg\text{-I}^n \qquad \frac{\varphi \qquad \neg \varphi}{\bot}\; \neg\text{-E}$$</p>
+<p>$$\frac{\bot}{\varphi}\; \bot\text{-E (ex falso)} \qquad \frac{[\neg \varphi]^n \;\vdots\; \bot}{\varphi}\; \text{RAA (reductio)}^n$$</p>
+<p>RAA (<em>reductio ad absurdum</em>) is <strong>classically</strong> valid but <strong>not intuitionistically</strong> — the great fault line separating NK from NJ, explored in <a href="18-non-classical-logic.html">Non-classical logics</a>.</p>
+<h3 id="biconditional-leftrightarrow">Biconditional $\leftrightarrow$</h3>
+<p>Defined as $(\varphi \rightarrow \psi) \wedge (\psi \rightarrow \varphi)$, with derivable rules.</p>
+<h2 id="2-two-notations-fitch-and-tree">2. Two notations: Fitch and tree</h2>
+<h3 id="fitch-notation-column-style">Fitch notation (column style)</h3>
+<p>Invented by Frederic Fitch in 1952 (<em>Symbolic Logic</em>). Assumptions open an indented sub-block; the block closes when the assumption is discharged.</p>
+<pre><code>1 │ p → q              premise
+2 │ q → r              premise
+3 │ ┌── p              assumption [a]
+4 │ │   q              →-E (1, 3)
+5 │ │   r              →-E (2, 4)
+6 │ └──
+7 │   p → r            →-I [a] (3-5)
+</code></pre>
+<p>Readable like a program: indentation corresponds to the <strong>scope</strong> of the assumption, exactly as scope in a programming language (deep connection: see <a href="19-curry-howard-type-theory.html">Curry-Howard</a>).</p>
+<h3 id="tree-notation">Tree notation</h3>
+<p>Premises on top, conclusions on the bottom, each rule a horizontal line. Leaves are assumptions; discharged ones are parenthesized.</p>
+<pre><code class="language-mermaid">flowchart TB
+  P1[&quot;p → q&quot;] --&gt; ME1[&quot;→-E&quot;]
+  A[&quot;[p] discharged&quot;] --&gt; ME1
+  ME1 --&gt; Q[&quot;q&quot;]
+  P2[&quot;q → r&quot;] --&gt; ME2[&quot;→-E&quot;]
+  Q --&gt; ME2
+  ME2 --&gt; R[&quot;r&quot;]
+  R --&gt; MI[&quot;→-I (discharge p)&quot;]
+  MI --&gt; Concl[&quot;p → r&quot;]
+</code></pre>
+<p>The same proof, two layouts. Fitch is friendlier for humans and proof assistants; the tree exposes the <strong>proof structure</strong> that the Curry-Howard isomorphism interprets as a typed lambda term.</p>
+<h2 id="3-worked-proof-hypothetical-syllogism">3. Worked proof: hypothetical syllogism</h2>
+<p>Goal: $(p \rightarrow q), (q \rightarrow r) \vdash (p \rightarrow r)$.</p>
+<table>
+<thead>
+<tr>
+<th>step</th>
+<th>formula</th>
+<th>justification</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>$p \rightarrow q$</td>
+<td>premise</td>
+</tr>
+<tr>
+<td>2</td>
+<td>$q \rightarrow r$</td>
+<td>premise</td>
+</tr>
+<tr>
+<td>3</td>
+<td>$p$</td>
+<td>assumption [a]</td>
+</tr>
+<tr>
+<td>4</td>
+<td>$q$</td>
+<td>$\rightarrow$-E (1, 3)</td>
+</tr>
+<tr>
+<td>5</td>
+<td>$r$</td>
+<td>$\rightarrow$-E (2, 4)</td>
+</tr>
+<tr>
+<td>6</td>
+<td>$p \rightarrow r$</td>
+<td>$\rightarrow$-I [a] (3-5)</td>
+</tr>
+</tbody>
+</table>
+<p>Note the discharge: the assumption $p$ at line 3 is open during 3-5; closing it at line 6 turns the local fact "from $p$ we got $r$" into the unconditional statement "$p \rightarrow r$". The proof is constructive — no excluded middle, no RAA — so it is valid in <strong>NJ</strong> as well.</p>
+<h2 id="4-a-non-proof-p-vee-neg-p">4. A non-proof: ⊢ $p \vee \neg p$?</h2>
+<p>In NK (classical), $p \vee \neg p$ is a theorem. A typical proof uses RAA:</p>
+<ol>
+<li>Assume $\neg (p \vee \neg p)$. [a]</li>
+<li>Assume $p$. [b]</li>
+<li>From 2: $p \vee \neg p$ by $\vee$-I.</li>
+<li>Contradiction with 1: $\bot$ by $\neg$-E.</li>
+<li>Discharge b: $\neg p$ by $\neg$-I [b] (2-4).</li>
+<li>From 5: $p \vee \neg p$ by $\vee$-I.</li>
+<li>Contradiction with 1: $\bot$ by $\neg$-E.</li>
+<li>Discharge a, apply RAA: $p \vee \neg p$.</li>
+</ol>
+<p>In <strong>NJ</strong> the move at step 8 is not allowed: intuitionistic negation derives $\neg \neg \varphi$ but not $\varphi$ — there is no double-negation elimination. Hence $p \vee \neg p$ is <strong>not</strong> a theorem of NJ. Counter-model: a Kripke model in which $p$ is undecided. See <a href="18-non-classical-logic.html">Non-classical logics</a> for the Brouwer-Heyting-Kolmogorov semantics that makes this rigorous.</p>
+<h2 id="5-discharge-the-subtle-part">5. Discharge: the subtle part</h2>
+<p>Discharge is the only piece of natural deduction that confuses beginners. Three rules of thumb:</p>
+<ul>
+<li>Each assumption gets a unique tag ($a, b, c, \ldots$ or $1, 2, 3, \ldots$).</li>
+<li>An assumption is <strong>live</strong> from the point of introduction until it is discharged.</li>
+<li>The rules that discharge are precisely <strong>$\rightarrow$-I</strong>, <strong>$\neg$-I</strong>, <strong>$\vee$-E</strong> (discharges <em>two</em> assumptions), and <strong>RAA</strong>.</li>
+</ul>
+<p>A common mistake is to use a discharged assumption after it has been "closed". In Fitch this is enforced by indentation: you cannot reach into a closed block. In tree notation it is enforced by the parenthesization on the leaf and the matching superscript on the rule.</p>
+<h2 id="6-normalization-and-the-cut">6. Normalization and the cut</h2>
+<p>A natural deduction proof can contain <strong>detours</strong>: introducing a connective only to immediately eliminate it. Gentzen-Prawitz <strong>normalization</strong> rewrites any proof into one without detours; the resulting normal form has the <strong>subformula property</strong> — every formula in the proof is a subformula of premises or conclusion. This is a theorem of structural proof theory and the propositional ancestor of cut-elimination in sequent calculus (see <a href="11-axiomatic-sequent-systems.html">Axiomatic and sequent calculus systems</a>).</p>
+<h2 id="7-exercises">7. Exercises</h2>
+<details>
+  <summary>Exercise 1 — derive $p \wedge q \vdash q \wedge p$ in NJ.</summary>
+
+| step | formula     | justification        |
+|------|-------------|----------------------|
+| 1    | $p \wedge q$ | premise              |
+| 2    | $p$         | $\wedge$-E$_1$ (1)   |
+| 3    | $q$         | $\wedge$-E$_2$ (1)   |
+| 4    | $q \wedge p$ | $\wedge$-I (3, 2)    |
+
+No discharge needed — constructively valid.
+</details>
+
+<details>
+  <summary>Exercise 2 — derive $\vdash \neg \neg (p \vee \neg p)$ in NJ.</summary>
+
+This is the **weak excluded middle** — provable intuitionistically even though $p \vee \neg p$ is not.
+
+1. Assume $\neg (p \vee \neg p)$. [a]
+2. Assume $p$. [b]
+3. $p \vee \neg p$ by $\vee$-I (2).
+4. $\bot$ by $\neg$-E (1, 3).
+5. $\neg p$ by $\neg$-I [b] (2-4).
+6. $p \vee \neg p$ by $\vee$-I (5).
+7. $\bot$ by $\neg$-E (1, 6).
+8. $\neg \neg (p \vee \neg p)$ by $\neg$-I [a] (1-7).
+</details>
+
+<h2 id="summary">Summary</h2>
+<ul>
+<li>Each connective gets a pair of rules: introduction (I) and elimination (E).</li>
+<li>The Fitch style nests sub-proofs by indentation; the tree style exposes the proof's tree structure.</li>
+<li><strong>Discharge</strong> turns a local assumption into a conditional fact — the engine of $\rightarrow$-I, $\neg$-I, $\vee$-E and RAA.</li>
+<li>RAA distinguishes classical (NK) from intuitionistic (NJ) natural deduction.</li>
+<li>Normalization eliminates detours and yields the subformula property, the proof-theoretic backbone of the system.</li>
+</ul>
+<h2 id="further-reading">Further reading</h2>
+<ul>
+<li>Gentzen, <em>Untersuchungen über das logische Schließen</em> (1934).</li>
+<li>Prawitz, <em>Natural Deduction: A Proof-Theoretical Study</em> (1965).</li>
+<li>Fitch, <em>Symbolic Logic: An Introduction</em> (1952).</li>
+<li>van Dalen, <em>Logic and Structure</em> (5th ed., Springer), ch. 2.</li>
+<li>Troelstra &amp; Schwichtenberg, <em>Basic Proof Theory</em> (Cambridge, 2nd ed.).</li>
+</ul>
+      <nav class="pager">
+<a href="09-rules-of-inference.html" class="prev"><span class="label">← Previous</span><span class="title">Rules of inference</span></a>
+<a href="11-axiomatic-sequent-systems.html" class="next"><span class="label">Next →</span><span class="title">Axiomatic and sequent calculus systems</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Logic, Problem Solving and Critical Thinking Zero to Hero</strong> — complete path, in English, from the anatomy of an argument to Pearl's do-calculus.</p><p>Open educational material. No sponsorships. When a concept is unclear, go back: logic and reasoning are a staircase, not a tree you skip across.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+</body>
+</html>

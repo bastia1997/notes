@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Teorema di Bayes e aggiornamento delle credenze — Logica e Pensiero Critico Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#2a2540',primaryTextColor:'#ecebff',primaryBorderColor:'#7a6cd6',lineColor:'#9890b8',background:'#141226'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">∴</div>
+      <div>
+        <div class="brand-title">LOGOS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">IT</span><a href="../en/pages/33-bayes-theorem.html" class="lang-link" title="Switch to English">EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-cosa-e-la-logica.html" class=""><span class="num">01</span>Cos&#x27;è la logica e il pensiero critico</a></li><li class="nav-item"><a href="../pages/02-storia-della-logica.html" class=""><span class="num">02</span>Breve storia della logica</a></li><li class="nav-item"><a href="../pages/03-tipi-di-ragionamento.html" class=""><span class="num">03</span>Tipi di ragionamento: deduttivo, induttivo, abduttivo, analogico</a></li><li class="nav-item"><a href="../pages/04-anatomia-degli-argomenti.html" class=""><span class="num">04</span>Argomenti: premesse, conclusione, validità, solidità</a></li><li class="nav-item"><a href="../pages/05-standard-paul-elder.html" class=""><span class="num">05</span>Pensiero critico: standard di Paul-Elder</a></li><li class="nav-item"><a href="../pages/06-linguaggio-e-ambiguita.html" class=""><span class="num">06</span>Linguaggio, ambiguità, definizioni</a></li><li class="nav-item"><a href="../pages/07-logica-proposizionale.html" class=""><span class="num">07</span>Logica proposizionale: connettivi e tabelle di verità</a></li><li class="nav-item"><a href="../pages/08-equivalenze-forme-normali.html" class=""><span class="num">08</span>Equivalenze logiche, De Morgan, forme normali</a></li><li class="nav-item"><a href="../pages/09-regole-inferenza.html" class=""><span class="num">09</span>Regole di inferenza</a></li><li class="nav-item"><a href="../pages/10-deduzione-naturale.html" class=""><span class="num">10</span>Deduzione naturale: regole I/E e dimostrazione strutturata</a></li><li class="nav-item"><a href="../pages/11-sistemi-assiomatici-sequenti.html" class=""><span class="num">11</span>Sistemi assiomatici e calcolo dei sequenti</a></li><li class="nav-item"><a href="../pages/12-logica-predicati-sintassi.html" class=""><span class="num">12</span>Logica dei predicati (FOL): sintassi e quantificatori</a></li><li class="nav-item"><a href="../pages/13-logica-predicati-semantica.html" class=""><span class="num">13</span>FOL: semantica, modelli, validità</a></li><li class="nav-item"><a href="../pages/14-insiemi-relazioni-funzioni.html" class=""><span class="num">14</span>Insiemi, relazioni, funzioni</a></li><li class="nav-item"><a href="../pages/15-metalogica-godel.html" class=""><span class="num">15</span>Metalogica: soundness, completezza, teoremi di Gödel</a></li><li class="nav-item"><a href="../pages/16-logiche-modali.html" class=""><span class="num">16</span>Logiche modali e mondi possibili</a></li><li class="nav-item"><a href="../pages/17-logiche-temporale-deontica-epistemica.html" class=""><span class="num">17</span>Logiche temporale, deontica, epistemica</a></li><li class="nav-item"><a href="../pages/18-logiche-non-classiche.html" class=""><span class="num">18</span>Logiche non classiche: intuizionista, fuzzy, paraconsistente</a></li><li class="nav-item"><a href="../pages/19-curry-howard-type-theory.html" class=""><span class="num">19</span>Curry-Howard e type theory: dimostrazioni come programmi</a></li><li class="nav-item"><a href="../pages/20-fallacie-formali.html" class=""><span class="num">20</span>Fallacie formali: quando la forma del ragionamento mente</a></li><li class="nav-item"><a href="../pages/21-fallacie-informali-rilevanza.html" class=""><span class="num">21</span>Fallacie informali di rilevanza: distrarre invece di argomentare</a></li><li class="nav-item"><a href="../pages/22-fallacie-informali-presunzione.html" class=""><span class="num">22</span>Fallacie informali di presunzione e ambiguità</a></li><li class="nav-item"><a href="../pages/23-bias-cognitivi.html" class=""><span class="num">23</span>Bias cognitivi: catalogo ragionato</a></li><li class="nav-item"><a href="../pages/24-dual-process.html" class=""><span class="num">24</span>Sistema 1 e Sistema 2: dual process theory</a></li><li class="nav-item"><a href="../pages/25-polya-problem-solving.html" class=""><span class="num">25</span>Polya: come risolvere un problema (4 step)</a></li><li class="nav-item"><a href="../pages/26-euristiche-problem-solving.html" class=""><span class="num">26</span>Euristiche del problem solving</a></li><li class="nav-item"><a href="../pages/27-pensiero-computazionale.html" class=""><span class="num">27</span>Pensiero computazionale</a></li><li class="nav-item"><a href="../pages/28-algoritmi-strategie.html" class=""><span class="num">28</span>Algoritmi e strategie di risoluzione</a></li><li class="nav-item"><a href="../pages/29-pensiero-creativo.html" class=""><span class="num">29</span>Pensiero creativo: lateral thinking, TRIZ, SCAMPER</a></li><li class="nav-item"><a href="../pages/30-design-thinking.html" class=""><span class="num">30</span>Design thinking</a></li><li class="nav-item"><a href="../pages/31-mental-models.html" class=""><span class="num">31</span>Mental models: modelli mentali</a></li><li class="nav-item"><a href="../pages/32-probabilita-fondamenti.html" class=""><span class="num">32</span>Probabilità: fondamenti per il ragionamento</a></li><li class="nav-item"><a href="../pages/33-teorema-bayes.html" class="active"><span class="num">33</span>Teorema di Bayes e aggiornamento delle credenze</a></li><li class="nav-item"><a href="../pages/34-paradossi-probabilistici.html" class=""><span class="num">34</span>Paradossi probabilistici: Monty Hall, base rate, Simpson</a></li><li class="nav-item"><a href="../pages/35-teoria-decisione.html" class=""><span class="num">35</span>Teoria della decisione: utilità attesa e prospect theory</a></li><li class="nav-item"><a href="../pages/36-forecasting-calibrazione.html" class=""><span class="num">36</span>Forecasting e calibrazione: la lezione dei superforecaster</a></li><li class="nav-item"><a href="../pages/37-knightian-cigni-neri.html" class=""><span class="num">37</span>Knightian uncertainty, cigni neri, antifragile</a></li><li class="nav-item"><a href="../pages/38-argomentazione-toulmin.html" class=""><span class="num">38</span>Argomentazione: Toulmin, Walton, argument mapping</a></li><li class="nav-item"><a href="../pages/39-retorica-persuasione.html" class=""><span class="num">39</span>Retorica e persuasione</a></li><li class="nav-item"><a href="../pages/40-dibattito-dialettica.html" class=""><span class="num">40</span>Dibattito, dialettica socratica, steelmanning</a></li><li class="nav-item"><a href="../pages/41-negoziazione-teoria-giochi.html" class=""><span class="num">41</span>Negoziazione e teoria dei giochi</a></li><li class="nav-item"><a href="../pages/42-epistemologia.html" class=""><span class="num">42</span>Epistemologia: JTB, Gettier, virtù epistemiche</a></li><li class="nav-item"><a href="../pages/43-metodo-scientifico-popper.html" class=""><span class="num">43</span>Metodo scientifico, Popper, falsificabilità</a></li><li class="nav-item"><a href="../pages/44-kuhn-lakatos-feyerabend.html" class=""><span class="num">44</span>Paradigmi: Kuhn, Lakatos, Feyerabend</a></li><li class="nav-item"><a href="../pages/45-causalita-pearl.html" class=""><span class="num">45</span>Causalità: Hume, Pearl, do-calculus</a></li><li class="nav-item"><a href="../pages/46-paradossi-celebri.html" class=""><span class="num">46</span>Paradossi celebri: dal mentitore al Newcomb</a></li><li class="nav-item"><a href="../pages/47-systems-thinking.html" class=""><span class="num">47</span>Systems thinking e modelli di feedback</a></li><li class="nav-item"><a href="../pages/48-wicked-problems.html" class=""><span class="num">48</span>Wicked problems, complessità, VUCA</a></li><li class="nav-item"><a href="../pages/49-critical-reading-writing.html" class=""><span class="num">49</span>Critical reading e scrittura argomentativa</a></li><li class="nav-item"><a href="../pages/50-propaganda-manipolazione.html" class=""><span class="num">50</span>Propaganda, manipolazione, news literacy, fact-checking</a></li><li class="nav-item"><a href="../pages/51-eserciziario.html" class=""><span class="num">51</span>Eserciziario completo con soluzioni</a></li><li class="nav-item"><a href="../pages/52-glossario-az.html" class=""><span class="num">52</span>Glossario A-Z bilingue</a></li><li class="nav-item"><a href="../pages/53-formulario.html" class=""><span class="num">53</span>Formulario / scheda riassuntiva</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Probabilità</span>
+        <span>Sezione 33 di 53</span>
+        <span class="level-tag level-adv">Livello: avanzato</span>
+      </div>
+      <h1>Teorema di Bayes e aggiornamento delle credenze</h1>
+      <p class="summary">La formula più importante per ragionare sotto incertezza: come si combina una credenza a priori con una nuova evidenza. Calcoli passo passo, test medici, base rate fallacy.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Probabilità</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>Aver letto [Probabilità: fondamenti](32-probabilita-fondamenti.html)</li></ul>
+  <div class="label">Strumenti / riferimenti</div>
+  <ul class="source-list"><li>Python: scipy</li><li>Foglio Excel</li></ul>
+</div>
+      <p>Il reverendo Thomas Bayes (1701–1761) propose una formula per aggiornare credenze alla luce di nuove evidenze. Il teorema, semplice sul piano matematico, ha avuto un impatto sproporzionato: è il motore dell'inferenza statistica moderna, dei filtri anti-spam, del riconoscimento vocale, della medicina diagnostica, e — applicato come abito mentale — del pensiero quantitativo sotto incertezza (cf. Tetlock, <em>Superforecasting</em>).</p>
+<h2 id="1-derivazione">1. Derivazione</h2>
+<p>Dalla definizione di probabilità condizionale:</p>
+<p>$$P(A \mid B) = \frac{P(A \cap B)}{P(B)} \qquad P(B \mid A) = \frac{P(B \cap A)}{P(A)}$$</p>
+<p>Da entrambe: $P(A \cap B) = P(A \mid B) P(B) = P(B \mid A) P(A)$. Da cui:</p>
+<p>$$\boxed{P(A \mid B) = \frac{P(B \mid A) \cdot P(A)}{P(B)}}$$</p>
+<p>In nomenclatura bayesiana:</p>
+<ul>
+<li>$P(A)$ = <strong>prior</strong> (la mia credenza iniziale su $A$).</li>
+<li>$P(B \mid A)$ = <strong>likelihood</strong> (quanto è verosimile osservare $B$ se $A$ è vero).</li>
+<li>$P(B)$ = <strong>evidence</strong> o costante di normalizzazione.</li>
+<li>$P(A \mid B)$ = <strong>posterior</strong> (la mia credenza aggiornata su $A$ dopo aver visto $B$).</li>
+</ul>
+<h2 id="2-la-forma-piu-utile">2. La forma più utile</h2>
+<p>Se $A_1, A_2, \ldots, A_n$ sono ipotesi alternative ed esaustive, possiamo esplicitare il denominatore (legge della probabilità totale):</p>
+<p>$$P(A_i \mid B) = \frac{P(B \mid A_i) P(A_i)}{\sum_j P(B \mid A_j) P(A_j)}$$</p>
+<p>In pratica: il posteriore di ogni ipotesi è proporzionale a prior × likelihood, normalizzato.</p>
+<h2 id="3-esempio-canonico-il-test-medico">3. Esempio canonico: il test medico</h2>
+<p><strong>Setup</strong>: una malattia rara colpisce <strong>1 persona su 1000</strong>. Esiste un test con:</p>
+<ul>
+<li>Sensibilità = $P(+ \mid \text{malato}) = 0{,}99$.</li>
+<li>Specificità = $P(- \mid \text{sano}) = 0{,}99$, quindi $P(+ \mid \text{sano}) = 0{,}01$ (falsi positivi).</li>
+</ul>
+<p>Sei positivo. Qual è la probabilità che tu sia davvero malato?</p>
+<p>S1 dice ~99% (perché il test è "accurato al 99%"). Sbagliato.</p>
+<p><strong>Calcolo</strong>:</p>
+<p>$$P(M \mid +) = \frac{P(+ \mid M) P(M)}{P(+)}$$</p>
+<p>$P(M) = 0{,}001$, $P(+ \mid M) = 0{,}99$.</p>
+<p>$P(+) = P(+ \mid M)P(M) + P(+ \mid \bar M) P(\bar M) = 0{,}99 \cdot 0{,}001 + 0{,}01 \cdot 0{,}999 = 0{,}00099 + 0{,}00999 = 0{,}01098$.</p>
+<p>$$P(M \mid +) = \frac{0{,}99 \cdot 0{,}001}{0{,}01098} \approx 0{,}090 = 9\%$$</p>
+<p><strong>Solo il 9%</strong>. L'intuizione tradisce perché ignora la <em>base rate</em> (1/1000). Su 1000 persone testate, ti aspetti 1 malato (correttamente positivo) e ~10 sani falsamente positivi: dei ~11 positivi, solo 1 è davvero malato.</p>
+<h3 id="31-visualizzazione">3.1 Visualizzazione</h3>
+<pre><code class="language-mermaid">flowchart TB
+  P[1000 persone testate] --&gt; M[1 malato]
+  P --&gt; S[999 sani]
+  M --&gt; MP[~1 positivo&lt;br/&gt;vero pos.]
+  S --&gt; SP[~10 positivi&lt;br/&gt;FALSI pos.]
+  S --&gt; SN[~989 negativi&lt;br/&gt;veri neg.]
+  MP --&gt; T[Totale positivi ≈ 11]
+  SP --&gt; T
+  T -.-&gt; R[&quot;P(M | +) ≈ 1/11 ≈ 9%&quot;]
+</code></pre>
+<h3 id="32-lezione">3.2 Lezione</h3>
+<p>La fallacia di ignorare la base rate (vedi <a href="22-fallacie-informali-presunzione.html">fallacie informali di presunzione</a> e <a href="23-bias-cognitivi.html">bias cognitivi</a>) è una delle ragioni di errore mediche più comuni. Per malattie rare, anche test ottimi danno spesso falsi positivi.</p>
+<h2 id="4-la-forma-odds">4. La forma odds</h2>
+<p>A volte è più comoda. Le <strong>odds</strong> a favore di $A$ sono $O(A) = P(A)/P(\bar A)$.</p>
+<p>$$\frac{P(A \mid B)}{P(\bar A \mid B)} = \frac{P(B \mid A)}{P(B \mid \bar A)} \cdot \frac{P(A)}{P(\bar A)}$$</p>
+<p>In parole: <strong>posterior odds = likelihood ratio × prior odds</strong>.</p>
+<p>Nel test medico: prior odds di essere malati = $1/999$. Likelihood ratio = $0{,}99 / 0{,}01 = 99$. Posterior odds = $99/999 \approx 0{,}099$. Converte in probabilità: $0{,}099 / (1 + 0{,}099) \approx 9\%$. ✓</p>
+<p>La forma odds è particolarmente utile quando aggiorni <strong>sequenzialmente</strong> con più evidenze indipendenti: moltiplichi i likelihood ratio.</p>
+<h2 id="5-aggiornamento-sequenziale">5. Aggiornamento sequenziale</h2>
+<p>Se ricevi due evidenze $B_1, B_2$ indipendenti dato $A$:</p>
+<p>$$P(A \mid B_1, B_2) \propto P(B_1 \mid A) P(B_2 \mid A) P(A)$$</p>
+<p>Ripetendo il test medico positivo una seconda volta (indipendentemente):</p>
+<p>Prior aggiornato = posterior precedente = 9%. Stesso likelihood ratio. Nuovo posterior odds = $99 \times 0{,}099 \approx 9{,}8$. Nuova probabilità: $9{,}8/10{,}8 \approx 91\%$. <strong>Due test positivi ti portano da 9% a 91%</strong>. Questo è il senso del re-testing.</p>
+<h2 id="6-estensione-bayes-per-parametri-continui">6. Estensione: Bayes per parametri continui</h2>
+<p>In statistica bayesiana, si aggiornano distribuzioni intere, non singole probabilità.</p>
+<p>$$p(\theta \mid D) = \frac{p(D \mid \theta) \cdot p(\theta)}{p(D)}$$</p>
+<p>$\theta$ = parametro (es. probabilità di testa di una moneta), $D$ = dati osservati. Si parte da una distribuzione prior $p(\theta)$ (es. uniforme se non sai nulla); con dati si ottiene una posterior più stretta. La media della posterior è la stima di $\theta$; la sua larghezza misura l'incertezza residua.</p>
+<h2 id="7-naive-bayes-cenno">7. Naive Bayes (cenno)</h2>
+<p>Algoritmo di classificazione: assumi che le features siano indipendenti dato la classe ($P(x_1, \ldots, x_n \mid C) = \prod_i P(x_i \mid C)$, <em>naive</em> perché l'indipendenza è quasi mai vera). Per filtro anti-spam: $C \in {\text{spam}, \text{ham}}$, $x_i$ = presenza/assenza di parole specifiche. Funziona sorprendentemente bene nonostante l'assunzione semplificata.</p>
+<h2 id="8-bayes-vs-frequentismo">8. Bayes vs frequentismo</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Bayesiano</th>
+<th>Frequentista</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cosa è probabilità?</td>
+<td>grado di credenza</td>
+<td>limite di frequenza</td>
+</tr>
+<tr>
+<td>Sui parametri</td>
+<td>distribuzione</td>
+<td>valore fisso ma ignoto</td>
+</tr>
+<tr>
+<td>Inferenza</td>
+<td>posterior, credible interval</td>
+<td>p-value, confidence interval</td>
+</tr>
+<tr>
+<td>Aggiornamento</td>
+<td>naturale, sequenziale</td>
+<td>richiede multipli "esperimenti"</td>
+</tr>
+<tr>
+<td>Critica</td>
+<td>scelta del prior soggettiva</td>
+<td>uso e abuso dei p-value</td>
+</tr>
+</tbody>
+</table>
+<p>Le due scuole hanno coesistito a lungo. Il ritorno del bayesianesimo è dovuto a calcoli computazionali (MCMC, Stan, PyMC) che hanno reso pratiche analisi prima intrattabili.</p>
+<h2 id="9-bayes-come-forma-mentis">9. Bayes come <em>forma mentis</em></h2>
+<p>Tetlock e altri (<em>Superforecasting</em>, vedi <a href="36-forecasting-calibrazione.html">sez. 36</a>) mostrano che i migliori previsori del mondo aggiornano le loro previsioni in modo <strong>bayesiano-like</strong>: non scartano l'ipotesi precedente al primo dato contrastante, e non si attaccano testardamente alla prior al primo dato confermativo. La probabilità si muove a piccoli passi, proporzionale alla forza dell'evidenza.</p>
+<h2 id="esercizi">Esercizi</h2>
+<details>
+  <summary>Esercizio 1 — In una città il 30% dei taxi è verde e il 70% azzurro. Un testimone identifica un taxi come verde dopo un incidente, ma in test ha solo 80% accuratezza nel distinguere i colori. Probabilità che il taxi fosse davvero verde?</summary>
+
+$P(V) = 0{,}3$, $P(A) = 0{,}7$.
+$P(\text{dice V} \mid V) = 0{,}8$, $P(\text{dice V} \mid A) = 0{,}2$.
+
+$P(\text{dice V}) = 0{,}8 \cdot 0{,}3 + 0{,}2 \cdot 0{,}7 = 0{,}24 + 0{,}14 = 0{,}38$.
+
+$P(V \mid \text{dice V}) = (0{,}8 \cdot 0{,}3) / 0{,}38 = 0{,}24 / 0{,}38 \approx 0{,}63 = 63\%$.
+
+Non 80%! La base rate (più taxi azzurri) compensa. È il famoso "Cab Problem" di Kahneman-Tversky.
+</details>
+
+<details>
+  <summary>Esercizio 2 — Hai 3 monete: 2 eque, 1 truccata che dà testa il 90%. Ne peschi una a caso e fai un lancio: viene testa. Probabilità che sia la truccata?</summary>
+
+Prior: $P(T) = 1/3$, $P(\bar T) = 2/3$.
+Likelihood: $P(\text{testa} \mid T) = 0{,}9$, $P(\text{testa} \mid \bar T) = 0{,}5$.
+
+$P(\text{testa}) = 0{,}9 \cdot 1/3 + 0{,}5 \cdot 2/3 = 0{,}3 + 0{,}333 = 0{,}633$.
+
+$P(T \mid \text{testa}) = (0{,}9 \cdot 1/3) / 0{,}633 = 0{,}3 / 0{,}633 \approx 0{,}474 = 47{,}4\%$.
+
+Da 33% a 47% per una sola testa. Dopo 5 teste consecutive di seguito la probabilità sale a >95%.
+</details>
+
+<h2 id="sintesi">Sintesi</h2>
+<ul>
+<li>$P(A \mid B) = P(B \mid A) P(A) / P(B)$.</li>
+<li>Posterior ∝ likelihood × prior.</li>
+<li><strong>Posterior odds = likelihood ratio × prior odds</strong>: forma comoda per aggiornamenti sequenziali.</li>
+<li>Base rate cruciale: ignorarla porta a sovrastimare drammaticamente la probabilità di malattia rara dato test positivo.</li>
+<li>Bayes opera anche sui parametri (statistica bayesiana) ed è la base di Naive Bayes, MCMC, ecc.</li>
+<li>Adottato come <em>forma mentis</em>, distingue ragionatori calibrati da intuitivi.</li>
+</ul>
+<h2 id="letture">Letture</h2>
+<ul>
+<li>Bayes, <em>An Essay towards solving a Problem in the Doctrine of Chances</em> (1763, postumo).</li>
+<li>Jaynes, <em>Probability Theory: The Logic of Science</em> (2003).</li>
+<li>McElreath, <em>Statistical Rethinking</em> (2020) — corso moderno bayesiano.</li>
+<li>Silver, <em>The Signal and the Noise</em> (2012) — divulgativo, Bayes nei dati reali.</li>
+</ul>
+      <nav class="pager">
+<a href="32-probabilita-fondamenti.html" class="prev"><span class="label">← Precedente</span><span class="title">Probabilità: fondamenti per il ragionamento</span></a>
+<a href="34-paradossi-probabilistici.html" class="next"><span class="label">Successivo →</span><span class="title">Paradossi probabilistici: Monty Hall, base rate, Simpson</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Logica, Problem Solving e Pensiero Critico Zero to Hero</strong> — percorso completo, in italiano, dall'anatomia di un argomento al do-calculus di Pearl.</p><p>Materiale didattico aperto. Nessuna sponsorizzazione. Quando un concetto è oscuro, torna indietro: la logica è una scala, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Successioni monotone e Bolzano-Weierstrass — Analisi Matematica I Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#1a2647',primaryTextColor:'#f3eed9',primaryBorderColor:'#d4af37',lineColor:'#8aa3c8',background:'#0c1428'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">∫</div>
+      <div>
+        <div class="brand-title">ANALYSIS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">IT</span><a href="../en/pages/13-monotone-bolzano-weierstrass.html" class="lang-link" title="Switch">EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li><li class="nav-item"><a href="00-intro.html" class=""><span class="num">00</span>Cos&#x27;è l&#x27;analisi matematica</a></li><li class="nav-item"><a href="01-logica-dimostrazioni.html" class=""><span class="num">01</span>Logica e dimostrazioni per l&#x27;analisi</a></li><li class="nav-item"><a href="02-insiemi-funzioni.html" class=""><span class="num">02</span>Insiemi, relazioni, funzioni</a></li><li class="nav-item"><a href="03-induzione-naturali.html" class=""><span class="num">03</span>Numeri naturali e principio di induzione</a></li><li class="nav-item"><a href="04-interi-razionali.html" class=""><span class="num">04</span>Numeri interi e razionali</a></li><li class="nav-item"><a href="05-cardinalita-cantor.html" class=""><span class="num">05</span>Cardinalità e infinito (Cantor)</a></li><li class="nav-item"><a href="06-numeri-reali-assiomi.html" class=""><span class="num">06</span>Numeri reali: gli assiomi</a></li><li class="nav-item"><a href="07-estremo-superiore.html" class=""><span class="num">07</span>Estremo superiore e completezza</a></li><li class="nav-item"><a href="08-costruzione-reali.html" class=""><span class="num">08</span>Costruzione di R: Dedekind e Cauchy</a></li><li class="nav-item"><a href="09-numeri-complessi.html" class=""><span class="num">09</span>Numeri complessi</a></li><li class="nav-item"><a href="10-topologia-r.html" class=""><span class="num">10</span>Topologia di R: intorni, aperti, chiusi, compatti</a></li><li class="nav-item"><a href="11-successioni-definizione.html" class=""><span class="num">11</span>Successioni e limiti: la definizione ε-N</a></li><li class="nav-item"><a href="12-algebra-limiti-successioni.html" class=""><span class="num">12</span>Algebra dei limiti di successioni</a></li><li class="nav-item"><a href="13-monotone-bolzano-weierstrass.html" class="active"><span class="num">13</span>Successioni monotone e Bolzano-Weierstrass</a></li><li class="nav-item"><a href="14-cauchy-completezza.html" class=""><span class="num">14</span>Successioni di Cauchy e completezza di R</a></li><li class="nav-item"><a href="15-limiti-notevoli-landau.html" class=""><span class="num">15</span>Limiti notevoli e simboli di Landau (o-piccolo, O-grande)</a></li><li class="nav-item"><a href="16-liminf-limsup.html" class=""><span class="num">16</span>Limite superiore, limite inferiore, sottosuccessioni</a></li><li class="nav-item"><a href="17-funzioni-elementari.html" class=""><span class="num">17</span>Funzioni elementari: panoramica</a></li><li class="nav-item"><a href="18-esponenziale-logaritmo.html" class=""><span class="num">18</span>Esponenziale, logaritmo, potenze</a></li><li class="nav-item"><a href="19-trigonometriche-iperboliche.html" class=""><span class="num">19</span>Funzioni trigonometriche e iperboliche</a></li><li class="nav-item"><a href="20-limite-funzione.html" class=""><span class="num">20</span>Limite di funzione: la definizione</a></li><li class="nav-item"><a href="21-teoremi-limiti-funzioni.html" class=""><span class="num">21</span>Teoremi sui limiti di funzioni</a></li><li class="nav-item"><a href="22-limiti-notevoli-funzioni.html" class=""><span class="num">22</span>Limiti notevoli per funzioni</a></li><li class="nav-item"><a href="23-asintoti.html" class=""><span class="num">23</span>Asintoti orizzontali, verticali, obliqui</a></li><li class="nav-item"><a href="24-continuita-definizione.html" class=""><span class="num">24</span>Continuità: la definizione e le prime proprietà</a></li><li class="nav-item"><a href="25-teoremi-continue.html" class=""><span class="num">25</span>Teoremi sulle funzioni continue (Weierstrass, valori intermedi)</a></li><li class="nav-item"><a href="26-uniforme-continuita.html" class=""><span class="num">26</span>Uniforme continuità, Heine, lipschitzianità</a></li><li class="nav-item"><a href="27-discontinuita.html" class=""><span class="num">27</span>Tipi di discontinuità</a></li><li class="nav-item"><a href="28-derivata-definizione.html" class=""><span class="num">28</span>Derivata: definizione e interpretazione geometrica</a></li><li class="nav-item"><a href="29-regole-derivazione.html" class=""><span class="num">29</span>Regole di derivazione (somma, prodotto, quoziente, catena)</a></li><li class="nav-item"><a href="30-derivate-elementari.html" class=""><span class="num">30</span>Derivate delle funzioni elementari</a></li><li class="nav-item"><a href="31-teoremi-differenziale.html" class=""><span class="num">31</span>Teoremi del calcolo differenziale: Fermat, Rolle, Lagrange, Cauchy</a></li><li class="nav-item"><a href="32-hopital.html" class=""><span class="num">32</span>Regola di de L&#x27;Hôpital</a></li><li class="nav-item"><a href="33-taylor.html" class=""><span class="num">33</span>Polinomi e formula di Taylor</a></li><li class="nav-item"><a href="34-limiti-taylor.html" class=""><span class="num">34</span>Calcolo di limiti tramite Taylor</a></li><li class="nav-item"><a href="35-monotonia-estremi.html" class=""><span class="num">35</span>Monotonia, massimi, minimi, punti critici</a></li><li class="nav-item"><a href="36-convessita-concavita.html" class=""><span class="num">36</span>Convessità, concavità, flessi</a></li><li class="nav-item"><a href="37-studio-funzione.html" class=""><span class="num">37</span>Studio di funzione completo</a></li><li class="nav-item"><a href="38-applicazioni-ottimizzazione.html" class=""><span class="num">38</span>Applicazioni dell&#x27;ottimizzazione: fisica, economia, geometria</a></li><li class="nav-item"><a href="39-integrale-riemann.html" class=""><span class="num">39</span>Integrale di Riemann: definizione</a></li><li class="nav-item"><a href="40-teorema-fondamentale-calcolo.html" class=""><span class="num">40</span>Teorema fondamentale del calcolo integrale</a></li><li class="nav-item"><a href="41-tecniche-integrazione.html" class=""><span class="num">41</span>Tecniche di integrazione: per parti, per sostituzione</a></li><li class="nav-item"><a href="42-integrali-razionali.html" class=""><span class="num">42</span>Integrazione di funzioni razionali</a></li><li class="nav-item"><a href="43-integrali-impropri.html" class=""><span class="num">43</span>Integrali impropri</a></li><li class="nav-item"><a href="44-funzioni-integrali.html" class=""><span class="num">44</span>Funzioni integrali e applicazioni geometriche</a></li><li class="nav-item"><a href="45-serie-numeriche.html" class=""><span class="num">45</span>Serie numeriche: definizione e convergenza</a></li><li class="nav-item"><a href="46-criteri-positivi.html" class=""><span class="num">46</span>Criteri di convergenza per serie a termini positivi</a></li><li class="nav-item"><a href="47-serie-segno-qualunque.html" class=""><span class="num">47</span>Serie a segno qualunque, Leibniz, convergenza assoluta</a></li><li class="nav-item"><a href="48-serie-potenze.html" class=""><span class="num">48</span>Serie di potenze e raggio di convergenza</a></li><li class="nav-item"><a href="49-serie-taylor.html" class=""><span class="num">49</span>Serie di Taylor e analiticità</a></li><li class="nav-item"><a href="50-serie-fourier-cenni.html" class=""><span class="num">50</span>Serie di Fourier: introduzione</a></li><li class="nav-item"><a href="51-edo-primo-ordine.html" class=""><span class="num">51</span>EDO del primo ordine</a></li><li class="nav-item"><a href="52-edo-lineari-ordine-n.html" class=""><span class="num">52</span>EDO lineari di ordine $n$ a coefficienti costanti</a></li><li class="nav-item"><a href="53-cauchy-esistenza-unicita.html" class=""><span class="num">53</span>Problema di Cauchy, esistenza e unicità</a></li><li class="nav-item"><a href="54-topologia-rn.html" class=""><span class="num">54</span>Topologia in $\mathbb{R}^n$</a></li><li class="nav-item"><a href="55-derivate-parziali-differenziale.html" class=""><span class="num">55</span>Derivate parziali e differenziale in più variabili</a></li><li class="nav-item"><a href="56-cenni-lebesgue-funzionale.html" class=""><span class="num">56</span>Oltre Riemann: Lebesgue, Banach, Hilbert</a></li><li class="nav-item"><a href="57-eserciziario.html" class=""><span class="num">57</span>Eserciziario: problemi tipo d&#x27;esame</a></li><li class="nav-item"><a href="58-glossario-az.html" class=""><span class="num">58</span>Glossario A-Z dell&#x27;Analisi Matematica I</a></li><li class="nav-item"><a href="59-formulario-completo.html" class=""><span class="num">59</span>Formulario completo di Analisi Matematica I</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Successioni</span>
+        <span>Sezione 13 di 59</span>
+        <span class="level-tag level-int">Livello: intermedio</span>
+      </div>
+      <h1>Successioni monotone e Bolzano-Weierstrass</h1>
+      <p class="summary">Due risultati cardine. **Successioni monotone limitate convergono** — arma per dimostrare esistenza di limiti senza conoscerli. **Bolzano-Weierstrass** — ogni successione limitata ha una sottosuccessione convergente. Entrambi crollano in $\mathbb{Q}$ e caratterizzano la completezza di $\mathbb{R}$.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Successioni</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>Successioni e limite (sez. 11)</li><li>Algebra dei limiti (sez. 12)</li><li>Topologia di R, sup/inf (sez. 07, 10)</li></ul>
+  <div class="label">Strumenti / riferimenti</div>
+  <ul class="source-list"><li>Rudin — *Principles*, cap. 3</li><li>Giusti — *Analisi 1*</li></ul>
+</div>
+      <h2 id="perche-parlarne">Perché parlarne</h2>
+<p>Due architravi:</p>
+<ol>
+<li><strong>Successioni monotone limitate convergono</strong> — uno strumento per dimostrare che un limite esiste <em>senza conoscerlo</em>. Cruciale per definire il numero $e$, per analizzare successioni ricorsive, per calcolare radici come limite di iterazioni.</li>
+<li><strong>Bolzano-Weierstrass</strong> — ogni successione limitata ha una sottosuccessione convergente. È il teorema-ponte tra "limitato" e "convergente": permette di costruire candidati al limite anche quando l'intera successione oscilla.</li>
+</ol>
+<p>Entrambi i risultati dipendono dalla <strong>completezza di $\mathbb{R}$</strong> (l'assenza di "buchi"). Sono <em>falsi</em> in $\mathbb{Q}$.</p>
+<h2 id="intuizione">Intuizione</h2>
+<p><strong>Monotone limitate.</strong> Se $a_n$ cresce e non supera una "cappa" $M$, allora deve "stabilizzarsi" da qualche parte sotto $M$. Quel "da qualche parte" è $\sup\{a_n\}$. I termini non lo superano (limitati) ma si avvicinano arbitrariamente (sup). Conclusione: convergono al sup.</p>
+<p><strong>Bolzano-Weierstrass.</strong> Prendi una successione che si dimena dentro $[a, b]$. Dividi a metà: una delle due metà contiene <strong>infiniti</strong> termini (perché l'unione delle due metà ha tutti gli infiniti termini, e non possono stare tutti in una metà finita). Iteriamo: bisezioni successive producono intervalli incatenati di diametro che dimezza ogni volta → 0. La loro intersezione è un solo punto $L$. Scegliendo un termine per intervallo, otteniamo una sottosuccessione che converge a $L$.</p>
+<h2 id="vocabolario">Vocabolario</h2>
+<h3 id="monotonia">Monotonia</h3>
+<ul>
+<li>$(a_n)$ è <strong>crescente</strong> se $a_n \le a_{n+1}$ per ogni $n$; <strong>strettamente crescente</strong> se $a_n < a_{n+1}$.</li>
+<li>$(a_n)$ è <strong>decrescente</strong> se $a_n \ge a_{n+1}$; strettamente se $a_n > a_{n+1}$.</li>
+<li>$(a_n)$ è <strong>monotona</strong> se è crescente o decrescente.</li>
+</ul>
+<h3 id="sottosuccessione">Sottosuccessione</h3>
+<p>Data $(a_n)$, una <strong>sottosuccessione</strong> si costruisce scegliendo indici crescenti: $n_0 < n_1 < n_2 < \dots$, e prendendo $(a_{n_k})_k$.</p>
+<blockquote>
+<p><strong>Glossarietto:</strong></p>
+<ul>
+<li>$n_k$ = il $k$-esimo indice scelto (i $n$ con pedice non sono gli stessi $n$ della successione originale!).</li>
+<li>Formalmente: $\varphi : \mathbb{N} \to \mathbb{N}$ strettamente crescente, $\varphi(k) = n_k$.</li>
+<li><strong>Esempio.</strong> Se $(a_n) = (n) = 0, 1, 2, 3, 4, \dots$, una sottosuccessione è $(a_{2k}) = 0, 2, 4, 6, \dots$ (gli indici pari).</li>
+</ul>
+</blockquote>
+<p><strong>Osservazione utile</strong>: $n_k \ge k$ per ogni $k$ (induzione: $n_0 \ge 0$, $n_{k+1} > n_k \ge k$, quindi $n_{k+1} \ge k + 1$).</p>
+<p><strong>Fatto base</strong>: se $a_n \to L$, allora <strong>ogni</strong> sottosuccessione $a_{n_k} \to L$.</p>
+<p><em>Dim.</em> Dato $\varepsilon > 0$, $\exists N : |a_n - L| < \varepsilon$ per $n \ge N$. Poiché $n_k \ge k$, anche $|a_{n_k} - L| < \varepsilon$ per $k \ge N$. ∎</p>
+<h2 id="teorema-delle-successioni-monotone">Teorema delle successioni monotone</h2>
+<blockquote>
+<p><strong>Teorema 1.</strong> Sia $(a_n)$ monotona.</p>
+<p>(i) Se è crescente: $\lim a_n = \sup_n a_n \in \overline{\mathbb{R}}$.
+(ii) Se è decrescente: $\lim a_n = \inf_n a_n \in \overline{\mathbb{R}}$.</p>
+<p>In particolare, <strong>monotona + limitata $\Rightarrow$ convergente</strong> (in $\mathbb{R}$).</p>
+<p><strong>Glossarietto:</strong></p>
+<ul>
+<li>$\sup_n a_n$ = $\sup \{a_n : n \in \mathbb{N}\}$, estremo superiore dell'insieme di tutti i termini.</li>
+<li>$\overline{\mathbb{R}} = \mathbb{R} \cup \{-\infty, +\infty\}$ (sez. 12): se la successione cresce senza limite, $\sup = +\infty$.</li>
+</ul>
+</blockquote>
+<p><em>Dim. del caso crescente.</em></p>
+<p><strong>Caso 1: $S = \sup_n a_n \in \mathbb{R}$</strong> (cioè limitata superiormente). Per la definizione di sup (cap. 07):
+1. $a_n \le S$ per ogni $n$.
+2. $\forall \varepsilon > 0,\ \exists N : a_N > S - \varepsilon$ ($\varepsilon$-caratterizzazione).</p>
+<p>Per monotonia, $a_n \ge a_N > S - \varepsilon$ per ogni $n \ge N$. Combinando con (1): $S - \varepsilon < a_n \le S < S + \varepsilon$, cioè $|a_n - S| < \varepsilon$. Quindi $a_n \to S$. ∎</p>
+<p><strong>Caso 2: $\sup a_n = +\infty$</strong> (non limitata). Per ogni $M > 0$, $M$ non è maggiorante, quindi $\exists N : a_N > M$. Per monotonia, $a_n > M$ per $n \ge N$. Quindi $a_n \to +\infty$. ∎</p>
+<p>Caso decrescente: analogo con $\inf$.</p>
+<h2 id="teorema-di-bolzano-weierstrass">Teorema di Bolzano-Weierstrass</h2>
+<blockquote>
+<p><strong>Teorema 2 (BW).</strong> Ogni successione <strong>limitata</strong> in $\mathbb{R}$ ammette una sottosuccessione convergente.</p>
+</blockquote>
+<p><em>Dim. (per bisezione).</em></p>
+<p>Sia $a_n \in [a, b] =: I_0$.</p>
+<p><strong>Costruzione degli intervalli.</strong> Dividiamo $I_0$ in due metà uguali: $\left[a, \frac{a+b}{2}\right]$ e $\left[\frac{a+b}{2}, b\right]$. Poiché l'unione contiene <strong>infiniti</strong> termini ($a_n$ con $n \in \mathbb{N}$), almeno una delle due metà contiene infiniti termini. Sia $I_1$ tale metà (se entrambe vanno bene, scegli la sinistra).</p>
+<p>Iteriamo: ad ogni passo dividi l'intervallo corrente $I_k$ a metà, scegli la metà $I_{k+1}$ che contiene infiniti termini.</p>
+<p>Otteniamo $I_0 \supseteq I_1 \supseteq I_2 \supseteq \dots$, intervalli <strong>chiusi e incatenati</strong>, ciascuno con lunghezza $|I_k| = (b - a)/2^k \to 0$.</p>
+<p><strong>Costruzione della sottosuccessione.</strong> Scegli:
+- $n_0 = 0$ (o un qualunque indice con $a_{n_0} \in I_0$).
+- $n_1 > n_0$ con $a_{n_1} \in I_1$ (esiste: $I_1$ contiene infiniti termini, quindi anche con indice $> n_0$).
+- In generale, $n_{k+1} > n_k$ con $a_{n_{k+1}} \in I_{k+1}$.</p>
+<p><strong>Convergenza.</strong> Gli $\{I_k\}$ sono chiusi incatenati con lunghezza $\to 0$. Per il <strong>teorema degli intervalli incatenati di Cantor</strong> (sez. 07, conseguenza della completezza), $\bigcap_k I_k = \{L\}$ per un unico $L \in \mathbb{R}$.</p>
+<p>Per costruzione, $a_{n_k} \in I_k$ e $L \in I_k$. Quindi:
+$$|a_{n_k} - L| \le |I_k| = \frac{b - a}{2^k} \to 0.$$
+Conclusione: $a_{n_k} \to L$. ∎</p>
+<div class="chart">
+<svg viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg">
+  <rect width="600" height="300" fill="#111a30"/>
+  <text x="20" y="25" fill="#f3eed9" font-family="ui-monospace" font-size="13">Bisezione: costruzione di Iₖ incatenati</text>
+  <line x1="80" y1="60" x2="540" y2="60" stroke="#d4af37" stroke-width="4"/>
+  <text x="50" y="65" fill="#d4af37" font-family="ui-monospace" font-size="11">I₀</text>
+  <text x="80" y="50" fill="#f3eed9" font-family="ui-monospace" font-size="10">a</text>
+  <text x="540" y="50" fill="#f3eed9" font-family="ui-monospace" font-size="10">b</text>
+  <line x1="310" y1="105" x2="540" y2="105" stroke="#e8a04a" stroke-width="4"/>
+  <text x="280" y="110" fill="#e8a04a" font-family="ui-monospace" font-size="11">I₁</text>
+  <line x1="310" y1="150" x2="425" y2="150" stroke="#6fb38a" stroke-width="4"/>
+  <text x="280" y="155" fill="#6fb38a" font-family="ui-monospace" font-size="11">I₂</text>
+  <line x1="367.5" y1="195" x2="425" y2="195" stroke="#6aa9d8" stroke-width="4"/>
+  <text x="338" y="200" fill="#6aa9d8" font-family="ui-monospace" font-size="11">I₃</text>
+  <line x1="367.5" y1="240" x2="396" y2="240" stroke="#e07a8d" stroke-width="4"/>
+  <text x="338" y="245" fill="#e07a8d" font-family="ui-monospace" font-size="11">I₄</text>
+  <circle cx="381" cy="275" r="5" fill="#d4af37"/>
+  <text x="386" y="280" fill="#d4af37" font-family="ui-monospace" font-size="11">L = ∩ Iₖ</text>
+</svg>
+<div class="chart-caption">Ogni $I_{k+1}$ è la metà di $I_k$ che contiene infiniti termini. L'intersezione è un singoletto $\{L\}$.</div>
+</div>
+
+<h3 id="corollario-sottosuccessione-monotona">Corollario — Sottosuccessione monotona</h3>
+<blockquote>
+<p><strong>Corollario.</strong> Ogni successione $(a_n)$ ammette una sottosuccessione <strong>monotona</strong>.</p>
+</blockquote>
+<p><em>Dim.</em> Diciamo che $n$ è una <strong>vetta</strong> se $a_n > a_m$ per ogni $m > n$ (tutti i termini dopo sono più piccoli).</p>
+<p><strong>Caso A: ci sono infinite vette.</strong> Siano $n_0 < n_1 < n_2 < \dots$ le vette. Per definizione $a_{n_0} > a_{n_1} > a_{n_2} > \dots$: sottosuccessione <strong>strettamente decrescente</strong>.</p>
+<p><strong>Caso B: ci sono finite vette.</strong> Sia $n_0$ un indice più grande di tutte le vette. $n_0$ non è vetta, quindi $\exists n_1 > n_0$ con $a_{n_1} \ge a_{n_0}$. Pure $n_1$ non è vetta, $\exists n_2 > n_1$ con $a_{n_2} \ge a_{n_1}$. Iteriamo: otteniamo sottosuccessione <strong>crescente</strong>. ∎</p>
+<p><strong>Combinando Teorema 1 + Corollario</strong> otteniamo una seconda dimostrazione di BW: limitata $\Rightarrow$ sottosuccessione monotona $\Rightarrow$ (limitata + monotona) $\Rightarrow$ converge.</p>
+<h2 id="esempi-cardine">Esempi cardine</h2>
+<h3 id="esempio-1-la-definizione-di-math119-via-successione">Esempio 1 — La definizione di $e$ via successione</h3>
+<p>$$a_n = \left(1 + \frac{1}{n}\right)^n.$$</p>
+<p><strong>Tesi.</strong> $(a_n)$ è crescente e limitata, quindi converge. Il limite <em>definisce</em> il numero $e$:
+$$e := \lim_{n \to \infty} \left(1 + \frac{1}{n}\right)^n.$$</p>
+<p><strong>Schizzo della monotonia.</strong> Sviluppo del binomio:
+$$a_n = \sum_{k=0}^n \binom{n}{k} \frac{1}{n^k} = \sum_{k=0}^n \frac{1}{k!} \cdot \prod_{j=0}^{k-1}\left(1 - \frac{j}{n}\right).$$
+Confrontando con $a_{n+1}$: ogni fattore $\left(1 - \frac{j}{n+1}\right) > \left(1 - \frac{j}{n}\right)$, e $a_{n+1}$ ha un termine in più (positivo). Quindi $a_{n+1} > a_n$.</p>
+<p><strong>Limitatezza</strong> (sopra da 3). $a_n \le \sum_{k=0}^n \frac{1}{k!} \le 1 + \sum_{k=1}^\infty \frac{1}{2^{k-1}} = 1 + 2 = 3$. (Usato $k! \ge 2^{k-1}$ per $k \ge 1$.)</p>
+<p>Per il Teorema 1, $\lim$ esiste finito $\in [2, 3]$. Si definisce $e := \lim a_n \approx 2.71828\dots$</p>
+<h3 id="esempio-2-successione-ricorsiva-math132-math133">Esempio 2 — Successione ricorsiva $a_{n+1} = \sqrt{2 + a_n}$, $a_0 = 0$</h3>
+<p><strong>Limitata da 2.</strong> Per induzione: $a_0 = 0 < 2$; se $a_n < 2$, allora $a_{n+1} = \sqrt{2 + a_n} < \sqrt 4 = 2$. ✓</p>
+<p><strong>Crescente.</strong> $a_{n+1}^2 - a_n^2 = (2 + a_n) - a_n^2 = -(a_n^2 - a_n - 2) = -(a_n - 2)(a_n + 1) > 0$ per $a_n \in [0, 2)$. Cioè $a_{n+1} > a_n$.</p>
+<p><strong>Convergenza.</strong> Per il Teorema 1, $a_n \to L = \sup a_n \le 2$. Passando al limite nell'equazione di ricorrenza: $L = \sqrt{2 + L}$, $L^2 - L - 2 = 0$, $L = 2$. (L'altra radice $L = -1$ è scartata, $a_n \ge 0$.)</p>
+<h3 id="esempio-3-bw-in-azione-sin-n">Esempio 3 — BW in azione (sin n)</h3>
+<p>$a_n = \sin n$. Successione <strong>limitata</strong> ($|a_n| \le 1$), <strong>non monotona</strong>, <strong>non convergente</strong> (lo si può dimostrare).</p>
+<p>Per BW esiste una sottosuccessione convergente. Anzi, si dimostra che per <em>ogni</em> $L \in [-1, 1]$ esiste una sottosuccessione $a_{n_k} \to L$ (teorema di equidistribuzione di Weyl). Una successione apparentemente "caotica" è in realtà ricchissima di sottosuccessioni.</p>
+<h2 id="trappole-comuni">Trappole comuni</h2>
+<ul>
+<li><strong>"Crescente $\Rightarrow$ convergente" è falso senza limitatezza.</strong> $a_n = n$ cresce ma diverge a $+\infty$. (Il teorema dice "convergente in $\overline{\mathbb{R}}$": il limite può essere $\pm\infty$.)</li>
+<li><strong>BW richiede limitatezza.</strong> $a_n = n$ non ha sottosuccessioni convergenti in $\mathbb{R}$.</li>
+<li><strong>In $\mathbb{Q}$ BW è falso.</strong> Esempio: $a_n =$ approssimazione decimale di $\sqrt 2$ a $n$ cifre. Limitata in $\mathbb{Q} \cap [1, 2]$, ma nessuna sottosuccessione converge in $\mathbb{Q}$ (convergerebbe a $\sqrt 2 \notin \mathbb{Q}$). BW equivale alla completezza.</li>
+<li><strong>Passare al limite senza giustificare l'esistenza.</strong> Errore classico: data $a_{n+1} = a_n^2$, $a_0 = 2$, se passi al limite $L = L^2 \Rightarrow L \in \{0, 1\}$. <strong>Falso</strong>: $a_n = 2^{2^n} \to +\infty$. Il vizio: hai passato al limite assumendo che esistesse finito. La regola: prima dimostra che il limite esiste, poi puoi passarlo.</li>
+</ul>
+<h2 id="esercizi">Esercizi</h2>
+<details>
+<summary>Esercizio 1 — Successione ricorsiva</summary>
+
+Sia $a_1 = 1$, $a_{n+1} = \frac{a_n + 6}{2}$. Calcola $\lim a_n$.
+
+**Soluzione.**
+*Monotonia.* $a_{n+1} - a_n = \frac{a_n + 6}{2} - a_n = \frac{6 - a_n}{2}$, positivo $\iff a_n < 6$. Per induzione $a_n < 6$ (base $a_1 = 1 < 6$; passo $a_n < 6 \Rightarrow a_{n+1} = (a_n + 6)/2 < 6$). Quindi $(a_n)$ crescente.
+
+*Limitatezza.* Da sopra da 6.
+
+*Limite.* Per Teorema 1, esiste $L \le 6$. Passando al limite: $L = (L + 6)/2 \Rightarrow L = 6$. ∎
+</details>
+
+<details>
+<summary>Esercizio 2 — Radice come limite (metodo di Newton)</summary>
+
+Sia $a_1 = 2$, $a_{n+1} = \frac{1}{2}\left(a_n + \frac{2}{a_n}\right)$ (metodo di Newton per $\sqrt 2$). Dimostra $a_n \to \sqrt 2$.
+
+**Soluzione.**
+
+*Limitatezza inferiore.* $a_n \ge \sqrt 2$ per $n \ge 1$ (per AM-GM: $\frac{a + 2/a}{2} \ge \sqrt{a \cdot \frac{2}{a}} = \sqrt 2$).
+
+*Decrescenza.* $a_{n+1} - a_n = \frac{1}{2}\left(\frac{2}{a_n} - a_n\right) = \frac{2 - a_n^2}{2 a_n} \le 0$ (perché $a_n^2 \ge 2$).
+
+*Limite.* Per Teorema 1, $a_n \to L \ge \sqrt 2$. Passando: $L = (L + 2/L)/2 \Rightarrow L^2 = 2 \Rightarrow L = \sqrt 2$. ∎
+
+(Bonus: il metodo di Newton converge in modo *quadratico* — il numero di cifre corrette raddoppia ad ogni passo. Velocissimo.)
+</details>
+
+<details>
+<summary>Esercizio 3 — BW costruttivo</summary>
+
+Sia $a_n = (-1)^n \frac{n}{n + 1}$. Trova due sottosuccessioni con limiti diversi.
+
+**Soluzione.**
+$a_{2k} = \frac{2k}{2k+1} \to 1$ (limite della sottosuccessione di indici pari).
+$a_{2k+1} = -\frac{2k+1}{2k+2} \to -1$ (indici dispari). ∎
+</details>
+
+<details>
+<summary>Esercizio 4 — Intervalli incatenati con condizione che fallisce</summary>
+
+Sia $I_n = [n, n + 1/n]$. Verifica che $I_{n+1} \not\subseteq I_n$ e che $\bigcap I_n = \emptyset$. Perché Cantor non si applica?
+
+**Soluzione.** $I_1 = [1, 2]$, $I_2 = [2, 2.5]$, $I_3 = [3, 3.33], \dots$ Gli estremi inferiori crescono: gli intervalli non sono incatenati ($I_2 \not\subseteq I_1$ perché $\sup I_1 = 2 < \inf I_2 = 2$? no in realtà sono al limite — più chiaramente $I_3$ inizia in 3 ma $I_2$ finisce a 2.5).
+
+L'intersezione è vuota perché un punto fissato $x$ può stare al più in uno dei $I_n$.
+
+Cantor richiede inclusione successiva, qui assente. ∎
+</details>
+
+<details>
+<summary>Esercizio 5 — Monotone "definitivamente"</summary>
+
+Dimostra: se $(a_n)$ è monotona definitivamente (cioè $\exists N : a_n \le a_{n+1}$ per $n \ge N$) e limitata, allora converge.
+
+**Soluzione.** Considera la sottosuccessione $b_k = a_{N + k}$: monotona e limitata, quindi $b_k \to L$ per Teorema 1.
+
+I primi $N$ termini di $(a_n)$ non influenzano il limite: dato $\varepsilon > 0$, $\exists K$ con $|b_k - L| < \varepsilon$ per $k \ge K$, cioè $|a_n - L| < \varepsilon$ per $n \ge N + K$. ∎
+</details>
+
+<details>
+<summary>Esercizio 6 — BW negato in $\mathbb{Q}$</summary>
+
+Costruisci $(a_n) \subseteq \mathbb{Q} \cap [1, 2]$ tale che nessuna sottosuccessione converga in $\mathbb{Q}$.
+
+**Soluzione.** $a_n$ = approssimazione decimale di $\sqrt 2$ a $n$ cifre: $a_1 = 1.4$, $a_2 = 1.41$, $a_3 = 1.414, \dots$ Tutti razionali, limitati in $[1, 2]$.
+
+Qualunque sottosuccessione converge a $\sqrt 2 \notin \mathbb{Q}$ (in $\mathbb{R}$; in $\mathbb{Q}$ non c'è limite). Quindi BW fallisce in $\mathbb{Q}$. ∎
+
+Conclusione: **BW ⇔ completezza** di $\mathbb{R}$.
+</details>
+
+<details>
+<summary>Esercizio 7 — Caratterizzazione del sup come limite</summary>
+
+Dimostra: se $A \subseteq \mathbb{R}$ è non vuoto e limitato superiormente, allora esiste $(a_n) \subseteq A$ con $a_n \to \sup A$.
+
+**Soluzione.** Sia $S = \sup A$. Per la $\varepsilon$-caratterizzazione (cap. 07), per ogni $n \ge 1$, $S - 1/n$ non è maggiorante, quindi $\exists a_n \in A$ con $a_n > S - 1/n$. Inoltre $a_n \le S$.
+
+Per carabinieri: $S - 1/n < a_n \le S$, entrambi gli estremi $\to S$. Quindi $a_n \to S$. ∎
+
+> **Risultato fondamentale**: il sup è sempre limite di una successione *dentro* l'insieme.
+</details>
+
+<h2 id="riassunto-in-tabella">Riassunto in tabella</h2>
+<table>
+<thead>
+<tr>
+<th>Ipotesi</th>
+<th>Conclusione</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>crescente, limitata sopra</td>
+<td>$\to \sup a_n \in \mathbb{R}$</td>
+</tr>
+<tr>
+<td>crescente, non limitata</td>
+<td>$\to +\infty$</td>
+</tr>
+<tr>
+<td>limitata in $\mathbb{R}$</td>
+<td>ha sottosuccessione convergente (BW)</td>
+</tr>
+<tr>
+<td>qualsiasi successione</td>
+<td>ha sottosuccessione monotona</td>
+</tr>
+<tr>
+<td>intervalli chiusi incatenati</td>
+<td>intersezione non vuota</td>
+</tr>
+</tbody>
+</table>
+<h2 id="riassunto-in-una-riga">Riassunto in una riga</h2>
+<p><strong>Monotone limitate convergono</strong>, <strong>limitate hanno sottosuccessioni convergenti</strong> (Bolzano-Weierstrass): due risultati equivalenti alla completezza di $\mathbb{R}$ — falsi in $\mathbb{Q}$ — e gli strumenti principali per dimostrare l'esistenza di limiti senza calcolarli esplicitamente.</p>
+      <nav class="pager">
+<a href="12-algebra-limiti-successioni.html" class="prev"><span class="label">← Precedente</span><span class="title">Algebra dei limiti di successioni</span></a>
+<a href="14-cauchy-completezza.html" class="next"><span class="label">Successivo →</span><span class="title">Successioni di Cauchy e completezza di R</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Analisi Matematica I Zero to Hero</strong> — percorso completo bilingue, dai naturali agli integrali impropri, dalle serie di Fourier alle EDO lineari.</p><p>Materiale didattico aperto. Quando una dimostrazione è oscura, torna indietro: l'analisi è una scala, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

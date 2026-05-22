@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Curry-Howard and type theory — Logic & Critical Thinking Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#2a2540',primaryTextColor:'#ecebff',primaryBorderColor:'#7a6cd6',lineColor:'#9890b8',background:'#141226'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">∴</div>
+      <div>
+        <div class="brand-title">LOGOS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/19-curry-howard-type-theory.html" class="lang-link" title="Passa all'italiano">IT</a><span class="lang-active" title="English">EN</span></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="search... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-what-is-logic.html" class=""><span class="num">01</span>What is logic and critical thinking</a></li><li class="nav-item"><a href="../pages/02-history-of-logic.html" class=""><span class="num">02</span>A short history of logic</a></li><li class="nav-item"><a href="../pages/03-types-of-reasoning.html" class=""><span class="num">03</span>Types of reasoning: deductive, inductive, abductive, analogical</a></li><li class="nav-item"><a href="../pages/04-anatomy-of-arguments.html" class=""><span class="num">04</span>Arguments: premises, conclusion, validity, soundness</a></li><li class="nav-item"><a href="../pages/05-paul-elder-standards.html" class=""><span class="num">05</span>Critical thinking: Paul-Elder standards</a></li><li class="nav-item"><a href="../pages/06-language-and-ambiguity.html" class=""><span class="num">06</span>Language, ambiguity, definitions</a></li><li class="nav-item"><a href="../pages/07-propositional-logic.html" class=""><span class="num">07</span>Propositional logic: connectives and truth tables</a></li><li class="nav-item"><a href="../pages/08-equivalences-normal-forms.html" class=""><span class="num">08</span>Logical equivalences, De Morgan, normal forms</a></li><li class="nav-item"><a href="../pages/09-rules-of-inference.html" class=""><span class="num">09</span>Rules of inference</a></li><li class="nav-item"><a href="../pages/10-natural-deduction.html" class=""><span class="num">10</span>Natural deduction: I/E rules and structured proof</a></li><li class="nav-item"><a href="../pages/11-axiomatic-sequent-systems.html" class=""><span class="num">11</span>Axiomatic and sequent calculus systems</a></li><li class="nav-item"><a href="../pages/12-predicate-logic-syntax.html" class=""><span class="num">12</span>Predicate logic (FOL): syntax and quantifiers</a></li><li class="nav-item"><a href="../pages/13-predicate-logic-semantics.html" class=""><span class="num">13</span>FOL: semantics, models, validity</a></li><li class="nav-item"><a href="../pages/14-sets-relations-functions.html" class=""><span class="num">14</span>Sets, relations, functions</a></li><li class="nav-item"><a href="../pages/15-metalogic-godel.html" class=""><span class="num">15</span>Metalogic: soundness, completeness, Gödel&#x27;s theorems</a></li><li class="nav-item"><a href="../pages/16-modal-logic.html" class=""><span class="num">16</span>Modal logic and possible worlds</a></li><li class="nav-item"><a href="../pages/17-temporal-deontic-epistemic-logic.html" class=""><span class="num">17</span>Temporal, deontic, epistemic logics</a></li><li class="nav-item"><a href="../pages/18-non-classical-logic.html" class=""><span class="num">18</span>Non-classical logics: intuitionistic, fuzzy, paraconsistent</a></li><li class="nav-item"><a href="../pages/19-curry-howard-type-theory.html" class="active"><span class="num">19</span>Curry-Howard and type theory</a></li><li class="nav-item"><a href="../pages/20-formal-fallacies.html" class=""><span class="num">20</span>Formal fallacies</a></li><li class="nav-item"><a href="../pages/21-informal-fallacies-relevance.html" class=""><span class="num">21</span>Informal fallacies of relevance</a></li><li class="nav-item"><a href="../pages/22-informal-fallacies-presumption.html" class=""><span class="num">22</span>Informal fallacies of presumption and ambiguity</a></li><li class="nav-item"><a href="../pages/23-cognitive-biases.html" class=""><span class="num">23</span>Cognitive biases: a curated catalog</a></li><li class="nav-item"><a href="../pages/24-dual-process.html" class=""><span class="num">24</span>System 1 and System 2: dual-process theory</a></li><li class="nav-item"><a href="../pages/25-polya-problem-solving.html" class=""><span class="num">25</span>Polya: how to solve a problem (4 steps)</a></li><li class="nav-item"><a href="../pages/26-problem-solving-heuristics.html" class=""><span class="num">26</span>Problem-solving heuristics</a></li><li class="nav-item"><a href="../pages/27-computational-thinking.html" class=""><span class="num">27</span>Computational thinking</a></li><li class="nav-item"><a href="../pages/28-algorithms-strategies.html" class=""><span class="num">28</span>Algorithms and problem-solving strategies</a></li><li class="nav-item"><a href="../pages/29-creative-thinking.html" class=""><span class="num">29</span>Creative thinking: lateral thinking, TRIZ, SCAMPER</a></li><li class="nav-item"><a href="../pages/30-design-thinking.html" class=""><span class="num">30</span>Design thinking</a></li><li class="nav-item"><a href="../pages/31-mental-models.html" class=""><span class="num">31</span>Mental models</a></li><li class="nav-item"><a href="../pages/32-probability-foundations.html" class=""><span class="num">32</span>Probability: foundations for reasoning</a></li><li class="nav-item"><a href="../pages/33-bayes-theorem.html" class=""><span class="num">33</span>Bayes&#x27; theorem and updating beliefs</a></li><li class="nav-item"><a href="../pages/34-probability-paradoxes.html" class=""><span class="num">34</span>Probability paradoxes: Monty Hall, base rate, Simpson</a></li><li class="nav-item"><a href="../pages/35-decision-theory.html" class=""><span class="num">35</span>Decision theory: expected utility and prospect theory</a></li><li class="nav-item"><a href="../pages/36-forecasting-calibration.html" class=""><span class="num">36</span>Forecasting and calibration</a></li><li class="nav-item"><a href="../pages/37-knightian-black-swans.html" class=""><span class="num">37</span>Knightian uncertainty, black swans, antifragility</a></li><li class="nav-item"><a href="../pages/38-argumentation-toulmin.html" class=""><span class="num">38</span>Argumentation: Toulmin, Walton, argument mapping</a></li><li class="nav-item"><a href="../pages/39-rhetoric-persuasion.html" class=""><span class="num">39</span>Rhetoric and persuasion</a></li><li class="nav-item"><a href="../pages/40-debate-dialectic.html" class=""><span class="num">40</span>Debate, Socratic dialectic, steelmanning</a></li><li class="nav-item"><a href="../pages/41-negotiation-game-theory.html" class=""><span class="num">41</span>Negotiation and game theory</a></li><li class="nav-item"><a href="../pages/42-epistemology.html" class=""><span class="num">42</span>Epistemology: JTB, Gettier, intellectual virtues</a></li><li class="nav-item"><a href="../pages/43-scientific-method-popper.html" class=""><span class="num">43</span>Scientific method, Popper, falsifiability</a></li><li class="nav-item"><a href="../pages/44-kuhn-lakatos-feyerabend.html" class=""><span class="num">44</span>Paradigms: Kuhn, Lakatos, Feyerabend</a></li><li class="nav-item"><a href="../pages/45-causality-pearl.html" class=""><span class="num">45</span>Causality: Hume, Pearl, do-calculus</a></li><li class="nav-item"><a href="../pages/46-famous-paradoxes.html" class=""><span class="num">46</span>Famous paradoxes: logic, sets, motion, decision</a></li><li class="nav-item"><a href="../pages/47-systems-thinking.html" class=""><span class="num">47</span>Systems thinking and feedback models</a></li><li class="nav-item"><a href="../pages/48-wicked-problems.html" class=""><span class="num">48</span>Wicked problems, complexity, VUCA</a></li><li class="nav-item"><a href="../pages/49-critical-reading-writing.html" class=""><span class="num">49</span>Critical reading and argumentative writing</a></li><li class="nav-item"><a href="../pages/50-propaganda-manipulation.html" class=""><span class="num">50</span>Propaganda, manipulation, news literacy, fact-checking</a></li><li class="nav-item"><a href="../pages/51-exercises.html" class=""><span class="num">51</span>Full exercise book with solutions</a></li><li class="nav-item"><a href="../pages/52-glossary-az.html" class=""><span class="num">52</span>A-Z bilingual glossary</a></li><li class="nav-item"><a href="../pages/53-formula-sheet.html" class=""><span class="num">53</span>Formula sheet / cheat sheet</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Logic/CS</span>
+        <span>Section 19 of 53</span>
+        <span class="level-tag level-exp">Level: expert</span>
+      </div>
+      <h1>Curry-Howard and type theory</h1>
+      <p class="summary">The deepest bridge in 20th-century logic: a proof is a program, a proposition is a type. From simply typed lambda calculus to Coq, Agda and Lean — and to industrial-strength formal verification.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Logic/CS</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>Read [Natural deduction](10-natural-deduction.html)</li><li>Read [Predicate logic — syntax](12-predicate-logic-syntax.html)</li><li>Familiarity with functional programming (Haskell, OCaml, Scala, F#)</li></ul>
+  <div class="label">Tools / references</div>
+  <ul class="source-list"><li>Lean 4, Coq or Agda (optional installation)</li><li>GHCi (Haskell REPL) for the toy snippet</li></ul>
+</div>
+      <p>Some isomorphisms are coincidences; one is so deep that mathematicians and computer scientists now use the same blackboard. Around 1934 Haskell Curry noticed that the types of combinators in combinatory logic look exactly like axioms of implicational logic. In 1969 William Howard, in an unpublished manuscript circulated for decades before being printed in 1980, extended the observation to full natural deduction. The slogan <strong>propositions as types, proofs as programs</strong> was born.</p>
+<p>The Curry-Howard correspondence is not a metaphor. It is an isomorphism: every constructive proof can be read as a typed program, and every typed program can be read as a constructive proof of the proposition encoded by its type. The consequences are radical. Pure mathematics, programming languages and machine-checked verification merge into a single discipline — <em>type theory</em>.</p>
+<p>This section reconstructs the correspondence at three levels: propositional, first-order (Martin-Löf), and dependent (Coq/Agda/Lean). At the end we run a tiny Haskell snippet that <em>is</em> a logical proof.</p>
+<h2 id="1-the-original-observation-simply-typed-lambda-calculus">1. The original observation: simply typed lambda calculus</h2>
+<p>Take <strong>implicational intuitionistic propositional logic</strong> (NJ$_\rightarrow$): the only connective is $\rightarrow$, the only rules are introduction and elimination. Now take the <strong>simply typed lambda calculus</strong> $\lambda^\rightarrow$. Compare:</p>
+<table>
+<thead>
+<tr>
+<th>Logic</th>
+<th>Lambda calculus</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Proposition $A$</td>
+<td>Type $A$</td>
+</tr>
+<tr>
+<td>Hypothesis $A$ in the context</td>
+<td>Variable $x : A$</td>
+</tr>
+<tr>
+<td>Proof of $A \rightarrow B$</td>
+<td>Function $\lambda x{:}A.\, t : A \to B$</td>
+</tr>
+<tr>
+<td>$\rightarrow$-introduction</td>
+<td>$\lambda$-abstraction</td>
+</tr>
+<tr>
+<td>$\rightarrow$-elimination (modus ponens)</td>
+<td>Function application $f\, x$</td>
+</tr>
+<tr>
+<td>Normalisation of the proof (cut elimination)</td>
+<td>$\beta$-reduction</td>
+</tr>
+</tbody>
+</table>
+<p>Formally, the <strong>typing judgement</strong> $\Gamma \vdash t : A$ corresponds to a derivation that $A$ follows from the hypotheses $\Gamma$. The two abstract rules are identical:</p>
+<p>$$
+\dfrac{\Gamma, x{:}A \vdash t : B}{\Gamma \vdash \lambda x{:}A.\, t : A \to B}\ (\to\mathrm{I})
+\qquad
+\dfrac{\Gamma \vdash f : A \to B \quad \Gamma \vdash a : A}{\Gamma \vdash f\, a : B}\ (\to\mathrm{E})
+$$</p>
+<p>Read the left rule as: "if from $A$ I can derive $B$, then I have proved $A \rightarrow B$". Read the right rule as: "from a proof that $A$ implies $B$ and a proof of $A$, I get a proof of $B$".</p>
+<h3 id="11-a-miniature-proof-miniature-program">1.1. A miniature proof = miniature program</h3>
+<p>Proposition: $A \rightarrow (B \rightarrow A)$ (a tautology — the K combinator).</p>
+<p>Proof term:
+$$
+K \;\equiv\; \lambda x{:}A.\, \lambda y{:}B.\, x \;:\; A \to (B \to A)
+$$</p>
+<p>Read: "Given a proof $x$ of $A$, and a proof $y$ of $B$, return a proof of $A$" — which is just $x$. The program ignores its second argument. The proof "ignores" the hypothesis $B$. Same thing.</p>
+<h2 id="2-extending-to-all-connectives">2. Extending to all connectives</h2>
+<p>Curry-Howard scales to the full intuitionistic propositional fragment.</p>
+<table>
+<thead>
+<tr>
+<th>Logic</th>
+<th>Type theory</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$A \rightarrow B$</td>
+<td>Function type $A \to B$</td>
+</tr>
+<tr>
+<td>$A \wedge B$</td>
+<td>Product (pair) type $A \times B$</td>
+</tr>
+<tr>
+<td>$A \vee B$</td>
+<td>Sum (disjoint union) type $A + B$</td>
+</tr>
+<tr>
+<td>$\top$ (truth)</td>
+<td>Unit type $\mathbf{1}$ (one inhabitant)</td>
+</tr>
+<tr>
+<td>$\bot$ (falsehood)</td>
+<td>Empty type $\mathbf{0}$ (zero inhabitants)</td>
+</tr>
+<tr>
+<td>$\neg A$</td>
+<td>$A \to \mathbf{0}$</td>
+</tr>
+<tr>
+<td>$\forall x{:}D.\, P(x)$</td>
+<td>Dependent function $\Pi x{:}D.\, P(x)$</td>
+</tr>
+<tr>
+<td>$\exists x{:}D.\, P(x)$</td>
+<td>Dependent pair $\Sigma x{:}D.\, P(x)$</td>
+</tr>
+</tbody>
+</table>
+<p>A proof of $A \wedge B$ is a pair $\langle a, b\rangle$ where $a : A$ and $b : B$. The two projection functions $\pi_1, \pi_2$ are exactly the $\wedge$-elimination rules. A proof of $A \vee B$ is <code>inl(a)</code> or <code>inr(b)</code>; case analysis is $\vee$-elimination.</p>
+<p>Crucially, this only matches <strong>intuitionistic</strong> logic. Classical theorems like $A \vee \neg A$ (excluded middle) or $\neg \neg A \rightarrow A$ are not inhabited by closed lambda terms — there is no constructive program that produces a proof of "$A$ or not $A$" for an arbitrary $A$. Classical logic requires extra control operators (Griffin 1990: <code>call/cc</code> corresponds to Peirce's law).</p>
+<pre><code class="language-mermaid">flowchart TB
+  L[Intuitionistic logic] -- isomorphism --&gt; T[Simply typed lambda calculus]
+  L -. extend with classical .-&gt; CL[Classical logic]
+  T -. extend with control operators .-&gt; CT[lambda + call/cc]
+  CL -- Griffin 1990 --&gt; CT
+  T -- extend with dependent types --&gt; MLTT[Martin-Lof type theory]
+  MLTT -- proof assistants --&gt; PA[Coq, Agda, Lean]
+</code></pre>
+<h2 id="3-dependent-types-proposition-type-literally">3. Dependent types: proposition = type, literally</h2>
+<p>Per Martin-Löf (1972, 1984), a <strong>dependent type</strong> is a family of types indexed by terms: e.g. <code>Vec A n</code> is the type of vectors of length $n$ over $A$. The length is part of the type. This is the level at which Curry-Howard becomes a tool, not a curiosity.</p>
+<p>Once types may depend on values, we can express genuine mathematical propositions:</p>
+<ul>
+<li>"For every natural number $n$, $n + 0 = n$" becomes the type
+  $$\Pi n{:}\mathbb{N}.\, \mathrm{Eq}(\mathbb{N}, n+0, n)$$</li>
+<li>A proof is a <em>term</em> of this type — a program that, given $n$, returns evidence that $n+0=n$. Usually written by recursion on $n$.</li>
+</ul>
+<p>The <strong>theorem-as-type</strong> principle is now operational: typing the proof = checking the theorem. A type checker is a proof checker.</p>
+<h3 id="31-identity-types-and-propositional-equality">3.1. Identity types and propositional equality</h3>
+<p>Equality itself is encoded as a type family $\mathrm{Id}_A(a, b)$ (the "identity type"). The single introduction rule is <code>refl : Id A a a</code>. Pattern matching on <code>refl</code> gives Leibniz substitution. This is the cornerstone of Homotopy Type Theory (Voevodsky et al., 2013), where types are interpreted as $\infty$-groupoids — but that is another story.</p>
+<h2 id="4-the-proof-assistants">4. The proof assistants</h2>
+<p>Three industrial-strength systems instantiate dependent type theory:</p>
+<ul>
+<li><strong>Coq</strong> (1989, INRIA, now called Rocq since 2024). Based on the Calculus of Inductive Constructions (CIC). Used for the formal proof of the Four Colour Theorem (Gonthier 2005), the Feit-Thompson Odd Order Theorem (Gonthier et al. 2012), and the CompCert verified C compiler (Leroy 2009).</li>
+<li><strong>Agda</strong> (Norell 2007, Chalmers). Closer in feel to Haskell, with dependent pattern matching and a slick Emacs interface. Excellent for teaching.</li>
+<li><strong>Lean</strong> (de Moura 2013, Microsoft → AWS). Lean 4 is now a full programming language <em>and</em> a proof assistant; the <strong>mathlib</strong> library is the largest formalised library of mathematics (≈1.5M lines as of 2024). Tao, Buzzard, Scholze have all formalised research-level mathematics in Lean.</li>
+</ul>
+<p>In all three, the user writes terms (proofs), the kernel checks types (verifies). Tactics — programs that build proofs — are syntactic sugar.</p>
+<h2 id="5-a-worked-haskell-snippet-that-is-a-proof">5. A worked Haskell snippet that is a proof</h2>
+<p>Haskell does not have full dependent types (yet), but its type system is enough to demonstrate Curry-Howard at the propositional level. Below is the proof of $A \rightarrow (B \rightarrow A)$ as a Haskell program. Type-check it: GHC just verified the tautology.</p>
+<pre><code class="language-haskell">-- Proposition: A -&gt; (B -&gt; A)
+k :: a -&gt; b -&gt; a
+k x _ = x
+
+-- Proposition: (A -&gt; B -&gt; C) -&gt; (A -&gt; B) -&gt; A -&gt; C  (the S combinator)
+s :: (a -&gt; b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+s f g x = f x (g x)
+
+-- Proposition: A and B implies B and A (commutativity of conjunction)
+swap :: (a, b) -&gt; (b, a)
+swap (x, y) = (y, x)
+
+-- Proposition: A or B implies B or A
+swapEither :: Either a b -&gt; Either b a
+swapEither (Left x)  = Right x
+swapEither (Right y) = Left y
+
+-- Proposition: ex falso quodlibet (from absurdity, anything)
+absurd :: Void -&gt; a
+absurd v = case v of {}
+</code></pre>
+<p>Every function above is a proof. Conversely, every constructive proof of these formulas yields, mechanically, a program with that type.</p>
+<p>A tiny Coq sketch of the same K combinator:</p>
+<pre><code class="language-coq">Theorem K : forall A B : Prop, A -&gt; B -&gt; A.
+Proof.
+  intros A B a b. exact a.
+Qed.
+
+(* The proof term, extracted: fun (A B : Prop) (a : A) (_ : B) =&gt; a *)
+</code></pre>
+<p>The <code>exact a</code> is literally the lambda body.</p>
+<h2 id="6-why-this-matters-programming-meets-verification">6. Why this matters: programming meets verification</h2>
+<p>Curry-Howard turned three previously distant disciplines into one:</p>
+<ol>
+<li><strong>Programming language design</strong>. Types are not bureaucracy — they are specifications. A function <code>head : forall a n, Vec a (S n) -&gt; a</code> <em>cannot</em> be applied to the empty vector. The type system rules out the bug; you don't need a runtime check.</li>
+<li><strong>Formal verification</strong>. CompCert is a C compiler whose Coq proof guarantees that every compiled program preserves the semantics of the source. Airbus uses it on safety-critical code. seL4 (Klein et al. 2009) is a microkernel verified line-by-line in Isabelle/HOL.</li>
+<li><strong>Foundations of mathematics</strong>. The Univalent Foundations programme (Voevodsky) proposes type theory + univalence as an alternative to set theory. Mathlib aims at a single, machine-checked corpus.</li>
+</ol>
+<p>The political economy of mathematics is shifting: Buzzard's "Liquid Tensor Experiment" (2020-2022) formalised a result of Scholze in Lean in 18 months. Reviewing papers may, in 20 years, look like reading mathlib commits.</p>
+<h2 id="7-limits-and-open-questions">7. Limits and open questions</h2>
+<p>Curry-Howard is not a free lunch.</p>
+<ul>
+<li><strong>Classical reasoning</strong> requires control operators or double-negation translations. Many working mathematicians find this awkward.</li>
+<li><strong>Decidability</strong>: type-checking dependent types is undecidable in general; proof assistants restrict to a decidable fragment plus user-provided proofs.</li>
+<li><strong>Engineering cost</strong>: a formal proof can be 10–100× longer than a paper proof. The CompCert proof is ~100K lines of Coq for ~10K lines of C compiler.</li>
+<li><strong>The "de Bruijn factor"</strong> (how much longer the formal version is than the informal): currently 4–10× in mathlib, dropping each year as tactics improve.</li>
+</ul>
+<h2 id="8-exercises">8. Exercises</h2>
+<details>
+<summary>Exercise 1 — write the proof term for $(A \wedge B) \rightarrow (B \wedge A)$</summary>
+
+In lambda + pair notation:
+$$\lambda p{:}A\times B.\, \langle \pi_2 p,\, \pi_1 p \rangle \;:\; A \times B \to B \times A$$
+
+In Haskell, this is `swap` above. The proof is: take the pair, project right, project left, repackage. Curry-Howard at work.
+</details>
+
+<details>
+<summary>Exercise 2 — is $\neg\neg A \rightarrow A$ inhabited?</summary>
+
+No, not by a *closed* term in pure intuitionistic lambda calculus. There is no constructive function of type `((a -> Void) -> Void) -> a`. To "extract" an $A$ from a double negation we would need to inspect the function `(a -> Void) -> Void` and produce an actual $a$, which requires either an oracle or a control operator (`call/cc`). This is exactly the classical-versus-intuitionistic divide.
+</details>
+
+<details>
+<summary>Exercise 3 — give the proof of $\forall n{:}\mathbb{N}.\, n + 0 = n$ as a recursive program</summary>
+
+By induction on $n$. Base case: $0 + 0 = 0$ by definition of `+`, so `refl` works. Inductive step: assume `p : n + 0 = n`. Then $(n+1) + 0 = (n + 0) + 1 = n + 1$ by congruence on `p`. In Agda-ish pseudocode:
+
+
+<pre><code class="language-agda">plus-zero : (n : Nat) -&gt; n + 0 ≡ n
+plus-zero zero    = refl
+plus-zero (suc n) = cong suc (plus-zero n)
+</code></pre>
+
+
+The proof is a recursive program. The recursion mirrors the induction.
+</details>
+
+<h2 id="summary">Summary</h2>
+<ul>
+<li><strong>Propositions are types, proofs are programs</strong>: the isomorphism between intuitionistic natural deduction and the simply typed lambda calculus.</li>
+<li>The full propositional fragment maps to product, sum, function and empty types; the first-order fragment requires dependent $\Pi$ and $\Sigma$.</li>
+<li>Classical logic sits outside the pure correspondence and demands control operators (Griffin 1990).</li>
+<li>Coq, Agda and Lean realise the correspondence industrially; major theorems (Four Colour, Odd Order, Feit-Thompson, perfectoid spaces) have been machine-verified.</li>
+<li>The CompCert verified C compiler and the seL4 microkernel show that the same machinery handles real-world software.</li>
+<li>The cost is high (de Bruijn factor 4–10×) but shrinking. Verification is increasingly a normal engineering activity.</li>
+</ul>
+<h2 id="further-reading">Further reading</h2>
+<ul>
+<li>Howard, W. A., <em>The Formulae-as-Types Notion of Construction</em>, 1969/1980.</li>
+<li>Wadler, P., <em>Propositions as Types</em>, CACM 2015 — the canonical accessible introduction.</li>
+<li>Martin-Löf, P., <em>Intuitionistic Type Theory</em>, Bibliopolis 1984.</li>
+<li>Pierce, B. C., <em>Types and Programming Languages</em>, MIT Press 2002.</li>
+<li>The HoTT Book, <em>Homotopy Type Theory: Univalent Foundations of Mathematics</em>, 2013 (free PDF).</li>
+<li>Avigad, J. et al., <em>Theorem Proving in Lean 4</em>, online textbook.</li>
+<li>See also: <a href="10-natural-deduction.html">Natural deduction</a>, <a href="12-predicate-logic-syntax.html">Predicate logic — syntax</a>, <a href="15-metalogic-godel.html">Metalogic and Gödel</a>.</li>
+</ul>
+      <nav class="pager">
+<a href="18-non-classical-logic.html" class="prev"><span class="label">← Previous</span><span class="title">Non-classical logics: intuitionistic, fuzzy, paraconsistent</span></a>
+<a href="20-formal-fallacies.html" class="next"><span class="label">Next →</span><span class="title">Formal fallacies</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Logic, Problem Solving and Critical Thinking Zero to Hero</strong> — complete path, in English, from the anatomy of an argument to Pearl's do-calculus.</p><p>Open educational material. No sponsorships. When a concept is unclear, go back: logic and reasoning are a staircase, not a tree you skip across.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+</body>
+</html>

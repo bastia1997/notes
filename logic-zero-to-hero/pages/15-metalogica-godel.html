@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Metalogica: soundness, completezza, teoremi di Gödel — Logica e Pensiero Critico Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#2a2540',primaryTextColor:'#ecebff',primaryBorderColor:'#7a6cd6',lineColor:'#9890b8',background:'#141226'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">∴</div>
+      <div>
+        <div class="brand-title">LOGOS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">IT</span><a href="../en/pages/15-metalogic-godel.html" class="lang-link" title="Switch to English">EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-cosa-e-la-logica.html" class=""><span class="num">01</span>Cos&#x27;è la logica e il pensiero critico</a></li><li class="nav-item"><a href="../pages/02-storia-della-logica.html" class=""><span class="num">02</span>Breve storia della logica</a></li><li class="nav-item"><a href="../pages/03-tipi-di-ragionamento.html" class=""><span class="num">03</span>Tipi di ragionamento: deduttivo, induttivo, abduttivo, analogico</a></li><li class="nav-item"><a href="../pages/04-anatomia-degli-argomenti.html" class=""><span class="num">04</span>Argomenti: premesse, conclusione, validità, solidità</a></li><li class="nav-item"><a href="../pages/05-standard-paul-elder.html" class=""><span class="num">05</span>Pensiero critico: standard di Paul-Elder</a></li><li class="nav-item"><a href="../pages/06-linguaggio-e-ambiguita.html" class=""><span class="num">06</span>Linguaggio, ambiguità, definizioni</a></li><li class="nav-item"><a href="../pages/07-logica-proposizionale.html" class=""><span class="num">07</span>Logica proposizionale: connettivi e tabelle di verità</a></li><li class="nav-item"><a href="../pages/08-equivalenze-forme-normali.html" class=""><span class="num">08</span>Equivalenze logiche, De Morgan, forme normali</a></li><li class="nav-item"><a href="../pages/09-regole-inferenza.html" class=""><span class="num">09</span>Regole di inferenza</a></li><li class="nav-item"><a href="../pages/10-deduzione-naturale.html" class=""><span class="num">10</span>Deduzione naturale: regole I/E e dimostrazione strutturata</a></li><li class="nav-item"><a href="../pages/11-sistemi-assiomatici-sequenti.html" class=""><span class="num">11</span>Sistemi assiomatici e calcolo dei sequenti</a></li><li class="nav-item"><a href="../pages/12-logica-predicati-sintassi.html" class=""><span class="num">12</span>Logica dei predicati (FOL): sintassi e quantificatori</a></li><li class="nav-item"><a href="../pages/13-logica-predicati-semantica.html" class=""><span class="num">13</span>FOL: semantica, modelli, validità</a></li><li class="nav-item"><a href="../pages/14-insiemi-relazioni-funzioni.html" class=""><span class="num">14</span>Insiemi, relazioni, funzioni</a></li><li class="nav-item"><a href="../pages/15-metalogica-godel.html" class="active"><span class="num">15</span>Metalogica: soundness, completezza, teoremi di Gödel</a></li><li class="nav-item"><a href="../pages/16-logiche-modali.html" class=""><span class="num">16</span>Logiche modali e mondi possibili</a></li><li class="nav-item"><a href="../pages/17-logiche-temporale-deontica-epistemica.html" class=""><span class="num">17</span>Logiche temporale, deontica, epistemica</a></li><li class="nav-item"><a href="../pages/18-logiche-non-classiche.html" class=""><span class="num">18</span>Logiche non classiche: intuizionista, fuzzy, paraconsistente</a></li><li class="nav-item"><a href="../pages/19-curry-howard-type-theory.html" class=""><span class="num">19</span>Curry-Howard e type theory: dimostrazioni come programmi</a></li><li class="nav-item"><a href="../pages/20-fallacie-formali.html" class=""><span class="num">20</span>Fallacie formali: quando la forma del ragionamento mente</a></li><li class="nav-item"><a href="../pages/21-fallacie-informali-rilevanza.html" class=""><span class="num">21</span>Fallacie informali di rilevanza: distrarre invece di argomentare</a></li><li class="nav-item"><a href="../pages/22-fallacie-informali-presunzione.html" class=""><span class="num">22</span>Fallacie informali di presunzione e ambiguità</a></li><li class="nav-item"><a href="../pages/23-bias-cognitivi.html" class=""><span class="num">23</span>Bias cognitivi: catalogo ragionato</a></li><li class="nav-item"><a href="../pages/24-dual-process.html" class=""><span class="num">24</span>Sistema 1 e Sistema 2: dual process theory</a></li><li class="nav-item"><a href="../pages/25-polya-problem-solving.html" class=""><span class="num">25</span>Polya: come risolvere un problema (4 step)</a></li><li class="nav-item"><a href="../pages/26-euristiche-problem-solving.html" class=""><span class="num">26</span>Euristiche del problem solving</a></li><li class="nav-item"><a href="../pages/27-pensiero-computazionale.html" class=""><span class="num">27</span>Pensiero computazionale</a></li><li class="nav-item"><a href="../pages/28-algoritmi-strategie.html" class=""><span class="num">28</span>Algoritmi e strategie di risoluzione</a></li><li class="nav-item"><a href="../pages/29-pensiero-creativo.html" class=""><span class="num">29</span>Pensiero creativo: lateral thinking, TRIZ, SCAMPER</a></li><li class="nav-item"><a href="../pages/30-design-thinking.html" class=""><span class="num">30</span>Design thinking</a></li><li class="nav-item"><a href="../pages/31-mental-models.html" class=""><span class="num">31</span>Mental models: modelli mentali</a></li><li class="nav-item"><a href="../pages/32-probabilita-fondamenti.html" class=""><span class="num">32</span>Probabilità: fondamenti per il ragionamento</a></li><li class="nav-item"><a href="../pages/33-teorema-bayes.html" class=""><span class="num">33</span>Teorema di Bayes e aggiornamento delle credenze</a></li><li class="nav-item"><a href="../pages/34-paradossi-probabilistici.html" class=""><span class="num">34</span>Paradossi probabilistici: Monty Hall, base rate, Simpson</a></li><li class="nav-item"><a href="../pages/35-teoria-decisione.html" class=""><span class="num">35</span>Teoria della decisione: utilità attesa e prospect theory</a></li><li class="nav-item"><a href="../pages/36-forecasting-calibrazione.html" class=""><span class="num">36</span>Forecasting e calibrazione: la lezione dei superforecaster</a></li><li class="nav-item"><a href="../pages/37-knightian-cigni-neri.html" class=""><span class="num">37</span>Knightian uncertainty, cigni neri, antifragile</a></li><li class="nav-item"><a href="../pages/38-argomentazione-toulmin.html" class=""><span class="num">38</span>Argomentazione: Toulmin, Walton, argument mapping</a></li><li class="nav-item"><a href="../pages/39-retorica-persuasione.html" class=""><span class="num">39</span>Retorica e persuasione</a></li><li class="nav-item"><a href="../pages/40-dibattito-dialettica.html" class=""><span class="num">40</span>Dibattito, dialettica socratica, steelmanning</a></li><li class="nav-item"><a href="../pages/41-negoziazione-teoria-giochi.html" class=""><span class="num">41</span>Negoziazione e teoria dei giochi</a></li><li class="nav-item"><a href="../pages/42-epistemologia.html" class=""><span class="num">42</span>Epistemologia: JTB, Gettier, virtù epistemiche</a></li><li class="nav-item"><a href="../pages/43-metodo-scientifico-popper.html" class=""><span class="num">43</span>Metodo scientifico, Popper, falsificabilità</a></li><li class="nav-item"><a href="../pages/44-kuhn-lakatos-feyerabend.html" class=""><span class="num">44</span>Paradigmi: Kuhn, Lakatos, Feyerabend</a></li><li class="nav-item"><a href="../pages/45-causalita-pearl.html" class=""><span class="num">45</span>Causalità: Hume, Pearl, do-calculus</a></li><li class="nav-item"><a href="../pages/46-paradossi-celebri.html" class=""><span class="num">46</span>Paradossi celebri: dal mentitore al Newcomb</a></li><li class="nav-item"><a href="../pages/47-systems-thinking.html" class=""><span class="num">47</span>Systems thinking e modelli di feedback</a></li><li class="nav-item"><a href="../pages/48-wicked-problems.html" class=""><span class="num">48</span>Wicked problems, complessità, VUCA</a></li><li class="nav-item"><a href="../pages/49-critical-reading-writing.html" class=""><span class="num">49</span>Critical reading e scrittura argomentativa</a></li><li class="nav-item"><a href="../pages/50-propaganda-manipolazione.html" class=""><span class="num">50</span>Propaganda, manipolazione, news literacy, fact-checking</a></li><li class="nav-item"><a href="../pages/51-eserciziario.html" class=""><span class="num">51</span>Eserciziario completo con soluzioni</a></li><li class="nav-item"><a href="../pages/52-glossario-az.html" class=""><span class="num">52</span>Glossario A-Z bilingue</a></li><li class="nav-item"><a href="../pages/53-formulario.html" class=""><span class="num">53</span>Formulario / scheda riassuntiva</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Metalogica</span>
+        <span>Sezione 15 di 53</span>
+        <span class="level-tag level-exp">Livello: esperto</span>
+      </div>
+      <h1>Metalogica: soundness, completezza, teoremi di Gödel</h1>
+      <p class="summary">I risultati che la logica ha dimostrato su sé stessa: correttezza e completezza della FOL (Gödel 1930), compactness e Löwenheim-Skolem, indecidibilità di Church, e i due teoremi di incompletezza che hanno chiuso il programma di Hilbert.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Metalogica</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>Aver letto [FOL: semantica](13-logica-predicati-semantica.html)</li><li>Aver letto [Sistemi assiomatici e sequenti](11-sistemi-assiomatici-sequenti.html)</li><li>Familiarità con [Insiemi e funzioni](14-insiemi-relazioni-funzioni.html)</li></ul>
+  <div class="label">Strumenti / riferimenti</div>
+  <ul class="source-list"><li>Carta e penna</li><li>Lettura consigliata: Hofstadter, *Gödel, Escher, Bach* per intuizione</li></ul>
+</div>
+      <p>La <strong>metalogica</strong> è la logica applicata alla logica stessa: prende un sistema deduttivo come oggetto matematico e ne dimostra proprietà — coerenza, completezza, decidibilità. Nasce di fatto al congresso di Bologna del 1928, quando David Hilbert articola il suo programma: fondare tutta la matematica su un sistema assiomatico <strong>coerente</strong> (privo di contraddizioni), <strong>completo</strong> (ogni enunciato vero è dimostrabile) e <strong>decidibile</strong> (esiste un algoritmo che dice se una formula è teorema). Due anni dopo, Kurt Gödel — venticinquenne — pubblica due risultati che cambiano per sempre il panorama: la <strong>completezza</strong> della logica del primo ordine (1930) e i due <strong>teoremi di incompletezza</strong> dell'aritmetica (1931). Pochi anni dopo Church e Turing aggiungono l'<strong>indecidibilità</strong>. Il programma di Hilbert è scardinato.</p>
+<p>Questa è una sezione difficile, da affrontare dopo aver digerito sintassi (sez. 11-12) e semantica (sez. 13). Si chiude con le conseguenze filosofiche, che ancora oggi sono materia di dibattito.</p>
+<h2 id="1-soundness-correttezza">1. Soundness (correttezza)</h2>
+<p>La <strong>correttezza</strong> afferma che il sistema deduttivo non dimostra falsità:</p>
+<p>$$\Gamma \vdash \varphi \quad \Longrightarrow \quad \Gamma \models \varphi$$</p>
+<p>Se $\varphi$ è dimostrabile da $\Gamma$, allora è conseguenza semantica di $\Gamma$. Dimostrazione: per induzione strutturale sulla derivazione. Si verifica che (i) ogni assioma è valido; (ii) ogni regola di inferenza preserva la verità.</p>
+<p>La correttezza è la proprietà <em>minima</em> che si pretende da un sistema deduttivo. Senza di essa il sistema è inutilizzabile — dimostrerebbe assurdità.</p>
+<h2 id="2-completezza-godel-1930">2. Completezza (Gödel 1930)</h2>
+<p>La <strong>completezza</strong> è il converso:</p>
+<p>$$\Gamma \models \varphi \quad \Longrightarrow \quad \Gamma \vdash \varphi$$</p>
+<p>Tutto ciò che è semanticamente conseguenza è anche sintatticamente dimostrabile. Insieme alla correttezza:</p>
+<p>$$\Gamma \vdash \varphi \quad \Longleftrightarrow \quad \Gamma \models \varphi$$</p>
+<p>Sintassi e semantica della FOL coincidono. È un risultato profondo: significa che un sistema <em>finitario</em> di regole simboliche cattura <em>tutta</em> la nozione platonica di verità logica.</p>
+<p><strong>Dimostrazione (Henkin 1949, versione moderna)</strong>: data una teoria $T$ coerente, si costruisce un modello canonico aggiungendo costanti per ogni $\exists x\, \varphi$ ("testimoni di Henkin") e completando massimalmente $T$. Il modello canonico è il quoziente del linguaggio per equivalenza sintattica.</p>
+<h2 id="3-compactness">3. Compactness</h2>
+<p>$\Gamma$ è soddisfacibile sse ogni sottoinsieme finito di $\Gamma$ lo è.</p>
+<p><strong>Equivalente</strong>: se $\Gamma \models \varphi$, allora esiste $\Gamma_0 \subseteq \Gamma$ finito tale che $\Gamma_0 \models \varphi$.</p>
+<p>Conseguenza di completezza: una dimostrazione usa solo finiti pezzi delle ipotesi.</p>
+<p><strong>Applicazione famosa: modelli non standard dell'aritmetica</strong>. Sia $T = \text{Th}(\mathfrak{N})$ (tutto ciò che è vero nel modello standard). Si estende il linguaggio con una nuova costante $c$ e si considera</p>
+<p>$$T' = T \cup {c &gt; S^n(0) : n \in \mathbb{N}}$$</p>
+<p>Ogni $T'_0 \subseteq T'$ finito menziona solo finiti $c &gt; S^n(0)$: basta interpretare $c$ come un naturale grande abbastanza per soddisfarli. Per compactness $T'$ è soddisfacibile: esiste un modello $\mathfrak{N}^<em>$ con un elemento $c$ "infinitamente grande". Robinson (1960) ha usato questa idea per fondare l'</em><em>analisi non standard</em>*.</p>
+<h2 id="4-lowenheim-skolem">4. Löwenheim-Skolem</h2>
+<p>Se una teoria del primo ordine ha un modello infinito, ne ha uno di <strong>ogni cardinalità infinita</strong> $\geq |\mathcal{L}|$.</p>
+<ul>
+<li><strong>Downward</strong>: se ha un modello, ne ha uno numerabile.</li>
+<li><strong>Upward</strong>: se ne ha uno infinito, ne ha di arbitrariamente grande.</li>
+</ul>
+<p><strong>Paradosso di Skolem</strong>: ZFC dimostra l'esistenza di insiemi non numerabili ma per Löwenheim-Skolem ha un modello numerabile. Soluzione: "non numerabile" è una proprietà <em>interna</em> al modello — significa "nessuna biiezione <em>all'interno del modello</em>", anche se <em>vista da fuori</em> l'insieme è numerabile.</p>
+<h2 id="5-decidibilita-e-indecidibilita">5. Decidibilità e indecidibilità</h2>
+<p>Una teoria è <strong>decidibile</strong> se esiste un algoritmo che, data una formula $\varphi$, in tempo finito decide se $T \vdash \varphi$.</p>
+<ul>
+<li>La <strong>logica proposizionale</strong> è decidibile (tabella di verità o SAT solver) — in NP-completo nel caso peggiore (Cook 1971).</li>
+<li>La <strong>FOL pura</strong> è <strong>indecidibile</strong> (Church 1936, Turing 1936): non esiste algoritmo generale. È solo <strong>semi-decidibile</strong>: se $\vdash \varphi$ vero, un algoritmo (enumerare dimostrazioni) lo trova; se falso, l'algoritmo può non terminare.</li>
+<li>L'<strong>aritmetica di Peano</strong> è anch'essa indecidibile (Church).</li>
+</ul>
+<p><strong>Teorema di Church (Entscheidungsproblem, 1936)</strong>: non esiste algoritmo per decidere la validità di una formula FOL arbitraria. Riduzione: dal halting problem di Turing. Dimostrazione fra le pietre miliari della teoria della computabilità.</p>
+<h2 id="6-aritmetica-di-peano-e-codifica-di-godel">6. Aritmetica di Peano e codifica di Gödel</h2>
+<p>L'<strong>aritmetica di Peano (PA)</strong> è la teoria del primo ordine con linguaggio ${0, S, +, \cdot, =}$ e i sette assiomi di Peano (1889) + lo schema di induzione:</p>
+<p>$$\forall \bar{y}\, ((\varphi(0, \bar{y}) \wedge \forall x\, (\varphi(x, \bar{y}) \rightarrow \varphi(S(x), \bar{y}))) \rightarrow \forall x\, \varphi(x, \bar{y}))$$</p>
+<p>Una formula per ogni $\varphi(x, \bar{y})$ — schema <strong>infinito</strong> in FOL.</p>
+<p><strong>Codifica di Gödel</strong> (cenno tecnico): a ogni simbolo del linguaggio si assegna un numero naturale; alla sequenza di simboli che compone una formula si associa un numero (es. via produttoria di primi: $2^{a_1} \cdot 3^{a_2} \cdot 5^{a_3} \cdots$). Idem per le dimostrazioni. Il risultato:</p>
+<ol>
+<li>proprietà sintattiche come "è una formula ben formata" o "è una dimostrazione di $\varphi$" diventano <strong>predicati ricorsivi</strong> sui naturali;</li>
+<li>PA è abbastanza potente da esprimere questi predicati come formule del suo stesso linguaggio (PA "parla di sé stessa");</li>
+<li>esiste un predicato $\text{Prov}_T(#\varphi)$ che dice "il numero che codifica $\varphi$ è dimostrabile in $T$".</li>
+</ol>
+<p>Con questa macchinaria Gödel costruisce un punto fisso autoreferenziale.</p>
+<h2 id="7-primo-teorema-di-incompletezza-godel-1931">7. Primo teorema di incompletezza (Gödel 1931)</h2>
+<p><strong>Enunciato</strong>: ogni teoria $T$ coerente, ricorsivamente assiomatizzabile, che include PA, contiene un enunciato $G$ tale che:</p>
+<p>$$T \nvdash G \quad \text{e} \quad T \nvdash \neg G$$</p>
+<p>cioè $G$ è <strong>indecidibile</strong> in $T$. Eppure, se $T$ è coerente, $G$ è <strong>vera</strong> (nel modello standard).</p>
+<p><strong>Idea</strong>: la formula $G$ dice di sé stessa "io non sono dimostrabile in $T$". Per costruzione, usando un lemma di punto fisso (diagonalizzazione di Cantor riadattata):</p>
+<p>$$T \vdash G \leftrightarrow \neg \text{Prov}_T(#G)$$</p>
+<p>Se $T \vdash G$, allora $T \vdash \neg \text{Prov}_T(#G)$, ma anche $T \vdash \text{Prov}_T(#G)$ (perché $G$ è dimostrabile) — contraddizione. Quindi $T \nvdash G$. Se inoltre $T$ è $\omega$-coerente (ipotesi rafforzata da Rosser 1936 a semplice coerenza), anche $T \nvdash \neg G$.</p>
+<p><strong>Conseguenza didattica</strong>: nessun sistema formale ragionevole può catturare <em>tutte</em> le verità aritmetiche. La nozione di "verità" eccede quella di "dimostrabilità".</p>
+<pre><code class="language-mermaid">flowchart LR
+  PA[Teoria T ⊇ PA, coerente] --&gt; Cod[Codifica di Gödel]
+  Cod --&gt; Prov[Predicato Prov_T è formalizzabile in T]
+  Prov --&gt; FP[Lemma di punto fisso\nG ↔ ¬Prov_T(#G)]
+  FP --&gt; Inc[&quot;G vera ma indimostrabile in T:\n T ⊬ G  e  T ⊬ ¬G&quot;]
+</code></pre>
+<h2 id="8-secondo-teorema-di-incompletezza-godel-1931">8. Secondo teorema di incompletezza (Gödel 1931)</h2>
+<p><strong>Enunciato</strong>: se $T$ è coerente, $T \nvdash \text{Coh}_T$, dove $\text{Coh}_T \equiv \neg \text{Prov}_T(# \bot)$ è la formula che esprime la coerenza di $T$.</p>
+<p>Cioè: <strong>una teoria coerente non può dimostrare la propria coerenza</strong> (a meno di essere troppo debole per esprimere PA, o di rinunciare a coerenza).</p>
+<p><strong>Conseguenza per il programma di Hilbert</strong>: Hilbert sperava di dimostrare la coerenza di teorie forti (come la teoria degli insiemi) usando solo metodi <em>finitistici</em>, codificabili in PA. Gödel mostra che è impossibile: se PA fosse capace di dimostrare la coerenza di un sistema $T \supseteq \text{PA}$, allora — per il secondo teorema — $T$ dimostrerebbe la propria coerenza, contraddicendo il teorema stesso (assumendo PA come sotto-sistema fidato).</p>
+<p>Gentzen (1936) dimostrerà la coerenza di PA usando induzione fino a $\epsilon_0$ (un ordinale "appena sopra" $\omega^\omega \cdots$). Non finitistico secondo Hilbert, ma costruttivamente accettabile.</p>
+<h2 id="9-conseguenze-filosofiche">9. Conseguenze filosofiche</h2>
+<p>Il dibattito non si è mai chiuso. Tre posizioni:</p>
+<h3 id="anti-meccanismo-lucas-penrose">Anti-meccanismo (Lucas-Penrose)</h3>
+<p>J. R. Lucas (1961) e Roger Penrose (<em>The Emperor's New Mind</em>, 1989; <em>Shadows of the Mind</em>, 1994): la mente umana <strong>non</strong> è una macchina di Turing, perché può "vedere" la verità di $G$ pur non potendola dimostrare nel sistema $T$. Argomento controverso: presuppone che la mente sappia di essere coerente (cosa di cui dubitare per primo).</p>
+<h3 id="risposta-classica-putnam-feferman">Risposta classica (Putnam, Feferman)</h3>
+<p>Hilary Putnam: la mente può oltrepassare <em>qualsiasi</em> sistema fissato, ma forse opera in un sistema più ampio non assolutizzabile. Solomon Feferman ha studiato gerarchie di estensioni progressive (sequenze di teorie sempre più forti che internalizzano la coerenza della precedente).</p>
+<h3 id="pluralismo-logico">Pluralismo logico</h3>
+<p>I teoremi di Gödel non parlano di "matematica" tout court ma di <em>teorie formali specifiche</em>. Il pluralismo (Carnap, Beall-Restall) considera coesistenti molte logiche per scopi diversi. Cfr. <a href="18-logiche-non-classiche.html">logiche non classiche</a>.</p>
+<blockquote>
+<p>Hofstadter, in <em>Gödel, Escher, Bach</em>, esplora il teorema come fenomeno di <strong>strange loop</strong> — autoreferenzialità che produce livelli emergenti. Lettura cult anche se a tratti vaga.</p>
+</blockquote>
+<h2 id="10-tabella-riassuntiva">10. Tabella riassuntiva</h2>
+<table>
+<thead>
+<tr>
+<th>Risultato</th>
+<th>Anno</th>
+<th>Autore</th>
+<th>Enunciato</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Completezza FOL</td>
+<td>1930</td>
+<td>Gödel</td>
+<td>$\models \Leftrightarrow \vdash$</td>
+</tr>
+<tr>
+<td>Compactness</td>
+<td>1930</td>
+<td>Gödel (conseguenza)</td>
+<td>$\Gamma$ sat ↔ ogni $\Gamma_0$ finito sat</td>
+</tr>
+<tr>
+<td>Löwenheim-Skolem</td>
+<td>1915/22</td>
+<td>Löwenheim/Skolem</td>
+<td>Teoria con modello infinito ha modelli di ogni cardinalità</td>
+</tr>
+<tr>
+<td>Indecidibilità FOL</td>
+<td>1936</td>
+<td>Church, Turing</td>
+<td>Nessun algoritmo decide validità</td>
+</tr>
+<tr>
+<td>1° incompletezza</td>
+<td>1931</td>
+<td>Gödel</td>
+<td>PA coerente ⇒ ∃ G vera ma indecidibile</td>
+</tr>
+<tr>
+<td>2° incompletezza</td>
+<td>1931</td>
+<td>Gödel</td>
+<td>PA coerente ⇒ PA ⊬ Coh(PA)</td>
+</tr>
+<tr>
+<td>Coerenza di PA via $\epsilon_0$</td>
+<td>1936</td>
+<td>Gentzen</td>
+<td>Dimostrabile con induzione transfinita</td>
+</tr>
+</tbody>
+</table>
+<h2 id="11-esercizi">11. Esercizi</h2>
+<details>
+  <summary>Esercizio 1 — perché la logica proposizionale è completa e decidibile?</summary>
+
+**Completezza**: sistemi di Hilbert, ND, sequenti tutti completi rispetto alla semantica veritativo-funzionale. Dimostrabile via Lindenbaum: ogni teoria coerente si estende a una massimale, e si valutano le variabili a partire dall'estensione.
+
+**Decidibilità**: una formula $\varphi$ con $n$ atomiche ha una tabella di verità di $2^n$ righe; in tempo $O(2^n)$ si controlla se è valida. SAT è NP-completo in generale, ma sempre decidibile.
+
+La FOL "ricca" perde la decidibilità per la presenza dei quantificatori su un dominio potenzialmente infinito.
+</details>
+
+<details>
+  <summary>Esercizio 2 — la teoria $T = $ "aritmetica di Robinson" (PA senza induzione) è essenzialmente indecidibile. Perché Gödel-1° si applica?</summary>
+
+La cosiddetta **aritmetica di Robinson Q** è sorprendentemente potente nonostante non abbia induzione. Tarski-Mostowski-Robinson (1953) mostrano che Q rappresenta ogni funzione ricorsiva, condizione sufficiente per Gödel-1°. Quindi anche Q è incompleta (in realtà, **essenzialmente indecidibile**: ogni sua estensione coerente lo è).
+</details>
+
+<details>
+  <summary>Esercizio 3 — è vero che "Gödel ha dimostrato che la matematica è incoerente"?</summary>
+
+**No**, è un fraintendimento popolare. Gödel ha dimostrato:
+
+1. una teoria $T \supseteq \text{PA}$ è incompleta (esiste $G$ indecidibile);
+2. una teoria coerente non dimostra la propria coerenza.
+
+Niente di tutto ciò implica incoerenza. Anzi: la coerenza è un'ipotesi del teorema. Una teoria *incoerente* dimostrerebbe tutto (ex contradictione quodlibet), inclusa la propria "coerenza", banalmente.
+</details>
+
+<h2 id="sintesi">Sintesi</h2>
+<ul>
+<li><strong>Correttezza</strong> + <strong>completezza</strong> ⇒ sintassi e semantica della FOL coincidono.</li>
+<li><strong>Compactness</strong> e <strong>Löwenheim-Skolem</strong> danno strutture impreviste: modelli non standard, paradosso di Skolem.</li>
+<li><strong>Church-Turing</strong>: la FOL è indecidibile. Solo semi-decidibile.</li>
+<li><strong>Primo Gödel</strong>: ogni teoria coerente ⊇ PA contiene enunciati veri ma indimostrabili.</li>
+<li><strong>Secondo Gödel</strong>: tale teoria non può dimostrare la propria coerenza ⇒ chiude il programma di Hilbert.</li>
+<li>Le conseguenze filosofiche (mente vs macchina, pluralismo) rimangono aperte.</li>
+</ul>
+<h2 id="letture">Letture</h2>
+<ul>
+<li>Kurt Gödel, <em>Über formal unentscheidbare Sätze der Principia Mathematica und verwandter Systeme I</em> (1931). Tradotto in Heijenoort, <em>From Frege to Gödel</em> (Harvard UP).</li>
+<li>Raymond Smullyan, <em>Gödel's Incompleteness Theorems</em> (Oxford UP, 1992) — esposizione tecnica chiara.</li>
+<li>Torkel Franzén, <em>Gödel's Theorem: An Incomplete Guide to Its Use and Abuse</em> (A K Peters, 2005) — antidoto agli usi pop.</li>
+<li>Douglas Hofstadter, <em>Gödel, Escher, Bach</em> (Basic Books, 1979) — lettura culturale.</li>
+<li>Carlo Cellucci, <em>Filosofia e matematica</em> (Laterza) per la prospettiva italiana.</li>
+</ul>
+      <nav class="pager">
+<a href="14-insiemi-relazioni-funzioni.html" class="prev"><span class="label">← Precedente</span><span class="title">Insiemi, relazioni, funzioni</span></a>
+<a href="16-logiche-modali.html" class="next"><span class="label">Successivo →</span><span class="title">Logiche modali e mondi possibili</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Logica, Problem Solving e Pensiero Critico Zero to Hero</strong> — percorso completo, in italiano, dall'anatomia di un argomento al do-calculus di Pearl.</p><p>Materiale didattico aperto. Nessuna sponsorizzazione. Quando un concetto è oscuro, torna indietro: la logica è una scala, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FOL: semantics, models, validity — Logic & Critical Thinking Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#2a2540',primaryTextColor:'#ecebff',primaryBorderColor:'#7a6cd6',lineColor:'#9890b8',background:'#141226'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">∴</div>
+      <div>
+        <div class="brand-title">LOGOS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/13-logica-predicati-semantica.html" class="lang-link" title="Passa all'italiano">IT</a><span class="lang-active" title="English">EN</span></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="search... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-what-is-logic.html" class=""><span class="num">01</span>What is logic and critical thinking</a></li><li class="nav-item"><a href="../pages/02-history-of-logic.html" class=""><span class="num">02</span>A short history of logic</a></li><li class="nav-item"><a href="../pages/03-types-of-reasoning.html" class=""><span class="num">03</span>Types of reasoning: deductive, inductive, abductive, analogical</a></li><li class="nav-item"><a href="../pages/04-anatomy-of-arguments.html" class=""><span class="num">04</span>Arguments: premises, conclusion, validity, soundness</a></li><li class="nav-item"><a href="../pages/05-paul-elder-standards.html" class=""><span class="num">05</span>Critical thinking: Paul-Elder standards</a></li><li class="nav-item"><a href="../pages/06-language-and-ambiguity.html" class=""><span class="num">06</span>Language, ambiguity, definitions</a></li><li class="nav-item"><a href="../pages/07-propositional-logic.html" class=""><span class="num">07</span>Propositional logic: connectives and truth tables</a></li><li class="nav-item"><a href="../pages/08-equivalences-normal-forms.html" class=""><span class="num">08</span>Logical equivalences, De Morgan, normal forms</a></li><li class="nav-item"><a href="../pages/09-rules-of-inference.html" class=""><span class="num">09</span>Rules of inference</a></li><li class="nav-item"><a href="../pages/10-natural-deduction.html" class=""><span class="num">10</span>Natural deduction: I/E rules and structured proof</a></li><li class="nav-item"><a href="../pages/11-axiomatic-sequent-systems.html" class=""><span class="num">11</span>Axiomatic and sequent calculus systems</a></li><li class="nav-item"><a href="../pages/12-predicate-logic-syntax.html" class=""><span class="num">12</span>Predicate logic (FOL): syntax and quantifiers</a></li><li class="nav-item"><a href="../pages/13-predicate-logic-semantics.html" class="active"><span class="num">13</span>FOL: semantics, models, validity</a></li><li class="nav-item"><a href="../pages/14-sets-relations-functions.html" class=""><span class="num">14</span>Sets, relations, functions</a></li><li class="nav-item"><a href="../pages/15-metalogic-godel.html" class=""><span class="num">15</span>Metalogic: soundness, completeness, Gödel&#x27;s theorems</a></li><li class="nav-item"><a href="../pages/16-modal-logic.html" class=""><span class="num">16</span>Modal logic and possible worlds</a></li><li class="nav-item"><a href="../pages/17-temporal-deontic-epistemic-logic.html" class=""><span class="num">17</span>Temporal, deontic, epistemic logics</a></li><li class="nav-item"><a href="../pages/18-non-classical-logic.html" class=""><span class="num">18</span>Non-classical logics: intuitionistic, fuzzy, paraconsistent</a></li><li class="nav-item"><a href="../pages/19-curry-howard-type-theory.html" class=""><span class="num">19</span>Curry-Howard and type theory</a></li><li class="nav-item"><a href="../pages/20-formal-fallacies.html" class=""><span class="num">20</span>Formal fallacies</a></li><li class="nav-item"><a href="../pages/21-informal-fallacies-relevance.html" class=""><span class="num">21</span>Informal fallacies of relevance</a></li><li class="nav-item"><a href="../pages/22-informal-fallacies-presumption.html" class=""><span class="num">22</span>Informal fallacies of presumption and ambiguity</a></li><li class="nav-item"><a href="../pages/23-cognitive-biases.html" class=""><span class="num">23</span>Cognitive biases: a curated catalog</a></li><li class="nav-item"><a href="../pages/24-dual-process.html" class=""><span class="num">24</span>System 1 and System 2: dual-process theory</a></li><li class="nav-item"><a href="../pages/25-polya-problem-solving.html" class=""><span class="num">25</span>Polya: how to solve a problem (4 steps)</a></li><li class="nav-item"><a href="../pages/26-problem-solving-heuristics.html" class=""><span class="num">26</span>Problem-solving heuristics</a></li><li class="nav-item"><a href="../pages/27-computational-thinking.html" class=""><span class="num">27</span>Computational thinking</a></li><li class="nav-item"><a href="../pages/28-algorithms-strategies.html" class=""><span class="num">28</span>Algorithms and problem-solving strategies</a></li><li class="nav-item"><a href="../pages/29-creative-thinking.html" class=""><span class="num">29</span>Creative thinking: lateral thinking, TRIZ, SCAMPER</a></li><li class="nav-item"><a href="../pages/30-design-thinking.html" class=""><span class="num">30</span>Design thinking</a></li><li class="nav-item"><a href="../pages/31-mental-models.html" class=""><span class="num">31</span>Mental models</a></li><li class="nav-item"><a href="../pages/32-probability-foundations.html" class=""><span class="num">32</span>Probability: foundations for reasoning</a></li><li class="nav-item"><a href="../pages/33-bayes-theorem.html" class=""><span class="num">33</span>Bayes&#x27; theorem and updating beliefs</a></li><li class="nav-item"><a href="../pages/34-probability-paradoxes.html" class=""><span class="num">34</span>Probability paradoxes: Monty Hall, base rate, Simpson</a></li><li class="nav-item"><a href="../pages/35-decision-theory.html" class=""><span class="num">35</span>Decision theory: expected utility and prospect theory</a></li><li class="nav-item"><a href="../pages/36-forecasting-calibration.html" class=""><span class="num">36</span>Forecasting and calibration</a></li><li class="nav-item"><a href="../pages/37-knightian-black-swans.html" class=""><span class="num">37</span>Knightian uncertainty, black swans, antifragility</a></li><li class="nav-item"><a href="../pages/38-argumentation-toulmin.html" class=""><span class="num">38</span>Argumentation: Toulmin, Walton, argument mapping</a></li><li class="nav-item"><a href="../pages/39-rhetoric-persuasion.html" class=""><span class="num">39</span>Rhetoric and persuasion</a></li><li class="nav-item"><a href="../pages/40-debate-dialectic.html" class=""><span class="num">40</span>Debate, Socratic dialectic, steelmanning</a></li><li class="nav-item"><a href="../pages/41-negotiation-game-theory.html" class=""><span class="num">41</span>Negotiation and game theory</a></li><li class="nav-item"><a href="../pages/42-epistemology.html" class=""><span class="num">42</span>Epistemology: JTB, Gettier, intellectual virtues</a></li><li class="nav-item"><a href="../pages/43-scientific-method-popper.html" class=""><span class="num">43</span>Scientific method, Popper, falsifiability</a></li><li class="nav-item"><a href="../pages/44-kuhn-lakatos-feyerabend.html" class=""><span class="num">44</span>Paradigms: Kuhn, Lakatos, Feyerabend</a></li><li class="nav-item"><a href="../pages/45-causality-pearl.html" class=""><span class="num">45</span>Causality: Hume, Pearl, do-calculus</a></li><li class="nav-item"><a href="../pages/46-famous-paradoxes.html" class=""><span class="num">46</span>Famous paradoxes: logic, sets, motion, decision</a></li><li class="nav-item"><a href="../pages/47-systems-thinking.html" class=""><span class="num">47</span>Systems thinking and feedback models</a></li><li class="nav-item"><a href="../pages/48-wicked-problems.html" class=""><span class="num">48</span>Wicked problems, complexity, VUCA</a></li><li class="nav-item"><a href="../pages/49-critical-reading-writing.html" class=""><span class="num">49</span>Critical reading and argumentative writing</a></li><li class="nav-item"><a href="../pages/50-propaganda-manipulation.html" class=""><span class="num">50</span>Propaganda, manipulation, news literacy, fact-checking</a></li><li class="nav-item"><a href="../pages/51-exercises.html" class=""><span class="num">51</span>Full exercise book with solutions</a></li><li class="nav-item"><a href="../pages/52-glossary-az.html" class=""><span class="num">52</span>A-Z bilingual glossary</a></li><li class="nav-item"><a href="../pages/53-formula-sheet.html" class=""><span class="num">53</span>Formula sheet / cheat sheet</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Formal Logic</span>
+        <span>Section 13 of 53</span>
+        <span class="level-tag level-adv">Level: advanced</span>
+      </div>
+      <h1>FOL: semantics, models, validity</h1>
+      <p class="summary">What does a first-order formula mean? Tarski&#x27;s answer: define a structure (domain + interpretation), an assignment to free variables, and recursively compute truth. Satisfiability, validity, models, counterexamples, and the compactness theorem.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Formal Logic</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>Read [FOL: syntax and quantifiers](12-predicate-logic-syntax.html)</li><li>Read [Sets, relations, functions](14-sets-relations-functions.html)</li></ul>
+  <div class="label">Tools / references</div>
+  <ul class="source-list"><li>Pen and paper</li><li>Optional software: Tarski&#x27;s World, Z3, Alloy</li></ul>
+</div>
+      <p>Syntax tells us which strings are well-formed; <strong>semantics</strong> tells us what they mean. The standard semantics for first-order logic was given by Alfred Tarski in 1933 (<em>The Concept of Truth in Formalized Languages</em>) and remains the basis for almost every modern formal system. The recipe is: pick a non-empty <strong>domain</strong> of objects, interpret every symbol of the signature, then compute truth recursively.</p>
+<p>Once we have a semantics we can define the <strong>validity</strong> of a formula (true in <em>every</em> model), the <strong>satisfiability</strong> of a theory (some model satisfies all its formulas), the notion of <strong>logical consequence</strong> $\Gamma \models \varphi$, and the relationship between syntactic provability $\vdash$ and semantic validity $\models$. This relationship — the <strong>soundness</strong> and <strong>completeness</strong> theorems — is the heart of <a href="15-metalogic-godel.html">Metalogic and Gödel's theorems</a>.</p>
+<h2 id="1-structures-models">1. Structures (models)</h2>
+<p>A <strong>structure</strong> (or <strong>model</strong>) $\mathcal{M}$ for a signature $\sigma$ consists of:</p>
+<ul>
+<li>a non-empty set $|\mathcal{M}|$, the <strong>domain</strong> (or <em>universe</em>);</li>
+<li>for each constant $c$ of $\sigma$, an element $c^{\mathcal{M}} \in |\mathcal{M}|$;</li>
+<li>for each $n$-ary function symbol $f$, a function $f^{\mathcal{M}} : |\mathcal{M}|^n \to |\mathcal{M}|$;</li>
+<li>for each $n$-ary predicate symbol $P$, a relation $P^{\mathcal{M}} \subseteq |\mathcal{M}|^n$;</li>
+<li>equality interpreted as actual identity on the domain.</li>
+</ul>
+<h3 id="three-example-structures">Three example structures</h3>
+<p><strong>Arithmetic.</strong> Signature ${0, 1, +, \cdot, &lt;}$, domain $\mathbb{N}$, interpretations as usual. The sentence $\forall x\, \exists y\, (y &gt; x)$ holds: the naturals have no maximum.</p>
+<p><strong>Graphs.</strong> Signature with a single binary predicate $E(x, y)$ ("edge"). A model is a graph. The sentence $\forall x\, \forall y\, (E(x,y) \rightarrow E(y,x))$ holds iff the graph is undirected.</p>
+<p><strong>Kinship.</strong> Signature with binary predicates $\text{Parent}(x,y)$, $\text{Married}(x,y)$, unary $\text{Male}(x)$, $\text{Female}(x)$. We can express "a grandparent": $\exists z\, (\text{Parent}(x, z) \wedge \text{Parent}(z, y))$.</p>
+<p>The point: <strong>the same syntax</strong> speaks about radically different domains. FOL is a <em>general purpose</em> descriptive language.</p>
+<h2 id="2-assignments-and-truth">2. Assignments and truth</h2>
+<p>An <strong>assignment</strong> $s$ is a function from variables to elements of the domain. We extend it to terms inductively:</p>
+<ul>
+<li>$s(c) = c^{\mathcal{M}}$ for a constant $c$;</li>
+<li>$s(x)$ = the value $s$ already gives;</li>
+<li>$s(f(t_1, \ldots, t_n)) = f^{\mathcal{M}}(s(t_1), \ldots, s(t_n))$.</li>
+</ul>
+<p>The <strong>satisfaction relation</strong> $\mathcal{M}, s \models \varphi$ ("$\varphi$ is true in $\mathcal{M}$ under assignment $s$") is then defined recursively:</p>
+<ul>
+<li>$\mathcal{M}, s \models P(t_1, \ldots, t_n)$ iff $(s(t_1), \ldots, s(t_n)) \in P^{\mathcal{M}}$.</li>
+<li>$\mathcal{M}, s \models t_1 = t_2$ iff $s(t_1) = s(t_2)$.</li>
+<li>$\mathcal{M}, s \models \neg \varphi$ iff $\mathcal{M}, s \not\models \varphi$.</li>
+<li>$\mathcal{M}, s \models \varphi \wedge \psi$ iff both.</li>
+<li>$\mathcal{M}, s \models \varphi \vee \psi$ iff at least one.</li>
+<li>$\mathcal{M}, s \models \varphi \rightarrow \psi$ iff (not $\mathcal{M}, s \models \varphi$) or $\mathcal{M}, s \models \psi$.</li>
+<li>$\mathcal{M}, s \models \forall x\, \varphi$ iff for every $a \in |\mathcal{M}|$, $\mathcal{M}, s[x \mapsto a] \models \varphi$.</li>
+<li>$\mathcal{M}, s \models \exists x\, \varphi$ iff for some $a \in |\mathcal{M}|$, $\mathcal{M}, s[x \mapsto a] \models \varphi$.</li>
+</ul>
+<p>Here $s[x \mapsto a]$ is the assignment that agrees with $s$ everywhere except at $x$, where it maps to $a$.</p>
+<p>For <strong>sentences</strong> (closed formulas) the assignment is irrelevant, and we write $\mathcal{M} \models \varphi$.</p>
+<h2 id="3-validity-satisfiability-logical-consequence">3. Validity, satisfiability, logical consequence</h2>
+<p>Three core notions:</p>
+<ul>
+<li>$\varphi$ is <strong>satisfiable</strong> if some structure (with some assignment) satisfies it.</li>
+<li>$\varphi$ is <strong>valid</strong> (notation $\models \varphi$) if every structure (with every assignment) satisfies it. Validity is the semantic analogue of theoremhood.</li>
+<li>$\Gamma \models \varphi$ (<strong>logical consequence</strong>) iff every structure that satisfies all formulas in $\Gamma$ also satisfies $\varphi$.</li>
+</ul>
+<p>Validity is the central object: the <strong>completeness theorem</strong> (Gödel 1930) says $\models \varphi$ iff $\vdash \varphi$.</p>
+<h3 id="example-validity-by-exhaustion">Example: validity by exhaustion</h3>
+<p>$\models \forall x\, (P(x) \vee \neg P(x))$. In any structure $\mathcal{M}$ and any assignment, each domain element either is in $P^{\mathcal{M}}$ or isn't — classical bivalence.</p>
+<h3 id="example-invalidity-by-counterexample">Example: invalidity by counterexample</h3>
+<p>Is $\forall x\, \exists y\, R(x,y) \rightarrow \exists y\, \forall x\, R(x,y)$ valid?</p>
+<p>Counterexample: $\mathcal{M} = (\mathbb{N}, &lt;)$, $R := &lt;$. Then $\forall x\, \exists y\, x &lt; y$ holds (the naturals are unbounded), but $\exists y\, \forall x\, x &lt; y$ does not (no maximum). So the implication fails in this structure, hence it is not valid.</p>
+<p>This is the <strong>single-counterexample technique</strong>: to refute a candidate logical law you only need <em>one</em> structure where it fails.</p>
+<pre><code class="language-mermaid">flowchart LR
+  Phi[&quot;Sentence φ&quot;] --&gt; Q{&quot;Is φ true in every model?&quot;}
+  Q --&gt;|&quot;yes&quot;| Valid[&quot;valid (⊨ φ)&quot;]
+  Q --&gt;|&quot;no&quot;| NotValid[&quot;not valid&quot;]
+  Phi --&gt; Q2{&quot;Is there a model where φ holds?&quot;}
+  Q2 --&gt;|&quot;yes&quot;| Sat[&quot;satisfiable&quot;]
+  Q2 --&gt;|&quot;no&quot;| Unsat[&quot;unsatisfiable (⊨ ¬φ)&quot;]
+</code></pre>
+<p>The four pairs valid/invalid/satisfiable/unsatisfiable are not exclusive: every valid formula is satisfiable; every unsatisfiable formula is invalid. The four corners of the chart are: valid, satisfiable-but-invalid (contingent), unsatisfiable, and "true-but-unprovable" (only meaningful given a deductive system).</p>
+<h2 id="4-compactness-theorem">4. Compactness theorem</h2>
+<p>A landmark of FOL semantics, due to Gödel (1930, propositional case) and Mal'cev (1936, full FOL):</p>
+<blockquote>
+<p>A set $\Gamma$ of FOL sentences is satisfiable iff every finite subset of $\Gamma$ is satisfiable.</p>
+</blockquote>
+<p>Equivalently, if $\Gamma \models \varphi$ then there is a finite subset $\Gamma_0 \subseteq \Gamma$ with $\Gamma_0 \models \varphi$. Proofs use only finitely many premises — even when the theory is infinite.</p>
+<h3 id="a-spectacular-consequence-non-standard-arithmetic">A spectacular consequence: non-standard arithmetic</h3>
+<p>Let $T$ be the theory of arithmetic (true sentences about $\mathbb{N}$). Add a new constant $c$ and the axioms $c &gt; 0, c &gt; 1, c &gt; 2, \ldots$. Every finite subset is satisfiable (interpret $c$ as a sufficiently large natural). By compactness, the whole infinite extension is satisfiable. The model is <strong>non-standard</strong>: it contains the naturals plus an "infinite" element $c$.</p>
+<p>This shows that FOL cannot rule out non-standard models of arithmetic. It also explains why the natural numbers cannot be axiomatized up to isomorphism in FOL (the <em>Löwenheim-Skolem-Tarski</em> limitations).</p>
+<h2 id="5-lowenheim-skolem-theorems">5. Löwenheim-Skolem theorems</h2>
+<ul>
+<li><strong>Downward LST</strong>: if $\Gamma$ has an infinite model, it has a countable model.</li>
+<li><strong>Upward LST</strong>: if $\Gamma$ has an infinite model, it has models of every infinite cardinality.</li>
+</ul>
+<p>A paradoxical corollary, the <strong>Skolem paradox</strong>: ZFC set theory, despite proving the existence of uncountable sets, has a <em>countable</em> model (if it has any model at all). The resolution: "uncountable" is <em>relative</em> to the model — there is no bijection inside the model, even if one exists outside.</p>
+<h2 id="6-difference-with-second-order-logic-sketch">6. Difference with second-order logic (sketch)</h2>
+<p>In <strong>second-order logic</strong> (SOL) we quantify over predicates and functions too:</p>
+<p>$$\forall P\, (P(0) \wedge \forall x\, (P(x) \rightarrow P(x+1)) \rightarrow \forall x\, P(x))$$</p>
+<p>This is the <strong>induction principle</strong>. In FOL it must be replaced by a <em>schema</em> (one axiom per formula $P$), which produces a strictly weaker theory — Peano arithmetic in FOL has non-standard models, while second-order PA does not.</p>
+<p>The cost: SOL loses the completeness theorem and the compactness theorem. There is no sound and complete deductive system for the standard semantics of SOL. FOL is the "sweet spot" of expressive power versus tractable metatheory; see <a href="15-metalogic-godel.html">Metalogic and Gödel's theorems</a>.</p>
+<h2 id="7-exercises">7. Exercises</h2>
+<details>
+  <summary>Exercise 1 — is $\forall x\, \exists y\, (x = y)$ valid?</summary>
+
+Take any structure $\mathcal{M}$ and any $a \in |\mathcal{M}|$. Pick $y := a$; then $a = a$ holds by reflexivity. So yes, this is valid in any non-empty domain. FOL semantics forbids empty domains for this reason — otherwise even $\exists x\, (x = x)$ would fail.
+</details>
+
+<details>
+  <summary>Exercise 2 — give a model where $\exists x\, (P(x) \wedge Q(x))$ is true but $\forall x\, (P(x) \rightarrow Q(x))$ is false.</summary>
+
+Domain $\{a, b\}$, $P^{\mathcal{M}} = \{a, b\}$, $Q^{\mathcal{M}} = \{a\}$. Then $P(a) \wedge Q(a)$ holds (the existential witnessed by $a$), but $P(b) \rightarrow Q(b)$ fails because $P(b)$ holds and $Q(b)$ does not.
+
+Moral: "some Ps are Qs" does not imply "all Ps are Qs". A classic informal-logic confusion (see [Formal fallacies](20-formal-fallacies.html)).
+</details>
+
+<h2 id="summary">Summary</h2>
+<ul>
+<li>A <strong>structure</strong> interprets a signature: domain, constants, functions, relations.</li>
+<li>Truth is defined recursively via Tarski's satisfaction relation.</li>
+<li><strong>Validity</strong> = true in every model; <strong>satisfiability</strong> = true in some model.</li>
+<li>A formula is invalid as soon as one counterexample exists.</li>
+<li><strong>Compactness</strong> and <strong>Löwenheim-Skolem</strong> are the two pillars of FOL model theory — and impose hard limits on what FOL can characterize (e.g., $\mathbb{N}$ up to isomorphism).</li>
+<li>Second-order logic gains expressiveness but loses completeness and compactness.</li>
+</ul>
+<h2 id="further-reading">Further reading</h2>
+<ul>
+<li>Tarski, <em>The Concept of Truth in Formalized Languages</em> (1933).</li>
+<li>Gödel, <em>Die Vollständigkeit der Axiome des logischen Funktionenkalküls</em> (1930).</li>
+<li>Hodges, <em>A Shorter Model Theory</em> (Cambridge, 1997).</li>
+<li>Enderton, <em>A Mathematical Introduction to Logic</em>, ch. 2.</li>
+<li>Marker, <em>Model Theory: An Introduction</em> (Springer).</li>
+</ul>
+      <nav class="pager">
+<a href="12-predicate-logic-syntax.html" class="prev"><span class="label">← Previous</span><span class="title">Predicate logic (FOL): syntax and quantifiers</span></a>
+<a href="14-sets-relations-functions.html" class="next"><span class="label">Next →</span><span class="title">Sets, relations, functions</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Logic, Problem Solving and Critical Thinking Zero to Hero</strong> — complete path, in English, from the anatomy of an argument to Pearl's do-calculus.</p><p>Open educational material. No sponsorships. When a concept is unclear, go back: logic and reasoning are a staircase, not a tree you skip across.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+</body>
+</html>

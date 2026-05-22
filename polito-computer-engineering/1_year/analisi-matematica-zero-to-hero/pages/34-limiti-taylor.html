@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calcolo di limiti tramite Taylor — Analisi Matematica I Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#1a2647',primaryTextColor:'#f3eed9',primaryBorderColor:'#d4af37',lineColor:'#8aa3c8',background:'#0c1428'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">∫</div>
+      <div>
+        <div class="brand-title">ANALYSIS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">IT</span><a href="../en/pages/34-limits-via-taylor.html" class="lang-link" title="Switch">EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li><li class="nav-item"><a href="00-intro.html" class=""><span class="num">00</span>Cos&#x27;è l&#x27;analisi matematica</a></li><li class="nav-item"><a href="01-logica-dimostrazioni.html" class=""><span class="num">01</span>Logica e dimostrazioni per l&#x27;analisi</a></li><li class="nav-item"><a href="02-insiemi-funzioni.html" class=""><span class="num">02</span>Insiemi, relazioni, funzioni</a></li><li class="nav-item"><a href="03-induzione-naturali.html" class=""><span class="num">03</span>Numeri naturali e principio di induzione</a></li><li class="nav-item"><a href="04-interi-razionali.html" class=""><span class="num">04</span>Numeri interi e razionali</a></li><li class="nav-item"><a href="05-cardinalita-cantor.html" class=""><span class="num">05</span>Cardinalità e infinito (Cantor)</a></li><li class="nav-item"><a href="06-numeri-reali-assiomi.html" class=""><span class="num">06</span>Numeri reali: gli assiomi</a></li><li class="nav-item"><a href="07-estremo-superiore.html" class=""><span class="num">07</span>Estremo superiore e completezza</a></li><li class="nav-item"><a href="08-costruzione-reali.html" class=""><span class="num">08</span>Costruzione di R: Dedekind e Cauchy</a></li><li class="nav-item"><a href="09-numeri-complessi.html" class=""><span class="num">09</span>Numeri complessi</a></li><li class="nav-item"><a href="10-topologia-r.html" class=""><span class="num">10</span>Topologia di R: intorni, aperti, chiusi, compatti</a></li><li class="nav-item"><a href="11-successioni-definizione.html" class=""><span class="num">11</span>Successioni e limiti: la definizione ε-N</a></li><li class="nav-item"><a href="12-algebra-limiti-successioni.html" class=""><span class="num">12</span>Algebra dei limiti di successioni</a></li><li class="nav-item"><a href="13-monotone-bolzano-weierstrass.html" class=""><span class="num">13</span>Successioni monotone e Bolzano-Weierstrass</a></li><li class="nav-item"><a href="14-cauchy-completezza.html" class=""><span class="num">14</span>Successioni di Cauchy e completezza di R</a></li><li class="nav-item"><a href="15-limiti-notevoli-landau.html" class=""><span class="num">15</span>Limiti notevoli e simboli di Landau (o-piccolo, O-grande)</a></li><li class="nav-item"><a href="16-liminf-limsup.html" class=""><span class="num">16</span>Limite superiore, limite inferiore, sottosuccessioni</a></li><li class="nav-item"><a href="17-funzioni-elementari.html" class=""><span class="num">17</span>Funzioni elementari: panoramica</a></li><li class="nav-item"><a href="18-esponenziale-logaritmo.html" class=""><span class="num">18</span>Esponenziale, logaritmo, potenze</a></li><li class="nav-item"><a href="19-trigonometriche-iperboliche.html" class=""><span class="num">19</span>Funzioni trigonometriche e iperboliche</a></li><li class="nav-item"><a href="20-limite-funzione.html" class=""><span class="num">20</span>Limite di funzione: la definizione</a></li><li class="nav-item"><a href="21-teoremi-limiti-funzioni.html" class=""><span class="num">21</span>Teoremi sui limiti di funzioni</a></li><li class="nav-item"><a href="22-limiti-notevoli-funzioni.html" class=""><span class="num">22</span>Limiti notevoli per funzioni</a></li><li class="nav-item"><a href="23-asintoti.html" class=""><span class="num">23</span>Asintoti orizzontali, verticali, obliqui</a></li><li class="nav-item"><a href="24-continuita-definizione.html" class=""><span class="num">24</span>Continuità: la definizione e le prime proprietà</a></li><li class="nav-item"><a href="25-teoremi-continue.html" class=""><span class="num">25</span>Teoremi sulle funzioni continue (Weierstrass, valori intermedi)</a></li><li class="nav-item"><a href="26-uniforme-continuita.html" class=""><span class="num">26</span>Uniforme continuità, Heine, lipschitzianità</a></li><li class="nav-item"><a href="27-discontinuita.html" class=""><span class="num">27</span>Tipi di discontinuità</a></li><li class="nav-item"><a href="28-derivata-definizione.html" class=""><span class="num">28</span>Derivata: definizione e interpretazione geometrica</a></li><li class="nav-item"><a href="29-regole-derivazione.html" class=""><span class="num">29</span>Regole di derivazione (somma, prodotto, quoziente, catena)</a></li><li class="nav-item"><a href="30-derivate-elementari.html" class=""><span class="num">30</span>Derivate delle funzioni elementari</a></li><li class="nav-item"><a href="31-teoremi-differenziale.html" class=""><span class="num">31</span>Teoremi del calcolo differenziale: Fermat, Rolle, Lagrange, Cauchy</a></li><li class="nav-item"><a href="32-hopital.html" class=""><span class="num">32</span>Regola di de L&#x27;Hôpital</a></li><li class="nav-item"><a href="33-taylor.html" class=""><span class="num">33</span>Polinomi e formula di Taylor</a></li><li class="nav-item"><a href="34-limiti-taylor.html" class="active"><span class="num">34</span>Calcolo di limiti tramite Taylor</a></li><li class="nav-item"><a href="35-monotonia-estremi.html" class=""><span class="num">35</span>Monotonia, massimi, minimi, punti critici</a></li><li class="nav-item"><a href="36-convessita-concavita.html" class=""><span class="num">36</span>Convessità, concavità, flessi</a></li><li class="nav-item"><a href="37-studio-funzione.html" class=""><span class="num">37</span>Studio di funzione completo</a></li><li class="nav-item"><a href="38-applicazioni-ottimizzazione.html" class=""><span class="num">38</span>Applicazioni dell&#x27;ottimizzazione: fisica, economia, geometria</a></li><li class="nav-item"><a href="39-integrale-riemann.html" class=""><span class="num">39</span>Integrale di Riemann: definizione</a></li><li class="nav-item"><a href="40-teorema-fondamentale-calcolo.html" class=""><span class="num">40</span>Teorema fondamentale del calcolo integrale</a></li><li class="nav-item"><a href="41-tecniche-integrazione.html" class=""><span class="num">41</span>Tecniche di integrazione: per parti, per sostituzione</a></li><li class="nav-item"><a href="42-integrali-razionali.html" class=""><span class="num">42</span>Integrazione di funzioni razionali</a></li><li class="nav-item"><a href="43-integrali-impropri.html" class=""><span class="num">43</span>Integrali impropri</a></li><li class="nav-item"><a href="44-funzioni-integrali.html" class=""><span class="num">44</span>Funzioni integrali e applicazioni geometriche</a></li><li class="nav-item"><a href="45-serie-numeriche.html" class=""><span class="num">45</span>Serie numeriche: definizione e convergenza</a></li><li class="nav-item"><a href="46-criteri-positivi.html" class=""><span class="num">46</span>Criteri di convergenza per serie a termini positivi</a></li><li class="nav-item"><a href="47-serie-segno-qualunque.html" class=""><span class="num">47</span>Serie a segno qualunque, Leibniz, convergenza assoluta</a></li><li class="nav-item"><a href="48-serie-potenze.html" class=""><span class="num">48</span>Serie di potenze e raggio di convergenza</a></li><li class="nav-item"><a href="49-serie-taylor.html" class=""><span class="num">49</span>Serie di Taylor e analiticità</a></li><li class="nav-item"><a href="50-serie-fourier-cenni.html" class=""><span class="num">50</span>Serie di Fourier: introduzione</a></li><li class="nav-item"><a href="51-edo-primo-ordine.html" class=""><span class="num">51</span>EDO del primo ordine</a></li><li class="nav-item"><a href="52-edo-lineari-ordine-n.html" class=""><span class="num">52</span>EDO lineari di ordine $n$ a coefficienti costanti</a></li><li class="nav-item"><a href="53-cauchy-esistenza-unicita.html" class=""><span class="num">53</span>Problema di Cauchy, esistenza e unicità</a></li><li class="nav-item"><a href="54-topologia-rn.html" class=""><span class="num">54</span>Topologia in $\mathbb{R}^n$</a></li><li class="nav-item"><a href="55-derivate-parziali-differenziale.html" class=""><span class="num">55</span>Derivate parziali e differenziale in più variabili</a></li><li class="nav-item"><a href="56-cenni-lebesgue-funzionale.html" class=""><span class="num">56</span>Oltre Riemann: Lebesgue, Banach, Hilbert</a></li><li class="nav-item"><a href="57-eserciziario.html" class=""><span class="num">57</span>Eserciziario: problemi tipo d&#x27;esame</a></li><li class="nav-item"><a href="58-glossario-az.html" class=""><span class="num">58</span>Glossario A-Z dell&#x27;Analisi Matematica I</a></li><li class="nav-item"><a href="59-formulario-completo.html" class=""><span class="num">59</span>Formulario completo di Analisi Matematica I</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Calcolo differenziale</span>
+        <span>Sezione 34 di 59</span>
+        <span class="level-tag level-int">Livello: intermedio</span>
+      </div>
+      <h1>Calcolo di limiti tramite Taylor</h1>
+      <p class="summary">La tecnica più potente per risolvere limiti $0/0$ con funzioni elementari. Sostituisci ogni $f$ col suo polinomio di Taylor a ordine adeguato, fai l&#x27;algebra dei termini, leggi il limite dall&#x27;ordine dominante.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Calcolo differenziale</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>Polinomio di Taylor (sez. 33)</li><li>$o$-piccolo (sez. 15)</li></ul>
+  <div class="label">Strumenti / riferimenti</div>
+  <ul class="source-list"><li>Rudin — *Principles*, cap. 5</li></ul>
+</div>
+      <h2 id="perche-parlarne">Perché parlarne</h2>
+<p><strong>Hôpital</strong> trasforma un limite in un altro limite. <strong>Taylor</strong> lo trasforma in <strong>calcolo algebrico</strong>: sostituisci ogni funzione con il suo polinomio di Maclaurin a ordine adatto, fai l'algebra, leggi il limite.</p>
+<p>Per espressioni con $\exp, \sin, \cos, \ln, $ potenze, è quasi sempre la via più rapida e con meno errori.</p>
+<h2 id="strategia-generale">Strategia generale</h2>
+<p>Per $\lim_{x \to 0} f(x)/g(x)$ in forma $0/0$:</p>
+<ol>
+<li><strong>Stima l'ordine</strong> di $f$ e $g$ in 0 (cioè $f \sim a x^p$, $g \sim b x^q$).</li>
+<li><strong>Sviluppa</strong> $f$ e $g$ con Taylor fino ad almeno $\max(p, q)$.</li>
+<li><strong>Sostituisci</strong> e semplifica.</li>
+<li><strong>Limite</strong> = rapporto dei termini di ordine più basso non nullo.</li>
+</ol>
+<h2 id="sviluppi-base-da-memoria">Sviluppi base (da memoria)</h2>
+<p>$$e^x = 1 + x + \frac{x^2}{2} + \frac{x^3}{6} + o(x^3)$$
+$$\sin x = x - \frac{x^3}{6} + o(x^4)$$
+$$\cos x = 1 - \frac{x^2}{2} + \frac{x^4}{24} + o(x^5)$$
+$$\ln(1 + x) = x - \frac{x^2}{2} + \frac{x^3}{3} + o(x^3)$$
+$$(1 + x)^\alpha = 1 + \alpha x + \binom{\alpha}{2} x^2 + o(x^2)$$</p>
+<blockquote>
+<p><strong>Glossarietto:</strong></p>
+<ul>
+<li>$o(x^n)$ = "<strong>o-piccolo</strong> di $x^n$": termine che tende a 0 <strong>più velocemente</strong> di $x^n$ per $x \to 0$.</li>
+<li>$f(x) \sim a x^p$ ($x \to 0$) = $f$ è <strong>asintotica</strong> a $ax^p$ (rapporto $\to 1$), cioè $p$ è l'<strong>ordine</strong> di $f$ in 0.</li>
+<li>$\binom{\alpha}{2} = \alpha(\alpha-1)/2$ = coefficiente binomiale generalizzato.</li>
+<li><strong>Ordine adeguato:</strong> quante derivate ti servono dipende dall'ordine di annullamento previsto del numeratore (vedi strategia).</li>
+</ul>
+</blockquote>
+<h2 id="esempi-guidati">Esempi guidati</h2>
+<h3 id="esempio-1-limite-classico">Esempio 1 — Limite classico</h3>
+<p>$\lim_{x \to 0} \frac{\sin x - x}{x^3}$.</p>
+<p><em>Soluzione.</em> $\sin x = x - x^3/6 + o(x^3)$. Quindi $\sin x - x = -x^3/6 + o(x^3)$. Diviso $x^3$: $-1/6 + o(1) \to -1/6$.</p>
+<h3 id="esempio-2-con-esponenziale">Esempio 2 — Con esponenziale</h3>
+<p>$\lim_{x \to 0} \frac{e^x - 1 - x}{x^2}$.</p>
+<p><em>Soluzione.</em> $e^x = 1 + x + x^2/2 + o(x^2)$. $e^x - 1 - x = x^2/2 + o(x^2)$. Diviso $x^2$: $1/2$.</p>
+<h3 id="esempio-3-multipli-ingredienti">Esempio 3 — Multipli ingredienti</h3>
+<p>$\lim_{x \to 0} \frac{\ln(1 + x) - \sin x}{x^2}$.</p>
+<p><em>Soluzione.</em> $\ln(1 + x) = x - x^2/2 + o(x^2)$, $\sin x = x + o(x^2)$ (ordine 3 in più, è già zero a ordine 2). Differenza: $-x^2/2 + o(x^2)$. Diviso $x^2$: $-1/2$.</p>
+<h3 id="esempio-4-tutto-taylor">Esempio 4 — Tutto Taylor</h3>
+<p>$\lim_{x \to 0} \frac{\cos x - 1 + x^2/2}{x^4}$.</p>
+<p><em>Soluzione.</em> $\cos x = 1 - x^2/2 + x^4/24 + o(x^4)$. Numeratore: $x^4/24 + o(x^4)$. Limite: $1/24$.</p>
+<h2 id="errori-da-evitare">Errori da evitare</h2>
+<p><strong>Errore 1: ordine troppo basso.</strong>
+$\lim_0 (\sin x - x)/x^3$ con $\sin x = x + o(x)$: numeratore $= o(x)$, diviso $x^3$ dà $o(1/x^2)$ — informazione insufficiente. Serve almeno $\sin x = x - x^3/6 + o(x^3)$.</p>
+<p><strong>Errore 2: dimenticare di propagare $o$.</strong>
+$\sin(x^2) = x^2 + o(x^2)$ NO. Si sostituisce $y = x^2$, e $\sin y = y + o(y) = x^2 + o(x^2)$ no, ancora sbagliato: deve essere $o(y^3) = o(x^6)$. Quindi $\sin(x^2) = x^2 - x^6/6 + o(x^6)$.</p>
+<p><strong>Errore 3: cancellazioni di termini di ordine principale.</strong>
+Se i termini di grado più basso si cancellano, devi sviluppare a ordine più alto. (Vedi esempio 3 vs 4.)</p>
+<h2 id="esercizi">Esercizi</h2>
+<details>
+<summary>Esercizio 1</summary>
+
+$\lim_{x \to 0} \frac{e^{x^2} - \cos x}{x^2}$.
+
+**Soluzione.** $e^{x^2} = 1 + x^2 + o(x^2)$, $\cos x = 1 - x^2/2 + o(x^2)$. Differenza: $3 x^2/2 + o(x^2)$. Limite: $3/2$. ∎
+</details>
+
+<details>
+<summary>Esercizio 2</summary>
+
+$\lim_{x \to 0} \frac{x - \sin x}{x - \tan x}$.
+
+**Soluzione.** $x - \sin x = x^3/6 + o(x^3)$. $\tan x = x + x^3/3 + o(x^3)$, quindi $x - \tan x = -x^3/3 + o(x^3)$. Rapporto: $(x^3/6)/(-x^3/3) = -1/2$. ∎
+</details>
+
+<h2 id="riassunto-in-una-riga">Riassunto in una riga</h2>
+<p><strong>Taylor per i limiti:</strong> sostituisci ogni funzione col suo Maclaurin a ordine sufficiente, simplifica, leggi il rapporto dei termini dominanti — la tecnica più potente per limiti $0/0$ con funzioni elementari.</p>
+      <nav class="pager">
+<a href="33-taylor.html" class="prev"><span class="label">← Precedente</span><span class="title">Polinomi e formula di Taylor</span></a>
+<a href="35-monotonia-estremi.html" class="next"><span class="label">Successivo →</span><span class="title">Monotonia, massimi, minimi, punti critici</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Analisi Matematica I Zero to Hero</strong> — percorso completo bilingue, dai naturali agli integrali impropri, dalle serie di Fourier alle EDO lineari.</p><p>Materiale didattico aperto. Quando una dimostrazione è oscura, torna indietro: l'analisi è una scala, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

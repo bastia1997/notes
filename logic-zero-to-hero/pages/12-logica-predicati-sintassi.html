@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Logica dei predicati (FOL): sintassi e quantificatori — Logica e Pensiero Critico Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#2a2540',primaryTextColor:'#ecebff',primaryBorderColor:'#7a6cd6',lineColor:'#9890b8',background:'#141226'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">∴</div>
+      <div>
+        <div class="brand-title">LOGOS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">IT</span><a href="../en/pages/12-predicate-logic-syntax.html" class="lang-link" title="Switch to English">EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-cosa-e-la-logica.html" class=""><span class="num">01</span>Cos&#x27;è la logica e il pensiero critico</a></li><li class="nav-item"><a href="../pages/02-storia-della-logica.html" class=""><span class="num">02</span>Breve storia della logica</a></li><li class="nav-item"><a href="../pages/03-tipi-di-ragionamento.html" class=""><span class="num">03</span>Tipi di ragionamento: deduttivo, induttivo, abduttivo, analogico</a></li><li class="nav-item"><a href="../pages/04-anatomia-degli-argomenti.html" class=""><span class="num">04</span>Argomenti: premesse, conclusione, validità, solidità</a></li><li class="nav-item"><a href="../pages/05-standard-paul-elder.html" class=""><span class="num">05</span>Pensiero critico: standard di Paul-Elder</a></li><li class="nav-item"><a href="../pages/06-linguaggio-e-ambiguita.html" class=""><span class="num">06</span>Linguaggio, ambiguità, definizioni</a></li><li class="nav-item"><a href="../pages/07-logica-proposizionale.html" class=""><span class="num">07</span>Logica proposizionale: connettivi e tabelle di verità</a></li><li class="nav-item"><a href="../pages/08-equivalenze-forme-normali.html" class=""><span class="num">08</span>Equivalenze logiche, De Morgan, forme normali</a></li><li class="nav-item"><a href="../pages/09-regole-inferenza.html" class=""><span class="num">09</span>Regole di inferenza</a></li><li class="nav-item"><a href="../pages/10-deduzione-naturale.html" class=""><span class="num">10</span>Deduzione naturale: regole I/E e dimostrazione strutturata</a></li><li class="nav-item"><a href="../pages/11-sistemi-assiomatici-sequenti.html" class=""><span class="num">11</span>Sistemi assiomatici e calcolo dei sequenti</a></li><li class="nav-item"><a href="../pages/12-logica-predicati-sintassi.html" class="active"><span class="num">12</span>Logica dei predicati (FOL): sintassi e quantificatori</a></li><li class="nav-item"><a href="../pages/13-logica-predicati-semantica.html" class=""><span class="num">13</span>FOL: semantica, modelli, validità</a></li><li class="nav-item"><a href="../pages/14-insiemi-relazioni-funzioni.html" class=""><span class="num">14</span>Insiemi, relazioni, funzioni</a></li><li class="nav-item"><a href="../pages/15-metalogica-godel.html" class=""><span class="num">15</span>Metalogica: soundness, completezza, teoremi di Gödel</a></li><li class="nav-item"><a href="../pages/16-logiche-modali.html" class=""><span class="num">16</span>Logiche modali e mondi possibili</a></li><li class="nav-item"><a href="../pages/17-logiche-temporale-deontica-epistemica.html" class=""><span class="num">17</span>Logiche temporale, deontica, epistemica</a></li><li class="nav-item"><a href="../pages/18-logiche-non-classiche.html" class=""><span class="num">18</span>Logiche non classiche: intuizionista, fuzzy, paraconsistente</a></li><li class="nav-item"><a href="../pages/19-curry-howard-type-theory.html" class=""><span class="num">19</span>Curry-Howard e type theory: dimostrazioni come programmi</a></li><li class="nav-item"><a href="../pages/20-fallacie-formali.html" class=""><span class="num">20</span>Fallacie formali: quando la forma del ragionamento mente</a></li><li class="nav-item"><a href="../pages/21-fallacie-informali-rilevanza.html" class=""><span class="num">21</span>Fallacie informali di rilevanza: distrarre invece di argomentare</a></li><li class="nav-item"><a href="../pages/22-fallacie-informali-presunzione.html" class=""><span class="num">22</span>Fallacie informali di presunzione e ambiguità</a></li><li class="nav-item"><a href="../pages/23-bias-cognitivi.html" class=""><span class="num">23</span>Bias cognitivi: catalogo ragionato</a></li><li class="nav-item"><a href="../pages/24-dual-process.html" class=""><span class="num">24</span>Sistema 1 e Sistema 2: dual process theory</a></li><li class="nav-item"><a href="../pages/25-polya-problem-solving.html" class=""><span class="num">25</span>Polya: come risolvere un problema (4 step)</a></li><li class="nav-item"><a href="../pages/26-euristiche-problem-solving.html" class=""><span class="num">26</span>Euristiche del problem solving</a></li><li class="nav-item"><a href="../pages/27-pensiero-computazionale.html" class=""><span class="num">27</span>Pensiero computazionale</a></li><li class="nav-item"><a href="../pages/28-algoritmi-strategie.html" class=""><span class="num">28</span>Algoritmi e strategie di risoluzione</a></li><li class="nav-item"><a href="../pages/29-pensiero-creativo.html" class=""><span class="num">29</span>Pensiero creativo: lateral thinking, TRIZ, SCAMPER</a></li><li class="nav-item"><a href="../pages/30-design-thinking.html" class=""><span class="num">30</span>Design thinking</a></li><li class="nav-item"><a href="../pages/31-mental-models.html" class=""><span class="num">31</span>Mental models: modelli mentali</a></li><li class="nav-item"><a href="../pages/32-probabilita-fondamenti.html" class=""><span class="num">32</span>Probabilità: fondamenti per il ragionamento</a></li><li class="nav-item"><a href="../pages/33-teorema-bayes.html" class=""><span class="num">33</span>Teorema di Bayes e aggiornamento delle credenze</a></li><li class="nav-item"><a href="../pages/34-paradossi-probabilistici.html" class=""><span class="num">34</span>Paradossi probabilistici: Monty Hall, base rate, Simpson</a></li><li class="nav-item"><a href="../pages/35-teoria-decisione.html" class=""><span class="num">35</span>Teoria della decisione: utilità attesa e prospect theory</a></li><li class="nav-item"><a href="../pages/36-forecasting-calibrazione.html" class=""><span class="num">36</span>Forecasting e calibrazione: la lezione dei superforecaster</a></li><li class="nav-item"><a href="../pages/37-knightian-cigni-neri.html" class=""><span class="num">37</span>Knightian uncertainty, cigni neri, antifragile</a></li><li class="nav-item"><a href="../pages/38-argomentazione-toulmin.html" class=""><span class="num">38</span>Argomentazione: Toulmin, Walton, argument mapping</a></li><li class="nav-item"><a href="../pages/39-retorica-persuasione.html" class=""><span class="num">39</span>Retorica e persuasione</a></li><li class="nav-item"><a href="../pages/40-dibattito-dialettica.html" class=""><span class="num">40</span>Dibattito, dialettica socratica, steelmanning</a></li><li class="nav-item"><a href="../pages/41-negoziazione-teoria-giochi.html" class=""><span class="num">41</span>Negoziazione e teoria dei giochi</a></li><li class="nav-item"><a href="../pages/42-epistemologia.html" class=""><span class="num">42</span>Epistemologia: JTB, Gettier, virtù epistemiche</a></li><li class="nav-item"><a href="../pages/43-metodo-scientifico-popper.html" class=""><span class="num">43</span>Metodo scientifico, Popper, falsificabilità</a></li><li class="nav-item"><a href="../pages/44-kuhn-lakatos-feyerabend.html" class=""><span class="num">44</span>Paradigmi: Kuhn, Lakatos, Feyerabend</a></li><li class="nav-item"><a href="../pages/45-causalita-pearl.html" class=""><span class="num">45</span>Causalità: Hume, Pearl, do-calculus</a></li><li class="nav-item"><a href="../pages/46-paradossi-celebri.html" class=""><span class="num">46</span>Paradossi celebri: dal mentitore al Newcomb</a></li><li class="nav-item"><a href="../pages/47-systems-thinking.html" class=""><span class="num">47</span>Systems thinking e modelli di feedback</a></li><li class="nav-item"><a href="../pages/48-wicked-problems.html" class=""><span class="num">48</span>Wicked problems, complessità, VUCA</a></li><li class="nav-item"><a href="../pages/49-critical-reading-writing.html" class=""><span class="num">49</span>Critical reading e scrittura argomentativa</a></li><li class="nav-item"><a href="../pages/50-propaganda-manipolazione.html" class=""><span class="num">50</span>Propaganda, manipolazione, news literacy, fact-checking</a></li><li class="nav-item"><a href="../pages/51-eserciziario.html" class=""><span class="num">51</span>Eserciziario completo con soluzioni</a></li><li class="nav-item"><a href="../pages/52-glossario-az.html" class=""><span class="num">52</span>Glossario A-Z bilingue</a></li><li class="nav-item"><a href="../pages/53-formulario.html" class=""><span class="num">53</span>Formulario / scheda riassuntiva</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Logica formale</span>
+        <span>Sezione 12 di 53</span>
+        <span class="level-tag level-int">Livello: intermedio</span>
+      </div>
+      <h1>Logica dei predicati (FOL): sintassi e quantificatori</h1>
+      <p class="summary">Il salto dalla logica proposizionale alla logica del primo ordine: variabili, predicati, funzioni, quantificatori ∀ ed ∃. Formule ben formate, variabili libere e vincolate, traduzione di frasi italiane in FOL.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Logica formale</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>Aver letto [Logica proposizionale](07-logica-proposizionale.html)</li><li>Aver letto [Deduzione naturale](10-deduzione-naturale.html)</li></ul>
+  <div class="label">Strumenti / riferimenti</div>
+  <ul class="source-list"><li>Carta e penna</li><li>Software opzionale: Tarski&#x27;s World, Carnap.io</li></ul>
+</div>
+      <p>La logica proposizionale (sez. 7) tratta gli enunciati come scatole nere. "Tutti i corvi sono neri" diventa una semplice lettera $P$: niente impedisce di affermare $P$ e contemporaneamente "questo corvo è bianco" senza che il sistema se ne accorga. La <strong>logica dei predicati del primo ordine</strong> (First-Order Logic, FOL) — sviluppata da Gottlob Frege (1879) e perfezionata da Russell, Whitehead, Hilbert e Tarski nel primo Novecento — sblocca questo livello: spacca l'enunciato in <strong>soggetto</strong> e <strong>predicato</strong>, introduce <strong>variabili</strong> e <strong>quantificatori</strong>, e rende esprimibile praticamente tutta la matematica.</p>
+<p>Questa sezione si concentra sulla <strong>sintassi</strong>: come si costruiscono le formule, quali sono i pezzi del linguaggio, cosa significa che una variabile è libera o vincolata, come tradurre frasi italiane in FOL. La <strong>semantica</strong> (modelli, validità, soddisfacibilità) la trattiamo in <a href="13-logica-predicati-semantica.html">sez. 13</a>.</p>
+<h2 id="1-il-vocabolario-della-fol">1. Il vocabolario della FOL</h2>
+<p>Un linguaggio del primo ordine $\mathcal{L}$ è costituito da:</p>
+<p><strong>Simboli logici</strong> (fissi, comuni a tutti i linguaggi):</p>
+<ul>
+<li>Variabili: $x, y, z, x_1, x_2, \ldots$ (insieme numerabile)</li>
+<li>Connettivi: $\neg, \wedge, \vee, \rightarrow, \leftrightarrow$</li>
+<li>Quantificatori: $\forall$ (universale), $\exists$ (esistenziale)</li>
+<li>Uguaglianza: $=$ (talvolta opzionale)</li>
+<li>Parentesi: $($, $)$</li>
+</ul>
+<p><strong>Simboli non logici</strong> (specifici del linguaggio):</p>
+<ul>
+<li><strong>Costanti</strong>: $a, b, c, \ldots$ (es. <em>Socrate</em>, $0$, $\pi$)</li>
+<li><strong>Simboli di funzione</strong> $n$-ari: $f, g, h, \ldots$ (es. $+$ binaria, $\sqrt{\cdot}$ unaria, <em>padre-di</em> unaria)</li>
+<li><strong>Simboli di predicato</strong> $n$-ari: $P, Q, R, \ldots$ (es. <em>Uomo</em> unaria, $&lt;$ binaria, <em>Sta-fra</em> ternaria)</li>
+</ul>
+<h3 id="esempi-di-linguaggi">Esempi di linguaggi</h3>
+<ul>
+<li><strong>Linguaggio dell'aritmetica</strong>: costanti $0$; funzioni $S$ (successore), $+$, $\cdot$; predicato $=$.</li>
+<li><strong>Linguaggio della teoria degli insiemi</strong>: nessuna costante (o solo $\emptyset$); predicati $\in$ e $=$.</li>
+<li><strong>Linguaggio "parentela"</strong>: costanti per persone specifiche; funzioni <em>padre-di</em>, <em>madre-di</em>; predicati <em>Maschio</em>, <em>Femmina</em>, <em>GenitoreDi</em>.</li>
+</ul>
+<h2 id="2-termini-e-formule">2. Termini e formule</h2>
+<h3 id="termini">Termini</h3>
+<p>Un <strong>termine</strong> denota un oggetto. Costruzione induttiva:</p>
+<ol>
+<li>ogni variabile è un termine;</li>
+<li>ogni costante è un termine;</li>
+<li>se $f$ è simbolo di funzione $n$-aria e $t_1, \ldots, t_n$ sono termini, allora $f(t_1, \ldots, t_n)$ è un termine.</li>
+</ol>
+<p>Esempi nel linguaggio dell'aritmetica: $0$, $x$, $S(0)$, $S(S(x))$, $+(x, S(0))$ (di solito scritto $x + S(0)$ in notazione infissa).</p>
+<h3 id="formule-atomiche">Formule atomiche</h3>
+<p>Una <strong>formula atomica</strong> è una "asserzione minima":</p>
+<ul>
+<li>$t_1 = t_2$ dove $t_1, t_2$ sono termini;</li>
+<li>$P(t_1, \ldots, t_n)$ dove $P$ è simbolo predicativo $n$-ario.</li>
+</ul>
+<p>Esempi: $x = 0$, $\text{Uomo}(\text{Socrate})$, $x &lt; y$, $\text{Padre}(\text{Giovanni}, \text{Mario})$.</p>
+<h3 id="formule-well-formed-wff">Formule well-formed (WFF)</h3>
+<p>Costruzione induttiva:</p>
+<ol>
+<li>ogni formula atomica è una WFF;</li>
+<li>se $\varphi, \psi$ sono WFF, lo sono $\neg \varphi$, $(\varphi \wedge \psi)$, $(\varphi \vee \psi)$, $(\varphi \rightarrow \psi)$, $(\varphi \leftrightarrow \psi)$;</li>
+<li>se $\varphi$ è una WFF e $x$ è una variabile, $\forall x\, \varphi$ e $\exists x\, \varphi$ sono WFF.</li>
+</ol>
+<p>Tutto il resto <strong>non</strong> è una WFF. Per esempio: $\forall x \forall$ non è una formula (manca tutto dopo il secondo $\forall$); $\forall \text{Socrate}\, P(x)$ non lo è (non si quantifica su costanti).</p>
+<h2 id="3-quantificatori-lettura">3. Quantificatori: lettura</h2>
+<table>
+<thead>
+<tr>
+<th>Forma</th>
+<th>Lettura italiana</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$\forall x\, P(x)$</td>
+<td>"per ogni $x$, $P(x)$"</td>
+</tr>
+<tr>
+<td>$\exists x\, P(x)$</td>
+<td>"esiste un $x$ tale che $P(x)$"</td>
+</tr>
+<tr>
+<td>$\forall x\, (P(x) \rightarrow Q(x))$</td>
+<td>"ogni $P$ è $Q$" / "tutti i $P$ sono $Q$"</td>
+</tr>
+<tr>
+<td>$\exists x\, (P(x) \wedge Q(x))$</td>
+<td>"qualche $P$ è $Q$" / "esiste un $P$ che è $Q$"</td>
+</tr>
+<tr>
+<td>$\neg \exists x\, P(x)$</td>
+<td>"non esistono $P$" / "nessun $x$ è $P$"</td>
+</tr>
+<tr>
+<td>$\forall x\, \neg P(x)$</td>
+<td>equivalente a $\neg \exists x\, P(x)$</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Equivalenze cruciali</strong> (dualità di De Morgan estesa):</p>
+<p>$$\neg \forall x\, \varphi(x) \;\equiv\; \exists x\, \neg \varphi(x)$$
+$$\neg \exists x\, \varphi(x) \;\equiv\; \forall x\, \neg \varphi(x)$$</p>
+<p>Esempio: la negazione di "tutti i politici mentono" non è "tutti i politici non mentono", ma "esiste un politico che non mente". Un errore di traduzione molto comune nelle discussioni quotidiane (vedi anche <a href="22-fallacie-informali-presunzione.html">Fallacie informali</a>).</p>
+<h2 id="4-variabili-libere-e-vincolate">4. Variabili libere e vincolate</h2>
+<p>In $\forall x\, P(x, y)$:</p>
+<ul>
+<li>$x$ è <strong>vincolata</strong> (bound) dal quantificatore $\forall$.</li>
+<li>$y$ è <strong>libera</strong> (free) — il quantificatore non la tocca.</li>
+</ul>
+<p>Una formula senza variabili libere è una <strong>sentenza</strong> (closed formula). Solo le sentenze hanno valore di verità indipendente da un'assegnazione esterna; le formule con variabili libere sono come funzioni in attesa di argomenti.</p>
+<h3 id="esempi-misti">Esempi misti</h3>
+<ul>
+<li>$P(x) \wedge \forall y\, Q(x, y)$ — $x$ libera (entrambe le occorrenze), $y$ vincolata.</li>
+<li>$\forall x\, (P(x) \rightarrow Q(x, y))$ — $x$ vincolata, $y$ libera.</li>
+<li>$\forall x\, \exists y\, R(x, y)$ — sentenza, entrambe vincolate.</li>
+</ul>
+<h3 id="sostituzione-e-cattura">Sostituzione e cattura</h3>
+<p>Sostituire una variabile libera $y$ con un termine $t$ in una formula $\varphi$ si scrive $\varphi[t/y]$. Va fatto con attenzione: se $t$ contiene una variabile $x$ che si trova nell'ambito di un $\forall x$ in $\varphi$, la sostituzione la <strong>cattura</strong> e ne cambia il significato. Soluzione: rinominare le variabili vincolate (α-conversione).</p>
+<p>Esempio: in $\forall x\, R(x, y)$ sostituiamo $y$ con $x$. Naïvamente otterremmo $\forall x\, R(x, x)$ — molto diverso! Si rinomina prima: $\forall z\, R(z, y)$, poi si sostituisce $y \mapsto x$, ottenendo $\forall z\, R(z, x)$.</p>
+<h2 id="5-tradurre-litaliano-in-fol">5. Tradurre l'italiano in FOL</h2>
+<p>La traduzione è l'esercizio più importante per imparare la FOL. Pattern fondamentali, assumendo dominio "persone" salvo diversa indicazione:</p>
+<h3 id="tutti-gli-a-sono-b">"Tutti gli A sono B"</h3>
+<p>$$\forall x\, (A(x) \rightarrow B(x))$$</p>
+<p><strong>Esempio</strong>: "Tutti i corvi sono neri" → $\forall x\, (\text{Corvo}(x) \rightarrow \text{Nero}(x))$.</p>
+<blockquote>
+<p><strong>⚠ Errore comune</strong>: scrivere $\forall x\, (\text{Corvo}(x) \wedge \text{Nero}(x))$ — significherebbe "tutto è un corvo nero", troppo forte.</p>
+</blockquote>
+<h3 id="qualche-a-e-b">"Qualche A è B"</h3>
+<p>$$\exists x\, (A(x) \wedge B(x))$$</p>
+<p><strong>Esempio</strong>: "Esiste un primo maggiore di 100" → $\exists x\, (\text{Primo}(x) \wedge x &gt; 100)$.</p>
+<blockquote>
+<p><strong>⚠ Errore comune</strong>: $\exists x\, (A(x) \rightarrow B(x))$ — banalmente vera appena esiste $x$ non-$A$ (per vacuità dell'implicazione).</p>
+</blockquote>
+<h3 id="nessun-a-e-b">"Nessun A è B"</h3>
+<p>$$\forall x\, (A(x) \rightarrow \neg B(x)) \;\equiv\; \neg \exists x\, (A(x) \wedge B(x))$$</p>
+<h3 id="quantificatori-annidati-lordine-conta">Quantificatori annidati (l'ordine conta!)</h3>
+<ul>
+<li>"Tutti amano qualcuno" → $\forall x\, \exists y\, \text{Ama}(x, y)$ — ognuno ha <em>un</em> qualcuno che ama (può variare).</li>
+<li>"C'è qualcuno che tutti amano" → $\exists y\, \forall x\, \text{Ama}(x, y)$ — esiste <em>uno specifico</em> $y$ amato da tutti.</li>
+</ul>
+<p>Le due frasi sono <em>non</em> equivalenti: la seconda implica la prima, ma non viceversa. Questo è un nodo classico (anche linguistico — vedi <a href="06-linguaggio-e-ambiguita.html">Linguaggio e ambiguità</a>).</p>
+<h2 id="6-diagramma-struttura-logica-delle-frasi-tipiche">6. Diagramma: struttura logica delle frasi tipiche</h2>
+<pre><code class="language-mermaid">flowchart LR
+  S1[&quot;Tutti i corvi sono neri&quot;] --&gt; F1[&quot;∀x (Corvo(x) → Nero(x))&quot;]
+  S2[&quot;Esiste un primo &gt; 100&quot;] --&gt; F2[&quot;∃x (Primo(x) ∧ x&gt;100)&quot;]
+  S3[&quot;Nessuno conosce tutto&quot;] --&gt; F3[&quot;¬∃x ∀y Conosce(x,y)&quot;]
+  S4[&quot;Ogni studente ha un professore&quot;] --&gt; F4[&quot;∀x (Studente(x) → ∃y (Prof(y) ∧ HaProf(x,y)))&quot;]
+  S5[&quot;C'è un Dio comune a tutti&quot;] --&gt; F5[&quot;∃y ∀x Adora(x, y)&quot;]
+</code></pre>
+<h2 id="7-esempio-lavorato-tradurre-ogni-studente-ama-almeno-un-professore-ma-nessun-professore-ama-tutti-gli-studenti">7. Esempio lavorato: tradurre "Ogni studente ama almeno un professore, ma nessun professore ama tutti gli studenti"</h2>
+<p>Dominio: persone. Predicati: $S(x)$ "x è studente", $P(x)$ "x è professore", $A(x, y)$ "x ama y".</p>
+<p><strong>Decomponiamo</strong>:</p>
+<ol>
+<li>"Ogni studente ama almeno un professore" → $\forall x\, (S(x) \rightarrow \exists y\, (P(y) \wedge A(x, y)))$</li>
+<li>"Nessun professore ama tutti gli studenti" → $\neg \exists x\, (P(x) \wedge \forall y\, (S(y) \rightarrow A(x, y)))$, equivalente a $\forall x\, (P(x) \rightarrow \exists y\, (S(y) \wedge \neg A(x, y)))$</li>
+</ol>
+<p>Congiunzione:</p>
+<p>$$\forall x\, (S(x) \rightarrow \exists y\, (P(y) \wedge A(x, y))) \;\wedge\; \forall x\, (P(x) \rightarrow \exists y\, (S(y) \wedge \neg A(x, y)))$$</p>
+<h2 id="8-esercizi">8. Esercizi</h2>
+<details>
+  <summary>Esercizio 1 — traduci "Solo i medici prescrivono farmaci"</summary>
+
+"Solo X fa Y" significa "se uno fa Y, allora è X": $\forall x\, (\text{Prescrive}(x) \rightarrow \text{Medico}(x))$.
+
+Attenzione: "solo i medici prescrivono" non implica "tutti i medici prescrivono". Le due direzioni sono distinte.
+</details>
+
+<details>
+  <summary>Esercizio 2 — traduci "C'è esattamente un re di Francia"</summary>
+
+"Esattamente uno" si esprime con esistenza + unicità:
+
+$$\exists x\, (\text{Re}(x, \text{Francia}) \wedge \forall y\, (\text{Re}(y, \text{Francia}) \rightarrow y = x))$$
+
+Notazione abbreviata: $\exists !x\, \text{Re}(x, \text{Francia})$.
+
+Questa è la struttura delle *descrizioni definite* di Russell (1905, *On Denoting*) — la famosa analisi di "l'attuale re di Francia è calvo".
+</details>
+
+<details>
+  <summary>Esercizio 3 — quali variabili sono libere in $\forall x\, (P(x, y) \rightarrow \exists z\, R(y, z, w))$?</summary>
+
+- $x$ vincolata da $\forall x$.
+- $y$ libera (entrambe le occorrenze).
+- $z$ vincolata da $\exists z$.
+- $w$ libera.
+
+Per renderla una sentenza bisognerebbe quantificarla con $\forall y \forall w$ o $\exists y \exists w$ in testa.
+</details>
+
+<h2 id="sintesi">Sintesi</h2>
+<ul>
+<li>La FOL aggiunge <strong>variabili</strong>, <strong>predicati $n$-ari</strong>, <strong>funzioni</strong> e <strong>quantificatori</strong> $\forall, \exists$ alla logica proposizionale.</li>
+<li><strong>Termini</strong> denotano oggetti; <strong>formule atomiche</strong> asseriscono predicati; <strong>WFF</strong> si costruiscono induttivamente con connettivi e quantificatori.</li>
+<li>Una variabile è <strong>libera</strong> se non è nell'ambito di un quantificatore che la lega. Le sentenze sono formule senza libere.</li>
+<li>Pattern di traduzione: "tutti gli A sono B" = $\forall x\, (A(x) \rightarrow B(x))$; "qualche A è B" = $\exists x\, (A(x) \wedge B(x))$.</li>
+<li><strong>L'ordine dei quantificatori conta</strong>: $\forall x \exists y$ non equivale a $\exists y \forall x$.</li>
+<li>Le dualità $\neg \forall \equiv \exists \neg$ e $\neg \exists \equiv \forall \neg$ sono lo strumento più usato in pratica.</li>
+</ul>
+<h2 id="letture">Letture</h2>
+<ul>
+<li>Gottlob Frege, <em>Begriffsschrift</em> (1879) — atto di nascita della FOL.</li>
+<li>Bertrand Russell, <em>On Denoting</em> (Mind, 1905) — descrizioni definite.</li>
+<li>Alfred Tarski, <em>Introduction to Logic and to the Methodology of Deductive Sciences</em> (1941).</li>
+<li>Herbert Enderton, <em>A Mathematical Introduction to Logic</em> (Academic Press, 2nd ed. 2001).</li>
+<li>Sergio Bernini, <em>Logica per la matematica</em> (Carocci) — manuale italiano accessibile.</li>
+</ul>
+      <nav class="pager">
+<a href="11-sistemi-assiomatici-sequenti.html" class="prev"><span class="label">← Precedente</span><span class="title">Sistemi assiomatici e calcolo dei sequenti</span></a>
+<a href="13-logica-predicati-semantica.html" class="next"><span class="label">Successivo →</span><span class="title">FOL: semantica, modelli, validità</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Logica, Problem Solving e Pensiero Critico Zero to Hero</strong> — percorso completo, in italiano, dall'anatomia di un argomento al do-calculus di Pearl.</p><p>Materiale didattico aperto. Nessuna sponsorizzazione. Quando un concetto è oscuro, torna indietro: la logica è una scala, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Equivalenze logiche, De Morgan, forme normali — Logica e Pensiero Critico Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#2a2540',primaryTextColor:'#ecebff',primaryBorderColor:'#7a6cd6',lineColor:'#9890b8',background:'#141226'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">∴</div>
+      <div>
+        <div class="brand-title">LOGOS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">IT</span><a href="../en/pages/08-equivalences-normal-forms.html" class="lang-link" title="Switch to English">EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-cosa-e-la-logica.html" class=""><span class="num">01</span>Cos&#x27;è la logica e il pensiero critico</a></li><li class="nav-item"><a href="../pages/02-storia-della-logica.html" class=""><span class="num">02</span>Breve storia della logica</a></li><li class="nav-item"><a href="../pages/03-tipi-di-ragionamento.html" class=""><span class="num">03</span>Tipi di ragionamento: deduttivo, induttivo, abduttivo, analogico</a></li><li class="nav-item"><a href="../pages/04-anatomia-degli-argomenti.html" class=""><span class="num">04</span>Argomenti: premesse, conclusione, validità, solidità</a></li><li class="nav-item"><a href="../pages/05-standard-paul-elder.html" class=""><span class="num">05</span>Pensiero critico: standard di Paul-Elder</a></li><li class="nav-item"><a href="../pages/06-linguaggio-e-ambiguita.html" class=""><span class="num">06</span>Linguaggio, ambiguità, definizioni</a></li><li class="nav-item"><a href="../pages/07-logica-proposizionale.html" class=""><span class="num">07</span>Logica proposizionale: connettivi e tabelle di verità</a></li><li class="nav-item"><a href="../pages/08-equivalenze-forme-normali.html" class="active"><span class="num">08</span>Equivalenze logiche, De Morgan, forme normali</a></li><li class="nav-item"><a href="../pages/09-regole-inferenza.html" class=""><span class="num">09</span>Regole di inferenza</a></li><li class="nav-item"><a href="../pages/10-deduzione-naturale.html" class=""><span class="num">10</span>Deduzione naturale: regole I/E e dimostrazione strutturata</a></li><li class="nav-item"><a href="../pages/11-sistemi-assiomatici-sequenti.html" class=""><span class="num">11</span>Sistemi assiomatici e calcolo dei sequenti</a></li><li class="nav-item"><a href="../pages/12-logica-predicati-sintassi.html" class=""><span class="num">12</span>Logica dei predicati (FOL): sintassi e quantificatori</a></li><li class="nav-item"><a href="../pages/13-logica-predicati-semantica.html" class=""><span class="num">13</span>FOL: semantica, modelli, validità</a></li><li class="nav-item"><a href="../pages/14-insiemi-relazioni-funzioni.html" class=""><span class="num">14</span>Insiemi, relazioni, funzioni</a></li><li class="nav-item"><a href="../pages/15-metalogica-godel.html" class=""><span class="num">15</span>Metalogica: soundness, completezza, teoremi di Gödel</a></li><li class="nav-item"><a href="../pages/16-logiche-modali.html" class=""><span class="num">16</span>Logiche modali e mondi possibili</a></li><li class="nav-item"><a href="../pages/17-logiche-temporale-deontica-epistemica.html" class=""><span class="num">17</span>Logiche temporale, deontica, epistemica</a></li><li class="nav-item"><a href="../pages/18-logiche-non-classiche.html" class=""><span class="num">18</span>Logiche non classiche: intuizionista, fuzzy, paraconsistente</a></li><li class="nav-item"><a href="../pages/19-curry-howard-type-theory.html" class=""><span class="num">19</span>Curry-Howard e type theory: dimostrazioni come programmi</a></li><li class="nav-item"><a href="../pages/20-fallacie-formali.html" class=""><span class="num">20</span>Fallacie formali: quando la forma del ragionamento mente</a></li><li class="nav-item"><a href="../pages/21-fallacie-informali-rilevanza.html" class=""><span class="num">21</span>Fallacie informali di rilevanza: distrarre invece di argomentare</a></li><li class="nav-item"><a href="../pages/22-fallacie-informali-presunzione.html" class=""><span class="num">22</span>Fallacie informali di presunzione e ambiguità</a></li><li class="nav-item"><a href="../pages/23-bias-cognitivi.html" class=""><span class="num">23</span>Bias cognitivi: catalogo ragionato</a></li><li class="nav-item"><a href="../pages/24-dual-process.html" class=""><span class="num">24</span>Sistema 1 e Sistema 2: dual process theory</a></li><li class="nav-item"><a href="../pages/25-polya-problem-solving.html" class=""><span class="num">25</span>Polya: come risolvere un problema (4 step)</a></li><li class="nav-item"><a href="../pages/26-euristiche-problem-solving.html" class=""><span class="num">26</span>Euristiche del problem solving</a></li><li class="nav-item"><a href="../pages/27-pensiero-computazionale.html" class=""><span class="num">27</span>Pensiero computazionale</a></li><li class="nav-item"><a href="../pages/28-algoritmi-strategie.html" class=""><span class="num">28</span>Algoritmi e strategie di risoluzione</a></li><li class="nav-item"><a href="../pages/29-pensiero-creativo.html" class=""><span class="num">29</span>Pensiero creativo: lateral thinking, TRIZ, SCAMPER</a></li><li class="nav-item"><a href="../pages/30-design-thinking.html" class=""><span class="num">30</span>Design thinking</a></li><li class="nav-item"><a href="../pages/31-mental-models.html" class=""><span class="num">31</span>Mental models: modelli mentali</a></li><li class="nav-item"><a href="../pages/32-probabilita-fondamenti.html" class=""><span class="num">32</span>Probabilità: fondamenti per il ragionamento</a></li><li class="nav-item"><a href="../pages/33-teorema-bayes.html" class=""><span class="num">33</span>Teorema di Bayes e aggiornamento delle credenze</a></li><li class="nav-item"><a href="../pages/34-paradossi-probabilistici.html" class=""><span class="num">34</span>Paradossi probabilistici: Monty Hall, base rate, Simpson</a></li><li class="nav-item"><a href="../pages/35-teoria-decisione.html" class=""><span class="num">35</span>Teoria della decisione: utilità attesa e prospect theory</a></li><li class="nav-item"><a href="../pages/36-forecasting-calibrazione.html" class=""><span class="num">36</span>Forecasting e calibrazione: la lezione dei superforecaster</a></li><li class="nav-item"><a href="../pages/37-knightian-cigni-neri.html" class=""><span class="num">37</span>Knightian uncertainty, cigni neri, antifragile</a></li><li class="nav-item"><a href="../pages/38-argomentazione-toulmin.html" class=""><span class="num">38</span>Argomentazione: Toulmin, Walton, argument mapping</a></li><li class="nav-item"><a href="../pages/39-retorica-persuasione.html" class=""><span class="num">39</span>Retorica e persuasione</a></li><li class="nav-item"><a href="../pages/40-dibattito-dialettica.html" class=""><span class="num">40</span>Dibattito, dialettica socratica, steelmanning</a></li><li class="nav-item"><a href="../pages/41-negoziazione-teoria-giochi.html" class=""><span class="num">41</span>Negoziazione e teoria dei giochi</a></li><li class="nav-item"><a href="../pages/42-epistemologia.html" class=""><span class="num">42</span>Epistemologia: JTB, Gettier, virtù epistemiche</a></li><li class="nav-item"><a href="../pages/43-metodo-scientifico-popper.html" class=""><span class="num">43</span>Metodo scientifico, Popper, falsificabilità</a></li><li class="nav-item"><a href="../pages/44-kuhn-lakatos-feyerabend.html" class=""><span class="num">44</span>Paradigmi: Kuhn, Lakatos, Feyerabend</a></li><li class="nav-item"><a href="../pages/45-causalita-pearl.html" class=""><span class="num">45</span>Causalità: Hume, Pearl, do-calculus</a></li><li class="nav-item"><a href="../pages/46-paradossi-celebri.html" class=""><span class="num">46</span>Paradossi celebri: dal mentitore al Newcomb</a></li><li class="nav-item"><a href="../pages/47-systems-thinking.html" class=""><span class="num">47</span>Systems thinking e modelli di feedback</a></li><li class="nav-item"><a href="../pages/48-wicked-problems.html" class=""><span class="num">48</span>Wicked problems, complessità, VUCA</a></li><li class="nav-item"><a href="../pages/49-critical-reading-writing.html" class=""><span class="num">49</span>Critical reading e scrittura argomentativa</a></li><li class="nav-item"><a href="../pages/50-propaganda-manipolazione.html" class=""><span class="num">50</span>Propaganda, manipolazione, news literacy, fact-checking</a></li><li class="nav-item"><a href="../pages/51-eserciziario.html" class=""><span class="num">51</span>Eserciziario completo con soluzioni</a></li><li class="nav-item"><a href="../pages/52-glossario-az.html" class=""><span class="num">52</span>Glossario A-Z bilingue</a></li><li class="nav-item"><a href="../pages/53-formulario.html" class=""><span class="num">53</span>Formulario / scheda riassuntiva</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Logica formale</span>
+        <span>Sezione 8 di 53</span>
+        <span class="level-tag level-int">Livello: intermedio</span>
+      </div>
+      <h1>Equivalenze logiche, De Morgan, forme normali</h1>
+      <p class="summary">Tradurre una formula in un&#x27;altra equivalente è il pane quotidiano della logica. Equivalenze fondamentali, leggi di De Morgan, e algoritmo per portare ogni formula in forma normale congiuntiva o disgiuntiva.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Logica formale</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>Aver letto [Logica proposizionale](07-logica-proposizionale.html)</li></ul>
+  <div class="label">Strumenti / riferimenti</div>
+  <ul class="source-list"><li>Carta e penna</li><li>SymPy o LogicPy per esperimenti</li></ul>
+</div>
+      <p>Due formule sono <strong>logicamente equivalenti</strong> (notazione $\equiv$) se hanno la stessa tabella di verità. Riconoscere e applicare equivalenze permette di semplificare, di dimostrare formule senza enumerare tutte le righe, e di riportare ogni formula in una <strong>forma normale</strong> che gli algoritmi (e i circuiti digitali) sanno digerire.</p>
+<h2 id="1-equivalenze-fondamentali">1. Equivalenze fondamentali</h2>
+<p>Le memorizzi una volta nella vita.</p>
+<table>
+<thead>
+<tr>
+<th>Nome</th>
+<th>Equivalenza</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Doppia negazione</td>
+<td>$\neg\neg p \equiv p$</td>
+</tr>
+<tr>
+<td>Idempotenza</td>
+<td>$p \wedge p \equiv p$; $p \vee p \equiv p$</td>
+</tr>
+<tr>
+<td>Commutativa</td>
+<td>$p \wedge q \equiv q \wedge p$; $p \vee q \equiv q \vee p$</td>
+</tr>
+<tr>
+<td>Associativa</td>
+<td>$(p \wedge q) \wedge r \equiv p \wedge (q \wedge r)$; idem per $\vee$</td>
+</tr>
+<tr>
+<td>Distributiva</td>
+<td>$p \wedge (q \vee r) \equiv (p \wedge q) \vee (p \wedge r)$</td>
+</tr>
+<tr>
+<td></td>
+<td>$p \vee (q \wedge r) \equiv (p \vee q) \wedge (p \vee r)$</td>
+</tr>
+<tr>
+<td>Assorbimento</td>
+<td>$p \wedge (p \vee q) \equiv p$; $p \vee (p \wedge q) \equiv p$</td>
+</tr>
+<tr>
+<td>De Morgan</td>
+<td>$\neg(p \wedge q) \equiv \neg p \vee \neg q$</td>
+</tr>
+<tr>
+<td></td>
+<td>$\neg(p \vee q) \equiv \neg p \wedge \neg q$</td>
+</tr>
+<tr>
+<td>Implicazione materiale</td>
+<td>$p \rightarrow q \equiv \neg p \vee q$</td>
+</tr>
+<tr>
+<td>Contropositiva</td>
+<td>$p \rightarrow q \equiv \neg q \rightarrow \neg p$</td>
+</tr>
+<tr>
+<td>Biconcizionale</td>
+<td>$p \leftrightarrow q \equiv (p \rightarrow q) \wedge (q \rightarrow p)$</td>
+</tr>
+<tr>
+<td></td>
+<td>$p \leftrightarrow q \equiv (p \wedge q) \vee (\neg p \wedge \neg q)$</td>
+</tr>
+<tr>
+<td>Terzo escluso</td>
+<td>$p \vee \neg p \equiv \top$</td>
+</tr>
+<tr>
+<td>Non-contraddizione</td>
+<td>$p \wedge \neg p \equiv \bot$</td>
+</tr>
+</tbody>
+</table>
+<p>Verifica una qualsiasi costruendo le due tabelle di verità: vedi che coincidono.</p>
+<h3 id="11-de-morgan-in-italiano">1.1 De Morgan in italiano</h3>
+<p>Le leggi di De Morgan (Augustus De Morgan, 1806–1871) sono le più utili nella vita reale. Significano:</p>
+<blockquote>
+<p>"Non è vero che $A$ E $B$" equivale a "non $A$ OPPURE non $B$".
+"Non è vero che $A$ O $B$" equivale a "non $A$ E non $B$".</p>
+</blockquote>
+<p>Esempio: "Non è vero che sia ricco e felice" = "O non è ricco, o non è felice (o entrambi)". È quasi sempre la trasformazione che ti permette di smontare una negazione di un'affermazione complessa.</p>
+<h2 id="2-implicazione-contropositiva-conversa-inversa">2. Implicazione, contropositiva, conversa, inversa</h2>
+<p>Da $p \rightarrow q$ si possono ottenere quattro forme.</p>
+<table>
+<thead>
+<tr>
+<th>Nome</th>
+<th>Formula</th>
+<th>Equivalente a $p \rightarrow q$?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Diretta</td>
+<td>$p \rightarrow q$</td>
+<td>sì (è essa stessa)</td>
+</tr>
+<tr>
+<td>Conversa</td>
+<td>$q \rightarrow p$</td>
+<td><strong>NO</strong></td>
+</tr>
+<tr>
+<td>Inversa</td>
+<td>$\neg p \rightarrow \neg q$</td>
+<td><strong>NO</strong></td>
+</tr>
+<tr>
+<td>Contropositiva</td>
+<td>$\neg q \rightarrow \neg p$</td>
+<td><strong>sì</strong></td>
+</tr>
+</tbody>
+</table>
+<p>La confusione tra <strong>diretta</strong> e <strong>conversa</strong> è la base della fallacia di affermazione del conseguente. La confusione tra <strong>diretta</strong> e <strong>inversa</strong> è la fallacia di negazione dell'antecedente. (Vedi <a href="20-fallacie-formali.html">fallacie formali</a>.)</p>
+<p>La contropositiva è invece equivalente: dimostrare $p \rightarrow q$ è la stessa cosa che dimostrare $\neg q \rightarrow \neg p$. Spesso è più semplice (è la dimostrazione "per contrapposizione").</p>
+<h2 id="3-forme-normali">3. Forme normali</h2>
+<p>Una <strong>forma normale</strong> è una sintassi canonica per le formule: due formule equivalenti hanno la stessa rappresentazione (a meno di banalità). Le due principali:</p>
+<h3 id="31-forma-normale-congiuntiva-cnf">3.1 Forma Normale Congiuntiva (CNF)</h3>
+<p>Una formula è in CNF se è una <strong>congiunzione di disgiunzioni di letterali</strong> (un letterale = variabile o sua negazione). Esempio:</p>
+<p>$$(p \vee \neg q) \wedge (\neg p \vee q \vee r) \wedge (\neg r)$$</p>
+<p>Ogni parentesi è una <strong>clausola</strong>. CNF è la rappresentazione standard per i SAT solver (DPLL, CDCL) e per il calcolo di risoluzione.</p>
+<h3 id="32-forma-normale-disgiuntiva-dnf">3.2 Forma Normale Disgiuntiva (DNF)</h3>
+<p>Una formula è in DNF se è una <strong>disgiunzione di congiunzioni di letterali</strong>. Esempio:</p>
+<p>$$(p \wedge q \wedge \neg r) \vee (\neg p \wedge q) \vee (r)$$</p>
+<p>DNF rispecchia direttamente le righe V della tabella di verità.</p>
+<h3 id="33-forma-normale-negativa-nnf">3.3 Forma Normale Negativa (NNF)</h3>
+<p>Forma intermedia: tutte le negazioni sono "spinte" davanti ai letterali (mai davanti a $\wedge$, $\vee$, $\rightarrow$). Si ottiene applicando De Morgan e doppia negazione.</p>
+<h2 id="4-algoritmo-portare-una-formula-in-cnf">4. Algoritmo: portare una formula in CNF</h2>
+<p>Passi:</p>
+<ol>
+<li><strong>Elimina $\leftrightarrow$</strong>: $p \leftrightarrow q \equiv (p \rightarrow q) \wedge (q \rightarrow p)$.</li>
+<li><strong>Elimina $\rightarrow$</strong>: $p \rightarrow q \equiv \neg p \vee q$.</li>
+<li><strong>Spingi le $\neg$ verso le foglie</strong> usando De Morgan e doppia negazione (arrivi a NNF).</li>
+<li><strong>Distribuisci $\vee$ su $\wedge$</strong>: $A \vee (B \wedge C) \equiv (A \vee B) \wedge (A \vee C)$. Ripeti fino a saturazione.</li>
+</ol>
+<h3 id="41-esempio-passo-passo">4.1 Esempio passo-passo</h3>
+<p>Convertire $(p \rightarrow q) \wedge (\neg r \rightarrow s)$ in CNF.</p>
+<p><strong>Passo 1</strong>: niente $\leftrightarrow$.</p>
+<p><strong>Passo 2</strong>: elimina $\rightarrow$:
+$$(\neg p \vee q) \wedge (\neg\neg r \vee s)$$
+$$\equiv (\neg p \vee q) \wedge (r \vee s)$$</p>
+<p><strong>Passo 3</strong>: niente negazioni da spingere.</p>
+<p><strong>Passo 4</strong>: la formula è già una congiunzione di disgiunzioni di letterali. ✔ Fine.</p>
+<p>CNF risultante: $(\neg p \vee q) \wedge (r \vee s)$. Due clausole.</p>
+<h3 id="42-esempio-meno-banale">4.2 Esempio meno banale</h3>
+<p>Convertire $\neg(p \wedge (q \vee r))$ in CNF.</p>
+<p><strong>Passo 1, 2</strong>: niente da fare.</p>
+<p><strong>Passo 3</strong>: De Morgan applicata alla negazione esterna:
+$$\neg p \vee \neg(q \vee r) \equiv \neg p \vee (\neg q \wedge \neg r)$$</p>
+<p><strong>Passo 4</strong>: distribuire $\vee$ su $\wedge$:
+$$(\neg p \vee \neg q) \wedge (\neg p \vee \neg r)$$</p>
+<p>Due clausole, CNF ottenuta.</p>
+<h2 id="5-espansione-esponenziale-attenzione">5. Espansione esponenziale: attenzione</h2>
+<p>La conversione in CNF può far esplodere la dimensione della formula. Esempio: $(p_1 \wedge q_1) \vee (p_2 \wedge q_2) \vee \cdots \vee (p_n \wedge q_n)$ in DNF è già lunga $n$; in CNF richiede $2^n$ clausole. Per evitare l'esplosione si usano trasformazioni che introducono variabili nuove (Tseitin transformation), che producono una formula <strong>equisoddisfacibile</strong> ma non <em>equivalente</em> — basta per SAT.</p>
+<h2 id="6-funzionale-completezza">6. Funzionale completezza</h2>
+<p>Un insieme di connettivi è <strong>funzionalmente completo</strong> se basta a esprimere qualsiasi funzione booleana. Risultati:</p>
+<ul>
+<li>${\neg, \wedge, \vee}$ è completo.</li>
+<li>${\neg, \wedge}$ è completo (puoi sintetizzare OR via De Morgan).</li>
+<li>${\neg, \vee}$ è completo.</li>
+<li>${\rightarrow, \neg}$ è completo.</li>
+<li><strong>NAND</strong> (Sheffer stroke, $p \uparrow q \equiv \neg(p \wedge q)$) da solo è completo. Idem <strong>NOR</strong> (Peirce, $\downarrow$). È perché certi circuiti elettronici usano solo NAND o solo NOR — riducono il costo di produzione.</li>
+</ul>
+<h2 id="7-diagramma-pipeline-di-conversione-in-cnf">7. Diagramma: pipeline di conversione in CNF</h2>
+<pre><code class="language-mermaid">flowchart LR
+  A[Formula con ↔, →, ¬, ∧, ∨] --&gt;|elimina ↔| B[Solo →, ¬, ∧, ∨]
+  B --&gt;|elimina →| C[Solo ¬, ∧, ∨]
+  C --&gt;|De Morgan, doppia neg| D[NNF: ¬ solo sui letterali]
+  D --&gt;|distribuisci ∨ su ∧| E[CNF: ⋀ ⋁ letterali]
+</code></pre>
+<h2 id="esercizi">Esercizi</h2>
+<details>
+  <summary>Esercizio 1 — semplifica $\neg(p \rightarrow \neg q)$</summary>
+
+Step 1: implicazione materiale: $p \rightarrow \neg q \equiv \neg p \vee \neg q$.
+
+Step 2: $\neg(\neg p \vee \neg q)$. De Morgan: $\neg\neg p \wedge \neg\neg q$.
+
+Step 3: doppia negazione: $p \wedge q$.
+
+Risposta: $p \wedge q$.
+</details>
+
+<details>
+  <summary>Esercizio 2 — verifica $(p \rightarrow q) \rightarrow (\neg q \rightarrow \neg p) \equiv \top$</summary>
+
+L'antecedente è $p \rightarrow q$. Il conseguente è la contropositiva $\neg q \rightarrow \neg p$. Ma sappiamo che $p \rightarrow q \equiv \neg q \rightarrow \neg p$, quindi l'implicazione $p \rightarrow q \rightarrow (\neg q \rightarrow \neg p)$ è del tipo $X \rightarrow X$, che è una tautologia.
+
+Verifica tabellare:
+| $p$ | $q$ | $p \rightarrow q$ | $\neg q \rightarrow \neg p$ | $\rightarrow$ |
+|---|---|---|---|---|
+| V | V | V | V | V |
+| V | F | F | F | V |
+| F | V | V | V | V |
+| F | F | V | V | V |
+
+Tautologia confermata.
+</details>
+
+<details>
+  <summary>Esercizio 3 — converti $(p \vee q) \wedge \neg(p \wedge r)$ in CNF</summary>
+
+Applichiamo De Morgan a $\neg(p \wedge r)$: $\neg p \vee \neg r$.
+
+Risultato: $(p \vee q) \wedge (\neg p \vee \neg r)$. Già in CNF.
+</details>
+
+<h2 id="sintesi">Sintesi</h2>
+<ul>
+<li>Due formule equivalenti $\equiv$ se hanno stessa tabella di verità.</li>
+<li>Equivalenze fondamentali: commut., assoc., distrib., De Morgan, doppia neg., implicazione materiale, contropositiva.</li>
+<li>Diretta ed inversa NON sono equivalenti. Diretta e contropositiva sì.</li>
+<li>CNF = $\wedge$ di clausole ($\vee$ di letterali). DNF = $\vee$ di mintermini ($\wedge$ di letterali).</li>
+<li>Algoritmo CNF: elimina ↔, elimina →, NNF (De Morgan), distribuisci ∨ su ∧.</li>
+<li>${\text{NAND}}$ è funzionalmente completo da solo.</li>
+</ul>
+<h2 id="letture">Letture</h2>
+<ul>
+<li>Mendelson, <em>Introduction to Mathematical Logic</em>, cap. 1.</li>
+<li>Russell &amp; Norvig, <em>AIMA</em>, cap. 7 — collegamento con SAT e knowledge representation.</li>
+<li>Marques-Silva, <em>Conflict-Driven Clause Learning SAT Solvers</em> — versione moderna degli algoritmi.</li>
+</ul>
+      <nav class="pager">
+<a href="07-logica-proposizionale.html" class="prev"><span class="label">← Precedente</span><span class="title">Logica proposizionale: connettivi e tabelle di verità</span></a>
+<a href="09-regole-inferenza.html" class="next"><span class="label">Successivo →</span><span class="title">Regole di inferenza</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Logica, Problem Solving e Pensiero Critico Zero to Hero</strong> — percorso completo, in italiano, dall'anatomia di un argomento al do-calculus di Pearl.</p><p>Materiale didattico aperto. Nessuna sponsorizzazione. Quando un concetto è oscuro, torna indietro: la logica è una scala, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Serie di Fourier: introduzione — Analisi Matematica I Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#1a2647',primaryTextColor:'#f3eed9',primaryBorderColor:'#d4af37',lineColor:'#8aa3c8',background:'#0c1428'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">∫</div>
+      <div>
+        <div class="brand-title">ANALYSIS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">IT</span><a href="../en/pages/50-fourier-series-intro.html" class="lang-link" title="Switch">EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li><li class="nav-item"><a href="00-intro.html" class=""><span class="num">00</span>Cos&#x27;è l&#x27;analisi matematica</a></li><li class="nav-item"><a href="01-logica-dimostrazioni.html" class=""><span class="num">01</span>Logica e dimostrazioni per l&#x27;analisi</a></li><li class="nav-item"><a href="02-insiemi-funzioni.html" class=""><span class="num">02</span>Insiemi, relazioni, funzioni</a></li><li class="nav-item"><a href="03-induzione-naturali.html" class=""><span class="num">03</span>Numeri naturali e principio di induzione</a></li><li class="nav-item"><a href="04-interi-razionali.html" class=""><span class="num">04</span>Numeri interi e razionali</a></li><li class="nav-item"><a href="05-cardinalita-cantor.html" class=""><span class="num">05</span>Cardinalità e infinito (Cantor)</a></li><li class="nav-item"><a href="06-numeri-reali-assiomi.html" class=""><span class="num">06</span>Numeri reali: gli assiomi</a></li><li class="nav-item"><a href="07-estremo-superiore.html" class=""><span class="num">07</span>Estremo superiore e completezza</a></li><li class="nav-item"><a href="08-costruzione-reali.html" class=""><span class="num">08</span>Costruzione di R: Dedekind e Cauchy</a></li><li class="nav-item"><a href="09-numeri-complessi.html" class=""><span class="num">09</span>Numeri complessi</a></li><li class="nav-item"><a href="10-topologia-r.html" class=""><span class="num">10</span>Topologia di R: intorni, aperti, chiusi, compatti</a></li><li class="nav-item"><a href="11-successioni-definizione.html" class=""><span class="num">11</span>Successioni e limiti: la definizione ε-N</a></li><li class="nav-item"><a href="12-algebra-limiti-successioni.html" class=""><span class="num">12</span>Algebra dei limiti di successioni</a></li><li class="nav-item"><a href="13-monotone-bolzano-weierstrass.html" class=""><span class="num">13</span>Successioni monotone e Bolzano-Weierstrass</a></li><li class="nav-item"><a href="14-cauchy-completezza.html" class=""><span class="num">14</span>Successioni di Cauchy e completezza di R</a></li><li class="nav-item"><a href="15-limiti-notevoli-landau.html" class=""><span class="num">15</span>Limiti notevoli e simboli di Landau (o-piccolo, O-grande)</a></li><li class="nav-item"><a href="16-liminf-limsup.html" class=""><span class="num">16</span>Limite superiore, limite inferiore, sottosuccessioni</a></li><li class="nav-item"><a href="17-funzioni-elementari.html" class=""><span class="num">17</span>Funzioni elementari: panoramica</a></li><li class="nav-item"><a href="18-esponenziale-logaritmo.html" class=""><span class="num">18</span>Esponenziale, logaritmo, potenze</a></li><li class="nav-item"><a href="19-trigonometriche-iperboliche.html" class=""><span class="num">19</span>Funzioni trigonometriche e iperboliche</a></li><li class="nav-item"><a href="20-limite-funzione.html" class=""><span class="num">20</span>Limite di funzione: la definizione</a></li><li class="nav-item"><a href="21-teoremi-limiti-funzioni.html" class=""><span class="num">21</span>Teoremi sui limiti di funzioni</a></li><li class="nav-item"><a href="22-limiti-notevoli-funzioni.html" class=""><span class="num">22</span>Limiti notevoli per funzioni</a></li><li class="nav-item"><a href="23-asintoti.html" class=""><span class="num">23</span>Asintoti orizzontali, verticali, obliqui</a></li><li class="nav-item"><a href="24-continuita-definizione.html" class=""><span class="num">24</span>Continuità: la definizione e le prime proprietà</a></li><li class="nav-item"><a href="25-teoremi-continue.html" class=""><span class="num">25</span>Teoremi sulle funzioni continue (Weierstrass, valori intermedi)</a></li><li class="nav-item"><a href="26-uniforme-continuita.html" class=""><span class="num">26</span>Uniforme continuità, Heine, lipschitzianità</a></li><li class="nav-item"><a href="27-discontinuita.html" class=""><span class="num">27</span>Tipi di discontinuità</a></li><li class="nav-item"><a href="28-derivata-definizione.html" class=""><span class="num">28</span>Derivata: definizione e interpretazione geometrica</a></li><li class="nav-item"><a href="29-regole-derivazione.html" class=""><span class="num">29</span>Regole di derivazione (somma, prodotto, quoziente, catena)</a></li><li class="nav-item"><a href="30-derivate-elementari.html" class=""><span class="num">30</span>Derivate delle funzioni elementari</a></li><li class="nav-item"><a href="31-teoremi-differenziale.html" class=""><span class="num">31</span>Teoremi del calcolo differenziale: Fermat, Rolle, Lagrange, Cauchy</a></li><li class="nav-item"><a href="32-hopital.html" class=""><span class="num">32</span>Regola di de L&#x27;Hôpital</a></li><li class="nav-item"><a href="33-taylor.html" class=""><span class="num">33</span>Polinomi e formula di Taylor</a></li><li class="nav-item"><a href="34-limiti-taylor.html" class=""><span class="num">34</span>Calcolo di limiti tramite Taylor</a></li><li class="nav-item"><a href="35-monotonia-estremi.html" class=""><span class="num">35</span>Monotonia, massimi, minimi, punti critici</a></li><li class="nav-item"><a href="36-convessita-concavita.html" class=""><span class="num">36</span>Convessità, concavità, flessi</a></li><li class="nav-item"><a href="37-studio-funzione.html" class=""><span class="num">37</span>Studio di funzione completo</a></li><li class="nav-item"><a href="38-applicazioni-ottimizzazione.html" class=""><span class="num">38</span>Applicazioni dell&#x27;ottimizzazione: fisica, economia, geometria</a></li><li class="nav-item"><a href="39-integrale-riemann.html" class=""><span class="num">39</span>Integrale di Riemann: definizione</a></li><li class="nav-item"><a href="40-teorema-fondamentale-calcolo.html" class=""><span class="num">40</span>Teorema fondamentale del calcolo integrale</a></li><li class="nav-item"><a href="41-tecniche-integrazione.html" class=""><span class="num">41</span>Tecniche di integrazione: per parti, per sostituzione</a></li><li class="nav-item"><a href="42-integrali-razionali.html" class=""><span class="num">42</span>Integrazione di funzioni razionali</a></li><li class="nav-item"><a href="43-integrali-impropri.html" class=""><span class="num">43</span>Integrali impropri</a></li><li class="nav-item"><a href="44-funzioni-integrali.html" class=""><span class="num">44</span>Funzioni integrali e applicazioni geometriche</a></li><li class="nav-item"><a href="45-serie-numeriche.html" class=""><span class="num">45</span>Serie numeriche: definizione e convergenza</a></li><li class="nav-item"><a href="46-criteri-positivi.html" class=""><span class="num">46</span>Criteri di convergenza per serie a termini positivi</a></li><li class="nav-item"><a href="47-serie-segno-qualunque.html" class=""><span class="num">47</span>Serie a segno qualunque, Leibniz, convergenza assoluta</a></li><li class="nav-item"><a href="48-serie-potenze.html" class=""><span class="num">48</span>Serie di potenze e raggio di convergenza</a></li><li class="nav-item"><a href="49-serie-taylor.html" class=""><span class="num">49</span>Serie di Taylor e analiticità</a></li><li class="nav-item"><a href="50-serie-fourier-cenni.html" class="active"><span class="num">50</span>Serie di Fourier: introduzione</a></li><li class="nav-item"><a href="51-edo-primo-ordine.html" class=""><span class="num">51</span>EDO del primo ordine</a></li><li class="nav-item"><a href="52-edo-lineari-ordine-n.html" class=""><span class="num">52</span>EDO lineari di ordine $n$ a coefficienti costanti</a></li><li class="nav-item"><a href="53-cauchy-esistenza-unicita.html" class=""><span class="num">53</span>Problema di Cauchy, esistenza e unicità</a></li><li class="nav-item"><a href="54-topologia-rn.html" class=""><span class="num">54</span>Topologia in $\mathbb{R}^n$</a></li><li class="nav-item"><a href="55-derivate-parziali-differenziale.html" class=""><span class="num">55</span>Derivate parziali e differenziale in più variabili</a></li><li class="nav-item"><a href="56-cenni-lebesgue-funzionale.html" class=""><span class="num">56</span>Oltre Riemann: Lebesgue, Banach, Hilbert</a></li><li class="nav-item"><a href="57-eserciziario.html" class=""><span class="num">57</span>Eserciziario: problemi tipo d&#x27;esame</a></li><li class="nav-item"><a href="58-glossario-az.html" class=""><span class="num">58</span>Glossario A-Z dell&#x27;Analisi Matematica I</a></li><li class="nav-item"><a href="59-formulario-completo.html" class=""><span class="num">59</span>Formulario completo di Analisi Matematica I</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Serie</span>
+        <span>Sezione 50 di 59</span>
+        <span class="level-tag level-adv">Livello: avanzato</span>
+      </div>
+      <h1>Serie di Fourier: introduzione</h1>
+      <p class="summary">Decomporre **funzioni periodiche** in armoniche $\{1, \cos nx, \sin nx\}$. Coefficienti, convergenza (Dirichlet, $L^2$), **Parseval**, fenomeno di **Gibbs**. La porta dell&#x27;analisi armonica.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Serie</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>Serie numeriche e integrali (sez. 45-49)</li><li>Trigonometriche, esponenziale complesso</li></ul>
+  <div class="label">Strumenti / riferimenti</div>
+  <ul class="source-list"><li>Stein-Shakarchi — *Fourier Analysis*</li></ul>
+</div>
+      <h2 id="perche-parlarne">Perché parlarne</h2>
+<p>Nelle sezioni 48-49 abbiamo decomposto le funzioni analitiche in <strong>potenze</strong> $\{1, x, x^2, \dots\}$. Per le <strong>funzioni periodiche</strong> questa base è inadatta: $x^n$ non è periodica. Serve una base fatta di funzioni periodiche.</p>
+<p>Nel 1822 <strong>Fourier</strong>, studiando la propagazione del calore, intuì che ogni funzione periodica può essere scritta come somma (potenzialmente infinita) di <strong>seni e coseni</strong>. Oggi è il pilastro di analisi armonica, EDP, signal processing, meccanica quantistica, JPEG, MP3.</p>
+<h2 id="polinomi-trigonometrici">Polinomi trigonometrici</h2>
+<p><strong>Definizione.</strong> Un <strong>polinomio trigonometrico</strong> di grado $N$:
+$$P(x) = \frac{a_0}{2} + \sum_{n=1}^N \big( a_n \cos(nx) + b_n \sin(nx) \big).$$</p>
+<p>In forma complessa:
+$$P(x) = \sum_{n=-N}^N c_n e^{inx}, \quad c_n = (a_n - ib_n)/2.$$</p>
+<blockquote>
+<p><strong>Glossarietto:</strong></p>
+<ul>
+<li>$a_n, b_n \in \mathbb{R}$ = coefficienti reali.</li>
+<li>$c_n \in \mathbb{C}$ = coefficienti complessi.</li>
+<li><strong>Normalizzazione</strong> $a_0/2$: pura convenzione per uniformare formule.</li>
+</ul>
+</blockquote>
+<h2 id="ortogonalita">Ortogonalità</h2>
+<p><strong>Lemma (forma reale).</strong> Per $n, m \ge 1$:
+$$\int_{-\pi}^\pi \cos(nx)\cos(mx)\,dx = \pi\delta_{nm}, \quad \int \sin(nx)\sin(mx) = \pi\delta_{nm},$$
+$$\int \cos(nx)\sin(mx) = 0, \quad \int 1\,dx = 2\pi.$$</p>
+<p><strong>Lemma (forma complessa).</strong> $\int_{-\pi}^\pi e^{inx}\overline{e^{imx}}\,dx = 2\pi\delta_{nm}$.</p>
+<blockquote>
+<p>Il sistema $\{1, \cos nx, \sin nx\}$ è <strong>ortogonale</strong>. Equivalentemente $\{e^{inx}\}_{n\in\mathbb{Z}}$ è ortogonale con norma $\sqrt{2\pi}$.</p>
+</blockquote>
+<h2 id="coefficienti-di-fourier">Coefficienti di Fourier</h2>
+<p><strong>Definizione.</strong> Per $f$ $2\pi$-periodica integrabile:
+$$a_n = \frac{1}{\pi}\int_{-\pi}^\pi f(x)\cos(nx)\,dx, \quad b_n = \frac{1}{\pi}\int f(x)\sin(nx)\,dx.$$</p>
+<p><strong>Forma complessa:</strong>
+$$c_n = \frac{1}{2\pi}\int_{-\pi}^\pi f(x)\,e^{-inx}\,dx.$$</p>
+<p><strong>Serie di Fourier:</strong>
+$$S_f(x) := \frac{a_0}{2} + \sum_{n=1}^\infty [a_n \cos(nx) + b_n \sin(nx)] = \sum_{n=-\infty}^{\infty} c_n e^{inx}.$$</p>
+<blockquote>
+<p><strong>Motivazione (formale).</strong> Se $f = \frac{a_0}{2} + \sum a_n\cos(nx) + b_n\sin(nx)$, integrando termine a termine contro $\cos(mx)$ per ortogonalità sopravvive solo $a_m \pi$.</p>
+</blockquote>
+<h2 id="parita">Parità</h2>
+<ul>
+<li>$f$ <strong>pari</strong>: $b_n = 0$ (solo coseni).</li>
+<li>$f$ <strong>dispari</strong>: $a_n = 0$ (solo seni).</li>
+<li>Media nulla: $a_0 = 0$.</li>
+</ul>
+<h2 id="esempi-cardine">Esempi cardine</h2>
+<h3 id="onda-quadra-dispari">Onda quadra (dispari)</h3>
+<p>$f(x) = \text{sgn}(x)$ su $(-\pi,\pi)$. Dispari, $a_n = 0$:
+$$b_n = \frac{2(1-(-1)^n)}{n\pi} = \begin{cases} 4/(n\pi) & n \text{ dispari} \\ 0 & n \text{ pari} \end{cases}$$
+$$S_f(x) = \frac{4}{\pi}\sum_{k=0}^\infty \frac{\sin((2k+1)x)}{2k+1}.$$</p>
+<p><strong>In $x = \pi/2$:</strong> $1 = (4/\pi)(1 - 1/3 + 1/5 - \dots)$ ⇒ <strong>$\pi/4 = \sum (-1)^k/(2k+1)$</strong> (Leibniz).</p>
+<h3 id="dente-di-sega-dispari">Dente di sega (dispari)</h3>
+<p>$f(x) = x$ su $(-\pi, \pi)$. $b_n = 2(-1)^{n+1}/n$:
+$$S_f(x) = 2\sum_{n=1}^\infty \frac{(-1)^{n+1}}{n}\sin(nx).$$</p>
+<h3 id="onda-triangolare-pari">Onda triangolare (pari)</h3>
+<p>$f(x) = |x|$. $a_0 = \pi$, $a_n = -4/(\pi n^2)$ per $n$ dispari:
+$$S_f(x) = \frac{\pi}{2} - \frac{4}{\pi}\sum_{k=0}^\infty \frac{\cos((2k+1)x)}{(2k+1)^2}.$$</p>
+<blockquote>
+<p><strong>Regola euristica.</strong> Più $f$ è regolare, più velocemente decadono i coefficienti: salti → $1/n$, $C^0$ ma con angoli → $1/n^2$, $C^k$ periodica → $1/n^{k+1}$.</p>
+</blockquote>
+<h2 id="convergenza-puntuale-dirichlet-1829">Convergenza puntuale (Dirichlet, 1829)</h2>
+<p><strong>Definizione.</strong> $f$ <strong>regolare a tratti</strong> se esiste partizione finita di $[-\pi,\pi]$ su cui $f, f'$ continue, con limiti laterali finiti.</p>
+<p><strong>Teorema (Dirichlet).</strong> $f$ $2\pi$-periodica, regolare a tratti. Allora per ogni $x$:
+$$\lim_{N\to\infty} S_N f(x) = \frac{f(x^+) + f(x^-)}{2}.$$</p>
+<p>Nei punti di continuità: $S_N f(x) \to f(x)$.</p>
+<blockquote>
+<p><strong>Sketch.</strong> Si scrive $S_N f(x) = \frac{1}{2\pi}\int f(t) D_N(x-t)\,dt$ con <strong>nucleo di Dirichlet</strong> $D_N(u) = \sin((N+1/2)u)/\sin(u/2)$; lemma di Riemann-Lebesgue per concludere.</p>
+</blockquote>
+<p><strong>Attenzione.</strong> Esistono funzioni continue la cui serie di Fourier <strong>diverge</strong> in qualche punto (Du Bois-Reymond, 1873). La sola continuità <strong>non basta</strong>.</p>
+<h2 id="convergenza-in-math70">Convergenza in $L^2$</h2>
+<p><strong>Spazio.</strong> $L^2(-\pi,\pi)$: funzioni a quadrato integrabile, prodotto $\langle f,g\rangle = \int f\bar g$, norma $\|f\|_2$.</p>
+<p><strong>Teorema.</strong> $\{e^{inx}/\sqrt{2\pi}\}_{n\in\mathbb{Z}}$ è <strong>base ortonormale</strong> di $L^2$. Per ogni $f \in L^2$:
+$$\|S_N f - f\|_2 \to 0.$$</p>
+<blockquote>
+<p><strong>Interpretazione.</strong> $S_N f$ è la proiezione ortogonale di $f$ sul sottospazio finito, e dunque la <strong>migliore approssimazione</strong> in norma $L^2$.</p>
+</blockquote>
+<h2 id="identita-di-parseval">Identità di Parseval</h2>
+<p><strong>Teorema.</strong> Per $f \in L^2(-\pi,\pi)$:
+$$\sum_{n=-\infty}^\infty |c_n|^2 = \frac{1}{2\pi}\int_{-\pi}^\pi |f(x)|^2\,dx.$$</p>
+<p>Forma reale:
+$$\frac{a_0^2}{4} + \frac{1}{2}\sum_{n=1}^\infty (a_n^2 + b_n^2) = \frac{1}{2\pi}\int |f|^2.$$</p>
+<blockquote>
+<p><strong>Idea.</strong> Pitagora in $L^2$ con base ortonormale.</p>
+</blockquote>
+<h3 id="applicazioni-numeriche-gioielli">Applicazioni numeriche (gioielli)</h3>
+<p><strong>Dal dente di sega.</strong> $\|f\|^2 = 2\pi^3/3$, $b_n^2 = 4/n^2$: Parseval dà
+$$\sum_{n=1}^\infty \frac{1}{n^2} = \frac{\pi^2}{6} \quad \text{(problema di Basilea!)}.$$</p>
+<p><strong>Dall'onda triangolare.</strong> $\sum 1/(2k+1)^4 = \pi^4/96$, da cui $\sum 1/n^4 = \pi^4/90$.</p>
+<h2 id="fenomeno-di-gibbs">Fenomeno di Gibbs</h2>
+<p>Anche con $S_N f \to f$ ovunque, vicino a un salto $S_N f$ <strong>non si avvicina monotonamente</strong>: oscilla con un <strong>picco persistente di circa il 9%</strong> dell'altezza del salto, che non scompare aumentando $N$.</p>
+<p>Costante di Gibbs:
+$$G = \frac{1}{\pi}\int_0^\pi \frac{\sin t}{t}\,dt - \frac{1}{2} \approx 0.0895.$$</p>
+<blockquote>
+<p><strong>Conseguenza pratica.</strong> Le somme tronche $S_N f$ non sono ideali per segnali con discontinuità: si usano <strong>finestre</strong> (Fejér, Hann) o <strong>wavelet</strong>.</p>
+</blockquote>
+<h2 id="applicazioni">Applicazioni</h2>
+<h3 id="equazione-del-calore">Equazione del calore</h3>
+<p>$u_t = u_{xx}$ con $u(0,t) = u(\pi,t) = 0$, $u(x,0) = f(x)$. Separazione variabili: $u_n = \sin(nx)e^{-n^2 t}$, soluzione
+$$u(x,t) = \sum b_n e^{-n^2 t}\sin(nx).$$</p>
+<p>Le alte frequenze decadono per prime: <strong>il calore liscia</strong>.</p>
+<h3 id="compressione-jpegmp3">Compressione JPEG/MP3</h3>
+<p>JPEG: blocchi $8\times 8$ → DCT → quantizzazione delle alte frequenze (occhio insensibile). MP3: analisi spettrale + mascheramento psicoacustico. <strong>Senza Fourier, niente Spotify</strong>.</p>
+<h2 id="esercizi">Esercizi</h2>
+<details>
+<summary>Esercizio 1 — Basilea</summary>
+
+Da Parseval su $f(x)=x$ (dente di sega): $\|f\|^2 = 2\pi^3/3$, $b_n^2 = 4/n^2$:
+$$\frac{1}{2}\sum 4/n^2 = \pi^2/3 \Rightarrow \sum 1/n^2 = \pi^2/6. \qquad ∎$$
+</details>
+
+<details>
+<summary>Esercizio 2 — $\pi/8$ da onda quadra</summary>
+
+Parseval su onda quadra: $\|f\|^2 = 2\pi$, $b_n^2 = 16/(n\pi)^2$ ($n$ dispari):
+$$\sum 1/(2k+1)^2 = \pi^2/8. \qquad ∎$$
+</details>
+
+<details>
+<summary>Esercizio 3 — Derivazione termine a termine</summary>
+
+$f$ continua $2\pi$-periodica $C^1$ a tratti con $f(-\pi)=f(\pi)$: coefficienti di $f'$ sono $\hat c_n = in c_n$.
+
+*Dim.* Per parti, bordo nullo (periodicità). Conseguenza: $f \in C^k$ → $|c_n| = O(1/n^k)$. ∎
+</details>
+
+<details>
+<summary>Esercizio 4 — Equazione del calore esplicita</summary>
+
+$u_t = u_{xx}$ su $(0,\pi)$, $u=0$ ai bordi, $u(x,0) = \sin x + 3\sin(4x)$:
+$$u(x,t) = e^{-t}\sin x + 3 e^{-16 t}\sin(4x).$$
+Il modo 4 decade 16 volte più velocemente. ∎
+</details>
+
+<h2 id="riassunto-in-una-riga">Riassunto in una riga</h2>
+<p>Le <strong>serie di Fourier</strong> decompongono funzioni $2\pi$-periodiche nella base ortogonale $\{e^{inx}\}$; <strong>Dirichlet</strong> dà convergenza puntuale a $(f^+ +f^-)/2$ per regolari a tratti, <strong>$L^2$</strong> è il framework naturale (Pitagora ⇒ <strong>Parseval</strong> $\sum|c_n|^2 = \|f\|^2/(2\pi)$), <strong>Gibbs</strong> è l'overshoot ~9% ai salti — base di EDP, signal processing, JPEG/MP3.</p>
+      <nav class="pager">
+<a href="49-serie-taylor.html" class="prev"><span class="label">← Precedente</span><span class="title">Serie di Taylor e analiticità</span></a>
+<a href="51-edo-primo-ordine.html" class="next"><span class="label">Successivo →</span><span class="title">EDO del primo ordine</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Analisi Matematica I Zero to Hero</strong> — percorso completo bilingue, dai naturali agli integrali impropri, dalle serie di Fourier alle EDO lineari.</p><p>Materiale didattico aperto. Quando una dimostrazione è oscura, torna indietro: l'analisi è una scala, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>

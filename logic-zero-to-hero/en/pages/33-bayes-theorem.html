@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bayes&#x27; theorem and updating beliefs — Logic & Critical Thinking Zero to Hero</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#2a2540',primaryTextColor:'#ecebff',primaryBorderColor:'#7a6cd6',lineColor:'#9890b8',background:'#141226'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">∴</div>
+      <div>
+        <div class="brand-title">LOGOS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><a href="../../pages/33-teorema-bayes.html" class="lang-link" title="Passa all'italiano">IT</a><span class="lang-active" title="English">EN</span></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="search... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Path</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li>
+      <li class="nav-item"><a href="../pages/01-what-is-logic.html" class=""><span class="num">01</span>What is logic and critical thinking</a></li><li class="nav-item"><a href="../pages/02-history-of-logic.html" class=""><span class="num">02</span>A short history of logic</a></li><li class="nav-item"><a href="../pages/03-types-of-reasoning.html" class=""><span class="num">03</span>Types of reasoning: deductive, inductive, abductive, analogical</a></li><li class="nav-item"><a href="../pages/04-anatomy-of-arguments.html" class=""><span class="num">04</span>Arguments: premises, conclusion, validity, soundness</a></li><li class="nav-item"><a href="../pages/05-paul-elder-standards.html" class=""><span class="num">05</span>Critical thinking: Paul-Elder standards</a></li><li class="nav-item"><a href="../pages/06-language-and-ambiguity.html" class=""><span class="num">06</span>Language, ambiguity, definitions</a></li><li class="nav-item"><a href="../pages/07-propositional-logic.html" class=""><span class="num">07</span>Propositional logic: connectives and truth tables</a></li><li class="nav-item"><a href="../pages/08-equivalences-normal-forms.html" class=""><span class="num">08</span>Logical equivalences, De Morgan, normal forms</a></li><li class="nav-item"><a href="../pages/09-rules-of-inference.html" class=""><span class="num">09</span>Rules of inference</a></li><li class="nav-item"><a href="../pages/10-natural-deduction.html" class=""><span class="num">10</span>Natural deduction: I/E rules and structured proof</a></li><li class="nav-item"><a href="../pages/11-axiomatic-sequent-systems.html" class=""><span class="num">11</span>Axiomatic and sequent calculus systems</a></li><li class="nav-item"><a href="../pages/12-predicate-logic-syntax.html" class=""><span class="num">12</span>Predicate logic (FOL): syntax and quantifiers</a></li><li class="nav-item"><a href="../pages/13-predicate-logic-semantics.html" class=""><span class="num">13</span>FOL: semantics, models, validity</a></li><li class="nav-item"><a href="../pages/14-sets-relations-functions.html" class=""><span class="num">14</span>Sets, relations, functions</a></li><li class="nav-item"><a href="../pages/15-metalogic-godel.html" class=""><span class="num">15</span>Metalogic: soundness, completeness, Gödel&#x27;s theorems</a></li><li class="nav-item"><a href="../pages/16-modal-logic.html" class=""><span class="num">16</span>Modal logic and possible worlds</a></li><li class="nav-item"><a href="../pages/17-temporal-deontic-epistemic-logic.html" class=""><span class="num">17</span>Temporal, deontic, epistemic logics</a></li><li class="nav-item"><a href="../pages/18-non-classical-logic.html" class=""><span class="num">18</span>Non-classical logics: intuitionistic, fuzzy, paraconsistent</a></li><li class="nav-item"><a href="../pages/19-curry-howard-type-theory.html" class=""><span class="num">19</span>Curry-Howard and type theory</a></li><li class="nav-item"><a href="../pages/20-formal-fallacies.html" class=""><span class="num">20</span>Formal fallacies</a></li><li class="nav-item"><a href="../pages/21-informal-fallacies-relevance.html" class=""><span class="num">21</span>Informal fallacies of relevance</a></li><li class="nav-item"><a href="../pages/22-informal-fallacies-presumption.html" class=""><span class="num">22</span>Informal fallacies of presumption and ambiguity</a></li><li class="nav-item"><a href="../pages/23-cognitive-biases.html" class=""><span class="num">23</span>Cognitive biases: a curated catalog</a></li><li class="nav-item"><a href="../pages/24-dual-process.html" class=""><span class="num">24</span>System 1 and System 2: dual-process theory</a></li><li class="nav-item"><a href="../pages/25-polya-problem-solving.html" class=""><span class="num">25</span>Polya: how to solve a problem (4 steps)</a></li><li class="nav-item"><a href="../pages/26-problem-solving-heuristics.html" class=""><span class="num">26</span>Problem-solving heuristics</a></li><li class="nav-item"><a href="../pages/27-computational-thinking.html" class=""><span class="num">27</span>Computational thinking</a></li><li class="nav-item"><a href="../pages/28-algorithms-strategies.html" class=""><span class="num">28</span>Algorithms and problem-solving strategies</a></li><li class="nav-item"><a href="../pages/29-creative-thinking.html" class=""><span class="num">29</span>Creative thinking: lateral thinking, TRIZ, SCAMPER</a></li><li class="nav-item"><a href="../pages/30-design-thinking.html" class=""><span class="num">30</span>Design thinking</a></li><li class="nav-item"><a href="../pages/31-mental-models.html" class=""><span class="num">31</span>Mental models</a></li><li class="nav-item"><a href="../pages/32-probability-foundations.html" class=""><span class="num">32</span>Probability: foundations for reasoning</a></li><li class="nav-item"><a href="../pages/33-bayes-theorem.html" class="active"><span class="num">33</span>Bayes&#x27; theorem and updating beliefs</a></li><li class="nav-item"><a href="../pages/34-probability-paradoxes.html" class=""><span class="num">34</span>Probability paradoxes: Monty Hall, base rate, Simpson</a></li><li class="nav-item"><a href="../pages/35-decision-theory.html" class=""><span class="num">35</span>Decision theory: expected utility and prospect theory</a></li><li class="nav-item"><a href="../pages/36-forecasting-calibration.html" class=""><span class="num">36</span>Forecasting and calibration</a></li><li class="nav-item"><a href="../pages/37-knightian-black-swans.html" class=""><span class="num">37</span>Knightian uncertainty, black swans, antifragility</a></li><li class="nav-item"><a href="../pages/38-argumentation-toulmin.html" class=""><span class="num">38</span>Argumentation: Toulmin, Walton, argument mapping</a></li><li class="nav-item"><a href="../pages/39-rhetoric-persuasion.html" class=""><span class="num">39</span>Rhetoric and persuasion</a></li><li class="nav-item"><a href="../pages/40-debate-dialectic.html" class=""><span class="num">40</span>Debate, Socratic dialectic, steelmanning</a></li><li class="nav-item"><a href="../pages/41-negotiation-game-theory.html" class=""><span class="num">41</span>Negotiation and game theory</a></li><li class="nav-item"><a href="../pages/42-epistemology.html" class=""><span class="num">42</span>Epistemology: JTB, Gettier, intellectual virtues</a></li><li class="nav-item"><a href="../pages/43-scientific-method-popper.html" class=""><span class="num">43</span>Scientific method, Popper, falsifiability</a></li><li class="nav-item"><a href="../pages/44-kuhn-lakatos-feyerabend.html" class=""><span class="num">44</span>Paradigms: Kuhn, Lakatos, Feyerabend</a></li><li class="nav-item"><a href="../pages/45-causality-pearl.html" class=""><span class="num">45</span>Causality: Hume, Pearl, do-calculus</a></li><li class="nav-item"><a href="../pages/46-famous-paradoxes.html" class=""><span class="num">46</span>Famous paradoxes: logic, sets, motion, decision</a></li><li class="nav-item"><a href="../pages/47-systems-thinking.html" class=""><span class="num">47</span>Systems thinking and feedback models</a></li><li class="nav-item"><a href="../pages/48-wicked-problems.html" class=""><span class="num">48</span>Wicked problems, complexity, VUCA</a></li><li class="nav-item"><a href="../pages/49-critical-reading-writing.html" class=""><span class="num">49</span>Critical reading and argumentative writing</a></li><li class="nav-item"><a href="../pages/50-propaganda-manipulation.html" class=""><span class="num">50</span>Propaganda, manipulation, news literacy, fact-checking</a></li><li class="nav-item"><a href="../pages/51-exercises.html" class=""><span class="num">51</span>Full exercise book with solutions</a></li><li class="nav-item"><a href="../pages/52-glossary-az.html" class=""><span class="num">52</span>A-Z bilingual glossary</a></li><li class="nav-item"><a href="../pages/53-formula-sheet.html" class=""><span class="num">53</span>Formula sheet / cheat sheet</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Probability</span>
+        <span>Section 33 of 53</span>
+        <span class="level-tag level-adv">Level: advanced</span>
+      </div>
+      <h1>Bayes&#x27; theorem and updating beliefs</h1>
+      <p class="summary">The most important formula for reasoning under uncertainty: how prior belief combines with new evidence. Step-by-step computations, medical tests, base rate fallacy.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Probability</div>
+  <div class="label">Prerequisites</div>
+  <ul class="source-list"><li>Have read [Probability foundations](32-probability-foundations.html)</li></ul>
+  <div class="label">Tools / references</div>
+  <ul class="source-list"><li>Python: scipy</li></ul>
+</div>
+      <p>Thomas Bayes (1701-1761) proposed a formula for updating belief in light of new evidence. The theorem is mathematically simple but disproportionately important: it powers modern statistics, spam filters, voice recognition, medical diagnostics, and — as a mental habit — quantitative reasoning under uncertainty (cf Tetlock, <em>Superforecasting</em>).</p>
+<h2 id="1-derivation">1. Derivation</h2>
+<p>From conditional probability:</p>
+<p>$$P(A|B) = \frac{P(A \cap B)}{P(B)}, \quad P(B|A) = \frac{P(B \cap A)}{P(A)}$$</p>
+<p>Equating $P(A \cap B)$:</p>
+<p>$$\boxed{P(A|B) = \frac{P(B|A) \cdot P(A)}{P(B)}}$$</p>
+<p>Bayesian terminology:</p>
+<ul>
+<li>$P(A)$ = <strong>prior</strong>.</li>
+<li>$P(B|A)$ = <strong>likelihood</strong>.</li>
+<li>$P(B)$ = <strong>evidence</strong> (normalizer).</li>
+<li>$P(A|B)$ = <strong>posterior</strong>.</li>
+</ul>
+<h2 id="2-full-form">2. Full form</h2>
+<p>If $A_1, \ldots, A_n$ are alternative exhaustive hypotheses:</p>
+<p>$$P(A_i|B) = \frac{P(B|A_i) P(A_i)}{\sum_j P(B|A_j) P(A_j)}$$</p>
+<p>Posterior ∝ likelihood × prior, normalized.</p>
+<h2 id="3-canonical-example-medical-test">3. Canonical example: medical test</h2>
+<p><strong>Setup</strong>: rare disease, prevalence <strong>1 in 1000</strong>. Test:
+- Sensitivity = $P(+|D) = 0.99$.
+- Specificity = $P(-|\bar D) = 0.99$, so $P(+|\bar D) = 0.01$ (false positives).</p>
+<p>You test positive. What's the probability you're actually sick?</p>
+<p>S1 says ~99%. Wrong.</p>
+<p>$P(D|+) = P(+|D) P(D) / P(+)$.</p>
+<p>$P(D) = 0.001$.
+$P(+) = 0.99 \cdot 0.001 + 0.01 \cdot 0.999 = 0.00099 + 0.00999 = 0.01098$.</p>
+<p>$$P(D|+) = \frac{0.99 \cdot 0.001}{0.01098} \approx 0.090 = 9\%$$</p>
+<p><strong>Only 9%</strong>. Intuition fails because it ignores the base rate (1/1000). Of 1000 people tested, expect 1 true positive and ~10 false positives — only 1 of ~11 positives is actually sick.</p>
+<pre><code class="language-mermaid">flowchart TB
+  P[1000 tested] --&gt; S[1 sick]
+  P --&gt; H[999 healthy]
+  S --&gt; SP[~1 true positive]
+  H --&gt; HP[~10 false positives]
+  H --&gt; HN[~989 true negatives]
+  SP --&gt; T[Total positives ≈ 11]
+  HP --&gt; T
+  T -.-&gt; R[&quot;P(D|+) ≈ 1/11 ≈ 9%&quot;]
+</code></pre>
+<h3 id="lesson">Lesson</h3>
+<p>Base rate fallacy is one of the most common diagnostic errors. For rare diseases, even excellent tests produce many false positives.</p>
+<h2 id="4-odds-form">4. Odds form</h2>
+<p>$O(A) = P(A) / P(\bar A)$.</p>
+<p>$$\frac{P(A|B)}{P(\bar A|B)} = \frac{P(B|A)}{P(B|\bar A)} \cdot \frac{P(A)}{P(\bar A)}$$</p>
+<p><strong>Posterior odds = likelihood ratio × prior odds</strong>.</p>
+<p>Test example: prior odds 1/999. LR = 0.99/0.01 = 99. Posterior odds = 99/999 ≈ 0.099. P ≈ 0.099/(1+0.099) ≈ 9%. ✓</p>
+<p>Particularly handy for <strong>sequential updating</strong> with multiple independent evidence — just multiply likelihood ratios.</p>
+<h2 id="5-sequential-updating">5. Sequential updating</h2>
+<p>Two independent positives:</p>
+<p>After first: P ≈ 9%. New prior odds ≈ 0.099. Same LR = 99. New posterior odds ≈ 9.8. New P ≈ 91%. <strong>Two positives push from 9% to 91%</strong>. That's why re-testing matters.</p>
+<h2 id="6-bayes-for-continuous-parameters">6. Bayes for continuous parameters</h2>
+<p>$$p(\theta | D) = \frac{p(D|\theta) p(\theta)}{p(D)}$$</p>
+<p>You update an entire distribution, not a single probability. Bayesian statistics; computationally enabled by MCMC, Stan, PyMC.</p>
+<h2 id="7-naive-bayes">7. Naive Bayes</h2>
+<p>Classification under feature-independence assumption (rarely true, often good enough). Spam filter: $C \in {\text{spam}, \text{ham}}$, $x_i$ = word presence. Surprisingly effective.</p>
+<h2 id="8-bayes-vs-frequentist">8. Bayes vs frequentist</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Bayesian</th>
+<th>Frequentist</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Probability?</td>
+<td>belief degree</td>
+<td>frequency limit</td>
+</tr>
+<tr>
+<td>Parameters?</td>
+<td>distribution</td>
+<td>fixed unknown</td>
+</tr>
+<tr>
+<td>Inference?</td>
+<td>posterior + credible interval</td>
+<td>p-value, confidence interval</td>
+</tr>
+<tr>
+<td>Updating?</td>
+<td>natural, sequential</td>
+<td>requires repeated experiments</td>
+</tr>
+</tbody>
+</table>
+<h2 id="9-bayes-as-habit">9. Bayes as habit</h2>
+<p>Tetlock and others show: top forecasters update beliefs <strong>Bayesian-like</strong> — don't drop hypothesis at first counter-evidence, don't cling stubbornly to first confirmation. Probabilities move in small steps proportional to evidence strength.</p>
+<h2 id="exercises">Exercises</h2>
+<details>
+  <summary>City has 30% green taxis, 70% blue. Witness identifies a taxi as green; 80% color accuracy. P(actually green)?</summary>
+
+$P(G) = 0.3$, $P(B) = 0.7$, $P(\text{say G}|G) = 0.8$, $P(\text{say G}|B) = 0.2$.
+
+$P(\text{say G}) = 0.8 \cdot 0.3 + 0.2 \cdot 0.7 = 0.38$.
+
+$P(G | \text{say G}) = 0.24/0.38 ≈ 63\%$.
+
+Not 80%! Base rate (more blue taxis) compensates. Kahneman-Tversky "Cab problem".
+</details>
+
+<details>
+  <summary>Three coins: 2 fair, 1 biased (90% heads). Pick one randomly, flip once: heads. P(biased)?</summary>
+
+Prior $P(B) = 1/3$. $P(\text{H}|B) = 0.9, P(\text{H}|\bar B) = 0.5$.
+
+$P(\text{H}) = 0.3 + 0.333 = 0.633$.
+
+$P(B|\text{H}) = 0.3/0.633 ≈ 47\%$.
+
+From 33% to 47% with one heads. Five heads in a row would push to >95%.
+</details>
+
+<h2 id="summary">Summary</h2>
+<ul>
+<li>$P(A|B) = P(B|A) P(A)/P(B)$.</li>
+<li>Posterior ∝ likelihood × prior.</li>
+<li>Odds form: posterior odds = LR × prior odds.</li>
+<li>Base rate is crucial — ignoring it drastically over-confidence.</li>
+<li>Sequential updating: multiply LRs.</li>
+<li>Naive Bayes, Bayesian statistics, MCMC.</li>
+<li>As mental habit: calibrated updating in proportion to evidence.</li>
+</ul>
+<h2 id="further-reading">Further reading</h2>
+<ul>
+<li>Bayes, <em>Essay towards solving a Problem in the Doctrine of Chances</em> (1763 posth).</li>
+<li>Jaynes, <em>Probability Theory: The Logic of Science</em> (2003).</li>
+<li>McElreath, <em>Statistical Rethinking</em> (2020).</li>
+<li>Silver, <em>The Signal and the Noise</em> (2012).</li>
+</ul>
+      <nav class="pager">
+<a href="32-probability-foundations.html" class="prev"><span class="label">← Previous</span><span class="title">Probability: foundations for reasoning</span></a>
+<a href="34-probability-paradoxes.html" class="next"><span class="label">Next →</span><span class="title">Probability paradoxes: Monty Hall, base rate, Simpson</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Logic, Problem Solving and Critical Thinking Zero to Hero</strong> — complete path, in English, from the anatomy of an argument to Pearl's do-calculus.</p><p>Open educational material. No sponsorships. When a concept is unclear, go back: logic and reasoning are a staircase, not a tree you skip across.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../../search.js"></script>
+<script src="../../toc.js"></script>
+</body>
+</html>

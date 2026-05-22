@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Topologia di R: intorni, aperti, chiusi, compatti — Analisi Matematica I Zero to Hero</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'\\[',right:'\\]',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false}
+    ],
+    throwOnError:false
+  });"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){mermaid.initialize({startOnLoad:false,theme:'dark',themeVariables:{darkMode:true,primaryColor:'#1a2647',primaryTextColor:'#f3eed9',primaryBorderColor:'#d4af37',lineColor:'#8aa3c8',background:'#0c1428'}});document.querySelectorAll('pre>code.language-mermaid').forEach(function(b){var p=b.parentElement;var d=document.createElement('div');d.className='mermaid';d.textContent=b.textContent;p.replaceWith(d);});mermaid.run();});</script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-mark">∫</div>
+      <div>
+        <div class="brand-title">ANALYSIS</div>
+        <div class="brand-subtitle">zero · to · hero</div>
+      </div>
+    </div>
+    <div class="lang-switch"><span class="lang-active" title="Italiano">IT</span><a href="../en/pages/10-topology-r.html" class="lang-link" title="Switch">EN</a></div>
+  </div>
+  <div class="search-wrap" style="position:relative">
+    <input class="search-input" id="search-input" placeholder="cerca... (/)" autocomplete="off">
+    <div class="search-hits" id="search-hits"></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-section-title">Percorso</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="../index.html"><span class="num">00</span>Home</a></li><li class="nav-item"><a href="00-intro.html" class=""><span class="num">00</span>Cos&#x27;è l&#x27;analisi matematica</a></li><li class="nav-item"><a href="01-logica-dimostrazioni.html" class=""><span class="num">01</span>Logica e dimostrazioni per l&#x27;analisi</a></li><li class="nav-item"><a href="02-insiemi-funzioni.html" class=""><span class="num">02</span>Insiemi, relazioni, funzioni</a></li><li class="nav-item"><a href="03-induzione-naturali.html" class=""><span class="num">03</span>Numeri naturali e principio di induzione</a></li><li class="nav-item"><a href="04-interi-razionali.html" class=""><span class="num">04</span>Numeri interi e razionali</a></li><li class="nav-item"><a href="05-cardinalita-cantor.html" class=""><span class="num">05</span>Cardinalità e infinito (Cantor)</a></li><li class="nav-item"><a href="06-numeri-reali-assiomi.html" class=""><span class="num">06</span>Numeri reali: gli assiomi</a></li><li class="nav-item"><a href="07-estremo-superiore.html" class=""><span class="num">07</span>Estremo superiore e completezza</a></li><li class="nav-item"><a href="08-costruzione-reali.html" class=""><span class="num">08</span>Costruzione di R: Dedekind e Cauchy</a></li><li class="nav-item"><a href="09-numeri-complessi.html" class=""><span class="num">09</span>Numeri complessi</a></li><li class="nav-item"><a href="10-topologia-r.html" class="active"><span class="num">10</span>Topologia di R: intorni, aperti, chiusi, compatti</a></li><li class="nav-item"><a href="11-successioni-definizione.html" class=""><span class="num">11</span>Successioni e limiti: la definizione ε-N</a></li><li class="nav-item"><a href="12-algebra-limiti-successioni.html" class=""><span class="num">12</span>Algebra dei limiti di successioni</a></li><li class="nav-item"><a href="13-monotone-bolzano-weierstrass.html" class=""><span class="num">13</span>Successioni monotone e Bolzano-Weierstrass</a></li><li class="nav-item"><a href="14-cauchy-completezza.html" class=""><span class="num">14</span>Successioni di Cauchy e completezza di R</a></li><li class="nav-item"><a href="15-limiti-notevoli-landau.html" class=""><span class="num">15</span>Limiti notevoli e simboli di Landau (o-piccolo, O-grande)</a></li><li class="nav-item"><a href="16-liminf-limsup.html" class=""><span class="num">16</span>Limite superiore, limite inferiore, sottosuccessioni</a></li><li class="nav-item"><a href="17-funzioni-elementari.html" class=""><span class="num">17</span>Funzioni elementari: panoramica</a></li><li class="nav-item"><a href="18-esponenziale-logaritmo.html" class=""><span class="num">18</span>Esponenziale, logaritmo, potenze</a></li><li class="nav-item"><a href="19-trigonometriche-iperboliche.html" class=""><span class="num">19</span>Funzioni trigonometriche e iperboliche</a></li><li class="nav-item"><a href="20-limite-funzione.html" class=""><span class="num">20</span>Limite di funzione: la definizione</a></li><li class="nav-item"><a href="21-teoremi-limiti-funzioni.html" class=""><span class="num">21</span>Teoremi sui limiti di funzioni</a></li><li class="nav-item"><a href="22-limiti-notevoli-funzioni.html" class=""><span class="num">22</span>Limiti notevoli per funzioni</a></li><li class="nav-item"><a href="23-asintoti.html" class=""><span class="num">23</span>Asintoti orizzontali, verticali, obliqui</a></li><li class="nav-item"><a href="24-continuita-definizione.html" class=""><span class="num">24</span>Continuità: la definizione e le prime proprietà</a></li><li class="nav-item"><a href="25-teoremi-continue.html" class=""><span class="num">25</span>Teoremi sulle funzioni continue (Weierstrass, valori intermedi)</a></li><li class="nav-item"><a href="26-uniforme-continuita.html" class=""><span class="num">26</span>Uniforme continuità, Heine, lipschitzianità</a></li><li class="nav-item"><a href="27-discontinuita.html" class=""><span class="num">27</span>Tipi di discontinuità</a></li><li class="nav-item"><a href="28-derivata-definizione.html" class=""><span class="num">28</span>Derivata: definizione e interpretazione geometrica</a></li><li class="nav-item"><a href="29-regole-derivazione.html" class=""><span class="num">29</span>Regole di derivazione (somma, prodotto, quoziente, catena)</a></li><li class="nav-item"><a href="30-derivate-elementari.html" class=""><span class="num">30</span>Derivate delle funzioni elementari</a></li><li class="nav-item"><a href="31-teoremi-differenziale.html" class=""><span class="num">31</span>Teoremi del calcolo differenziale: Fermat, Rolle, Lagrange, Cauchy</a></li><li class="nav-item"><a href="32-hopital.html" class=""><span class="num">32</span>Regola di de L&#x27;Hôpital</a></li><li class="nav-item"><a href="33-taylor.html" class=""><span class="num">33</span>Polinomi e formula di Taylor</a></li><li class="nav-item"><a href="34-limiti-taylor.html" class=""><span class="num">34</span>Calcolo di limiti tramite Taylor</a></li><li class="nav-item"><a href="35-monotonia-estremi.html" class=""><span class="num">35</span>Monotonia, massimi, minimi, punti critici</a></li><li class="nav-item"><a href="36-convessita-concavita.html" class=""><span class="num">36</span>Convessità, concavità, flessi</a></li><li class="nav-item"><a href="37-studio-funzione.html" class=""><span class="num">37</span>Studio di funzione completo</a></li><li class="nav-item"><a href="38-applicazioni-ottimizzazione.html" class=""><span class="num">38</span>Applicazioni dell&#x27;ottimizzazione: fisica, economia, geometria</a></li><li class="nav-item"><a href="39-integrale-riemann.html" class=""><span class="num">39</span>Integrale di Riemann: definizione</a></li><li class="nav-item"><a href="40-teorema-fondamentale-calcolo.html" class=""><span class="num">40</span>Teorema fondamentale del calcolo integrale</a></li><li class="nav-item"><a href="41-tecniche-integrazione.html" class=""><span class="num">41</span>Tecniche di integrazione: per parti, per sostituzione</a></li><li class="nav-item"><a href="42-integrali-razionali.html" class=""><span class="num">42</span>Integrazione di funzioni razionali</a></li><li class="nav-item"><a href="43-integrali-impropri.html" class=""><span class="num">43</span>Integrali impropri</a></li><li class="nav-item"><a href="44-funzioni-integrali.html" class=""><span class="num">44</span>Funzioni integrali e applicazioni geometriche</a></li><li class="nav-item"><a href="45-serie-numeriche.html" class=""><span class="num">45</span>Serie numeriche: definizione e convergenza</a></li><li class="nav-item"><a href="46-criteri-positivi.html" class=""><span class="num">46</span>Criteri di convergenza per serie a termini positivi</a></li><li class="nav-item"><a href="47-serie-segno-qualunque.html" class=""><span class="num">47</span>Serie a segno qualunque, Leibniz, convergenza assoluta</a></li><li class="nav-item"><a href="48-serie-potenze.html" class=""><span class="num">48</span>Serie di potenze e raggio di convergenza</a></li><li class="nav-item"><a href="49-serie-taylor.html" class=""><span class="num">49</span>Serie di Taylor e analiticità</a></li><li class="nav-item"><a href="50-serie-fourier-cenni.html" class=""><span class="num">50</span>Serie di Fourier: introduzione</a></li><li class="nav-item"><a href="51-edo-primo-ordine.html" class=""><span class="num">51</span>EDO del primo ordine</a></li><li class="nav-item"><a href="52-edo-lineari-ordine-n.html" class=""><span class="num">52</span>EDO lineari di ordine $n$ a coefficienti costanti</a></li><li class="nav-item"><a href="53-cauchy-esistenza-unicita.html" class=""><span class="num">53</span>Problema di Cauchy, esistenza e unicità</a></li><li class="nav-item"><a href="54-topologia-rn.html" class=""><span class="num">54</span>Topologia in $\mathbb{R}^n$</a></li><li class="nav-item"><a href="55-derivate-parziali-differenziale.html" class=""><span class="num">55</span>Derivate parziali e differenziale in più variabili</a></li><li class="nav-item"><a href="56-cenni-lebesgue-funzionale.html" class=""><span class="num">56</span>Oltre Riemann: Lebesgue, Banach, Hilbert</a></li><li class="nav-item"><a href="57-eserciziario.html" class=""><span class="num">57</span>Eserciziario: problemi tipo d&#x27;esame</a></li><li class="nav-item"><a href="58-glossario-az.html" class=""><span class="num">58</span>Glossario A-Z dell&#x27;Analisi Matematica I</a></li><li class="nav-item"><a href="59-formulario-completo.html" class=""><span class="num">59</span>Formulario completo di Analisi Matematica I</a></li>
+    </ul>
+  </nav>
+</aside>
+  <main class="main">
+    <div class="content">
+      <div class="page-meta">
+        <span class="pill">Topologia</span>
+        <span>Sezione 10 di 59</span>
+        <span class="level-tag level-int">Livello: intermedio</span>
+      </div>
+      <h1>Topologia di R: intorni, aperti, chiusi, compatti</h1>
+      <p class="summary">La grammatica formale del &quot;vicino&quot; su $\mathbb{R}$. Cos&#x27;è un intorno, cos&#x27;è un punto di accumulazione, cosa vuol dire &quot;aperto&quot; e &quot;chiuso&quot;, e perché i **compatti** (= chiusi + limitati) sono il vero protagonista dell&#x27;analisi.</p>
+      <div class="info-card">
+  <div class="label">Area</div>
+  <div>Topologia</div>
+  <div class="label">Prerequisiti</div>
+  <ul class="source-list"><li>Numeri reali e completezza (sup, inf — sez. 06-07)</li><li>Valore assoluto e disuguaglianze</li><li>Logica dei quantificatori (sez. 01)</li></ul>
+  <div class="label">Strumenti / riferimenti</div>
+  <ul class="source-list"><li>Rudin — *Principles of Mathematical Analysis*, cap. 2</li><li>Giusti — *Analisi Matematica 1*</li><li>Apostol — *Mathematical Analysis*, cap. 3</li></ul>
+</div>
+      <h2 id="perche-parlarne">Perché parlarne</h2>
+<p>Tutta l'analisi parla di <strong>vicinanza</strong>: il limite di una successione è "dove i termini si avvicinano", una funzione continua è "se sposti poco l'input, sposti poco l'output". Per scrivere queste cose con rigore serve un linguaggio formale per "vicino" e "lontano".</p>
+<p>Quel linguaggio è la <strong>topologia</strong>. In $\mathbb{R}$ è semplicissima — basta la distanza $d(x, y) = |x - y|$ — ma da quella singola nozione germoglia tutto: intorni, aperti, chiusi, compatti, connessi.</p>
+<p>Il salto concettuale: <strong>smetti di pensare "i numeri sono punti su una retta"</strong> e inizia a pensare "ogni punto vive dentro famiglie di intorni che lo contengono". Cambia il modo in cui ragioni sulle proprietà locali.</p>
+<h2 id="intuizione-veloce">Intuizione veloce</h2>
+<p>Un punto $x_0 \in \mathbb{R}$ ha <strong>intorni</strong> — intervalli aperti che lo contengono.</p>
+<p>Un insieme $A$ è <strong>aperto</strong> se ogni suo punto è "comodamente all'interno": ha un intorno tutto incluso in $A$. Esempio: $(0, 1)$.</p>
+<p>Un insieme è <strong>chiuso</strong> se contiene la sua "buccia": tutti i punti che gli sono "infinitamente vicini". Esempio: $[0, 1]$.</p>
+<p>Pensa a $(0, 1)$ vs $[0, 1]$:
+- $0.9999 \in (0, 1)$? Sì, ha intorno $(0.998, 0.9999\dots99)$ tutto dentro. Comodo.
+- $1 \in (0, 1)$? No, <em>ogni</em> suo intorno tocca punti fuori. È un <strong>punto di accumulazione</strong> non incluso: per questo $(0, 1)$ è aperto ma non chiuso.
+- $1 \in [0, 1]$? Sì, l'estremo è incluso. Per questo $[0, 1]$ è chiuso.</p>
+<h2 id="distanza-e-intorni">Distanza e intorni</h2>
+<h3 id="la-distanza-in-math20">La distanza in $\mathbb{R}$</h3>
+<p>$$d(x, y) := |x - y|, \quad x, y \in \mathbb{R}.$$</p>
+<blockquote>
+<p><strong>Glossarietto:</strong></p>
+<ul>
+<li>$d(x, y)$ = "distanza fra $x$ e $y$".</li>
+<li>$|x - y|$ = valore assoluto della differenza (sez. 06). $|3 - 7| = 4$, $|2 - 2| = 0$.</li>
+<li>Soddisfa: $d(x, y) \ge 0$, $d(x, y) = 0 \iff x = y$, $d(x, y) = d(y, x)$ (simmetria), $d(x, z) \le d(x, y) + d(y, z)$ (disuguaglianza triangolare).</li>
+</ul>
+</blockquote>
+<h3 id="intorni-sferici">Intorni "sferici"</h3>
+<p>Un <strong>intorno sferico</strong> (o "palla") di centro $x_0$ e raggio $r > 0$ è
+$$B_r(x_0) := \{x \in \mathbb{R} : |x - x_0| < r\} = (x_0 - r,\ x_0 + r).$$</p>
+<blockquote>
+<p><strong>Glossarietto:</strong></p>
+<ul>
+<li>$B$ = "ball" (palla) — in $\mathbb{R}$ è un intervallo aperto, in $\mathbb{R}^2$ un disco, in $\mathbb{R}^3$ una palla 3D; il nome arriva da lì.</li>
+<li>$|x - x_0| < r$ = "la distanza fra $x$ e $x_0$ è minore di $r$".</li>
+<li>$(x_0 - r, x_0 + r)$ = intervallo aperto da $x_0 - r$ a $x_0 + r$ (estremi esclusi).</li>
+</ul>
+<p><strong>Esempio.</strong> $B_{0.5}(3) = (2.5, 3.5)$.</p>
+</blockquote>
+<p>Più in generale, un <strong>intorno</strong> di $x_0$ è un qualunque insieme $U$ che contiene almeno un intorno sferico di $x_0$: $\exists r > 0$ con $B_r(x_0) \subseteq U$.</p>
+<h2 id="classificazione-dei-punti-rispetto-a-un-insieme">Classificazione dei punti rispetto a un insieme</h2>
+<p>Sia $A \subseteq \mathbb{R}$ e $x_0 \in \mathbb{R}$ (non necessariamente in $A$). Definiamo cinque tipi di punti.</p>
+<ul>
+<li><strong>Interno</strong> ad $A$: $\exists r > 0 : B_r(x_0) \subseteq A$ (un intero intorno sferico sta dentro $A$).</li>
+<li><strong>Esterno</strong> ad $A$: $\exists r > 0 : B_r(x_0) \subseteq \mathbb{R} \setminus A$ (un intero intorno sferico sta fuori da $A$).</li>
+<li><strong>Frontiera</strong> per $A$: $\forall r > 0$, $B_r(x_0)$ tocca sia $A$ sia $\mathbb{R} \setminus A$ (ogni intorno è "diviso a metà").</li>
+<li><strong>Accumulazione</strong> per $A$: $\forall r > 0$, $(B_r(x_0) \setminus \{x_0\}) \cap A \ne \emptyset$ (ogni intorno contiene un punto di $A$ diverso da $x_0$).</li>
+<li><strong>Isolato</strong> in $A$: $x_0 \in A$ e $\exists r > 0 : B_r(x_0) \cap A = \{x_0\}$ ($x_0$ è in $A$ ma "da solo": l'intorno non contiene altri elementi di $A$).</li>
+</ul>
+<blockquote>
+<p><strong>Glossarietto delle definizioni:</strong></p>
+<ul>
+<li>$A$ = un sottoinsieme di $\mathbb{R}$.</li>
+<li>$\mathbb{R} \setminus A$ = il complementare di $A$, "tutto ciò che non è in $A$".</li>
+<li>$B_r(x_0) \setminus \{x_0\}$ = la palla "bucata", senza il centro stesso.</li>
+<li>$\cap$ = intersezione, $\ne \emptyset$ = "non vuoto".</li>
+</ul>
+<p><strong>Distinzione cruciale.</strong> Un punto di accumulazione <strong>può non appartenere</strong> ad $A$ (esempio: $0$ è di accumulazione per $\{1/n : n \ge 1\}$, ma $0$ non è nell'insieme). E un punto di $A$ può non essere di accumulazione (è isolato).</p>
+</blockquote>
+<h2 id="aperti-chiusi-chiusura-interno">Aperti, chiusi, chiusura, interno</h2>
+<ul>
+<li>$A$ è <strong>aperto</strong> se ogni suo punto è interno: $\forall x \in A, \exists r > 0 : B_r(x) \subseteq A$.</li>
+<li>$A$ è <strong>chiuso</strong> se il complementare $\mathbb{R} \setminus A$ è aperto.</li>
+<li>L'<strong>interno</strong> $\mathring{A}$ (o $\operatorname{int}(A)$) = l'insieme dei punti interni di $A$. È il più grande aperto contenuto in $A$.</li>
+<li>La <strong>chiusura</strong> $\overline{A}$ = $A$ unito ai suoi punti di accumulazione. È il più piccolo chiuso contenente $A$.</li>
+<li>La <strong>frontiera</strong> $\partial A = \overline{A} \setminus \mathring{A}$.</li>
+</ul>
+<blockquote>
+<p><strong>Tradotto a parole:</strong></p>
+<ul>
+<li>Aperto = "ogni punto ha respiro intorno a sé". Esempio: $(0, 1)$.</li>
+<li>Chiuso = "contiene la sua buccia". Esempio: $[0, 1]$.</li>
+<li>Interno = la "pancia" senza la pelle.</li>
+<li>Chiusura = l'insieme con la sua pelle inclusa.</li>
+<li>Frontiera = la sola pelle.</li>
+</ul>
+</blockquote>
+<h3 id="esempi-geometrici-fondamentali">Esempi geometrici fondamentali</h3>
+<div class="chart">
+<svg viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg">
+  <rect width="600" height="300" fill="#111a30"/>
+  <g font-family="ui-monospace, Menlo, monospace" font-size="13" fill="#f3eed9">
+    <text x="20" y="30">Tipologie di intervalli in R</text>
+  </g>
+  <line x1="80" y1="80" x2="520" y2="80" stroke="#3a4868" stroke-width="1"/>
+  <line x1="160" y1="75" x2="160" y2="85" stroke="#f3eed9" stroke-width="1"/>
+  <line x1="440" y1="75" x2="440" y2="85" stroke="#f3eed9" stroke-width="1"/>
+  <line x1="160" y1="80" x2="440" y2="80" stroke="#d4af37" stroke-width="4"/>
+  <circle cx="160" cy="80" r="6" fill="#111a30" stroke="#d4af37" stroke-width="2"/>
+  <circle cx="440" cy="80" r="6" fill="#111a30" stroke="#d4af37" stroke-width="2"/>
+  <text x="20" y="84" fill="#f3eed9" font-family="ui-monospace" font-size="12">(a,b)</text>
+  <text x="540" y="84" fill="#6fb38a" font-family="ui-monospace" font-size="11">aperto</text>
+  <line x1="80" y1="135" x2="520" y2="135" stroke="#3a4868" stroke-width="1"/>
+  <line x1="160" y1="135" x2="440" y2="135" stroke="#e8a04a" stroke-width="4"/>
+  <circle cx="160" cy="135" r="6" fill="#e8a04a"/>
+  <circle cx="440" cy="135" r="6" fill="#e8a04a"/>
+  <text x="20" y="139" fill="#f3eed9" font-family="ui-monospace" font-size="12">[a,b]</text>
+  <text x="540" y="139" fill="#e8a04a" font-family="ui-monospace" font-size="11">chiuso, compatto</text>
+  <line x1="80" y1="190" x2="520" y2="190" stroke="#3a4868" stroke-width="1"/>
+  <line x1="160" y1="190" x2="440" y2="190" stroke="#6aa9d8" stroke-width="4"/>
+  <circle cx="160" cy="190" r="6" fill="#6aa9d8"/>
+  <circle cx="440" cy="190" r="6" fill="#111a30" stroke="#6aa9d8" stroke-width="2"/>
+  <text x="20" y="194" fill="#f3eed9" font-family="ui-monospace" font-size="12">[a,b)</text>
+  <text x="540" y="194" fill="#e07a8d" font-family="ui-monospace" font-size="11">né aperto né chiuso</text>
+  <line x1="80" y1="245" x2="520" y2="245" stroke="#3a4868" stroke-width="1"/>
+  <line x1="160" y1="245" x2="520" y2="245" stroke="#6fb38a" stroke-width="4"/>
+  <circle cx="160" cy="245" r="6" fill="#6fb38a"/>
+  <polygon points="520,238 530,245 520,252" fill="#6fb38a"/>
+  <text x="20" y="249" fill="#f3eed9" font-family="ui-monospace" font-size="12">[a,+∞)</text>
+  <text x="540" y="249" fill="#e8a04a" font-family="ui-monospace" font-size="11">chiuso, non limitato</text>
+  <text x="160" y="280" fill="#f3eed9" font-family="ui-monospace" font-size="11" text-anchor="middle">a</text>
+  <text x="440" y="280" fill="#f3eed9" font-family="ui-monospace" font-size="11" text-anchor="middle">b</text>
+</svg>
+<div class="chart-caption">Cerchio pieno = estremo incluso; cerchio vuoto = escluso. La compattezza richiede entrambi: chiuso e limitato.</div>
+</div>
+
+<h2 id="teoremi-cardine">Teoremi cardine</h2>
+<h3 id="teorema-1-caratterizzazione-dei-chiusi-via-accumulazione">Teorema 1 — Caratterizzazione dei chiusi via accumulazione</h3>
+<blockquote>
+<p>$A \subseteq \mathbb{R}$ è chiuso $\iff$ $A$ contiene tutti i suoi punti di accumulazione.</p>
+<p><strong>A parole:</strong> un insieme è chiuso esattamente quando non "perde" punti di accumulazione che gli sono vicini.</p>
+</blockquote>
+<p><em>Dim.</em></p>
+<p>$(\Rightarrow)$ Sia $A$ chiuso, cioè $\mathbb{R} \setminus A$ aperto. Sia $x_0$ punto di accumulazione di $A$. Per assurdo $x_0 \notin A$, dunque $x_0 \in \mathbb{R} \setminus A$, che è aperto: $\exists r > 0$ con $B_r(x_0) \subseteq \mathbb{R} \setminus A$, cioè $B_r(x_0) \cap A = \emptyset$, contro l'ipotesi che $x_0$ sia di accumulazione.</p>
+<p>$(\Leftarrow)$ Mostriamo $\mathbb{R} \setminus A$ aperto. Sia $y \in \mathbb{R} \setminus A$. Per ipotesi $y$ non è di accumulazione di $A$ (altrimenti starebbe in $A$). Quindi $\exists r > 0$ con $(B_r(y) \setminus \{y\}) \cap A = \emptyset$; siccome anche $y \notin A$, $B_r(y) \cap A = \emptyset$, cioè $B_r(y) \subseteq \mathbb{R} \setminus A$. ∎</p>
+<h3 id="teorema-2-stabilita-di-aperti-e-chiusi">Teorema 2 — Stabilità di aperti e chiusi</h3>
+<blockquote>
+<p>(i) $\emptyset$ e $\mathbb{R}$ sono sia aperti sia chiusi.
+(ii) <strong>Unione qualunque</strong> di aperti è aperta; <strong>intersezione finita</strong> di aperti è aperta.
+(iii) <strong>Intersezione qualunque</strong> di chiusi è chiusa; <strong>unione finita</strong> di chiusi è chiusa.</p>
+<p><strong>Asimmetria importante:</strong> "qualunque" da una parte, "finita" dall'altra. Vedi controesempio sotto.</p>
+</blockquote>
+<p><em>Dim. di (ii).</em></p>
+<p><em>Unione qualunque.</em> Sia $\{A_\alpha\}$ famiglia di aperti, $A = \bigcup A_\alpha$. Se $x \in A$, $x \in A_{\alpha_0}$ per qualche $\alpha_0$, e per apertura $\exists r > 0 : B_r(x) \subseteq A_{\alpha_0} \subseteq A$.</p>
+<p><em>Intersezione finita.</em> $A_1 \cap \dots \cap A_n$: se $x$ vi appartiene, per ogni $i$ esiste $r_i > 0$ con $B_{r_i}(x) \subseteq A_i$. Posto $r = \min(r_1, \dots, r_n) > 0$, $B_r(x) \subseteq \bigcap A_i$.</p>
+<p><strong>Perché serve la finitezza:</strong> con infiniti aperti, il $\min$ potrebbe non essere $> 0$ (un $\inf$ di $r_i$ potrebbe essere 0).</p>
+<p><strong>Controesempio per intersezione infinita.</strong> $A_n = (-1/n, 1/n)$, tutti aperti. Ma
+$$\bigcap_{n \ge 1} A_n = \{0\}$$
+che è <strong>chiuso</strong> (un punto isolato), non aperto. ∎</p>
+<h3 id="teorema-3-heine-borel-in-math147-il-cuore-del-capitolo">Teorema 3 — Heine-Borel in $\mathbb{R}$ (il cuore del capitolo)</h3>
+<blockquote>
+<p>$K \subseteq \mathbb{R}$ è <strong>compatto</strong> $\iff$ $K$ è <strong>chiuso e limitato</strong>.</p>
+</blockquote>
+<p>Dove la definizione di compatto è la seguente.</p>
+<p><strong>Definizione (compatto).</strong> $K$ è <strong>compatto</strong> se da ogni <strong>copertura aperta</strong> $\{U_\alpha\}_{\alpha \in I}$ (cioè una famiglia di aperti con $K \subseteq \bigcup U_\alpha$) si può estrarre una <strong>sottocopertura finita</strong>: esistono $\alpha_1, \dots, \alpha_n$ tali che $K \subseteq U_{\alpha_1} \cup \dots \cup U_{\alpha_n}$.</p>
+<blockquote>
+<p><strong>Glossarietto:</strong></p>
+<ul>
+<li><strong>Copertura aperta</strong> = famiglia di insiemi aperti la cui unione contiene $K$. Tipo "una collezione di intorni che ricopre tutto $K$".</li>
+<li><strong>Sottocopertura finita</strong> = ne basta un numero finito.</li>
+</ul>
+<p><strong>Tradotto.</strong> Compatto = "per quanto frammenti il ricoprimento, ne bastano sempre finiti pezzi". Concetto sottile, ma esattamente ciò che serve per trasformare argomenti locali in globali.</p>
+</blockquote>
+<p><em>Dim.</em></p>
+<p>$(\Leftarrow)$ Caso modello $K = [a, b]$. Sia $\{U_\alpha\}$ copertura aperta. Definiamo
+$$S := \{x \in [a, b] : [a, x] \text{ è coperto da finiti } U_\alpha\}.$$</p>
+<p>$S$ è non vuoto ($a \in S$: basta uno $U_\alpha$ contenente $a$) e limitato superiormente da $b$. Sia $c = \sup S \in [a, b]$.</p>
+<p><em>$c \in S$:</em> esiste $U_{\alpha_0}$ contenente $c$, aperto, quindi contenente un intorno $B_\delta(c)$. Per definizione di sup, $\exists x \in S$ con $c - \delta < x \le c$. Allora $[a, x]$ ha sottocopertura finita $V_1, \dots, V_n$, e $[a, c] \subseteq V_1 \cup \dots \cup V_n \cup U_{\alpha_0}$. Dunque $c \in S$.</p>
+<p><em>$c = b$:</em> per assurdo $c < b$. Allora $\exists \delta' > 0$ tale che $c + \delta' < b$ e $B_{\delta'}(c) \subseteq U_{\alpha_0}$. Allora $[a, c + \delta'/2]$ ha sottocopertura finita, e $c + \delta'/2 \in S$ ma $c + \delta'/2 > c = \sup S$. Contraddizione.</p>
+<p>Quindi $b \in S$: $[a, b]$ ha sottocopertura finita.</p>
+<p>Per $K$ chiuso e limitato generico: $K \subseteq [a, b]$; data copertura $\{U_\alpha\}$ di $K$, aggiungiamo $\mathbb{R} \setminus K$ (aperto perché $K$ chiuso) ottenendo copertura di $[a, b]$, da cui estraiamo sottocopertura finita; togliendo $\mathbb{R} \setminus K$ resta sottocopertura finita di $K$.</p>
+<p>$(\Rightarrow)$ Sia $K$ compatto.</p>
+<p><em>Limitato.</em> $K \subseteq \bigcup_{n \in \mathbb{N}} (-n, n)$: copertura aperta. Per compattezza ne bastano finiti: $K \subseteq (-N, N)$ per qualche $N$.</p>
+<p><em>Chiuso.</em> Mostriamo che $\mathbb{R} \setminus K$ è aperto. Sia $y \notin K$. Per ogni $x \in K$, scegliamo $r_x > 0$ con $|x - y| > 2 r_x$, sicché $B_{r_x}(x) \cap B_{r_x}(y) = \emptyset$. La famiglia $\{B_{r_x}(x)\}_{x \in K}$ copre $K$; per compattezza esistono $x_1, \dots, x_n$ con $K \subseteq \bigcup B_{r_{x_i}}(x_i)$. Posto $r = \min r_{x_i} > 0$, $B_r(y)$ è disgiunto da tutti i $B_{r_{x_i}}(x_i)$, quindi $B_r(y) \cap K = \emptyset$. ∎</p>
+<blockquote>
+<p><strong>Significato pratico.</strong> Su $\mathbb{R}$ (e $\mathbb{R}^n$) "compatto" è facile da riconoscere: basta che sia <strong>chiuso E limitato</strong>. Non vale in spazi più astratti (es. spazi di funzioni $\ell^2$), ma per l'analisi reale è esatto.</p>
+</blockquote>
+<h3 id="teorema-4-connessi-in-math218-sono-intervalli">Teorema 4 — Connessi in $\mathbb{R}$ sono intervalli</h3>
+<blockquote>
+<p>$C \subseteq \mathbb{R}$ è <strong>connesso</strong> $\iff$ $C$ è un <strong>intervallo</strong> (cioè $\forall x, y \in C, \forall z$ con $x < z < y$, $z \in C$).</p>
+<p><strong>Glossarietto:</strong> connesso = "non si spezza in due pezzi separati". Un insieme è connesso se non si può scrivere come unione di due aperti disgiunti non vuoti.</p>
+</blockquote>
+<p><em>Dim. (schema).</em></p>
+<p>$(\Leftarrow)$ Sia $C$ intervallo e per assurdo $C = A \cup B$ con $A, B$ aperti relativi non vuoti disgiunti. Scegliamo $a \in A, b \in B$, WLOG $a < b$. Sia $s = \sup\{x \in [a, b] \cap C : [a, x] \cap C \subseteq A\}$. Si mostra che $s \notin A$ (perché $s$ è "al confine") e $s \notin B$ (per simmetria), contraddizione.</p>
+<p>$(\Rightarrow)$ Se $C$ non è intervallo, $\exists x < z < y$ in $\mathbb{R}$ con $x, y \in C$, $z \notin C$. Allora $C = (C \cap (-\infty, z)) \cup (C \cap (z, +\infty))$: due aperti relativi disgiunti non vuoti. Quindi $C$ non connesso. ∎</p>
+<h2 id="esempi-guida">Esempi guida</h2>
+<p><strong>1. $\mathbb{Q}$ in $\mathbb{R}$.</strong>
+Non aperto (ogni intorno di un razionale contiene irrazionali).
+Non chiuso (ogni irrazionale è di accumulazione per $\mathbb{Q}$ ma non appartiene).
+$\overline{\mathbb{Q}} = \mathbb{R}$ (i razionali sono densi). $\mathring{\mathbb{Q}} = \emptyset$.</p>
+<p><strong>2. L'insieme $\{1/n : n \ge 1\}$.</strong>
+Ogni $1/n$ è un <strong>punto isolato</strong> (con raggio $r < 1/(n(n+1))$ l'intorno contiene solo $1/n$).
+L'unico punto di accumulazione è $0$, e $0 \notin$ insieme.
+Aggiungendo $0$: $\{0\} \cup \{1/n\}$ diventa <strong>chiuso</strong> (contiene il suo punto di accumulazione) e limitato → <strong>compatto</strong>.</p>
+<p><strong>3. L'insieme di Cantor.</strong>
+Si costruisce rimuovendo iterativamente il "terzo medio" da $[0, 1]$: prima rimuovi $(1/3, 2/3)$, poi i due terzi medi dei pezzi rimasti, ecc.
+Risultato: chiuso, limitato → compatto. Ha <strong>interno vuoto</strong> (nessun punto è interno) ma <strong>cardinalità $\mathfrak{c}$</strong> (cap. 05). Esempio prototipico di compatto "strano".</p>
+<p><strong>4. Aperti di $\mathbb{R}$ = unione numerabile di intervalli aperti disgiunti.</strong>
+Ogni aperto di $\mathbb{R}$ si scrive in modo unico come unione di al più numerabili intervalli aperti disgiunti (le sue componenti connesse). Risultato strutturale fondamentale.</p>
+<h2 id="esercizi">Esercizi</h2>
+<details>
+<summary>Esercizio 1 — Intersezione di aperti</summary>
+
+Mostra che $\bigcap_{n=1}^\infty \left(-\frac{1}{n},\ 1 + \frac{1}{n}\right) = [0, 1]$.
+
+**Soluzione.**
+
+*$\supseteq$.* Se $x \in [0, 1]$, allora per ogni $n$: $-1/n < 0 \le x \le 1 < 1 + 1/n$, quindi $x$ sta in ogni intervallo.
+
+*$\subseteq$.* Se $x$ sta in ogni $(-1/n, 1 + 1/n)$, allora $x > -1/n$ per ogni $n$, quindi $x \ge \lim(-1/n) = 0$. Analogamente $x \le 1$. Quindi $x \in [0, 1]$. ∎
+
+**Morale**: intersezione numerabile di aperti può dare un chiuso.
+</details>
+
+<details>
+<summary>Esercizio 2 — Chiusura, interno, frontiera</summary>
+
+Sia $A = (0, 1) \cup \{2\} \cup (\mathbb{Q} \cap (3, 4))$. Calcola $\overline{A}$, $\mathring{A}$, $\partial A$.
+
+**Soluzione.**
+
+- $\overline{A} = [0, 1] \cup \{2\} \cup [3, 4]$. Spiegazione: la chiusura di $(0, 1)$ è $[0, 1]$. $\{2\}$ è già chiuso (punto isolato). I razionali in $(3, 4)$ sono **densi** in $(3, 4)$, quindi la loro chiusura in $\mathbb{R}$ è $[3, 4]$.
+- $\mathring{A} = (0, 1)$. Spiegazione: nessun razionale in $(3, 4)$ è interno (ogni suo intorno contiene irrazionali $\notin A$). E $2$ è isolato, non interno.
+- $\partial A = \overline{A} \setminus \mathring{A} = \{0, 1, 2\} \cup [3, 4]$.
+
+**Notevole:** la frontiera può essere "spessa" come l'intervallo $[3, 4]$.
+</details>
+
+<details>
+<summary>Esercizio 3 — Un compatto fatto di punti isolati</summary>
+
+Mostra che $K = \{0\} \cup \{1/n : n \ge 1\}$ è compatto, usando direttamente la definizione (copertura aperta).
+
+**Soluzione.** Sia $\{U_\alpha\}$ copertura aperta di $K$. Esiste $U_{\alpha_0}$ che contiene $0$, e in quanto aperto, contiene anche $B_r(0) = (-r, r)$ per un certo $r > 0$.
+
+Per Archimede, esiste $N$ con $1/N < r$. Allora per ogni $n > N$, $1/n < 1/N < r$, quindi $1/n \in U_{\alpha_0}$.
+
+Restano i punti $1, 1/2, \dots, 1/N$ — **un numero finito**. Per ciascuno scegli un $U_{\alpha_k}$ che lo contenga (esiste per definizione di copertura).
+
+Sottocopertura finita: $\{U_{\alpha_0}, U_{\alpha_1}, \dots, U_{\alpha_N}\}$. ∎
+
+**Tecnica classica:** "cattura la coda" con l'aperto intorno al punto di accumulazione, e poi gestisci a mano i punti rimanenti (in numero finito).
+</details>
+
+<details>
+<summary>Esercizio 4 — Un chiuso non compatto</summary>
+
+Esibisci un chiuso di $\mathbb{R}$ non compatto, e una copertura aperta da cui *non* si estrae sottocopertura finita.
+
+**Soluzione.** $K = \mathbb{N}$ è chiuso (il complementare $\bigcup_{n \in \mathbb{Z}} (n, n+1)$ è aperto). Non limitato → non compatto per Heine-Borel.
+
+Copertura: $U_n = (n - 1/3,\ n + 1/3)$ per $n \in \mathbb{N}$. Ciascun naturale $n$ è coperto da $U_n$, e da nessun altro. Quindi nessun sotto-insieme finito di $\{U_n\}$ può coprire tutto $\mathbb{N}$. ∎
+</details>
+
+<details>
+<summary>Esercizio 5 — Bolzano-Weierstrass topologico</summary>
+
+Dimostra: ogni sottoinsieme **infinito e limitato** di $\mathbb{R}$ ha almeno un punto di accumulazione.
+
+**Soluzione.** Sia $A$ infinito e limitato, $A \subseteq [a, b]$. Per assurdo, supponiamo che nessun punto di $[a, b]$ sia di accumulazione di $A$. Allora per ogni $x \in [a, b]$, $\exists r_x > 0$ con $B_{r_x}(x) \cap A \subseteq \{x\}$.
+
+La famiglia $\{B_{r_x}(x)\}_{x \in [a, b]}$ è una copertura aperta di $[a, b]$ — compatto per Heine-Borel. Quindi esiste sottocopertura finita $B_{r_{x_1}}(x_1), \dots, B_{r_{x_n}}(x_n)$. Allora:
+$$A \subseteq A \cap [a, b] \subseteq \bigcup_{i=1}^n B_{r_{x_i}}(x_i) \cap A \subseteq \{x_1, \dots, x_n\},$$
+quindi $A$ è finito. Contraddice l'ipotesi $|A| = \infty$. ∎
+
+Questa è la versione "puntuale" di Bolzano-Weierstrass. Vedremo la versione "successioni" in [cap. 13](13-monotone-bolzano-weierstrass.html).
+</details>
+
+<h2 id="trappole-comuni">Trappole comuni</h2>
+<ul>
+<li><strong>"Chiuso" NON significa "non aperto".</strong> $\mathbb{R}$ è entrambi. $[0, 1)$ è nessuno dei due. La negazione di "aperto" non è "chiuso": ci sono insiemi né aperti né chiusi, e insiemi entrambi (gli "clopen").</li>
+<li><strong>Punto di accumulazione ≠ punto interno.</strong> Un punto di accumulazione può essere interno, esterno o di frontiera. Il concetto guarda alla densità di $A$ vicino al punto, non a quanto $A$ "contenga" intorno al punto.</li>
+<li><strong>Limitato non implica compatto</strong> in generale: $\mathbb{Q} \cap [0, 1]$ è limitato ma non chiuso in $\mathbb{R}$.</li>
+<li><strong>Heine-Borel vale in $\mathbb{R}^n$</strong> ma <strong>non</strong> in spazi metrici generici (es. $\ell^2$): in spazi astratti "chiuso e limitato" non basta per la compattezza.</li>
+<li><strong>Asimmetria stabilità.</strong> Unione <strong>qualunque</strong> di aperti è aperta, ma intersezione <strong>infinita</strong> di aperti può non essere aperta. E viceversa per i chiusi.</li>
+</ul>
+<blockquote>
+<p><strong>Pillola operativa.</strong> Quando in un'argomentazione devi "passare dal locale al globale" (es. "per ogni punto vale qualcosa di buono, lo stesso vale globalmente?"), il <em>requisito</em> è quasi sempre <strong>compattezza</strong>. È la proprietà che permette argomenti per "ricoperture finite".</p>
+</blockquote>
+<h2 id="riassunto-in-tabella">Riassunto in tabella</h2>
+<table>
+<thead>
+<tr>
+<th>concetto</th>
+<th>def. operativa</th>
+<th>esempio in $\mathbb{R}$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>aperto</strong></td>
+<td>ogni punto è interno</td>
+<td>$(0, 1)$, $\mathbb{R}$, $\emptyset$</td>
+</tr>
+<tr>
+<td><strong>chiuso</strong></td>
+<td>complementare aperto / contiene i suoi punti di accumulazione</td>
+<td>$[0, 1]$, $\mathbb{N}$, $\{0\} \cup \{1/n\}$</td>
+</tr>
+<tr>
+<td><strong>compatto</strong></td>
+<td>chiuso E limitato (Heine-Borel)</td>
+<td>$[a, b]$, Cantor, $\{0\} \cup \{1/n\}$</td>
+</tr>
+<tr>
+<td><strong>connesso</strong></td>
+<td>è un intervallo</td>
+<td>$\mathbb{R}$, $[0, 1)$, $(-\infty, 5]$</td>
+</tr>
+</tbody>
+</table>
+<h2 id="riassunto-in-una-riga">Riassunto in una riga</h2>
+<p>La topologia di $\mathbb{R}$ è il linguaggio formale del "vicino", basato sulla distanza $|x - y|$ — e i <strong>compatti</strong> (= chiusi + limitati) sono il suo strumento più potente: trasformano proprietà locali in globali tramite sottocoperture finite.</p>
+      <nav class="pager">
+<a href="09-numeri-complessi.html" class="prev"><span class="label">← Precedente</span><span class="title">Numeri complessi</span></a>
+<a href="11-successioni-definizione.html" class="next"><span class="label">Successivo →</span><span class="title">Successioni e limiti: la definizione ε-N</span></a>
+</nav>
+      <footer class="page-footer">
+        <p><strong>Analisi Matematica I Zero to Hero</strong> — percorso completo bilingue, dai naturali agli integrali impropri, dalle serie di Fourier alle EDO lineari.</p><p>Materiale didattico aperto. Quando una dimostrazione è oscura, torna indietro: l'analisi è una scala, non un albero a salti.</p>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="../search-data.js"></script>
+<script src="../search.js"></script>
+<script src="../toc.js"></script>
+</body>
+</html>
